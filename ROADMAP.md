@@ -315,918 +315,167 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 237 — Standardize sweep: lanes 1-3 clean an ELEVENTH time, lane 4 dispatched the ninth archive sweep, and the file that sweep writes into was still instructing the opposite of the rule written beside dispatcher rule 4 the day before (2026-09-01)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0, and GitHub intake
+`list_issues` OPEN → `totalCount: 0`, so Step 1 had nothing to triage and no
+`Roadmap · plan` row was recorded. Rule 2: **`Standardize 4 / 4 Continue rounds
+OVERDUE` — dispatched.** Rule 3 read `Objective 3 / 3 slices OVERDUE
+[232, 234, 236]` and stays armed behind it, which is Step 2's stated order
+working, not a rule being skipped.
+
+**All four lanes ran; `n of 4` is 4 of 4, per the playbook's own instruction.**
+
+**Lane 1 of 4 — `scan:dead-style`: clean.** 0 dead declaration(s) on 0 pages,
+1,433 live inline declarations, screen + print measured. It needs
+`CHROME_PATH` exported in the same command, like every other browser-driven
+gate here — without it the scan exits 1 naming six paths it tried, which reads
+like a failure and is a missing export.
+
+**Lane 2 of 4 — `report:css-repeats`: clean, and the delta is what was read,
+never the count.** 74 source files · **242** rules with 3+ declarations · **230**
+distinct bodies · **8** bodies appearing more than once, against LOOPS.md's
+table (2026-08-28) of 237 · 225 · 8. The repeat set is unchanged **member for
+member** — x4 joined-control radius (money ×2, quantity ×2), x3 list reset
+(approval-workflow, sidebar-nav, tree), x3 visually-hidden (sidebar-nav,
+stepper, primitives), and the five x2 pairs. The x4 group is still **two
+components**, so its stated reopen trigger — a THIRD component — is unmet. Rules
+and distinct bodies both moved by +5 with repeats flat, which is only consistent
+with added rules carrying novel bodies; that is a derivation from the three
+totals, not a separate measurement of what was added.
+
+**Lane 3 of 4 — `report:prose`: clean, checked by SET MEMBERSHIP.** 118
+documentation pages of 127 built · median **748** · total **105,705** words.
+Nine pages over 2x the corpus median and twelve over a family median; the union
+is **fourteen distinct pages**, and every one resolves against **158.1's
+twelve**, **161.1's three** and **178.3's** `/concepts/scale/` — sixteen
+verdicted pages, nothing flagged outside them. 228.1 already recorded why the
+obvious instrument here is a dead one (grepping each page path out of
+`ROADMAP.md` + the archive returns hits for all fourteen whatever the truth is),
+so membership against the sixteen is what was checked.
+
+*One instrument artefact worth a line, because it is the trap CLAUDE.md names
+under its own heading.* Extracting the flagged page paths with a
+`/[a-z-]+/[a-z-]+/` regex over the report's output returns **fifteen** paths,
+and the fifteenth is `/script/style/` — matched out of the report's own
+explanatory sentence, *"with pre/script/style/svg/template removed"*. A page
+list that contains a substring of the sentence explaining how pages are
+measured. Caught by reading the list, not by a check.
+
+**Lane 4 of 4 — `report_loop_prose.py`: carries the finding, and it is the same
+one as last wake.** The `ratchet` block read first, per the playbook:
+`ROADMAP.md` **4 up, last cut `574a8634` (2026-09-01)**. `roadmap_scope.py` read
+closed-history share **1,410 / 2,907 = 48.5%** — up from 31.6% at the previous
+hand-off — with targets `[236, 235, 234, 232]`, and 236.2's new dependency lane
+read *"no target slice is named by a still-open item"*. **The archive sweep is
+due a ninth time**, and the hand-off had already assigned it here rather than to
+the Continue round that spent rule 4.
+
+1. [x] **237.1 — the ninth archive sweep. Four slices moved, and the
+       verification reads the SOURCE rather than the mover's own memory.**
+       *Accept was*: each target slice present byte-identical in
+       `ROADMAP-archive.md` and absent from `ROADMAP.md`, one pointer line left
+       behind per slice, `check:slice-refs` green, and its reported count
+       reconciled rather than accepted.
+
+       ```
+       python3 scripts/loops/roadmap_scope.py        # targets, share, 236.2's lane
+       npm run check:slice-refs -w docs
+       ```
+
+       **Moved:** 236 (381 lines), 235 (368), 234 (161), 232 (500) — boundaries
+       read one slice at a time from the heading line to the next `## `, and a
+       block already reduced to a pointer refused outright (235.3's lesson).
+       `ROADMAP.md` **2,907 → 1,509 lines**; closed-history share **48.5% →
+       0.0%**; live-file slice count unchanged at 218, because a sweep moves
+       text, not slices. **Both are AT MOVE TIME** (177.1's convention): writing
+       this result block back into the file is itself growth, so the committed
+       file reads higher and `roadmap_scope.py` reads a non-zero share again —
+       carrying exactly one closed slice, this one.
+
+       **The verification is a second, independently written parser** that
+       re-derives each block from `git show HEAD:ROADMAP.md` — the pre-move
+       source in git — and asserts it appears exactly once in the working-tree
+       archive and zero times in the working-tree live file. Comparing against
+       the mover's in-memory copy would have been self-consistent by
+       construction, which is CLAUDE.md's *reconcile against the SOURCE, not
+       against the argument*. **Red-proved by injection**: one line of the
+       expected block replaced, the injection confirmed to have landed (archive
+       count for that slice 1 → **0**), verifier FAILED 1 of 4 and exited 1;
+       clean run 4 of 4 ok, exit 0.
+
+       **`check:slice-refs` moved 680 → 684, and the +4 is not new citations.**
+       Measured against a `git worktree` at `HEAD` rather than reasoned about:
+       distinct slice headings in the archive **212 → 216**, in the live file
+       unchanged at 218, so the gate's uniqueness arm runs 430 → **434** checks
+       while its citation arm holds at **250** (252 cited − 2 known-dangling).
+       A swept slice number heads a section in *both* files — the pointer stub
+       and the real section — so it earns exactly one more uniqueness check.
+       +4 for four slices is the tidy number this repo says to distrust, and it
+       reconciles. On the committed tree the gate reads **685 / 219**, one more
+       than the sweep produced, because Slice 237 is a new live-file heading and
+       earns its own uniqueness check.
+
+2. [x] **237.2 — the archive's own header instructed the opposite of the rule
+       `LOOPS.md` gained the day before, and that sentence has a measured
+       cost.**
+       *Accept was*: the header stops asserting a rule that contradicts
+       dispatcher rule 4's standing answer, and points at where the rule lives;
+       the header's falsity re-measured here rather than quoted from 236.2;
+       every other copy of the claim in the tree found and adjudicated.
+
+       `ROADMAP-archive.md`'s header (110.4, 2026-08-22) read *"Nothing here is
+       edited — corrections to history go in new slices, never here."*
+       `LOOPS.md` beside rule 4 (236.2, decided 2026-09-01) reads *"Amending the
+       archive is allowed and expected for a correction"* and *"'Archived
+       verbatim' is a property of the MOVE, not a claim of immutability."* Two
+       documents, opposite instructions, one day apart, neither naming the
+       other — the shape this playbook already records costing 44 minutes
+       between a gate being hardened and demoted.
+
+       **The premise re-run, not quoted** (CLAUDE.md: when the premise is an
+       earlier wake's measurement, re-checking it is part of the criterion):
+
+       ```
+       git log --format='COMMIT %h %ad %s' --date=short --numstat -- ROADMAP-archive.md
+       # 10 commits · 8 pure appends (the sweeps) · 2 with NO move:
+       #   d3d76a28 (199.1)  +27 / -0   a RE-VERIFIED block appended INSIDE an archived slice
+       #   dc861a25 (235.3)   -0 / -12  three self-referential stubs deleted
+       ```
+
+       **The cost, and it is specific.** 177.1 (2026-08-28) found Slices 17, 23
+       and 24 each heading two sections in the archive, the second a three-line
+       stub pointing at the file it was already in, named all three — and left
+       them, **"on the archive's own authority"**, quoting this header verbatim.
+       `dc861a25` deleted exactly those three on 2026-09-01. Four commits landed
+       on the file in between (`d3d76a28`, `83192cd1`, `d701e619`, `574a8634`).
+       A correct twelve-line deletion was deferred four days by a sentence that
+       was already false when it was read.
+
+       **Scope checked, and two near-misses left alone.** A fixed-string sweep
+       for the claim (`Nothing here is edited`, `corrections to history`,
+       `never edited`, `byte-identical to what stood`) finds the header, 177.1's
+       own quotation of it, and two hits about **loop-log rows** being never
+       edited — `record_iteration.py`'s standing rule, a different rule about a
+       different file, correctly untouched.
+
+       **Refused: restating rule 4's paragraph in the header.** 236.2 already
+       decided the standing answer lives in `LOOPS.md` beside the rule, and lane
+       4 of this very sweep is the instrument that measures this file growing.
+       The header carries the correction, the measured cost and a pointer — 5
+       lines to 22 — not a second copy of the rule.
+
 ## Slice 236 — Objective grill of Slices 232, 233, 234, 235: every published figure reproduces except one, and the two findings are both about what a verification CANNOT see — a corroborating count that measures its own explanation, and a sweep that archived the target of an open item's Accept (2026-09-01)
 
-**Dispatcher trace, cloud wake.** Rule 1: no open P0 (`grep -n 'P0' ROADMAP.md`
-returns only closed slice headings) and GitHub intake **0 open issues**
-(`list_issues` OPEN → `totalCount: 0`), so Step 1 had nothing to triage and no
-`Roadmap · plan` row was recorded. Rule 2: `Standardize 0 / 4 since 2026-09-01
-05:06`, no drift flagged. Rule 3:
-**`Objective 4 / 3 slices OVERDUE [232, 233, 234, 235]` — dispatched.** Rule 4
-was not reached. Full report:
-`.roundtable/grill-objective-232-233-234-235-2026-09-01.md`.
-
-**Arming set NOT narrowed, and the check is set membership rather than a
-recollection.** The last grill is Slice 232 itself, covering 229/230/231; the
-armed set is disjoint from it. `ls .roundtable/grill-objective-*.md` reads
-**41** (232's own report is the 41st, which is why that slice read 40), and
-grepping the four armed numbers out of the other forty returns hits in **4**
-files, every one of them incidental — `230 distinct bodies` from a
-`report:css-repeats` line, `229 cited` from a `slice-refs` line, `229.4` /
-`229.5` as items 232 filed, and a 2026-08-19 class count. **None is a prior
-grill OF 232, 233, 234 or 235.** The loose grep is reported rather than hidden
-because it is the weak instrument here: it cannot tell a subject from a
-coincidence, so its four hits were read individually rather than counted.
-
-**Scope, said honestly: 232 is armed by its own follow-up items, not by being
-un-grilled as a grill.** `dispatch_status.py` counts distinct slice numbers
-named by Continue/Standardize rows, and 232.1/232.2 were built as Continue
-rounds after the grill landed. So what is grilled here is those rounds and
-their published numbers, not the 229/230/231 verdicts, which stand untouched.
-
-### What was re-derived, and what it cost to be sure
-
-Every load-bearing figure in the four slices was re-run on an **unshallowed**
-clone (`git rev-parse --is-shallow-repository` → `false`, 1,776 commits;
-ENVIRONMENT.md §2 — history figures are silently 50x wrong without it). The
-container also started **DETACHED** with local `main` stale at `17b3ba67`
-against `HEAD` `7bce44ed`, exactly ENVIRONMENT trap 1; `git branch
---show-current` returned empty and `git checkout -B main origin/main` fixed it
-before any commit existed.
-
-| slice | claim | re-run | verdict |
-|---|---|---|---|
-| 235.1 | `--rev d701e619^` reproduces 228.1 | `OPEN: [15, 112]` · `15 closed / 2366 lines` · `62.4%` | **exact** |
-| 235.1 | `--rev e29c7c18^` reproduces 214.1 | 7 targets `[213, 212, 210, 209, 208, 201, 200]` · `1568 lines` | **exact** |
-| 235.1 | `--self-test` cases A-D discriminate | `self-test OK` on all four | **holds** |
-| 235.2 | 5 sections moved byte-identically | **5/5** against `574a863^:ROADMAP.md`, independent parser | **exact** |
-| 235.2 | 1,419 body lines moved | **1,419**; archive `+1,424 = 5 headings + 1,419` = measured `1424` | **exact** |
-| 235.2 | open checkboxes unchanged | raw `6 → 6` | **exact** |
-| 235.2 | 216 untouched live sections, 0 changed | 216 untouched, **1** changed — Slice 235's own write-up | **explained** |
-| 235.3 | archive `31,013 → 31,001`, −12 | `git show`: 31013 → 31001, numstat `0 12` | **exact** |
-| 235.3 | `677 = 217 + 212 + 248` | 217 live · 212 archive · 250 cited − 2 dangling | **exact** |
-| 235.3 | `seen.size` unchanged at 217 | archive-minus-live set difference **empty** | **exact** |
-| 235 lane 2 | `74 · 242 · 230 · 8`, shapes unchanged | byte-identical, same eight shapes | **exact** |
-| 232.1 | NARROW 2 / tense-inclusive 7 / unanchored 17 | 2 · 7 · 17 (18 without the exclusion it records) | **exact** |
-| 232.3 | `ff2b623d^` flags exactly 1, `HEAD` flags 0 | **1** (`concepts/cascade.astro`) and **0** | **exact** |
-| 234.1 | per-file at `84eb14ca`: 5 files `branch=0`, `check-notes.mjs` `branch=1` | reproduced for all six files at all four commits | **exact** |
-| 234.1 | aggregate `0 → 1 → 6 → 5 → 0` | derives from the same per-file table | **exact** |
-
-**232.3's checkout was confirmed to have taken effect before its result was
-believed**, which is the step a green red-proof is a defect in: at
-`ff2b623d^` the pre-fix `cascade.astro` reads `throws=0`, and the two pages
-230.1 excluded by hand (`scale`, `index`) exclude themselves at `parses=0` in
-both trees. `git status` empty after restore.
-
-**235.2's live-side arithmetic reconciles once its own convention is applied,
-and that was checked rather than accepted.** The item states `3,569 → 2,165`
-while the commit holds **2,269** — the gap ENVIRONMENT.md's "read a figure from
-THAT COMMIT" bullet exists to catch. It is not that defect: the item declares
-the figure is the file *after the move and before this write-up was appended*,
-and the difference is exactly the write-up. `3,569 − 1,419 + 15 = 2,165`, and
-`2,165 + 104 = 2,269`, with the 104 landing in the one live section the
-independent parser reports as changed — Slice 235's own. Stated because the
-tell for the real defect is never arithmetic; here the arithmetic AND the
-independent section walk agree.
-
-**233 survives on its own terms.** Its two items are `check:claims` cases, and
-the gate is the instrument: it reports **`162 documented behaviours verified
-live · 3 NOT VERIFIED`**, which is 233.2's stated `161 → 162` landing, and the
-gate names the cause of the three itself — *"this browser reports
-`(hover: hover) and (pointer: fine) = false`"*, ENVIRONMENT trap 6b's container
-property, **not a regression and not to be "restored" to zero**. No finding
-against 233.
-
-1. [x] **236.1 — 234.1's corroborating count does not reproduce as written, and
-       it fails by measuring its own explanation. The five files do not read
-       `0` under "any `--self-test` mention"; they read `1`, and that `1` is the
-       OWES sentence the item is measuring.**
-
-       234.1's central claim is **correct and reproduces exactly** — that is
-       stated first so this is not read as a reopen. At `84eb14ca` five files
-       read `sentence=1 branch=0` and `check-notes.mjs` reads `sentence=1
-       branch=1`, and `git show 84eb14ca -- apps/docs/scripts/check-notes.mjs`
-       confirms 42.1 itself adds `if (process.argv.includes('--self-test')) {`.
-       Nothing here touches that, or the aggregate, or 229.3's refusal.
-
-       What does not reproduce is the sentence guarding it against a
-       narrow-regex artefact: *"Widening the branch predicate to **any**
-       `--self-test` mention confirms the other five carried none at 42.1."*
-
-       ```
-       for f in apps/docs/scripts/check-{boost,floor,forced-colors,loop-vocab,notes}.mjs \
-                packages/core/scripts/check-markup.mjs; do
-         printf '%-30s any=%s excl=%s\n' "$(basename $f)" \
-           "$(git show 84eb14ca:$f | grep -c -- '--self-test')" \
-           "$(git show 84eb14ca:$f | grep -- '--self-test' | grep -vc 'OWES a --self-test')"
-       done
-       #   the five:        any=1  excl=0
-       #   check-notes.mjs: any=3  excl=2
-       ```
-
-       The five read **`any=1`, not 0**. The single match is line 15 of each:
-       `OWES a --self-test (roadmap 42.3): a detector this easy to fool must
-       prove it can fail.` — the very sentence whose truth the item is
-       adjudicating. The claim is true only under `excl`, an exclusion the
-       published command does not carry.
-
-       **The substance is unchanged, which is why this is a finding about the
-       corroboration and not about the conclusion.** Under `excl` the five read
-       `0` and `check-notes.mjs` reads `2`, so the widened predicate does
-       support "not a narrow-regex artefact" — once the sentence is excluded.
-
-       **This is a recurrence, not a one-off, and that is the reason to file
-       it.** 232.1 — two slices earlier, and the item 234 was filed against —
-       records exactly this shape about itself: *"One published figure did NOT
-       reproduce as written, and the difference is a missing exclusion … it is
-       the same class of defect this item exists to fix."* There the excluded
-       file was `check-selftests.mjs`, the meta-gate that names the vocabulary
-       by definition. Here it is the sentence itself. CLAUDE.md names the
-       general form twice — *"an assertion that trips on its own explanation"*
-       and *"verifying a removal: assert on structure, never on raw text"* —
-       and a corroborating count is where it keeps landing, because the
-       corroboration is written last and inherits none of the care the headline
-       figure got. That is 192.1's shape a third time: **the defect lands in
-       what shipped BESIDE the number.**
-
-       *Accept* — properties, not predicted values:
-       - (a) 234.1's widening sentence agrees with what the command above
-         actually prints — either by carrying the exclusion, or by recording
-         that the unexcluded count is 1 and why that 1 is the sentence.
-         **Both close this.**
-       - (b) The command sits beside the claim, per 234.1's own criterion (c) —
-         this item exists because a corroborating count was published without
-         one.
-       - (c) 234.1's central claim and its aggregate are left standing. A change
-         that reopens either does not satisfy this item.
-       - (d) **Finding the distinction not worth drawing is a satisfying
-         outcome**, recorded with its reason: the substance holds under `excl`,
-         so "the sentence is imprecise and the conclusion is right" is a
-         defensible close.
-
-       **Kind of work needed, so rule 4 sorts it correctly: NOT browser-blocked
-       and NOT owner-blocked.** It is a `git show` over six files on an
-       unshallowed clone plus a markdown edit. No screenshot is evidence for any
-       part of it.
-
-       ---
-
-       **CLOSED 2026-09-01, by arm (a)'s first branch — the exclusion is now
-       carried.** The finding reproduces exactly: on an unshallowed clone the
-       five files read **`any=1 excl=0`** and `check-notes.mjs` reads
-       **`any=3 excl=2`**, so the published sentence's *"confirms the other five
-       carried none"* is false against `any` and true against `excl`.
-
-       234.1's widening paragraph now prints the two columns side by side, names
-       the `1` as line 15's `OWES a --self-test (roadmap 42.3)…` — the sentence
-       the item is adjudicating — and says outright that **it is the `excl`
-       column that carries the claim, never the unexcluded one**. Arm (a)
-       offered "carry the exclusion" or "record that the unexcluded count is 1
-       and why"; the edit does **both**, because the second is what stops the
-       next wake re-deriving the first.
-
-       **(b) — the command sits beside the claim**, in the fenced block
-       immediately under the corrected sentence, per 234.1's own criterion (c).
-
-       **(c) — 234.1's central claim and aggregate are left standing.** Both
-       were re-run this wake and neither moved: `sentence=1 branch=0` × 5 and
-       `sentence=1 branch=1` for `check-notes.mjs` at `84eb14ca`; one entry,
-       zero recurrences. Nothing here reopens 229.3's refusal.
-
-       **(d) was available and is NOT what closed this.** "The sentence is
-       imprecise and the conclusion is right" was a defensible close, and it was
-       declined for a measured reason rather than a stylistic one: this is the
-       **third** instance of the same shape (232.1's missing
-       `check-selftests.mjs` exclusion, this one, and 192.1's general form), and
-       a defect recurring three times is the case where writing the correction
-       down beats recording that it did not matter. The cost of the edit was one
-       paragraph.
-
-2. [x] **236.2 — the eighth archive sweep moved Slice 229 while `234.1` was
-       open and names 229.3's `RECURRENCE HISTORY` as a thing to amend. That
-       text now lives only in `ROADMAP-archive.md`, and none of 235.2's five
-       Accept criteria could see it.**
-
-       Measured, not inferred:
-
-       ```
-       grep -n 'RECURRENCE HISTORY' ROADMAP.md ROADMAP-archive.md
-       #   ROADMAP.md:707, 761, 1059   — all REFERENCES, from 234.1 and 232.2
-       #   ROADMAP-archive.md:30520    — the section itself, the only copy
-       grep -n '^## Slice 229' ROADMAP.md ROADMAP-archive.md
-       #   ROADMAP.md:1161      the 3-line pointer
-       #   ROADMAP-archive.md:30194   the real body
-       ```
-
-       234.1's Accept (a) reads: *"229.3's `RECURRENCE HISTORY` and 232.2's
-       closing text each agree with what the per-file command above actually
-       prints, or record why the six-file generalisation is preferred anyway."*
-       232.2's closing text is live (`ROADMAP.md:1058`). 229.3's is not. So an
-       open item's criterion is half-satisfiable in the live file and half only
-       by editing the archive — the file `LOOPS.md` rule 4 calls the place "for
-       looking a reason UP", from which *"a dispatch decision never comes"*.
-
-       **235.2 is not careless here; the point is that it could not have
-       known.** Its five criteria are byte-identity, two-way line accounting,
-       citation neutrality via `check:slice-refs`, a raw open-checkbox count,
-       and target derivation at move time. All five passed and all five were
-       re-verified above. Every one of them is a property of the MOVE. None
-       asks the different question — *does anything still OPEN depend on the
-       text being moved?* — and `check:slice-refs` cannot answer it either: it
-       asks whether a citation **resolves**, and `229.3` resolves fine from the
-       archive. Resolving is exactly the wrong question when the criterion says
-       *amend*.
-
-       **Base rate, measured before proposing anything (94.11).** Five items are
-       open; three are owner- or hardware-blocked. Of the two dispatchable ones,
-       **234.1 requires editing archived text and 232.3 does not** — 232.3 cites
-       230.1 (also archived) but its Accept (a)-(e) is entirely about building
-       and red-proving a detector, so a citation that resolves is all it needs.
-       **1 of 2**, and 1 of 5 overall. That is a real rate on a tiny
-       denominator, and it is reported as such rather than as a trend.
-
-       **A gate is NOT proposed, and the reason is measured rather than
-       stylistic.** The predicate a gate would need — *"does an open item's
-       Accept require amending a section this sweep is about to move?"* — is
-       semantic: it turns on the difference between `234.1` cited as a reason
-       and `229.3` cited as a target, which is the same "checkable shape vs.
-       semantic content" line 94.11 draws and `check:wrong-choice` lives on.
-       The shape that IS checkable — "an open item names a slice number whose
-       body is archive-only" — fires on 232.3 as well, where it is correct
-       behaviour, so a gate over it would be red on a healthy state. What is
-       cheap and exact is a **sweep-time report**: list the slice numbers the
-       target set contains that any still-open item names, and let the wake
-       running the sweep read them. That is a line in `roadmap_scope.py`, which
-       already parses both the checkboxes and the headings.
-
-       *Accept* — properties, not predicted values:
-       - (a) A wake running an archive sweep is told, from the sweep's own
-         instrument, which target slices are named by still-open items — or it
-         is recorded that the loop prefers to check this by hand and why. Both
-         close this.
-       - (b) Whatever is decided, **234.1's Accept (a) is reachable**: either
-         the archived text is amendable by an explicit note that says so, or
-         (a) is restated against text that is live. Leaving a criterion whose
-         target a later wake cannot act on without breaking a doctrine is what
-         this item is about.
-       - (c) The base rate above is **re-measured** at decision time, not
-         carried from here — 1 of 2 is a two-item denominator and the open set
-         moves every wake.
-       - (d) **Finding the premise false is a satisfying outcome**: if editing
-         an archived section for a correction is judged fine — the archive is
-         markdown, reviewed and diffed, and 235.3 already deleted from it — then
-         record that as the standing answer and close this. It is not obviously
-         wrong; what is wrong is that no document says either way.
-
-       **Kind of work needed: NOT browser-blocked and NOT owner-blocked.** A
-       parse of two markdown files plus a decision recorded in prose.
-
-       ---
-
-       **CLOSED 2026-09-01. Both arms answered, and arm (d) fired: the premise
-       is FALSE as stated, which this item wrote down as a satisfying outcome.**
-
-       **(d) first, because it changes what the other arms are for.** The item
-       says *"what is wrong is that no document says either way"* about editing
-       archived text. The document was missing; the PRACTICE was not, and it is
-       measurable rather than a judgement call:
-
-       ```
-       git log --format='%h %cs %s' --numstat -- ROADMAP-archive.md
-       #   dc861a25  235.3   0 insertions / 12 deletions   <- a DELETION
-       #   d3d76a28  199.1  27 insertions /  0 deletions   <- an AMENDMENT, no move
-       #   (every other commit touching the file is a sweep: N insertions, 0 deletions)
-       ```
-
-       `d3d76a28` (199.1, 2026-08-29) appended a **`RE-VERIFIED … the trigger
-       fired`** block into an archived slice — new text written into the archive
-       months after that slice closed, with no move involved. `dc861a25` (235.3)
-       deleted from it. So the loop has already both amended and deleted
-       archived text, and nothing in `CLAUDE.md` or `LOOPS.md` forbids either:
-       "archived verbatim" is a property of the **move**, not a claim of
-       immutability, and rule 4's *"a dispatch decision never comes from it"* is
-       about where a dispatch reads, not about where a correction may be
-       written.
-
-       **The standing answer, now recorded in `LOOPS.md` beside rule 4's archive
-       paragraph:** amending an archived section is allowed and expected for a
-       correction — the archive is markdown, in git, reviewed and diffed like
-       any other file. What is NOT allowed is what rule 4 already forbids:
-       taking a dispatch decision from it. It is written in the durable playbook
-       rather than here, because a correction written into a per-wake file is a
-       correction that dies there (169.3), which is this item's sibling lesson.
-
-       **(b) — 234.1's Accept (a) was reachable all along, and the premise that
-       it was not is the false half.** 236.2 says the criterion is *"half
-       satisfiable in the live file and half only by editing the archive"*.
-       Measured: the archived half was **already satisfied before the sweep
-       moved it**. `git log -S'CORRECTED 2026-08-31 by slice 234.1'` returns
-       `258856b4` — 234.1's own filing commit, which wrote the correction while
-       229.3 was live — and then `574a8634`, the sweep, which carried it across
-       verbatim. Nothing was lost and no archive edit was ever required. Said
-       plainly because it is the more useful finding: **the sweep's
-       verbatim-move property is what saved this**, not the criterion's wording.
-
-       **This does not make the item's worry wrong, and the distinction is worth
-       drawing.** 234.1's correction happened to be written before the move; a
-       correction filed *after* one would have had nowhere live to go, and no
-       criterion of the sweep asks the question. That is why (a) still shipped.
-
-       **(a) — the sweep's own instrument now reports it.** A dependency lane
-       was added to `scripts/loops/roadmap_scope.py` as **recognition 3**: for
-       each still-open item, the slice numbers it names, intersected with the
-       target set. It is a **report, not a gate**, for the reason this item
-       measured — the checkable shape fires on healthy states too.
-
-       On today's tree it is not vacuous, which is the first thing that had to
-       be true:
-
-       ```
-       python3 scripts/loops/roadmap_scope.py
-       #   targets (newest first, over 6 lines): [235, 232]
-       #   ⚠ 4 target(s) NAMED by a still-open item — read each before moving it:
-       #     Slice 232 <- ROADMAP.md:400 (236.1)   Slice 232 <- :472 (236.2)
-       #     Slice 235 <- ROADMAP.md:472 (236.2)   Slice 232 <- :943 (234.1)
-       ```
-
-       **Red-proved and reconciled, per "an instrument's first output is not
-       evidence":**
-
-       - **Discrimination, by injection** — `--self-test` case **E**. Two items
-         under one slice, the OPEN one first, citing **different** slices; the
-         open item's citation must be charged and the closed item's must not.
-         The order and the different citations are both load-bearing: a fixture
-         with the closed item first, or with both citing the same slice, passes
-         on a lane with no clear-on-`[x]` at all. Cases A-D still pass.
-       - **Reconciled against an independent parser**, not against itself — a
-         throwaway second implementation over line ranges agrees on **all four**
-         (target, item) pairs and on the same three line numbers, and reports
-         the other three open items as naming nothing.
-       - **Not true-of-everything (94.11's base-rate test).** The two targets are
-         cited **22** and **24** times across `ROADMAP.md`; the lane charges
-         **4**. 3 of 6 open items name a target, 3 name none — so the predicate
-         distinguishes, which is the check 236.2 itself demanded of any proposal
-         and the one 94.11's worked example failed.
-       - **Over-reporting is deliberate and declared in the header.** A decimal
-         that merely looks like a slice number will be named. Over-reporting
-         costs the sweeping wake one look; under-reporting is the failure this
-         item exists to prevent.
-
-       **(c) — the base rate is RE-MEASURED, not carried, and it moved.** The
-       item states *"1 of 2 dispatchable, 1 of 5 overall"*. Today: **6** items
-       open, **3** owner- or hardware-blocked (112.3, 112.4, Slice 15's AT
-       runtime evidence), **3** dispatchable (234.1, 236.1, 236.2) — and **0 of
-       3** require editing archived text, because 234.1's archived half was
-       already satisfied and the other two are edits to live text. **0 of 3, not
-       1 of 2.** A zero is a defect until proven otherwise (CLAUDE.md), so it is
-       stated with its cause rather than as a trend: the denominator is three,
-       and the reason the numerator fell is a single measurable fact — the
-       correction predated the move.
-
-       **Not verified, said plainly:** cloud wake — no Podman and no
-       `localhost:8081`. The diff is one Python script and `ROADMAP.md` /
-       `LOOPS.md` prose; **no CSS, no markup, no shipped artefact and no
-       rendered output moved**, and the docs site renders none of these files.
-       Nothing here rests on a rendered image.
-
-**NOT VERIFIED, said plainly:** cloud wake — no Podman and no
-`localhost:8081`, so the 1440/390 light-and-dark screenshot lane could not run.
-**This slice changes no code**: the diff is `ROADMAP.md` and `.roundtable/`
-markdown, no shipped artefact, CSS, markup or rendered output moved, and the
-docs site renders neither file. Nothing here rests on a rendered image. The one
-browser-driven reading quoted — `check:claims` 162 live / 3 NOT VERIFIED — came
-from the gate executing in this container, not from an image.
+Closed — archived verbatim in `ROADMAP-archive.md`.
 
 ## Slice 235 — Standardize sweep: lanes 1-3 clean a TENTH time, and lane 4's finding is that the sweep's own instrument has never had a file — five runs, one copy, living inside an archived slice. Committing it exposed two owner calls no run could see, and the sweep it enabled exposed three self-referential stubs in the archive (2026-09-01)
 
-**Dispatcher trace, cloud wake.** Rule 1: no open P0 (`grep -n 'P0' ROADMAP.md`
-returns only closed slice headings) and GitHub intake **0 open issues**, asked
-via the API (`list_issues` OPEN → `totalCount: 0`), so Step 1 had nothing to
-triage and no `Roadmap · plan` row was recorded. Rule 2: `dispatch_status.py`
-read `Standardize 6 / 4 Continue rounds since 2026-08-31 13:03 OVERDUE` →
-**Standardize**. Rule 3 (`3 / 3`, also OVERDUE) and rule 4 were not reached.
-
-**Lanes 1-3: a tenth identical clean result.** The ordinal is checked against
-the sweep HEADINGS, not incremented from the last write-up — 228's own warning,
-and the reason it and 230 differ by one legitimately: 228 says *"an eighth
-time"*, 230 says *"a ninth"*, so this is the tenth.
-
-| lane | command | reading | verdict |
-|---|---|---|---|
-| 1 dead-style | `npm run scan:dead-style -w docs` | **0 dead** on 0 pages; 1,433 live inline declarations | clean |
-| 2 css-repeats | `npm run report:css-repeats -w @busy-office/ui` | 74 files · 242 rules · 230 distinct · **8 repeat groups** | clean — no delta |
-| 3 report:prose | `npm run report:prose -w docs` | 118 pages, median 748; 9 over corpus, 12 over a family median, **union 14** | all verdicted |
-| **4 loop-prose** | `python3 scripts/loops/report_loop_prose.py` | **the finding, below** | not clean |
-
-**Lane 2's delta is zero, which is the whole reading.** All eight groups map
-one-to-one onto `LOOPS.md`'s standing table, shapes
-`x4(3) x3(3) x3(9) x2(3) x2(3) x2(6) x2(3) x2(3)`, byte-identical to 228's and
-230's readings. The joined-control `x4` is still **two** components (money,
-quantity), so its stated reopen trigger — a THIRD component — is unmet.
-
-**Lane 3 checked by SET MEMBERSHIP, not by a cite count**, because the obvious
-instrument is a dead one and 228.1 already recorded why: grepping each page's
-path out of `ROADMAP.md` + `ROADMAP-archive.md` returns hits for all fourteen,
-so it reports full coverage whatever the truth is. Re-measured here rather than
-assumed — the range across the fourteen is **10 to 194 hits, minimum 10**, which
-is exactly the confident-coverage reading that instrument gives on any input;
-three of the fourteen have **zero** hits in the live file and are carried
-entirely by the archive. The union (data-table, richtext, which-pattern, form, editable-grid,
-list-report, calendar, money, combobox, motion, layouts, js-behaviors,
-design-language, scale) resolves entirely against **158.1's twelve**, **161.1's
-three** and **178.3's** `/concepts/scale/`; nothing is flagged outside those
-sixteen.
-
-**Lane 4 of 4 carries the finding, and it is the signal `LOOPS.md` names
-verbatim** — *"a file the loop reads every wake accumulating with no cut behind
-it"*. The `ratchet` block, read first per the playbook:
-
-```
-python3 scripts/loops/report_loop_prose.py
-#   ROADMAP.md   15 up   last cut d701e619 (2026-08-30)
-```
-
-230.1, one wake ago, read `4 up, last cut d701e619` and concluded *"the signal
-lane 4 carried in 228.1 is discharged and has not returned"*. It has returned:
-**4 up → 15 up, same last cut.** Rule 4 reads this file top-to-bottom every wake
-and it is walking **3,359 lines to find 5 open items**, four of which are
-blocked.
-
-**The regrowth cycle is at the highest per-commit rate in the record**, measured
-from the sweep commit rather than from its stated after-figure — which is
-`ENVIRONMENT.md`'s rule, and 228.1 is the wake that paid for it:
-
-```
-git show d701e619:ROADMAP.md | wc -l            # 1,626   (its message says 1,473)
-git rev-list --count d701e619..HEAD -- ROADMAP.md   # 15
-wc -l < ROADMAP.md                              # 3,359
-#   +1,733 over 15 commits = 115.5 lines/commit
-```
-
-against 177's and 228.1's recorded cycle rates of 30.4 / 51.0 / 69.5 / 66.6 /
-94.2 / 98.0. **Reported as a rate with its n**, per 214.1: 15 commits is a short
-cycle and nothing about convergence is concluded from one point.
-
-The other seven files in the dispatcher region were read for a class change and
-none had one. `CLAUDE.md` (29 up, never cut) and `DESIGN.md` (22 up, never cut)
-are the standing HONEST verdicts — 193.1 executed 167.1's reopen condition on
-`CLAUDE.md` and decided *fold nothing, retire the watch*; `ENVIRONMENT.md` and
-`LOOPS-archive.md` carry 224.2's verdicts; both archives are out of scope for
-167.1's stated reason.
-
-1. [x] **235.1 — DONE 2026-09-01 (cloud wake). The archive-sweep scope
-       instrument is a committed script, `scripts/loops/roadmap_scope.py`. Its
-       first run found two owner-call items that every previous run of this
-       instrument silently could not see.**
-
-       **The Standardize finding, measured, not asserted.** This instrument has
-       been run by five wakes and has never had a file — its only source is a
-       fenced code block inside an *archived* slice:
-
-       ```
-       grep -c "closed slices carrying" ROADMAP.md ROADMAP-archive.md
-       #   ROADMAP.md:1   ROADMAP-archive.md:4        -> five runs on the record
-       grep -rln 'OPEN=set(); cur=None' --include='*.md' --include='*.py' .
-       #   ./ROADMAP-archive.md                        -> one copy of the source
-       ```
-
-       So three separate wakes wrote a pointer of the form *"the command is in
-       ROADMAP-archive.md, Slice 177, verbatim"* — into the file `LOOPS.md` rule
-       4 calls the place "for looking a reason UP", from which "a dispatch
-       decision never comes". That is the duplicated-logic lane this loop exists
-       for, and `.roundtable/RESUME.md` had already written the trigger, which
-       fired: *"if a wake needs this share a third time, commit the script"*,
-       after four consecutive hand-offs deferred re-measuring the share. This
-       wake needed it and ran the heredoc by hand, which is the fifth.
-
-       *Accept* — properties, not predicted values:
-       - The script's figures agree with what earlier wakes published from the
-         same instrument, at the same trees — **met**, below.
-       - The detector proves it can fail on each recognition it makes, with each
-         injection confirmed to have landed — **met**, `--self-test` cases A-D.
-       - Anything the parse cannot attribute is reported rather than dropped,
-         and the counts are asserted against a raw scan of the file — **met**,
-         and it is what found the two owner calls.
-
-       **Reconciled against an independent record before quoting, per CLAUDE.md**
-       — the published figures of two earlier wakes, reproduced at their own
-       trees by `--rev`:
-
-       ```
-       python3 scripts/loops/roadmap_scope.py --rev d701e619^
-       #   OPEN: [15, 112] · 15 closed slice(s) carrying 2366 lines · 62.4%
-       #   228.1 published exactly these three.                        EXACT
-
-       python3 scripts/loops/roadmap_scope.py --rev e29c7c18^
-       #   7 closed slice(s) carrying 1568 lines
-       #   targets [213, 212, 210, 209, 208, 201, 200]
-       #   214.1 published exactly this count, this line total and this set. EXACT
-       ```
-
-       **Where it disagrees with 214.1 it is the tree, not the parse**, and that
-       is checked rather than waved past. 214.1 published `OPEN: [15, 112, 211]`
-       and `50.8%`; this run reads `[15, 112, 211, 214]` and `49.0%`. Both
-       differences are the same fact: 214.1 measured *before* Slice 214's own
-       section — carrying its then-open `214.1` checkbox — was written into the
-       file, at 3,085 lines. `1568 / 3085 = 50.8%`, and `1568 / 3197 = 49.0%`.
-       The carried-lines figure and the target set, which are what a sweep acts
-       on, are identical at both.
-
-       **Both of this script's first outputs were wrong, and both were caught
-       before use** — CLAUDE.md's base rate, holding again:
-
-       - The self-test's baseline expectation was off by one, because
-         `split('\n')` yields a phantom empty line for the file's trailing
-         newline and charges it to the last slice. `splitlines()` throughout;
-         `total` now equals `wc -l` by construction rather than by a `- 1`.
-       - **The reconciliation REFUSED on the real file — correctly.** 19 raw
-         `[x]` markers against 17 attributed. The two it could not see are
-         `1. [x] OWNER CALL — 0.2.0 release` and `2. [x] OWNER CALL — (a)
-         adoption/DX`, both under `## STATE`, a non-slice H2. **Both are closed
-         and nothing is being lost today**, said plainly. What matters is the
-         shape: an OPEN item there would be invisible to a slice-keyed pass
-         while rule 4 is asking for *"the OLDEST still-open item"* — the exact
-         defect CLAUDE.md's storage doctrine records `STATUS.md` shipping for
-         weeks, where "OWNER CALL — direction" was a stated release blocker its
-         parser's numeric-id requirement hid. They are now printed on every run,
-         and an open one is flagged `⚠ OPEN and unattributed`.
-
-       **`--self-test`, red-proved by injection with each injection confirmed to
-       have landed before its result was believed:**
-
-       - **A — openness.** Re-open one `[x]` → `[ ]` in a closed fixture slice;
-         injection asserted present, then the open set must move `{}` → `{2}`
-         and the box counts `[0,2]` → `[1,1]`.
-       - **B — attribution (165.1's bug).** Wedge a `## Objective` H2 with two
-         body lines between two slices; the per-slice body counts must not move
-         at all. A "nearest preceding `## Slice`" parse fails this while looking
-         entirely correct.
-       - **C — the unattributed lane.** Add an OPEN `OWNER CALL` under a
-         `## STATE` H2; it must stay out of every slice figure AND come back as
-         exactly one stray flagged open.
-       - **D — the reconciliation itself.** Hand `reconcile()` an empty stray
-         list for the same fixture; it must refuse. Without D the check would
-         agree with whatever its caller passed, which is CLAUDE.md's named
-         defect — *"a reconciliation that cannot see past its own caller is a
-         detector that cannot fail"*. Each case exits non-zero with the reason
-         if the detector stops discriminating.
-
-       **Not a gate, deliberately.** Every figure it prints is legitimately
-       non-zero on a healthy day — a sweep is a cadence, not an invariant — so a
-       gate over this predicate would fail the build on a correct state. 94.11's
-       test, applied before writing one.
-
-       **NOT VERIFIED, said plainly:** no Podman and no `localhost:8081` here, so
-       the 1440/390 light-and-dark screenshot lane could not run. This item adds
-       one Python script that renders nothing and is imported by nothing — no
-       markup, no CSS, no docs page — so nothing in it rests on a rendered image.
-
-2. [x] **235.2 — DONE 2026-09-01 (cloud wake). Eighth archive sweep: five
-       closed slices moved, `ROADMAP.md` 3,569 → 2,165 lines. And the
-       verification parser found a pre-existing defect in the archive that no
-       previous sweep's checks could see.**
-
-       Scope from the script committed above, **re-derived at move time** rather
-       than read off this entry — which is the first Accept criterion, and it
-       moved: Slice 235 itself became open between filing and moving, so `OPEN`
-       gained `235` and the share fell to 39.8% as this write-up landed in the
-       denominator. The target set and carried lines did not change.
-
-       ```
-       python3 scripts/loops/roadmap_scope.py     # at move time
-       #   OPEN: [15, 112, 232, 234, 235]
-       #   5 closed slice(s) carrying 1419 lines here; 0 already in the archive
-       #   closed-history share: 1419/3569 = 39.8%
-       #   targets: [233, 231, 230, 229, 228]
-       ```
-
-       *Accept* — properties, not predicted values. **All five met:**
-       - The target set is DERIVED from the checkboxes at move time, never read
-         off this entry — **met**, and it is what caught `235` joining `OPEN`.
-       - Every moved section is byte-identical in the archive, verified against
-         the git blob rather than against whatever performed the move — **met**.
-       - The line accounting reconciles in BOTH directions — **met**.
-       - `check:slice-refs` reports the same figures either side — **met**.
-       - The open-checkbox count is unchanged across the move, counted raw —
-         **met**, 6 before and 6 after.
-
-       **Swept: `ROADMAP.md` 3,569 → 2,165; `ROADMAP-archive.md` 29,589 →
-       31,013.** Five slices — 233, 231, 230, 229, 228 — moved verbatim in the
-       order they held in the live file, each leaving the standing three-line
-       pointer.
-
-       **The line accounting reconciles exactly, in both directions**, which is
-       what a move owes over a rewrite: live loses `1,419` body lines and gains
-       `5 × 3 = 15` pointer lines = **−1,404**; archive gains 5 headings plus
-       the same 1,419 body lines = **+1,424**. Both match the measured deltas to
-       the line.
-
-       **Lossless, verified by an independently written parser against the git
-       blob** — not against the dict the move built, which would be
-       self-consistent by construction. That parser splits on the heading line
-       and keys by heading text, where the move script walked line spans:
-
-       ```
-       5/5 moved sections byte-identical to HEAD:ROADMAP.md
-       216 untouched live sections, 0 changed
-       228 pre-existing archive sections, 0 changed
-       5/5 pointers exactly the standing 3-line form
-       raw checkboxes  before: 6 open / 20 closed   after: 6 open / 9 closed
-       ```
-
-       **Citation-neutral, measured rather than asserted** — run against the two
-       files either side of the move, every figure identical:
-
-       ```
-       npm run check:slice-refs -w docs
-       # before: 464 citation(s) checked (249 cited, 2 known-dangling), 217 slice numbers
-       # after:  464 citation(s) checked (249 cited, 2 known-dangling), 217 slice numbers
-       ```
-
-       **The post-sweep 0% was checked before being believed**, per CLAUDE.md's
-       *a 0% is a defect until proven otherwise*. `roadmap_scope.py` now reads
-       `0 closed slice(s) carrying 0 lines`, and the corroborating reading is
-       the same command with the floor removed: `--min-lines 0` reports **212
-       closed slices carrying 636 lines, 212 of them already in the archive** —
-       i.e. every one is a three-line pointer sitting under the `>6` floor, not
-       a section the parse failed to see.
-
-       **The figures above are the file after the MOVE and before this write-up
-       was appended to it** — 209.1's correction, and `ENVIRONMENT.md`'s rule
-       that a sweep's stated after-figure predates its own write-up. The
-       post-commit figure is in the loop log row and in `.roundtable/RESUME.md`.
-
-       **A pre-existing defect the verification found, filed rather than fixed
-       here — see 235.3.** The independent parser refused to build its index at
-       all: `AssertionError: duplicate heading: ## Slice 24`. Three slice
-       numbers — **17, 23, 24** — each head TWO sections in `ROADMAP-archive.md`,
-       and in every case the second is a three-line **pointer into the file it
-       is already in**. An earlier sweep moved a live entry that had already been
-       reduced to a pointer. This sweep cannot reproduce it: the `>6 lines` floor
-       excludes a pointer by construction, which is what that floor is for.
-
-       **NOT VERIFIED, said plainly:** no Podman and no `localhost:8081` here, so
-       the 1440/390 light-and-dark screenshot lane could not run. This is a
-       markdown-only move — no rendered surface changes, and the docs site does
-       not render either file — so nothing in this item rests on a rendered
-       image.
-
-3. [x] **235.3 — DONE 2026-09-01 (cloud wake). The three self-referential
-       pointer stubs are gone, and `check:slice-refs` now asserts uniqueness in
-       the archive too — red-proved against the real defect, not only against an
-       injection.**
-
-       `ROADMAP-archive.md` carried three self-referential pointer stubs: slices
-       17, 23 and 24 each headed two sections there, the second being
-       `Closed — archived verbatim in ROADMAP-archive.md.` inside
-       `ROADMAP-archive.md`.
-
-       Found by 235.2's verification parser crashing on a duplicate key, not by
-       looking for it. The live file's own pointer for each of the three is
-       correct and stays; what is wrong is the extra stub in the archive, which
-       makes a slice number resolve to two sections in the file that exists so a
-       citation can be looked up.
-
-       ```
-       grep -n '^## Slice 24 ' ROADMAP-archive.md
-       #   6035   the real 183-line body
-       #   13815  a 3-line pointer into this same file
-       ```
-
-       **`check:slice-refs` does not see this and passes**, which is worth
-       stating precisely rather than as a gate proposal: its "each heading one
-       section" assertion reads **217** — the live file's slice count — so the
-       archive's duplicates are outside what it checks.
-
-       *Accept* — properties, not predicted values. **All four met:**
-       - The three stubs are removed and every remaining slice number heads
-         exactly one section in `ROADMAP-archive.md`, counted raw — **met**.
-       - The real body of each of 17, 23 and 24 is byte-identical afterwards,
-         verified against the git blob — **met**.
-       - `check:slice-refs` reports consistent figures either side — **met**,
-         with one figure that MOVED by design and is accounted for below.
-       - Whether this warrants extending a gate is decided by measuring the base
-         rate first (94.11) — **met, and the answer is yes.**
-
-       **The deletion took the stubs and nothing else**, checked against the git
-       blob by an independently written span parser rather than against the
-       script that performed it:
-
-       ```
-       archive 31,013 -> 31,001 lines   (3 stubs x 4 lines = -12, exact)
-       before 233 sections, after 230; every kept section byte-identical, in order
-       3 sections removed — exactly the three stubs, named
-       Slice 17 / 23 / 24: 1 real section before -> 1 after, identical each
-       slice numbers heading >1 archive section: {}
-       ```
-
-       Deleting from this file is the operation whose history includes losing
-       7,307 lines to a silent case-collision overwrite, which is why the check
-       is the point rather than a formality.
-
-       **The gate was extended, and the base rate is why that is not ceremony.**
-       `check-slice-refs.mjs` ran its uniqueness loop over `ROADMAP.md` alone,
-       with a header arguing that was sufficient because every archived slice
-       leaves a live pointer stub. **That argument holds for CITATIONS and does
-       not hold for UNIQUENESS** — nothing looked at the archive's own headings,
-       so nothing could see three violations sitting in it. The loop now runs
-       over both files. Base rate for the added half at the moment it was
-       written: **3 of 233 archive sections**, false of the other 230.
-
-       **Red-proved twice, and the second is the one that matters** — against
-       the real defect rather than a synthetic one:
-
-       - **By injection.** A second `## Slice 23` section appended to the
-         archive; injection confirmed present first (`grep -c '^## Slice 23 '`
-         → **2**), then `slice-refs check FAILED — 1 of 677`, naming
-         `slice 23 heads exactly one section in ROADMAP-archive.md`. File
-         restored and diffed identical to the byte copy.
-       - **Against `HEAD`'s own archive**, i.e. the file as it stood before this
-         item: injection confirmed (`Slice 24` → **2** sections), then
-         **`FAILED — 3 of 677`**, naming 24, 17 and 23. The gate goes red on the
-         defect that was actually there, and green on the fixed file.
-
-       **One reported figure moved, by design, and it is accounted for exactly
-       rather than left to be re-derived:** `464 → 677` assertions. That is
-       `217` live uniqueness checks + `212` archive uniqueness checks (new) +
-       `248` citation checks — and the citation count moved `249 → 250` because
-       the gate's own new header names `235.3`, which is CLAUDE.md's
-       "an assertion that trips on its own explanation" arriving harmlessly:
-       the citation resolves, because this item exists. `seen.size` is unchanged
-       at **217** — every archive slice number is also a live one, set
-       difference empty, so the union did not grow.
-
-       **Deliberately not folded into 235.2.** Two edits to this file pair in one
-       commit — a 1,419-line move and a deletion — is what CLAUDE.md's bulk-edit
-       rule counsels against, and the destructive precedent is on this exact
-       file. Separate round, separate verification.
-
-       **NOT VERIFIED, said plainly:** no Podman and no `localhost:8081` here, so
-       the 1440/390 light-and-dark screenshot lane could not run. This item is a
-       build-time gate and markdown the docs site does not render — nothing in
-       it rests on a rendered image.
+Closed — archived verbatim in `ROADMAP-archive.md`.
 
 ## Slice 234 — 232.2's closing measurement is wrong about its own headline: the defect was introduced by 42.1, the commit that WROTE the sentence, and both dispatchers confirmed the opposite from the same single-file probe (2026-08-31)
 
-**Provenance, because it is what makes this admissible rather than a
-re-litigation.** A fourth cloud wake dispatched rule 4 on `232.2` — the oldest
-dispatchable item, the three older ones being owner- or hardware-blocked — and
-lost the Step 0c race to `606edf88`. Its pre-push `git fetch origin main` showed
-`0c3fd9ea..84aa5b93` with 232.2 already closed. **The item is not reopened.** What
-is filed is the one thing its independent derivation holds that the landed text
-does not, and it is a refutation of a sentence the landed text asserts twice.
-
-**Both dispatchers re-derived the premise and both confirmed it. The premise is
-false.** That is the finding: not that anyone was careless, but that the
-confirming instrument was the same one in both cases, and it cannot see the
-counterexample.
-
-1. [x] **234.1 — the introducing commit is `84eb14ca` (42.1), not `443348e2`
-       (42.3). 42.1 gave `check-notes.mjs` its `--self-test` branch in the SAME
-       commit as the header claiming it owed one, so 1 of 6 files was defective
-       before "the commit that paid the debt" existed.**
-
-       229.3's landed `RECURRENCE HISTORY` says *"At 42.1 the sentence was
-       TRUE"*, its table row reads *"wrote the sentence into 6 files"*, and it
-       concludes *"the defect was introduced by the commit that PAID the debt"*.
-       232.2's own text says the same. **Five of six files behave that way. The
-       sixth does not**, and it is the earliest.
-
-       **Why two independent re-derivations both confirmed it.** Both ran the
-       second instrument against **`check-floor.mjs` alone** — the landed text
-       publishes exactly that pair of commands — and generalised the result to
-       six files. `check-floor.mjs` is one of the five. Run per file:
-
-       ```
-       git fetch --unshallow origin     # ENVIRONMENT.md §2 — every figure here is history
-       for r in 84eb14ca 443348e2 f1be2485 5754ea02; do
-         for f in apps/docs/scripts/check-{boost,floor,forced-colors,loop-vocab,notes}.mjs \
-                  packages/core/scripts/check-markup.mjs; do
-           printf '%s %-42s sentence=%s branch=%s\n' "$r" "$f" \
-             "$(git show $r:$f 2>/dev/null | grep -c 'OWES a --self-test')" \
-             "$(git show $r:$f 2>/dev/null | grep -cF "argv.includes('--self-test')")"
-         done; echo
-       done
-       git show 84eb14ca -- apps/docs/scripts/check-notes.mjs | grep -E '^\+.*argv\.includes'
-       ```
-
-       At `84eb14ca` five files read `sentence=1 branch=0` and **`check-notes.mjs`
-       reads `sentence=1 branch=1`**; the diff confirms 42.1 itself adds
-       `if (process.argv.includes('--self-test')) {` to that file.
-
-       **CORRECTED by 236.1 — the widening check needs an exclusion, and the
-       sentence here used to omit it.** Widening the branch predicate to **any**
-       `--self-test` mention does NOT give the five a zero; it gives them
-       **`any=1`**, and that `1` is line 15 of each file — *"OWES a --self-test
-       (roadmap 42.3)…"*, the very sentence whose truth this item is
-       adjudicating. An assertion that trips on its own explanation is
-       CLAUDE.md's named defect, twice over. The predicate discriminates only
-       once the sentence is excluded, and it does:
-
-       ```
-       for f in apps/docs/scripts/check-{boost,floor,forced-colors,loop-vocab,notes}.mjs \
-                packages/core/scripts/check-markup.mjs; do
-         printf '%-30s any=%s excl=%s\n' "$(basename $f)" \
-           "$(git show 84eb14ca:$f | grep -c -- '--self-test')" \
-           "$(git show 84eb14ca:$f | grep -- '--self-test' | grep -vc 'OWES a --self-test')"
-       done
-       #   the five:        any=1  excl=0     <- `excl` is what carries the claim
-       #   check-notes.mjs: any=3  excl=2
-       ```
-
-       Under `excl` the five carry no branch mention at 42.1 and
-       `check-notes.mjs` carries two, so the conclusion is unchanged and **this
-       is not a narrow-regex artefact** — but it is the `excl` column that says
-       so, never the unexcluded one.
-
-       **What does NOT change, said first so the correction is not over-read.**
-       The aggregate is unaffected: walking all **1,749** first-parent commits of
-       `main` and counting files in the defective state gives
-       `0 → 1` (42.1) `→ 6` (42.3) `→ 5` (220, by deletion) `→ 0` (229.2) —
-       **one entry, zero recurrences**, exactly as 232.2 reported. Regrowth is
-       **0 of 24** by this scope (every `check-*.mjs` created between 42.3 and
-       229.2), against the sibling walk's `0 of 8` over heuristic gates — different
-       denominators, same zero. **229.3's refusal stands and is not reopened.**
-
-       **What changes is a sentence the refusal leans on rhetorically**: *"the
-       single introduction was a same-day side effect of a fix"*. It was not a
-       side effect of the fix. The debt was **false from the moment it was
-       written**, in 1 of 6 files, twenty minutes and two commits earlier.
-
-       **This correction was reached a third time and died twice before this.**
-       The `233.1` hand-off says the sentence entered at 42.1 *"where **5 of 6**
-       instances were true when written"* — the same reading, from a 316-commit
-       walk, hours earlier. `grep -n '5 of 6' ROADMAP.md` finds nothing about this
-       defect: it lived only in `.roundtable/RESUME.md`, which is rewritten
-       wholesale every wake, and the durable record went on asserting the
-       opposite. **169.3's lesson on live data** — a correction written into the
-       handover is a correction that dies there.
-
-       *Accept* — properties, not predicted values:
-       - (a) 229.3's `RECURRENCE HISTORY` and 232.2's closing text each agree with
-         what the per-file command above actually prints, **or** record why the
-         six-file generalisation is preferred anyway. Both close this.
-       - (b) The aggregate figures (one entry, zero recurrences) are stated
-         separately from the attribution, so a reader can see which part the
-         correction touches. Finding the distinction not worth drawing is a
-         satisfying outcome, recorded with its reason.
-       - (c) Whatever is decided, the per-file command sits beside the claim —
-         this item exists because a one-file probe was quoted over six.
-
-       ---
-
-       **CLOSED 2026-09-01 (cloud wake, rule 4 — oldest dispatchable item).**
-       Both premises were re-run before anything was edited, per CLAUDE.md's
-       rule that a premise inherited from an earlier wake is part of the
-       criterion. Both reproduce **exactly** as written: at `84eb14ca` five
-       files read `sentence=1 branch=0`, `check-notes.mjs` reads `sentence=1
-       branch=1`, and at `443348e2` all six read `branch=1`. Clone unshallowed
-       first (`git rev-parse --is-shallow-repository` → **false**, **1,780**
-       commits), per ENVIRONMENT §2.
-
-       **(a) — both targets now agree with what the per-file command prints,
-       and only one of them was this wake's to write.**
-
-       | target | state found | this wake |
-       |---|---|---|
-       | 229.3's `RECURRENCE HISTORY` | already amended | nothing to do |
-       | 232.2's closing text | un-annotated | amended in place |
-
-       229.3's half was **already satisfied before the archive sweep moved
-       it**, and that is a measured correction to 236.2's premise rather than a
-       lucky find:
-
-       ```
-       git log -S'CORRECTED 2026-08-31 by slice 234.1' --format='%h %cs %s' \
-           -- ROADMAP.md ROADMAP-archive.md
-       #   574a8634  2026-09-01  Roadmap 235.2 — eighth archive sweep …
-       #   258856b4  2026-08-31  Roadmap 234.1 — the OWES-a-self-test defect …
-       ```
-
-       `258856b4` is **this item's own filing commit**, and it wrote the
-       correction into `ROADMAP.md` while 229.3 was still live; `574a8634`'s
-       sweep then carried it into the archive verbatim, correction included. So
-       no wake ever had to edit the archive to satisfy (a) — see 236.2.
-
-       **(b) — the aggregate is stated separately from the attribution**, in
-       its own paragraph of the note added to 232.2's closing text, so a reader
-       can see which part the correction touches: attribution moves for 1 of 6
-       files, the aggregate (one entry, zero recurrences; regrowth 0 of 8 and
-       0 of 24) does not, and **229.3's refusal is not reopened**.
-
-       **(c) — the per-file command sits beside the claim** in this item, and
-       the note added to 232.2 points at it rather than re-copying it, which is
-       the one place a pointer is right: the command is four lines above the
-       text that cites it in the same file.
-
-       **Not verified, said plainly:** cloud wake — no Podman and no
-       `localhost:8081`, so the 1440/390 light-and-dark screenshot lane could
-       not run. This item changed **no CSS, no markup and no shipped artefact**
-       — its diff is `ROADMAP.md` prose — so nothing in it rests on a rendered
-       image.
-
-       **Requires an unshallowed clone** (`git fetch --unshallow origin`); no
-       browser, no owner. Dispatchable by any wake.
+Closed — archived verbatim in `ROADMAP-archive.md`.
 
 ## Slice 233 — 231.2's new prose asserts two computed facts and nothing executes either; found by the THIRD independent build of 231.2 (2026-08-31)
 
@@ -1234,504 +483,7 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 ## Slice 232 — Objective grill of Slices 229, 230, 231: 230 and 231 survive entirely, and both findings are against how 229's refusal RECORDED its numbers, not against the refusal (2026-08-31)
 
-**Dispatcher trace, cloud wake.** Rule 1: no open P0, and GitHub intake **0 open
-issues** (`list_issues` OPEN → `totalCount: 0`), so Step 1 had nothing to triage.
-Rule 2: `Standardize 1 / 4`, no drift flagged. Rule 3:
-**`Objective 3 / 3 slices OVERDUE [229, 230, 231]` — dispatched.** Full report:
-`.roundtable/grill-objective-229-230-231-2026-08-31.md`.
-
-**Arming set NOT narrowed.** **40** prior grill reports, read **from the HEAD
-blobs**; none names 229, 230 or 231. All three genuinely un-grilled. Read from
-the blob rather than the tree for 229's own stated reason — the working-tree form
-matches this grill's own heading.
-
-**This wake was the LOSING dispatcher of two Step 0c collisions, and that is
-recorded because it is the evidence, not an excuse.** It dispatched rule 4 onto
-**229.3**, built the refusal and ran the gates green; the mandated pre-commit
-`git fetch origin main` found **origin/main 10 commits ahead** with 229.3, 229.4,
-229.5, 230 and 231 all landed. It re-dispatched onto **231.2**, built that and
-ran the gates green; the next pre-commit fetch found **2 more commits** — 231.2
-taken as well. Both discarded per Step 0c, then rule 3 was OVERDUE and this grill
-is the third dispatch.
-
-**Both times the loser reached the same substantive answer as the winner**, which
-is the first direct *measurement* of Step 0c's central claim rather than an
-argument for it:
-
-| item | winner | loser, independently | agreed? |
-|---|---|---|---|
-| 229.3 | refuse the assertion | refuse the assertion | **yes** |
-| 231.2 | keep `--elevated`, document it | keep `--elevated`, document it | **yes** |
-| 231.2 numbers | `2 → 5`, low set `17 → 16` | `2 → 5`, low set `17 → 16` | **yes** |
-| 231.2 denominator | 89 pairs vs 88 names | 89 pairs vs 88 names | **yes** |
-
-**And it is worse than two, because the PREVIOUS hand-off records the same
-loss.** `.roundtable/RESUME.md` at `d32b758c` says that wake dispatched rule 4 on
-229.3 and *"did the whole item — measured the base rate, built both candidate
-predicates as a throwaway probe, red-proved them by injection"* before its own
-pre-commit fetch showed 229.3 already landed. So on 2026-08-31, **229.3 was built
-to completion three times by three wakes and landed once**, and 231.2 twice and
-landed once. That is not inferred from the log; it is written in three hand-offs,
-this one included.
-
-**So redundant coverage paid once and cost at least three times over, in one
-day.** It paid in finding 232.1, a defect in a number 229.3 published that only
-an independent derivation was ever going to surface. Step 0c's refusal of *"the
-local session stops dispatching"* rested on one prior instance; this is the
-second time the mechanism has paid, and the first time its cost has been counted
-on the same day.
-
-**Not filed as an item** — Step 0c's decision is *accept collisions*, taken with
-the cost named, and the decision is the owner's. What is new is only that the
-cost is no longer hypothetical: the accepted figure is *"up to one wake's work,
-discarded"* and the measured figure for one day is **at least three wakes' work**.
-Recorded for the owner in `RESUME.md`'s Direction block, which is the one place
-the loop can say so; no fourth option is proposed here, because Step 0c already
-records three refusals with a measured reason each and inventing a fourth to fill
-the gap is the ceremony 94.11 refuses.
-
-**Slice 230 survives entirely, including a red-proof re-run by this grill.** The
-population claim verifies from the blobs — 8 pages read a source file, `scale`
-and `index` parse nothing, so the population is **6** and `cascade` threw **0**
-before `ff2b623d` and **1** after, making it the sole one-off. `tokens.min.css`
-carries **0** comments, so no stripping step was needed. The built table still
-renders **5** rows. And case C, the discriminating red-proof, was re-run
-independently: injecting `--bo-z-toast: 1600 → 1700` in the source only, with the
-injection confirmed present first, fails the build at **exit 1** with **count 5
-on both sides** — so a `length < 5` floor would have passed, which is exactly the
-claim. Injection reverted, `git status` confirmed empty.
-
-**It also reconciles a figure that reads like a contradiction.** The previous
-hand-off recorded *"6 of 8 throw"* while 230 says *"5 of 6"*. Both are right and
-count different denominators: 6 of the 8 readers throw (cascade now among them),
-and 5 of the 6 *parsers* threw before the fix.
-
-**Slice 231 survives and is corroborated by an independent derivation** — this
-wake built 231.2 in full without having read the winner's version and reached the
-same decision on the same evidence, including the same 89-vs-88 denominator
-correction. No finding against it.
-
-1. [x] **232.1 — DONE 2026-08-31 (cloud wake). Every published figure
-       reproduced exactly; 229.3 now carries the tense-inclusive count, the
-       command that produces it, and a correction to its red-proof table that
-       the replay turned up. The refusal stands and is strengthened. The record
-       is at the end of this item.** The finding as filed:
-       **229.3's BROAD base rate of 2 is an artefact of `owes?\b` not
-       matching `owed`. The tense-inclusive count is 7, and the 5 extra firings
-       are exactly the five files 229.2 corrected — the set 229.3's own Accept
-       names as the ones it must not fire on.**
-
-       **The refusal is NOT overturned, and that is stated first so this is not
-       read as a reopen.** 229.3's decisive argument is its third injection row —
-       a *reworded* stale claim leaves both predicates green — and that argument
-       is independent of any base rate. Refusing was right. What is wrong is a
-       published number beside it, which CLAUDE.md's "a number you report is
-       load-bearing" makes worth a slice on its own; 192.1's shape again, the
-       defect landing in what shipped BESIDE the carefully-proved claim.
-
-       229.3 publishes this as its reproduction command:
-
-       ```
-       grep -rniE 'owes?\b' apps/docs/scripts packages/core/scripts \
-         --include='check-*.mjs'                    # 2, both correct prose
-       ```
-
-       `owes?\b` is `owe` + optional `s` + a word boundary, so it **cannot match
-       the past tense** — the boundary fails against the `d`:
-
-       ```
-       printf 'this line used to say it was owed\n' | grep -cE 'owes?\b'      # 0
-       printf 'this line used to say it was owed\n' | grep -cE 'owe[sd]?\b'   # 1
-       ```
-
-       Past tense is not an edge case here — **it is the wording 229.2's own fix
-       used.** All five corrected headers read *"the debt is PAID, and this line
-       used to say it was owed"*. So the whole-word count is **7**, not 2:
-
-       ```
-       grep -rlwE 'owes|owed' apps/docs/scripts packages/core/scripts \
-         --include='check-*.mjs' | grep -v check-selftests.mjs | wc -l    # 7
-       ```
-
-       **BROAD as 229.3 defines it — "`owes` within 120 chars of `--self-test`
-       or `@heuristic`, either order" — fires on all five once the tense is
-       included.** The gap is **18 characters**; they sit on adjacent lines,
-       which is also why a line-based `grep` reports nothing and a multiline test
-       reports five:
-
-       ```
-       node -e "const s=require('fs').readFileSync(process.argv[1],'utf8');
-         console.log(/owed[\s\S]{0,120}--self-test|--self-test[\s\S]{0,120}owed/.test(s))" \
-         apps/docs/scripts/check-floor.mjs      # true, and true for all five
-       ```
-
-       So BROAD's complete false-positive set is **7, not 2** — and the five it
-       gains are precisely the ones 229.3's Accept forbids it firing on. The
-       reason is the sharper form of the same lesson: **a gate reading prose
-       about self-tests trips on the correction that fixed the thing it exists to
-       catch**, because explaining a paid debt requires naming the debt. That is
-       CLAUDE.md's *"verifying a removal: assert on structure, never on raw
-       text"*, recorded three times about a removal ASSERTION and here killing a
-       proposed GATE.
-
-       **Widening the word is worse, and that was measured too.** `owe[sd]?\b`
-       unanchored returns **17** files, because it matches inside *allowed* (9),
-       *windowed* (7), *showed* (3), *followed*, *swallowed*, *overflowed*,
-       *narrowest*, *slowest*, *lowest*. Only `-w` gives the honest 7.
-
-       *Accept* — properties, not predictions:
-       - 229.3's BROAD figure either carries the tense-inclusive count with the
-         command that produces it, or records that the published 2 was measured
-         with a regex blind to `owed` and says what the complete set is. **Both
-         close this.**
-       - The refusal itself is left standing. A change that reopens it does not
-         satisfy this item — the third injection row is untouched by any of it.
-
-       ---
-
-       **RESOLUTION (2026-08-31, cloud wake). Both Accept bullets are satisfied
-       by the same edit: 229.3 now carries the tense-inclusive count AND says
-       the published 2 was measured with a regex blind to `owed`.**
-
-       **Every figure this item published was re-run before anything was
-       edited** — the premise is a prior wake's measurement, so re-checking it
-       is part of the criterion, not a courtesy. All reproduce:
-
-       | claim | re-run |
-       |---|---|
-       | NARROW/published count is 2, both correct prose | **2** — `check-resume-charter`, `check-resume-slice-ids` |
-       | `owes?\b` cannot match `owed` | `0` vs `1` for `owe[sd]?\b`, on the same line |
-       | tense-inclusive whole-word count | **7** |
-       | the 5 extra are 229.2's corrected files | **5** headers carry *"used to say it was owed"* |
-       | BROAD's multiline test fires on all five | **true** on all five |
-       | 15 heuristic gates carry a `--self-test` branch | **15**, re-derived from the branch test |
-
-       **Reconciled against an independent instrument before being quoted.**
-       The 7 was produced twice by different means — `grep -rlwE` over the
-       filenames, and a Node pass applying BROAD's actual 120-char proximity
-       predicate to the 15 branch-carrying files. Both return the same seven,
-       and all seven are inside the 15, so the false-positive set is not
-       inflated by files the proposal would never have walked.
-
-       **One published figure did NOT reproduce as written, and the difference
-       is a missing exclusion.** This item states that unanchored `owe[sd]?\b`
-       returns 17 files. Run as written it returns **18**; it returns 17 with
-       the `grep -v check-selftests.mjs` the 7-count command carries and the
-       17-count sentence does not. The excluded file is the meta-gate, which
-       names this vocabulary by definition. Recorded rather than quietly
-       adjusted — it is the same class of defect this item exists to fix.
-
-       **The replay found a SECOND defect in the same table, which is why this
-       took a replay rather than an edit.** 229.3's red-proof reads
-       `NARROW 0 BROAD 0` on its third row. Rows 1 and 2 are counts over the 15;
-       row 3 is *"did it fire on the injection"*. As a count it is **2** — the
-       reworded sentence contains no `owe` word, so BROAD's two standing false
-       positives are still there and cannot go anywhere. The `<- both BLIND`
-       annotation carries the meaning, so the refusal is unaffected, but the
-       number as printed is wrong in the same way the base rate was.
-
-       **And the correction sharpens the refusal rather than weakening it.**
-       Under the tense-inclusive predicate the BROAD column reads **7 / 7 / 7**
-       — flat across the baseline and both injections — because the red-proof's
-       chosen injection site, `check-floor.mjs`, is itself one of the seven
-       false positives. So the corrected BROAD not only costs 3.5x the false
-       positives; on this test it discriminates nothing at all. 229.3's
-       decisive third row is untouched by any of this, and **the refusal is
-       explicitly left standing.**
-
-       **Method note, since the replay is itself an instrument.** The injections
-       were done in memory — the file is read, the sentence spliced into the
-       string, the predicate applied to the string — so no revert could be
-       missed. Each mutated string was asserted to CONTAIN the injected sentence
-       before it was measured (a green red-proof is a defect in the injection
-       until proven otherwise), and the file on disk was asserted byte-identical
-       afterwards. The replay is also case-INsensitive, as 229.3 measured it: a
-       case-sensitive run reads row 2 as `BROAD 2`, not 3, because the injected
-       sentence says `OWES`. That discrepancy was chased down rather than
-       averaged over — it is the difference between reproducing a measurement
-       and merely getting a similar number.
-
-       **Not verified, said plainly:** cloud wake — no Podman and no
-       `localhost:8081`, so the 1440/390 light-and-dark screenshot lane could
-       not run. **Nothing here is a code change**: the diff is `ROADMAP.md` and
-       the loop-log files only, and no shipped artefact, CSS, markup or rendered
-       output moved. Nothing in this item rests on a rendered image.
-
-2. [x] **232.2 — DONE 2026-08-31 (cloud wake). The recurrence history 229.3
-       never measured: the defect was
-       introduced BY the commit that paid the debt, and has recurred zero times
-       since.**
-
-       229.3 rests its ratchet refusal on a base rate of 0 *today*. It never asks
-       how often the defect has actually appeared, which is the question a
-       ratchet is for. Measured by the losing dispatcher, two independent
-       instruments, on an unshallowed clone:
-
-       ```
-       git log -S'OWES a --self-test' --format='%h %cs %s' --name-only \
-           -- apps/docs/scripts packages/core/scripts        # exactly 3 commits
-       ```
-
-       | commit | date | what it did | seen by |
-       |---|---|---|---|
-       | `84eb14ca` 42.1 | 2026-08-19 | wrote the sentence into **6** files | pickaxe |
-       | `443348e2` 42.3 | 2026-08-19 | added the branches — **the claim becomes false** | second instrument only |
-       | `f1be2485` 220 | 2026-08-30 | deleted `check-boost.mjs`, the sixth file | pickaxe |
-       | `5754ea02` 229.2 | 2026-08-31 | corrected the remaining five | pickaxe |
-
-       **At 42.1 the sentence was TRUE**, which the pickaxe structurally cannot
-       see — it finds where the SENTENCE changed, and `443348e2` changed only the
-       branch. The instrument that sees it tests sentence AND branch together:
-
-       ```
-       git show 84eb14ca:apps/docs/scripts/check-floor.mjs | grep -c "argv.includes('--self-test')"   # 0
-       git show 443348e2:apps/docs/scripts/check-floor.mjs | grep -c "argv.includes('--self-test')"   # 1
-       ```
-
-       **So the defect was introduced by `443348e2`, titled *"42.3: all seven
-       heuristic gates now prove they can fail"* — the commit that paid the
-       debt.** It shipped the self-tests and left five sentences saying they were
-       owed. One introduction, zero recurrences in the twelve days to 229.2.
-
-       That is the ratchet argument answered on its own terms rather than by
-       today's base rate: a ratchet guards recurrence, and the measured
-       recurrence rate over the whole history is zero.
-
-       **`check-boost.mjs` is the sixth file and is resolved, not filed** — it
-       left the defective state by deletion in Slice 220's htmx-4 migration, not
-       by correction, which is why 229.2 corrected five.
-
-       *Accept* — a property: the recurrence history is recorded in 229.3's
-       vicinity with the commands above, **or** it is recorded that the loop
-       prefers the today-base-rate framing and why. Both close this; finding the
-       history irrelevant to the decision is a satisfying outcome.
-
-       **Requires an unshallowed clone** (`git fetch --unshallow origin`) — every
-       figure here is a history measurement, and ENVIRONMENT.md §2 says they are
-       silently 50x wrong without it.
-
-       ---
-
-       **CLOSED by the first arm.** The history now sits inside 229.3 itself,
-       under **RECURRENCE HISTORY**, with both instruments and their commands
-       beside it — as a paragraph, not a pointer, for 167.2's reason.
-
-       **Every figure re-derived on an unshallowed clone rather than carried
-       across**, per this item's own closing warning:
-       `git rev-parse --is-shallow-repository` → **false**; the pickaxe returns
-       exactly the three commits claimed, and **`443348e2` is confirmed absent
-       from that list**, which is the entire point of needing a second
-       instrument; `check-floor.mjs`'s branch count reads **0** at `84eb14ca`
-       and **1** at `443348e2`. Nothing moved, so the item's own measurements
-       are confirmed rather than merely quoted.
-
-       **The refusal is untouched and better supported**, which is the outcome
-       this Accept was written to allow: a ratchet guards recurrence, measured
-       recurrence is zero, and the one introduction was a same-day side effect
-       of the commit that paid the debt.
-
-       > **CORRECTED 2026-09-01 by slice 234.1 — the attribution in the clause
-       > above is wrong for 1 of the 6 files, and the aggregate is untouched.**
-       > This text and 229.3's `RECURRENCE HISTORY` were both argued from a
-       > probe that reads **`check-floor.mjs` alone**, which is one of the five
-       > files that behave as described. Run per file at `84eb14ca` (42.1), five
-       > read `sentence=1 branch=0` and **`check-notes.mjs` reads `sentence=1
-       > branch=1`** — 42.1's own diff adds
-       > `if (process.argv.includes('--self-test')) {` to that one file, in the
-       > same commit as the header claiming it owed one. So for that file the
-       > debt was **false from the moment it was written**, two commits and
-       > twenty minutes before 42.3.
-       >
-       > **What the correction does NOT reach, stated separately so the two are
-       > not read as one** (234.1's Accept (b)): the aggregate. Walking all
-       > **1,749** first-parent commits and counting files in the defective
-       > state still gives `0 → 1` (42.1) `→ 6` (42.3) `→ 5` (220, by deletion)
-       > `→ 0` (229.2) — **one entry, zero recurrences** — and regrowth reads
-       > zero at both scopes measured (0 of 8 heuristic gates, 0 of 24
-       > `check-*.mjs`). **229.3's refusal stands and is not reopened.** What
-       > changes is the attribution only: *"a same-day side effect of the commit
-       > that paid the debt"* describes five instances and not the first.
-       >
-       > The per-file command sits beside the claim in **234.1** (Accept (c)),
-       > because this correction exists precisely because a one-file probe was
-       > quoted over six.
-
-       **Its sibling reading is recorded too, because it is a different
-       instrument reaching the same verdict.** A third dispatcher's 316-commit
-       walk measured **regrowth at 0 of 8** — eight new heuristic gates were
-       authored while six sibling headers still carried the stale sentence, and
-       none copied it. Recurrence and regrowth are not the same question; both
-       read zero, which is why no wake has needed to reopen 229.3.
-
-3. [x] **232.3 — 230.1's refusal to gate its predicate misapplies 94.11, and
-       94.11's own test is what refutes it. Filed by a THIRD dispatcher on the
-       same armed set; this grill's §B records "no finding against 230".**
-
-       Provenance first, because it is what makes this admissible rather than a
-       re-litigation: a third cloud wake dispatched rule 2 on the same flagged
-       drift from `e995891`, built its own `cascade.astro` fix, and lost the Step
-       0c race to `d32b758c`; re-dispatching, it drew rule 3 and independently
-       grilled the same armed set, losing a **second** race to `dbc41ae2`. Its
-       other finding — the 89-vs-88 denominator — **duplicates** what this grill's
-       §C already records from two dispatchers, and is dropped rather than
-       re-filed. This one does not appear in any landed document.
-
-       **The refusal.** 230.1 fixed the unasserted parse and then declined a gate:
-       *"the population is now 6 of 6, so a gate over this predicate would be
-       uniformly true and is refused on roadmap 94.11's own test: ceremony, not a
-       detector."*
-
-       **94.11's test is about DISCRIMINATION, not today's headcount.** Its
-       predicate was refused because it stayed true *under injection* — the
-       red-proof injected `letter-spacing: 7px` and the detector still reported
-       **0 unexplained**. A detector handed the defect and still reporting clean is
-       ceremony. Applied properly here the same test **passes**, and no synthetic
-       injection is needed because the defect is in this repo's history:
-
-       ```
-       git checkout -q ff2b623d^ -- apps/docs/src/pages
-       for f in $(grep -rlE "readFileSync|import\.meta\.glob" apps/docs/src/pages --include=*.astro | sort); do
-         fm=$(awk '/^---$/{c++} c==1' "$f")
-         echo "throws=$(echo "$fm" | grep -c 'throw new Error') parses=$(echo "$fm" | grep -cE 'matchAll|\.match\(|\.split\(') $f"
-       done
-       git checkout -q HEAD -- apps/docs/src/pages
-       ```
-
-       | tree | flagged by `parses > 0 && throws == 0` |
-       |---|---|
-       | `ff2b623d^` (pre-fix) | **exactly 1** — `concepts/cascade.astro` |
-       | current `HEAD` | **0** |
-
-       **Zero false positives, and no exemption map needed.** `scale.astro` and
-       `index.astro` — the two pages 230.1 excluded *by hand* as byte-length-only —
-       exclude themselves at `parses=0`. The distinction 230.1 reached by reading
-       eight files and reconciling a disputed denominator, the detector reaches
-       mechanically.
-
-       **The counter-evidence, carried rather than omitted.** The loop found this
-       without a gate (227.1 spotted it, 230.1 fixed it), and the population has
-       been **static at 8 for 9 days** after growing 1 → 8 in ten
-       (`git log -S'readFileSync'` / `-S'import.meta.glob'`, first appearance per
-       page, on an unshallowed clone). A gate's value is about the **9th page**, so
-       this is **not urgent and not a P0**. What it is not, is ceremony:
-       `cascade.astro` gained its parse on 2026-08-22 and shipped unasserted for
-       those same 9 days, read past by three wakes.
-
-       *Accept* — properties, not predicted values:
-       - (a) The gate's verdict on the CURRENT tree agrees with what the tree
-         carries, measured rather than assumed.
-       - (b) Red-proved against the REAL pre-fix tree (`ff2b623d^`), not only a
-         synthetic injection, with the checkout confirmed to have taken effect
-         before the result is believed.
-       - (c) It carries `@heuristic` and a working `--self-test` with a
-         `process.argv` branch. Recognising "derives rendered content from a parse"
-         is a recognition problem, and this population was read as **6** and as
-         **8** by careful passes on the same day.
-       - (d) The byte-length-only exclusion is MECHANICAL, not an exemption list.
-         Any page exempted by name carries a reason, per `check:wrong-choice`.
-       - (e) **Finding the premise false is a satisfying outcome**: if the detector
-         cannot be written without an exemption map naming more files than it
-         catches, record that and refuse the gate on the measurement.
-
-       ---
-
-       **RESOLUTION (2026-09-01, cloud wake). The gate is built and wired:
-       `apps/docs/scripts/check-parse-asserts.mjs`, run from `check:repo` — so
-       it runs on every `docs:build` and on CI's `npm run build -w docs`, with
-       no `ci.yml` step added.** All five Accept bullets are satisfied, and (e)
-       did NOT fire: the exemption map it offered as an escape is not needed.
-
-       - **(a) The verdict on the current tree agrees with the tree, measured.**
-         `parse-assert check passed — 149 .astro file(s) scanned, 8 read a file
-         at build time, none parses without asserting`. Reconciled against an
-         INDEPENDENT count before being quoted: `grep -rlE
-         "readFileSync|import\.meta\.glob" apps/docs/src/pages --include=*.astro
-         | wc -l` also reads **8**, and the same grep over `apps/docs/src`
-         minus `/pages/` reads **0**, so the walk's wider root costs nothing and
-         adds no surprise. The six parsing pages were then read BY HAND, parse
-         site against throw site, rather than trusted from the count.
-       - **(b) Red-proved against the real pre-fix tree, and the checkout was
-         confirmed to have taken effect before the result was believed.**
-         `git checkout -q 'ff2b623d^' -- apps/docs/src/pages`, then the check
-         that is not the command's own exit code: `git hash-object
-         apps/docs/src/pages/concepts/cascade.astro` and `git rev-parse
-         'ff2b623d^:apps/docs/src/pages/concepts/cascade.astro'` both read
-         **`6138cbe6`**, and the page's frontmatter throw count moved **1 → 0**.
-         The gate then exited **1**, naming **exactly one** page —
-         `concepts/cascade.astro` — with **zero false positives**, including on
-         `components/alerts.astro`, which that same checkout also reverted.
-         Restored with `git checkout -q HEAD --`, and the gate re-run green.
-       - **(c) `@heuristic`, with a `--self-test` `check:selftests` accepts** —
-         it now reads `47 gates classified: 16 heuristic (all self-tested), 31
-         exact`, up one from 46/15. **The self-test was itself red-proved**, per
-         CLAUDE.md's rule that a green red-proof is a defect in the injection
-         until proven otherwise: a probe copy with comment-stripping removed
-         (injection confirmed by `grep -c` on the probe — 1 probe line present,
-         0 original lines left, and the first attempt's `&&` chain stopped on
-         that very grep rather than reporting a false green) turns **3 of the 11
-         cases WRONG**, including the fail-OPEN one, a commented-out `throw` that
-         would otherwise clear a page asserting nothing.
-       - **(d) The byte-length-only exclusion is mechanical. There is no
-         exemption map, by name or otherwise.** `concepts/scale.astro` and
-         `index.astro` — the two 230.1 excluded by hand — exclude themselves at
-         `parses = 0`, exactly as this item predicted.
-       - **(e) The premise held.** No exemption map was needed, so there was
-         nothing to refuse on.
-
-       **Two design choices measured rather than assumed, both narrowing the
-       gate.** All three signals are read from the FRONTMATTER only: scanning
-       the template body was tried first, and across the 8 reading pages the
-       body contributes exactly **one** parse — `name.split('-')[3]` in
-       `base/primitives.astro`, on a value whose own parse is already guarded
-       upstream — so it moves **no verdict** while opening a false-positive
-       class the gate cannot mechanically close, since a `<pre><code>` sample
-       legitimately contains `.split(`. And a build-time assertion can only live
-       in the frontmatter anyway, which the self-test asserts directly. The gap
-       this leaves is stated in the file rather than hidden: a page whose read
-       is in the frontmatter and whose ONLY parse is in the body would not be
-       flagged. No page does that today.
-
-       **What the gate does NOT check, said in its own header:** whether each
-       individual parse is guarded by the assertion beside it. That is semantic
-       — 94.11's wall — so it enforces the SHAPE that carries the property
-       (read + parse ⇒ at least one build-time throw) and says so, which is the
-       `check:wrong-choice` precedent rather than a new one.
-
-       **One tidy landed with it, and it is lane-2 drift caught before it
-       existed rather than after:** `stripComments` had exactly one copy, in
-       `check-ci-ignores.mjs`, and this gate needs the same decision. It moved
-       to `source-files.mjs` — the module whose own header records this precise
-       failure for the source walk.
-
-       **The first draft of this paragraph claimed `check:ci-ignores` "reports
-       the same numbers after the move", and that claim was FALSE** — caught by
-       going to get the pre-move reading instead of asserting it, which is the
-       only reason it is not in the commit. The gate reads `130 CI-ignored
-       file(s) verified against 128 script(s)` in this tree and **`128 / 127`**
-       at `HEAD`. The move is not what moved them; the new gate is. Isolated in
-       a **pristine `git worktree` at `HEAD`** rather than by `git stash`, which
-       ENVIRONMENT.md warns reverts the data along with the script:
-
-       | tree | ci-ignores reads |
-       |---|---|
-       | `HEAD`, untouched | 128 file(s) / 127 script(s) |
-       | `HEAD` + the helper move ONLY | **128 / 127** — unchanged |
-       | this tree (move + the new gate) | 130 / 128 |
-
-       Both deltas are accounted for exactly: `+1 script` is
-       `check-parse-asserts.mjs` existing, and `+2 file(s)` is that same script
-       becoming CI-run × the **2** `paths-ignore` entries (`.roundtable/**`,
-       `STATUS.md`) it is asserted against. The probe tree was confirmed to hold
-       the moved helper and NOT the new gate before its output was believed, and
-       `check:ci-ignores --self-test` still passes its 7 cases on the moved
-       helper.
-
-       **Not verified, said plainly:** this wake has no Podman and no
-       `localhost:8081`, so the 1440/390 light-and-dark screenshot lane could
-       not run. It changed **no CSS and no page markup** — the diff is two gate
-       scripts, one shared helper, `package.json` and this file — so nothing in
-       it rests on a rendered image. The browser-driven readings quoted come
-       from gates executing in this container.
+Closed — archived verbatim in `ROADMAP-archive.md`.
 
 ## Slice 231 — Polish round on `component/alerts`: the reconciliation is a NO-OP, and the sweep that surrounded it found one shipped variant with no recorded reason anywhere (2026-08-31)
 
