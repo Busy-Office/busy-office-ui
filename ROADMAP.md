@@ -315,6 +315,216 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 235 — Standardize sweep: lanes 1-3 clean a TENTH time, and lane 4's finding is that the sweep's own instrument has never had a file — five runs, one copy, and it lives inside an archived slice (2026-09-01)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0 (`grep -n 'P0' ROADMAP.md`
+returns only closed slice headings) and GitHub intake **0 open issues**, asked
+via the API (`list_issues` OPEN → `totalCount: 0`), so Step 1 had nothing to
+triage and no `Roadmap · plan` row was recorded. Rule 2: `dispatch_status.py`
+read `Standardize 6 / 4 Continue rounds since 2026-08-31 13:03 OVERDUE` →
+**Standardize**. Rule 3 (`3 / 3`, also OVERDUE) and rule 4 were not reached.
+
+**Lanes 1-3: a tenth identical clean result.** The ordinal is checked against
+the sweep HEADINGS, not incremented from the last write-up — 228's own warning,
+and the reason it and 230 differ by one legitimately: 228 says *"an eighth
+time"*, 230 says *"a ninth"*, so this is the tenth.
+
+| lane | command | reading | verdict |
+|---|---|---|---|
+| 1 dead-style | `npm run scan:dead-style -w docs` | **0 dead** on 0 pages; 1,433 live inline declarations | clean |
+| 2 css-repeats | `npm run report:css-repeats -w @busy-office/ui` | 74 files · 242 rules · 230 distinct · **8 repeat groups** | clean — no delta |
+| 3 report:prose | `npm run report:prose -w docs` | 118 pages, median 748; 9 over corpus, 12 over a family median, **union 14** | all verdicted |
+| **4 loop-prose** | `python3 scripts/loops/report_loop_prose.py` | **the finding, below** | not clean |
+
+**Lane 2's delta is zero, which is the whole reading.** All eight groups map
+one-to-one onto `LOOPS.md`'s standing table, shapes
+`x4(3) x3(3) x3(9) x2(3) x2(3) x2(6) x2(3) x2(3)`, byte-identical to 228's and
+230's readings. The joined-control `x4` is still **two** components (money,
+quantity), so its stated reopen trigger — a THIRD component — is unmet.
+
+**Lane 3 checked by SET MEMBERSHIP, not by a cite count**, because the obvious
+instrument is a dead one and 228.1 already recorded why: grepping each page's
+path out of `ROADMAP.md` + `ROADMAP-archive.md` returns hits for all fourteen,
+so it reports full coverage whatever the truth is. Re-measured here rather than
+assumed — the range across the fourteen is **10 to 194 hits, minimum 10**, which
+is exactly the confident-coverage reading that instrument gives on any input;
+three of the fourteen have **zero** hits in the live file and are carried
+entirely by the archive. The union (data-table, richtext, which-pattern, form, editable-grid,
+list-report, calendar, money, combobox, motion, layouts, js-behaviors,
+design-language, scale) resolves entirely against **158.1's twelve**, **161.1's
+three** and **178.3's** `/concepts/scale/`; nothing is flagged outside those
+sixteen.
+
+**Lane 4 of 4 carries the finding, and it is the signal `LOOPS.md` names
+verbatim** — *"a file the loop reads every wake accumulating with no cut behind
+it"*. The `ratchet` block, read first per the playbook:
+
+```
+python3 scripts/loops/report_loop_prose.py
+#   ROADMAP.md   15 up   last cut d701e619 (2026-08-30)
+```
+
+230.1, one wake ago, read `4 up, last cut d701e619` and concluded *"the signal
+lane 4 carried in 228.1 is discharged and has not returned"*. It has returned:
+**4 up → 15 up, same last cut.** Rule 4 reads this file top-to-bottom every wake
+and it is walking **3,359 lines to find 5 open items**, four of which are
+blocked.
+
+**The regrowth cycle is at the highest per-commit rate in the record**, measured
+from the sweep commit rather than from its stated after-figure — which is
+`ENVIRONMENT.md`'s rule, and 228.1 is the wake that paid for it:
+
+```
+git show d701e619:ROADMAP.md | wc -l            # 1,626   (its message says 1,473)
+git rev-list --count d701e619..HEAD -- ROADMAP.md   # 15
+wc -l < ROADMAP.md                              # 3,359
+#   +1,733 over 15 commits = 115.5 lines/commit
+```
+
+against 177's and 228.1's recorded cycle rates of 30.4 / 51.0 / 69.5 / 66.6 /
+94.2 / 98.0. **Reported as a rate with its n**, per 214.1: 15 commits is a short
+cycle and nothing about convergence is concluded from one point.
+
+The other seven files in the dispatcher region were read for a class change and
+none had one. `CLAUDE.md` (29 up, never cut) and `DESIGN.md` (22 up, never cut)
+are the standing HONEST verdicts — 193.1 executed 167.1's reopen condition on
+`CLAUDE.md` and decided *fold nothing, retire the watch*; `ENVIRONMENT.md` and
+`LOOPS-archive.md` carry 224.2's verdicts; both archives are out of scope for
+167.1's stated reason.
+
+1. [x] **235.1 — DONE 2026-09-01 (cloud wake). The archive-sweep scope
+       instrument is a committed script, `scripts/loops/roadmap_scope.py`. Its
+       first run found two owner-call items that every previous run of this
+       instrument silently could not see.**
+
+       **The Standardize finding, measured, not asserted.** This instrument has
+       been run by five wakes and has never had a file — its only source is a
+       fenced code block inside an *archived* slice:
+
+       ```
+       grep -c "closed slices carrying" ROADMAP.md ROADMAP-archive.md
+       #   ROADMAP.md:1   ROADMAP-archive.md:4        -> five runs on the record
+       grep -rln 'OPEN=set(); cur=None' --include='*.md' --include='*.py' .
+       #   ./ROADMAP-archive.md                        -> one copy of the source
+       ```
+
+       So three separate wakes wrote a pointer of the form *"the command is in
+       ROADMAP-archive.md, Slice 177, verbatim"* — into the file `LOOPS.md` rule
+       4 calls the place "for looking a reason UP", from which "a dispatch
+       decision never comes". That is the duplicated-logic lane this loop exists
+       for, and `.roundtable/RESUME.md` had already written the trigger, which
+       fired: *"if a wake needs this share a third time, commit the script"*,
+       after four consecutive hand-offs deferred re-measuring the share. This
+       wake needed it and ran the heredoc by hand, which is the fifth.
+
+       *Accept* — properties, not predicted values:
+       - The script's figures agree with what earlier wakes published from the
+         same instrument, at the same trees — **met**, below.
+       - The detector proves it can fail on each recognition it makes, with each
+         injection confirmed to have landed — **met**, `--self-test` cases A-D.
+       - Anything the parse cannot attribute is reported rather than dropped,
+         and the counts are asserted against a raw scan of the file — **met**,
+         and it is what found the two owner calls.
+
+       **Reconciled against an independent record before quoting, per CLAUDE.md**
+       — the published figures of two earlier wakes, reproduced at their own
+       trees by `--rev`:
+
+       ```
+       python3 scripts/loops/roadmap_scope.py --rev d701e619^
+       #   OPEN: [15, 112] · 15 closed slice(s) carrying 2366 lines · 62.4%
+       #   228.1 published exactly these three.                        EXACT
+
+       python3 scripts/loops/roadmap_scope.py --rev e29c7c18^
+       #   7 closed slice(s) carrying 1568 lines
+       #   targets [213, 212, 210, 209, 208, 201, 200]
+       #   214.1 published exactly this count, this line total and this set. EXACT
+       ```
+
+       **Where it disagrees with 214.1 it is the tree, not the parse**, and that
+       is checked rather than waved past. 214.1 published `OPEN: [15, 112, 211]`
+       and `50.8%`; this run reads `[15, 112, 211, 214]` and `49.0%`. Both
+       differences are the same fact: 214.1 measured *before* Slice 214's own
+       section — carrying its then-open `214.1` checkbox — was written into the
+       file, at 3,085 lines. `1568 / 3085 = 50.8%`, and `1568 / 3197 = 49.0%`.
+       The carried-lines figure and the target set, which are what a sweep acts
+       on, are identical at both.
+
+       **Both of this script's first outputs were wrong, and both were caught
+       before use** — CLAUDE.md's base rate, holding again:
+
+       - The self-test's baseline expectation was off by one, because
+         `split('\n')` yields a phantom empty line for the file's trailing
+         newline and charges it to the last slice. `splitlines()` throughout;
+         `total` now equals `wc -l` by construction rather than by a `- 1`.
+       - **The reconciliation REFUSED on the real file — correctly.** 19 raw
+         `[x]` markers against 17 attributed. The two it could not see are
+         `1. [x] OWNER CALL — 0.2.0 release` and `2. [x] OWNER CALL — (a)
+         adoption/DX`, both under `## STATE`, a non-slice H2. **Both are closed
+         and nothing is being lost today**, said plainly. What matters is the
+         shape: an OPEN item there would be invisible to a slice-keyed pass
+         while rule 4 is asking for *"the OLDEST still-open item"* — the exact
+         defect CLAUDE.md's storage doctrine records `STATUS.md` shipping for
+         weeks, where "OWNER CALL — direction" was a stated release blocker its
+         parser's numeric-id requirement hid. They are now printed on every run,
+         and an open one is flagged `⚠ OPEN and unattributed`.
+
+       **`--self-test`, red-proved by injection with each injection confirmed to
+       have landed before its result was believed:**
+
+       - **A — openness.** Re-open one `[x]` → `[ ]` in a closed fixture slice;
+         injection asserted present, then the open set must move `{}` → `{2}`
+         and the box counts `[0,2]` → `[1,1]`.
+       - **B — attribution (165.1's bug).** Wedge a `## Objective` H2 with two
+         body lines between two slices; the per-slice body counts must not move
+         at all. A "nearest preceding `## Slice`" parse fails this while looking
+         entirely correct.
+       - **C — the unattributed lane.** Add an OPEN `OWNER CALL` under a
+         `## STATE` H2; it must stay out of every slice figure AND come back as
+         exactly one stray flagged open.
+       - **D — the reconciliation itself.** Hand `reconcile()` an empty stray
+         list for the same fixture; it must refuse. Without D the check would
+         agree with whatever its caller passed, which is CLAUDE.md's named
+         defect — *"a reconciliation that cannot see past its own caller is a
+         detector that cannot fail"*. Each case exits non-zero with the reason
+         if the detector stops discriminating.
+
+       **Not a gate, deliberately.** Every figure it prints is legitimately
+       non-zero on a healthy day — a sweep is a cadence, not an invariant — so a
+       gate over this predicate would fail the build on a correct state. 94.11's
+       test, applied before writing one.
+
+       **NOT VERIFIED, said plainly:** no Podman and no `localhost:8081` here, so
+       the 1440/390 light-and-dark screenshot lane could not run. This item adds
+       one Python script that renders nothing and is imported by nothing — no
+       markup, no CSS, no docs page — so nothing in it rests on a rendered image.
+
+2. [ ] **235.2 — eighth archive sweep: the five closed slices carrying 1,419 of
+       `ROADMAP.md`'s 3,359 lines (42.2%) move to `ROADMAP-archive.md`, each
+       leaving the standing one-line pointer.**
+
+       Scope from the script committed above, at the tree before the move:
+
+       ```
+       python3 scripts/loops/roadmap_scope.py
+       #   OPEN: [15, 112, 232, 234]
+       #   5 closed slice(s) carrying 1419 lines here; 0 already in the archive
+       #   closed-history share: 1419/3359 = 42.2%
+       #   targets: [233, 231, 230, 229, 228]
+       ```
+
+       *Accept* — properties, not predicted values:
+       - The target set is DERIVED from the checkboxes at move time, never read
+         off this entry — a slice closed or opened between now and the move
+         changes it.
+       - Every moved section is byte-identical in the archive, verified against
+         the git blob rather than against whatever performed the move.
+       - The line accounting reconciles in BOTH directions: live loses the body
+         lines and gains three pointer lines per slice; archive gains the
+         heading plus the same body lines.
+       - `check:slice-refs` reports the same figures either side of the move.
+       - The open-checkbox count is unchanged across the move, counted raw.
+
 ## Slice 234 — 232.2's closing measurement is wrong about its own headline: the defect was introduced by 42.1, the commit that WROTE the sentence, and both dispatchers confirmed the opposite from the same single-file probe (2026-08-31)
 
 **Provenance, because it is what makes this admissible rather than a
