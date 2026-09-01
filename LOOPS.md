@@ -436,6 +436,29 @@ match to its full playbook below:
    citations resolvable — it reports the count itself, so read it there); a
    dispatch decision never comes from it, because nothing in it is open.
 
+   **Archived text MAY be amended, and a sweep must check what still-open items
+   NAME before moving it** (roadmap 236.2, decided 2026-09-01). Two separate
+   things, both previously unwritten:
+
+   - **Amending the archive is allowed and expected for a correction.** It is
+     markdown, in git, reviewed and diffed like any other file. This was already
+     the practice before any document said so — `git log --numstat --
+     ROADMAP-archive.md` shows `d3d76a28` (199.1) appending a `RE-VERIFIED`
+     block into an archived slice with no move involved, and `dc861a25` (235.3)
+     deleting from it; every other commit on that file is a sweep. *"Archived
+     verbatim"* is a property of the MOVE, not a claim of immutability, and the
+     rule above is about where a dispatch READS, not where a correction may be
+     written.
+   - **What a sweep must not do is move text an open item's Accept says to
+     amend.** `check:slice-refs` cannot catch it — it asks whether a citation
+     RESOLVES, and an archived one resolves fine; resolving is the wrong
+     question when the criterion says *amend*. So `roadmap_scope.py` reports
+     it: for each still-open item, the target slices it NAMES. Read that line
+     before moving anything. It is a **report, not a gate**, measured rather
+     than assumed — the checkable shape ("an open item names an archive-bound
+     slice") fires on healthy states too, so a gate over it would be red on a
+     correct tree.
+
    **Oldest, not "current in-progress slice," as of 2026-08-19.** The old
    wording never defined "current," and in practice it meant "whichever
    slice a triage step just created" — because triage inserts near the top

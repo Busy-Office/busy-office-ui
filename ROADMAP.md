@@ -397,7 +397,7 @@ gate names the cause of the three itself — *"this browser reports
 property, **not a regression and not to be "restored" to zero**. No finding
 against 233.
 
-1. [ ] **236.1 — 234.1's corroborating count does not reproduce as written, and
+1. [x] **236.1 — 234.1's corroborating count does not reproduce as written, and
        it fails by measuring its own explanation. The five files do not read
        `0` under "any `--self-test` mention"; they read `1`, and that `1` is the
        OWES sentence the item is measuring.**
@@ -469,7 +469,40 @@ against 233.
        unshallowed clone plus a markdown edit. No screenshot is evidence for any
        part of it.
 
-2. [ ] **236.2 — the eighth archive sweep moved Slice 229 while `234.1` was
+       ---
+
+       **CLOSED 2026-09-01, by arm (a)'s first branch — the exclusion is now
+       carried.** The finding reproduces exactly: on an unshallowed clone the
+       five files read **`any=1 excl=0`** and `check-notes.mjs` reads
+       **`any=3 excl=2`**, so the published sentence's *"confirms the other five
+       carried none"* is false against `any` and true against `excl`.
+
+       234.1's widening paragraph now prints the two columns side by side, names
+       the `1` as line 15's `OWES a --self-test (roadmap 42.3)…` — the sentence
+       the item is adjudicating — and says outright that **it is the `excl`
+       column that carries the claim, never the unexcluded one**. Arm (a)
+       offered "carry the exclusion" or "record that the unexcluded count is 1
+       and why"; the edit does **both**, because the second is what stops the
+       next wake re-deriving the first.
+
+       **(b) — the command sits beside the claim**, in the fenced block
+       immediately under the corrected sentence, per 234.1's own criterion (c).
+
+       **(c) — 234.1's central claim and aggregate are left standing.** Both
+       were re-run this wake and neither moved: `sentence=1 branch=0` × 5 and
+       `sentence=1 branch=1` for `check-notes.mjs` at `84eb14ca`; one entry,
+       zero recurrences. Nothing here reopens 229.3's refusal.
+
+       **(d) was available and is NOT what closed this.** "The sentence is
+       imprecise and the conclusion is right" was a defensible close, and it was
+       declined for a measured reason rather than a stylistic one: this is the
+       **third** instance of the same shape (232.1's missing
+       `check-selftests.mjs` exclusion, this one, and 192.1's general form), and
+       a defect recurring three times is the case where writing the correction
+       down beats recording that it did not matter. The cost of the edit was one
+       paragraph.
+
+2. [x] **236.2 — the eighth archive sweep moved Slice 229 while `234.1` was
        open and names 229.3's `RECURRENCE HISTORY` as a thing to amend. That
        text now lives only in `ROADMAP-archive.md`, and none of 235.2's five
        Accept criteria could see it.**
@@ -547,6 +580,114 @@ against 233.
 
        **Kind of work needed: NOT browser-blocked and NOT owner-blocked.** A
        parse of two markdown files plus a decision recorded in prose.
+
+       ---
+
+       **CLOSED 2026-09-01. Both arms answered, and arm (d) fired: the premise
+       is FALSE as stated, which this item wrote down as a satisfying outcome.**
+
+       **(d) first, because it changes what the other arms are for.** The item
+       says *"what is wrong is that no document says either way"* about editing
+       archived text. The document was missing; the PRACTICE was not, and it is
+       measurable rather than a judgement call:
+
+       ```
+       git log --format='%h %cs %s' --numstat -- ROADMAP-archive.md
+       #   dc861a25  235.3   0 insertions / 12 deletions   <- a DELETION
+       #   d3d76a28  199.1  27 insertions /  0 deletions   <- an AMENDMENT, no move
+       #   (every other commit touching the file is a sweep: N insertions, 0 deletions)
+       ```
+
+       `d3d76a28` (199.1, 2026-08-29) appended a **`RE-VERIFIED … the trigger
+       fired`** block into an archived slice — new text written into the archive
+       months after that slice closed, with no move involved. `dc861a25` (235.3)
+       deleted from it. So the loop has already both amended and deleted
+       archived text, and nothing in `CLAUDE.md` or `LOOPS.md` forbids either:
+       "archived verbatim" is a property of the **move**, not a claim of
+       immutability, and rule 4's *"a dispatch decision never comes from it"* is
+       about where a dispatch reads, not about where a correction may be
+       written.
+
+       **The standing answer, now recorded in `LOOPS.md` beside rule 4's archive
+       paragraph:** amending an archived section is allowed and expected for a
+       correction — the archive is markdown, in git, reviewed and diffed like
+       any other file. What is NOT allowed is what rule 4 already forbids:
+       taking a dispatch decision from it. It is written in the durable playbook
+       rather than here, because a correction written into a per-wake file is a
+       correction that dies there (169.3), which is this item's sibling lesson.
+
+       **(b) — 234.1's Accept (a) was reachable all along, and the premise that
+       it was not is the false half.** 236.2 says the criterion is *"half
+       satisfiable in the live file and half only by editing the archive"*.
+       Measured: the archived half was **already satisfied before the sweep
+       moved it**. `git log -S'CORRECTED 2026-08-31 by slice 234.1'` returns
+       `258856b4` — 234.1's own filing commit, which wrote the correction while
+       229.3 was live — and then `574a8634`, the sweep, which carried it across
+       verbatim. Nothing was lost and no archive edit was ever required. Said
+       plainly because it is the more useful finding: **the sweep's
+       verbatim-move property is what saved this**, not the criterion's wording.
+
+       **This does not make the item's worry wrong, and the distinction is worth
+       drawing.** 234.1's correction happened to be written before the move; a
+       correction filed *after* one would have had nowhere live to go, and no
+       criterion of the sweep asks the question. That is why (a) still shipped.
+
+       **(a) — the sweep's own instrument now reports it.** A dependency lane
+       was added to `scripts/loops/roadmap_scope.py` as **recognition 3**: for
+       each still-open item, the slice numbers it names, intersected with the
+       target set. It is a **report, not a gate**, for the reason this item
+       measured — the checkable shape fires on healthy states too.
+
+       On today's tree it is not vacuous, which is the first thing that had to
+       be true:
+
+       ```
+       python3 scripts/loops/roadmap_scope.py
+       #   targets (newest first, over 6 lines): [235, 232]
+       #   ⚠ 4 target(s) NAMED by a still-open item — read each before moving it:
+       #     Slice 232 <- ROADMAP.md:400 (236.1)   Slice 232 <- :472 (236.2)
+       #     Slice 235 <- ROADMAP.md:472 (236.2)   Slice 232 <- :943 (234.1)
+       ```
+
+       **Red-proved and reconciled, per "an instrument's first output is not
+       evidence":**
+
+       - **Discrimination, by injection** — `--self-test` case **E**. Two items
+         under one slice, the OPEN one first, citing **different** slices; the
+         open item's citation must be charged and the closed item's must not.
+         The order and the different citations are both load-bearing: a fixture
+         with the closed item first, or with both citing the same slice, passes
+         on a lane with no clear-on-`[x]` at all. Cases A-D still pass.
+       - **Reconciled against an independent parser**, not against itself — a
+         throwaway second implementation over line ranges agrees on **all four**
+         (target, item) pairs and on the same three line numbers, and reports
+         the other three open items as naming nothing.
+       - **Not true-of-everything (94.11's base-rate test).** The two targets are
+         cited **22** and **24** times across `ROADMAP.md`; the lane charges
+         **4**. 3 of 6 open items name a target, 3 name none — so the predicate
+         distinguishes, which is the check 236.2 itself demanded of any proposal
+         and the one 94.11's worked example failed.
+       - **Over-reporting is deliberate and declared in the header.** A decimal
+         that merely looks like a slice number will be named. Over-reporting
+         costs the sweeping wake one look; under-reporting is the failure this
+         item exists to prevent.
+
+       **(c) — the base rate is RE-MEASURED, not carried, and it moved.** The
+       item states *"1 of 2 dispatchable, 1 of 5 overall"*. Today: **6** items
+       open, **3** owner- or hardware-blocked (112.3, 112.4, Slice 15's AT
+       runtime evidence), **3** dispatchable (234.1, 236.1, 236.2) — and **0 of
+       3** require editing archived text, because 234.1's archived half was
+       already satisfied and the other two are edits to live text. **0 of 3, not
+       1 of 2.** A zero is a defect until proven otherwise (CLAUDE.md), so it is
+       stated with its cause rather than as a trend: the denominator is three,
+       and the reason the numerator fell is a single measurable fact — the
+       correction predated the move.
+
+       **Not verified, said plainly:** cloud wake — no Podman and no
+       `localhost:8081`. The diff is one Python script and `ROADMAP.md` /
+       `LOOPS.md` prose; **no CSS, no markup, no shipped artefact and no
+       rendered output moved**, and the docs site renders none of these files.
+       Nothing here rests on a rendered image.
 
 **NOT VERIFIED, said plainly:** cloud wake — no Podman and no
 `localhost:8081`, so the 1440/390 light-and-dark screenshot lane could not run.
@@ -940,7 +1081,7 @@ false.** That is the finding: not that anyone was careless, but that the
 confirming instrument was the same one in both cases, and it cannot see the
 counterexample.
 
-1. [ ] **234.1 — the introducing commit is `84eb14ca` (42.1), not `443348e2`
+1. [x] **234.1 — the introducing commit is `84eb14ca` (42.1), not `443348e2`
        (42.3). 42.1 gave `check-notes.mjs` its `--self-test` branch in the SAME
        commit as the header claiming it owed one, so 1 of 6 files was defective
        before "the commit that paid the debt" existed.**
@@ -971,9 +1112,32 @@ counterexample.
 
        At `84eb14ca` five files read `sentence=1 branch=0` and **`check-notes.mjs`
        reads `sentence=1 branch=1`**; the diff confirms 42.1 itself adds
-       `if (process.argv.includes('--self-test')) {` to that file. Widening the
-       branch predicate to **any** `--self-test` mention confirms the other five
-       carried none at 42.1, so this is not a narrow-regex artefact.
+       `if (process.argv.includes('--self-test')) {` to that file.
+
+       **CORRECTED by 236.1 — the widening check needs an exclusion, and the
+       sentence here used to omit it.** Widening the branch predicate to **any**
+       `--self-test` mention does NOT give the five a zero; it gives them
+       **`any=1`**, and that `1` is line 15 of each file — *"OWES a --self-test
+       (roadmap 42.3)…"*, the very sentence whose truth this item is
+       adjudicating. An assertion that trips on its own explanation is
+       CLAUDE.md's named defect, twice over. The predicate discriminates only
+       once the sentence is excluded, and it does:
+
+       ```
+       for f in apps/docs/scripts/check-{boost,floor,forced-colors,loop-vocab,notes}.mjs \
+                packages/core/scripts/check-markup.mjs; do
+         printf '%-30s any=%s excl=%s\n' "$(basename $f)" \
+           "$(git show 84eb14ca:$f | grep -c -- '--self-test')" \
+           "$(git show 84eb14ca:$f | grep -- '--self-test' | grep -vc 'OWES a --self-test')"
+       done
+       #   the five:        any=1  excl=0     <- `excl` is what carries the claim
+       #   check-notes.mjs: any=3  excl=2
+       ```
+
+       Under `excl` the five carry no branch mention at 42.1 and
+       `check-notes.mjs` carries two, so the conclusion is unchanged and **this
+       is not a narrow-regex artefact** — but it is the `excl` column that says
+       so, never the unexcluded one.
 
        **What does NOT change, said first so the correction is not over-read.**
        The aggregate is unaffected: walking all **1,749** first-parent commits of
@@ -1008,6 +1172,58 @@ counterexample.
          satisfying outcome, recorded with its reason.
        - (c) Whatever is decided, the per-file command sits beside the claim —
          this item exists because a one-file probe was quoted over six.
+
+       ---
+
+       **CLOSED 2026-09-01 (cloud wake, rule 4 — oldest dispatchable item).**
+       Both premises were re-run before anything was edited, per CLAUDE.md's
+       rule that a premise inherited from an earlier wake is part of the
+       criterion. Both reproduce **exactly** as written: at `84eb14ca` five
+       files read `sentence=1 branch=0`, `check-notes.mjs` reads `sentence=1
+       branch=1`, and at `443348e2` all six read `branch=1`. Clone unshallowed
+       first (`git rev-parse --is-shallow-repository` → **false**, **1,780**
+       commits), per ENVIRONMENT §2.
+
+       **(a) — both targets now agree with what the per-file command prints,
+       and only one of them was this wake's to write.**
+
+       | target | state found | this wake |
+       |---|---|---|
+       | 229.3's `RECURRENCE HISTORY` | already amended | nothing to do |
+       | 232.2's closing text | un-annotated | amended in place |
+
+       229.3's half was **already satisfied before the archive sweep moved
+       it**, and that is a measured correction to 236.2's premise rather than a
+       lucky find:
+
+       ```
+       git log -S'CORRECTED 2026-08-31 by slice 234.1' --format='%h %cs %s' \
+           -- ROADMAP.md ROADMAP-archive.md
+       #   574a8634  2026-09-01  Roadmap 235.2 — eighth archive sweep …
+       #   258856b4  2026-08-31  Roadmap 234.1 — the OWES-a-self-test defect …
+       ```
+
+       `258856b4` is **this item's own filing commit**, and it wrote the
+       correction into `ROADMAP.md` while 229.3 was still live; `574a8634`'s
+       sweep then carried it into the archive verbatim, correction included. So
+       no wake ever had to edit the archive to satisfy (a) — see 236.2.
+
+       **(b) — the aggregate is stated separately from the attribution**, in
+       its own paragraph of the note added to 232.2's closing text, so a reader
+       can see which part the correction touches: attribution moves for 1 of 6
+       files, the aggregate (one entry, zero recurrences; regrowth 0 of 8 and
+       0 of 24) does not, and **229.3's refusal is not reopened**.
+
+       **(c) — the per-file command sits beside the claim** in this item, and
+       the note added to 232.2 points at it rather than re-copying it, which is
+       the one place a pointer is right: the command is four lines above the
+       text that cites it in the same file.
+
+       **Not verified, said plainly:** cloud wake — no Podman and no
+       `localhost:8081`, so the 1440/390 light-and-dark screenshot lane could
+       not run. This item changed **no CSS, no markup and no shipped artefact**
+       — its diff is `ROADMAP.md` prose — so nothing in it rests on a rendered
+       image.
 
        **Requires an unshallowed clone** (`git fetch --unshallow origin`); no
        browser, no owner. Dispatchable by any wake.
@@ -1313,6 +1529,32 @@ correction. No finding against it.
        this Accept was written to allow: a ratchet guards recurrence, measured
        recurrence is zero, and the one introduction was a same-day side effect
        of the commit that paid the debt.
+
+       > **CORRECTED 2026-09-01 by slice 234.1 — the attribution in the clause
+       > above is wrong for 1 of the 6 files, and the aggregate is untouched.**
+       > This text and 229.3's `RECURRENCE HISTORY` were both argued from a
+       > probe that reads **`check-floor.mjs` alone**, which is one of the five
+       > files that behave as described. Run per file at `84eb14ca` (42.1), five
+       > read `sentence=1 branch=0` and **`check-notes.mjs` reads `sentence=1
+       > branch=1`** — 42.1's own diff adds
+       > `if (process.argv.includes('--self-test')) {` to that one file, in the
+       > same commit as the header claiming it owed one. So for that file the
+       > debt was **false from the moment it was written**, two commits and
+       > twenty minutes before 42.3.
+       >
+       > **What the correction does NOT reach, stated separately so the two are
+       > not read as one** (234.1's Accept (b)): the aggregate. Walking all
+       > **1,749** first-parent commits and counting files in the defective
+       > state still gives `0 → 1` (42.1) `→ 6` (42.3) `→ 5` (220, by deletion)
+       > `→ 0` (229.2) — **one entry, zero recurrences** — and regrowth reads
+       > zero at both scopes measured (0 of 8 heuristic gates, 0 of 24
+       > `check-*.mjs`). **229.3's refusal stands and is not reopened.** What
+       > changes is the attribution only: *"a same-day side effect of the commit
+       > that paid the debt"* describes five instances and not the first.
+       >
+       > The per-file command sits beside the claim in **234.1** (Accept (c)),
+       > because this correction exists precisely because a one-file probe was
+       > quoted over six.
 
        **Its sibling reading is recorded too, because it is a different
        instrument reaching the same verdict.** A third dispatcher's 316-commit

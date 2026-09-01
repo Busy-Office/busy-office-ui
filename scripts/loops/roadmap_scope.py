@@ -2,10 +2,11 @@
 """Report the archive-sweep scope: which closed slices still carry body lines in
 the LIVE `ROADMAP.md`, and what share of the file rule 4 walks is closed history.
 
-@heuristic — the verdict rests on RECOGNISING two things, and both have been got
-wrong here before: which H2 a body line belongs to, and whether a slice is open.
-`--self-test` is what earns its output; it fails the script if either
-recognition stops discriminating.
+@heuristic — the verdict rests on RECOGNISING three things, and the first two
+have been got wrong here before: which H2 a body line belongs to, whether a
+slice is open, and which target slices a still-open item names. `--self-test` is
+what earns its output; it fails the script if any recognition stops
+discriminating.
 
 WHY THIS EXISTS. This instrument has been run by five wakes and has never had a
 file. Its only source is a fenced code block inside an ARCHIVED roadmap entry:
@@ -22,7 +23,7 @@ says is "for looking a reason UP", from which "a dispatch decision never comes".
 *"if a wake needs this share a third time, commit the script"*, after four
 consecutive hand-offs deferred re-measuring the share.
 
-WHAT IT MEASURES, and the two recognitions it can get wrong:
+WHAT IT MEASURES, and the three recognitions it can get wrong:
 
   1. **Attribution.** A body line is charged to the nearest preceding H2 **of any
      kind**, not to the nearest `## Slice`. Getting this wrong is 165.1's own
@@ -31,6 +32,33 @@ WHAT IT MEASURES, and the two recognitions it can get wrong:
      Slice 29 read as 78 lines when it is a correct 3-line pointer.
   2. **Openness.** A slice is OPEN if its body carries an `N. [ ]` checkbox. This
      is DERIVED, never hardcoded — hardcoding it is 165's other bug.
+  3. **Dependency (236.2).** Which target slices a still-open item NAMES. A
+     citation is charged to an item only while that item is the open one being
+     accumulated — a closed item citing the same slice must not fire, or the
+     report is true of everything and distinguishes nothing (94.11's base-rate
+     test, which this file's own `targets` line already passes).
+
+WHY RECOGNITION 3 EXISTS (roadmap 236.2). The eighth sweep moved Slice 229 while
+`234.1` was open and naming 229.3's `RECURRENCE HISTORY` as a thing to AMEND.
+All five of that sweep's Accept criteria passed, and none could see it: every one
+is a property of the MOVE (byte identity, two-way line accounting, citation
+resolution, a raw checkbox count, target derivation at move time). Even
+`check:slice-refs` cannot answer it — it asks whether a citation RESOLVES, and
+`229.3` resolves fine from the archive. Resolving is the wrong question when the
+criterion says amend.
+
+**This is a REPORT, not a gate, and 236.2 measured why before proposing it.** The
+predicate a gate would need — *"does an open item's Accept require amending a
+section this sweep is about to move?"* — turns on the difference between a slice
+cited as a REASON and one cited as a TARGET, which is semantic (94.11's
+checkable-shape-vs-content line, the one `check:wrong-choice` lives on). The
+shape that IS checkable fires on healthy states too, so a gate over it would be
+red on a correct tree. The wake running the sweep reads these and judges.
+
+**It errs toward OVER-reporting, deliberately.** A citation is any `N.M` or
+`Slice N` inside an open item's text, intersected with the target set; a decimal
+that merely looks like a slice number will be named. Over-reporting costs the
+sweeping wake one look; under-reporting is what 236.2 exists to prevent.
 
 RECONCILIATION. Per CLAUDE.md, a mirror must reconcile against the SOURCE, not
 against its own parse: this script counts the raw `N. [ ]` and `N. [x]` markers
@@ -71,29 +99,57 @@ HEADING = re.compile(r'^## ')
 SLICE = re.compile(r'^## Slice (\d+)\b')
 OPEN_BOX = re.compile(r'^\s*\d+\. \[ \]')
 DONE_BOX = re.compile(r'^\s*\d+\. \[x\]')
+# Recognition 3. Both citation shapes this repo actually writes: `232.2` /
+# `234.1's` for an item, `Slice 229` for a whole slice. Intersected with the
+# target set afterwards, so a stray decimal only matters if it collides with a
+# target number — the over-reporting this file's header accepts on purpose.
+CITE = re.compile(r'\bSlice (\d+)\b|\b(\d+)\.\d+\b')
+
+
+def cites(lines):
+    """Slice numbers named anywhere in an item's text."""
+    found = set()
+    for line in lines:
+        for whole, dotted in CITE.findall(line):
+            found.add(int(whole or dotted))
+    return found
 
 
 def scan(text):
-    """Body-line counts per slice, the open set, the attributed box counts, and
-    every checkbox that belongs to NO slice.
+    """Body-line counts per slice, the open set, the attributed box counts,
+    every checkbox that belongs to NO slice, and each still-open item's text.
 
     One pass, so the readings cannot drift apart. `cur` is None while the current
     H2 is not a slice heading — that is recognition 1, and it is what keeps
     `## Objective`'s body off the slice that precedes it. `splitlines()`, not
     `split('\\n')`: the latter yields a phantom empty line for the file's
     trailing newline and charges it to the last slice.
+
+    `item` is the open item currently accumulating, and it is cleared by the next
+    checkbox of EITHER kind and by any heading — that is recognition 3. Without
+    the clear-on-`[x]`, a closed item's citations would be charged to whichever
+    open item preceded it, and the dependency report would fire on healthy
+    states.
     """
     body, opened, boxes, stray = {}, set(), [0, 0], []
-    cur, head = None, '(before any heading)'
+    open_items = []
+    cur, head, item = None, '(before any heading)', None
     for n, line in enumerate(text.splitlines(), 1):
         if HEADING.match(line):
             m = SLICE.match(line)
             cur = int(m.group(1)) if m else None
-            head = line.strip()
+            head, item = line.strip(), None
             if cur is not None:
                 body.setdefault(cur, 0)
             continue
         is_open, is_done = bool(OPEN_BOX.match(line)), bool(DONE_BOX.match(line))
+        if is_open:
+            item = {'slice': cur, 'line': n, 'label': line.strip(), 'text': [line]}
+            open_items.append(item)
+        elif is_done:
+            item = None
+        elif item is not None:
+            item['text'].append(line)
         if cur is None:
             if is_open or is_done:
                 stray.append((n, head, is_open, line.strip()))
@@ -104,7 +160,7 @@ def scan(text):
             boxes[0] += 1
         elif is_done:
             boxes[1] += 1
-    return body, opened, boxes, stray
+    return body, opened, boxes, stray, open_items
 
 
 def reconcile(path, text, boxes, stray):
@@ -140,9 +196,9 @@ def from_rev(rev):
 
 def report(read, min_lines, rev):
     live_text = read(LIVE)
-    body, opened, boxes, stray = scan(live_text)
+    body, opened, boxes, stray, open_items = scan(live_text)
     reconcile(LIVE, live_text, boxes, stray)
-    arch, _, _, _ = scan(read(ARCHIVE))
+    arch = scan(read(ARCHIVE))[0]
 
     targets = {s: n for s, n in body.items() if s not in opened and n > min_lines}
     carried = sum(targets.values())
@@ -161,6 +217,21 @@ def report(read, min_lines, rev):
           f'{sorted(targets, reverse=True)}')
     print('  targets are ELIGIBLE to move, not a plan — the move is hand-checked,')
     print('  one slice at a time (177.1, and CLAUDE.md\'s bulk-edit rule).')
+
+    # Recognition 3 (236.2): a target named by a still-open item may be text that
+    # item's Accept says to AMEND, which the move puts out of the live file.
+    # Reported for the sweeping wake to judge; never a gate — see the header.
+    named = [(t, it) for it in open_items for t in sorted(cites(it['text']) & set(targets))]
+    if named:
+        print(f'  ⚠ {len(named)} target(s) NAMED by a still-open item — read each '
+              f'before moving it (236.2):')
+        for target, it in named:
+            where = f'Slice {it["slice"]}' if it['slice'] is not None else 'no slice'
+            print(f'    Slice {target} is named by the open item at '
+                  f'{LIVE}:{it["line"]} ({where})')
+            print(f'      {it["label"][:96]}')
+    else:
+        print('  no target slice is named by a still-open item (236.2).')
 
     # Reported, never dropped: a slice-keyed pass cannot see these, and an OPEN
     # one would be invisible to rule 4's "oldest still-open item" the same way
@@ -195,6 +266,12 @@ def self_test():
     account for the raw count. Red-proved by breaking the stray lane rather than
     by reading it, because a reconciliation that only agrees with its own caller
     cannot fail — CLAUDE.md's named defect.
+
+    Case E — the dependency lane (236.2) DISCRIMINATES. The same citation must be
+    reported from an OPEN item and NOT from a closed one. Half a test would pass
+    on a lane that charges every citation in the file to the nearest open item,
+    which is the shape that would fire on healthy states and teach the sweeping
+    wake to ignore the line.
     """
     closed = ('## Slice 1 — a\n'
               '1. [x] **1.1 — done.**\n'
@@ -203,7 +280,7 @@ def self_test():
               '2. [x] **2.1 — done.**\n'
               '       body line\n'
               '       body line\n')
-    body, opened, boxes, stray = scan(closed)
+    body, opened, boxes, stray, _ = scan(closed)
     if opened or boxes != [0, 2] or body != {1: 2, 2: 3} or stray:
         sys.exit(f'SELF-TEST FAILED (baseline): open={opened} boxes={boxes} '
                  f'body={body} stray={stray}')
@@ -212,7 +289,7 @@ def self_test():
     reopened = closed.replace('2. [x] **2.1 — done.**', '2. [ ] **2.1 — open.**')
     if '2. [ ]' not in reopened:
         sys.exit('SELF-TEST FAILED: case A injection did not land.')
-    _, opened_a, boxes_a, _ = scan(reopened)
+    _, opened_a, boxes_a, _, _ = scan(reopened)
     if opened_a != {2} or boxes_a != [1, 1]:
         sys.exit(f'SELF-TEST FAILED (A): reopening Slice 2 gave open={opened_a} '
                  f'boxes={boxes_a}, want {{2}} and [1, 1] — openness does not '
@@ -226,7 +303,7 @@ def self_test():
                             '## Slice 2 — b\n')
     if '## Objective' not in wedged:
         sys.exit('SELF-TEST FAILED: case B injection did not land.')
-    body_b, _, _, _ = scan(wedged)
+    body_b = scan(wedged)[0]
     if body_b != body:
         sys.exit(f'SELF-TEST FAILED (B): a non-slice H2 moved the body counts '
                  f'{body} -> {body_b}. Its lines are being charged to a slice — '
@@ -237,7 +314,7 @@ def self_test():
                        '3. [ ] **OWNER CALL — a decision nobody has taken.**\n')
     if '3. [ ]' not in stated:
         sys.exit('SELF-TEST FAILED: case C injection did not land.')
-    body_c, opened_c, boxes_c, stray_c = scan(stated)
+    body_c, opened_c, boxes_c, stray_c, _ = scan(stated)
     if body_c != body or opened_c or boxes_c != [0, 2]:
         sys.exit(f'SELF-TEST FAILED (C): the stray item leaked into the slice '
                  f'figures — body={body_c} open={opened_c} boxes={boxes_c}.')
@@ -257,10 +334,45 @@ def self_test():
         sys.exit('SELF-TEST FAILED (D): dropping the stray lane still reconciled '
                  '— the check agrees with its caller and cannot fail.')
 
+    # E — the dependency lane discriminates OPEN from CLOSED. Slice 1's item is
+    # closed and Slice 2's is open; both name Slice 9. Only the open one may be
+    # charged, or the lane fires on healthy states and gets ignored.
+    # The order is load-bearing: leakage flows from a closed item into whichever
+    # OPEN item precedes it, so the open one must come first and the two must
+    # cite DIFFERENT slices. A fixture where both cite the same slice, or where
+    # the closed item comes first, passes on a lane with no clear-on-`[x]` at
+    # all — a green red-proof is a defect in the injection (CLAUDE.md).
+    cited = ('## Slice 3 — a\n'
+             '1. [ ] **3.1 — open, and it names Slice 9 as a thing to amend.**\n'
+             '       amend 9.4 in place\n'
+             '2. [x] **3.2 — done, and it cites Slice 7 as a reason.**\n'
+             '       see 7.3 for the argument\n')
+    if '9.4' not in cited or '7.3' not in cited:
+        sys.exit('SELF-TEST FAILED: case E injection did not land — the open and '
+                 'closed items must carry DIFFERENT citations to discriminate.')
+    _, _, _, _, items_e = scan(cited)
+    charged = {it['label']: cites(it['text']) for it in items_e}
+    if len(charged) != 1:
+        sys.exit(f'SELF-TEST FAILED (E): {len(charged)} open item(s) accumulated, '
+                 f'want exactly 1 — the closed item is being read as open.')
+    (label, named), = charged.items()
+    if '3.1' not in label:
+        sys.exit(f'SELF-TEST FAILED (E): the accumulated item is {label!r}, not '
+                 f'the open one.')
+    if 9 not in named:
+        sys.exit(f'SELF-TEST FAILED (E): the open item names Slice 9 and the lane '
+                 f'charged it {sorted(named)} — it cannot see a citation at all.')
+    if 7 in named:
+        sys.exit(f'SELF-TEST FAILED (E): the CLOSED item\'s citation of Slice 7 '
+                 f'leaked into the open one ({sorted(named)}). Every citation '
+                 f'after an open item is being charged to it, so this lane would '
+                 f'fire on a healthy state and mean nothing.')
+
     print('self-test OK — openness discriminates (A), a non-slice H2 is charged '
           'to nobody (B),\n  an open item outside every slice is caught and '
-          'flagged (C), and the\n  reconciliation refuses when a lane stops '
-          'accounting for a marker (D).')
+          'flagged (C), the\n  reconciliation refuses when a lane stops '
+          'accounting for a marker (D), and\n  a citation is charged to an OPEN '
+          'item and not to a closed one (E).')
 
 
 def main():
