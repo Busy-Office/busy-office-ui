@@ -499,31 +499,135 @@ are the standing HONEST verdicts — 193.1 executed 167.1's reopen condition on
        one Python script that renders nothing and is imported by nothing — no
        markup, no CSS, no docs page — so nothing in it rests on a rendered image.
 
-2. [ ] **235.2 — eighth archive sweep: the five closed slices carrying 1,419 of
-       `ROADMAP.md`'s 3,359 lines (42.2%) move to `ROADMAP-archive.md`, each
-       leaving the standing one-line pointer.**
+2. [x] **235.2 — DONE 2026-09-01 (cloud wake). Eighth archive sweep: five
+       closed slices moved, `ROADMAP.md` 3,569 → 2,165 lines. And the
+       verification parser found a pre-existing defect in the archive that no
+       previous sweep's checks could see.**
 
-       Scope from the script committed above, at the tree before the move:
+       Scope from the script committed above, **re-derived at move time** rather
+       than read off this entry — which is the first Accept criterion, and it
+       moved: Slice 235 itself became open between filing and moving, so `OPEN`
+       gained `235` and the share fell to 39.8% as this write-up landed in the
+       denominator. The target set and carried lines did not change.
 
        ```
-       python3 scripts/loops/roadmap_scope.py
-       #   OPEN: [15, 112, 232, 234]
+       python3 scripts/loops/roadmap_scope.py     # at move time
+       #   OPEN: [15, 112, 232, 234, 235]
        #   5 closed slice(s) carrying 1419 lines here; 0 already in the archive
-       #   closed-history share: 1419/3359 = 42.2%
+       #   closed-history share: 1419/3569 = 39.8%
        #   targets: [233, 231, 230, 229, 228]
        ```
 
-       *Accept* — properties, not predicted values:
+       *Accept* — properties, not predicted values. **All five met:**
        - The target set is DERIVED from the checkboxes at move time, never read
-         off this entry — a slice closed or opened between now and the move
-         changes it.
+         off this entry — **met**, and it is what caught `235` joining `OPEN`.
        - Every moved section is byte-identical in the archive, verified against
-         the git blob rather than against whatever performed the move.
-       - The line accounting reconciles in BOTH directions: live loses the body
-         lines and gains three pointer lines per slice; archive gains the
-         heading plus the same body lines.
-       - `check:slice-refs` reports the same figures either side of the move.
-       - The open-checkbox count is unchanged across the move, counted raw.
+         the git blob rather than against whatever performed the move — **met**.
+       - The line accounting reconciles in BOTH directions — **met**.
+       - `check:slice-refs` reports the same figures either side — **met**.
+       - The open-checkbox count is unchanged across the move, counted raw —
+         **met**, 6 before and 6 after.
+
+       **Swept: `ROADMAP.md` 3,569 → 2,165; `ROADMAP-archive.md` 29,589 →
+       31,013.** Five slices — 233, 231, 230, 229, 228 — moved verbatim in the
+       order they held in the live file, each leaving the standing three-line
+       pointer.
+
+       **The line accounting reconciles exactly, in both directions**, which is
+       what a move owes over a rewrite: live loses `1,419` body lines and gains
+       `5 × 3 = 15` pointer lines = **−1,404**; archive gains 5 headings plus
+       the same 1,419 body lines = **+1,424**. Both match the measured deltas to
+       the line.
+
+       **Lossless, verified by an independently written parser against the git
+       blob** — not against the dict the move built, which would be
+       self-consistent by construction. That parser splits on the heading line
+       and keys by heading text, where the move script walked line spans:
+
+       ```
+       5/5 moved sections byte-identical to HEAD:ROADMAP.md
+       216 untouched live sections, 0 changed
+       228 pre-existing archive sections, 0 changed
+       5/5 pointers exactly the standing 3-line form
+       raw checkboxes  before: 6 open / 20 closed   after: 6 open / 9 closed
+       ```
+
+       **Citation-neutral, measured rather than asserted** — run against the two
+       files either side of the move, every figure identical:
+
+       ```
+       npm run check:slice-refs -w docs
+       # before: 464 citation(s) checked (249 cited, 2 known-dangling), 217 slice numbers
+       # after:  464 citation(s) checked (249 cited, 2 known-dangling), 217 slice numbers
+       ```
+
+       **The post-sweep 0% was checked before being believed**, per CLAUDE.md's
+       *a 0% is a defect until proven otherwise*. `roadmap_scope.py` now reads
+       `0 closed slice(s) carrying 0 lines`, and the corroborating reading is
+       the same command with the floor removed: `--min-lines 0` reports **212
+       closed slices carrying 636 lines, 212 of them already in the archive** —
+       i.e. every one is a three-line pointer sitting under the `>6` floor, not
+       a section the parse failed to see.
+
+       **The figures above are the file after the MOVE and before this write-up
+       was appended to it** — 209.1's correction, and `ENVIRONMENT.md`'s rule
+       that a sweep's stated after-figure predates its own write-up. The
+       post-commit figure is in the loop log row and in `.roundtable/RESUME.md`.
+
+       **A pre-existing defect the verification found, filed rather than fixed
+       here — see 235.3.** The independent parser refused to build its index at
+       all: `AssertionError: duplicate heading: ## Slice 24`. Three slice
+       numbers — **17, 23, 24** — each head TWO sections in `ROADMAP-archive.md`,
+       and in every case the second is a three-line **pointer into the file it
+       is already in**. An earlier sweep moved a live entry that had already been
+       reduced to a pointer. This sweep cannot reproduce it: the `>6 lines` floor
+       excludes a pointer by construction, which is what that floor is for.
+
+       **NOT VERIFIED, said plainly:** no Podman and no `localhost:8081` here, so
+       the 1440/390 light-and-dark screenshot lane could not run. This is a
+       markdown-only move — no rendered surface changes, and the docs site does
+       not render either file — so nothing in this item rests on a rendered
+       image.
+
+3. [ ] **235.3 — `ROADMAP-archive.md` carries three self-referential pointer
+       stubs: slices 17, 23 and 24 each head two sections there, the second
+       being `Closed — archived verbatim in ROADMAP-archive.md.` inside
+       `ROADMAP-archive.md`.**
+
+       Found by 235.2's verification parser crashing on a duplicate key, not by
+       looking for it. The live file's own pointer for each of the three is
+       correct and stays; what is wrong is the extra stub in the archive, which
+       makes a slice number resolve to two sections in the file that exists so a
+       citation can be looked up.
+
+       ```
+       grep -n '^## Slice 24 ' ROADMAP-archive.md
+       #   6035   the real 183-line body
+       #   13815  a 3-line pointer into this same file
+       ```
+
+       **`check:slice-refs` does not see this and passes**, which is worth
+       stating precisely rather than as a gate proposal: its "each heading one
+       section" assertion reads **217** — the live file's slice count — so the
+       archive's duplicates are outside what it checks.
+
+       *Accept* — properties, not predicted values:
+       - The three stubs are removed and every remaining slice number heads
+         exactly one section in `ROADMAP-archive.md`, counted raw.
+       - The real body of each of 17, 23 and 24 is byte-identical afterwards to
+         what it is now, verified against the git blob — the deletion must take
+         the stub and nothing else. Deleting from this file is the operation
+         that once destroyed 7,307 lines of history, so the check is the point.
+       - `check:slice-refs` reports the same figures either side.
+       - Whether this warrants extending a gate is decided by measuring the base
+         rate first (94.11): 3 of ~230 archive sections is not uniformly true,
+         so the answer may be yes — but it is measured, not assumed, and a
+         refusal with its reason is a valid outcome.
+
+       **Deliberately not folded into 235.2.** Two edits to this file pair in one
+       commit — a 1,419-line move and a deletion — is what CLAUDE.md's bulk-edit
+       rule counsels against, and the destructive precedent is on this exact
+       file. It is a separate round with its own verification.
 
 ## Slice 234 — 232.2's closing measurement is wrong about its own headline: the defect was introduced by 42.1, the commit that WROTE the sentence, and both dispatchers confirmed the opposite from the same single-file probe (2026-08-31)
 
@@ -614,256 +718,7 @@ counterexample.
 
 ## Slice 233 — 231.2's new prose asserts two computed facts and nothing executes either; found by the THIRD independent build of 231.2 (2026-08-31)
 
-**Where this came from, because the provenance is the interesting part.** This
-wake was the **third** dispatcher to build 231.2 to completion on 2026-08-31 and
-the second to lose the push. Slice 232 records the second ("this wake built
-231.2 in full without having read the winner's version and reached the same
-decision on the same evidence, including the same 89-vs-88 denominator
-correction"); this is the third, and it reached the same decision again — keep
-and demo — on the same re-measured premise (17 of 89 pairs, 4 of 40 components,
-`--success` 5 / `--warning` 5 / `--danger` 3 / `--elevated` 2, call sites
-unchanged at 5 + 2 + 1). **So the correction to `RESUME.md`'s collision ledger
-is one line: 231.2 was built three times and landed once, not twice**, and the
-day's discarded total is at least four wakes' work, not three.
-
-**Step 0c's credited compensation fired a second time, and this item IS it.**
-The losing diff was not identical to the winner's: it also carried a
-`check:claims` case, and the winner's page — the one that shipped — makes the
-same assertion with nothing executing it. Redundant coverage catching what the
-winner missed is precisely the mechanism Step 0c names in exchange for the
-collision cost; the ledger for the day is now **two** such catches (232.1 and
-this), against at least four discarded wakes.
-
-1. [x] **233.1 — DONE, and executing the first claim proved it WRONG: the two
-       surfaces do not match, they share a background and deliberately differ in
-       height. Three cases added (158 → 161 live), each red-proved.** (Continue,
-       build mode, cloud wake 2026-08-31 — the fourth dispatcher to touch this
-       page today and the first whose diff was not discarded.)
-
-       The item asked for the claims to be made executable. Doing so is what
-       found that **one of the two sentences was false and the other was only
-       half true** — neither was visible to review, and both had shipped.
-
-       **Claim 1 — "though the surface matches" — FALSE, and the first run of
-       the case is what said so.** Measured on the built page, both themes:
-
-       | | `--elevated` | `.bo-toast` |
-       |---|---|---|
-       | background | `255,255,255` / `34,38,46` | **identical** |
-       | box-shadow | `0 4px 6px -1px` (md) | `0 10px 15px -3px` (**lg**) |
-       | border-radius | `6px` | `4px` (never set; inherits `.bo-alert`) |
-
-       **The divergence is correct, so the page was corrected rather than the
-       CSS.** A toast floats *over* the page and an elevated alert sits *in* it,
-       so the toast being visually higher is the design. The case now asserts
-       the property 231.2's keep-decision actually rests on — *same raised
-       background, deliberately different height* — which also pins the
-       difference so a token change cannot quietly collapse the two.
-       `alert.css`'s own comment carried the same overstatement (*"already
-       carries this exact look"*) and is corrected in the same commit, since
-       leaving a measured-false sentence in the source is what 229.2 was about.
-
-       **Claim 2 — "the card look and the accent colour are independent" — TRUE
-       as written, and INCOMPLETE in the way a reader acts on.** The accent
-       colour is independent (`245,158,11` on the elevated warning, identical to
-       the plain warning). But `.bo-alert` sets `background: var(--bo-alert-bg)`
-       while `.bo-alert--elevated` sets `background` **directly** and wins on
-       source order at equal specificity — so *"combine it with a severity
-       variant"* invited a combination whose tint silently vanishes. A third
-       case now asserts that, and the page gained a clause saying severity reads
-       through the 3px accent bar, not the fill — the channel that survives
-       forced-colors, which is why `alert.css` chose a border over a stripe.
-       **The clause was written FROM the measurement**; a first draft, read off
-       the stylesheet, got the direction wrong.
-
-       **Every Accept bullet, answered:**
-
-       - **The equality hole was stated and closed in the same assertion.** Two
-         transparent boxes are equal, so all three equalities are conjoined with
-         an `opaque()` predicate refusing `rgba(…, 0)`. **Red-proved:** appending
-         `.bo-alert--elevated,.bo-toast{background:transparent}` to the built
-         stylesheet — the exact case that would otherwise agree about nothing —
-         turns the gate **red**, and its own failure detail prints
-         `"elev":{"bg":"rgba(0, 0, 0, 0)"`. That is the injection confirmed in
-         the **DOM** via the computed reading, not in the file.
-       - **Red-proved by targeted injection, each hitting a different subset**,
-         which is what shows the three discriminate rather than moving together:
-         adding `border-inline-start-color` to `.bo-alert--elevated` reddens
-         **case 2 only**; deleting its `background` reddens **cases 1 and 3**;
-         the transparency injection reddens **1 and 3**. Case 1 additionally
-         went red on a **real defect** before any injection existed.
-       - **Counts move exactly as required**: live claims **158 → 161**, +3 for
-         3 cases, and `NOT VERIFIED` **unchanged at 3** — ENVIRONMENT trap 6b's
-         container property, not restored to zero.
-
-       **What this is evidence for, stated narrowly.** Not that the winning
-       diff was careless — the section was reviewed and every gate was green.
-       It is that a prose claim about computed style is invisible to every gate
-       until someone writes the assertion, and writing it took one function and
-       found two wrong sentences. That is `check:claims`'s own thesis, and this
-       is the second time in two days it has paid on this page.
-
-       CLAUDE.md: *"If a page says the browser will do something … add a case to
-       `apps/docs/scripts/check-claims.mjs`."* Both sentences below are computed
-       style, which is the cheapest possible thing to execute, and both are
-       load-bearing: the first is the entire reason the variant was kept rather
-       than removed (Slice 231.2's decision rests on `--elevated` being the
-       toast surface *without* `bo-toast-in`), and the second licenses the
-       `bo-alert--elevated bo-alert--warning` composition the page itself ships
-       in that section's second demo.
-
-       The two claims, quoted from the shipped page:
-
-       - *"And not the same as a toast, though the surface matches —
-         `.bo-toast` adds an entrance animation"*
-       - *"Combine it with a severity variant or leave it plain — the card look
-         and the accent colour are independent settings"*
-
-       The absence, measured rather than asserted — a plain fixed string first,
-       per the context-window-regex lesson:
-
-       ```
-       grep -c 'elevated' apps/docs/scripts/check-claims.mjs        # 0
-       grep -c 'bo-alert--elevated' apps/docs/dist/components/alerts/index.html
-       ```
-
-       **Not a gap in the winner's work so much as a gap the recipe predicts.**
-       `check:claims`'s own header says *"Add a case whenever a page claims
-       something a browser can check"*, and a new demo section is exactly when
-       that step is easy to skip — the section was reviewed, the gates were run,
-       and every gate that ran was one the new prose does not reach.
-
-       *Accept* — properties, not predictions:
-
-       - `check:claims` gains coverage of **both** sentences, read off the built
-         `/components/alerts/` page as computed style: the elevated alert and an
-         injected toast agree on `background-color` while only the toast carries
-         an `animation-name`; and the page's own
-         `bo-alert--elevated bo-alert--warning` element carries both the raised
-         treatment and the warning accent, so "independent settings" is executed
-         rather than described.
-       - **The equality is not asserted alone.** Two transparent boxes are
-         equal, which is the one way this pair could agree while measuring
-         nothing, so the check must also fail when the shared colour is
-         `rgba(0, 0, 0, 0)`. State the hole and close it in the same assertion.
-       - **Red-proved by an injection confirmed in the DOM, not in the file** —
-         append a rule to the built stylesheet the alerts page actually loads
-         (it loads three), re-run, and require that the gate's own failure
-         detail shows the *computed* reading moved, not merely that the gate
-         went red. A red-proof that comes back green is a defect in the
-         injection until proven otherwise.
-       - The gate's reported live-claim count rises by exactly the number of
-         cases added, and the `NOT VERIFIED` count is unchanged — it is
-         ENVIRONMENT trap 6b's container property, not a regression, and must
-         not be "restored" to zero.
-
-       **Kind of work needed, so rule 4 sorts it correctly: NOT browser-blocked
-       and NOT owner-blocked.** It is entirely the second of ENVIRONMENT.md's
-       two lists — a computed-style assertion plus a red-proof by injection —
-       which a cloud wake takes with `browser-harness.mjs` + `serve-dist.mjs`,
-       the same pair `check:claims` already drives every wake. No screenshot is
-       evidence for any part of it.
-
-2. [x] **233.2 — DONE 2026-08-31 (cloud wake). 233.1's three cases pin the
-       elevated card and the toast apart on SHADOW and leave the ANIMATION —
-       the difference the variant exists for — unexecuted. One case added
-       (161 → 162 live), red-proved, and the red-proof is what shows it is not
-       redundant.**
-
-       **This is the FIFTH independent build of this page in one day and the
-       fourth to lose a Step 0c collision** — the same wake that built 231.2 in
-       full (discarded), then rebased its delta onto 233.1's triage, then found
-       that landed too. Each time the pre-commit `git fetch origin main` caught
-       it before a commit existed, so the cost was rework and never a bad merge.
-       What survived four losses is this one assertion, and it survived because
-       re-deriving independently kept finding something the previous derivation
-       had not.
-
-       **The gap, stated precisely.** 233.1's page still says: *"`.bo-toast`
-       adds an entrance animation, which says this just arrived. An elevated
-       alert is for entries already on the page at load, so animating them in
-       would announce arrivals that never happened."* That sentence is the whole
-       reason `--elevated` is a separate modifier — `alert.css`'s own comment
-       makes the same argument — and 231.2's keep-decision rests on it. Checked
-       at `0c546516` before adding anything, plain fixed string first:
-
-       ```
-       git show origin/main:apps/docs/scripts/check-claims.mjs | grep -n 'animationName'
-       # 7 hits: skeleton, row-edit, validation shake — none an alert
-       git show origin/main:apps/docs/scripts/check-claims.mjs | grep -n 'bo-toast-in'
-       # 1 hit, line 3934 — inside a COMMENT in the 200.5 exit case
-       ```
-
-       The four standing toast cases (200.5) cover dismissal, auto-dismiss,
-       stack collapse and reduced motion. None asserts that an elevated alert
-       carries no entrance.
-
-       **The red-proof is the argument for the case existing, not just evidence
-       that it works.** Injecting
-       `animation: bo-toast-in var(--bo-motion-duration-base) …` into
-       `.bo-alert--elevated`, confirmed present in the BUILT, comment-stripped
-       CSS first (`bo-alert--elevated{animation:bo-toast-in …}` — the rule body,
-       never the source spelling, since `alert.css`'s comment names
-       `bo-toast-in` three times):
-
-       ```
-       claims check FAILED — 1 of 162
-       FAIL alerts: the elevated card does NOT animate in, and the toast does
-            {"elevAnimation":"bo-toast-in","toastAnimation":"bo-toast-in",
-             "elevShadow":"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px"}
-       ```
-
-       **One of 162 — 233.1's three cases stayed GREEN.** That is the finding:
-       an entrance animation landing on `--elevated` collapses the variant's
-       entire reason to exist, and every background, accent and shadow assertion
-       on the page reads clean through it. The failure detail carries the moved
-       computed value (`elevAnimation` `none` → `bo-toast-in`), which is the
-       form 233.1's own Accept asks for. Injection reverted; `git diff` on
-       `alert.css` empty.
-
-       **Asserted in both directions on purpose.** "Elevated has no animation"
-       alone would stay green if the toast quietly lost its entrance too, so the
-       toast's `bo-toast-in` is asserted beside it; and the shadow is asserted
-       so "no animation" cannot be satisfied by the modifier having gone inert.
-       `animationName` rather than duration, because reduced motion zeroes the
-       DURATION token and leaves the name — the reading stays stable under the
-       media query the 200.5 case already exercises.
-
-       *Accept — met as a property:* the page's entrance-animation sentence has
-       a `check:claims` case; it has been shown to fail on a real defect with
-       the injection confirmed in the built artefact and the computed reading
-       shown to move; and it fails on a defect **no existing case detects**.
-       `check:claims` **161 → 162** verified live, `NOT VERIFIED` unchanged at
-       **3** (ENVIRONMENT trap 6b — `(pointer: fine) = false` in this container;
-       **not a regression, not to be "restored" to zero**).
-
-       **All 16 CI entry points green, exit 0 each**, against the final tree,
-       each written to its own log and tailed only on failure: core `build`,
-       core `test` (**152** in 27 files), `lint:css`, `docs:build`,
-       `check:claims`, `check:formatting`, `check:scroll`, `check:layout`
-       (**127** pages), `check:forced-colors`, `test:axe` (**127** × 2 widths,
-       zero violations), `check:target-size`, `check:search`, `check:pseudo`,
-       `check:quickstart`, `check:repo`, `check:po-app`, `create-ui check`,
-       `suite`.
-
-       **A gate run that fails must keep its output, and this wake paid to
-       learn it.** Earlier, one `check:claims` exited 1 inside a 12-gate loop
-       and never reproduced — five standalone runs, a re-run of the exact
-       command sequence, and a re-run of the whole loop all came back green at
-       the same live count, with `git diff` on `alert.css` clean at the time so it
-       was not a stale injection. **The cause is unknown and is recorded as
-       unknown**, because the loop piped every gate through
-       `grep -iE 'check passed|FAILED'` and the only surviving line was
-       `npm error command failed`, which names nothing. Same shape as
-       `ENVIRONMENT.md` trap 2b, where `| tail -2` cut off the line naming the
-       lock file. Write each gate's full output to a log; tail it only on
-       failure.
-
-       **Not verified, said plainly:** no Podman and no `localhost:8081` here,
-       so the 1440/390 light-and-dark screenshot lane could not run. This item
-       **changed no markup, no CSS and no prose** — the diff is one
-       `check:claims` case plus this entry — so nothing in it rests on a
-       rendered image.
+Closed — archived verbatim in `ROADMAP-archive.md`.
 
 ## Slice 232 — Objective grill of Slices 229, 230, 231: 230 and 231 survive entirely, and both findings are against how 229's refusal RECORDED its numbers, not against the refusal (2026-08-31)
 
@@ -1242,1174 +1097,19 @@ correction. No finding against it.
 
 ## Slice 231 — Polish round on `component/alerts`: the reconciliation is a NO-OP, and the sweep that surrounded it found one shipped variant with no recorded reason anywhere (2026-08-31)
 
-**Dispatcher trace, cloud wake.** Rule 1: no open P0 — the three open items are
-`112.3` and `112.4` (owner-blocked: 5 owner-authored briefs, and a verdict that
-depends on them; `.roundtable/pilot-112/` holds a README and SEALED-PICKS.md and
-**no `briefs.md`**) and AT runtime evidence (hardware-blocked), and GitHub intake
-**0 open issues** (`list_issues` OPEN → `totalCount: 0`), so Step 1 had nothing
-to triage. Rule 2: `dispatch_status.py` read `Standardize 0 / 4`, and **no drift
-was flagged** — the previous wake spent that trigger. Rule 3: `Objective 2 / 3`.
-Rule 4: **nothing dispatchable, and none of the three is browser-blocked** — a
-local wake has nothing here this wake lacked. Rule 5: see below. **Rule 6 fired
-→ Polish.**
-
-**Rule 5 was answered from the instrument, not from the file.** Only
-`axe-violations` has a comparable pair newer than 2026-08-20 — `0.0@2026-08-29`,
-`0.0@2026-08-30`, `0.0@2026-08-31`, flat — and the other 12 multi-sample names'
-newest pairs are all 2026-08-16→19, i.e. **12+ days stale**. `bundle-gz-kb` reads
-`10.8 → 11.6 → 11.7`, which is two consecutive moves the wrong way and is
-**exactly the dead-instrument answer `LOOPS.md` rule 5 warns about**: those three
-samples are 2026-08-16/17. Recorded as *not evaluable* rather than quoted as
-current. The command:
-
-```
-python3 -c "import json,collections;rows=[json.loads(l) for l in open('.roundtable/loop-metrics.jsonl') if l.strip()];\
-by=collections.defaultdict(list);[by[r['name']].append(r) for r in rows];\
-print({n:[(x['value'],x['ts'][:10]) for x in v[-3:]] for n,v in by.items() if len(v)>=2})"
-```
-
-1. [x] **231.1 — DONE 2026-08-31 (cloud wake). Polish round 2 on
-       `component/alerts`: reconciliation clean on all four arms, recorded as a
-       NO-OP.** §3b's rule for a `content: 3` re-queued surface, following
-       `badge`'s round-2 precedent — reconcile the published artefact against the
-       ledger's record of it, and if that finds nothing, say so in one line
-       rather than manufacture a fix.
-
-       `polish_requeue.py --check` re-queued **8** surfaces on source-blob
-       movement; all six of the 1/3 rows tie on the ledger's stated tie-break
-       (lowest score, then fewest rounds), so the tie was broken by where a
-       defect might actually be.
-
-       - **Arm 1 — the entry exists.** `dsa-scores.json` carries `alert` with
-         `content: 3`, `scored: 2026-08-23`, matching the ledger's round-1 row.
-       - **Arm 2 — it is published.** All **40** entries render on a built page
-         (40 entries → 39 pages: `alert`→`alerts`, and `skeleton`+`state` both
-         →`state-patterns`). **Zero** pages publish `Not yet scored` — 176.1's
-         defect has not recurred — and zero publish `NaN` or `undefined / 3`.
-         Three built component pages carry no `DsaScore` section at all:
-         `inline-editing` and `table-toolbar`, both of which the ledger already
-         annotates *"(unscored in DSA)"*, and `nav`, which was never seeded into
-         the ledger (it is off `check:wrong-choice`'s original TODO set).
-       - **Arm 3 — the citations hold against the shipped CSS.** All **17**
-         literals cited across the 7 re-queued surfaces with DSA entries are
-         present in their component stylesheets (0 absent). `dashboard`'s
-         `typography` cite makes the only *countable* claim — `3rem` "has exactly
-         one caller; a second is the trigger to promote it (94.13)" — and
-         comment-stripped it reads **exactly 1** caller against 2 raw
-         occurrences, the second being the comment that explains it.
-       - **Arm 4 — no silent NaN path.** `DsaScore.astro` spreads
-         `entry.dimensions[d]` for every `d` in `rubric.dimensions`, so a missing
-         key would publish `NaN%` with nothing throwing. Reconciled: **6 of 6**
-         rubric dimensions present on **40 of 40** entries, zero extra keys, zero
-         non-integer non-`na` scores.
-
-       **A history measurement was taken only after `git fetch --unshallow`** —
-       the container opened at **55** commits and a `git log --since` over the
-       alert sources was silently wrong until it read **1,753**
-       (`is-shallow-repository` → `false`, which is the only check that it
-       worked). ENVIRONMENT trap 2, exercised for real.
-
-       **Not verified, said plainly:** no Podman and no `localhost:8081` here, so
-       the 1440/390 light-and-dark screenshot lane could not run. This item
-       changed no CSS, no markup and no rendered output — it is a ledger entry
-       and a set of assertions over artefacts already built — so nothing in it
-       rests on a rendered image.
-
-2. [x] **231.2 — `bo-alert--elevated` is published in the API tables of
-       `/components/alerts` and explained nowhere, and its three call sites are
-       one screen.** DONE 2026-08-31 — documented, and the §3 "should it exist"
-       question answered KEEP on a reason that is general rather than screen-shaped. Found by the sweep around 231.1, filed rather than fixed:
-       §3b's stop rule (101.3) confines Polish to the existing ratchet, and
-       no DSA dimension flags this.
-
-       **The measurement.** Counting each shipped variant's occurrences in its
-       own BUILT page — the artefact, not the source:
-
-       ```
-       python3 -c "import json,os;api=json.load(open('packages/core/dist/api.json'));\
-       slug=api.get('pageSlug',{});\
-       print({v:open('apps/docs/dist/components/%s/index.html'%slug.get(n,n)).read().count(v) \
-       for n,c in api['components'].items() for v in c.get('variants',[]) \
-       if os.path.exists('apps/docs/dist/components/%s/index.html'%slug.get(n,n))})"
-       ```
-
-       **17 of 89** shipped variants, across **4 of 40** components, occur `<=2`
-       times — twice being exactly the two generated tables (`ClassRef` row +
-       `ApiTable` Variants list) and nowhere else on the page. That is a real
-       base rate, not a uniformly-true predicate: it is neither 0 nor 100%.
-
-       **Red-proved by discrimination inside one page**, which is what makes the
-       count a signal rather than an artefact of counting: on `/components/alerts`,
-       `--success` reads **5**, `--warning` **5**, `--danger` **3**, and
-       `--elevated` **2**. The three demoed variants separate from the one that
-       is not, in the same document, under the same instrument.
-
-       **16 of the 17 carry a recorded reason; one does not.** This is the part
-       that took the work, and it is why the finding is one variant rather than
-       seventeen:
-
-       - **14 `bo-icon--*` glyphs** — the icon page renders **12 of 26**, and
-         icon's own `fit` cite states the position outright: *"the set is an
-         example of the mechanism rather than a catalogue"*. Coherent by record.
-         (Note the 12: it reproduces, from the built HTML and independently, the
-         same 12 that icon's Polish round 2 caught hard-coded as a divisor —
-         ROADMAP 227. Two instruments, one number.)
-       - **`bo-select--seamless` and `bo-tag-input--seamless`** — both named in
-         prose on `/patterns/editable-grid`, with an explicit `Scope` clause
-         saying which cell types stay chromed and why.
-       - **`bo-alert--elevated`** — nothing, on any page.
-
-       **And it has survived one composition, not two.** Every use in the repo is
-       the notification screen: `patterns/notification.astro` (5),
-       `PatternPreview.astro` (2 — which is the *thumbnail of that same pattern*),
-       and `examples/po-app/server.mjs` (1). Objective §3 says a piece earns its
-       place by surviving **≥2 real, independent compositions**; §2 refuses "a
-       modifier that serves exactly one scenario". So this is not merely a docs
-       gap — it is an open question about whether the variant should exist.
-
-       ```
-       grep -rn 'bo-alert--elevated' apps/docs/src examples packages/core/src | grep -v node_modules
-       ```
-
-       **Accept** — written so that finding the premise false is a satisfying
-       outcome, not an off-plan one:
-
-       - **Re-run both measurements first** (the occurrence count and the call-site
-         grep above); the premise is a measurement from this wake and re-checking
-         it is part of the criterion. If a second independent composition has
-         landed since, that is the answer to the §3 question and the item says so.
-       - **Then either**: `/components/alerts` gains a demo section whose caption
-         names when `--elevated` applies against a plain inline alert and against
-         a toast — **or** the variant is refused and removed, with the notification
-         pattern absorbing the look another way — **or** it is kept as a named
-         deliberate exception, recorded the way `/patterns/editable-grid` records
-         `--seamless`. Any of the three closes this; which one is a judgement.
-       - **In every case**, the built page's treatment of `bo-alert--elevated`
-         agrees with what this item records, verified by re-running the count
-         rather than by predicting what it will read.
-       - The two `--seamless` variants get a one-line verdict in the same pass, or
-         a recorded reason they are out of scope — they are the only other
-         non-glyph members of the flagged set.
-
-       **Kind of work needed, so rule 4 sorts it correctly: NOT browser-blocked
-       and not owner-blocked.** The elevated rendering already ships and is
-       already built on `/patterns/notification`; the options above add or remove
-       markup and prose. A cloud wake can verify all of it through `docs:build`,
-       `check:claims`, `check:layout`, `test:axe` and `check:repo`. A screenshot
-       would be a nice-to-have, not the evidence.
-
-       **Outcome (2026-08-31, cloud wake, dispatcher rule 4).** Taken as the
-       oldest *dispatchable* item — 112.3 and 112.4 are owner-blocked and the AT
-       item is hardware-blocked, so the oldest open item is not the oldest
-       actionable one.
-
-       **Both premises re-derived first, as the Accept requires, and both hold.**
-       17 low pairs across 4 of 40 components; the non-glyph members are exactly
-       `bo-alert--elevated`, `bo-select--seamless`, `bo-tag-input--seamless`; the
-       within-page discrimination on `/components/alerts` reproduces exactly at
-       `--success` 5, `--warning` 5, `--danger` 3, `--elevated` 2. The call-site
-       grep returns the same eight lines: `patterns/notification.astro` (5),
-       `PatternPreview.astro` (2), `examples/po-app/server.mjs` (1), plus the CSS
-       definition. **No second independent composition has landed**, so the §3
-       question was live and had to be answered rather than assumed away.
-
-       **One correction to the premise's arithmetic, which changes nothing.**
-       The item says "17 of **89** shipped variants" and re-running it reads
-       **88**. Both are right and the gap is exact: there are 89
-       *(component, variant)* pairs and 88 distinct *names*, because
-       `bo-badge--type` is declared by two components (`badge` and `dashboard`),
-       so a dict keyed on the name collapses it. The `17` is unaffected — it is
-       counted over pairs either way.
-
-       **Decision: KEEP and document** — option 1 of the three, and the §3
-       question is answered on the merits rather than deferred. `alert.css`'s own
-       comment already carries a reason that is **not** screen-shaped: `.bo-toast`
-       ships this same raised surface *plus* `bo-toast-in`, an entrance animation
-       that asserts the content just arrived, which is wrong for a list already
-       in the page at load. That is a general distinction — *arrival vs.
-       presence* — and it is the same axis this component's top comment already
-       uses to decide `role="alert"`. A modifier that exists to separate two
-       genuinely different announcements is not 231.2's "modifier that serves
-       exactly one scenario"; the single call site is a docs gap, not evidence of
-       a one-off. **Removal was the live alternative and is refused**: it would
-       force the notification list to either adopt toast semantics it should not
-       claim, or hand-roll the shadow outside the component.
-
-       **What shipped:** one demo section on `/components/alerts`, placed before
-       the Toast recipe so the contrast reads in order. Its caption names both
-       comparisons the Accept asked for — against a plain inline alert
-       (*"not for a single message inside a form or a page section"*) and against
-       a toast (*"a toast interrupts, an elevated alert is scanned"*) — and links
-       the pattern that composes them.
-
-       **Verified by re-running the count, not by predicting it**, which is the
-       Accept's own wording: `bo-alert--elevated` moves **2 → 5** on the built
-       page and the low set drops **17 → 16**, leaving only the two `--seamless`
-       variants.
-
-       **Verdict on those two, recorded in the same pass as required: no change
-       needed.** They already carry the recorded reason the item credits them
-       with — `/patterns/editable-grid` names both in prose with an explicit
-       `Scope` clause (*"a checkbox already reads as a control"*) saying which
-       cell types stay chromed and why. They are correctly at 2 occurrences on
-       their own component pages because their explanation lives on the pattern
-       that composes them, which is the `--seamless` precedent this item cites.
-
-       **Not verified, said plainly:** no Podman and no `localhost:8081` here, so
-       the 1440/390 light-and-dark screenshot lane could not run. **The change is
-       prose plus two `<div>`s using a variant that already ships and is already
-       rendered on `/patterns/notification`** — no CSS changed, so no new visual
-       state exists to look at. The whole-tree browser gates are the evidence
-       that nothing broke: all 17 cloud entry points exit 0, including
-       `check:layout` (127 pages, no overflow at 390 or 150% zoom), `test:axe`
-       (127 pages x 2 widths, zero violations), `check:pseudo` (≥41% expansion,
-       nothing clipped) and the `DOCS_BASE=/busy-office-ui` parity build, which
-       is what proves the added `<a href={base + '/patterns/notification'}>`
-       resolves on Pages.
+Closed — archived verbatim in `ROADMAP-archive.md`.
 
 ## Slice 230 — Standardize sweep: lanes 1-4 clean a ninth time, and the drift carried for three wakes was a genuine one-off — 5 of 6 parsing pages already asserted (2026-08-31)
 
-**Dispatcher trace, cloud wake.** Rule 1: no open P0 — the three open items are
-`112.3`, `112.4` (owner-blocked) and AT runtime evidence (hardware-blocked) —
-and GitHub intake **0 open issues** (`list_issues` OPEN → `totalCount: 0`), so
-Step 1 had nothing to triage and no `Roadmap · plan` row was recorded. Rule 2:
-`dispatch_status.py` read `Standardize 3 / 4 Continue rounds`, so the **counter**
-did not fire — but rule 2's *other* trigger, **"or drift flagged"**, was loaded,
-and the previous hand-off had recorded that it was being left implicit for a
-third wake. **Dispatched Standardize on the flagged drift.**
-
-**Why this wake could not defer it again.** Rule 2's counter is fed by `Continue`
-rows only, Continue is reachable only through rules 1 and 4, and rule 4's
-dispatchable set is empty — so the counter can no longer advance on its own. The
-drift trigger is the only remaining path to this lane, which is the same silent
-starvation shape `LOOPS.md` Step 0b records three times.
-
-1. [x] **230.1 — DONE 2026-08-31 (cloud wake). `cascade.astro`'s `Z_TOKENS`
-       parse now reconciles against the shipped tokens, and the sweep's four
-       standing lanes came back clean.**
-
-       **The flagged drift, confirmed rather than assumed.**
-       `apps/docs/src/pages/concepts/cascade.astro` parsed the z-index scale out
-       of `tokens/z-index.css` with a regex and rendered it straight into a
-       `<tbody>` with no assertion. A zero-match parse renders an **empty
-       table** — silence, not a wrong number, which is why three wakes read past
-       it. The page's own prose beside that table tells every `position: sticky`
-       element to "reach for a token from this table", and the table is the
-       framework's only published statement of the scale.
-
-       **The base rate is what made this a Standardize finding rather than a new
-       gate.** Population = docs pages whose frontmatter reads a source file at
-       build time and derives rendered content from it by regex:
-
-       ```
-       grep -rlE "readFileSync|import\.meta\.glob" apps/docs/src/pages --include=*.astro
-       ```
-
-       → 8 files; `scale.astro` and `index.astro` take only a **byte/gzip
-       length** and parse nothing, so the population is **6**. Of those,
-       `palettes`, `primitives`, `icon`, `ai-assistants` and `tokens` all throw
-       on a bad parse. **5 of 6 already asserted** — `cascade` was the sole
-       one-off, which is exactly what this loop exists to consolidate.
-
-       **Reconciled against the shipped artifact, not a hand-typed floor.**
-       `if (Z_TOKENS.length < 5)` is the decaying constant `icon.astro` refuses
-       in its own block, and it cannot see a partial parse that clears the
-       floor. Instead the source parse is compared against
-       `@busy-office/ui/css/tokens.min` — two independent derivations of one
-       fact, the same shape `icon.astro` uses (source css vs `api.json`).
-
-       **The minified file is also the only comment-free reading available, and
-       that is measured, not assumed:** `z-index.css`'s rationale comment NAMES
-       four of the five tokens in prose, so counting raw `--bo-z-` occurrences
-       in the source would trip on its own explanation — CLAUDE.md's named trap.
-       `(tokens.min.css.match(/\/\*/g)||[]).length` → **0**, so no
-       comment-stripping step was invented.
-
-       *Accept* — properties, not predicted values:
-       - The assertion's verdict agrees with what the shipped tokens carry —
-         **met**: control build exit 0, and the rendered table still carries all
-         five rows (`grep -o 'col--code">--bo-z-[a-z-]*' dist/concepts/cascade/index.html`
-         → 5, unchanged from before the edit).
-       - Each red-proof's **injection is confirmed present** before its result is
-         believed, per CLAUDE.md's "a green red-proof is a defect in the
-         injection until proven otherwise" — **met**, both below.
-       - The check discriminates something a count floor cannot — **met**, and
-         this is the load-bearing one.
-
-       **Red-proofs, injection confirmed each time:**
-
-       - **A — zero-match parse.** Renamed the declared prefix in the source
-         only (`--bo-z-` → `--bo-zed-`). Injection confirmed: `grep -cE '^    --bo-zed-'`
-         → **5**, `grep -cE '^    --bo-z-[a-z]'` → **0**. Build **exit 1**:
-         *"parsed 0 z-index token(s) from the source css [] but the shipped
-         tokens.min.css carries 5"*.
-       - **C — value drift, the discriminating case.** Changed
-         `--bo-z-toast: 1600` → `1700` in the source only. Injection confirmed
-         present, and **the count stayed 5**, so a `length < 5` floor would have
-         **passed**. Build **exit 1**, reporting 5 against 5 with the differing
-         member visible in both lists.
-
-       Source restored from a byte copy afterwards; `git status --short` shows
-       `cascade.astro` as the only modified file.
-
-       **The re-scan the playbook requires found nothing further.** Same drift
-       shape outside `pages/` — `lib/`, `components/`, `layouts/` — returns one
-       file, `lib/semantic-css.ts`, and it already carries both guards including
-       an explicit *"parsed zero palette references"* throw. The population is
-       now **6 of 6**, so a gate over this predicate would be uniformly true and
-       is **refused** on roadmap 94.11's own test: ceremony, not a detector.
-
-       **The four standing lanes — `4 of 4`, all clean:**
-
-       | lane | reading | verdict |
-       |---|---|---|
-       | 1 `scan:dead-style` | 0 dead on 0 pages; 1,433 live inline decls | clean |
-       | 2 `report:css-repeats` | **8** groups — the standing eight, no delta | clean |
-       | 3 `report:prose` | 7 over corpus median + family outliers, **union 8** | all verdicted |
-       | 4 `report_loop_prose.py` | no file changed accumulate class | clean |
-
-       **Lane 3 checked by SET MEMBERSHIP, not by a cite count** — 228.1 already
-       recorded that grepping a page's path out of `ROADMAP.md` +
-       `ROADMAP-archive.md` returns hits for everything and reports full
-       coverage whatever the truth is. Today's union (data-table, richtext,
-       form, calendar, money, combobox, tabs, motion) resolves entirely against
-       **158.1's twelve** and **161.1's three**; nothing is flagged outside those
-       lists. `tabs` is flagged again after 228.1 recorded it as no longer
-       flagged — it still carries 158.1's verdict, so it needs no new one.
-
-       **Lane 4 needed the clone unshallowed first** —
-       `report_loop_prose.py` refused to report, exactly as ENVIRONMENT trap 2
-       says it should, rather than printing wrong history figures. No
-       `.git/shallow.lock` was present and `git rev-parse --is-shallow-repository`
-       read **false** afterwards, which is the only check that it worked.
-       `CLAUDE.md` (29 up, never cut) and `DESIGN.md` (22 up, never cut) are
-       227-era standing HONEST verdicts — 193.1 decided *fold nothing, retire the
-       watch* — and `ROADMAP.md` reads `4 up, last cut d701e619`, so the signal
-       lane 4 carried in 228.1 is discharged and has not returned.
-
-       **Gates, run against the final tree, exit 0 each**: core `build`, core
-       `test` (152 in 27 files), `lint:css`, `docs:build` (which runs
-       `check:repo`), `check:claims`, `check:formatting`, `check:layout` (**127**
-       pages), `test:axe` (**127** pages × 2 widths, zero violations),
-       `check:repo` (`check:slice-refs` **456** citations).
-
-       `check:claims` reads **158 verified live · 3 NOT VERIFIED**. That is
-       `ENVIRONMENT.md` §6b — this container reports `(pointer: fine) = false` —
-       **not** a regression. Do not "restore" the zero.
-
-       **NOT VERIFIED, said plainly:** no Podman and no `localhost:8081` here, so
-       the 1440/390 light-and-dark screenshot lane could not run. The change is a
-       build-time assertion that renders nothing new — the emitted table is
-       byte-identical, asserted above by re-reading the built HTML — so nothing
-       in this item rests on a rendered image.
+Closed — archived verbatim in `ROADMAP-archive.md`.
 
 ## Slice 229 — Objective grill of Slices 222, 226, 227, 228: every decision survives, the best candidate finding was already gated, and the one mirror no gate can see is fixed (2026-08-31)
 
-**Dispatcher trace, cloud wake.** Rule 1: no open P0, and GitHub intake **0 open
-issues** (`list_issues` OPEN → `totalCount: 0`), so Step 1 had nothing to triage
-and no `Roadmap · plan` row was recorded. Rule 2: `dispatch_status.py` read
-`Standardize 0 / 4 Continue rounds ok` — the counter reset when 228 fired. Rule
-3: `Objective 4 / 3 slices OVERDUE [222, 226, 227, 228]` → **Objective**. Rules
-4-8 were not reached.
-
-**The open set was 3 at dispatch time and wholly blocked — for the fourth wake
-running.** This slice files three more (229.3, 229.4, 229.5), and unlike the
-standing three **none of them needs the owner, hardware or a second agent**, so
-rule 4 has ordinary buildable work again. Read the rule carefully next wake: the
-oldest open item is still `112.3` and still owner-blocked; the oldest
-*dispatchable* one is 229.3.
-
-**Arming set not narrowed, and that is a reading rather than an omission**
-(playbook §6 step 0). The most recent grill (225) covered 218, 219, 223, 224,
-and **none of the 23 prior grills names 222, 226, 227 or 228** — all four are
-genuinely un-grilled. 222 is armed because its Continue row landed 19 minutes
-*after* the 225 grill row — the re-arming shape step 0 warns about — but it had
-not in fact been grilled, so it stays in scope.
-
-**Measured off the HEAD blobs, and the working-tree form is a detector that
-cannot fail** — caught inside this slice, which is why it is written down rather
-than quietly fixed. Run against the working tree, `grep -cE '\b(222|226|227|228)\b'`
-over the grill headings returns **1**: this slice's own heading, *"Objective
-grill of Slices 222, 226, 227, 228"*, matches the search for prior coverage of
-those slices. The distinct-grill count is inflated the same way — **24** in the
-tree, **23** at HEAD. That is CLAUDE.md's *"an assertion tripped on its own
-explanation"* and 225.1's finding in 218.1, arriving in the scope-setting step of
-the grill that re-derived them:
-
-```
-git show HEAD:ROADMAP.md > /tmp/r.md; git show HEAD:ROADMAP-archive.md > /tmp/a.md
-grep -hoE '^## Slice [0-9]+ — Objective grill of Slices [0-9, -]+' /tmp/r.md /tmp/a.md \
-  | sed -E 's/^## Slice ([0-9]+) .*/\1/' | sort -n -u | wc -l          # 23
-grep -hoE '^## Slice [0-9]+ — Objective grill of Slices [0-9, -]+' /tmp/r.md /tmp/a.md \
-  | grep -cE '\b(222|226|227|228)\b'                                   # 0
-```
-
-**A scope check for a NEW slice is read from the commit that predates it**, not
-from the tree that already contains it.
-
-Full report: `.roundtable/grill-objective-222-226-227-228-2026-08-31.md`.
-
-1. [x] **229.1 — DONE. `icon.astro`'s deprecated-glyph set was a hand-typed
-       mirror that no gate can see, and it is now derived.**
-
-       *Accept* — properties, never predicted values:
-       - Every load-bearing count in the four slices is re-derived
-         independently, and each either holds or the disagreement is recorded.
-       - Any candidate finding is red-proved by injection, with the injection
-         confirmed to have landed, **before** it is written up — and finding it
-         already gated is a satisfying outcome, not an off-plan one.
-       - The rendered artefact is compared, not the diff that made it.
-
-       **Everything the four slices decided survives.** 227's numbers re-derive
-       exactly — 9,109 / 95,046 / 26 (by three independent derivations) / 9.6% /
-       93 kB / 68 kB at `/26` and 148 at `/12` / 85,937 B = 83.9 kB, so 227.1's
-       point that *"more than everything else we ship"* was true at 148 and false
-       at 68 is confirmed. 226.1's probes all reproduce in a **second** cloud
-       container a day later, including `check:po-app` 19/19 exit 0 with the
-       missing root hoist still absent — so its one open inference is now two
-       readings on two dates. 228.1's sweep is lossless at **15/15 byte-identical
-       moved sections**, verified with a parser written here rather than the
-       sweep's own, and its `+2,381` archive delta matches the git blobs exactly.
-
-       **The grill's best candidate finding was REFUTED, and recording that is
-       the useful part.** 227.3's guard compares a *count*, so a glyph **rename**
-       passes it. Renaming `.bo-icon--doc` → `.bo-icon--doczz` in the source CSS:
-       core exits **0**, `api.json` still declares 26 variants, and the guard is
-       silent — exactly as predicted. But `npm run docs:build` exits **1**:
-       `check-markup FAILED — 116 problem(s) across 165 file(s): unknown class
-       "bo-icon--doc"`. `packages/core/scripts/check-markup.mjs dist` reconciles
-       every rendered `bo-*` class against `api.json` and runs in the docs build
-       chain, so glyph names are guarded one layer up by a gate written for a
-       different reason (32.2). Hypothesis dead.
-
-       Two injection notes, both this repo's own base rate landing again: the
-       first attempt used `docZZ` and went red on **stylelint's naming pattern**
-       — a red for the wrong reason, the mirror image of the green red-proof
-       trap; and the refutation then reproduced *by accident* when a later build
-       failed identically because core's `dist/` still carried the injected
-       `api.json` after the source was reverted. Two firings, one unplanned.
-
-       **What `check:markup` structurally CANNOT see is which glyphs are
-       deprecated**, because a wrongly-listed glyph is still a class the
-       framework ships. `deprecatedGlyphs = ['settings','barcode','building',
-       'user']` was hand-typed against four `/* DEPRECATED` blocks in the same
-       stylesheet. Deprecating a fifth would have left the page showing it among
-       the eight that "earned their place", under a badge still reading 4, with
-       nothing failing — and that set is the page's published answer to *which
-       glyphs should I stop using*. Same page, same class, one step on from
-       227.1's divisor and 227.3's unasserted denominator.
-
-       **Fixed by derivation, not by refreshing the list** (217.2/220.1's rule).
-       Read from the **unminified** shipped css — minification drops the comments
-       that carry the deprecation — and reconciled against an independent count
-       of the markers themselves, so a partial parse fails as well as an empty
-       one. **No hand-typed floor**, for 227.3's stated reason: a literal minimum
-       would be the very decaying constant 227.1 removed from this block.
-
-       **Red-proved in both directions, through the built page**, with each
-       injection confirmed present before the build:
-
-       ```
-       A  stray "DEPRECATED", no glyph selector after it
-          markers=5 derived=4   ->  docs:build EXIT=1
-          "icon: parsed 4 deprecated glyph(s) … but it carries 5 DEPRECATED marker(s)"
-       B  a real DEPRECATED block above .bo-icon--close (not one of the eight)
-          markers=5 derived=5   ->  docs:build EXIT=0
-          rendered badge 4 -> 5, "close" enters the deprecated cluster
-          (baseline page: badge 4, no "close" anywhere in that region)
-       ```
-
-       **Verified against the RENDERED artefact, not the diff**: with the
-       stylesheet untouched, `/components/icon/index.html` is **byte-identical**
-       before and after — two full clean builds, diffed. The derivation
-       reproduces the hand-typed list exactly; what it removes is the silence.
-
-       **Not verified, said plainly:** cloud wake — no Podman, no
-       `localhost:8081`, so the 1440/390 light-and-dark screenshot lane could not
-       run. Nothing here rests on a rendered image: the change is build-time only
-       and the rendered page is byte-unchanged, which was measured rather than
-       assumed. The whole-tree browser gates are the evidence that nothing broke.
-
-2. [x] **229.2 — the improvement question, asked of what 229.1 touched, found a
-       stale claim on FIVE gate headers — including the one that refuted 229.1's
-       hypothesis. Base rate measured before fixing: 5 of 5.**
-
-       `check-markup.mjs`'s header — the gate that caught the renamed glyph —
-       reads *"OWES a --self-test (roadmap 42.3): a detector this easy to fool
-       must prove it can fail."* It does not owe one. It carries a real
-       `process.argv.includes('--self-test')` branch with four cases, and
-
-       ```
-       node packages/core/scripts/check-markup.mjs --self-test
-       # self-test passed — the detector can fail                       EXIT=0
-       node apps/docs/scripts/check-selftests.mjs
-       # 46 gates classified: 15 heuristic (all self-tested), 31 exact
-       ```
-
-       **Measured before touching anything, because a 1-of-1 is 94.11 ceremony
-       and a class is not.** Five files carry that line — `check-markup`,
-       `check-forced-colors`, `check-notes`, `check-loop-vocab`, `check-floor` —
-       and **5 of 5** have the branch. The meta-gate says every one of the 15
-       heuristic gates is self-tested, so the sentence is false everywhere it
-       appears, and the gate that would notice is the one whose passing proves
-       the debt paid.
-
-       Fixed in place — five comment headers, no behaviour — because it is
-       smaller than explaining, which is the operating rule's own test. Each
-       `--self-test` re-run green afterwards, and `check:selftests` still reports
-       15 of 15.
-
-       **This is the exact INVERSE of the class 227.2 refused, which is why it is
-       fixed rather than argued.** 227.2 refused a gate for *"a literal
-       duplicating a fact something else can read"* — semantic, base rate 0.
-       This is a *stated debt contradicted by a gate that already runs*: exact
-       (does the file contain the branch?), and base rate 5.
-
-3. [x] **229.3 — REFUSED, and not on the base rate the item expected to decide
-       it. Both candidate predicates were built and red-proved, and both are
-       GREEN on a reworded instance of the exact defect they exist to catch.**
-
-       Raised by 229.2 rather than acted on, because adding a gate is a decision
-       and 229.2 was a comment fix. The predicate is exact and one line from data
-       `check-selftests.mjs` already holds: it classifies each gate as heuristic
-       or exact and already knows whether the branch exists, so "and its header
-       does not say it owes one" is a string test over the same file it just
-       read — not the semantic predicate 94.11, 216.2, 217.2, 220.2 and 227.2
-       each refused.
-
-       **The argument against, stated so it is not re-derived:** after 229.2 the
-       base rate is **0**, and 94.11's finding is that a gate shipping to fire on
-       zero things is ceremony however cheap. The counter is that this one
-       *ratchets* — `check:wrong-choice` is the precedent for an executable
-       ratchet whose base rate the fixing pass drove to near-zero.
-
-       *Accept* — a property, not a prediction:
-       - Either `check:selftests` gains the assertion **and is red-proved by
-         injecting the old sentence back into one gate, with the injection
-         confirmed present before the run**, or the refusal is recorded with the
-         base rate that decided it. **Both close this item.**
-       - If it is added, it must not fire on the five files this slice corrected
-         — verified by running it, not by reading the regex.
-
-       **Closed on the second branch — refused. The base rate is 0 as predicted,
-       but that is the WEAKEST of the three readings below and it is not what
-       decided this.** The item framed the choice as "ceremony (94.11) versus a
-       ratchet (`check:wrong-choice`)". Building both candidates answers a
-       question neither horn asks: *can this predicate go red on the defect at
-       all?* Probe kept out of the tree deliberately (a throwaway, per 134.3's
-       rule), the readings reproduced with the commands below.
-
-       Two candidates, over the **15** heuristic gates that carry a
-       `--self-test` branch:
-
-       - **NARROW** — the exact sentence 229.2 removed, both comment styles:
-         `/^\s*(?:\*|\/\/)\s*OWES a --self-test\b/m`. Base rate **0**.
-       - **BROAD** — `owes` within 120 chars of `--self-test` or `@heuristic`,
-         either order. Base rate **2**, and **both are FALSE POSITIVES**:
-         `check-resume-charter.mjs` (*"This is what the `@heuristic` tag
-         owes"*) and `check-resume-slice-ids.mjs` (*"The `--self-test` below is
-         what that tag owes"*). Both files have the branch; both sentences are
-         correct prose explaining what the tag obliges.
-
-         > **CORRECTED 2026-08-31 by slice 232.1 — the base rate is 7, not 2,
-         > and the 2 was measured with a regex blind to the past tense.**
-         > `owes?\b` is `owe` + optional `s` + a word boundary, so it cannot
-         > match `owed` — and `owed` is the wording 229.2's own fix used, in all
-         > five headers it corrected (*"the debt is PAID, and this line used to
-         > say it was owed"*). Re-measured over the same 15 branch-carrying
-         > gates, whole-word and tense-inclusive:
-         >
-         > ```
-         > grep -rlwE 'owes|owed' apps/docs/scripts packages/core/scripts \
-         >   --include='check-*.mjs' | grep -v check-selftests.mjs | wc -l    # 7
-         > ```
-         >
-         > The complete false-positive set is `check-resume-charter`,
-         > `check-resume-slice-ids` **plus** `check-floor`, `check-forced-colors`,
-         > `check-loop-vocab`, `check-notes` and `check-markup` — and those five
-         > are exactly the files 229.2 corrected, which this item's own Accept
-         > names as the set it must not fire on. **The refusal is not
-         > overturned; it is strengthened** — BROAD costs seven false positives,
-         > not two, and is blind to the same rewording either way.
-         >
-         > The `grep -v check-selftests.mjs` is load-bearing and 232.1 published
-         > its 17-file widening figure without it visible: unanchored
-         > `owe[sd]?\b` returns **18** files as written and **17** with that
-         > exclusion. The excluded file is the meta-gate itself, which names the
-         > vocabulary by definition.
-
-       **Red-proved in three directions, each injection confirmed present in the
-       file before the run** (`grep -n` on the injected line; the denominator
-       stayed 15 throughout, so nothing was silently reclassified):
-
-       ```
-       baseline                                   NARROW 0   BROAD 2
-       inject the verbatim 229.2 sentence
-         into check-floor.mjs (line 16)           NARROW 1   BROAD 3   <- both live
-       inject a REWORDED stale claim instead:
-         "This gate still needs a --self-test
-          (roadmap 42.3) before it can be
-          trusted."          (line 16)            NARROW 0   BROAD 0   <- both BLIND
-       ```
-
-       > **CORRECTED 2026-08-31 by slice 232.1, replaying every row.** Two
-       > things are wrong in that table and neither touches the conclusion.
-       >
-       > **The third row's `BROAD 0` is not a count.** Rows 1 and 2 report how
-       > many of the 15 files the predicate matches; row 3 reports whether it
-       > fired *on the injection*. As a count it is **2** — the injected
-       > sentence contains no `owe` word, so the two standing false positives
-       > are still there. The `<- both BLIND` annotation carries the real
-       > meaning, which is why the argument survives the mixed units, but the
-       > number as printed is wrong. Same shape as the base rate above: a defect
-       > in what shipped BESIDE a correct claim.
-       >
-       > **And under the corrected predicate the red-proof's own injection site
-       > cannot discriminate at all.** `check-floor.mjs` is already one of
-       > BROAD's seven tense-inclusive false positives, so that column reads
-       > 7 / 7 / 7 — flat across the baseline and both injections. Replayed in
-       > memory (the file is read, never written; the tree was asserted
-       > unchanged afterwards, and each mutated string was asserted to contain
-       > the injected sentence before being measured):
-       >
-       > ```
-       >                                NARROW   BROAD-as-published   BROAD-tense
-       > baseline                          0             2                 7
-       > inject verbatim 229.2 sentence    1             3                 7
-       > inject REWORDED stale claim       0             2                 7
-       > ```
-       >
-       > Read case-insensitively, as 229.3 measured it — the injected sentence
-       > says `OWES`, and a case-sensitive replay reads row 2 as 2, not 3.
-       > Denominator 15 throughout, re-derived from the branch test rather than
-       > carried.
-
-       The third row is the refusal. That injected sentence is a genuine
-       instance of the defect — a gate that has a `--self-test` branch, with a
-       header stating it does not — and **both detectors report clean**. One
-       synonym away from the wording it was written against, the gate is green
-       on exactly what it exists to catch. BROAD is strictly worse than NARROW:
-       it buys two false positives and is blind to the same rewording.
-
-       **The general form, which is why no third regex was attempted.** What
-       separates *"the `--self-test` below is what that tag owes"* (correct)
-       from *"this gate still needs a --self-test"* (stale) is what the sentence
-       MEANS, not its shape. That is 94.11's line exactly — *"a comment precedes
-       this literal" is checkable; "a comment explains this literal" is
-       semantic* — and it is the same class refused by 216.2, 217.2, 220.2 and
-       227.2. Five prior refusals of this shape, and the sixth was measured
-       rather than argued from them.
-
-       **The ratchet counter-argument does not transfer, and that was checked
-       rather than waved off.** `check:wrong-choice` ratchets because its
-       predicate is a **required shape on every page** — it walks
-       `src/pages/components/` and `src/pages/patterns/` and asserts a
-       `<strong>Not …</strong>` clause is PRESENT, so every new page that omits
-       one fires it. This proposal's predicate is a **forbidden phrasing**,
-       which can only fire on a verbatim recurrence of a sentence that now
-       appears nowhere. A presence-over-the-corpus gate and an
-       absence-of-one-string gate are not the same instrument; the precedent
-       covers the first.
-
-       **What is NOT claimed:** that the underlying defect does not matter. It
-       is real — 229.2 measured it at 5 of 5, and it misled the wake that found
-       it. The finding is that this defect has no exact textual signal, so the
-       thing that catches it is a wake reading the header, which is what
-       happened.
-
-       ```
-       # base rates (both predicates, over the 15 heuristic gates with a branch)
-       grep -rlE "process\.argv\.includes\(['\"]--self-test['\"]\)" \
-         apps/docs/scripts packages/core/scripts --include='check-*.mjs' | wc -l   # 15
-       grep -rniE 'owes?\b' apps/docs/scripts packages/core/scripts \
-         --include='check-*.mjs'                    # 2 — BLIND TO `owed`; see 232.1
-       grep -rlwE 'owes|owed' apps/docs/scripts packages/core/scripts \
-         --include='check-*.mjs' | grep -v check-selftests.mjs | wc -l   # 7, the honest count
-       grep -rn 'OWES a --self-test' apps/docs/scripts packages/core/scripts       # 0
-       node apps/docs/scripts/check-selftests.mjs   # 15 heuristic (all self-tested)
-       ```
-
-       **RECURRENCE HISTORY — added by 232.2 (2026-08-31), because a ratchet
-       guards RECURRENCE and this refusal was argued from today's base rate
-       alone.** Recorded here, in 229.3's own text, rather than left as a
-       cross-reference: a pointer is read less than a paragraph, and this is the
-       paragraph that changes what the refusal rests on.
-
-       ```
-       git rev-parse --is-shallow-repository    # must be false, or ENVIRONMENT §2 applies
-       git log -S'OWES a --self-test' --format='%h %cs %s' \
-           -- apps/docs/scripts packages/core/scripts
-       ```
-
-       | commit | date | what it did | seen by |
-       |---|---|---|---|
-       | `84eb14ca` 42.1 | 2026-08-19 | wrote the sentence into 6 files | pickaxe |
-       | `443348e2` 42.3 | 2026-08-19 | added the branches — **the claim becomes false** | second instrument ONLY |
-       | `f1be2485` 220 | 2026-08-30 | deleted `check-boost.mjs`, the sixth file | pickaxe |
-       | `5754ea02` 229.2 | 2026-08-31 | corrected the remaining five | pickaxe |
-
-       **At 42.1 the sentence was TRUE, and the pickaxe structurally cannot see
-       the moment it stopped being true** — it finds where the SENTENCE changed,
-       and `443348e2` changed only the branch. Re-derived rather than copied:
-       the pickaxe returns exactly three commits and **`443348e2` is confirmed
-       absent from them**. The instrument that does see it tests sentence and
-       branch together:
-
-       ```
-       git show 84eb14ca:apps/docs/scripts/check-floor.mjs | grep -c "argv.includes('--self-test')"   # 0
-       git show 443348e2:apps/docs/scripts/check-floor.mjs | grep -c "argv.includes('--self-test')"   # 1
-       ```
-
-       **So the defect was introduced by the commit that PAID the debt** —
-       `443348e2`, titled *"42.3: all seven heuristic gates now prove they can
-       fail"*, shipped the self-tests and left five sentences saying they were
-       owed. **One introduction, zero recurrences in the twelve days to 229.2**;
-       the sixth file left the defective state by deletion (Slice 220), not by
-       correction, which is why 229.2 corrected five.
-
-       > **CORRECTED 2026-08-31 by slice 234.1 — the attribution above is wrong
-       > for 1 of the 6 files, and the probe printed just above is why both
-       > dispatchers confirmed it.** That probe reads `check-floor.mjs` alone,
-       > which is one of the five files that behave as described. Run per file,
-       > `84eb14ca` gives five files `sentence=1 branch=0` and
-       > **`check-notes.mjs` `sentence=1 branch=1`** — 42.1's own diff adds
-       > `if (process.argv.includes('--self-test')) {` to that one file beside
-       > the header it was writing. **So the defect was introduced by `84eb14ca`
-       > (42.1), the commit that WROTE the sentence**, two commits and twenty
-       > minutes before 42.3; *"at 42.1 the sentence was TRUE"* holds for 5 of 6.
-       >
-       > **The aggregate is untouched and so is the refusal.** Walking all 1,749
-       > first-parent commits and counting files in the defective state still
-       > gives one entry and zero recurrences; regrowth reads zero at both
-       > scopes measured (0 of 8 heuristic gates, 0 of 24 `check-*.mjs`). What
-       > the correction reaches is the clause below — *"a same-day side effect
-       > of a fix"* — which describes five instances and not the first. The
-       > per-file command is in **234.1**, beside the claim, because this item
-       > exists precisely because a one-file probe was quoted over six.
-
-       **This answers the ratchet argument on its own terms and does NOT
-       overturn the refusal.** A ratchet guards recurrence; measured recurrence
-       over the whole history is **zero**, and the single introduction was a
-       same-day side effect of a fix — which a forbidden-phrasing gate would
-       have caught only by also firing on the correct wording, the seven false
-       positives 232.1 measured.
-
-       **Not verified, said plainly:** cloud wake — no Podman and no
-       `localhost:8081`, so the 1440/390 light-and-dark screenshot lane could
-       not run. **Nothing here rests on a rendered image, and nothing here is a
-       code change at all** — the outcome is a recorded refusal; the working
-       tree carries only `ROADMAP.md` and the loop-log files. The injections
-       were reverted and `git status` was confirmed clean before committing.
-
-4. [x] **229.4 — 227.2's base rate is not re-derivable, and the base rate IS
-       the refusal. Record the command; do NOT add a gate.**
-
-       227.2 refused a gate on *"30 files … 50 numeric literals … the
-       unrestricted form returns 308"*, and its own text says the probe lives in
-       that wake's scratchpad. `git log --name-only 96bd852a` shows the commit
-       carried only `ROADMAP.md` and `icon.astro`, so the instrument is gone.
-       Reconstructing it from the predicate the write-up describes gives a
-       different answer for every defensible scope — **18**, **23** or **34**
-       files — and the claimed 30 sits inside that spread without being
-       reproducible from anything committed.
-
-       This is not a claim that 30 is wrong. It is that **it cannot be checked**,
-       and here that matters more than usual: 227.2's own reopen condition is a
-       *re-measurement* (*"if it is 1-of-1 this is 94.11 ceremony and should be
-       refused a fourth time"*). A refusal whose reopen path is a number nobody
-       can re-run is closed by accident rather than on the merits.
-
-       **The refusal still stands on its other leg**, verified independently
-       here: *"a literal is an operand" is checkable; "a literal duplicates a
-       fact something else can read" is not* — 94.11 exactly. That leg needs no
-       base rate.
-
-       *Accept* — properties, not values:
-       - The commands that produce 227.2's base rate are recorded somewhere a
-         later wake can run them, **or** the claim is restated as the
-         unreproducible reading it is, with the reconstruction spread named.
-       - Whatever the re-measurement says, a **gate is not added** unless the
-         semantic leg above is first shown to be wrong. Finding the base rate
-         higher than 30 is therefore a satisfying outcome that still refuses.
-
-       **Left OPEN, not owner-blocked** — any wake can take it, and the honest
-       first outcome is a paragraph, not a gate.
-
-       **DONE — the file half is now re-runnable and 30 is not among its seven
-       readings; the literal half is restated as unreproducible, with the
-       spread named. No gate added (2026-08-31, cloud wake).** Both branches of
-       Accept bullet 1 are taken, because the claim splits cleanly into a half
-       that reduces to a command and a half that cannot.
-
-       *The file half — recorded, and it refutes the 30.* Run against
-       **`96bd852a` itself**, the commit that published the number, so this is a
-       reproduction attempt rather than a re-measurement of a moved tree. It
-       reads identically at `HEAD`:
-
-       ```
-       REV=96bd852a
-       CODE='\.(mjs|js|ts|tsx|astro|cjs)$'
-       SIG='readFileSync|statSync|gzipSync|require\.resolve|import\.meta\.glob'
-       GEN='(api|behaviors|contrast|floor|keymap|events|acr|scales|dsa-scores'
-       GEN=$GEN'|patterns-index|patterns|rf-profile|versions|suite|framework|build-id)\.json'
-       sig() { git grep -lE "$SIG" $REV -- | sed 's/^[^:]*://'; }
-       gen() { git grep -lE "(import|require).*['\"][^'\"]*$GEN['\"]" $REV -- | sed 's/^[^:]*://'; }
-
-       git grep -lE 'readFileSync' $REV -- | wc -l                       # 18
-       sig | grep -E "$CODE" | grep -vE '/tests?/|^examples/' | wc -l    # 23
-       sig | grep -cE "$CODE"                                            # 25
-       sig | wc -l                                                       # 32
-       { sig; gen; } | grep -E "$CODE" | sort -u | grep -vE '/tests?/|^examples/' | wc -l   # 33
-       { sig; gen; } | grep -E "$CODE" | sort -u | grep -v '^examples/' | wc -l             # 34
-       { sig; gen; } | grep -E "$CODE" | sort -u | wc -l                                    # 36
-       ```
-
-       **Seven defensible scopes span 18-36 and none of them is 30.** The
-       differences are the three choices 227.2's prose leaves open: whether
-       prose files that merely *name* `readFileSync` count (32 vs 25 — seven
-       markdown files match, this roadmap among them), whether "an import of a
-       generated `*.json`" is a sixth signal or a gloss on the five, and whether
-       `examples/` and `packages/core/tests/` are in scope. 229.4's own premise
-       named **18, 23 and 34**; all three are reachable and are the 1st, 2nd and
-       6th lines above, so its spread holds — it simply carried no command, and
-       these are it.
-
-       *The literal half — unreproducible, and for a deeper reason than a
-       missing command.* "Numeric literals … on lines that also carry a
-       live-derived identifier" needs a **taint implementation**, and prose
-       cannot pin one. Three successive versions were built here, each
-       defensible, on the same 33-file set at the same commit:
-
-       | how far liveness propagates | restricted | unrestricted |
-       |---|---|---|
-       | one hop, right-hand side bounded to its own line | 22 | 574 |
-       | fixpoint, right-hand side bounded to its own line | 33 | 574 |
-       | fixpoint, right-hand side running to the next declaration | 61 | 574 |
-
-       The third is the correct one and the first two are undercounts, provable
-       without any judgement: 227.2 names `primitives.astro:24`,
-       `tokens.astro:81` and `ai-assistants.astro:30` as sites of the pattern,
-       and the first two versions score all three **zero** — the chain there is
-       `readFileSync` → `src` → `primitivesCss` → `KNOBS` → `knobs.length < 4`,
-       three hops with the read on a **continuation line**. A second axis moves
-       it again: counting a bare `=` as a comparison is the difference between
-       **61 and 58**, and the file set between **61** (33 files) and **167** (the
-       25-file scope), of which **112 come from `examples/po-app/server.mjs`
-       alone** — one demo server whose whole body is taint-reachable.
-
-       So the restricted count ranges over **22 · 33 · 58 · 61 · 152 · 155 ·
-       167 · 173** and the unrestricted over **324 … 785** across the same
-       choices. **227.2's 50 is produced by none of them, and its 308 is below
-       every unrestricted reading taken here.** That is the honest verdict: not
-       "30 and 50 are wrong", but that no stated predicate yields them, so the
-       reopen condition 227.2 wrote for itself cannot be executed.
-
-       *The instrument was red-proved twice by injection before any number above
-       was quoted*, both confirmed present by `grep` before the run and reverted
-       after, with `git status` clean:
-
-       - one hand-typed literal against a live identifier added to
-         `icon.astro`'s frontmatter (`const probeRatio = iconBytes / 7;`,
-         landing at line 41) → restricted **7 → 8**, whole-file **7 → 8**.
-       - the same expression injected into the TEMPLATE half instead
-         (`<!-- probe {iconBytes / 7} -->` at line 122, closing fence at 121) →
-         restricted stayed **7** while whole-file went **7 → 8**, so the
-         build-time restriction discriminates rather than passing everything.
-
-       **A reconstruction that reproduces the target number is a defect in the
-       reconstruction until proven otherwise** — the sharpest thing this item
-       produced, and it is not a restatement of the green-red-proof rule, it is
-       that rule pointed at a *measurement* rather than a gate. An early scope
-       here returned **exactly 30**, and it was wrong: the generated-json arm
-       used `[^\n]*` in an **ERE**, where a bracket expression makes that "any
-       character except backslash or the letter n". `import patterns from
-       '…/patterns.json'` contains an `n` in `patterns`, so three real importers
-       (`Gallery.astro`, `which-pattern.astro`, `patterns/index.astro`) were
-       silently dropped and the count landed on the number being sought. Had it
-       been believed, this item would have closed as "reproduced" on a broken
-       instrument. The tell was not the number — it was that the three missing
-       files were nameable.
-
-       *Accept, against the properties as written:*
-       - **Bullet 1 — met.** The file-level commands are recorded above and run
-         from a clean checkout; the literal-level claim is restated as the
-         unreproducible reading it is, with the spread named.
-       - **Bullet 2 — met, and a gate is NOT added.** The semantic leg was not
-         shown wrong and is not touched: *"a literal is an operand" is
-         checkable; "a literal duplicates a fact something else can read" is
-         not.* Every reading here is **higher** than 30, which 229.4 named in
-         advance as a satisfying outcome that still refuses — and it is, because
-         the base rate was never the leg the refusal stood on.
-
-       **Not verified, said plainly:** cloud wake — no Podman and no
-       `localhost:8081`, so the 1440/390 light-and-dark screenshot lane could
-       not run. Nothing here rests on a rendered image and nothing here is a
-       code change: the diff is `ROADMAP.md` and the loop-log files. The probe
-       was deliberately **not** committed — it is the throwaway 227.2's own
-       write-up describes, and committing it would add the machinery this item
-       exists to refuse; what is committed instead is the half that reduces to
-       seven shell lines.
-
-5. [x] **229.5 — `ENVIRONMENT.md`'s "measure from the git blob" bullet covers
-       the after-figure form and not the diff-stat form, and the wake that wrote
-       it made the uncovered error in the same document.**
-
-       The 228 hand-off asserted *"`git diff --stat`'s own net (129 insertions −
-       2,328 deletions = −2,199) matches 3,794 → 1,595 to the line."*
-
-       ```
-       git show --numstat --format='' d701e61 -- ROADMAP.md   # 158  2326
-       ```
-
-       158 − 2,326 = **−2,168** → **1,626**, the committed file. All four figures
-       are working-tree readings taken mid-write-up, and the sentence claims they
-       "match to the line" when they match nothing. **`ROADMAP.md`'s durable
-       Slice 228 text is unaffected and correct** — it states `−2,321` / `+2,381`
-       for the move and says outright that its after-figure predates its own
-       write-up. The defect is confined to the ephemeral hand-off, which is why
-       it is filed rather than fixed in place.
-
-       Worth naming for *which* wake wrote it: the same one promoted "measure a
-       regrowth cycle from `git show <sweep>:ROADMAP.md | wc -l`, never from the
-       sweep's own prose" into `ENVIRONMENT.md`. That bullet names the
-       **after-figure**; the error made beside it is the **diff-stat**. 192.1's
-       shape again — the defect lands in what shipped beside the carefully-proved
-       claim.
-
-       *Accept* — a property: `ENVIRONMENT.md`'s bullet states the general form
-       (**a figure describing a commit is read from the commit**) rather than the
-       one instance, **or** it is recorded that the generalisation was weighed and
-       refused as prose growth, with the reason. Both are satisfying; 158.2's
-       cadence argument makes the second a real option rather than a cop-out.
-
-       ---
-
-       **LANDED 2026-08-31 (cloud wake, rule 4). The first arm was taken — the
-       bullet now states the general form — and the deciding evidence is
-       something this item did not know: the premise's own "confined to the
-       ephemeral hand-off" is FALSE.**
-
-       **The premise re-checks exactly, which is why the rest is worth
-       believing** (CLAUDE.md: when the premise is itself an earlier wake's
-       measurement, re-checking it is part of the criterion):
-
-       ```
-       git show --numstat --format='' d701e61 -- ROADMAP.md   # 158  2326
-       git show d701e61^:ROADMAP.md | wc -l                   # 3794
-       git show d701e61:ROADMAP.md   | wc -l                  # 1626
-       ```
-
-       158 − 2,326 = −2,168; 3,794 − 2,168 = **1,626**, the committed file. The
-       quoted sentence was located verbatim rather than paraphrased — it is
-       `d701e61:.roundtable/RESUME.md` line 87, surviving into `7be5e4ae` — and
-       the hand-off's four figures are **internally self-consistent**
-       (129 − 2,328 = −2,199; 3,794 − 2,199 = 1,595). That is the finding this
-       item was missing and the reason the error survived review: it is not an
-       arithmetic slip that a re-add would catch, it is a *provenance* error in
-       which every number agrees with every other and none describes the commit.
-
-       **The defect is NOT confined to the ephemeral hand-off.** `d701e61` is
-       the commit that ADDED the bullet (`git show d701e61 -- .roundtable/ENVIRONMENT.md`
-       → `9  0`), and its own **subject line** reads
-       *"ROADMAP.md 3,794 -> 1,473 lines"* where the commit holds **1,626** — a
-       153-line gap, and an instance of the *after-figure* form the bullet was
-       being written to name, in the durable commit message, in the same commit.
-       So the narrow form did not prevent the error it describes even at zero
-       distance. That is the base rate a generalisation is supposed to move, and
-       it is why the refusal arm was not taken: refusing would have left an
-       instruction with a measured failure at n = 1 of 1 opportunities.
-
-       **Third repo-wide instance of an instruction naming an instance rather
-       than the property, and the first in `ENVIRONMENT.md`.**
-       `grep -n "name the property" LOOPS.md CLAUDE.md .roundtable/ENVIRONMENT.md`
-       returns `LOOPS.md:738` and `LOOPS.md:773` (the prose-page names, then the
-       ratchet clause) and **0** in `ENVIRONMENT.md`; LOOPS.md:773 calls itself
-       "the second time this playbook has paid for it".
-
-       **A limit of the general form was found while writing it, and is carried
-       rather than papered over:** a figure going into the *message* of a commit
-       cannot be read from that commit, because it does not exist yet — which is
-       exactly the case `d701e61`'s subject got wrong. The bullet therefore names
-       the index as the third reading, `git show :<file> | wc -l`, **red-proved
-       by discrimination** rather than asserted: staged a 3-line file, grew the
-       working tree to 5, and the index kept reading **3** while the tree read
-       **5**; re-adding moved it to 5. The probe file was removed and
-       `git status --short` was empty afterwards.
-
-       **Growth, stated rather than hidden:** the bullet goes **9 → 16 lines
-       (+7)** (`git diff --cached --numstat` → `16  9`), covering three readings
-       (size, delta, index) where it covered one. 158.2's cadence argument is the
-       reason that number is quoted here instead of being left for lane 4 to
-       find. **Three lines of it are a cut**, which is what held the delta to +7:
-       the one-cycle regrowth consequence — "2,144 lines over ~34 hours" against
-       a measured "+2,073 over 22 commits in 16h03m" — is the *effect* of the
-       error, not the rule, and it survives one grep away at `ROADMAP.md:975-977`
-       under Slice 228, which the bullet still cites.
-
-       *Accept, against the properties as written:* **first arm met** — the
-       bullet states the general form, keeps `e29c7c18`/214.1 as the original
-       worked instance (re-verified: 73 − 1,549 = −1,476; 3,197 − 1,476 =
-       **1,721** against its stated `3,197 → 1,650`), and adds `d701e61` as the
-       second. The refusal arm was weighed and lost on the measurement above,
-       not on preference.
-
-       **Not verified, said plainly:** cloud wake — no Podman and no
-       `localhost:8081`, so the 1440/390 light-and-dark screenshot lane could not
-       run. The diff is `.roundtable/ENVIRONMENT.md`, `ROADMAP.md` and the
-       loop-log files; nothing here renders, and no code changed.
+Closed — archived verbatim in `ROADMAP-archive.md`.
 
 ## Slice 228 — Standardize sweep: lanes 1-3 clean an eighth time, and lane 4 carries the finding again — the archive sweep is due a SEVENTH time (2026-08-30)
 
-**Dispatcher trace, cloud wake.** Rule 1: no open P0 (`grep -n 'P0' ROADMAP.md`
-returns only closed slice headings) and GitHub intake **0 open issues**, asked
-via the API (`list_issues` OPEN → `totalCount: 0`). Step 1 therefore had nothing
-to triage. Rule 2: `dispatch_status.py` read
-`Standardize 4 / 4 Continue rounds since 2026-08-30 20:25 OVERDUE` → **Standardize**.
-Rules 3 (`3 / 3`, also OVERDUE) and 4 were not reached — rule 2 sits above them,
-exactly as the previous hand-off predicted.
-
-**Lanes 1-3: an eighth identical clean result**, matching the baseline 194, 197,
-202, 206, 208, 214 and 224 established. Reported as `n of 4` per the playbook.
-
-**The two ordinals differ and that is not a typo** — the lanes-1-3 clean count
-is **8**, the archive-sweep count is **7**, because 224's sweep found its lane-4
-finding in `ENVIRONMENT.md` rather than in the roadmap's length. Checked against
-the headings rather than incremented from the last write-up: 214 says *"clean
-for the sixth time"* and 224 is the seventh but states no ordinal, which is
-exactly how an off-by-one gets inherited.
-
-- **Lane 1 of 4** (`scan:dead-style -w docs`) — **0 dead** of **1,433** live
-  inline declarations. Identical to 224.1's reading; 0 dead on screen but live
-  in print.
-- **Lane 2 of 4** (`report:css-repeats -w @busy-office/ui`) — 74 source files,
-  242 rules, 230 distinct bodies, **still exactly 8 repeat groups**, shapes
-  `x4(3) x3(3) x3(9) x2(3) x2(3) x2(6) x2(3) x2(3)` mapping one-to-one onto
-  `LOOPS.md`'s standing table of eight. **No delta**, which is what this lane
-  asks for — not the count.
-- **Lane 3 of 4** (`report:prose -w docs`) — 118 pages, median 748, 9 over 2x
-  the corpus median and 12 over a family median, **union = 14**. Every one of
-  the 14 already carries a verdict.
-
-  **Checked by SET MEMBERSHIP against the three verdict lists, not by a cite
-  count**, because the obvious instrument here is a dead one: grepping each
-  page's path out of `ROADMAP.md` + `ROADMAP-archive.md` returns 1-11 hits for
-  all fourteen, so it reports 14 of 14 covered whatever the truth is — a page
-  name appears in this repo's history for a dozen reasons that are not a prose
-  verdict. The union resolves against **158.1's twelve** (data-table, richtext,
-  which-pattern, form, editable-grid, list-report, calendar, money, combobox,
-  tabs, layouts, output-form), **161.1's three** (motion, js-behaviors,
-  design-language) and **178.3's** `/concepts/scale/` — with `tabs` and
-  `output-form` no longer flagged and nothing flagged that is outside those
-  sixteen.
-
-**Lane 4 of 4 is where the finding is, and it is the same one as 208.1, 214.1,
-177 and 165.1.** `report_loop_prose.py`'s `ratchet` block — read first, per the
-playbook, never the delta — showed `ROADMAP.md 9 up, last cut f1be2485
-(2026-08-30)`: the signature `LOOPS.md` names verbatim as this lane's finding,
-*"a file the loop reads every wake accumulating with no cut behind it"*. Rule 4
-reads this file top-to-bottom every wake, and it was walking **3,794 lines** to
-find **3 open items**.
-
-The other seven files in the dispatcher region were read for a class change and
-none had one: `CLAUDE.md` (29 up, never cut) and `DESIGN.md` (22 up, never cut)
-are the two standing HONEST verdicts — 193.1 executed 167.1's reopen condition on
-`CLAUDE.md` and decided *fold nothing, retire the watch* — `ENVIRONMENT.md` and
-`LOOPS-archive.md` carry 224.2's verdicts, and both archives are out of scope for
-167.1's stated reason.
-
-1. [x] **228.1 — DONE 2026-08-30 (cloud wake). Seventh archive sweep: 15 closed
-       slices, `ROADMAP.md` 3,794 → 1,473 lines.**
-
-       *Accept* — properties, not predicted values:
-       - The target set is DERIVED from the checkboxes at move time, and the
-         deriving instrument is red-proved before its output is used.
-       - Every moved section is byte-identical in the archive, verified against
-         the git blob rather than against the script that moved it.
-       - `check:slice-refs` reports the same figures either side of the move.
-
-       **Scope, on 177's instrument unchanged** (nearest preceding H2 of any
-       kind; the open set derived from `N. [ ]` checkboxes, never hardcoded —
-       165's own bug):
-
-       ```
-       # the command is in ROADMAP-archive.md, Slice 177, verbatim
-       OPEN: [15, 112]
-       15 closed slices carrying 2366 lines here; 0 already in the archive
-         # 2,366 of 3,794 lines = 62.4% of the live file was closed history
-       ```
-
-       **The instrument was red-proved by injection before its output was
-       used**, per CLAUDE.md's base rate on first outputs. An open checkbox was
-       injected into Slice 224 on a scratch copy, its presence confirmed
-       (**1** occurrence) *before* the parse, and the scope pass moved
-       `OPEN [15, 112] → [15, 112, 224]`, targets **15 → 14**, lines
-       **2,366 → 2,309**. It can distinguish an open slice from a closed one.
-
-       **Swept: `ROADMAP.md` 3,794 → 1,473; `ROADMAP-archive.md` 27,208 →
-       29,589.** Fifteen slices — 211, 214-227 — moved verbatim in the order
-       they held in the live file, each leaving the standing one-line pointer.
-
-       **The line accounting reconciles exactly, in both directions**, which is
-       what a move owes over a rewrite: the live file loses `2,366` body lines
-       and gains `15 × 3` pointer lines = **−2,321**; the archive gains 15
-       headings plus the same 2,366 body lines = **+2,381**. Both match the
-       measured deltas to the line.
-
-       **Lossless, verified against the git blob and by an independently
-       written parser** — not against the dict the sweep script built, which
-       would be self-consistent by construction:
-
-       ```
-       15/15 moved sections byte-identical to HEAD:ROADMAP.md
-       194 untouched live sections, 0 changed
-       192 pre-existing archive sections, 0 changed
-       3 open checkboxes before, 3 after
-       ```
-
-       **Citation-neutral, measured rather than asserted** — the gate was run
-       against `HEAD`'s two files and then against the swept pair, and every
-       figure is identical:
-
-       ```
-       npm run check:slice-refs -w docs
-       # before: 453 citation(s) checked (246 cited, 2 known-dangling), 209 slice numbers
-       # after:  453 citation(s) checked (246 cited, 2 known-dangling), 209 slice numbers
-       ```
-
-       **The number above is the file after the MOVE and before this write-up
-       was appended to it** — 209.1's correction. The post-commit figure is in
-       the loop log row and in `.roundtable/RESUME.md`.
-
-       **And 209.1's correction is not history: it bit again in this very
-       slice, on the SIXTH sweep's figure, while measuring the regrowth
-       cycle.** 214.1's write-up and its log row both say `3,197 → 1,650`.
-       The file as committed is **1,721 lines**:
-
-       ```
-       git show --format='%H %cI' -s e29c7c18            # 2026-08-30T00:46:02+00:00
-       git show e29c7c18:ROADMAP.md | wc -l              # 1721, not 1650
-       git rev-list --count e29c7c18..HEAD -- ROADMAP.md # 22
-       ```
-
-       Read off the log row, this cycle's regrowth publishes as **2,144 lines
-       over "~34 hours"**; measured from git it is **+2,073 over 22
-       ROADMAP-touching commits in 16h03m — 94.2 lines per commit**, against
-       177's recorded cycle rates of 30.4 / 51.0 / 69.5 / 66.6. Both of the
-       first pair were wrong, and neither is re-derivable from the log.
-
-       **So the rule, stated as a property rather than as this slice's
-       numbers:** a sweep's own stated after-figure is the file *before its
-       write-up landed*, so it is never the cycle's starting line count.
-       Measure a regrowth cycle from `git show <sweep-commit>:ROADMAP.md | wc -l`.
-       Carried into `ENVIRONMENT.md`'s measurement-discipline list, because
-       this is the second wake to pay for it and the first correction stayed
-       inside the slice it corrected.
-
-       **Not verified, said plainly:** this is a markdown-only change. No
-       rendered surface moves, so the 1440/390 light-and-dark screenshot lane
-       — which this container cannot run, having no Podman and no
-       `localhost:8081` — is not evidence this change needed. Nothing here
-       rests on a rendered image.
+Closed — archived verbatim in `ROADMAP-archive.md`.
 
 ## Slice 227 — Polish round 1 on `component/icon`: a stale count that was also a DIVISOR (2026-08-30)
 
