@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-08-31 16:15 UTC
+Generated at: 2026-09-01 05:06 UTC
 
 ## Open items by slice
 
@@ -19,11 +19,12 @@ Generated at: 2026-08-31 16:15 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1258 iterations logged)
-  Standardize   6 / 4 Continue rounds since 2026-08-31 13:03   OVERDUE
-  Objective     3 / 3 slices          since 2026-08-31 14:58   OVERDUE  [232, 233, 234]
+dispatch status — counter-triggered rules (1261 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-09-01 05:06   ok
+  Objective     4 / 3 slices          since 2026-08-31 14:58   OVERDUE  [232, 233, 234, 235]
   -> a counter is at or past its threshold; the dispatcher should pick it
-  Optimize      0 wake-date(s) newer   since 2026-08-31 08:41   ok   [newest pair: axe-violations; 106 sample(s), 13 of 33 name(s) sampled twice]
+  Optimize      1 wake-date(s) newer   since 2026-08-31 16:15   STALE   [newest pair: axe-violations; 107 sample(s), 13 of 33 name(s) sampled twice]
+  -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-08-31, not this one — record a metric or say the rule could not be evaluated.
 ```
 
 ## Owner-blocked
@@ -36,9 +37,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-31 14:58 · Objective · grill · 232.3 — 230.1's gate refusal misapplies 94.11; detector red on the real pre-fix tree, green on HEAD (third dispatcher, two Step 0c losses) · logged · 577a2ab4
-- 2026-08-31 14:58 · Meta · refusal · re-filing the 89-vs-88 denominator finding — duplicates what the landed grill records from two dispatchers · refused · 577a2ab4
-- 2026-08-31 15:29 · Continue · build · 233.1 — made /components/alerts' two Elevated prose claims executable; one shipped FALSE (elevated vs toast surface) and one half true (severity fill), both corrected, 3 cases red-proved, 158->161 live · landed · 255ceb8f
 - 2026-08-31 15:29 · Meta · refusal · changing alert.css's shadow/radius to make the two surfaces actually match — the divergence is the design (a toast floats over the page), so the prose was corrected instead · refused · 255ceb8f
 - 2026-08-31 15:34 · Continue · build · 232.2 — 229.3's recurrence history recorded in 229.3 itself, re-derived on an unshallowed clone; refusal untouched · landed · 606edf88
 - 2026-08-31 15:34 · Meta · refusal · no gate proposed for the stale-self-test phrasing: recurrence 0 and regrowth 0 of 8 both say a ratchet has nothing to guard · refused · 606edf88
@@ -46,6 +44,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-08-31 15:46 · Meta · refusal · reopening 232.2 after losing its race — the item is closed and only the refuted attribution is re-filed · refused · 258856b4
 - 2026-08-31 15:46 · Meta · refusal · reopening 229.3's refusal on the strength of the history — measured recurrence of zero supports the refusal rather than overturning it · refused · 258856b4
 - 2026-08-31 16:15 · Continue · build · 233.2 — execute /components/alerts' entrance-animation claim; 233.1's three cases stay green on the injected defect · landed · efab3c13
+- 2026-09-01 05:06 · Standardize · sweep · 235.1 — Standardize sweep 4 of 4 lanes; lanes 1-3 clean a tenth time with no delta, lane 4's ratchet carried the finding (ROADMAP.md 4 up -> 15 up, same last cut, +1,733 over 15 commits = 115.5 lines/commit, the highest per-commit rate in the record). The finding is that the sweep's own scope instrument has been run by five wakes and never had a file — one copy, inside an archived slice, pointed at three times. Committed as scripts/loops/roadmap_scope.py, @heuristic with --self-test cases A-D; reproduces 228.1's OPEN/count/share exactly and 214.1's target set and line total exactly at their own trees. Its first run REFUSED on the real file: 19 raw [x] against 17 attributed, the two being OWNER CALL items under ## STATE that no earlier run of this instrument could see · landed · 54396d36
+- 2026-09-01 05:06 · Standardize · sweep · 235.2 — eighth archive sweep: 5 closed slices (233, 231, 230, 229, 228) moved verbatim, ROADMAP.md 3,569 -> 2,165 lines (39.8% was closed history), each leaving the standing three-line pointer. Lossless against the git blob by an independently written parser (5/5 byte-identical, 216 untouched live sections 0 changed, 228 pre-existing archive sections 0 changed, 6 open checkboxes both sides), line accounting reconciling in both directions (-1,419 body +15 pointer = -1,404; +5 headings +1,419 body = +1,424), citation-neutral at 464/249/2/217 either side. The post-sweep 0% checked before being believed via --min-lines 0 · landed · 574a8634
+- 2026-09-01 05:06 · Standardize · tidy · 235.3 — ROADMAP-archive.md carried three self-referential pointer stubs (slices 17, 23, 24 each heading two sections there, the second a pointer into the file it was already in), found by 235.2's verification parser crashing on a duplicate map key. Removed exactly, 31,013 -> 31,001, every kept section byte-identical in order. check:slice-refs's uniqueness loop extended from ROADMAP.md alone to both files — its header's sufficiency argument holds for citations and not for uniqueness. Base rate 3 of 233 archive sections; red-proved by injection AND against HEAD's own archive, where it goes red 3 of 677 naming 24, 17 and 23 · landed · dc861a25
 
 ## Sunset test
 
