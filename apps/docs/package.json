@@ -24,6 +24,7 @@
     "check:loop-vocab": "node scripts/check-loop-vocab.mjs",
     "check:learning-path": "node scripts/check-learning-path.mjs",
     "check:selftests": "node scripts/check-selftests.mjs",
+    "check:parse-asserts": "node scripts/check-parse-asserts.mjs",
     "check:dist-walkers": "node scripts/check-dist-walkers.mjs",
     "check:viewport-forks": "node scripts/check-viewport-forks.mjs",
     "check:components-used": "node scripts/check-components-used.mjs",
@@ -43,7 +44,7 @@
     "check:paths": "node scripts/check-paths.mjs",
     "check:resume-charter": "node scripts/check-resume-charter.mjs",
     "check:resume-slice-ids": "node scripts/check-resume-slice-ids.mjs",
-    "check:repo": "node scripts/check-imports.mjs && node scripts/check-loop-vocab.mjs && node scripts/check-selftests.mjs && node scripts/check-dist-walkers.mjs && node scripts/check-viewport-forks.mjs && node scripts/check-paths.mjs && node scripts/check-ci-ignores.mjs && node scripts/check-slice-refs.mjs && node scripts/check-vendor-names.mjs"
+    "check:repo": "node scripts/check-imports.mjs && node scripts/check-loop-vocab.mjs && node scripts/check-selftests.mjs && node scripts/check-parse-asserts.mjs && node scripts/check-dist-walkers.mjs && node scripts/check-viewport-forks.mjs && node scripts/check-paths.mjs && node scripts/check-ci-ignores.mjs && node scripts/check-slice-refs.mjs && node scripts/check-vendor-names.mjs"
   },
   "dependencies": {
     "@busy-office/ui": "*",

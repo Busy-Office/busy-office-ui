@@ -42,6 +42,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gate, assertScanned, selfTest } from './gate-report.mjs';
 import { REPO_ROOT as ROOT } from './paths.mjs';
+import { stripComments } from './source-files.mjs';
 
 
 /** Directories whose scripts can run inside a CI job. */
@@ -54,12 +55,9 @@ const SCRIPT_DIRS = [
 /** Reads a NAME in a way that would break if the file changed. */
 /* Four scripts NAME these paths in prose, and a gate matching those could
    never pass. One definition, used by both readers below — it was inlined in
-   readsFile and the glob reader needed the same thing. */
-function stripComments(source) {
-  return source
-    .replace(/\/\*[\s\S]*?\*\//g, ' ')
-    .replace(/(^|[^:])\/\/.*$/gm, '$1 ');
-}
+   readsFile and the glob reader needed the same thing. Moved to
+   `source-files.mjs` on 2026-09-01 when a second gate needed it; the reason it
+   exists is unchanged, and the counts this gate reports did not move. */
 
 /**
  * Does this source OPEN something under a directory? Used for glob entries.

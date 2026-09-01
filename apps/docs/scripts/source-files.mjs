@@ -104,6 +104,27 @@ export async function collectSource(roots, { keep, skipDirs = SKIP_DIRS, include
   return { files, missing };
 }
 
+/**
+ * Strip JS comments, so a detector reads CODE rather than prose about code.
+ *
+ * CLAUDE.md's standing rule — "assert on structure, never on raw text" — because
+ * the comment written to explain a removal legitimately names the thing removed.
+ * Both directions are real here and only one is loud: a signal a comment MENTIONS
+ * over-flags (annoying, visible), while a signal a comment CONTAINS — a
+ * commented-out `throw` still read as an assertion — clears a page that asserts
+ * nothing. That one is fail-open, which is the bug a gate must not have.
+ *
+ * Lifted out of `check-ci-ignores.mjs`, which had the only copy, when
+ * `check-parse-asserts.mjs` needed the same thing (2026-09-01). One decision —
+ * "what counts as code here?" — stored once, per this module's own header.
+ * Deliberately not a parser: it does not know string or regex literals, so a
+ * `//` inside a string is over-stripped. Measured before being accepted: on the
+ * two callers' inputs it changes no verdict.
+ */
+export function stripComments(source) {
+  return source.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(^|[^:])\/\/.*$/gm, '$1 ');
+}
+
 /** Convenience: a `keep` predicate matching any of the given extensions. */
 export const byExt = (...exts) => {
   const set = new Set(exts.map((e) => (e.startsWith('.') ? e : `.${e}`)));

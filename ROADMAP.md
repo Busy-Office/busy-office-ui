@@ -1321,7 +1321,7 @@ correction. No finding against it.
        none copied it. Recurrence and regrowth are not the same question; both
        read zero, which is why no wake has needed to reopen 229.3.
 
-3. [ ] **232.3 — 230.1's refusal to gate its predicate misapplies 94.11, and
+3. [x] **232.3 — 230.1's refusal to gate its predicate misapplies 94.11, and
        94.11's own test is what refutes it. Filed by a THIRD dispatcher on the
        same armed set; this grill's §B records "no finding against 230".**
 
@@ -1390,6 +1390,106 @@ correction. No finding against it.
        - (e) **Finding the premise false is a satisfying outcome**: if the detector
          cannot be written without an exemption map naming more files than it
          catches, record that and refuse the gate on the measurement.
+
+       ---
+
+       **RESOLUTION (2026-09-01, cloud wake). The gate is built and wired:
+       `apps/docs/scripts/check-parse-asserts.mjs`, run from `check:repo` — so
+       it runs on every `docs:build` and on CI's `npm run build -w docs`, with
+       no `ci.yml` step added.** All five Accept bullets are satisfied, and (e)
+       did NOT fire: the exemption map it offered as an escape is not needed.
+
+       - **(a) The verdict on the current tree agrees with the tree, measured.**
+         `parse-assert check passed — 149 .astro file(s) scanned, 8 read a file
+         at build time, none parses without asserting`. Reconciled against an
+         INDEPENDENT count before being quoted: `grep -rlE
+         "readFileSync|import\.meta\.glob" apps/docs/src/pages --include=*.astro
+         | wc -l` also reads **8**, and the same grep over `apps/docs/src`
+         minus `/pages/` reads **0**, so the walk's wider root costs nothing and
+         adds no surprise. The six parsing pages were then read BY HAND, parse
+         site against throw site, rather than trusted from the count.
+       - **(b) Red-proved against the real pre-fix tree, and the checkout was
+         confirmed to have taken effect before the result was believed.**
+         `git checkout -q 'ff2b623d^' -- apps/docs/src/pages`, then the check
+         that is not the command's own exit code: `git hash-object
+         apps/docs/src/pages/concepts/cascade.astro` and `git rev-parse
+         'ff2b623d^:apps/docs/src/pages/concepts/cascade.astro'` both read
+         **`6138cbe6`**, and the page's frontmatter throw count moved **1 → 0**.
+         The gate then exited **1**, naming **exactly one** page —
+         `concepts/cascade.astro` — with **zero false positives**, including on
+         `components/alerts.astro`, which that same checkout also reverted.
+         Restored with `git checkout -q HEAD --`, and the gate re-run green.
+       - **(c) `@heuristic`, with a `--self-test` `check:selftests` accepts** —
+         it now reads `47 gates classified: 16 heuristic (all self-tested), 31
+         exact`, up one from 46/15. **The self-test was itself red-proved**, per
+         CLAUDE.md's rule that a green red-proof is a defect in the injection
+         until proven otherwise: a probe copy with comment-stripping removed
+         (injection confirmed by `grep -c` on the probe — 1 probe line present,
+         0 original lines left, and the first attempt's `&&` chain stopped on
+         that very grep rather than reporting a false green) turns **3 of the 11
+         cases WRONG**, including the fail-OPEN one, a commented-out `throw` that
+         would otherwise clear a page asserting nothing.
+       - **(d) The byte-length-only exclusion is mechanical. There is no
+         exemption map, by name or otherwise.** `concepts/scale.astro` and
+         `index.astro` — the two 230.1 excluded by hand — exclude themselves at
+         `parses = 0`, exactly as this item predicted.
+       - **(e) The premise held.** No exemption map was needed, so there was
+         nothing to refuse on.
+
+       **Two design choices measured rather than assumed, both narrowing the
+       gate.** All three signals are read from the FRONTMATTER only: scanning
+       the template body was tried first, and across the 8 reading pages the
+       body contributes exactly **one** parse — `name.split('-')[3]` in
+       `base/primitives.astro`, on a value whose own parse is already guarded
+       upstream — so it moves **no verdict** while opening a false-positive
+       class the gate cannot mechanically close, since a `<pre><code>` sample
+       legitimately contains `.split(`. And a build-time assertion can only live
+       in the frontmatter anyway, which the self-test asserts directly. The gap
+       this leaves is stated in the file rather than hidden: a page whose read
+       is in the frontmatter and whose ONLY parse is in the body would not be
+       flagged. No page does that today.
+
+       **What the gate does NOT check, said in its own header:** whether each
+       individual parse is guarded by the assertion beside it. That is semantic
+       — 94.11's wall — so it enforces the SHAPE that carries the property
+       (read + parse ⇒ at least one build-time throw) and says so, which is the
+       `check:wrong-choice` precedent rather than a new one.
+
+       **One tidy landed with it, and it is lane-2 drift caught before it
+       existed rather than after:** `stripComments` had exactly one copy, in
+       `check-ci-ignores.mjs`, and this gate needs the same decision. It moved
+       to `source-files.mjs` — the module whose own header records this precise
+       failure for the source walk.
+
+       **The first draft of this paragraph claimed `check:ci-ignores` "reports
+       the same numbers after the move", and that claim was FALSE** — caught by
+       going to get the pre-move reading instead of asserting it, which is the
+       only reason it is not in the commit. The gate reads `130 CI-ignored
+       file(s) verified against 128 script(s)` in this tree and **`128 / 127`**
+       at `HEAD`. The move is not what moved them; the new gate is. Isolated in
+       a **pristine `git worktree` at `HEAD`** rather than by `git stash`, which
+       ENVIRONMENT.md warns reverts the data along with the script:
+
+       | tree | ci-ignores reads |
+       |---|---|
+       | `HEAD`, untouched | 128 file(s) / 127 script(s) |
+       | `HEAD` + the helper move ONLY | **128 / 127** — unchanged |
+       | this tree (move + the new gate) | 130 / 128 |
+
+       Both deltas are accounted for exactly: `+1 script` is
+       `check-parse-asserts.mjs` existing, and `+2 file(s)` is that same script
+       becoming CI-run × the **2** `paths-ignore` entries (`.roundtable/**`,
+       `STATUS.md`) it is asserted against. The probe tree was confirmed to hold
+       the moved helper and NOT the new gate before its output was believed, and
+       `check:ci-ignores --self-test` still passes its 7 cases on the moved
+       helper.
+
+       **Not verified, said plainly:** this wake has no Podman and no
+       `localhost:8081`, so the 1440/390 light-and-dark screenshot lane could
+       not run. It changed **no CSS and no page markup** — the diff is two gate
+       scripts, one shared helper, `package.json` and this file — so nothing in
+       it rests on a rendered image. The browser-driven readings quoted come
+       from gates executing in this container.
 
 ## Slice 231 — Polish round on `component/alerts`: the reconciliation is a NO-OP, and the sweep that surrounded it found one shipped variant with no recorded reason anywhere (2026-08-31)
 
