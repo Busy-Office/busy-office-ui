@@ -352,7 +352,7 @@ all three points. Lanes 2 and 3 reproduce byte for byte (`74 · 242 · 230 · 8`
 `any=1 excl=0` × 5 and `any=3 excl=2`; `roadmap_scope.py --self-test` passes
 **A–E**. 234.1's aggregate is **1 / 6 / 5 / 0** at its four named commits.
 
-1. [ ] **238.1 — 237.2's supporting commit count is FIVE, not four, and the
+1. [x] **238.1 — 237.2's supporting commit count is FIVE, not four, and the
        wrong number now stands at two durable sites, one of them the archive
        header that item was written to correct.**
 
@@ -380,7 +380,9 @@ all three points. Lanes 2 and 3 reproduce byte for byte (`74 · 242 · 230 · 8`
        the third-largest of the five by insertions (4369, 2381, **1575**, 1424,
        27).
 
-       **The two sites:**
+       **The two sites** (quoted as first published; **both were corrected in
+       place when this item closed**, so neither string is findable in the live
+       tree any more — the quotations are the record of what stood):
        - `ROADMAP.md` 237.2 — *"Four commits landed on the file in between
          (`d3d76a28`, `83192cd1`, `d701e619`, `574a8634`)"*.
        - `ROADMAP-archive.md`'s header, which 237.2 itself rewrote — *"they sat
@@ -448,6 +450,75 @@ all three points. Lanes 2 and 3 reproduce byte for byte (`74 · 242 · 230 · 8`
        NOT owner-blocked, NOT agent-blocked.** It is a `git log` over one file on
        an unshallowed clone plus a markdown edit at two sites. No screenshot is
        evidence for any part of it.
+
+       **CLOSED 2026-09-01 (cloud wake, rule 4 — the first rule-4 dispatch in
+       six hand-offs). Corrected to five at both sites; (e) considered and
+       refused, with a reason.**
+
+       Every premise was **re-run on this wake's own unshallowed clone** before
+       anything was edited, not read out of the item — `is-shallow-repository`
+       → `false`, 1,786 commits:
+
+       - The range prints **5** (`574a8634`, `d701e619`, `e29c7c18`,
+         `83192cd1`, `d3d76a28`). `e29c7c18` is in it in **both** directions
+         (`git merge-base --is-ancestor 2ae54a4a e29c7c18` and
+         `… e29c7c18 dc861a25^`, rc=0 each) and reads `1575 0`, third of
+         `4369 · 2381 · 1575 · 1424 · 27` — the item's own ordering, reproduced.
+       - **(c) holds, measured, not assumed.** The ten-commit premise reads
+         **10** at `7e861867^`, with numstats `0/12` and `27/0` the only two
+         non-appends; `dc861a25`'s diff deletes exactly the Slice 24, 17 and 23
+         stubs and nothing else (12 lines); and `2026-08-28 → 2026-09-01` is
+         **4 days** exactly. None of the three moved.
+       - **(a) + (b) — both sites now carry the number AND the command**
+         (`ROADMAP.md` 237.2's cost paragraph, and the archive header). The
+         header's correction says what it used to read and why, so the file
+         records its own amendment rather than silently reading right.
+       - **(d) — `loop-log.md:1279` and `STATUS.md:43` are untouched**, and the
+         reason is written into 237.2's cost paragraph itself, which is where a
+         reader of the correction arrives. The dated grill report
+         `grill-objective-232-234-236-237-2026-09-01.md` also keeps the
+         pre-correction quotation, for the same reason.
+       - The `-0 / -12` annotation is now `+0 / -12`, matching what
+         `git log --numstat` prints for `dc861a25` (`0` and `12`).
+
+       **(e) refused, and it is the interesting half.** *"Imprecise and right"*
+       was genuinely available — the conclusion survives either count — and it
+       is refused because **the number is not decorative here: it is the size of
+       the cost**, the whole point of a paragraph whose subject is how long a
+       correct deletion was deferred. It would also have left the wrong figure
+       in the one file whose header instructs future wakes about its own
+       editability. So this is *not* the fourth instance of 232.1/236.1's shape;
+       it is the first case in that series where the disputed number is
+       load-bearing for the claim it sits in.
+
+       **Scope: counted before AND after editing, never enumerated by eye** —
+       which is the failure mode this whole item is about:
+
+       ```
+       git grep -in "four commits landed\|four further commits" -- . | wc -l   # 6
+       git grep -in "four commits" -- . | wc -l                                # 21
+       git grep -in "four commits landed on the file\|sat through four further commits" \
+         -- ROADMAP.md ROADMAP-archive.md | grep -v '\*"' | wc -l              # 0
+       ```
+
+       The third is the one that matters: **zero surviving live assertions of
+       the wrong figure.** Of the 6, none is a claim — 238.1's two quotations
+       (labelled above as pre-correction text), this paragraph's own grep
+       command, the dated grill report, and the two immortal log rows
+       (`loop-log.md:1281`, `STATUS.md:43` — 1281, not the 1279 filed, because
+       rows landed after). The remaining 15 of the 21 are about entirely
+       different ranges, including two script headers and the archive's own
+       *"silently produced FOUR commits, not five"* at `:22793`; all untouched.
+
+       **That third command exists because the obvious check cannot pass.** A
+       plain `'four commits landed' not in ROADMAP.md` is red on a correct
+       tree — the item's evidence quotes the string it removed, and the grep
+       written to verify the removal *is itself a match*. Both are CLAUDE.md's
+       "an assertion tripped on its own explanation", met twice in one
+       paragraph; the fix is to assert on the claim's shape, excluding quoted
+       forms, not on the substring.
+
+       **No new gate**, per the item's own refusal, which was not re-litigated.
 
 **NOT VERIFIED, said plainly:** cloud wake — no Podman and no
 `localhost:8081`, so the 1440/390 light-and-dark screenshot lane could not run.
@@ -582,17 +653,40 @@ the Continue round that spent rule 4.
        git log --format='COMMIT %h %ad %s' --date=short --numstat -- ROADMAP-archive.md
        # 10 commits · 8 pure appends (the sweeps) · 2 with NO move:
        #   d3d76a28 (199.1)  +27 / -0   a RE-VERIFIED block appended INSIDE an archived slice
-       #   dc861a25 (235.3)   -0 / -12  three self-referential stubs deleted
+       #   dc861a25 (235.3)   +0 / -12  three self-referential stubs deleted
        ```
 
        **The cost, and it is specific.** 177.1 (2026-08-28) found Slices 17, 23
        and 24 each heading two sections in the archive, the second a three-line
        stub pointing at the file it was already in, named all three — and left
        them, **"on the archive's own authority"**, quoting this header verbatim.
-       `dc861a25` deleted exactly those three on 2026-09-01. Four commits landed
-       on the file in between (`d3d76a28`, `83192cd1`, `d701e619`, `574a8634`).
+       `dc861a25` deleted exactly those three on 2026-09-01. **Five** commits
+       landed on the file in between — the command, since this figure was
+       published without one and was wrong for four days (238.1):
+
+       ```
+       git log --format='%h %ad %s' --date=short 2ae54a4a..dc861a25^ -- ROADMAP-archive.md | wc -l
+       #   5 — 574a8634 (235.2), d701e619 (228.1), e29c7c18 (214.1),
+       #       83192cd1 (208.1), d3d76a28 (199.1)
+       ```
+
        A correct twelve-line deletion was deferred four days by a sentence that
        was already false when it was read.
+
+       **Corrected 2026-09-01 by 238.1; `+0 / -12` above was `-0 / -12` in the
+       same commit.** As first published this paragraph read *"Four commits
+       landed on the file in between (`d3d76a28`, `83192cd1`, `d701e619`,
+       `574a8634`)"* — `e29c7c18` (214.1, the sixth archive sweep, `+1,575`) was
+       dropped, and it is the middle of three consecutive `— Nth archive sweep`
+       subjects. The conclusion, the ten-commit premise above and the *"four
+       days"* figure are unchanged and were each re-run before this edit.
+       **`.roundtable/loop-log.md:1279` and `STATUS.md:43` still carry the wrong
+       phrase and are deliberately left wrong**: `record_iteration.py`'s standing
+       rule is that historical rows are never edited, so the figure is immortal
+       in the log — which is the whole reason the two durable sites had to carry
+       the correction. The grill report
+       `.roundtable/grill-objective-232-234-236-237-2026-09-01.md` quotes the
+       pre-correction wording as a dated finding and is likewise not edited.
 
        **Scope checked, and two near-misses left alone.** A fixed-string sweep
        for the claim (`Nothing here is edited`, `corrections to history`,

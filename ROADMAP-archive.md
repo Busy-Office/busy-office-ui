@@ -16,8 +16,20 @@ This header used to say the opposite — *"Nothing here is edited"* — and
 that sentence had a measured cost. 177.1 found three self-referential
 pointer stubs in this file on 2026-08-28, named them (Slices 17, 23, 24)
 and left them **"on the archive's own authority"**, quoting this
-paragraph; they sat through four further commits to this file until
-235.3 deleted them (`dc861a25`, 2026-09-01). It was also already false
+paragraph; they sat through **five** further commits to this file until
+235.3 deleted them (`dc861a25`, 2026-09-01):
+
+```
+git log --format='%h %ad %s' --date=short 2ae54a4a..dc861a25^ -- ROADMAP-archive.md | wc -l
+#   5 — 574a8634 (235.2), d701e619 (228.1), e29c7c18 (214.1),
+#       83192cd1 (208.1), d3d76a28 (199.1)
+```
+
+That count read *"four"* from 2026-09-01 until 238.1 corrected it the
+same day: `e29c7c18` (214.1, the sixth archive sweep, `+1,575`) was
+dropped from an enumeration made by eye down three consecutive
+`— Nth archive sweep` subjects, with no command published beside it. The
+command is here now for that reason. It was also already false
 as a description of practice when 236.2 measured it: of the ten commits
 that have touched this file, eight are sweeps and **two are edits with
 no move at all** — `d3d76a28` (199.1) appending a `RE-VERIFIED` block
