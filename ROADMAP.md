@@ -315,6 +315,247 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 236 — Objective grill of Slices 232, 233, 234, 235: every published figure reproduces except one, and the two findings are both about what a verification CANNOT see — a corroborating count that measures its own explanation, and a sweep that archived the target of an open item's Accept (2026-09-01)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0 (`grep -n 'P0' ROADMAP.md`
+returns only closed slice headings) and GitHub intake **0 open issues**
+(`list_issues` OPEN → `totalCount: 0`), so Step 1 had nothing to triage and no
+`Roadmap · plan` row was recorded. Rule 2: `Standardize 0 / 4 since 2026-09-01
+05:06`, no drift flagged. Rule 3:
+**`Objective 4 / 3 slices OVERDUE [232, 233, 234, 235]` — dispatched.** Rule 4
+was not reached. Full report:
+`.roundtable/grill-objective-232-233-234-235-2026-09-01.md`.
+
+**Arming set NOT narrowed, and the check is set membership rather than a
+recollection.** The last grill is Slice 232 itself, covering 229/230/231; the
+armed set is disjoint from it. `ls .roundtable/grill-objective-*.md` reads
+**41** (232's own report is the 41st, which is why that slice read 40), and
+grepping the four armed numbers out of the other forty returns hits in **4**
+files, every one of them incidental — `230 distinct bodies` from a
+`report:css-repeats` line, `229 cited` from a `slice-refs` line, `229.4` /
+`229.5` as items 232 filed, and a 2026-08-19 class count. **None is a prior
+grill OF 232, 233, 234 or 235.** The loose grep is reported rather than hidden
+because it is the weak instrument here: it cannot tell a subject from a
+coincidence, so its four hits were read individually rather than counted.
+
+**Scope, said honestly: 232 is armed by its own follow-up items, not by being
+un-grilled as a grill.** `dispatch_status.py` counts distinct slice numbers
+named by Continue/Standardize rows, and 232.1/232.2 were built as Continue
+rounds after the grill landed. So what is grilled here is those rounds and
+their published numbers, not the 229/230/231 verdicts, which stand untouched.
+
+### What was re-derived, and what it cost to be sure
+
+Every load-bearing figure in the four slices was re-run on an **unshallowed**
+clone (`git rev-parse --is-shallow-repository` → `false`, 1,776 commits;
+ENVIRONMENT.md §2 — history figures are silently 50x wrong without it). The
+container also started **DETACHED** with local `main` stale at `17b3ba67`
+against `HEAD` `7bce44ed`, exactly ENVIRONMENT trap 1; `git branch
+--show-current` returned empty and `git checkout -B main origin/main` fixed it
+before any commit existed.
+
+| slice | claim | re-run | verdict |
+|---|---|---|---|
+| 235.1 | `--rev d701e619^` reproduces 228.1 | `OPEN: [15, 112]` · `15 closed / 2366 lines` · `62.4%` | **exact** |
+| 235.1 | `--rev e29c7c18^` reproduces 214.1 | 7 targets `[213, 212, 210, 209, 208, 201, 200]` · `1568 lines` | **exact** |
+| 235.1 | `--self-test` cases A-D discriminate | `self-test OK` on all four | **holds** |
+| 235.2 | 5 sections moved byte-identically | **5/5** against `574a863^:ROADMAP.md`, independent parser | **exact** |
+| 235.2 | 1,419 body lines moved | **1,419**; archive `+1,424 = 5 headings + 1,419` = measured `1424` | **exact** |
+| 235.2 | open checkboxes unchanged | raw `6 → 6` | **exact** |
+| 235.2 | 216 untouched live sections, 0 changed | 216 untouched, **1** changed — Slice 235's own write-up | **explained** |
+| 235.3 | archive `31,013 → 31,001`, −12 | `git show`: 31013 → 31001, numstat `0 12` | **exact** |
+| 235.3 | `677 = 217 + 212 + 248` | 217 live · 212 archive · 250 cited − 2 dangling | **exact** |
+| 235.3 | `seen.size` unchanged at 217 | archive-minus-live set difference **empty** | **exact** |
+| 235 lane 2 | `74 · 242 · 230 · 8`, shapes unchanged | byte-identical, same eight shapes | **exact** |
+| 232.1 | NARROW 2 / tense-inclusive 7 / unanchored 17 | 2 · 7 · 17 (18 without the exclusion it records) | **exact** |
+| 232.3 | `ff2b623d^` flags exactly 1, `HEAD` flags 0 | **1** (`concepts/cascade.astro`) and **0** | **exact** |
+| 234.1 | per-file at `84eb14ca`: 5 files `branch=0`, `check-notes.mjs` `branch=1` | reproduced for all six files at all four commits | **exact** |
+| 234.1 | aggregate `0 → 1 → 6 → 5 → 0` | derives from the same per-file table | **exact** |
+
+**232.3's checkout was confirmed to have taken effect before its result was
+believed**, which is the step a green red-proof is a defect in: at
+`ff2b623d^` the pre-fix `cascade.astro` reads `throws=0`, and the two pages
+230.1 excluded by hand (`scale`, `index`) exclude themselves at `parses=0` in
+both trees. `git status` empty after restore.
+
+**235.2's live-side arithmetic reconciles once its own convention is applied,
+and that was checked rather than accepted.** The item states `3,569 → 2,165`
+while the commit holds **2,269** — the gap ENVIRONMENT.md's "read a figure from
+THAT COMMIT" bullet exists to catch. It is not that defect: the item declares
+the figure is the file *after the move and before this write-up was appended*,
+and the difference is exactly the write-up. `3,569 − 1,419 + 15 = 2,165`, and
+`2,165 + 104 = 2,269`, with the 104 landing in the one live section the
+independent parser reports as changed — Slice 235's own. Stated because the
+tell for the real defect is never arithmetic; here the arithmetic AND the
+independent section walk agree.
+
+**233 survives on its own terms.** Its two items are `check:claims` cases, and
+the gate is the instrument: it reports **`162 documented behaviours verified
+live · 3 NOT VERIFIED`**, which is 233.2's stated `161 → 162` landing, and the
+gate names the cause of the three itself — *"this browser reports
+`(hover: hover) and (pointer: fine) = false`"*, ENVIRONMENT trap 6b's container
+property, **not a regression and not to be "restored" to zero**. No finding
+against 233.
+
+1. [ ] **236.1 — 234.1's corroborating count does not reproduce as written, and
+       it fails by measuring its own explanation. The five files do not read
+       `0` under "any `--self-test` mention"; they read `1`, and that `1` is the
+       OWES sentence the item is measuring.**
+
+       234.1's central claim is **correct and reproduces exactly** — that is
+       stated first so this is not read as a reopen. At `84eb14ca` five files
+       read `sentence=1 branch=0` and `check-notes.mjs` reads `sentence=1
+       branch=1`, and `git show 84eb14ca -- apps/docs/scripts/check-notes.mjs`
+       confirms 42.1 itself adds `if (process.argv.includes('--self-test')) {`.
+       Nothing here touches that, or the aggregate, or 229.3's refusal.
+
+       What does not reproduce is the sentence guarding it against a
+       narrow-regex artefact: *"Widening the branch predicate to **any**
+       `--self-test` mention confirms the other five carried none at 42.1."*
+
+       ```
+       for f in apps/docs/scripts/check-{boost,floor,forced-colors,loop-vocab,notes}.mjs \
+                packages/core/scripts/check-markup.mjs; do
+         printf '%-30s any=%s excl=%s\n' "$(basename $f)" \
+           "$(git show 84eb14ca:$f | grep -c -- '--self-test')" \
+           "$(git show 84eb14ca:$f | grep -- '--self-test' | grep -vc 'OWES a --self-test')"
+       done
+       #   the five:        any=1  excl=0
+       #   check-notes.mjs: any=3  excl=2
+       ```
+
+       The five read **`any=1`, not 0**. The single match is line 15 of each:
+       `OWES a --self-test (roadmap 42.3): a detector this easy to fool must
+       prove it can fail.` — the very sentence whose truth the item is
+       adjudicating. The claim is true only under `excl`, an exclusion the
+       published command does not carry.
+
+       **The substance is unchanged, which is why this is a finding about the
+       corroboration and not about the conclusion.** Under `excl` the five read
+       `0` and `check-notes.mjs` reads `2`, so the widened predicate does
+       support "not a narrow-regex artefact" — once the sentence is excluded.
+
+       **This is a recurrence, not a one-off, and that is the reason to file
+       it.** 232.1 — two slices earlier, and the item 234 was filed against —
+       records exactly this shape about itself: *"One published figure did NOT
+       reproduce as written, and the difference is a missing exclusion … it is
+       the same class of defect this item exists to fix."* There the excluded
+       file was `check-selftests.mjs`, the meta-gate that names the vocabulary
+       by definition. Here it is the sentence itself. CLAUDE.md names the
+       general form twice — *"an assertion that trips on its own explanation"*
+       and *"verifying a removal: assert on structure, never on raw text"* —
+       and a corroborating count is where it keeps landing, because the
+       corroboration is written last and inherits none of the care the headline
+       figure got. That is 192.1's shape a third time: **the defect lands in
+       what shipped BESIDE the number.**
+
+       *Accept* — properties, not predicted values:
+       - (a) 234.1's widening sentence agrees with what the command above
+         actually prints — either by carrying the exclusion, or by recording
+         that the unexcluded count is 1 and why that 1 is the sentence.
+         **Both close this.**
+       - (b) The command sits beside the claim, per 234.1's own criterion (c) —
+         this item exists because a corroborating count was published without
+         one.
+       - (c) 234.1's central claim and its aggregate are left standing. A change
+         that reopens either does not satisfy this item.
+       - (d) **Finding the distinction not worth drawing is a satisfying
+         outcome**, recorded with its reason: the substance holds under `excl`,
+         so "the sentence is imprecise and the conclusion is right" is a
+         defensible close.
+
+       **Kind of work needed, so rule 4 sorts it correctly: NOT browser-blocked
+       and NOT owner-blocked.** It is a `git show` over six files on an
+       unshallowed clone plus a markdown edit. No screenshot is evidence for any
+       part of it.
+
+2. [ ] **236.2 — the eighth archive sweep moved Slice 229 while `234.1` was
+       open and names 229.3's `RECURRENCE HISTORY` as a thing to amend. That
+       text now lives only in `ROADMAP-archive.md`, and none of 235.2's five
+       Accept criteria could see it.**
+
+       Measured, not inferred:
+
+       ```
+       grep -n 'RECURRENCE HISTORY' ROADMAP.md ROADMAP-archive.md
+       #   ROADMAP.md:707, 761, 1059   — all REFERENCES, from 234.1 and 232.2
+       #   ROADMAP-archive.md:30520    — the section itself, the only copy
+       grep -n '^## Slice 229' ROADMAP.md ROADMAP-archive.md
+       #   ROADMAP.md:1161      the 3-line pointer
+       #   ROADMAP-archive.md:30194   the real body
+       ```
+
+       234.1's Accept (a) reads: *"229.3's `RECURRENCE HISTORY` and 232.2's
+       closing text each agree with what the per-file command above actually
+       prints, or record why the six-file generalisation is preferred anyway."*
+       232.2's closing text is live (`ROADMAP.md:1058`). 229.3's is not. So an
+       open item's criterion is half-satisfiable in the live file and half only
+       by editing the archive — the file `LOOPS.md` rule 4 calls the place "for
+       looking a reason UP", from which *"a dispatch decision never comes"*.
+
+       **235.2 is not careless here; the point is that it could not have
+       known.** Its five criteria are byte-identity, two-way line accounting,
+       citation neutrality via `check:slice-refs`, a raw open-checkbox count,
+       and target derivation at move time. All five passed and all five were
+       re-verified above. Every one of them is a property of the MOVE. None
+       asks the different question — *does anything still OPEN depend on the
+       text being moved?* — and `check:slice-refs` cannot answer it either: it
+       asks whether a citation **resolves**, and `229.3` resolves fine from the
+       archive. Resolving is exactly the wrong question when the criterion says
+       *amend*.
+
+       **Base rate, measured before proposing anything (94.11).** Five items are
+       open; three are owner- or hardware-blocked. Of the two dispatchable ones,
+       **234.1 requires editing archived text and 232.3 does not** — 232.3 cites
+       230.1 (also archived) but its Accept (a)-(e) is entirely about building
+       and red-proving a detector, so a citation that resolves is all it needs.
+       **1 of 2**, and 1 of 5 overall. That is a real rate on a tiny
+       denominator, and it is reported as such rather than as a trend.
+
+       **A gate is NOT proposed, and the reason is measured rather than
+       stylistic.** The predicate a gate would need — *"does an open item's
+       Accept require amending a section this sweep is about to move?"* — is
+       semantic: it turns on the difference between `234.1` cited as a reason
+       and `229.3` cited as a target, which is the same "checkable shape vs.
+       semantic content" line 94.11 draws and `check:wrong-choice` lives on.
+       The shape that IS checkable — "an open item names a slice number whose
+       body is archive-only" — fires on 232.3 as well, where it is correct
+       behaviour, so a gate over it would be red on a healthy state. What is
+       cheap and exact is a **sweep-time report**: list the slice numbers the
+       target set contains that any still-open item names, and let the wake
+       running the sweep read them. That is a line in `roadmap_scope.py`, which
+       already parses both the checkboxes and the headings.
+
+       *Accept* — properties, not predicted values:
+       - (a) A wake running an archive sweep is told, from the sweep's own
+         instrument, which target slices are named by still-open items — or it
+         is recorded that the loop prefers to check this by hand and why. Both
+         close this.
+       - (b) Whatever is decided, **234.1's Accept (a) is reachable**: either
+         the archived text is amendable by an explicit note that says so, or
+         (a) is restated against text that is live. Leaving a criterion whose
+         target a later wake cannot act on without breaking a doctrine is what
+         this item is about.
+       - (c) The base rate above is **re-measured** at decision time, not
+         carried from here — 1 of 2 is a two-item denominator and the open set
+         moves every wake.
+       - (d) **Finding the premise false is a satisfying outcome**: if editing
+         an archived section for a correction is judged fine — the archive is
+         markdown, reviewed and diffed, and 235.3 already deleted from it — then
+         record that as the standing answer and close this. It is not obviously
+         wrong; what is wrong is that no document says either way.
+
+       **Kind of work needed: NOT browser-blocked and NOT owner-blocked.** A
+       parse of two markdown files plus a decision recorded in prose.
+
+**NOT VERIFIED, said plainly:** cloud wake — no Podman and no
+`localhost:8081`, so the 1440/390 light-and-dark screenshot lane could not run.
+**This slice changes no code**: the diff is `ROADMAP.md` and `.roundtable/`
+markdown, no shipped artefact, CSS, markup or rendered output moved, and the
+docs site renders neither file. Nothing here rests on a rendered image. The one
+browser-driven reading quoted — `check:claims` 162 live / 3 NOT VERIFIED — came
+from the gate executing in this container, not from an image.
+
 ## Slice 235 — Standardize sweep: lanes 1-3 clean a TENTH time, and lane 4's finding is that the sweep's own instrument has never had a file — five runs, one copy, living inside an archived slice. Committing it exposed two owner calls no run could see, and the sweep it enabled exposed three self-referential stubs in the archive (2026-09-01)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0 (`grep -n 'P0' ROADMAP.md`
