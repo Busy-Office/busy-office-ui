@@ -61,6 +61,19 @@ def git(*args: str, tree: str | None = None) -> str:
 
 def slug_to_css_dirs() -> dict[str, list[str]]:
     """Reverse api.json's generated pageSlug map. Never guess this."""
+    if not API.exists():
+        # LOOPS.md rule 6 mandates running this BEFORE evaluating the rule, and a
+        # cloud container starts with no `dist/` at all -- so this is the FIRST
+        # thing a fresh wake runs, and it used to answer with a bare
+        # FileNotFoundError traceback naming a path but not the command. Same
+        # shape as ENVIRONMENT.md trap 2b, where git's refusal names the lock
+        # file and the recipe that truncated the output dropped that line.
+        sys.exit(
+            f"polish_requeue: {API.relative_to(ROOT)} is missing, so the "
+            "slug -> css-dir map cannot be read (it is generated, never "
+            "guessed).\n  Run `npm run build -w @busy-office/ui` first, then "
+            "re-run this command."
+        )
     api = json.loads(API.read_text())
     page_slug = api.get("pageSlug", {})
     out: dict[str, list[str]] = {}

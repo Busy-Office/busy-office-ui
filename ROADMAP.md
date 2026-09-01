@@ -315,6 +315,174 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 239 — Polish round 2 on `component/tree-table`: NO-OP on six arms, and the sixth is the class arm 5 structurally cannot see — where 3 of this ledger's 5 recorded defects lived (2026-09-01)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0, GitHub intake
+`list_issues` OPEN → `totalCount: 0`, so Step 1 had nothing to triage and no
+`Roadmap · plan` row was recorded. Rule 2: `Standardize 1 / 4`. Rule 3:
+`Objective 1 / 3 [238]`. Rule 4: three open items, **all blocked** — `112.3`
+and `112.4` owner-blocked, Slice 15's AT evidence owner-hardware-blocked; none
+browser-blocked or agent-blocked. Rule 5: `ok`, newest pair
+`axe-violations 0.0 → 0.0 → 0.0`, and the one absolute budget in the tree
+(`RF_BUDGET_KB = 40`) passed inside `build`. **Rule 6 dispatched**;
+`polish_requeue.py --apply` re-queued **7** surfaces.
+
+**The pick was measured.** §3b's tie-break left four re-queued surfaces at
+`1/3`; `inline-editing` drops out for 217.1's stated reason (no
+`dsa-scores.json` entry, so no arm can disagree with it), leaving calendar,
+dashboard and tree-table, all `content: 3`. Source movement since each
+surface's own `scored` date, with 217.1's `+08:00` boundary
+(`git rev-list -1 --before=2026-08-23T23:59:59+08:00 HEAD` → `a9ba5c7e`):
+
+```
+calendar    2 commits  +18/-2    last touch 2026-08-24 05:08
+dashboard   0 commits    0/0     last touch 2026-08-23 21:04  (predates the boundary — 227.1's reading, unchanged)
+tree-table  1 commit   +20/-12   last touch 2026-08-25 22:07  <- picked
+```
+
+tree-table wins on recency and on churn, and what moved is real CSS rather than
+whitespace: `td` → `:is(td, th)` across the eleven-rule indent ladder, so a
+`<th scope="row">` first column keeps its indentation. Its cites also carry the
+most cross-file claims of the three, which is 217.2's decay-prone shape.
+
+### 239.1 — six arms, all clean; the round is a NO-OP
+
+1. **Wrong-choice clause** — `check:wrong-choice` passed, `156 assertions / 80
+   pages (components: 37 carry / 1 outstanding / 3 exempt)`; the one
+   outstanding is the skipped `date`.
+2. **Entry rendered by its page** — `check:dsa-scores` passed, `360 assertions
+   / 40 scored (40 requested by a page, all scored)`.
+3. **Line-number cites: still 1 of 40**, still `badge · spacing → badge.css:42`,
+   re-read at the line rather than trusted — line 42 reads `pushed the whole
+   PAGE sideways: measured 373px wide against a 390px`.
+4. **`content` cites quoting a page clause verbatim — 20 of 20**, unchanged
+   from 2026-09-01.
+5. **CSS dimension literals quoted in any cite — 81 of 81**, unchanged.
+6. **NEW — bare (unitless) counts in any cite, re-verified against the tree
+   each one names: 8 of 8.**
+
+**Arm 6 exists because arm 5's literal regex is unit-bearing only
+(`\d+(px|rem|em|ms|s|ch|vw|vh|%)`), so a cite claiming *"po-app uses it at 13
+sites"* is invisible to it — and that is where three of the five defects this
+ledger has recorded lived**: `sidebar-nav · fit` (a usage count falsified by a
+new po-app screen), `breadcrumb · fit` (a denominator falsified by the pattern
+corpus growing 19 → 39), `icon · fit` (*"12 ERP glyphs"* against 26, and the
+same 12 hard-coded as a published divisor). Arms 4 and 5 could not have caught
+one of them.
+
+**The claimed number is parsed FROM THE CITE, never hard-coded.** A probe with
+the expectation baked in only sees the tree move, and 227.1's defect was on the
+cite side. Red-proved three times, each injection confirmed present in the
+parsed JSON or the measured tree before the run, each going red on exactly the
+injected row and nothing else: a tree-side mutation (a fourth `bo-navbar` line
+→ `cite says 3, tree reads 4`), a cite-side mutation (`13 sites` → `12` →
+`cite says 12, tree reads 13`), and a cite-SHAPE mutation (`across its 5 CSS
+files` → `across its CSS files` → `CITE NO LONGER MATCHES`). Clean tree: 8/8.
+The probe source is in `.roundtable/polish-state.md` so the next wake re-runs
+it instead of re-deriving it.
+
+### 239.2 — the class is 8 claims, not the 4 this ledger records, and 2 of the 8 are instrument-ambiguous
+
+217.2 measured this class at **6 of 240 cites**, and 220.2 recorded it
+"shrinking by construction" to **4 of 240** after the two stale ones were
+repaired by removing the quantity. Re-measured this wake — which CLAUDE.md
+makes part of the criterion, not a courtesy, since the premise is an earlier
+wake's measurement and 217.2 recorded no command beside it:
+
+```
+node -e "const d=require('./apps/docs/src/data/dsa-scores.json').components; …"
+#   31 of 240 cites carry a bare integer — but most are noise: dates (2026),
+#   Polish round numbers, roadmap slice refs (73.2, 45.3, 36.1), badge's line
+#   number (arm 3), and icon's %23000 hex fragment.
+```
+
+Hand-classified down to **checkable quantitative claims about the tree, 8 of
+them across 7 cites**, every one verified exact this wake:
+
+| cite | claim | live |
+|---|---|---|
+| `navbar · fit` | po-app uses it at **3** sites | 3 |
+| `dialog · fit` | po-app uses it at **13** sites | 13 |
+| `offcanvas · fit` | used in **1** pattern screen | 1 |
+| `tabs · fit` | used in **2** pattern screens | 2 |
+| `form · typography` | zero raw font-size across its **5** CSS files | 5 |
+| `scan · fit` | rf-essentials' **40** kB RF budget gate | `RF_BUDGET_KB = 40` |
+| `date · fit` | **1** prose mention on `/components/amount`, the only occurrence off its own page | 1 |
+| `date · fit` | **zero** screens use it | 0 in `examples/` |
+
+**So the recorded base rate understated the live class by 3** — 217.2's six
+were all in `fit`, and `form · typography`, `scan · fit` and `date · fit` were
+never in it. Not a defect in any published artefact: every one of the eight is
+exact today. It is the ledger's own figure that was wrong, and the reason it
+went wrong is the reason 220.1 gave for a different figure — a count recorded
+without the command that produced it.
+
+**Two of the eight cannot be re-verified without guessing the instrument, and
+that cost a round of this wake's own time.** Arm 6's first run reported
+`dialog · fit :: cite says 13, tree reads 14`. Neither number is wrong:
+
+```
+grep -c  'bo-dialog' examples/po-app/server.mjs   # 13  lines containing
+grep -o  'bo-dialog' examples/po-app/server.mjs | wc -l   # 14  occurrences
+#   line 470 carries bo-dialog__header AND bo-dialog__title
+```
+
+Walking every revision of `server.mjs`, both readings have been stable at
+13/14 since `4d9014d2` (2026-08-20), three days *before* the score — so `13` is
+exact under the instrument that produced it and has not decayed. `navbar`'s 3
+happens to agree under both readings, which is why the ambiguity did not
+surface until a second cite of the same shape was checked. **Arm 6 counts
+lines, chosen from that revision history rather than because it is the reading
+that passes** — a detector fitted to whichever method makes the number match is
+the "detector that cannot fail" this repo's doctrine names, so the reason is
+recorded and the occurrence count is written down beside it.
+
+**The comparative claim beside the number was checked too, per 192.1.**
+`dialog · fit` also says *"the heaviest real usage in this family"* — within
+the overlay family in po-app it is 13 against `bo-offcanvas`, `bo-popover`,
+`bo-tooltip`, `bo-drawer` all at **0**, so the claim holds as scoped. (It is
+not the heaviest usage in po-app overall — `bo-data-table` 53, `bo-btn` 40 —
+but the cite says *family*.)
+
+**No gate proposed, and this is the fifth consecutive refusal.** 101.3's stop
+rule confines Polish to maintaining the existing ratchet, and 217.2/220.2/227.2
+each refused this class on the ground that a gate would need every cite to
+carry its own command — which is exactly what arm 6's claim table *is*, and it
+is a hand-maintained table of eight, not a rule a detector derives. 8 of 8 is
+also a uniformly-true predicate today, 94.11's own test for ceremony. Recorded,
+not gated.
+
+### 239.3 — `polish_requeue.py` answered a fresh container with a bare traceback
+
+Noticed rather than searched for, and fixed because the fix is smaller than the
+explanation. LOOPS.md rule 6 mandates `polish_requeue.py --apply` **before**
+rule 6 is evaluated, so on a cloud wake it is the first loop script to run —
+and a cloud container starts with no `packages/core/dist/` at all. It exited
+with `FileNotFoundError: …/packages/core/dist/api.json`, which names a path and
+not the command that produces it.
+
+Same shape as ENVIRONMENT.md trap 2b, where git's refusal names the lock file
+and the obvious way to shorten the output drops exactly that line. It failed
+loudly rather than skipping quietly, so the doctrine held; what was missing was
+the next step. Now:
+
+```
+polish_requeue: packages/core/dist/api.json is missing, so the slug -> css-dir
+map cannot be read (it is generated, never guessed).
+  Run `npm run build -w @busy-office/ui` first, then re-run this command.
+```
+
+Red-proved by removal — `api.json` moved aside, its absence confirmed before
+the run, the guard fired with exit 1; restored, and `--check` reports the same
+7 surfaces as before. Not a gate and not a rubric change, so 101.3 is untouched.
+
+**Not verified, said plainly.** Cloud wake: no Podman and no `localhost:8081`,
+so the 1440/390 light-and-dark screenshot lane could not run. **This slice
+changed no CSS and no page markup** — the diff is `ROADMAP.md`,
+`.roundtable/polish-state.md` and one Python error message — so nothing in it
+rests on a rendered image. Every browser-derived number quoted came from a gate
+executing in this container.
+
 ## Slice 238 — Objective grill of Slices 232, 234, 236, 237: twenty-four of twenty-five published claims reproduce, and the one that does not is the count written BESIDE a premise that was correctly re-run — five archive commits reported as four, at two durable sites (2026-09-01)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0, and GitHub intake

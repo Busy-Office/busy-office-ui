@@ -106,7 +106,7 @@ a no-op recorded in one line.
 | component/stepper | content | **3** | 2/3 | 0 | efba2799 | round 1 landed — blind 2→3, "not for independent sections"; **round 2 (2026-09-01) NO-OP — reconciliation clean on five arms; arm 4 re-measured 20/20 and a new arm 5 reads 81/81, see below** |
 | component/table-toolbar | content | **3** | 1/3 | 0 | f7950a7f | round 1 landed — blind 3, "do not add to a read-mostly list" (unscored in DSA) |
 | component/tree | content | **3** | 1/3 | 0 | b92740e4 | round 1 landed — blind 2→3, pair-coherent with tree-table |
-| component/tree-table | content | **3** | 1/3 | 0 | f0b3ed9e | round 1 landed — blind 2→3, pair-coherent with tree · **RE-QUEUED — source changed** |
+| component/tree-table | content | **3** | 2/3 | 0 | 298374cc | round 1 landed — blind 2→3, pair-coherent with tree; **round 2 (2026-09-01) NO-OP — reconciliation clean on six arms; a new arm 6 reads 8/8 and corrects this ledger's own base rate for the class, see below** |
 
 ## Re-entry: scan (2026-08-23) — the queue's first source-change entry
 
@@ -757,3 +757,184 @@ moves 1→2 on badge's and alerts' precedent.
 Nothing in this round rests on a rendered image — the diff is this ledger and
 no CSS or page markup changed — and every browser-derived number quoted above
 came from a gate executing in this container.
+
+## Round 2: tree-table (2026-09-01, cloud wake) — NO-OP, and a sixth arm
+
+Dispatcher rule 6, reached because rules 1-5 were all clear: no P0, Standardize
+at `1 / 4`, Objective at `1 / 3`, rule 4's three open items all blocked (two
+owner, one owner-hardware), and rule 5 `ok` with its newest pair
+`axe-violations 0.0 -> 0.0`. `polish_requeue.py --apply` re-queued **7**
+surfaces.
+
+**The pick was measured.** §3b's tie-break left four re-queued surfaces at
+`1/3`; `inline-editing` drops out for 217.1's stated reason (no
+`dsa-scores.json` entry, so no arm can disagree with it), leaving calendar,
+dashboard and tree-table. Source movement since each surface's own `scored`
+date, with 217.1's `+08:00` boundary:
+
+```
+BASE=$(git rev-list -1 --before=2026-08-23T23:59:59+08:00 HEAD)   # a9ba5c7e
+# calendar    2 commits +18/-2   last touch 2026-08-24 05:08
+# dashboard   0 commits    0/0   last touch 2026-08-23 21:04  (227.1's reading, unchanged)
+# tree-table  1 commit  +20/-12  last touch 2026-08-25 22:07   <- picked
+```
+
+**What re-queued it was real CSS**: `td` -> `:is(td, th)` across the eleven-rule
+indent ladder, so a `<th scope="row">` first column keeps its indentation. The
+cites had something to decay against.
+
+### The six arms
+
+1. **Wrong-choice clause present** — `check:wrong-choice` passed, `156
+   assertion(s) across 80 pages (components: 37 carry / 1 outstanding / 3
+   exempt)`; the one outstanding is the skipped `date`.
+2. **`dsa-scores.json` entry rendered by its page** — `check:dsa-scores`
+   passed, `360 assertion(s) across 40 scored components (40 requested by a
+   page, all scored)`.
+3. **Line-number citations into shipped CSS: still 1 of 40**, still
+   `badge · spacing -> badge.css:42`, re-read at the line rather than trusted.
+4. **`content` cites quoting a page clause verbatim — 20 of 20 present.**
+5. **CSS dimension literals quoted in any cite — 81 of 81 present.**
+6. **NEW — bare (unitless) counts in any cite, re-verified against the tree
+   each one names: 8 of 8.**
+
+Arm 6 exists because **arm 5's literal regex is unit-bearing only**, so a cite
+claiming *"po-app uses it at 13 sites"* is invisible to it — and that is where
+**3 of the 5 defects this ledger has recorded** lived: `sidebar-nav · fit`,
+`breadcrumb · fit`, `icon · fit`. Arms 4 and 5 could not have caught one of
+them.
+
+**The claimed number is parsed FROM THE CITE, never hard-coded** — a probe with
+the expectation baked in only sees the tree move, and 227.1's defect was on the
+cite side. **Red-proved three times, each injection confirmed present in the
+parsed JSON or the measured tree before the run**, each going red on exactly
+the injected row: a tree-side mutation (a fourth `bo-navbar` line ->
+`cite says 3, tree reads 4`), a cite-side mutation (`13 sites` -> `12`), and a
+cite-SHAPE mutation (`across its 5 CSS files` -> `across its CSS files` ->
+`CITE NO LONGER MATCHES`). Clean tree: 8/8.
+
+```js
+// save as a scratch .mjs and run with node; ARM_ROOT / ARM_SCORES point at
+// mutated copies, which is how the red-proof is re-run. A shadow ARM_ROOT with
+// symlinks for what is not mutated is enough.
+import fs from 'node:fs';
+import path from 'node:path';
+const R = process.env.ARM_ROOT || process.cwd();
+const SCORES = process.env.ARM_SCORES || `${R}/apps/docs/src/data/dsa-scores.json`;
+const S = JSON.parse(fs.readFileSync(SCORES, 'utf8')).components;
+const read = (p) => fs.readFileSync(path.join(R, p), 'utf8');
+// LINES containing the token, not occurrences: the revision walk shows `grep -c`
+// is what produced navbar's 3 and dialog's 13 (13 lines / 14 occurrences since
+// 4d9014d2, 2026-08-20). Chosen from that history, NOT because it is the reading
+// that passes — see "the ambiguity" below.
+const count = (p, needle) => read(p).split('\n').filter((l) => l.includes(needle)).length;
+// top-level pattern pages only: patterns.json counts 39, a recursive glob returns 47 (220.1)
+const patternPages = () => fs.readdirSync(path.join(R, 'apps/docs/src/pages/patterns'))
+  .filter((f) => f.endsWith('.astro') && f !== 'index.astro');
+const filesWith = (needle) => patternPages()
+  .filter((f) => read(`apps/docs/src/pages/patterns/${f}`).includes(needle)).length;
+
+const CLAIMS = [
+  { k: 'navbar',   d: 'fit', re: /po-app uses it at (\d+) sites/,     live: () => count('examples/po-app/server.mjs', 'bo-navbar') },
+  { k: 'dialog',   d: 'fit', re: /po-app uses it at (\d+) sites/,     live: () => count('examples/po-app/server.mjs', 'bo-dialog') },
+  { k: 'offcanvas',d: 'fit', re: /used in (\d+) pattern screens?/,    live: () => filesWith('bo-offcanvas') },
+  { k: 'tabs',     d: 'fit', re: /used in (\d+) pattern screens?/,    live: () => filesWith('bo-tabs') },
+  { k: 'form', d: 'typography', re: /across its (\d+) CSS files/,     live: () => fs.readdirSync(path.join(R, 'packages/core/src/css/components/form')).filter((f) => f.endsWith('.css')).length },
+  { k: 'scan',     d: 'fit', re: /rf-essentials' (\d+) kB RF budget/, live: () => Number(/RF_BUDGET_KB = (\d+)/.exec(read('packages/core/scripts/build-rf-essentials.mjs'))[1]) },
+  { k: 'date', d: 'fit', re: /(\d+) prose mention on \/components\/amount is the only occurrence outside its own page/,
+    live: () => fs.readdirSync(path.join(R, 'apps/docs/src/pages/components'))
+      .filter((f) => f.endsWith('.astro') && f !== 'date.astro')
+      .reduce((n, f) => n + count(`apps/docs/src/pages/components/${f}`, 'bo-date'), 0) },
+  { k: 'date', d: 'fit', re: /and (zero) screens use it/,
+    live: () => (count('examples/po-app/server.mjs', 'bo-date') === 0 ? 'zero' : 'some') },
+];
+
+let ok = 0; const bad = [];
+for (const c of CLAIMS) {
+  const cite = String(S[c.k]?.dimensions?.[c.d]?.cite || '');
+  const m = c.re.exec(cite);
+  if (!m) { bad.push(`${c.k} · ${c.d} :: CITE NO LONGER MATCHES ${c.re}`); continue; }
+  const live = String(c.live());
+  if (m[1] === live) ok++; else bad.push(`${c.k} · ${c.d} :: cite says ${m[1]}, tree reads ${live}`);
+}
+console.log(`arm 6 ${ok}/${CLAIMS.length}`, bad);
+process.exitCode = bad.length ? 1 : 0;
+```
+
+### The class is 8 claims, not the 4 this ledger records
+
+217.2 measured it at **6 of 240 cites** and 220.2 recorded it shrinking "by
+construction" to **4 of 240** once the two stale ones were repaired.
+Re-measured this wake — which CLAUDE.md makes part of the criterion rather than
+a courtesy, the premise being an earlier wake's measurement with **no command
+recorded beside it**.
+
+A bare-integer regex over all 240 cites returns **31**, and most are noise:
+dates (`2026`), Polish round numbers, roadmap slice refs (`73.2`, `45.3`,
+`36.1`), badge's line number (arm 3's business), and icon's `%23000` hex
+fragment. Hand-classified down to checkable quantitative claims about the tree:
+**8, across 7 cites**, every one exact today —
+
+| cite | claim | live |
+|---|---|---|
+| `navbar · fit` | po-app uses it at **3** sites | 3 |
+| `dialog · fit` | po-app uses it at **13** sites | 13 |
+| `offcanvas · fit` | used in **1** pattern screen | 1 |
+| `tabs · fit` | used in **2** pattern screens | 2 |
+| `form · typography` | zero raw font-size across its **5** CSS files | 5 |
+| `scan · fit` | rf-essentials' **40** kB RF budget gate | `RF_BUDGET_KB = 40` |
+| `date · fit` | **1** prose mention on `/components/amount`, the only one off its own page | 1 |
+| `date · fit` | **zero** screens use it | 0 in `examples/` |
+
+**217.2's six were all in `fit`**, so `form · typography`, `scan · fit` and
+`date · fit` were never in the class. Nothing published is wrong; the ledger's
+own figure was, for the reason 220.1 gave about a different figure — a count
+recorded without its command.
+
+### The ambiguity, and why arm 6 counts lines
+
+**Arm 6's first run reported `dialog · fit :: cite says 13, tree reads 14`.**
+Neither number is wrong:
+
+```
+grep -c 'bo-dialog' examples/po-app/server.mjs           # 13  lines containing
+grep -o 'bo-dialog' examples/po-app/server.mjs | wc -l   # 14  occurrences
+#  line 470 carries bo-dialog__header AND bo-dialog__title
+```
+
+Walking every revision of `server.mjs`, both readings have been stable at 13/14
+since `4d9014d2` (2026-08-20), three days **before** the 2026-08-23 score — so
+`13` is exact under the instrument that produced it and has not decayed.
+`navbar`'s 3 agrees under both readings, which is why the ambiguity stayed
+hidden until a second cite of the same shape was checked.
+
+So arm 6 counts lines, **chosen from that revision history and not because it
+is the reading that passes** — a detector fitted to whichever method makes the
+number match is exactly the detector-that-cannot-fail this repo's doctrine
+names. The occurrence count is written down here so the next divergence is
+visible rather than re-litigated.
+
+**The claim beside the number was checked too, per 192.1.** `dialog · fit` also
+says *"the heaviest real usage in this family"*: within the overlay family in
+po-app it is 13 against `bo-offcanvas`, `bo-popover`, `bo-tooltip` and
+`bo-drawer` all at **0**, so it holds as scoped. It is not the heaviest usage
+in po-app overall (`bo-data-table` 53, `bo-btn` 40) — but the cite says
+*family*.
+
+### No gate proposed — the fifth refusal, and this time the table IS the gate's body
+
+101.3's stop rule forbids Polish adding gates. 217.2, 220.2 and 227.2 each
+refused this class on the ground that a gate would need every cite to carry its
+own command — and arm 6's `CLAIMS` table is precisely that, hand-maintained,
+eight rows long, with no rule a detector could derive from a cite it has not
+seen. 8 of 8 is also uniformly true today, 94.11's own test for ceremony. So it
+stays a probe recorded here, re-runnable, not a build gate.
+
+**No blind re-score is owed**: the round changed no artefact, so `scored` stays
+**2026-08-23** and `dry` stays **0** — there was no re-score to fail. `rounds`
+moves 1->2 on badge's and alerts' precedent.
+
+**Not verified, said plainly.** Cloud wake: no Podman, no `localhost:8081`, so
+the 1440/390 light-and-dark screenshot lane could not run. Nothing in this
+round rests on a rendered image — no CSS and no page markup changed — and every
+browser-derived number quoted came from a gate executing in this container.
