@@ -473,7 +473,7 @@ all three points. Lanes 2 and 3 reproduce byte for byte (`74 · 242 · 230 · 8`
          (`ROADMAP.md` 237.2's cost paragraph, and the archive header). The
          header's correction says what it used to read and why, so the file
          records its own amendment rather than silently reading right.
-       - **(d) — `loop-log.md:1279` and `STATUS.md:43` are untouched**, and the
+       - **(d) — the two log rows are untouched**, and the
          reason is written into 237.2's cost paragraph itself, which is where a
          reader of the correction arrives. The dated grill report
          `grill-objective-232-234-236-237-2026-09-01.md` also keeps the
@@ -505,8 +505,14 @@ all three points. Lanes 2 and 3 reproduce byte for byte (`74 · 242 · 230 · 8`
        the wrong figure.** Of the 6, none is a claim — 238.1's two quotations
        (labelled above as pre-correction text), this paragraph's own grep
        command, the dated grill report, and the two immortal log rows
-       (`loop-log.md:1281`, `STATUS.md:43` — 1281, not the 1279 filed, because
-       rows landed after). The remaining 15 of the 21 are about entirely
+       (the Slice 238 grill row in `loop-log.md`, and the copy of it `STATUS.md`
+       renders). **Neither is cited by line number here, and that is a finding
+       of its own**: 238.1 filed them as `loop-log.md:1279` / `STATUS.md:43` and
+       BOTH numbers were already wrong by the time this item closed — the log
+       had grown to `:1281`, and `STATUS.md` regenerates its "last 10
+       iterations" on every `record_iteration.py` run, moving the row to `:38`
+       within this very wake. A line number into a regenerated mirror rots by
+       construction; grep the row instead. The remaining 15 of the 21 are about entirely
        different ranges, including two script headers and the archive's own
        *"silently produced FOUR commits, not five"* at `:22793`; all untouched.
 
@@ -680,8 +686,11 @@ the Continue round that spent rule 4.
        dropped, and it is the middle of three consecutive `— Nth archive sweep`
        subjects. The conclusion, the ten-commit premise above and the *"four
        days"* figure are unchanged and were each re-run before this edit.
-       **`.roundtable/loop-log.md:1279` and `STATUS.md:43` still carry the wrong
-       phrase and are deliberately left wrong**: `record_iteration.py`'s standing
+       **The Slice 238 grill row in `.roundtable/loop-log.md`, and the copy of it
+       `STATUS.md` renders, still carry the wrong phrase and are deliberately
+       left wrong** (grep the row — neither is cited by line number, because
+       238.1 filed both as `:1279` / `:43` and both had already moved by the time
+       it closed): `record_iteration.py`'s standing
        rule is that historical rows are never edited, so the figure is immortal
        in the log — which is the whole reason the two durable sites had to carry
        the correction. The grill report
