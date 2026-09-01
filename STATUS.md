@@ -2,28 +2,24 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-01 07:48 UTC
+Generated at: 2026-09-01 10:48 UTC
 
 ## Open items by slice
 
 - **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS + FOUR ANSWERS (grilled 2026-08-29 at the owner's request; full report `.roundtable/grill-112.3-pilot-still-worth-it-2026-08-29.md`).
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-- **Slice 234** (1 open)
-  - 234.1 — the introducing commit is `84eb14ca` (42.1), not `443348e2` (42.3). 42.1 gave `check-notes.mjs` its `--self-test` branch in the SAME commit as the header claiming it owed one, so 1 of 6 files was defective before "the commit that paid the debt" existed.
-- **Slice 236** (2 open)
-  - 236.1 — 234.1's corroborating count does not reproduce as written, and it fails by measuring its own explanation. The five files do not read `0` under "any `--self-test` mention"; they read `1`, and that `1` is the OWES sentence the item is measuring.
-  - 236.2 — the eighth archive sweep moved Slice 229 while `234.1` was open and names 229.3's `RECURRENCE HISTORY` as a thing to amend. That text now lives only in `ROADMAP-archive.md`, and none of 235.2's five Accept criteria could see it.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1264 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-09-01 05:06   ok
-  Objective     1 / 3 slice           since 2026-09-01 06:45   ok  [232]
-  Optimize      0 wake-date(s) newer   since 2026-09-01 06:45   ok   [newest pair: axe-violations; 109 sample(s), 13 of 33 name(s) sampled twice]
+dispatch status — counter-triggered rules (1269 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-09-01 05:06   OVERDUE
+  Objective     3 / 3 slices          since 2026-09-01 06:45   OVERDUE  [232, 234, 236]
+  -> a counter is at or past its threshold; the dispatcher should pick it
+  Optimize      0 wake-date(s) newer   since 2026-09-01 07:48   ok   [newest pair: axe-violations; 110 sample(s), 13 of 33 name(s) sampled twice]
 ```
 
 ## Owner-blocked
@@ -36,16 +32,16 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-08-31 15:46 · Continue · build · 234.1 — filed: the OWES-a-self-test defect was introduced by 42.1, not the 42.3 both dispatchers confirmed; the confirming probe reads one file of six. Dispatched 232.2, lost the Step 0c race to 606edf88 · logged · 258856b4
-- 2026-08-31 15:46 · Meta · refusal · reopening 232.2 after losing its race — the item is closed and only the refuted attribution is re-filed · refused · 258856b4
-- 2026-08-31 15:46 · Meta · refusal · reopening 229.3's refusal on the strength of the history — measured recurrence of zero supports the refusal rather than overturning it · refused · 258856b4
-- 2026-08-31 16:15 · Continue · build · 233.2 — execute /components/alerts' entrance-animation claim; 233.1's three cases stay green on the injected defect · landed · efab3c13
-- 2026-09-01 05:06 · Standardize · sweep · 235.1 — Standardize sweep 4 of 4 lanes; lanes 1-3 clean a tenth time with no delta, lane 4's ratchet carried the finding (ROADMAP.md 4 up -> 15 up, same last cut, +1,733 over 15 commits = 115.5 lines/commit, the highest per-commit rate in the record). The finding is that the sweep's own scope instrument has been run by five wakes and never had a file — one copy, inside an archived slice, pointed at three times. Committed as scripts/loops/roadmap_scope.py, @heuristic with --self-test cases A-D; reproduces 228.1's OPEN/count/share exactly and 214.1's target set and line total exactly at their own trees. Its first run REFUSED on the real file: 19 raw [x] against 17 attributed, the two being OWNER CALL items under ## STATE that no earlier run of this instrument could see · landed · 54396d36
 - 2026-09-01 05:06 · Standardize · sweep · 235.2 — eighth archive sweep: 5 closed slices (233, 231, 230, 229, 228) moved verbatim, ROADMAP.md 3,569 -> 2,165 lines (39.8% was closed history), each leaving the standing three-line pointer. Lossless against the git blob by an independently written parser (5/5 byte-identical, 216 untouched live sections 0 changed, 228 pre-existing archive sections 0 changed, 6 open checkboxes both sides), line accounting reconciling in both directions (-1,419 body +15 pointer = -1,404; +5 headings +1,419 body = +1,424), citation-neutral at 464/249/2/217 either side. The post-sweep 0% checked before being believed via --min-lines 0 · landed · 574a8634
 - 2026-09-01 05:06 · Standardize · tidy · 235.3 — ROADMAP-archive.md carried three self-referential pointer stubs (slices 17, 23, 24 each heading two sections there, the second a pointer into the file it was already in), found by 235.2's verification parser crashing on a duplicate map key. Removed exactly, 31,013 -> 31,001, every kept section byte-identical in order. check:slice-refs's uniqueness loop extended from ROADMAP.md alone to both files — its header's sufficiency argument holds for citations and not for uniqueness. Base rate 3 of 233 archive sections; red-proved by injection AND against HEAD's own archive, where it goes red 3 of 677 naming 24, 17 and 23 · landed · dc861a25
 - 2026-09-01 06:45 · Objective · grill · Slice 236 — Objective grill of Slices 232, 233, 234, 235: 22 of 23 published figures reproduce; filed 236.1 (a corroborating count that measures its own explanation) and 236.2 (the sweep archived the target of an open item's Accept) · logged · a5f5007a
 - 2026-09-01 06:45 · Meta · refusal · a gate over 'an open item's Accept names a section this sweep will move' — the discriminating predicate is semantic, and the checkable shape fires on 232.3 where the behaviour is correct, so it would be red on a healthy state (94.11's test) · refused · a5f5007a
 - 2026-09-01 07:48 · Continue · build · 232.3 — check:parse-asserts, the parse-without-assert gate: red-proved against the real pre-fix tree ff2b623d^ (exactly 1 flag, zero false positives), self-test red-proved by removing comment-stripping (3 of 11 cases go WRONG), stripComments moved to source-files.mjs · landed · fd9affed
+- 2026-09-01 10:47 · Continue · build · 234.1 — dispatched by rule 4 as the oldest still-open dispatchable item; both premises re-run on an unshallowed clone (1,780 commits) and both reproduce exactly. Accept (a): 229.3's RECURRENCE HISTORY was ALREADY amended by 258856b4, this item's own filing commit, while 229.3 was live, and 574a8634's sweep carried the correction across verbatim — so only 232.2's closing text was this wake's to write, and it is now corrected in place with the aggregate (one entry, zero recurrences, regrowth 0 of 8 and 0 of 24) stated in its own paragraph per (b). 229.3's refusal is not reopened. (c) the per-file command sits beside the claim. · landed · ede706af
+- 2026-09-01 10:48 · Continue · build · 236.1 — the corroborating count now carries its exclusion. The five files read any=1, not 0, and that 1 is line 15's 'OWES a --self-test (roadmap 42.3)' — the sentence being adjudicated, so the assertion tripped on its own explanation. 234.1's paragraph now prints any and excl side by side and names which column carries the claim. Arm (d)'s 'imprecise but right' close was available and declined: third instance of the shape (232.1, this, 192.1's general form). 234.1's central claim and aggregate re-run and left standing. · landed · ede706af
+- 2026-09-01 10:48 · Meta · refusal · arm (d) — closing 236.1 as 'the sentence is imprecise and the conclusion is right' without editing it; refused because the shape has now recurred three times and the edit cost one paragraph · refused · ede706af
+- 2026-09-01 10:48 · Continue · build · 236.2 — arm (d) fired: the premise is FALSE as stated. Editing archived text was already established practice — d3d76a28 (199.1) appended a RE-VERIFIED block into an archived slice with no move, dc861a25 (235.3) deleted 12 lines, every other commit on ROADMAP-archive.md is a sweep. Standing answer recorded in LOOPS.md beside rule 4, not in a per-wake file (169.3). (b) 234.1's Accept (a) was reachable all along — the archived half was satisfied BEFORE the move. (c) base rate re-measured and moved: 1 of 2 -> 0 of 3 dispatchable items needing an archive edit. (a) roadmap_scope.py gains recognition 3, a dependency report, red-proved by injection as --self-test case E and reconciled against an independent parser: 4 of 46 whole-file citations charged, 3 of 6 open items naming a target. · landed · ede706af
+- 2026-09-01 10:48 · Meta · refusal · a GATE over the dependency predicate — refused on 236.2's own measurement: the checkable shape fires on healthy states too, so it would be red on a correct tree (94.11) · refused · ede706af
 
 ## Sunset test
 
