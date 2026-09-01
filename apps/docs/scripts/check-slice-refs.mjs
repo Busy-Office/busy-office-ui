@@ -93,12 +93,26 @@
  * `ROADMAP.md`, a duplicated slice number appears in **3** — the three commits
  * carrying this one collision. The predicate is false of the other 707.
  *
- * Scoped to `ROADMAP.md` alone, and that is sufficient rather than a shortcut:
- * every archived slice leaves a pointer stub behind here, and the two sets were
- * checked equal — 144 stubs here, 144 real sections in `ROADMAP-archive.md`,
- * the same numbers on both sides. A number in use anywhere is therefore visible
- * in this one file. What would break that: deleting a stub instead of leaving
- * one, which is exactly what the 110.4 sweep exists not to do.
+ * It used to be scoped to `ROADMAP.md` alone, argued as sufficient rather than a
+ * shortcut: every archived slice leaves a pointer stub behind here, and the two
+ * sets were checked equal — 144 stubs here, 144 real sections in
+ * `ROADMAP-archive.md` — so a number in use anywhere was visible in this one
+ * file. **That argument holds for CITATIONS and does not hold for
+ * UNIQUENESS**, and the archive was carrying three violations while this gate
+ * reported "each heading one section" (roadmap 235.3, 2026-09-01).
+ *
+ * Slices 17, 23 and 24 each headed TWO sections in `ROADMAP-archive.md`, the
+ * second in every case a three-line pointer *into the file it was already in* —
+ * an earlier sweep moving a live entry that had already been reduced to a
+ * pointer. Nothing here looked at the archive's own headings, so nothing could
+ * see it; it was found by a sweep's verification parser crashing on a duplicate
+ * map key. So the uniqueness loop now runs over BOTH files.
+ *
+ * Base rate for the added half, so it is not ceremony (94.11): **3 of 233**
+ * archive sections at the moment it was written, and 3 of 216 archive slice
+ * numbers. The predicate was false of the other 230 — it discriminates. It is
+ * uniformly true again once 235.3 lands, which is what a ratchet looks like the
+ * day it is installed, not evidence that it cannot fail.
  */
 import { readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
@@ -205,19 +219,29 @@ const g = gate('slice-refs check', 'slice citation(s)');
 
 /* Uniqueness first: every check below asks a citation to resolve, and a number
    heading two sections makes "resolves" the wrong question. */
-const headings = [...live.matchAll(/^## Slice (\d+)\b/gm)].map((m) => m[1]);
-assertScanned(headings.length, 'slice heading(s) in ROADMAP.md', 'has the heading form changed?');
 const seen = new Map();
-for (const n of headings) seen.set(n, (seen.get(n) ?? 0) + 1);
-for (const [n, count] of seen) {
-  g.check(
-    `slice ${n} heads exactly one section`,
-    count === 1,
-    `"## Slice ${n}" heads ${count} sections in ROADMAP.md, so every "${n}.x" ` +
-      `names two items.\n     Renumber the one filed LATER to the next free ` +
-      `number and note the renumber in it; the loop log keeps the old id, ` +
-      `because historical rows are left alone (roadmap 175.1).`,
-  );
+for (const [file, text] of [
+  ['ROADMAP.md', live],
+  ['ROADMAP-archive.md', archived],
+]) {
+  const headings = [...text.matchAll(/^## Slice (\d+)\b/gm)].map((m) => m[1]);
+  assertScanned(headings.length, `slice heading(s) in ${file}`, 'has the heading form changed?');
+  const here = new Map();
+  for (const n of headings) here.set(n, (here.get(n) ?? 0) + 1);
+  for (const [n, count] of here) {
+    seen.set(n, true);
+    g.check(
+      `slice ${n} heads exactly one section in ${file}`,
+      count === 1,
+      `"## Slice ${n}" heads ${count} sections in ${file}, so every "${n}.x" ` +
+        `names two items.\n     In ROADMAP.md: renumber the one filed LATER to ` +
+        `the next free number and note the renumber in it; the loop log keeps ` +
+        `the old id, because historical rows are left alone (roadmap 175.1).` +
+        `\n     In the archive it is usually a sweep that moved a live entry ` +
+        `already reduced to a pointer — delete the stub, never the real ` +
+        `section (roadmap 235.3).`,
+    );
+  }
 }
 
 for (const [ref, where] of cites) {

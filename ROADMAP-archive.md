@@ -13812,10 +13812,6 @@ promised was never written.
          is viewport-centered, not append-only; `load-more` already covers
          the simpler forward-only case for consumers that don't need this.
 
-## Slice 24 — triaged from "ROADMAP DIRECTION v1.2" (external review, 2026-08-17)
-
-Closed — archived verbatim in `ROADMAP-archive.md`.
-
 ## Done
 
 ### Slice 1 — Foundation + core components
@@ -15249,10 +15245,6 @@ in the grill doc): keep `data-theme`/`data-density` unprefixed and commit, or
 prefix now; declare `--bo-palette-*` internal in the versioning policy; run
 the AT hardware pass (VoiceOver/NVDA) that Slice 15's ACR blocks on.
 
-## Slice 17 — ERP component gaps, compared against 4 enterprise design systems
-
-Closed — archived verbatim in `ROADMAP-archive.md`.
-
 ## Done — Slice 18: money & editable-table depth (user wishlist, all 5 items shipped 2026-08-16)
 
 Triaged 2026-08-16 from a 4-item user wishlist, refined interactively before
@@ -15801,10 +15793,6 @@ switcher listener scoping, detectLang in practice, swatch hex adjacency,
 highlighting's (correct) absence of a11y claims. The architect's
 "no escape from snapshots" reduced on live re-check to the banner gap
 (docs pages inside snapshots DO carry a working switcher).
-
-## Slice 23 — docs IA & depth (owner review, 2026-08-16)
-
-Closed — archived verbatim in `ROADMAP-archive.md`.
 
 ## Triage decisions — refuse/rethink log (per the Objective)
 

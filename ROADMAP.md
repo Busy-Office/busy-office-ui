@@ -315,7 +315,7 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
-## Slice 235 — Standardize sweep: lanes 1-3 clean a TENTH time, and lane 4's finding is that the sweep's own instrument has never had a file — five runs, one copy, and it lives inside an archived slice (2026-09-01)
+## Slice 235 — Standardize sweep: lanes 1-3 clean a TENTH time, and lane 4's finding is that the sweep's own instrument has never had a file — five runs, one copy, living inside an archived slice. Committing it exposed two owner calls no run could see, and the sweep it enabled exposed three self-referential stubs in the archive (2026-09-01)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0 (`grep -n 'P0' ROADMAP.md`
 returns only closed slice headings) and GitHub intake **0 open issues**, asked
@@ -589,10 +589,15 @@ are the standing HONEST verdicts — 193.1 executed 167.1's reopen condition on
        not render either file — so nothing in this item rests on a rendered
        image.
 
-3. [ ] **235.3 — `ROADMAP-archive.md` carries three self-referential pointer
-       stubs: slices 17, 23 and 24 each head two sections there, the second
-       being `Closed — archived verbatim in ROADMAP-archive.md.` inside
-       `ROADMAP-archive.md`.**
+3. [x] **235.3 — DONE 2026-09-01 (cloud wake). The three self-referential
+       pointer stubs are gone, and `check:slice-refs` now asserts uniqueness in
+       the archive too — red-proved against the real defect, not only against an
+       injection.**
+
+       `ROADMAP-archive.md` carried three self-referential pointer stubs: slices
+       17, 23 and 24 each headed two sections there, the second being
+       `Closed — archived verbatim in ROADMAP-archive.md.` inside
+       `ROADMAP-archive.md`.
 
        Found by 235.2's verification parser crashing on a duplicate key, not by
        looking for it. The live file's own pointer for each of the three is
@@ -611,23 +616,73 @@ are the standing HONEST verdicts — 193.1 executed 167.1's reopen condition on
        section" assertion reads **217** — the live file's slice count — so the
        archive's duplicates are outside what it checks.
 
-       *Accept* — properties, not predicted values:
+       *Accept* — properties, not predicted values. **All four met:**
        - The three stubs are removed and every remaining slice number heads
-         exactly one section in `ROADMAP-archive.md`, counted raw.
-       - The real body of each of 17, 23 and 24 is byte-identical afterwards to
-         what it is now, verified against the git blob — the deletion must take
-         the stub and nothing else. Deleting from this file is the operation
-         that once destroyed 7,307 lines of history, so the check is the point.
-       - `check:slice-refs` reports the same figures either side.
+         exactly one section in `ROADMAP-archive.md`, counted raw — **met**.
+       - The real body of each of 17, 23 and 24 is byte-identical afterwards,
+         verified against the git blob — **met**.
+       - `check:slice-refs` reports consistent figures either side — **met**,
+         with one figure that MOVED by design and is accounted for below.
        - Whether this warrants extending a gate is decided by measuring the base
-         rate first (94.11): 3 of ~230 archive sections is not uniformly true,
-         so the answer may be yes — but it is measured, not assumed, and a
-         refusal with its reason is a valid outcome.
+         rate first (94.11) — **met, and the answer is yes.**
+
+       **The deletion took the stubs and nothing else**, checked against the git
+       blob by an independently written span parser rather than against the
+       script that performed it:
+
+       ```
+       archive 31,013 -> 31,001 lines   (3 stubs x 4 lines = -12, exact)
+       before 233 sections, after 230; every kept section byte-identical, in order
+       3 sections removed — exactly the three stubs, named
+       Slice 17 / 23 / 24: 1 real section before -> 1 after, identical each
+       slice numbers heading >1 archive section: {}
+       ```
+
+       Deleting from this file is the operation whose history includes losing
+       7,307 lines to a silent case-collision overwrite, which is why the check
+       is the point rather than a formality.
+
+       **The gate was extended, and the base rate is why that is not ceremony.**
+       `check-slice-refs.mjs` ran its uniqueness loop over `ROADMAP.md` alone,
+       with a header arguing that was sufficient because every archived slice
+       leaves a live pointer stub. **That argument holds for CITATIONS and does
+       not hold for UNIQUENESS** — nothing looked at the archive's own headings,
+       so nothing could see three violations sitting in it. The loop now runs
+       over both files. Base rate for the added half at the moment it was
+       written: **3 of 233 archive sections**, false of the other 230.
+
+       **Red-proved twice, and the second is the one that matters** — against
+       the real defect rather than a synthetic one:
+
+       - **By injection.** A second `## Slice 23` section appended to the
+         archive; injection confirmed present first (`grep -c '^## Slice 23 '`
+         → **2**), then `slice-refs check FAILED — 1 of 677`, naming
+         `slice 23 heads exactly one section in ROADMAP-archive.md`. File
+         restored and diffed identical to the byte copy.
+       - **Against `HEAD`'s own archive**, i.e. the file as it stood before this
+         item: injection confirmed (`Slice 24` → **2** sections), then
+         **`FAILED — 3 of 677`**, naming 24, 17 and 23. The gate goes red on the
+         defect that was actually there, and green on the fixed file.
+
+       **One reported figure moved, by design, and it is accounted for exactly
+       rather than left to be re-derived:** `464 → 677` assertions. That is
+       `217` live uniqueness checks + `212` archive uniqueness checks (new) +
+       `248` citation checks — and the citation count moved `249 → 250` because
+       the gate's own new header names `235.3`, which is CLAUDE.md's
+       "an assertion that trips on its own explanation" arriving harmlessly:
+       the citation resolves, because this item exists. `seen.size` is unchanged
+       at **217** — every archive slice number is also a live one, set
+       difference empty, so the union did not grow.
 
        **Deliberately not folded into 235.2.** Two edits to this file pair in one
        commit — a 1,419-line move and a deletion — is what CLAUDE.md's bulk-edit
        rule counsels against, and the destructive precedent is on this exact
-       file. It is a separate round with its own verification.
+       file. Separate round, separate verification.
+
+       **NOT VERIFIED, said plainly:** no Podman and no `localhost:8081` here, so
+       the 1440/390 light-and-dark screenshot lane could not run. This item is a
+       build-time gate and markdown the docs site does not render — nothing in
+       it rests on a rendered image.
 
 ## Slice 234 — 232.2's closing measurement is wrong about its own headline: the defect was introduced by 42.1, the commit that WROTE the sentence, and both dispatchers confirmed the opposite from the same single-file probe (2026-08-31)
 
