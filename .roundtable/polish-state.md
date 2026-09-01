@@ -86,7 +86,7 @@ a no-op recorded in one line.
 
 | surface | dimension | score | rounds | dry | src | status |
 |---|---|---|---|---|---|---|
-| component/alerts | content | **3** | 2/3 | 0 | 4ee5ad51 | round 1 landed — blind re-score 2→3, off the gate's TODO; **round 2 (2026-08-31) NO-OP — reconciliation clean on all four arms; the sweep around it filed ROADMAP 231.2, see below** |
+| component/alerts | content | **3** | 2/3 | 0 | 4ee5ad51 | round 1 landed — blind re-score 2→3, off the gate's TODO; **round 2 (2026-08-31) NO-OP — reconciliation clean on all four arms; the sweep around it filed ROADMAP 231.2, see below** · **RE-QUEUED — source changed** |
 | component/avatar | content | **3** | 1/3 | 0 | a21b88a7 | round 1 landed — blind 2→3, "not the only way to name someone" |
 | component/badge | content | **3** | 2/3 | 0 | 1f69e677 | round 1 landed — blind 2→3, "not for anything actionable"; **round 2 (2026-08-28) NO-OP — reconciliation clean on all four arms, see below** |
 | component/breadcrumb | content | **3** | 1/3 | 0 | dcbde565 | **round 1 (2026-08-30) FOUND A DEFECT — `fit` counted "2 of 19 pattern screens" against 39; re-entry from 217.2's filing, see below** |
@@ -103,7 +103,7 @@ a no-op recorded in one line.
 | component/scan | colour+interaction+fit | **3** | 2/3 | 0 | e1c34049 | round 1 (2026-08-23) fixed all three; **round 2 (2026-08-28) discovered the round-1 score was never written to `dsa-scores.json` at all** — see below · **RE-QUEUED — source changed** |
 | component/sidebar-nav | content | **3** | 2/3 | 0 | 904b544f | round 1 landed — blind 2→3, "not for navigating within one screen"; **round 2 (2026-08-30) FOUND A DEFECT — the `fit` cite's usage count was EXACT when written and decayed two days later, see below** |
 | component/state-patterns | content | **3** | 2/3 | 0 | 7d3f0e38 | round 1 landed — blind 2→3 (clears skeleton AND state); **round 2 (2026-08-28) FOUND A DEFECT — `skeleton · colour` cited the removed token pairing, see below** |
-| component/stepper | content | **3** | 1/3 | 0 | 4b8a288e | round 1 landed — blind 2→3, "not for independent sections" · **RE-QUEUED — source changed**|
+| component/stepper | content | **3** | 2/3 | 0 | efba2799 | round 1 landed — blind 2→3, "not for independent sections"; **round 2 (2026-09-01) NO-OP — reconciliation clean on five arms; arm 4 re-measured 20/20 and a new arm 5 reads 81/81, see below** |
 | component/table-toolbar | content | **3** | 1/3 | 0 | f7950a7f | round 1 landed — blind 3, "do not add to a read-mostly list" (unscored in DSA) |
 | component/tree | content | **3** | 1/3 | 0 | b92740e4 | round 1 landed — blind 2→3, pair-coherent with tree-table |
 | component/tree-table | content | **3** | 1/3 | 0 | f0b3ed9e | round 1 landed — blind 2→3, pair-coherent with tree · **RE-QUEUED — source changed** |
@@ -588,3 +588,172 @@ compositions" is the actual question.
 **No gate proposed.** That would be the fifth refusal in this ledger and the
 predicate's base rate here is **1 of 89** — 94.11 ceremony by the same test
 227.2 named.
+
+## Round 2: stepper (2026-09-01, cloud wake) — NO-OP, and a fifth arm
+
+Dispatcher rule 6, reached because rules 1-5 were all clear: no P0, Standardize
+at `1 / 4`, Objective at `1 / 3`, rule 4's three open items all blocked (two
+owner, one owner-hardware), and rule 5 `ok` with its newest pair
+`axe-violations 0.0 -> 0.0`. `polish_requeue.py --apply` re-queued **8**
+surfaces.
+
+**The pick was measured, not alphabetical.** §3b breaks ties by fewest rounds
+used, which left five re-queued surfaces level at `1/3` — calendar, dashboard,
+inline-editing, stepper, tree-table. Two further readings settled it:
+
+```
+git log -1 --format='%ai %h' -- packages/core/src/css/components/<s> \
+    apps/docs/src/pages/components/<s>.astro
+# calendar 2026-08-24 · dashboard 2026-08-23 · tree-table 2026-08-25
+# inline-editing 2026-08-27 17:57:55 · stepper 2026-08-27 18:55:14
+```
+
+stepper's source is the most recently changed, and it is the only one of the
+five with a full `dsa-scores.json` entry, so all five arms are falsifiable on
+it — `inline-editing` has no entry at all (correctly: its page makes no
+`DsaScore` call, and `check:dsa-scores` reads `40 requested by a page, all
+scored`, so this is the ledger's recorded "unscored in DSA", not scan's defect
+repeating).
+
+**What re-queued it** was real CSS, not a whitespace move: `2a47d4eb..HEAD`
+adds GAP-17's wrap fix (`flex-wrap`, `row-gap`, `min-inline-size: auto`, a
+tightened connector under `@container bo-stepper (max-width: 30rem)`) and the
+third copy of the visually-hidden recipe. So the cites had something to decay
+against.
+
+### The five arms
+
+1. **Wrong-choice clause present** — `check:wrong-choice` passed, `156
+   assertion(s) across 80 pages (components: 37 carry / 1 outstanding / 3
+   exempt)`. The one outstanding is the skipped `date`.
+2. **`dsa-scores.json` entry rendered by its page** — `check:dsa-scores`
+   passed, `360 assertion(s) across 40 scored components (40 requested by a
+   page, all scored)`, and `grep -rlo 'Not yet scored' apps/docs/dist/components/`
+   returns nothing.
+3. **Line-number citations into shipped CSS: still 1 of 40**, still
+   `badge · spacing -> badge.css:42`, and re-read at the line rather than
+   trusted: line 42 reads `pushed the whole PAGE sideways: measured 373px wide
+   against a 390px`, bare numbers inside a comment, exactly as the cite claims.
+4. **`content` cites quoting a page clause verbatim — 20 of 20 present.**
+5. **NEW — css dimension literals quoted in ANY cite, against the shipped css:
+   81 of 81 present.**
+
+Arm 5 exists because arm 4 covers `content` prose only, while **all four
+defects this ledger has ever recorded were numbers in other dimensions** —
+icon's `fit` "12 ERP glyphs", breadcrumb's `fit` "2 of 19 pattern screens",
+data-table's `spacing` literal removed by 94.3, sidebar-nav's `fit` usage
+count. Arm 4 could not have caught one of them.
+
+Both arms are one probe, and **both were red-proved by injection, three times,
+each injection confirmed present before the run** — a cite literal mutated
+(`1.75rem` -> `1.77rem`), the css mutated instead (`1.75rem` -> `1.8rem` in a
+copy of the tree), and a `content` clause reworded. Each went red on exactly
+the injected item and nothing else; the clean tree returns `20/20` and `81/81`.
+
+```js
+// save as a scratch .mjs and run with node; ARM_SCORES / ARM_CSS / ARM_DIST
+// point at mutated copies, which is how the red-proof is re-run.
+import fs from 'node:fs';
+import path from 'node:path';
+const R = process.cwd();
+const SCORES = process.env.ARM_SCORES || `${R}/apps/docs/src/data/dsa-scores.json`;
+const CSS = process.env.ARM_CSS || `${R}/packages/core/src/css/components`;
+const DIST = process.env.ARM_DIST || `${R}/apps/docs/dist/components`;
+const S = JSON.parse(fs.readFileSync(SCORES, 'utf8')).components;
+const A = JSON.parse(fs.readFileSync(`${R}/packages/core/dist/api.json`, 'utf8'));
+const slug = (k) => (A.pageSlug || {})[k] || k;
+const norm = (s) => s.replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/&quot;/g,'"')
+  .replace(/&#39;/g,"'").replace(/[‘’]/g,"'").replace(/[“”]/g,'"')
+  .replace(/[–—]/g,'-').replace(/\s+/g,' ').trim();
+let q4 = 0; const m4 = [];
+for (const [k, e] of Object.entries(S)) {
+  const cite = e.dimensions?.content?.cite; if (!cite) continue;
+  const quotes = [...cite.matchAll(/"([^"]{6,})"/g)].map((x) => x[1]);
+  if (!quotes.length) continue;
+  const f = `${DIST}/${slug(k)}/index.html`;
+  if (!fs.existsSync(f)) { m4.push(`${k} NOPAGE`); continue; }
+  const text = norm(fs.readFileSync(f, 'utf8').replace(/<[^>]+>/g, ' '));
+  for (const x of quotes) { q4++; if (!text.includes(norm(x))) m4.push(`${k} :: "${x}"`); }
+}
+// `form/` is the ONE dir with no canonical form.css — select dirs by
+// isDirectory, never by the existence of <dir>/<dir>.css (see below).
+const dirs = fs.readdirSync(CSS).filter((d) => fs.statSync(path.join(CSS, d)).isDirectory());
+const readDir = (d) => fs.readdirSync(path.join(CSS, d)).filter((f) => f.endsWith('.css'))
+  .map((f) => fs.readFileSync(path.join(CSS, d, f), 'utf8')).join('\n');
+const LIT = /\b\d+(?:\.\d+)?(?:px|rem|em|ms|s|ch|vw|vh|%)\b/g; // unit-bearing only
+let q5 = 0; const m5 = [];
+for (const [k, e] of Object.entries(S)) {
+  const d = [k, slug(k)].find((x) => dirs.includes(x));
+  if (!d) { m5.push(`${k} NODIR`); continue; }
+  const css = readDir(d);
+  for (const [dim, v] of Object.entries(e.dimensions || {}))
+    for (const lit of new Set(String(v.cite || '').match(LIT) || [])) {
+      q5++; if (!css.includes(lit)) m5.push(`${k} · ${dim} :: ${lit}`);
+    }
+}
+console.log(`arm 4 ${q4 - m4.length}/${q4}`, m4);
+console.log(`arm 5 ${q5 - m5.length}/${q5}`, m5);
+```
+
+### Two instrument defects, both caught before they became findings
+
+- **Arm 5's first run reported `form · spacing :: 1rem` UNRESOLVED** — a
+  slug-to-directory failure, not a decayed cite. The resolver required
+  `<dir>/<dir>.css`, and `form/` is the **only** component dir with no such
+  file (it holds `input.css`, `select.css`, `form-field.css`,
+  `form-section.css`, `checkbox-radio.css`), so `form` fell through to a block
+  match and was searched against `data-table,quantity,richtext`. Command that
+  finds it: `for d in packages/core/src/css/components/*/; do n=$(basename $d);
+  [ -f "$d$n.css" ] || echo $n; done` -> `form`, and nothing else. The fix
+  reports *fewer* unresolved, which is this ledger's own "a parser change that
+  reports MORE is not self-evidently a fix" inverted — hence the css-side
+  red-proof, which is the only thing that distinguishes a real fix here from a
+  detector that stopped being able to fail.
+- **A negative check that matched everything.** Verifying stepper's
+  `typography` cite (*"no raw font-size"*),
+  `grep -nP 'font-size\s*:\s*(?!var\()'` reported **2** on the clean file and
+  **2** on a copy with `font-size: 13px` injected — it discriminated nothing,
+  because `\s*` backtracks to zero width and the lookahead then succeeds one
+  space before `var(`. A possessive `\s*+` fixes it: **0** clean, **1**
+  injected. Across the whole component tree it reads **8** raw font-size
+  declarations, one of which is `dashboard.css:185 font-size: 3rem` —
+  corroborating dashboard's own typography cite rather than contradicting it.
+  The first form was also *fail-open*: it sat in a `grep ... || echo "none"`
+  pipeline, so its error message (`conflicting matchers specified`) printed a
+  reassuring "none".
+
+### One thing recorded and deliberately NOT called a defect
+
+`dashboard · spacing` says *"zero uncommented dimension literals — the 32px and
+20rem/1rem a scan flags are numbers quoted INSIDE the comments that explain
+them"*. `dashboard.css:16` carries a live `20rem`:
+`minmax(min(var(--bo-widget-min, 20rem), 100%), 1fr)`. It is not a decay —
+`git blame -L 16,16` dates it to **2026-08-12**, eleven days before the
+2026-08-23 score, so the scorer had it in front of them — and it reads as the
+fallback of a documented consumer-override hook (`check:token-refs`: *"11
+consumer-override hook(s) carrying a fallback"*), which is a blessed category
+rather than a bare literal. Calling it a defect would require re-running "a
+scan" the cite names and this repo does not ship — 94.11's dimension-literal
+gate was measured at a 155/155 base rate and refused. Recorded so a later wake
+does not re-derive it; **not fixed, and not counted as a finding.**
+
+### No gate proposed — and this time the base rate says so outright
+
+Arm 4 reads **20/20** and arm 5 **81/81**. Both predicates are uniformly true
+of the corpus today, which is exactly 94.11's test for ceremony: a detector
+whose predicate already holds for 100% of the tree distinguishes nothing, however
+carefully written. 101.3's stop rule independently forbids Polish adding gates.
+So both stay **recorded, not gated**, and the numbers are here to be
+re-measured — arm 4 was **18/18** when 176.1 wrote it and is **20/20** now, the
+corpus having gained two quotes, so the base rate is stable across a real
+change rather than merely unexamined.
+
+**No blind re-score is owed**: the round changed no artefact, so `scored` stays
+**2026-08-23** and `dry` stays **0** — there was no re-score to fail. `rounds`
+moves 1→2 on badge's and alerts' precedent.
+
+**Not verified, said plainly.** This was a cloud wake: no Podman, no
+`localhost:8081`, so the 1440/390 light-and-dark screenshot lane could not run.
+Nothing in this round rests on a rendered image — the diff is this ledger and
+no CSS or page markup changed — and every browser-derived number quoted above
+came from a gate executing in this container.
