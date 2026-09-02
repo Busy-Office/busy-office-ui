@@ -1292,3 +1292,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-02 01:46 · Meta · refusal · a gate for the absence-claim class — 42/43 before the fix and 42/42 after, uniformly true (94.11), and it needs a per-phrasing rule only a human can extend · refused · 044f2e0a
 - 2026-09-02 04:48 · Continue · build · 241.1 / closes 240.1 — four routes to a tokenised select chevron measured and refuted; not browser-blocked, only its first branch was · landed · e20b2b78
 - 2026-09-02 04:48 · Meta · refusal · a contrast gate over the chevron's data:-URI hex — filed as 241.2 with the base-rate argument against it, not built · refused · e20b2b78
+- 2026-09-02 06:48 · Continue · build · 241.2 — chevron contrast pairing stays ungated (base rate 2 of 46, both sides frozen since commit 1); fixed the coverage overclaim it exposed in check-contrast.mjs · landed · 597bb288
+- 2026-09-02 06:48 · Meta · refusal · a contrast gate over the 2 painted data-URI literals — refused on weight, not on undiscriminability (94.11's stronger argument does not apply) · refused · 597bb288
+- 2026-09-02 06:48 · Meta · refusal · a ratchet over the raw-literal count — 26 of 46 are icon glyphs, so it would go red on a correct tree; reported instead (236.2) · refused · 597bb288
