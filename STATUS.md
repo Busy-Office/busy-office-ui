@@ -2,20 +2,22 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-02 06:48 UTC
+Generated at: 2026-09-02 12:59 UTC
 
 ## Open items by slice
 
 - **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS + FOUR ANSWERS (grilled 2026-08-29 at the owner's request; full report `.roundtable/grill-112.3-pilot-still-worth-it-2026-08-29.md`).
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
+- **Slice 242** (1 open)
+  - 242.1 — decide whether arm 8 becomes a build gate. NOT a Polish decision.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1289 iterations logged)
+dispatch status — counter-triggered rules (1291 iterations logged)
   Standardize   3 / 4 Continue rounds since 2026-09-01 12:05   ok
   Objective     2 / 3 slices          since 2026-09-01 15:42   ok  [238, 241]
   Optimize      0 wake-date(s) newer   since 2026-09-02 01:46   ok   [newest pair: axe-violations; 119 sample(s), 13 of 36 name(s) sampled twice]
@@ -31,8 +33,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-01 17:44 · Meta · refusal · a gate over either arm — 20/20 and 81/81 are uniformly-true predicates (94.11 ceremony test), and 101.3 forbids Polish adding gates · refused · e784bbfd
-- 2026-09-01 19:43 · Polish · reconcile · Polish round 2 on component/tree-table (Slice 239) — NO-OP on six arms; new arm 6 (bare counts in cites) 8/8, red-proved 3x; base rate corrected 4 -> 8; polish_requeue.py fresh-clone guard · landed · cb7c80da
 - 2026-09-01 19:43 · Meta · refusal · a gate for the bare-count cite class, a fifth time — the CLAIMS table IS the per-cite command 217.2/220.2/227.2 said a gate would need, hand-maintained at 8 rows, and 8/8 is uniformly true (94.11 ceremony); 101.3 forbids Polish adding gates independently · refused · cb7c80da
 - 2026-09-02 01:46 · Polish · reconcile · calendar round 2 — six arms clean; new arm 7 (absence claims) found form · colour claiming 'zero raw hex' against two painted ones; cite corrected, CSS left open as 240.1 · landed · 044f2e0a
 - 2026-09-02 01:46 · Meta · refusal · a gate for the absence-claim class — 42/43 before the fix and 42/42 after, uniformly true (94.11), and it needs a per-phrasing rule only a human can extend · refused · 044f2e0a
@@ -41,6 +41,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-02 06:48 · Continue · build · 241.2 — chevron contrast pairing stays ungated (base rate 2 of 46, both sides frozen since commit 1); fixed the coverage overclaim it exposed in check-contrast.mjs · landed · 597bb288
 - 2026-09-02 06:48 · Meta · refusal · a contrast gate over the 2 painted data-URI literals — refused on weight, not on undiscriminability (94.11's stronger argument does not apply) · refused · 597bb288
 - 2026-09-02 06:48 · Meta · refusal · a ratchet over the raw-literal count — 26 of 46 are icon glyphs, so it would go red on a correct tree; reported instead (236.2) · refused · 597bb288
+- 2026-09-02 12:59 · Polish · reconcile · 242.1 dashboard round 2 — interaction:na wrong (ships initCollapsibleCards), BLIND re-scored to 3 by a second agent, the first blind re-score actually run; spacing cite's live-literal claim corrected; new arm 8 1-of-18 -> 0-of-17, red-proved 3x after four discarded definitions · landed · e60338c8
+- 2026-09-02 12:59 · Meta · refusal · a build gate for arm 8 — mechanically writable, unlike the four cite-gates refused before it, but 101.3 confines Polish to the existing ratchet and post-fix the predicate is true of 0 of 17; filed as 242.1 for a non-Polish loop · refused · e60338c8
 
 ## Sunset test
 
