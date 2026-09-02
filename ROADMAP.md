@@ -315,6 +315,144 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 246 — 244.4 built: the src/css chokepoint gets its gate, and the design question it carried is answered by a count nobody had taken — there are FOUR chokepoints in this repo, one of them gated (2026-09-02)
+
+**Dispatcher trace, cloud wake.** Step 0: container started **DETACHED** and
+`origin/main` arrived as a forced update (`+ 17b3ba6...41abd4b`), both
+`ENVIRONMENT.md` traps 1 and 2 biting as usual; `git checkout -B main
+origin/main` before any commit existed, `--unshallow` clean in one attempt →
+**1,808** commits, `is-shallow-repository` → `false`. Rule 1: no open P0 —
+GitHub intake `list_issues` OPEN → `totalCount: 0`, no owner message, so Step 1
+had nothing to triage. Rule 2: Standardize `0 / 4`. Rule 3: Objective `0 / 3`.
+**Rule 4 dispatched Continue, build mode**, on the oldest still-open item it
+can take, which is `244.4`.
+
+**The item's own premise was re-checked first, and it is wrong in one of its two
+readings.** 244.4 states the predicate is *"true of every core script but one"*.
+That holds for one predicate and not for the one its FIRST criterion words.
+Both counts, over the 26 scripts in `packages/core/scripts`:
+
+```
+node <probe>   # both predicates over packages/core/scripts, comments blanked
+#   Reading A — "enumerates src/css itself" (criterion 1's wording):     7
+#     build-component-css, check-contrast, extract-acr, extract-api,
+#     extract-keymap, generate-scales, src-css-files
+#   Reading B — defines its own RECURSIVE .css walker (base-rate clause): 2
+#     generate-scales :: cssFiles, src-css-files :: srcCssFiles
+```
+
+Reading A is **six scripts besides the chokepoint**, not one. Four of them —
+`build-component-css`, `extract-api`, `extract-acr`, `extract-keymap` —
+enumerate `src/css/components` as a **directory structure**, one entry per
+component dir and then the files inside it, which a flat file stream cannot
+express; `srcCssFiles` is not what they should be calling. Gating reading A
+would mean exempting six of twenty-six scripts, which is exempting the tree
+rather than gating it. **The gate takes reading B**, the shape that actually
+drifted and actually regrew, and the gate's header carries both numbers so the
+next wake does not re-derive them.
+
+**The second criterion — "second gate or shared mechanism" — is answered by a
+count nobody had taken.** This repo has **four** walker chokepoints, not two:
+
+| chokepoint | tree | gated? |
+|---|---|---|
+| `dist-pages.mjs` | `apps/docs/dist` | yes, since 103.2 |
+| `src-css-files.mjs` | `packages/core/src/css` | **yes, this slice** |
+| `source-files.mjs` | the repo source tree | no |
+| `dist-css.mjs` | `packages/core/dist/css` | no |
+
+`source-files.mjs`'s own header is the evidence, and it states the gap outright:
+*"`dist-pages.mjs` already owns dist enumeration, and `check:dist-walkers`
+enforces that nothing re-rolls it. Source had no equivalent, so the first two
+scripts that needed one each hand-rolled a recursive walk."* So "a second gate
+by copying the first" was never the choice on offer — it is the second of four,
+and four hand-copied drivers is exactly the drift Slice 244 removed, re-created
+one layer up.
+
+**Answer: a shared DRIVER (`gate-source-scan.mjs`), one gate FILE per
+chokepoint.** Not a table-driven single gate, and the reason is a measured
+property of an existing gate rather than taste: `check-selftests.mjs` enforces
+`@heuristic`/`@exact` + a real `--self-test` per `check-*.mjs` **file**
+(`check-selftests.mjs:51-52,90` — it keys on filename and requires the
+`process.argv` branch). A table of rows inside one gate satisfies that meta-gate
+**once**, and would then accept a third and fourth predicate with no new
+obligation to prove either can fail — in a repo whose Slice 39.2 shipped four
+detectors in a row that could not fail. One file per chokepoint makes the
+meta-gate demand a self-test from every new predicate. Confirmed by the count
+moving: **47 → 48 gates, 17 heuristic (all self-tested)**, `+1` exactly.
+
+**The predicates cannot be shared, and that is red-proved rather than asserted.**
+`check-dist-walkers`' own `walksDist`, run against the exact body 244.2 removed
+from three core scripts (`git show 71a61679`):
+
+```
+walksDist(the removed src/css walker body)  = false
+walksDist(body + its call site)             = false
+walksDist("fs.readdirSync(join(DIST,'patterns'))")  = true   # control
+```
+
+The dist signal is *"a directory-listing call whose ARGUMENT names the tree"*.
+A recursive src/css walker names its tree only at the **call site** — the
+`readdir` inside it takes `dir`. **A retargeted copy of the dist gate would have
+been a detector that cannot fail on the drift it was written for**, which is the
+defect this repo's doctrine names most often. So only the plumbing is common;
+each chokepoint brings its own predicate and its own self-test.
+
+**Where it lives, and why not in `packages/core/scripts`.** It reads core's
+scripts as TEXT and does not import them. A gate wired into core's own build
+chain could not import `apps/docs/scripts` at all — `examples/po-app/Dockerfile`
+runs `npm run build -w @busy-office/ui` in a context holding `packages` and
+`apps/docs/package.json` **only**, which is exactly how `check:rtl`'s DESIGN.md
+assertion broke that image build. `check-selftests.mjs` is the precedent: a
+repo-wide gate in `apps/docs/scripts` that scans
+`['apps/docs/scripts', 'packages/core/scripts']` by source text via `REPO_ROOT`.
+Wired into `check:repo`, not into core's `build`.
+
+**Two red-proofs, each with the injection confirmed landed in the file the gate
+reads before the result was believed** — CLAUDE.md's rule that a green red-proof
+is a defect in the injection until proven otherwise:
+
+- Restored the removed `async function* cssFiles` into
+  `check-sticky-layers.mjs`. Injection confirmed at **line 43** by grep, then
+  `check:src-css-walkers` → **exit 1** naming the file. Reverted → exit 0,
+  grep count 0.
+- The rewired dist gate too, since its driver changed: appended
+  `readdir(join(DIST, 'patterns'))` to `copy-suite.mjs`, injection confirmed at
+  **line 113**, gate → **exit 1** naming the file. Reverted → exit 0.
+
+**What this buys is a RATCHET, not a discovery**, stated rather than implied:
+both gates are green on the tree they landed against, exactly as
+`check-dist-walkers.mjs` was on 2026-08-22 (`cdffe03a` changed no other script).
+The evidence that a ratchet is worth it is the measured twice-regrew history in
+that gate's header, plus the disagreement 244.2 found already present here.
+
+**The third option 245 recorded is neither chosen nor lost.** 244.3's general
+cross-file duplicate detector would have found the ORIGINAL drift — three
+identical copies — but **cannot catch regrowth**, because a duplicate detector
+needs n ≥ 2 and regrowth is the n = 1 case: `component-scores.mjs`'s single
+private `readdirSync(join(DIST,'patterns'))` (103.1) had no twin. The two are
+complementary lanes, not alternatives, and 244.4 asked for the chokepoint gate.
+The general detector stays where 245.1 put it — recorded inside `244.4` as a
+third answer rather than filed as a fourth roadmap entry — and closing `244.4`
+does not close it. It remains available to a future Standardize sweep.
+
+**Not verified, said plainly:** no Podman and no `localhost:8081` here, so the
+1440/390 light-and-dark screenshot lane could not run. This wake changed **no
+CSS, no page markup and no shipped artefact** — the diff is two new gate scripts,
+one rewired gate, `apps/docs/package.json` and markdown. `check:layout`
+(127 pages) and `test:axe` (127 × 2, zero violations) executed here regardless
+and are green.
+
+1. [x] **246.1 — the two flat `src/css` listings that COULD route through the
+       chokepoint, recorded as a finding rather than changed.** Of the seven
+       reading-A matches, two are flat single-directory `.css` listings that
+       `srcCssFiles` could serve: `check-contrast.mjs:135` (`src/css/brand`) and
+       `build-component-css.mjs:98` (the same directory). Neither is a drop-in —
+       both use the bare filename, while `srcCssFiles` yields full paths — and
+       routing them would change build output, which is the one thing this wake
+       cannot verify visually. Left alone deliberately; noted so the next
+       Standardize sweep has the call sites rather than re-deriving them.
+
 ## Slice 245 — Objective grill of Slices 238, 241, 243, 244: twenty-nine of thirty-one published claims reproduce, and the two that do not are ONE item's two counts of one set — six and eight against a tree holding five before and seven after (2026-09-02)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0 — the four open items are
@@ -561,9 +699,40 @@ green. **No visual debt was added; nothing visual was looked at.**
        diagonal into a maximal run and skipping import lines. The first number
        this instrument produced was not evidence.
 
-4. [ ] **244.4 — a gate for the `src/css` walker chokepoint, so the
-       consolidation does not regrow. FILED, NOT BUILT — it is bigger than the
-       item that found it.**
+4. [x] **244.4 — a gate for the `src/css` walker chokepoint, so the
+       consolidation does not regrow. BUILT in Slice 246 (2026-09-02) —
+       `check-src-css-walkers.mjs`, on a shared driver `gate-source-scan.mjs`
+       that `check-dist-walkers.mjs` was rewired onto.**
+
+       Against each *Accept*, and the first criterion's premise did not survive
+       re-checking:
+
+       - **The gate exists**, wired into `check:repo`, with `generate-scales.mjs`
+         exempt and its reason in the `EXEMPT` Map rather than a comment above a
+         Set, so the reason cannot drift from the entry granting it.
+         `dist-css.mjs` is deliberately NOT exempted — the tree test already
+         excludes it, which is stronger than a name-based exemption because
+         repointing it at `src/css` would then be caught.
+       - **The design decision is recorded**: a shared DRIVER, one gate FILE per
+         chokepoint. Argued from a count nobody had taken (there are FOUR
+         chokepoints here, one gated) and from a measured property of
+         `check-selftests.mjs` (it demands a `--self-test` per FILE, so a table
+         of rows would satisfy the meta-gate once and accept predicates three and
+         four unproved). Full argument in Slice 246.
+       - **Red-proved by injection, injection confirmed landed** at
+         `check-sticky-layers.mjs:43` before the exit-1 was believed; reverted to
+         green. The base rate is measured and stated in the gate's header: **2 of
+         26** under the predicate the gate implements, **both exempt** — so what
+         is bought is a RATCHET against regrowth, and the entry says that rather
+         than implying the gate found something.
+       - **The premise is corrected, not passed over.** *"After 244.2 it is true
+         of every core script but one"* holds for the base-rate clause's
+         predicate and NOT for this criterion's own wording, *"enumerates
+         `src/css` itself"* — that reads **7 of 26**, six besides the chokepoint.
+         Four of the six enumerate `src/css/components` as a directory structure
+         a flat file stream cannot express. Gating the wide reading would mean
+         exempting six of twenty-six scripts. The narrow predicate was chosen and
+         both counts are in the gate's header.
 
        LOOPS.md's operating rules ask, of every fix, *"does the gate that should
        have caught this exist, and can it fail?"* Here it does not, and the

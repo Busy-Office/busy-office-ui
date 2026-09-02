@@ -11,6 +11,15 @@
  * with its own walker works fine right up until its hand-copied exclusion
  * set disagrees with everyone else's.
  *
+ * IT IS THE FIRST OF FOUR, which is why its driver now lives in
+ * `gate-source-scan.mjs` (roadmap 244.4, 2026-09-02). `src-css-files.mjs`,
+ * `source-files.mjs` and `dist-css.mjs` are the same shape of chokepoint over
+ * three other trees; `check-src-css-walkers.mjs` is the second gate, and it
+ * shares this file's plumbing rather than copying it. Its PREDICATE is its
+ * own, and that is measured, not tasteful: `walksDist` returns false on the
+ * exact walker 244.2 removed from three core scripts, because a recursive
+ * walker names its tree at the call site and not in the readdir argument.
+ *
  * @heuristic — recognises "walks dist" from source text: a readdir/opendir/
  *   glob call whose argument mentions DIST or a dist path. That can be
  *   fooled (a string that looks like a call, a walker built from pieces),
@@ -18,21 +27,18 @@
  *   Comments are blanked before matching — the sweep's own literal-detector
  *   was wrong six times before it learned that (94.6b).
  */
-import { readdir, readFile } from 'node:fs/promises';
-import { basename } from 'node:path';
-import { selfTest, assertScanned } from './gate-report.mjs';
+import { selfTest } from './gate-report.mjs';
+import { DOCS_ROOT } from './paths.mjs';
+import { join } from 'node:path';
+import { blankComments, chokepointGate } from './gate-source-scan.mjs';
 
 /* The chokepoint itself, and this gate (its fixtures below mention the
-   pattern it hunts). */
-const EXEMPT = new Set(['dist-pages.mjs', 'check-dist-walkers.mjs']);
-
-/** Blank comments (line + block) so a walker named in prose never matches —
- *  the string shape stays, offsets survive for error reporting. */
-export function blankComments(src) {
-  return src
-    .replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' '))
-    .replace(/(^|[^:])\/\/[^\n]*/g, (m, pre) => pre + m.slice(pre.length).replace(/[^\n]/g, ' '));
-}
+   pattern it hunts). Reasons live in the Map so they cannot drift away from
+   the entry that grants them. */
+const EXEMPT = new Map([
+  ['dist-pages.mjs', 'the chokepoint itself'],
+  ['check-dist-walkers.mjs', 'this gate — its --self-test fixtures spell out the pattern it hunts'],
+]);
 
 /** Does this source enumerate dist itself? The signal: a directory-listing
  *  call (readdir/readdirSync/opendir/opendirSync/glob) whose argument
@@ -62,21 +68,14 @@ if (process.argv.includes('--self-test')) {
   process.exit(0);
 }
 
-const dir = new URL('./', import.meta.url);
-const files = (await readdir(dir)).filter((f) => f.endsWith('.mjs') && !EXEMPT.has(f));
-assertScanned(files.length, 'docs scripts', 'no scripts found — the gate verified nothing');
-
-const offenders = [];
-for (const f of files) {
-  if (walksDist(await readFile(new URL(f, dir), 'utf8'))) offenders.push(f);
-}
-
-if (offenders.length) {
-  console.error(`dist-walkers check FAILED — ${offenders.length} script(s) enumerate dist outside the chokepoint:`);
-  for (const f of offenders) {
-    console.error(`  ${basename(f)} — route it through distPages() in dist-pages.mjs;`);
-    console.error('    a private walker works until its hand-copied exclusion set drifts (103.1: six forks, four page counts)');
-  }
-  process.exit(1);
-}
-console.log(`dist-walkers check passed — ${files.length} docs scripts, all dist enumeration goes through dist-pages.mjs`);
+await chokepointGate({
+  label: 'dist-walkers',
+  scriptDir: join(DOCS_ROOT, 'scripts'),
+  tree: 'dist',
+  chokepoint: 'dist-pages.mjs',
+  exempt: EXEMPT,
+  detect: walksDist,
+  hint:
+    'route it through distPages() in dist-pages.mjs;\n' +
+    '    a private walker works until its hand-copied exclusion set drifts (103.1: six forks, four page counts)',
+});
