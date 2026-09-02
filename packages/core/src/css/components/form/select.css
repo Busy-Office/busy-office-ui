@@ -20,7 +20,29 @@
      --bo-select-chevron property (gray-300 URI) — one definition per
      theme, every variant (incl. --seamless reveal) reads the property.
      RTL needs a physical position flip — background-position has no
-     logical keywords. */
+     logical keywords.
+
+     These two escaped hex literals are the framework's only PAINTED raw
+     hex (every other one is print-only or under a mask), and they CANNOT
+     be tokenised. Four routes were measured in headless Chrome, each
+     against a control that paints — roadmap 241.1:
+
+       - an SVG in a data: URI is a separate document, so it cannot read
+         this one. stroke='currentColor' paints BLACK against a pure-red
+         host (6px core, 0 red px); stroke='var(--bo-color-text-muted)'
+         paints NOTHING (0px). The shipped literal paints 6px of gray-500,
+         which is what proves the reader can tell the three apart.
+       - icon.css's mask-image + background-color: currentcolor cannot
+         apply. Masking .bo-select masks the WHOLE control: 1010 painted
+         pixels -> 22, i.e. border, surface and option text erased. And
+         <select> generates no ::before box to hang a mask on instead —
+         0 painted px, against 1080 for the identical rule on a <div>.
+
+     The only route that removes them is a wrapper element around every
+     select, which widens the public API for a colour literal. Refused;
+     disclosed here and in the DSA colour cite instead, as the six other
+     components carrying raw hex do. Reopen if <select> gains a styleable
+     pseudo-element (appearance: base-select) at the support floor. */
   [data-theme="dark"] .bo-select {
     --bo-select-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%23d1d5db' stroke-width='1.5' d='m2.5 4.5 3.5 3.5 3.5-3.5'/%3E%3C/svg%3E");
   }

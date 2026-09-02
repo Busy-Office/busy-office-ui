@@ -315,6 +315,106 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 241 — 240.1 closed on its OWN second branch: the chevron's two hex literals are not removable, measured four ways — and the item was never browser-blocked, only its first branch was (2026-09-02)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0; GitHub intake
+`list_issues` OPEN → `totalCount: 0`, so Step 1 had nothing to triage and no
+`Roadmap · plan` row was recorded. Rule 2: `Standardize 1 / 4`. Rule 3:
+`Objective 1 / 3 [238]`. **Rule 4 dispatched Continue, build mode** — the first
+wake in five not to fall through to rule 6. Four open items: Slice 15's AT
+evidence owner-hardware-blocked (unchanged — it needs a human listening),
+`112.3`/`112.4` owner-blocked (re-checked from `git log`, not mtime:
+`.roundtable/pilot-112/briefs.md` is still the 16-line scaffold, single commit
+`e58ea3ca` 2026-08-23), and **`240.1`, which the hand-off classified
+browser-blocked and which is not**. Rules 5-8 were not reached.
+
+**The mis-sort, named, because it is the mirror of the one LOOPS.md rule 4
+already records.** 240.1's Accept criterion 1 is a disjunction and the hand-off
+read only its first half. Branch 1 — convert the chevron to a mask — needs
+screenshots at 1440/390 in both themes, and a cloud wake genuinely cannot take
+it. **Branch 2 — "or a one-line reason is recorded in the cite for why the mask
+technique is wrong for a chevron specifically", with "finding the mask approach
+unworkable is a satisfying outcome" written into the criterion itself — is a
+DOM/computed-style/pixel-count question, which is entirely `ENVIRONMENT.md`'s
+"can run" list.** 189 §D2 records the loop declining a whole ITEM a cloud wake
+could take; this is the same error one level down, declining a BRANCH. Cost:
+one wake, against 173.2's four.
+
+**This is exactly what 158/191's criterion rule bought.** 240.1's Accept was
+written to name the property and to make finding the premise false a satisfying
+outcome. The premise *was* false, and because the criterion said so in advance,
+refuting it closed the item instead of going off-plan.
+
+1. [x] **241.1 — DONE 2026-09-02: four routes to a tokenised chevron, all
+       measured in headless Chrome, all refuted. `240.1` closes on branch 2.**
+
+       240.1 proposed rendering the chevron as `mask-image` +
+       `background-color: currentcolor`, "exactly as `icon.css` does". Measured
+       rather than reasoned, each route against a control that must paint, on a
+       page whose select borders are forced to a green that appears nowhere else
+       so a chevron count can never be a border count:
+
+       | route | reading | control |
+       |---|---|---|
+       | `stroke='currentColor'` in the URI | **0 red px**, 6 px BLACK, against a pure-red host | the shipped literal, same geometry: 6 px of `107,114,128` |
+       | `stroke='var(--bo-color-text-muted)'` | **0 px painted at all** | as above — the same 6 px core paints when the value is legal |
+       | mask on `.bo-select` itself | painted pixels **1010 → 22** on a 240×36 control: border, surface and option text erased | the same select unmasked, at 1010 |
+       | mask on `.bo-select::before` | **0 px** — `<select>` generates no pseudo-element box | the identical rule on a `<div>`: **1080 px** |
+
+       The first two are one fact: **an SVG in a `data:` URI is a separate
+       document**, so it cannot read this one's `currentColor` or its custom
+       properties. The last two are the other: **`icon.css`'s technique needs an
+       element whose whole box IS the glyph**, and a `<select>` is neither empty
+       nor able to lend a pseudo-element. The only remaining route is a wrapper
+       element around every select — new markup for a colour literal, refused as
+       widening the public API. Recorded in `select.css`'s own comment and in
+       the `form · colour` cite, as the six other components carrying raw hex
+       already do.
+
+       **The instrument's first output was wrong, as the base rate says.** The
+       first run clipped the chevron strip wide enough to include the control's
+       border — whose shipped colour is *also* `#6b7280` — so the chevron and
+       the border were one indistinguishable count of 44-50 px, and the reading
+       that mattered (is any pixel red?) was buried. Forcing the border green
+       and insetting the clip by 2px separated them: 6 px, exactly, in every
+       case that paints.
+
+       **Reopen condition, named rather than left implicit:** `<select>` gaining
+       a styleable pseudo-element at the support floor (`appearance:
+       base-select`). Not a promise it will; a statement of what would make the
+       refusal wrong.
+
+2. [ ] **241.2 — the framework's only PAINTED raw hex sits outside every
+       contrast gate, and it passes today. Filed rather than built.**
+
+       Measured this wake, same instrument, reconciled against the gate's own
+       numbers before being quoted: the chevron reads **4.83:1** against the
+       light surface and **11.46:1** against the dark one, so both clear WCAG
+       1.4.11's 3:1 for a non-text graphical object. The control — the
+       documented `text-primary` on `bg-surface` pairing — read **17.74** light
+       and **16.15** dark, which is `contrast.json`'s independently computed
+       value to the digit in both themes.
+
+       What is missing is the ratchet, not the value: **0 of the 36 gated
+       pairings in each theme covers this**, because `check:contrast` takes two
+       token names and the chevron's colour is a literal inside a URI.
+
+       *Accept* — names the property, not the value:
+
+       1. Either `check:contrast` (or a sibling gate) asserts the chevron
+          literals against the surface token they are painted on, extracting the
+          hex from the URI rather than from a parallel token that could diverge
+          — **or** a recorded reason why the pairing stays ungated.
+       2. If built, it is tagged `@heuristic` and ships `--self-test`: deciding
+          which `data:` URI hexes are PAINTED (`background-image`) versus masked
+          away (`mask-image`) is recognition, and this repo's own history says
+          that class of detector must demonstrate it can fail.
+       3. Its base rate is stated before it lands. **The argument against is on
+          the record now so a later wake weighs it rather than rediscovering
+          it:** the predicate covers 2 literals in 1 file, both passing with
+          margin since the initial commit, which is thin ground for a gate under
+          94.11's test.
+
 ## Slice 240 — Polish round 2 on `component/calendar`: six arms clean, and a SEVENTH finds the sixth recorded defect — the one cite in the framework that claims an absence the shipped CSS does not have (2026-09-02)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0; GitHub intake
@@ -352,7 +452,13 @@ other. **Recorded rather than resolved**, because the pick is the same under
 both: calendar exceeds dashboard either way. The stamp reading is the one that
 answers "what changed since this score was earned", so it is the one used here.
 
-1. [ ] **240.1 — the select chevron is the framework's only PAINTED raw hex, and the mask technique to remove it already ships. BROWSER-BLOCKED (screenshots at 1440/390, both themes) — a LOCAL wake can take this.**
+1. [x] **240.1 — CLOSED 2026-09-02 by Slice 241, on this item's OWN Accept
+       criterion 1 branch 2: the mask technique is wrong for a chevron, and that
+       was measurable without a screenshot. The "BROWSER-BLOCKED" call below was
+       right about branch 1 and wrong about the item — see Slice 241 for the
+       four routes and their controls.** Original text kept verbatim:
+
+       **The select chevron is the framework's only PAINTED raw hex, and the mask technique to remove it already ships. BROWSER-BLOCKED (screenshots at 1440/390, both themes) — a LOCAL wake can take this.**
 
        **Found by arm 7 (new, below), red-proved three ways.** `form · colour`'s cite
        read *"zero raw hex; the error state is border + message + aria-invalid, never
