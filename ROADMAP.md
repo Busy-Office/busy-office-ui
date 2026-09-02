@@ -315,6 +315,211 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 242 — Polish round 2 on `component/dashboard`: the seventh recorded defect is the first where the SCORE was wrong, not the cite — `interaction: na` on a component that ships a behaviour, blind re-scored to 3 by a second agent (2026-09-02)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0 (the three open items are
+`112.3`, `112.4`, Slice 15's AT evidence — none a bug); GitHub intake
+`list_issues` OPEN → `totalCount: 0`, so Step 1 had nothing to triage and no
+`Roadmap · plan` row was recorded. Rule 2: `Standardize 3 / 4`. Rule 3:
+`Objective 2 / 3 [238, 241]`. Rule 4: three open items, all blocked —
+`112.3`/`112.4` owner-blocked, Slice 15 owner-hardware-blocked; **none
+browser-blocked**, so 241's mis-sort does not repeat here. **Rule 5 was
+genuinely evaluated, not reported clear from a dead instrument**:
+`dispatch_status.py` reads `ok`, newest pair `axe-violations 0.0 → 0.0 → 0.0`
+across three consecutive runs, and the one live absolute budget
+(`RF_BUDGET_KB = 40`) passed inside `npm run build -w @busy-office/ui` at
+`min 38.0 kB`. **Rule 6 dispatched Polish.**
+
+**The tie-break discriminated for the first time since 176.1.**
+`polish_requeue.py --apply` re-queued **5** surfaces (the hand-off predicted 4;
+`component/alerts` is the fifth). §3b picks lowest score, then fewest rounds:
+`alert`, `icon` and `scan` sit at `2/3`, leaving `dashboard` and
+`inline-editing` at `1/3` — and `inline-editing` drops for 217.1's reason,
+**verified rather than inherited**:
+
+```
+node -e "console.log('inline-editing' in require('./apps/docs/src/data/dsa-scores.json').components)"   # false
+```
+
+So `dashboard` was the only re-queued surface at `1/3` with an entry. Six
+consecutive rounds have had to invent a discriminator; this one did not.
+
+### Finding A — `interaction: na` is wrong, and wrong under either reading
+
+The cite read *"ships no behavior — auto-compaction is a named container query,
+not JS"*. The component ships `initCollapsibleCards`.
+
+```
+node -e "const b=require('./packages/core/dist/behaviors.json').behaviors;
+console.log(JSON.stringify(b.initCollapsibleCards))"
+# {"module":"behaviors/collapsible-card","summary":"Collapsible card sections (.bo-widget)",
+#  "hooks":["bo-widget__collapse","data-collapse-trigger","data-state"]}
+```
+
+All three hooks are on dashboard's own generated surface — `bo-widget__collapse`
+in `api.json`'s `classes`, `data-collapse-trigger`/`data-state` in its
+`dataAttrs` — and `dashboard.css` defines the part. The docs page demos it, with
+**two** copies of `import { initCollapsibleCards } from "@busy-office/ui/js"`.
+
+**Not decay — wrong when written.** `collapsible-card.ts` and dashboard.css's
+`.bo-widget__collapse` landed in the SAME commit, `055a706a`, **2026-08-14**;
+the entry is stamped `"scored": "2026-08-23"`, nine days later. 216.1's class,
+not 217.2's.
+
+**And `na` is unjustifiable under the cite's own false premise.** The rubric:
+*"a component that ships NO behavior earns 3 by saying so. `na` only when there
+is no interaction surface at all."* So even if "ships no behavior" had been
+true, the score should have been **3**, not `na`.
+
+**Blind re-scored by a second agent — the first this ledger has actually run.**
+§3b step 4's re-score has been recorded as *owed* by every round since 182.1,
+each correctly saying it could not run one. This wake could. The agent was given
+the surface, the dimension and the rubric text, and told not to open
+`dsa-scores.json`, `polish-state.md`, `ROADMAP.md` or `ROADMAP-archive.md`; it
+was never told the old score or that anything was suspected wrong. It returned
+**3**, ruling out `na` independently (*"there is an interaction surface"*) and
+citing the page's platform-versus-behavior line and `check:claims`'s live
+assertion of both channels.
+
+**`scored` stays `2026-08-23` deliberately.** One dimension was re-scored, not
+six; moving the entry-level stamp would claim an independent opinion on the
+other five that nobody gave. The 2026-09-02 blind re-score is stamped inside the
+`interaction` cite, which is the house style `content`'s cite already uses.
+
+### Finding B — the `spacing` cite misstates which literals are live
+
+It read *"…the 32px and 20rem/1rem a scan flags are numbers quoted INSIDE the
+comments that explain them, and the only real literal left is a font-size"*.
+Comment-stripped, `dashboard.css` carries **three** live length literals:
+
+| literal | where | in the cite? |
+|---|---|---|
+| `20rem` | `:16`, `minmax(min(var(--bo-widget-min, 20rem), 100%), 1fr)` | named as comment-only — **wrong** |
+| `41rem` | `:145`, `@container bo-widget-grid (max-width: 41rem)` | **not mentioned at all** |
+| `3rem` | `:185` `font-size` | correct, scored under typography |
+
+`32px` and `1rem` are comment-only, as claimed. **The set is `20rem 41rem 3rem`
+in 9 of 9 revisions of the file**, the newest 2026-08-21 — again before the
+score, so again wrong when written.
+
+**The score stays 3 and no blind re-score is owed for it**: both live literals
+carry their reason in place — `20rem` is the fallback of the documented
+consumer-override hook `--bo-widget-min` (`check:token-refs`: *"11
+consumer-override hook(s) carrying a fallback"*), and `41rem` is derived in the
+comment directly above it. The evidence record was wrong; the thing it described
+was right. 216.1's shape.
+
+**This supersedes the stepper round's "recorded and deliberately NOT called a
+defect"** (2026-09-01), which examined the `20rem` alone, judged it a blessed
+override-hook fallback and declined on the ground that calling it a defect would
+need "a scan the cite names and this repo does not ship". That reasoning holds
+for the *score* and is why the score does not move. It does not reach the cite's
+own locational claim — `20rem` is live at `:16` whatever a scan says — and it
+never saw `41rem`, which the cite omits entirely.
+
+**Red-proved in three directions, each injection confirmed before the result was
+believed:** a live literal added (`7px` appears), the at-rule-prelude literal
+replaced by a `var()` (`41rem` drops, proving the scan reads `@container`
+preludes while the comment's surviving `41rem` is correctly ignored), and a
+literal placed inside a comment (not reported). Control `20rem 41rem 3rem`, real
+tree untouched. **The first attempt at the first injection did not land** — the
+`sed` anchor matched nothing and the scan returned the control set, which is
+CLAUDE.md's "a green red-proof is a defect in the injection until proven
+otherwise" firing on the wake that had just read it.
+
+### The new arm, and the four instruments discarded getting to it
+
+**Arm 8 — a component scored `interaction: na` whose own docs page imports a
+behaviour. Base rate 1 of 18 before the fix, 0 of 17 after.** Arms 1-7 are all
+blind to this by construction: they verify that something a cite NAMES resolves,
+and this is a defect in the *score*.
+
+**Four ownership definitions were measured and discarded first**, recorded so
+the next wake does not re-derive them:
+
+1. **CSS grep for hook classes** — flagged 7 components on `.bo-btn` noise and
+   **missed the true positive**, its hook regex having dropped `__` parts.
+2. **"every hook in the component's `api.json` surface"** — under-reported:
+   `initCombobox` also drives the shared `bo-visually-hidden`, so a combobox
+   injected as `na` escaped.
+3. **"a hook on an exclusively-owned block"** — `api.json`'s `blocks` records
+   blocks a component *references*, not only those it declares (`bo-widget` is
+   listed by **both** `dashboard` and `form`), so dashboard itself escaped.
+4. **Data-attribute hooks** — right on dashboard, but combobox's own
+   `data-name`/`data-open-on-focus`/`data-value` are absent from its recorded
+   `dataAttrs`, so the injected combobox escaped again.
+
+Only the fifth — reading the **docs page's own import**, which is what the
+rubric actually scores — discriminates. Red-proved three ways, each injection
+confirmed: combobox forced to `na` **is** flagged; dashboard set to 3 flags
+nothing; both copies of the import removed from a page copy makes dashboard
+clean. **The second copy is why the page-side proof needed two passes** — the
+first `sed` left one of the two imports standing and the gate stayed red, which
+is "count the matches before replacing" landing for real.
+
+**This reproduces, independently and five days later, what the rubric already
+recorded about this dimension**: *"Applied by READING all 14 behaviour-backed
+pages in 94.9, not by grep — an earlier regex was wrong on 4 of 7."* Four
+regexes wrong here, out of five.
+
+**What the 0-of-17 does NOT cover, said before the number can be quoted as
+more.** Arm 8 clears a component when its docs page imports no behaviour; that
+is not a confirmation that `na` is the right score for it. `kbd · interaction`
+is the live illustration — its cite *also* reads *"ships no behavior"*, the same
+words just found false on dashboard, and for `kbd` it is true, a `<kbd>` having
+no interaction surface at all. But the rubric makes the `3`-versus-`na` boundary
+a **reading** (*"a component that ships NO behavior earns 3 by saying so"*), and
+an import test cannot see it. The other sixteen are unexamined on that question
+and are **not asserted here to be right**.
+
+### The seven standing arms all reproduce
+
+`1` `156 assertions / 80 pages / 1 outstanding` (the skipped `date`) · `2`
+`360 assertions / 40 scored`, zero `Not yet scored` in dist · `3` **1 of 40**,
+still `badge · spacing -> badge.css:42`, re-read AT the line · `4` **20/20** ·
+`5` **81/81** · `6` **9/9** · `7` **42/42**.
+
+**Arm 5 moves 81 → 82** after the fix, and that reconciles exactly rather than
+coincidentally: the new `spacing` cite quotes `41rem`, which the old one did
+not. Same shape as 241's `check:slice-refs` 692 → 693.
+
+1. [ ] **242.1 — decide whether arm 8 becomes a build gate. NOT a Polish
+       decision.** 101.3's stop rule confines Polish to maintaining the existing
+       ratchet, so this round refused it and files the question instead.
+
+       **What makes it different from the four refusals before it.** 216.2,
+       217.2, 220.2 and 227.2 each refused a gate over a *decaying cite*, and
+       each refused it on the same ground: the gate would need every cite to
+       carry its own command, which is a rubric change. **Arm 8 needs no such
+       thing** — it reads `dsa-scores.json`, `behaviors.json` and a page's
+       import list, all generated or source, and it has been red-proved to
+       discriminate. It is the first member of this class that is mechanically
+       writable.
+
+       **The argument against, stated as honestly:** post-fix the predicate is
+       true of **0 of 17**, i.e. uniformly true of the tree, which is 94.11's
+       own test for ceremony. The counter is that `check:wrong-choice` is also
+       uniformly true and is valued because it **ratchets** — it catches the
+       regression, not the current state. Which of those two this is, is the
+       decision.
+
+       **Accept:** either a gate ships with a red-proof by injection recorded
+       (an `interaction: na` written onto a behaviour-backed component makes it
+       go red, with the injection confirmed present before the run), **or** a
+       one-line refusal is recorded here naming which of the two arguments above
+       decided it. **Finding the predicate un-gateable is a satisfying
+       outcome.** Re-measure the base rate first — `node <arm 8b probe>`, kept in
+       `.roundtable/polish-state.md`; the figures above are snapshots.
+
+### Not verified, said plainly
+
+Cloud wake: no Podman and no `localhost:8081`, so the 1440/390 light-and-dark
+screenshot lane could not run. **This round changed no CSS and no page markup** —
+the diff is `dsa-scores.json`'s two cite strings and one score, `ROADMAP.md`,
+the Polish ledger and the bookkeeping files — so nothing in it rests on a
+rendered image. Every browser-derived number quoted came from a gate executing
+in this container.
+
 ## Slice 241 — 240.1 closed on its OWN second branch: the chevron's two hex literals are not removable, measured four ways — and the item was never browser-blocked, only its first branch was (2026-09-02)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0; GitHub intake

@@ -92,7 +92,7 @@ a no-op recorded in one line.
 | component/breadcrumb | content | **3** | 1/3 | 0 | dcbde565 | **round 1 (2026-08-30) FOUND A DEFECT — `fit` counted "2 of 19 pattern screens" against 39; re-entry from 217.2's filing, see below** |
 | component/byline | content | **3** | 1/3 | 0 | 29ededaf | round 1 landed — blind 2→3; scorer caught the boundary, redrawn |
 | component/calendar | content | **3** | 2/3 | 0 | 6b36b863 | round 1 landed — blind 2→3, "not for a plain date field"; **round 2 (2026-09-02) six arms clean on calendar itself, and a NEW arm 7 FOUND A DEFECT elsewhere — `form · colour` claimed "zero raw hex" against two painted ones; cite corrected, CSS left open as 240.1, see below** |
-| component/dashboard | content | **3** | 1/3 | 0 | 2c8fde4c | round 1 landed — blind 2→3, "not a wrapper round every section" · **RE-QUEUED — source changed**|
+| component/dashboard | content | **3** | 2/3 | 0 | 3780542a | round 1 landed — blind 2→3, "not a wrapper round every section"; **round 2 (2026-09-02) FOUND TWO DEFECTS, and the first is the only one in this ledger where the SCORE was wrong rather than the cite — `interaction: na` on a component that ships `initCollapsibleCards`; blind re-scored to 3 by a second agent, the first blind re-score this ledger has actually run. See below** |
 | component/data-table | content | **3** | 2/3 | 0 | 36c4bbe3 | round 1 landed — blind 2→3, "not for laying out a page"; **round 2 (2026-08-30) FOUND A DEFECT — the `spacing` cite named a literal 94.3 had removed two days before the score was taken, see below** |
 | component/date | content | 2 | — | — | 399709aa | **SKIPPED** — deprecated, see note below |
 | component/icon | content | **3** | 2/3 | 0 | f0d9f50b | round 1 landed — blind 2→3; scorer caught the demo contradiction, clause narrowed; **round 2 (2026-08-30) FOUND A DEFECT — `fit` cited "12 ERP glyphs" against 26 shipped, and the same 12 was hard-coded as the DIVISOR of the page's published size projection, see below** · **RE-QUEUED — source changed** |
@@ -1071,3 +1071,161 @@ the bookkeeping files — so nothing in it rests on a rendered image. Every
 browser-derived number quoted came from a gate executing in this container.
 **240.1, which does need that lane, was deliberately NOT attempted and is left
 open for a local wake.**
+
+---
+
+## Round 2 — dashboard (2026-09-02): two defects, and the first blind re-score this ledger has run
+
+Dispatched by rule 6, reached because rules 1-5 were all clear — no P0, no
+GitHub intake, `Standardize 3 / 4`, `Objective 2 / 3 [238, 241]`, rule 4's three
+open items all blocked (two owner, one owner-hardware, **none** browser-blocked),
+and rule 5 `ok` with `axe-violations 0.0 → 0.0 → 0.0` plus `RF_BUDGET_KB = 40`
+passing at `min 38.0 kB`. Full trace and both findings in ROADMAP 242.
+
+**The pick needed no invented discriminator — the first time since 176.1.**
+`polish_requeue.py --apply` re-queued **5**. §3b's own tie-break settled it:
+`alert`, `icon` and `scan` are at `2/3`; of the two at `1/3`, `inline-editing`
+drops for 217.1's reason, verified not inherited
+(`'inline-editing' in dsa-scores.json.components` → **false**). `dashboard` was
+the only re-queued surface at `1/3` with an entry.
+
+### Defect 1 — `interaction: na`, and the score was the wrong part
+
+Every defect this ledger has recorded was a right score with a wrong cite. This
+one is not. `initCollapsibleCards` is a shipped behaviour whose three hooks —
+`bo-widget__collapse`, `data-collapse-trigger`, `data-state` — are all on
+dashboard's own `api.json` surface, and the docs page demos it with two copies
+of the import. The rubric admits `na` *"only when there is no interaction
+surface at all"*, and says a component shipping **no** behaviour earns **3 by
+saying so** — so `na` was unjustifiable even under the cite's own false premise.
+
+Wrong when written, not decayed: `collapsible-card.ts` and the CSS part landed
+in the same commit `055a706a` (**2026-08-14**), nine days before the
+`2026-08-23` score.
+
+**§3b step 4 ran for real.** A second agent was given the surface, the dimension
+and the rubric text, told not to open `dsa-scores.json`, `polish-state.md`,
+`ROADMAP.md` or `ROADMAP-archive.md`, and told nothing about the old score or
+that anything was suspected. It returned **3** and ruled out `na` on its own
+reading. Every round since 182.1 has correctly recorded this step as *owed*; it
+is now discharged for this one dimension.
+
+**`scored` stays `2026-08-23`.** One dimension was blind re-scored, not six —
+moving the entry stamp would claim an opinion on the other five that nobody
+gave. The 2026-09-02 date is stamped inside the `interaction` cite instead,
+which is the form `content`'s cite already uses. `rounds` 1→2; `dry` stays 0, a
+score having moved.
+
+### Defect 2 — the `spacing` cite misstates which literals are live
+
+Three live length literals comment-stripped, not one: `20rem` at `:16` (the cite
+lists it among the comment-only numbers — it is live), `41rem` at `:145` (the
+cite never mentions it), and the `3rem` font-size it correctly defers to
+typography. Stable at `20rem 41rem 3rem` across **9 of 9 revisions**, newest
+2026-08-21 — before the score. Score stays 3: both live literals carry their
+reason in place (`--bo-widget-min`'s documented override fallback; `41rem`
+derived in the comment above it), so 216.1's shape.
+
+This **supersedes** the stepper round's *"recorded and deliberately NOT called a
+defect"*. That reasoning holds for the score and is why the score does not move,
+but it examined `20rem` alone and never saw `41rem`, and it does not reach the
+cite's locational claim.
+
+### Arm 8 — new, and four discarded definitions are the record worth keeping
+
+**A component scored `interaction: na` whose own docs page imports a behaviour:
+1 of 18 before the fix, 0 of 17 after.** Arms 1-7 verify that something a cite
+NAMES resolves, so all seven are blind to a wrong score by construction.
+
+Four ownership definitions were measured and discarded before one discriminated:
+a CSS grep (flagged 7 on `.bo-btn` noise, **missed** the true positive — its hook
+regex dropped `__` parts); "every hook in the api.json surface" (`initCombobox`
+also drives the shared `bo-visually-hidden`, so an injected combobox escaped);
+"a hook on an exclusively-owned block" (`api.json`'s `blocks` records blocks a
+component *references* — `bo-widget` is listed by both `dashboard` and `form` —
+so dashboard escaped); and data-attribute hooks (right on dashboard, but
+combobox's own `data-name`/`data-open-on-focus`/`data-value` are not in its
+recorded `dataAttrs`). Only reading the **page's own import** — what the rubric
+actually scores — works. This reproduces, independently, the rubric's own note
+that 94.9 applied this dimension *"by READING all 14 behaviour-backed pages, not
+by grep — an earlier regex was wrong on 4 of 7"*.
+
+**Red-proved three ways, each injection confirmed:** combobox forced to `na` is
+flagged; dashboard set to 3 flags nothing; the import removed from a page copy
+makes dashboard clean. The page-side proof needed **two passes** — the first
+`sed` left one of the **two** copies of the import standing — which is "count
+the matches before replacing" landing for real.
+
+**What the 17 does NOT cover.** Arm 8 clears a component when its docs page
+imports no behaviour. That is not the same as confirming `na` is the right score
+for it. `kbd · interaction` is the live illustration: its cite also says *"ships
+no behavior"*, the same words this round just found false on dashboard, and for
+`kbd` it is true — a `<kbd>` paints native text and has no interaction surface,
+so `na` holds. But the rubric's *"a component that ships NO behavior earns 3 by
+saying so"* means the boundary between `3` and `na` is a **reading**, not an
+import, and arm 8 cannot see it. Sixteen of the seventeen are unexamined on that
+question; **not re-scored here, and not asserted to be right.**
+
+```js
+// arm 8 — save as a scratch .mjs and run with node.
+// ARM_SCORES / ARM_PAGES point at mutated copies, which is how the red-proof re-runs.
+import fs from 'node:fs';
+const R = process.env.ARM_ROOT || process.cwd();
+const SCORES = process.env.ARM_SCORES || `${R}/apps/docs/src/data/dsa-scores.json`;
+const PAGES = process.env.ARM_PAGES || `${R}/apps/docs/src/pages/components`;
+const S = JSON.parse(fs.readFileSync(SCORES, 'utf8')).components;
+const A = JSON.parse(fs.readFileSync(`${R}/packages/core/dist/api.json`, 'utf8'));
+const slug = (k) => (A.pageSlug || {})[k] || k;   // page slugs are NOT class names
+const IMPORT = /from\s+['"]@busy-office\/ui\/js['"]/;
+let na = 0; const flagged = []; const clean = []; const missing = [];
+for (const [k, e] of Object.entries(S)) {
+  if (e.dimensions?.interaction?.score !== 'na') continue;
+  na++;
+  const f = `${PAGES}/${slug(k)}.astro`;
+  if (!fs.existsSync(f)) { missing.push(`${k} (${slug(k)}.astro)`); continue; }
+  const src = fs.readFileSync(f, 'utf8');
+  if (IMPORT.test(src)) {
+    const fns = [...src.matchAll(/import\s*\{([^}]+)\}\s*from\s*['"]@busy-office\/ui\/js['"]/g)]
+      .flatMap((m) => m[1].split(',').map((s) => s.trim())).filter(Boolean);
+    flagged.push(`${k} :: page imports ${[...new Set(fns)].join(', ')}`);
+  } else clean.push(k);
+}
+console.log(`arm 8 — ${na} scored interaction:na; ${flagged.length} whose docs page imports a behaviour`);
+for (const f of flagged) console.log('   FLAG', f);
+console.log(`   no page of their own (${missing.length}): ${missing.join(' ') || '-'}`);
+console.log(`   clean (${clean.length}): ${clean.join(' ')}`);
+process.exitCode = flagged.length ? 1 : 0;
+```
+
+### The seven standing arms all reproduce
+
+| arm | reading |
+|---|---|
+| 1 wrong-choice clause | `156 assertions / 80 pages / 1 outstanding` (the skipped `date`) |
+| 2 score rendered by its page | `360 assertions / 40 scored`; `Not yet scored` absent from dist |
+| 3 line-number cites | **1 of 40**, `badge · spacing -> badge.css:42`, re-read AT the line |
+| 4 content quotes in built pages | **20/20** |
+| 5 css dimension literals | **81/81** → **82/82** after the fix |
+| 6 bare counts in any cite | **9/9** |
+| 7 absence claims | **42/42** |
+
+Arm 5's move is the reconciliation for this round's added citation, not a
+coincidence: the new `spacing` cite quotes `41rem` and the old one did not.
+
+### No gate — filed as ROADMAP 242.1, and deliberately NOT decided here
+
+101.3 confines Polish to the existing ratchet. **Arm 8 is the first member of
+this class that is mechanically writable** — 216.2/217.2/220.2/227.2 each
+refused a gate because it would need every cite to carry its own command, and
+arm 8 needs none. Against it: post-fix the predicate is true of **0 of 17**,
+94.11's own ceremony test. `check:wrong-choice` is equally uniform and is valued
+because it ratchets, so the two arguments are genuinely opposed and the decision
+is not Polish's to take.
+
+### Not verified, said plainly
+
+Cloud wake: no Podman, no `localhost:8081`, so the 1440/390 light-and-dark
+screenshot lane could not run. **This round changed no CSS and no page markup** —
+the diff is `dsa-scores.json`'s two cite strings and one score, `ROADMAP.md`,
+this ledger and the bookkeeping files — so nothing rests on a rendered image.
+Every browser-derived number quoted came from a gate executing in this container.

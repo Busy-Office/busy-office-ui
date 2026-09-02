@@ -852,11 +852,11 @@
         },
         "spacing": {
           "score": 3,
-          "cite": "zero uncommented dimension literals — the 32px and 20rem/1rem a scan flags are numbers quoted INSIDE the comments that explain them, and the only real literal left is a font-size, scored under typography"
+          "cite": "every live dimension literal carries its reason in place: the 20rem is the fallback of the documented consumer-override hook --bo-widget-min, and the 41rem container threshold is derived in the comment directly above it (2 x 20rem min + 1rem gap); the only other literal is a font-size, scored under typography. 32px and 1rem occur in explanatory comments only. Corrected 2026-09-02 (Polish round 2): the previous wording counted 20rem among the comment-only numbers, where it is live at dashboard.css:16, and never mentioned 41rem at all."
         },
         "interaction": {
-          "score": "na",
-          "cite": "ships no behavior — auto-compaction is a named container query, not JS"
+          "score": 3,
+          "cite": "the page heads its one JS-backed section \"Collapsible (opt-in)\" and draws the platform-versus-behavior line in both directions: data-collapse-trigger + initCollapsibleCards() flip aria-expanded and data-state, while CSS owns the 0fr/1fr height transition and a panel carrying no data-state renders open — so without the JS the widget degrades to a plain always-open card. The same sentence ships in the generated ApiTable notes, and check:claims drives both channels live. Blind re-scored 2026-09-02 (Polish round 2), correcting an `na`: the rubric admits `na` only where there is no interaction surface at all, and this component ships initCollapsibleCards (behaviors.json), whose hooks bo-widget__collapse / data-collapse-trigger / data-state are all on dashboard's own api.json surface."
         },
         "content": {
           "score": 3,
