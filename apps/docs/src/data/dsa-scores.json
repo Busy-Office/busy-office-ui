@@ -264,7 +264,7 @@
         },
         "colour": {
           "score": 3,
-          "cite": "zero raw hex; the error state is border + message + aria-invalid, never colour alone"
+          "cite": "the only raw hex are the two select-chevron greys (%236b7280 light, %23d1d5db dark) inside the data: URI an SVG stroke needs, one definition per theme; unlike every other raw hex in the framework these are PAINTED via background-image rather than print-only or under a mask, so check:contrast cannot reach them (roadmap 240.1); the error state is border + message + aria-invalid, never colour alone"
         },
         "spacing": {
           "score": 3,

@@ -91,7 +91,7 @@ a no-op recorded in one line.
 | component/badge | content | **3** | 2/3 | 0 | 1f69e677 | round 1 landed — blind 2→3, "not for anything actionable"; **round 2 (2026-08-28) NO-OP — reconciliation clean on all four arms, see below** |
 | component/breadcrumb | content | **3** | 1/3 | 0 | dcbde565 | **round 1 (2026-08-30) FOUND A DEFECT — `fit` counted "2 of 19 pattern screens" against 39; re-entry from 217.2's filing, see below** |
 | component/byline | content | **3** | 1/3 | 0 | 29ededaf | round 1 landed — blind 2→3; scorer caught the boundary, redrawn |
-| component/calendar | content | **3** | 1/3 | 0 | e1dec38b | round 1 landed — blind 2→3, "not for a plain date field" · **RE-QUEUED — source changed**|
+| component/calendar | content | **3** | 2/3 | 0 | 6b36b863 | round 1 landed — blind 2→3, "not for a plain date field"; **round 2 (2026-09-02) six arms clean on calendar itself, and a NEW arm 7 FOUND A DEFECT elsewhere — `form · colour` claimed "zero raw hex" against two painted ones; cite corrected, CSS left open as 240.1, see below** |
 | component/dashboard | content | **3** | 1/3 | 0 | 2c8fde4c | round 1 landed — blind 2→3, "not a wrapper round every section" · **RE-QUEUED — source changed**|
 | component/data-table | content | **3** | 2/3 | 0 | 36c4bbe3 | round 1 landed — blind 2→3, "not for laying out a page"; **round 2 (2026-08-30) FOUND A DEFECT — the `spacing` cite named a literal 94.3 had removed two days before the score was taken, see below** |
 | component/date | content | 2 | — | — | 399709aa | **SKIPPED** — deprecated, see note below |
@@ -938,3 +938,136 @@ moves 1->2 on badge's and alerts' precedent.
 the 1440/390 light-and-dark screenshot lane could not run. Nothing in this
 round rests on a rendered image — no CSS and no page markup changed — and every
 browser-derived number quoted came from a gate executing in this container.
+
+
+---
+
+## Round 2 — calendar (2026-09-02): six arms clean, and a seventh finds the sixth defect
+
+Dispatched by rule 6. Picked over `dashboard` on source movement since the
+ledger's own stamp (+18/-2 across 2 commits vs +7/-1 across 1); `inline-editing`
+dropped for 217.1's reason, **verified** — `dsa-scores.json` has no entry for it.
+The two tie-break instruments this ledger has used disagree on dashboard and
+agree on the pick; ROADMAP 240 carries both readings and why neither is wrong.
+
+### calendar's own cites: all six hold
+
+Checked at the source, not inferred. `typography` *"no raw font-size"* — both
+`font-size` declarations in `calendar.css` are `var(--bo-…)`. `colour` *"zero
+raw colour"* — no hex/rgb/hsl in the dir. `spacing` *"all three numbers are em"*
+— the holiday dot is `inset-block-end: 0.15em`, `inline-size: 0.3em`,
+`block-size: 0.3em`; three numbers, three `em`. `content`'s quoted clause
+*"Not for a plain date field"* is present in the built page (arm 4).
+
+The `+15/-0` that re-queued it (`16ed66dd`, the RANGE paragraph) added a link to
+`/components/form#dates`. **The fragment resolves** — `id="dates"` is present
+exactly once on the built form page — which the link checker does not verify.
+
+### The six standing arms, all reproducing
+
+| arm | reading | note |
+|---|---|---|
+| 1 wrong-choice clause | `156 assertions / 80 pages / 1 outstanding` | the outstanding is the skipped `date` |
+| 2 score rendered by its page | `360 assertions / 40 scored` | `Not yet scored` absent from dist |
+| 3 line-number cites | **1 of 40**, `badge · spacing -> badge.css:42` | re-read AT the line: *"pushed the whole PAGE sideways: measured 373px wide against a 390px"* — bare numbers in a comment, as cited |
+| 4 content quotes in built pages | **20/20** | |
+| 5 css dimension literals (unit-bearing) | **81/81** | |
+| 6 bare counts in any cite | **8/8**, now **9/9** | a row added this round, below |
+
+### Arm 7 — absence claims
+
+The full measurement, the two definitional choices, the three red-proofs and the
+refusal of a gate are in ROADMAP 240.2. In short: **43 checkable absence claims
+across 27 components, 42 exact, and the 43rd is 240.1.** Arms 4-6 all verify
+that something a cite NAMES is present; an absence claim names nothing, so all
+three are blind to it by construction.
+
+**Arm 7 read `42/43` before the fix and `42/42` after** — the corrected claim
+left the class rather than joining the passing set, because arm 7 derives its
+set from the cites. The delta and its reason are the finding; the ratio is not.
+
+```js
+// save as a scratch .mjs and run with node; ARM_CSS / ARM_SCORES point at
+// mutated copies, which is how the red-proof is re-run.
+// arm 7 — ABSENCE claims in cites, verified against the shipped CSS.
+// ARM_SCORES / ARM_CSS point at mutated copies, which is how the red-proof re-runs.
+import fs from 'node:fs';
+import path from 'node:path';
+const R = process.env.ARM_ROOT || process.cwd();
+const SCORES = process.env.ARM_SCORES || `${R}/apps/docs/src/data/dsa-scores.json`;
+const CSS = process.env.ARM_CSS || `${R}/packages/core/src/css/components`;
+const S = JSON.parse(fs.readFileSync(SCORES, 'utf8')).components;
+const A = JSON.parse(fs.readFileSync(`${R}/packages/core/dist/api.json`, 'utf8'));
+const slug = (k) => (A.pageSlug || {})[k] || k;
+// select dirs by isDirectory, never by <dir>/<dir>.css — `form/` has no form.css (arm 5)
+const dirs = fs.readdirSync(CSS).filter((d) => fs.statSync(path.join(CSS, d)).isDirectory());
+// Comments are STRIPPED before every test: badge.css:42 is bare numbers inside a
+// comment, and the cite there says outright they are "not declarations".
+const strip = (s) => s.replace(/\/\*[\s\S]*?\*\//g, ' ');
+const readDir = (d) => fs.readdirSync(path.join(CSS, d)).filter((f) => f.endsWith('.css'))
+  .map((f) => strip(fs.readFileSync(path.join(CSS, d, f), 'utf8'))).join('\n');
+
+// Each claim is PARSED FROM THE CITE, never hard-coded: a probe carrying the
+// expectation only ever sees the tree move (227.1's defect was on the cite side).
+const KINDS = [
+  { kind: 'font-size', re: /\b(?:no|zero) raw font-size\b/i,
+    // a font-size declaration whose value is not purely var()/keyword
+    find: (css) => [...css.matchAll(/font-size\s*:\s*([^;}]+)/gi)]
+      .map((m) => m[1].trim())
+      .filter((v) => /\d/.test(v.replace(/var\([^)]*\)/g, ''))) },
+  { kind: 'hex', re: /\bzero raw hex\b/i,
+    // %23 is a '#' inside a data: URI — an encoded hex is still a raw hex
+    find: (css) => [...css.matchAll(/#[0-9a-fA-F]{3,8}\b|%23[0-9a-fA-F]{3,6}\b/g)].map((m) => m[0]) },
+  { kind: 'dimension', re: /\bzero raw dimension literals\b/i,
+    // LENGTH units only: s/ms are time and % is a ratio, neither is a "dimension
+    // literal" in the sense the spacing cites use (they are about space tokens).
+    find: (css) => [...css.matchAll(/\b\d+(?:\.\d+)?(?:px|rem|em|ch|vw|vh)\b/g)].map((m) => m[0]) },
+];
+
+let ok = 0; const bad = []; let claims = 0;
+for (const [k, e] of Object.entries(S)) {
+  const d = [k, slug(k)].find((x) => dirs.includes(x));
+  for (const [dim, v] of Object.entries(e.dimensions || {})) {
+    const cite = String(v.cite || '');
+    for (const K of KINDS) {
+      if (!K.re.test(cite)) continue;
+      claims++;
+      if (!d) { bad.push(`${k} · ${dim} :: NODIR`); continue; }
+      const hits = K.find(readDir(d));
+      if (hits.length === 0) ok++;
+      else bad.push(`${k} · ${dim} :: cite claims no ${K.kind}, css has ${hits.length}: ${[...new Set(hits)].slice(0, 6).join(' ')}`);
+    }
+  }
+}
+console.log(`arm 7 ${ok}/${claims}`);
+for (const b of bad) console.log('   ', b);
+process.exitCode = bad.length ? 1 : 0;
+```
+
+### The row this round added to arm 6
+
+240.1's corrected cite was kept checkable by moving it here, where a fixed
+`CLAIMS` table reports `CITE NO LONGER MATCHES` if the wording shifts — the
+weakness arm 7 has by construction. Red-proved by injecting a third hex into an
+isolated copy of the tree (`8/9`, *"cite says two, tree reads 3"*), injection
+confirmed present in the copy and absent from the real tree; clean control
+`9/9`.
+
+```js
+  { k: 'form', d: 'colour', re: /the (two) select-chevron greys/,
+    live: () => { const d = `${R}/packages/core/src/css/components/form`;
+      const n = fs.readdirSync(d).filter((f) => f.endsWith('.css'))
+        .map((f) => fs.readFileSync(path.join(d, f), 'utf8').replace(/\/\*[\s\S]*?\*\//g, ' '))
+        .join('\n').match(/%23[0-9a-fA-F]{3,6}\b|#[0-9a-fA-F]{3,8}\b/g)?.length || 0;
+      return n === 2 ? 'two' : String(n); } },
+```
+
+### Not verified, said plainly
+
+Cloud wake: no Podman, no `localhost:8081`, so the 1440/390 light-and-dark
+screenshot lane could not run. **This round changed no CSS and no page markup** —
+the diff is `dsa-scores.json`'s one cite string, `ROADMAP.md`, this ledger and
+the bookkeeping files — so nothing in it rests on a rendered image. Every
+browser-derived number quoted came from a gate executing in this container.
+**240.1, which does need that lane, was deliberately NOT attempted and is left
+open for a local wake.**

@@ -315,6 +315,156 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 240 — Polish round 2 on `component/calendar`: six arms clean, and a SEVENTH finds the sixth recorded defect — the one cite in the framework that claims an absence the shipped CSS does not have (2026-09-02)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0; GitHub intake
+`list_issues` OPEN → `totalCount: 0`, so Step 1 had nothing to triage and no
+`Roadmap · plan` row was recorded. Rule 2: `Standardize 1 / 4`. Rule 3:
+`Objective 1 / 3 [238]`. Rule 4: three open items, **all blocked** — `112.3`
+and `112.4` owner-blocked (re-checked: `.roundtable/pilot-112/briefs.md` is
+still the 16-line scaffold, single commit `e58ea3ca` 2026-08-23, read from
+`git log` not mtime), Slice 15's AT evidence owner-hardware-blocked; **none
+browser-blocked or agent-blocked**, so a local wake gains nothing on them.
+Rule 5: `ok` — not stale; newest pair `axe-violations 0.0 → 0.0 → 0.0` over
+three runs, every other repeated name 13+ days old, and the one absolute budget
+(`RF_BUDGET_KB = 40`) passed inside `build`. **Rule 6 dispatched**;
+`polish_requeue.py --apply` re-queued **6** surfaces.
+
+**The pick was measured, and it is robust to the instrument.** §3b's tie-break
+left three re-queued surfaces at `1/3`; `inline-editing` drops out for 217.1's
+stated reason — verified rather than assumed, `dsa-scores.json` has **no entry**
+for it, so no arm can disagree with it. That leaves calendar and dashboard, both
+`content: 3`, both `scored 2026-08-23`. The two wakes have used **two different
+instruments** for this tie-break, and they disagree on dashboard:
+
+```
+                     BOUNDARY reading (239's)      STAMP reading (this wake's)
+calendar             2 commits  +18/-2             2 commits  +18/-2
+dashboard            0 commits                     1 commit   +7/-1  (e034a6eb)
+```
+
+Neither is wrong. 239 measured commits after the scored DATE closed
+(`git rev-list -1 --before=2026-08-23T23:59:59+08:00 HEAD` → `a9ba5c7e`);
+this wake measured movement since the ledger's own `src` digest was **stamped**,
+which is what actually re-queued the surface. `e034a6eb` lands 2026-08-23 21:04
+— after the stamp, before the boundary — so it is counted by one and not the
+other. **Recorded rather than resolved**, because the pick is the same under
+both: calendar exceeds dashboard either way. The stamp reading is the one that
+answers "what changed since this score was earned", so it is the one used here.
+
+### 240.1 — [ ] the select chevron is the framework's only PAINTED raw hex, and the mask technique to remove it already ships
+
+**Found by arm 7 (new, below), red-proved three ways.** `form · colour`'s cite
+read *"zero raw hex; the error state is border + message + aria-invalid, never
+colour alone"*. `packages/core/src/css/components/form/select.css` carries
+**two** — `%236b7280` (light, line 4) and `%23d1d5db` (dark, line 25) — as the
+`stroke` of the chevron's SVG `data:` URI.
+
+**The cite was wrong when written, not decayed.** Both hexes were present on
+2026-08-23, the day the dimension was scored:
+`git show "$(git rev-list -1 --before=2026-08-24 HEAD):packages/core/src/css/components/form/select.css" | grep -c "%23"` → **2**.
+They date to `4ef554fa`, the initial commit. This is a different class from the
+four decay defects the ledger records, and from 227.1's cite-side defect: the
+claim never held.
+
+**Reconciled against six independent siblings, which is what makes it a defect
+rather than a wording preference.** Every other component with a raw hex
+discloses it in its own cite and says why it is not a defect — badge,
+`data-table`, `stepper` and `approval-workflow` (*"raw hex appears ONLY inside
+`@media print`, where theme tokens would be wrong on paper"*), `tabs` (*"the
+nine `#000` are MASK alpha inside `linear-gradient()`"*), `icon` (*"the `%23000`
+inside the data URIs is SVG stroke … under a MASK and is never painted"*). All
+seven score `colour: 3`. **`form` was the only one of the seven claiming zero.**
+
+**And form's two are the only ones that are actually PAINTED.** Verified in the
+CSS, not inferred: `select.css:12` is `background-image: var(--bo-select-chevron)`,
+while `icon.css` is `mask-image: var(--bo-icon-src)` + `background-color:
+currentcolor`. The print-only hexes never reach a screen; icon's are masked away.
+The chevron's stroke colour is the pixel the user sees, in both themes, and
+`check:contrast` cannot reach inside a `data:` URI to gate it.
+
+**The cite was corrected this wake** (evidence only — no CSS, no rendering
+change), and the corrected claim was kept CHECKABLE by moving it into arm 6's
+count table rather than leaving it as prose: `form · colour :: the (two)
+select-chevron greys`, red-proved by injecting a third hex (`8/9`, *"cite says
+two, tree reads 3"*) with the clean control at `9/9`.
+
+**What is left OPEN is the CSS**, because the framework already ships the
+technique that removes the hex entirely: render the chevron as `mask-image` +
+`background-color: currentcolor`, exactly as `icon.css` does. That would drop
+both literals AND the `[data-theme="dark"]` duplicate rule, and let the chevron
+take a colour token — one definition instead of two.
+
+**Not attempted this wake: it is BROWSER-BLOCKED, in the screenshot sense.**
+It changes how every `<select>` in the framework paints, across both themes, the
+`--seamless` variant and the RTL position flip, and the evidence a human needs
+is a rendered image at 1440 and 390 in light and dark. A cloud wake has no
+Podman. Left open for a local wake per the standing instruction; **this is the
+first browser-blocked item in the open set**, so rule 4 has real work to hand a
+local dispatcher rather than three blocked items.
+
+*Accept* — each criterion names a property to verify, not a value it will have:
+
+1. Either `packages/core/src/css/components/form/` contains **no** raw hex,
+   or a one-line reason is recorded in the cite for why the mask technique is
+   wrong for a chevron specifically. **Finding the mask approach unworkable is a
+   satisfying outcome**, not an off-plan one — record it and close.
+2. `form · colour`'s cite **agrees with a raw-hex count of the shipped CSS**,
+   whatever that count turns out to be, and arm 6's `form · colour` row agrees
+   with the tree (its regex updated if the claim's shape changes).
+3. If converted: screenshots at 1440 and 390, light and dark, show the chevron
+   rendering in the base select, the `--seamless` variant and under `[dir="rtl"]`
+   — the three sites `select.css` distinguishes.
+4. `npm run lint:css`, `check:contrast` coverage and `test:axe` stay green.
+
+### 240.2 — arm 7: absence claims, the class arms 4-6 structurally cannot see
+
+Arms 4, 5 and 6 all check that something a cite NAMES is present in the tree —
+a quoted clause, a unit-bearing literal, a bare count. **An absence claim names
+nothing to look up**, so all three are blind to it by construction, and it
+decays the same way a count does: any commit adding a `font-size` or a hex
+falsifies a cite nobody re-reads.
+
+Measured, following arm 6's method rather than asserting a size: **111 of 240**
+cites contain an absence word, but most are prose (*"no select needed"*,
+*"never colour alone"*). Hand-classified to claims that are mechanically
+checkable against the component's own CSS: **43, across 27 components** —
+23 `no/zero raw font-size`, 14 `zero raw hex`, 6 `zero raw dimension literals`.
+**42 of 43 were exact**; the 43rd is 240.1.
+
+Two definitional choices, written down because they are judgements and not
+derivable:
+
+- **Comments are stripped before every test.** `badge.css:42`'s own cite says
+  its bare numbers are *"measurements quoted INSIDE a comment, not
+  declarations"*, so counting them would contradict a cite the ledger has
+  already verified at the line.
+- **`dimension` means LENGTH units only** (`px rem em ch vw vh`), not `s`/`ms`
+  (time) or `%` (a ratio). The six spacing cites are about space tokens.
+
+**Red-proved three times, each injection confirmed present in the copy and
+absent from the real tree before the run**, and each went red on exactly the
+injected row: a tree-side mutation (a raw `font-size: 13px` into `calendar.css`
+→ `41/43`), a cite-side mutation (`zero raw hex` prepended to `badge · colour`,
+which genuinely has `#000` → `42/44`, the claim count RISING by one), and a
+cite-SHAPE mutation (form's *"zero raw hex"* reworded → **43 claims → 42**,
+proving the claim is parsed from the cite rather than hard-coded).
+
+**A limitation, stated rather than discovered later.** Arm 7 derives its set
+from the cites, so *fixing a false claim by rewording it removes it from the
+checked set* — which is exactly what happened here: arm 7 read `42/43` before
+the fix and `42/42` after, and the improvement is the DELTA and its reason, not
+the ratio. Arm 6 has a fixed `CLAIMS` table and reports `CITE NO LONGER MATCHES`
+instead; arm 7 cannot tell "reworded because fixed" from "reworded to dodge".
+That is why 240.1's corrected claim was moved into arm 6 rather than left for
+arm 7 to re-derive.
+
+**No gate proposed — the sixth refusal, and the base rate is the reason again.**
+42 of 43 held before the fix and 42 of 42 after: 94.11's own test says a
+predicate already true of nearly everything distinguishes nothing. The check
+also needs a per-phrasing rule (three today) that only a human reading the cite
+can extend, which is 217.2/220.2/227.2/239's standing reason.
+
 ## Slice 239 — Polish round 2 on `component/tree-table`: NO-OP on six arms, and the sixth is the class arm 5 structurally cannot see — where 3 of this ledger's 5 recorded defects lived (2026-09-01)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0, GitHub intake
