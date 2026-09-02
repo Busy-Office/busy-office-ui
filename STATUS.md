@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-01 19:43 UTC
+Generated at: 2026-09-02 01:46 UTC
 
 ## Open items by slice
 
@@ -15,10 +15,11 @@ Generated at: 2026-09-01 19:43 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1282 iterations logged)
+dispatch status — counter-triggered rules (1284 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-09-01 12:05   ok
   Objective     1 / 3 slice           since 2026-09-01 15:42   ok  [238]
-  Optimize      0 wake-date(s) newer   since 2026-09-01 17:45   ok   [newest pair: axe-violations; 115 sample(s), 13 of 34 name(s) sampled twice]
+  Optimize      1 wake-date(s) newer   since 2026-09-01 19:43   STALE   [newest pair: axe-violations; 117 sample(s), 13 of 35 name(s) sampled twice]
+  -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-01, not this one — record a metric or say the rule could not be evaluated.
 ```
 
 ## Owner-blocked
@@ -31,8 +32,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-01 15:42 · Objective · grill · Slice 238 — Objective grill of Slices 232, 234, 236, 237: scope narrowed to the six rows logged after the last Objective row (232 and 234 were already grilled by 236, so the armed set was resolved to rows, not slice numbers). 24 of 25 published claims reproduce, enumerated in the report so the total is auditable. 237.1's sweep re-verified by a third independent parser off git show 7e861867^:ROADMAP.md (381/368/161/500 = 1,410, 4/4 present-once-and-absent, headings 212->216, slice-refs 685/219 reconciling at all three points, and the model predicted this commit's own 686/220). Filed 238.1: 237.2's 'four commits landed in between' is five — e29c7c18 (214.1, sixth sweep, +1,575) missing, at two durable sites including the archive header that item rewrote; 237.1 counts it correctly one item earlier in the same commit, so the failure is transcription, not a wrong range · logged · 411a6663
-- 2026-09-01 15:42 · Meta · refusal · a gate over 'a commit count in prose agrees with git log over that range' — 79 candidate phrases, one checked and wrong, 78 unchecked; keyed on the shape it is green on everything, and recovering each range from prose is 94.11's semantic wall · refused · 411a6663
 - 2026-09-01 15:42 · Meta · refusal · editing the loop-log.md and STATUS.md rows carrying the same wrong phrase — record_iteration.py's standing rule is that historical rows are never edited · refused · 411a6663
 - 2026-09-01 16:39 · Continue · build · Slice 238.1 — 237.2's deferral cost is FIVE commits, not four: corrected at both durable sites (ROADMAP.md 237.2's cost paragraph and the ROADMAP-archive.md header that item itself rewrote), each now carrying the git log … | wc -l that produces it. Every premise re-run on an unshallowed clone (1,786 commits) before editing: range prints 5, e29c7c18 in it in both ancestry directions at 1575/0, third of 4369/2381/1575/1424/27. Accept (c) verified not assumed — ten-commit premise still 10 at 7e861867^, dc861a25 deletes exactly the three stubs (12 lines), 2026-08-28→09-01 is 4 days. Also fixed -0 / -12 → +0 / -12. (d) loop-log and STATUS rows left unedited with the reason written where a reader of the correction arrives. Scope counted before and after: 6 phrase hits, 21 wider, 0 surviving live assertions; the plain removal check cannot pass because the evidence quotes the string it removed. check:slice-refs 686/220 identical to a worktree run at HEAD — distinct-ref set, so unchanged is correct, not a dead instrument · landed · 61074ca7
 - 2026-09-01 16:39 · Meta · refusal · (e)'s 'imprecise and right' close — refused because the number is the SIZE OF THE COST in a paragraph about how long a correct deletion was deferred, so unlike 232.1/236.1 the disputed figure is load-bearing for its own claim · refused · 61074ca7
@@ -41,6 +40,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-01 17:44 · Meta · refusal · a gate over either arm — 20/20 and 81/81 are uniformly-true predicates (94.11 ceremony test), and 101.3 forbids Polish adding gates · refused · e784bbfd
 - 2026-09-01 19:43 · Polish · reconcile · Polish round 2 on component/tree-table (Slice 239) — NO-OP on six arms; new arm 6 (bare counts in cites) 8/8, red-proved 3x; base rate corrected 4 -> 8; polish_requeue.py fresh-clone guard · landed · cb7c80da
 - 2026-09-01 19:43 · Meta · refusal · a gate for the bare-count cite class, a fifth time — the CLAIMS table IS the per-cite command 217.2/220.2/227.2 said a gate would need, hand-maintained at 8 rows, and 8/8 is uniformly true (94.11 ceremony); 101.3 forbids Polish adding gates independently · refused · cb7c80da
+- 2026-09-02 01:46 · Polish · reconcile · calendar round 2 — six arms clean; new arm 7 (absence claims) found form · colour claiming 'zero raw hex' against two painted ones; cite corrected, CSS left open as 240.1 · landed · 044f2e0a
+- 2026-09-02 01:46 · Meta · refusal · a gate for the absence-claim class — 42/43 before the fix and 42/42 after, uniformly true (94.11), and it needs a per-phrasing rule only a human can extend · refused · 044f2e0a
 
 ## Sunset test
 

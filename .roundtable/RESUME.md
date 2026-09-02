@@ -17,194 +17,210 @@ it the moment the slice lands.**
 
 ## In flight: nothing
 
-Last updated 2026-09-01 (**cloud** wake). Working tree clean at hand-off; two
-commits — `cb7c80da` (the Polish round) and the bookkeeping commit carrying this
+Last updated 2026-09-02 (**cloud** wake). Working tree clean at hand-off; two
+commits — `044f2e0a` (the Polish round) and the bookkeeping commit carrying this
 file — pushed.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
 ```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md          # 3 at hand-off, across 2 slices
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md          # 4 at hand-off, across 3 slices
 node apps/docs/scripts/check-resume-slice-ids.mjs # names the closed ids
 python3 scripts/loops/roadmap_scope.py            # OPEN set + sweep scope + 236.2's lane
 ```
 
-## ⚠ READ THIS FIRST: the next wake reaches rule 6 again — 6 surfaces still re-queued
+## ⚠ READ THIS FIRST: rule 4 is no longer empty — 240.1 is BROWSER-BLOCKED
+
+**This is the change that matters this wake.** For the last several wakes rule 4
+found three open items and all three were owner- or hardware-blocked, so every
+wake fell through to rule 6. **240.1 is different: it is browser-blocked in the
+screenshot sense, which LOOPS.md rule 4 says a LOCAL wake can take.**
+
+So the next wake's rule 4 has real product work in it, and the answer depends on
+where the wake is running:
+
+- **A local wake (Podman available): take 240.1.** It is the oldest *dispatchable*
+  item. Do not fall through to rule 6.
+- **A cloud wake: 240.1 is still not takeable** — its evidence is a rendered
+  image at 1440/390 in both themes. Say so and fall through to rule 6, which has
+  **5** surfaces queued.
+
+Do not re-report the open set as "all owner-blocked". That was true through
+Slice 239 and is not true now. LOOPS.md rule 4 records that exactly this
+mis-sort cost four consecutive wakes on 173.2.
+
+## Dispatcher counters, read immediately after recording (Step 0b)
 
 ```
 Standardize   1 / 4 Continue round   since 2026-09-01 12:05   ok
 Objective     1 / 3 slice            since 2026-09-01 15:42   ok  [238]
-Optimize      0 wake-date(s) newer   since 2026-09-01 19:43   ok  [newest pair: axe-violations]
+Optimize      0 wake-date(s) newer   since 2026-09-02 01:46   ok  [newest pair: axe-violations]
 ```
 
-Read immediately after recording, per Step 0b. Rules 1-5 are all clear and rule
-4 is still empty, so **the next wake reaches rule 6 (Polish)**, not rule 8.
-`polish_requeue.py --apply` re-queued **7** surfaces this wake; `tree-table`
-took its round and was stamped, so **6 remain** — alerts, calendar, dashboard,
-icon, inline-editing, scan. Run `--apply` again first regardless, per rule 6.
-Re-run `dispatch_status.py` rather than trusting this snapshot.
-
-**Do not read `grep -c 'RE-QUEUED' .roundtable/polish-state.md` as the queue
-length.** It reads **8** at hand-off against a live queue of **6**, because the
-ledger's prose quotes the marker while narrating past rounds. `--check` is the
-count; the grep is not.
-
-**Rule 5 is `ok`, not STALE.** Two metrics recorded this wake, both measured
-here: `axe-violations 0` (from `test:axe`) and a new
-`dsa-cite-bare-counts-resolved 8`. **Do not read `bundle-gz-kb`** — it and
-eleven other names are 13+ days stale and its `10.8 → 11.6 → 11.7` *looks*
-exactly like a rule-5 trigger. Not evaluable. The one absolute size budget that
-IS live (`RF_BUDGET_KB = 40` in `build-rf-essentials.mjs`) is asserted inside
+**Rule 5 is `ok`, not STALE, and it was genuinely evaluated**: `axe-violations`
+reads `0.0 → 0.0 → 0.0` across three consecutive runs. **Do not read
+`bundle-gz-kb`** — it and eleven other names are 13+ days stale and its
+`10.8 → 11.6 → 11.7` *looks* exactly like a rule-5 trigger. Not evaluable. The
+one absolute size budget that IS live (`RF_BUDGET_KB = 40`) is asserted inside
 `npm run build -w @busy-office/ui`, which passed.
 
 **Polish rows do not advance the Standardize or Objective counters**, which is
-correct — LOOPS.md rule 3 counts Continue and Standardize only. Three wakes of
-Polish will not arm a grill.
+correct — LOOPS.md rule 3 counts Continue and Standardize only.
+
+**Do not read `grep -c 'RE-QUEUED' .roundtable/polish-state.md` as the queue
+length** — the ledger's prose quotes the marker while narrating past rounds.
+`polish_requeue.py --check` is the count; the grep is not. It read **5** at
+hand-off (alerts, dashboard, icon, inline-editing, scan); run `--apply` first
+regardless, per rule 6.
 
 ## The archive sweep signal: still Standardize's lane, at 1 / 4
 
-`roadmap_scope.py` read closed-history share **393 / 1,904 = 20.6%** with
-targets `[238, 237]` and **no target named by a still-open item**, so 236.2's
-lane is clear. Re-run it — this wake added Slice 239, so the denominator moved.
-Real lane-4 signal, and it belongs to Standardize, whose counter reads
-**1 / 4**. Do not self-dispatch it from rule 6; it arms on its own.
+`roadmap_scope.py` read closed-history share **560 / 2,222 = 25.2%** with targets
+`[239, 238, 237]` and **no target named by a still-open item**, so 236.2's lane
+is clear. Re-run it — this wake added Slice 240, so the denominator moved. Real
+lane-4 signal, and it belongs to Standardize, whose counter reads **1 / 4**. Do
+not self-dispatch it from rule 6; it arms on its own.
+
+**The share went DOWN (27.0% → 25.2%) while the file grew, and that is not an
+error**: Slice 240 adds 150 lines to the denominator while its own body counts as
+OPEN rather than closed history. A sweep-scope number moves on both axes; read it
+from the tool, never by subtracting.
 
 ## What landed this wake
 
-**Polish, reconcile mode, dispatched by rule 6. One commit; the round is a
-NO-OP on the artefact, which §3b names as a valid outcome — but it added an arm
-and corrected a base rate.**
+**Polish, reconcile mode, dispatched by rule 6. One commit. NOT a no-op — a new
+arm found the ledger's sixth recorded defect.**
 
-- **The pick was measured.** §3b's tie-break left four re-queued surfaces at
-  `1/3`; `inline-editing` drops out for 217.1's stated reason (no
-  `dsa-scores.json` entry, so no arm can disagree with it). Source movement
-  since each surface's own `scored` date, with 217.1's `+08:00` boundary:
-  `tree-table` 1 commit **+20/-12** last touched 2026-08-25 22:07, ahead of
-  `calendar` (+18/-2, 08-24) and `dashboard` (0/0 — 227.1's reading, unchanged).
-  What re-queued it is real CSS: `td` → `:is(td, th)` across the eleven-rule
-  indent ladder.
-- **Arms 1-5 clean and reproducing the previous round exactly** — 156/80 pages,
-  360/40, line-number cites still 1 of 40 (re-read *at* `badge.css:42`, not
-  assumed), content quotes **20/20**, css dimension literals **81/81**.
-- **Arm 6 is new — 8/8.** Bare (unitless) counts in ANY cite, re-verified
-  against the tree each one names. It exists because arm 5's literal regex is
-  **unit-bearing only**, so this class is invisible to it, and it is where
-  **3 of the 5 defects this ledger has ever recorded** lived (sidebar-nav,
-  breadcrumb, icon).
-- **The claimed number is parsed FROM THE CITE, never hard-coded** — a probe
-  with the expectation baked in only sees the tree move, and 227.1's defect was
-  on the cite side. **Red-proved three times**, each injection confirmed present
-  in the parsed JSON or the measured tree before the run, each going red on
-  exactly the injected row: a tree-side mutation, a cite-side mutation, and a
-  cite-SHAPE mutation. The probe source is embedded in the ledger so the next
-  wake re-runs it instead of re-deriving it.
-- **No gate proposed — the fifth refusal, and this time for a sharper reason.**
-  217.2/220.2/227.2 each refused this class saying a gate would need every cite
-  to carry its own command. Arm 6's `CLAIMS` table **is** that, hand-maintained
-  at eight rows, with no rule a detector could derive for a cite it has not
-  seen. 8/8 is also uniformly true today — 94.11's own test for ceremony.
+- **The pick was measured, and two instruments disagree.** §3b's tie-break left
+  three surfaces at `1/3`; `inline-editing` drops for 217.1's reason, **verified
+  rather than assumed** (`dsa-scores.json` has no entry). calendar beat dashboard
+  under **both** readings — 239's scored-date boundary (calendar 2 commits
+  +18/-2, dashboard 0) and this wake's ledger-stamp reading (dashboard +7/-1 via
+  `e034a6eb`, which lands after the stamp but before the boundary). Neither is
+  wrong; ROADMAP 240 records both. **My first note this wake that 239's "0/0 did
+  not reproduce" was itself wrong** — it was a different instrument, not a bad
+  reading.
+- **calendar's own six cites all hold**, checked at the source: both `font-size`
+  declarations are `var()` tokens, no hex/rgb/hsl in the dir, the holiday dot is
+  exactly three `em` numbers. The link `16ed66dd` added to
+  `/components/form#dates` **resolves** (`id="dates"` present once on the built
+  page) — a fragment the link checker does not verify.
+- **The six standing arms reproduce exactly**: 156/80, 360/40, line-number cites
+  1 of 40 (re-read *at* `badge.css:42`), content quotes 20/20, css literals
+  81/81, bare counts 8/8 → **9/9** with the row added this round.
+- **Arm 7 is new — absence claims**, the class arms 4-6 are blind to by
+  construction: each verifies that something a cite NAMES is present, and an
+  absence claim names nothing. 111 of 240 cites carry an absence word;
+  hand-classified to **43 checkable claims across 27 components**. 42 exact.
 
-**The ledger's recorded base rate for the class was wrong, and nothing published
-was.** 217.2 measured **6 of 240** and 220.2 recorded it shrinking "by
-construction" to **4 of 240**. Re-measured this wake: **8 checkable claims
-across 7 cites**, every one exact. 217.2's six were all in `fit`, so
-`form · typography` ("its 5 CSS files"), `scan · fit` ("40 kB RF budget") and
-`date · fit` (two claims) were never in the class. The reason it went wrong is
-220.1's own: a count recorded without the command that produced it.
+**The defect: `form · colour` claimed "zero raw hex" and `select.css` has two.**
+Wrong **when written**, not decayed — both were present on the 2026-08-23 scoring
+date and date to the initial commit. What makes it a defect rather than a wording
+preference is that **six sibling components with raw hex all disclose it** and
+say why (print-only ×4, mask alpha, masked-and-never-painted); all seven score
+`colour: 3`, and form was the only one claiming zero. **Form's two are also the
+only PAINTED ones** — `select.css:12` is `background-image`, `icon.css` is
+`mask-image` + `currentcolor` — and `check:contrast` cannot see inside a `data:`
+URI. Cite corrected; **the CSS fix is 240.1, left open.**
 
-**One instrument ambiguity, caught before it became a finding.** Arm 6's first
-run reported `dialog · fit :: cite says 13, tree reads 14`. Neither is wrong —
-`grep -c` counts **lines** (13), `grep -o | wc -l` counts **occurrences** (14),
-and line 470 carries `bo-dialog__header` and `bo-dialog__title`. Walking every
-revision of `server.mjs`, both readings have been stable at 13/14 since
-`4d9014d2` (2026-08-20), three days *before* the 2026-08-23 score, so `13` is
-exact under the instrument that produced it and has **not** decayed. Arm 6
-counts lines, **chosen from that revision history and not because it is the
-reading that passes** — the occurrence count is written down beside it so the
-next divergence is visible.
+**Arm 7's limitation is stated, not discovered later.** It derives its set from
+the cites, so fixing a false claim by rewording removes it from the checked set:
+arm 7 read **42/43 before** the fix and **42/42 after**. The delta is the
+finding, not the ratio. That is why the corrected claim was moved into arm 6's
+fixed `CLAIMS` table, which reports `CITE NO LONGER MATCHES` instead.
 
-**239.3 — a real fix, noticed rather than searched for.** `polish_requeue.py`
-is the FIRST loop script a cloud wake runs (rule 6 mandates `--apply` before
-the rule is evaluated) and a cloud container starts with no
-`packages/core/dist/`. It answered with a bare
-`FileNotFoundError: …/dist/api.json` — a path, not the command that makes it.
-It now exits naming `npm run build -w @busy-office/ui`. Red-proved by removal,
-absence confirmed before the run; `--check` unaffected afterwards.
+**Red-proved four times total**, each injection confirmed present in the copy and
+absent from the real tree before the run: arm 7 tree-side (`41/43`), cite-side
+(`42/44`, claim count *rising*), cite-shape (43 claims → 42), and arm 6's new row
+(`8/9` "cite says two, tree reads 3"; clean control `9/9`).
+
+**No gate proposed — the sixth refusal**, on 94.11's base-rate test: 42/43 before
+and 42/42 after is uniformly true, and the check needs a per-phrasing rule (three
+today) only a human reading the cite can extend.
+
+**One round this wake, deliberately.** §3b step 1 is one round per surface per
+pass, and the arms are **corpus-wide** — running a second round on `alerts` would
+re-execute the identical seven arms across the same 40 components and find the
+same thing. That is the busywork §3b's own text refuses. Polish's Exit
+("every surface dry or budget-spent") has never been satisfiable and the owner
+closed that as no-change (176.3); do not re-raise it.
 
 ## Gates
 
-**Nine entry points run green against the committed tree, exit 0 each** —
-`build`, `test` (**27 files / 152 tests**), `docs:build`, `check:repo`
-(slice-refs **687 / 221**, ci-ignores **130 / 128**, paths **260**,
-vendor-names **559**), `check:claims`, `check:layout` (**127 pages**),
-`test:axe` (**127 × 2, zero violations**), `check:formatting`, `lint:css`.
+**Ten entry points run green against the committed tree, exit 0 each** —
+`build`, `test` (**27 files / 152 tests**), `lint:css`, `docs:build`,
+`check:repo` (slice-refs **690 / 222**, ci-ignores **130 / 128**, paths **260**,
+vendor-names **559**), `check:claims`, `check:formatting`, `check:layout`
+(**127 pages**), `test:axe` (**127 × 2, zero violations**), plus
+`check:wrong-choice` and `check:dsa-scores` as arms 1 and 2.
 
-`check:slice-refs` moving **686 → 687** citations and **220 → 221** headings is
+`check:slice-refs` moving **687 → 690** citations and **221 → 222** headings is
 the reconciliation for this wake's one added slice, not a coincidence.
 
-**Said plainly: that is 9 of the 17 entry points `ENVIRONMENT.md` derives from
-`ci.yml`, and the other 8 were NOT run this wake** — `check:scroll`,
+**Said plainly: that is 10 of the 17 entry points `ENVIRONMENT.md` derives from
+`ci.yml`, and the other 7 were NOT run this wake** — `check:scroll`,
 `check:forced-colors`, `check:target-size`, `check:search`, `check:pseudo`,
 `check:quickstart`, `check:po-app`, `check -w @busy-office/create-ui` and
-`suite`. The diff is `ROADMAP.md`, `.roundtable/**` and one Python error
-message; no CSS, no page markup, no behaviour. **Do not carry "all seventeen
-green" forward from any hand-off** — that described a different tree.
+`suite`. The diff is one cite string in `dsa-scores.json`, `ROADMAP.md` and
+`.roundtable/**`; no CSS, no page markup, no behaviour. **Do not carry "all
+seventeen green" forward from any hand-off** — that described a different tree.
 
 `check:claims` reads **162 verified live · 3 NOT VERIFIED** — ENVIRONMENT §6b,
-`(pointer: fine) = false` in this container, and the gate names that cause
-itself on each of the three. **Not a regression; do not "restore" the zero.**
-
-Two gates outside that nine were also run, as arms 1 and 2 of the round:
-`check:wrong-choice` (**156 assertions / 80 pages / 1 outstanding**, the skipped
-`date`) and `check:dsa-scores` (**360 assertions / 40 scored / 40 requested by a
-page**).
+`(pointer: fine) = false` in this container, and the gate names that cause itself
+on each of the three. **Not a regression; do not "restore" the zero.**
 
 ## Step 0c: ZERO collisions this wake
 
-`origin/main` stayed at `6d8d973c` across both `git fetch origin main` calls —
+`origin/main` stayed at `e4eae6d6` across both `git fetch origin main` calls —
 Step 0 and once immediately before the first commit.
 
-**ENVIRONMENT traps 1 and 2 both bit at Step 0, as usual.** The container
-started **DETACHED** (`git branch --show-current` empty — the check that file
-names as the actual answer), and `origin/main` arrived as a **forced update**
-(`+ 17b3ba6...6d8d973`) with the local `main` ref stale at `17b3ba6`.
+**ENVIRONMENT traps 1 and 2 both bit at Step 0, as usual.** The container started
+**DETACHED** (`git branch --show-current` empty — the check that file names as
+the actual answer), and `origin/main` arrived as a **forced update**
+(`+ 17b3ba6...e4eae6d`) with the local `main` ref stale at `17b3ba6`.
 `git checkout -B main origin/main` fixed it before any commit existed. Trap 2's
 `--unshallow` ran clean in one attempt, no `.git/shallow.lock`,
-`is-shallow-repository` → `false`, **1,790** commits.
+`is-shallow-repository` → `false`, **1,792** commits.
+
+**239.3's guard fired and worked.** `polish_requeue.py --apply` is the first loop
+script a cloud wake runs, and it exited naming `npm run build -w @busy-office/ui`
+instead of a bare `FileNotFoundError` on the missing `dist/api.json`. That fix
+landed last wake for exactly this moment.
 
 ## Direction
 
-**No new input arrived**: GitHub intake `list_issues` OPEN → `totalCount: 0`,
-and no owner message. Step 1 had nothing to triage, so this wake recorded no
+**No new input arrived**: GitHub intake `list_issues` OPEN → `totalCount: 0`, and
+no owner message. Step 1 had nothing to triage, so this wake recorded no
 `Roadmap · plan` row.
 
-**The open set is 3 items across 2 slices, and NONE is dispatchable:**
+**The open set is 4 items across 3 slices, and one is now dispatchable by a local
+wake:**
 
 | item | kind of blocked |
 |---|---|
-| `112.3` pattern-fit pilot | owner-blocked — 5 briefs; `.roundtable/pilot-112/briefs.md` is still the 16-line scaffold, its only commit `e58ea3ca` on **2026-08-23** and never modified since (read from `git log`, not from mtime — mtime here is clone time) |
-| `112.4` Screen Contract layer | owner-blocked — on 112.3's verdict |
-| AT runtime evidence (Slice 15) | hardware-blocked — owner hardware |
+| `112.3` pattern-fit pilot | **owner-blocked** — 5 briefs; `.roundtable/pilot-112/briefs.md` is still the 16-line scaffold, its only commit `e58ea3ca` on **2026-08-23**, never modified since (read from `git log`, not mtime — mtime here is clone time) |
+| `112.4` Screen Contract layer | **owner-blocked** — on 112.3's verdict |
+| AT runtime evidence (Slice 15) | **hardware-blocked** — owner hardware |
+| `240.1` select-chevron raw hex | **browser-blocked** — needs 1440/390 screenshots in both themes; **a local wake can take this** |
 
-Say the *kind* of blocked, per rule 4's own instruction. **Not one of the three
-is browser-blocked or agent-blocked** — a local wake with Podman gains nothing
-here, and neither does a second agent. Two need an owner decision; one needs
-owner hardware.
+**What is owed to the owner:** unchanged, and now **seven wakes old**. Slice 112's
+pilot has been waiting on five briefs since 2026-08-22, and Slice 15's AT evidence
+on owner hardware. **Nothing this loop can do closes either.**
 
-**What is owed to the owner:** unchanged, and now **six wakes old**. Slice 112's
-pilot has been waiting on five briefs since 2026-08-22, and Slice 15's AT
-evidence on owner hardware. **Nothing this loop can do closes either.** The
-honest shape of the last six wakes is unchanged too: everything built has been
-the loop's own bookkeeping and self-measurement. This wake's round is real work
-— arm 6 covers the class three of five recorded defects came from, and the
-`polish_requeue.py` guard fixes something that bit this very wake — but **it is
-still not product work; only the owner can make it be.**
+But the honest shape of the last several wakes has changed slightly this wake, and
+it is worth saying precisely. Everything built recently has been the loop's own
+bookkeeping and self-measurement. This round is still self-measurement — **but it
+produced the first item in weeks that is real product work on shipped CSS**, and
+it is blocked only on a screenshot, not on the owner. A local wake can close it
+without any owner input. That is a smaller gap than "owner-blocked", and it is the
+first one in a while.
 
 **Not verified, said plainly:** no Podman and no `localhost:8081` here, so the
-1440/390 light-and-dark screenshot lane could not run. This wake changed **no
-CSS and no page markup** — the diff is `ROADMAP.md`,
-`.roundtable/polish-state.md`, one Python error message plus the bookkeeping
-files, and the docs site renders none of them — so nothing in it rests on a
-rendered image. Every browser-driven reading quoted (`check:claims` 162/3,
-`check:layout` 127, `test:axe` 127 × 2, and arm 4's 20/20 against the built
-pages) came from a gate or probe executing in this container.
+1440/390 light-and-dark screenshot lane could not run. This wake changed **no CSS
+and no page markup** — the diff is one cite string, `ROADMAP.md` and
+`.roundtable/**`, and the docs site renders the cite as text — so nothing in it
+rests on a rendered image. The one change that DOES reach a rendered page (the
+cite on `/components/form`) was verified by `check:layout` (127 pages, no
+overflow at 390 or 150% zoom) and `test:axe` (127 × 2, zero violations) executing
+in this container, and confirmed present in the built HTML. **240.1 was
+deliberately not attempted for exactly this reason.**
