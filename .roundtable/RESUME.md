@@ -6,9 +6,13 @@
 > wake and that is where corrections go to die. `LOOPS.md` Step 0 names both
 > files, and two advisory checks run from `record_iteration.py` — the charter
 > check and `check:resume-slice-ids`. Both REPORT on stderr; neither fails a
-> build (roadmap 175.3). **`check:resume-slice-ids` fired this wake, correctly**
-> — it named `240.1`, `241.2` and `242.1`, all three closed, all three of which
-> this rewrite has removed. That is the check doing its job.
+> build (roadmap 175.3). **`check:resume-slice-ids` fired against the PREVIOUS
+> revision of this file, correctly** — three closed ids it still named, all
+> three removed by this rewrite. The ids are deliberately not repeated here:
+> naming them to report them re-trips the check on its own explanation, which
+> is CLAUDE.md's "an assertion that can be tripped by its own explanation"
+> landing in a handover. Run the check to see what it says about the file as it
+> stands now.
 
 The wake prompt says *"don't assume prior-turn state"*. This file is how a wake
 picks up work that was left mid-flight, so the instruction stays true across a
@@ -19,106 +23,103 @@ it the moment the slice lands.**
 
 ## In flight: nothing
 
-Last updated 2026-09-02 (**cloud** wake). Working tree clean at hand-off; two
-commits — `3f76c0e1` (the 243 refusal) and the bookkeeping commit carrying this
-file — pushed.
+Last updated 2026-09-02 (**cloud** wake). Working tree clean at hand-off; four
+commits — `71a61679`, `1590bc2b`, `b0b70f96` and the bookkeeping commit carrying
+this file — pushed.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
 ```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md          # 3 at hand-off, across 2 slices
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md          # 4 at hand-off, across 3 slices
 node apps/docs/scripts/check-resume-slice-ids.mjs # names the closed ids
 python3 scripts/loops/roadmap_scope.py            # OPEN set + sweep scope
 ```
 
-## ⚠ TWO counters are OVERDUE — rule 2 fires before rule 4 is reached
-
-This reverses the last hand-off in the other direction: it said rule 4 had
-something dispatchable. It did, this wake took it, and closing it armed both
-counter rules at once.
+## ⚠ Rule 3 fires next wake — Objective is OVERDUE and nothing sits above it
 
 ```
-Standardize   4 / 4 Continue rounds   since 2026-09-01 12:05   OVERDUE
-Objective     3 / 3 slices            since 2026-09-01 15:42   OVERDUE  [238, 241, 243]
+Standardize   0 / 4 Continue rounds   since 2026-09-02 16:54   ok
+Objective     4 / 3 slices            since 2026-09-01 15:42   OVERDUE  [238, 241, 243, 244]
 Optimize      0 wake-date(s) newer    since 2026-09-02 01:46   ok  [newest pair: axe-violations]
 ```
 
-- **Rule 2 wins — dispatch Standardize.** It sits above rule 3 in Step 2's
-  stated order, so the Objective grill waits one more wake even though it is
-  also at threshold. Do not reorder them; the ordering is 2026-08-18's decision
-  and its reasoning is written beside the rule.
-- **Both moved for the same recorded reason**: this wake's row is
-  `Continue · build`, and rule 3 counts Continue/Standardize rows only (161.4).
-  Slice 243 is the third slice since the last Objective.
+- **This wake discharged rule 2** — the Standardize counter reset 4/4 → 0/4.
+  Rule 3 was already overdue and waited, per Step 2's stated order; it is now
+  at **4 / 3** because Slice 244 armed it further. Rule 1 (no open P0) and rule
+  2 (`ok`) are both clear above it, so **rule 3 dispatches the Objective grill**.
+- **Narrow the arming set before grilling it**, per §6 step 0 — check
+  `.roundtable/INDEX.md` first and state the honest scope. `[238, 241, 243, 244]`
+  is what the counter names, not a plan.
 - **Rule 5 is `ok`, not STALE, and was genuinely evaluated**: `axe-violations`
-  reads `0.0 → 0.0 → 0.0` across three consecutive runs, and the one live
-  absolute budget (`RF_BUDGET_KB = 40`) passed inside
-  `npm run build -w @busy-office/ui`. **Do not read `bundle-gz-kb`** — it and
-  eleven other names are 13+ days stale and its `10.8 → 11.6 → 11.7` *looks*
-  exactly like a rule-5 trigger. Not evaluable.
+  reads zero across three consecutive runs and the one live absolute budget
+  (`RF_BUDGET_KB = 40`) passed inside `npm run build -w @busy-office/ui`. **Do
+  not read `bundle-gz-kb`** — it and eleven other names are 13+ days stale and
+  its `10.8 → 11.6 → 11.7` *looks* exactly like a rule-5 trigger. Not evaluable.
 
-## The archive sweep signal jumped to 46.2% — and Standardize's lane 4 is where it lands
+## The archive sweep signal is 43.4%, and the lane is clear
 
-`roadmap_scope.py` reads closed-history share **1,304 / 2,820 = 46.2%** with
+`roadmap_scope.py` reads closed-history share **1,304 / 3,006 = 43.4%** with
 targets `[243, 242, 241, 240, 239, 238, 237]` and **no target named by a
-still-open item**, so the lane is clear.
+still-open item**, so nothing blocks a sweep when one is next dispatched.
 
-**The 35.0% → 46.2% move is this wake's own doing, not drift, and the mechanism
-matters**: Slice 242's only open item was `242.1`, so ticking it flipped that
-whole slice's body from the OPEN side of the ratio to the closed numerator, and
-Slice 243 added its own closed body on top. Numerator 926 → 1,304, denominator
-2,645 → 2,820. Read it from the tool, never by subtracting — the reconciliation
-above is a check on the tool, not a substitute for running it.
+The 46.2% → 43.4% move is **denominator-only and is this wake's own doing**:
+Slice 244's ~190 open-side lines were added to the live file while the closed
+numerator stayed at 1,304. Read it from the tool, never by subtracting.
 
 ## What landed this wake
 
-**Continue, build mode, dispatched by rule 4** after rules 1-3 were evaluated
-and clear. One commit. Full detail in ROADMAP 243 and the Polish ledger's arm-8
-section.
+**Standardize, dispatched by rule 2** after rule 1 was evaluated and clear.
+Three commits. Full detail in ROADMAP 244.
 
-- **`242.1` is ANSWERED: REFUSED — arm 8 does not become a build gate.** Its
-  Accept allowed a refusal and said outright that finding the predicate
-  un-gateable is a satisfying outcome, so the item closes.
-- **What decided it is soundness, and it is neither of the two arguments the
-  Accept anticipated.** The arm goes **red on a correct tree**: `navbar` scores
-  `interaction: na` with the cite *"a container: it holds controls but
-  introduces none of its own"*, and giving its page the same `initDropdowns()`
-  demo `button.astro` already carries makes the arm flag it while the score
-  stays right by its own words. All three original injections varied the true
-  positive; this direction was never tested.
-- **The arm reads demo CONTENT, not a page import** — 21 of 21 matches sit
-  inside a demo template literal or a body `<script type="module">`, because
-  Astro frontmatter runs on the server and cannot wire a browser behaviour at
-  all. That is why it cannot tell whose behaviour it found, and **4 of 21** pages
-  (`button`, `offcanvas`, `richtext`, `form`) name only a neighbour's.
-- **No narrowing rescues it**, which is what puts arm 8 in the same class as
-  216.2/217.2/220.2/227.2 after all: the sound version needs an ownership map —
-  the datum four definitions already failed to produce — and its cheapest proxy
-  **misses `dashboard`/`initCollapsibleCards`, the only defect arm 8 has ever
-  found.** 242.1's "the first member of this class that is mechanically
-  writable" is withdrawn in ROADMAP and in the ledger.
-- **Arm 8 is KEPT as a probe a human reads.** Do not re-file it as a gate; the
-  ledger carries that instruction beside the probe.
+- **All four standing lanes clean** — say `n of 4`, the playbook's own
+  correction. 0 dead of 1,433 inline decls; css-repeats 74/242/230/**8** with
+  the eight groups compared **member-for-member by selector** against LOOPS.md's
+  table (five new rules, all five distinct, no group grew; the `x4`
+  joined-control group is still two components, so its reopen trigger is unmet);
+  14 flagged prose pages, all inside the sixteen verdicted; lane 4's ratchet
+  shows no accumulate-class change.
+- **The finding came from the fifth thing step 1 names and no instrument
+  covers** — duplicated logic across scripts. `cssFiles` was hand-copied **four**
+  times in `packages/core/scripts`, three byte-identical and `generate-scales`
+  already diverged. `src-css-files.mjs` is the new chokepoint.
+- **It obeys `dist-css.mjs`'s 2026-08-17 refusal rather than reversing it.**
+  That header declines to fold different tree rules behind one options bag;
+  so only the three copies that were **already the same rule** are consolidated,
+  and `generate-scales.mjs` keeps its own copy carrying its reason.
+- **`from_disk`/`from_rev` were the same drift in `scripts/loops`**, folded into
+  the `_common.py` that already exists there.
+- **Both consolidations are behaviour-preserving AND red-proved by
+  discrimination**, because byte-identical output cannot tell a working
+  chokepoint from an unused one. Every injection was confirmed present in the
+  file before the result was believed.
 
-**Refused inside the item, and recorded:** the name-match narrowing.
+**Refused inside the item, and recorded:** folding `generate-scales.mjs` into
+the chokepoint.
 
-**One instrument of this wake's own over-reported and it is written down rather
-than smoothed over**: the name-match probe used to shortlist Finding B's four
-pages flagged **9 of 21**, and five of the nine ship their own behaviour under a
-non-matching name. The four were confirmed by reading each import's context.
+**One instrument of this wake's own was wrong on its first output, written down
+rather than smoothed over**: the cross-file duplicate scan reported **11** blocks,
+six of them sliding windows of a single `import` run — "drop a window that is a
+substring of another" does not deduplicate *shifted* windows. Fixed by extending
+each match along its diagonal. Its final **0** is red-proved, not trusted: a
+novel identical 7-line function appended to two unrelated scripts in a scratch
+copy took it **0 → 1** with both sites named.
+
+**A claim this wake nearly published and measurement killed:** that the three
+plain walkers count generated CSS as authored source. They do pick up
+`tokens/scales.css` and `scales/extended.css`, but both **ship**, so including
+them is correct. Checked before writing it down.
 
 ## Gates
 
 **All 17 CI entry points ran green against the committed tree, exit 0 each** —
 `build`, `test`, `lint:css`, `docs:build`, `check:claims`, `check:formatting`,
-`check:scroll` (**912 containers / 118 pages**), `check:layout` (**127 pages**),
-`check:forced-colors`, `test:axe` (**127 × 2, zero violations**),
-`check:target-size`, `check:search`, `check:pseudo`, `check:quickstart`,
-`check:po-app` (**19 behaviours**), `check -w @busy-office/create-ui`, and
-`suite` (**28 screens × 2 widths**). `check:repo` was re-run on its own after
-the ROADMAP edits: `check:slice-refs` reads **698 citations / 225 slice numbers**
-(up from 693 / 224 — Slice 243's own heading and citations, which reconciles),
-and `check:dsa-scores` **360 assertions / 40 scored**.
+`check:scroll`, `check:layout` (**127 pages**), `check:forced-colors`,
+`test:axe` (**127 × 2, zero violations**), `check:target-size`, `check:search`,
+`check:pseudo`, `check:quickstart`, `check:po-app` (**19 behaviours**),
+`check -w @busy-office/create-ui`, and `suite` (**28 screens × 2 widths**).
+`check:repo` was re-run on its own after the ROADMAP edits: `check:slice-refs`
+reads **699 citations / 226 slice numbers** (up from 698 / 225 — Slice 244's own
+heading and citation, which reconciles).
 
 `check:claims` reads **162 verified live · 3 NOT VERIFIED** — ENVIRONMENT §6b,
 `(pointer: fine) = false` in this container. **Not a regression; do not "restore"
@@ -126,43 +127,43 @@ the zero.**
 
 ## Step 0c: ZERO collisions this wake
 
-`origin/main` stayed at `af01aadb` across both `git fetch origin main` calls —
+`origin/main` stayed at `f401c1e2` across both `git fetch origin main` calls —
 Step 0 and once immediately before the first commit.
 
 **ENVIRONMENT traps 1 and 2 both bit at Step 0, as usual.** The container started
 **DETACHED** (`git branch --show-current` empty — the check that file names as
 the actual answer), and `origin/main` arrived as a **forced update**
-(`+ 17b3ba6...af01aad`) with the local `main` ref stale at `17b3ba6` — the same
-stale sha as the last five wakes. `git checkout -B main origin/main` fixed it
+(`+ 17b3ba6...f401c1e`) with the local `main` ref stale at `17b3ba6` — the same
+stale sha as the last six wakes. `git checkout -B main origin/main` fixed it
 before any commit existed. Trap 2's `--unshallow` ran clean in one attempt, no
-`.git/shallow.lock`, `is-shallow-repository` → `false`, **1,800** commits.
+`.git/shallow.lock`, `is-shallow-repository` → `false`, **1,802** commits.
 
 ## Direction
 
 **No new input arrived**: GitHub intake `list_issues` OPEN → `totalCount: 0`, and
-no owner message. Step 1 had nothing to triage, so this wake recorded no
-`Roadmap · plan` row.
+no owner message. Step 1 had nothing to triage.
 
-**The open set is 3 items across 2 slices, and NONE of them is dispatchable:**
+**The open set is 4 items across 3 slices, and ONE of them is now dispatchable:**
 
 | item | kind of blocked |
 |---|---|
+| `244.4` src/css walker gate | **NOT BLOCKED** — filed this wake; any wake can build it |
 | AT runtime evidence (Slice 15) | **owner-hardware-blocked** — needs a human listening to a screen reader |
 | `112.3` pattern-fit pilot | **owner-blocked** — 5 briefs; `.roundtable/pilot-112/briefs.md` is still the 16-line scaffold, its only commit `e58ea3ca` on **2026-08-23**, never modified since (read from `git log`, not mtime — mtime here is clone time) |
 | `112.4` Screen Contract layer | **owner-blocked** — on 112.3's verdict |
 
-**None is browser-blocked or agent-blocked**, so a local wake gains nothing on
-them that this one could not do. Rule 4 will find nothing next wake — but it is
-not reached, because rules 2 and 3 are both overdue above it.
+**This ends four consecutive wakes reporting rule 4 as finding nothing.** 244.4
+is neither owner-, browser- nor agent-blocked. It is not reached *next* wake —
+rule 3 is overdue above it — but it is there afterwards.
 
-**What is owed to the owner:** unchanged, and now **eleven wakes old**. Slice
+**What is owed to the owner:** unchanged, and now **twelve wakes old**. Slice
 112's pilot has been waiting on five briefs since 2026-08-22, and Slice 15's AT
 evidence on owner hardware. **Nothing this loop can do closes either.**
 
 **Not verified, said plainly:** no Podman and no `localhost:8081` here, so the
 1440/390 light-and-dark screenshot lane could not run. This wake changed **no
-CSS, no page markup and no shipped artefact** — the diff is `ROADMAP.md`, the
-Polish ledger and the bookkeeping files, and the only code written was a scratch
-injection that was never committed — so nothing in it rests on a rendered image.
-`check:layout` (127 pages) and `test:axe` (127 × 2) executed in this container
-regardless and are green.
+CSS, no page markup and no shipped artefact** — the diff is four build scripts,
+two loop scripts, `ROADMAP.md` and the bookkeeping files — and every consumer's
+output is byte-identical before and after, which is a stronger statement than a
+screenshot would have been. `check:layout` (127 pages) and `test:axe` (127 × 2)
+executed in this container regardless and are green.
