@@ -315,6 +315,105 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 247 — 245.1 built: both of 244.3's counts corrected against a named revision, and upholding the "leave the log row alone" bullet found that bullet's OWN citation pointing at the wrong row (2026-09-02)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0 — the four open items were
+`245.1`, `112.3`, `112.4` and Slice 15's AT evidence, none a bug; GitHub intake
+`list_issues` OPEN -> `totalCount: 0`, so Step 1 had nothing to triage and no
+`Roadmap · plan` row was recorded. Rule 2: `Standardize 1 / 4 ok`. Rule 3:
+`Objective 1 / 3 ok [244]`. Rule 5: `0 wake-date(s) newer`, newest pair
+`axe-violations` — evaluable, not stale, and clear. **Rule 4 dispatched
+Continue, build mode** on the oldest still-open item that is not owner-blocked,
+`245.1`; the three older ones are owner- and owner-hardware-blocked, unchanged
+for fifteen wakes.
+
+**What landed.** Both sites in 244.3 now state a figure with the revision it was
+read at, the command that prints it, and the noun it counts. The item's premise
+reproduced exactly at every revision it named, and the fourth Accept bullet — a
+third reading rescuing one of the numbers — was **tested by command and came
+back negative**, which is recorded rather than left implied.
+
+**The finding came out of the Accept bullet that asked for the least.** Bullet
+three said only to leave `loop-log.md:1305` and its `STATUS.md:45` mirror
+unedited and record why. Going to read them first, as this repo's rule requires
+before asserting anything about a line, showed `STATUS.md:45` holding an
+unrelated row — and 245.1's own two citations 237 lines from where it filed
+them, one wake later. Filed as `247.1` with the full 17-citation measurement.
+
+**This wake did NOT run the archive sweep, and says so rather than leaving it
+implied.** `roadmap_scope.py` reads closed-history share **50.9%** with nine
+eligible targets, and 236.2's dependency report flags Slice **244** as named by
+an open item — which was `245.1`, the item this wake was dispatched to build,
+and it needed to amend 244.3's text. Moving Slice 244 first would have archived
+the very lines the dispatch existed to correct. The sweep is left for the next
+wake, which is the first one where 244 is safe to move.
+
+1. [ ] **247.1 — `ROADMAP.md` cites by two idioms. The gated one (slice number)
+       resolves every citation it has. The ungated one (`file:line`) holds 8 of 8
+       into source files and **3 of 8** into markdown — and every one of those
+       five failures targets a file that is rewritten or regenerated.**
+
+       Found while upholding 245.1's third Accept bullet, not by going looking:
+       the bullet's own `STATUS.md:45` pointed at the wrong row, and 245.1's own
+       two citations had moved 237 lines in one wake.
+
+       **The measurement.** All 17 `file:line` citations in `ROADMAP.md`, each
+       re-read AT the line:
+
+       ```
+       grep -oE '`?[A-Za-z0-9_.-]+\.(md|mjs|py|css|json|astro|ts):[0-9]+' ROADMAP.md
+       ```
+
+       | target class | instances | resolve | note |
+       |---|---|---|---|
+       | source files (`.css` `.mjs` `.astro`) | 9 | **8** | `badge.css:42` ×3, `select.css:12`, `check-selftests.mjs:51-52,90`, `button.astro:107-110`, `check-contrast.mjs:135`, `build-component-css.mjs:98` all read exactly as cited |
+       | `loop-log.md` (append-only) | 3 | **3** | `:1305` = 244.3's row, `:1279` ×2 = 237.2's row |
+       | `STATUS.md` (regenerated, rolling 10) | 3 | **0** | `:45` is an unrelated row; `:43`'s target has left the file — `grep -c '237.2' STATUS.md` → 0 |
+       | `ROADMAP.md` (grows above the cite) | 2 | **0** | `:436`/`:446` → `:673`/`:685` in one wake |
+
+       The ninth source citation, `check-sticky-layers.mjs:43`, names a **reverted
+       injection point**, so it has no standing target and is excluded from the
+       denominator rather than scored as a failure — 8 of 8 verifiable, 11 of 16
+       overall.
+
+       **The split is mechanical, not a judgement**: a `file:line` citation
+       survives iff its target is append-only or line-stable source. It cannot
+       survive into a file that grows above the cited line or is regenerated as a
+       rolling window. `check:slice-refs` already validates the durable idiom:
+       **704 citations / 228 slice numbers** at `c31799a3`, the tree this was
+       measured on, and **705 / 229** once this slice's own heading landed. Both
+       readings are the gate's own output, and it reports the count on every run
+       — read it there rather than from this line.
+
+       **A blanket gate is refused in advance, on base rate.** Across all tracked
+       markdown the same pattern hits **45** sites, and ~39 are inside
+       `ROADMAP-archive.md` and dated `.roundtable/grill-*.md` reports, where the
+       citation was true when written and the file exists to record a moment.
+       Gating those would force edits to frozen history to fix nothing — the
+       ceremony CLAUDE.md's base-rate rule names. The live subset a wake reads as
+       *current guidance* is **`ROADMAP.md` + `.roundtable/RESUME.md`, 6 sites**,
+       and 245.1 has already corrected 2 of them.
+
+       *Accept* — properties, not predicted values:
+
+       - Every `file:line` citation remaining in `ROADMAP.md` and
+         `.roundtable/RESUME.md` whose target is a rewritten or regenerated file
+         either states a figure that agrees with re-reading that line, or is
+         restated in the durable idiom. The three `STATUS.md:NN` sites are the
+         known population; re-run the grep rather than trusting that count.
+       - Whatever is built reports its own scope and **base rate on the current
+         tree**, so a later wake can see whether it distinguishes anything. If
+         the base rate after correction is 0 and the predicate is exact, say so;
+         if it can only be made to fire by forbidding a live idiom nobody uses,
+         that is a refusal and closes this item.
+       - `ROADMAP-archive.md` and `.roundtable/grill-*.md` are **out of scope by
+         construction**, with the 45-vs-6 measurement as the reason, not taste.
+       - Amending 238.1's two `STATUS.md:43` sites is permitted — 236.2 settled
+         that archived and closed text may be corrected — and leaving the
+         `loop-log.md` rows unedited is required, per `record_iteration.py`.
+       - Finding that the live population is already clean when this is
+         dispatched is a satisfying outcome: record the re-run and close it.
+
 ## Slice 246 — 244.4 built: the src/css chokepoint gets its gate, and the design question it carried is answered by a count nobody had taken — there are FOUR chokepoints in this repo, one of them gated (2026-09-02)
 
 **Dispatcher trace, cloud wake.** Step 0: container started **DETACHED** and
@@ -500,14 +599,20 @@ re-confirm a refusal four independent measurements already agreed on was judged
 not worth the wake; 241.2's contrast figures — the numbers that decide whether
 that refusal is safe — were re-run instead and hold.
 
-1. [ ] **245.1 — 244.3 publishes TWO counts of one set, six and eight, and
-       neither is what the tree holds. The consolidation itself is sound and is
-       not reopened.**
+1. [x] **245.1 — DONE 2026-09-02. 244.3 publishes TWO counts of one set, six
+       and eight, and neither is what the tree holds. The consolidation itself is
+       sound and is not reopened.**
 
-       `ROADMAP.md:436` — *"`_common.py` is the established shared module there,
-       imported by **six** other loop scripts"*. `ROADMAP.md:446` — *"all
-       **eight** other `_common` consumers still import"*. Same set, two numbers,
-       and they disagree with each other before they disagree with the tree.
+       In **244.3** — *"`_common.py` is the established shared module there,
+       imported by **six** other loop scripts"* and *"all **eight** other
+       `_common` consumers still import"*. Same set, two numbers, and they
+       disagree with each other before they disagree with the tree.
+
+       *(Both sites were filed as `ROADMAP.md:436` and `:446`. By the time this
+       item was dispatched — one wake later — they had moved to `:673` and
+       `:685`, because Slice 246's write-up landed above them. The citations are
+       restated by slice number above for that reason; the measurement is
+       `247.1`.)*
 
        ```
        for f in $(git ls-tree --name-only $rev scripts/loops/ | grep '\.py$' | grep -v '_common.py'); do
@@ -552,6 +657,44 @@ that refusal is safe — were re-run instead and hold.
        - Finding that a *third* reading makes one of the two numbers correct is
          a satisfying outcome and closes this item, provided the reading is
          produced by a command rather than argued.
+
+       **What was done.** Both sites in 244.3 now carry a figure with the
+       revision it was read at, the command that prints it, and the noun it
+       counts. The command reproduces the item's premise exactly — **5** at
+       `71a61679`, **7** at `1590bc2b`, `b0b70f96` and `c31799a3` — and the two
+       folded by 244.3 are `report_reopen_conditions.py` and `roadmap_scope.py`
+       (`git diff --name-only 71a61679 1590bc2b -- scripts/loops/`), so *"other
+       than the two folded"* is **five**.
+
+       **No third reading rescues either number, and this was measured before
+       being ruled out** (the fourth Accept bullet). Three widenings, each by
+       command at `HEAD`, all still read 5 before / 7 after:
+
+       ```
+       git grep -l -E '(from _common import|import _common)' $rev -- '*.py' | grep -v '_common.py' | wc -l
+       #  whole repo, any import syntax:  71a61679 -> 5   HEAD -> 7
+       git grep -l '_common' HEAD -- 'scripts/loops/*.py' | grep -v '_common.py' | wc -l
+       #  any MENTION at all, not just an import:          HEAD -> 7
+       ```
+
+       So the **six** is reachable at no revision under any reading — it is the
+       mid-edit working-tree figure the item diagnosed. The **eight** keeps its
+       diagnosis too: `scripts/loops` holds ten `.py` besides `_common.py`, minus
+       the two folded; the three non-importers are named at the corrected site.
+
+       **The log row and its mirror are left unedited, and the reason lands
+       here** — `record_iteration.py`'s standing rule is that historical rows are
+       never edited, so the figure stays immortal in `loop-log.md` and the
+       durable site carries the correction. That is 238.1's disposition for the
+       same class, applied unchanged.
+
+       **The mirror citation in the bullet above is itself wrong, found while
+       upholding it.** `STATUS.md:45` today holds an unrelated `Meta · refusal`
+       row; 244.3's row is at `STATUS.md:38`. `STATUS.md` renders a rolling *last
+       ten iterations*, so a cited row does not merely shift — it leaves the file
+       (`grep -c '237.2' STATUS.md` → **0**, against `238.1`'s `STATUS.md:43`).
+       `loop-log.md:1305` and `:1279`, into the append-only log, both still
+       resolve. Measured in full as `247.1`.
 
 ## Slice 244 — Standardize sweep: all four standing lanes clean, and the finding came from the fifth thing the playbook names — `cssFiles` hand-copied four times, one of them already diverged (2026-09-02)
 
@@ -671,7 +814,19 @@ green. **No visual debt was added; nothing visual was looked at.**
        `_common.py` that already exists.**
 
        Not a new pattern — `_common.py` is the established shared module there,
-       imported by six other loop scripts.
+       imported by **five** other loop scripts before this item (`71a61679`) and
+       **seven** after it (`1590bc2b`), counting every `.py` in `scripts/loops`
+       that imports `_common` other than `_common.py` itself:
+
+       ```
+       for f in $(git ls-tree --name-only $rev scripts/loops/ | grep '\.py$' | grep -v '_common.py'); do
+         git show $rev:$f | grep -q "from _common import" && echo $f; done | wc -l
+       #  71a61679 -> 5   1590bc2b -> 7   b0b70f96 -> 7   c31799a3 -> 7
+       ```
+
+       *Corrected by 245.1 (2026-09-02).* The figure published here was **six**,
+       which no revision produces: it is a working-tree reading taken between the
+       two foldings, the form ENVIRONMENT.md's standing trap names.
 
        **Why a READER pair in particular must not drift:** ENVIRONMENT.md's
        standing trap says a figure describing a commit is read from THAT COMMIT,
@@ -681,8 +836,17 @@ green. **No visual debt was added; nothing visual was looked at.**
 
        Verified in **both** modes rather than the default only: tree and
        `--rev HEAD`, both scripts, all four outputs byte-identical.
-       `report_reopen_conditions.py --self-test` still passes; all eight other
-       `_common` consumers still import. Red-proved twice by discrimination —
+       `report_reopen_conditions.py --self-test` still passes; all **five**
+       pre-existing `_common` consumers still import — the same five the command
+       above prints at `71a61679`, joined by the two folded here to make seven at
+       `1590bc2b`.
+
+       *Corrected by 245.1 (2026-09-02).* The figure published here was
+       **eight**, and it counts a different noun: `scripts/loops` holds ten `.py`
+       files besides `_common.py`, minus the two this item changed. Three of
+       those eight — `generate_roundtable_index.py`, `polish_requeue.py`,
+       `report_loop_prose.py` — do not import `_common` at all, so they are not
+       consumers. Counted right, labelled wrong. Red-proved twice by discrimination —
        truncating `from_disk` moved both tree-mode outputs, truncating `from_rev`
        moved both `--rev` outputs, each injection confirmed landed and reverted.
 
