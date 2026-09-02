@@ -315,6 +315,192 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 244 — Standardize sweep: all four standing lanes clean, and the finding came from the fifth thing the playbook names — `cssFiles` hand-copied four times, one of them already diverged (2026-09-02)
+
+Dispatcher rule 2, `dispatch_status.py` reading `Standardize 4 / 4 OVERDUE`.
+Rule 1 found no open P0 (the three open items are Slice 15's AT evidence and
+112.3/112.4, all owner-blocked) and GitHub intake is empty (`list_issues` OPEN →
+`totalCount: 0`), so nothing preempted it. Rule 3 is ALSO overdue (`3 / 3`,
+`[238, 241, 243]`) and waits one more wake: rule 2 sits above it in Step 2's
+stated order, which is 2026-08-18's decision.
+
+**Cloud wake: no Podman, no `localhost:8081`, no screenshots at 1440px/390px in
+light and dark.** Nothing in this slice renders — the diff is four build scripts,
+two loop scripts and this file. No CSS, no page markup, no shipped artefact
+changed, and every consumer's output is byte-identical before and after, which is
+a stronger statement than a screenshot would have been. `check:layout` (127
+pages) and `test:axe` (127 × 2, zero violations) swept everything anyway and are
+green. **No visual debt was added; nothing visual was looked at.**
+
+1. [x] **244.1 — the four standing lanes: all clean, and the delta is the
+       finding in each.** `n of 4` said explicitly, per the playbook's own
+       correction that four consecutive sweeps ran three.
+
+       ```
+       npm run scan:dead-style -w docs                 # lane 1 of 4
+       npm run report:css-repeats -w @busy-office/ui   # lane 2 of 4
+       npm run report:prose -w docs                    # lane 3 of 4
+       python3 scripts/loops/report_loop_prose.py      # lane 4 of 4
+       ```
+
+       - **Lane 1 — `scan:dead-style`: 0 dead on 0 pages, 1,433 live inline
+         declarations.** Against 166.1's 1,428 that is +5 live and the same
+         zero; 0 declarations dead on screen but live in print.
+       - **Lane 2 — `report:css-repeats`: zero delta in the GROUPS, which is
+         what the table's own rule asks for.** 74 files · **242** rules with 3+
+         declarations · **230** distinct · **8** repeated, against LOOPS.md's
+         recorded 74 / 237 / 225 / 8 (2026-08-28). Five new rules, all five
+         distinct, no new repeat and no existing group grown — the eight groups
+         were compared by their named selectors, not by the count, and match the
+         table one for one. The `x4` joined-control group is still **two
+         components** (money ×2, quantity ×2), so its stated reopen trigger — a
+         THIRD component — is unmet.
+       - **Lane 3 — `report:prose`: zero unverdicted pages, checked by SET
+         MEMBERSHIP.** 118 documentation pages of 127 built · median **748** ·
+         total **105,963** words. Nine over 2x the corpus median and twelve over
+         a family median; the union is **fourteen distinct pages** and every one
+         is inside the sixteen already verdicted — 158.1's twelve, 161.1's three
+         (`/base/motion/`, `/concepts/js-behaviors/`, `/concepts/design-language/`)
+         and 178.3's `/concepts/scale/`. `tabs` and `output-form` are verdicted
+         and no longer flagged. Membership was checked against the enumerated
+         sixteen because 228.1 already recorded that grepping each page path out
+         of ROADMAP + archive returns hits for all fourteen whatever the truth is.
+       - **Lane 4 — `report_loop_prose.py`: no file changed accumulate class,
+         and the `ratchet` block was read first.** `CLAUDE.md` **29 up, never
+         cut** and `DESIGN.md` **22 up, never cut** are 167.1's standing verdicts
+         (HONEST, and DESIGN.md is its control) — `CLAUDE.md`'s watch was
+         executed and **retired** by 193.1, so it is not re-raised here.
+         `LOOPS.md` now reads `6 up, last cut 9198e43f (2026-08-29)`, which
+         discharges 191.1's condition; `RESUME.md` was cut at the tip
+         (`f401c1e2`). Every file the loop reads every wake has a cut behind it
+         except the two 167.1 already adjudicated.
+
+2. [x] **244.2 — DONE 2026-09-02. `cssFiles` was hand-copied FOUR times in
+       `packages/core/scripts`, three byte-identical and one already diverged.
+       Consolidated the three; the fourth stays, carrying its reason.**
+
+       Found by the divergence scan step 1 names and no instrument covers —
+       *"duplicated token values or logic (e.g. the same lookup table
+       hand-copied into multiple scripts)"* — the same lane that produced 166.2
+       and 209.2.
+
+       ```
+       grep -rn 'function\* cssFiles' packages/core/scripts/
+       for f in generate-scales check-contrast check-sticky-layers report-css-repeats; do
+         awk '/async function\* cssFiles/,/^}/' packages/core/scripts/$f.mjs | md5sum; done
+       #   c091aeb7b75b57ed727d0cbd8e954710  x3   (contrast, sticky-layers, css-repeats)
+       #   a4ff6324c6f1783dbf55207399326b22        (generate-scales — excludes /scales/)
+       ```
+
+       **The precedent is exact and it is in this repo.** `check-dist-walkers.mjs`
+       exists because the identical convention regrew **twice** on the docs side
+       — its header: *"a script with its own walker works fine right up until its
+       hand-copied exclusion set disagrees with everyone else's."* Here that
+       disagreement was already present before anyone looked.
+
+       **`src-css-files.mjs` obeys `dist-css.mjs`'s 2026-08-17 refusal rather
+       than reversing it.** That module declines to absorb `check-contrast.mjs`
+       and `generate-scales.mjs` because *"those walk different trees with
+       different filters, and folding four different rules behind one options bag
+       would be a worse abstraction than two honest copies."* Correct, and it
+       decides the shape here: what is consolidated is **only the three copies
+       that were already the same rule**. `generate-scales.mjs` keeps its own and
+       now states why — it must not read its own generated output back as input,
+       or the palette-reference check verifies the ramps against the ramps it
+       just emitted.
+
+       **A suspicion this raised and MEASUREMENT killed, recorded because it
+       nearly shipped as a finding.** The three plain walkers pick up
+       `tokens/scales.css` and `scales/extended.css`, which are generated — so
+       `report:css-repeats` looked like it was counting generated output as
+       authored source. It is not a defect: both files **ship**
+       (`tokens/index.css` imports the first; the second is the opt-in
+       `@busy-office/ui/css/scales` entry), so a report over the shipped tree is
+       right to include them. Two of 242 rules. Checked before writing it down,
+       not after.
+
+       **Verified behaviour-preserving, then red-proved by discrimination** —
+       because byte-identical output cannot distinguish a working chokepoint from
+       an unused one, which is this repo's dominant failure mode. Injecting an
+       exclusion for `data-table.css` into `srcCssFiles` (injection confirmed
+       present in the module before running) moved all three: repeats 74 → 73
+       files and 242 → 226 rules, sticky-layers 2 → 1 block-axis and 4 → 0
+       inline-axis, and contrast's per-file tally. Reverted; all three restored
+       byte-identical.
+
+3. [x] **244.3 — DONE 2026-09-02. The same drift in `scripts/loops`:
+       `from_disk`/`from_rev` byte-identical in two reports, folded into the
+       `_common.py` that already exists.**
+
+       Not a new pattern — `_common.py` is the established shared module there,
+       imported by six other loop scripts.
+
+       **Why a READER pair in particular must not drift:** ENVIRONMENT.md's
+       standing trap says a figure describing a commit is read from THAT COMMIT,
+       never the working tree. Two reports disagreeing about what "read" means
+       would publish figures that cannot be reconciled — the class of error
+       228.1 and 229.5 are on the record for.
+
+       Verified in **both** modes rather than the default only: tree and
+       `--rev HEAD`, both scripts, all four outputs byte-identical.
+       `report_reopen_conditions.py --self-test` still passes; all eight other
+       `_common` consumers still import. Red-proved twice by discrimination —
+       truncating `from_disk` moved both tree-mode outputs, truncating `from_rev`
+       moved both `--rev` outputs, each injection confirmed landed and reverted.
+
+       **The scan that found 244.2 and this now reads 0, and the zero is
+       red-proved rather than trusted** — appending a novel identical 7-line
+       function to two unrelated scripts in a scratch copy took the detector
+       **0 → 1** with both sites named. It was 4 at the start of the sweep.
+
+       *Instrument note, because its first output was wrong and this repo's rule
+       says to expect that.* The scan's first version reported **11** cross-file
+       blocks; six were sliding windows of one `import` run reported as separate
+       findings, because "drop a window whose key is a substring of another" does
+       not deduplicate SHIFTED windows. Fixed by extending each match along its
+       diagonal into a maximal run and skipping import lines. The first number
+       this instrument produced was not evidence.
+
+4. [ ] **244.4 — a gate for the `src/css` walker chokepoint, so the
+       consolidation does not regrow. FILED, NOT BUILT — it is bigger than the
+       item that found it.**
+
+       LOOPS.md's operating rules ask, of every fix, *"does the gate that should
+       have caught this exist, and can it fail?"* Here it does not, and the
+       answer is not speculative: `check-dist-walkers.mjs`'s header records that
+       this exact convention, consolidated by convention alone, **regrew twice**
+       on the docs side and that nothing noticed either regrowth for days. 244.2
+       shipped the same consolidation with the same absence of a gate.
+
+       Filed rather than built because the same rules say an improvement bigger
+       than the item becomes a roadmap entry, and this one carries a real design
+       question rather than being mechanical (see the second criterion).
+       `check-selftests.mjs` already scans `packages/core/scripts`, so a
+       `check-*.mjs` there is automatically held to `@heuristic`/`@exact` + a
+       `--self-test`; the machinery exists.
+
+       *Accept* — properties, not predicted values:
+
+       - A gate that fails when a script under `packages/core/scripts`
+         enumerates `src/css` itself instead of importing `src-css-files.mjs`,
+         with `generate-scales.mjs` exempt **and its reason stated in the gate**,
+         the way `check-dist-walkers.mjs` states its two.
+       - **A recorded decision on whether it is a second gate or a shared
+         mechanism**, since `check-dist-walkers.mjs` asks the identical question
+         of a different (tree, chokepoint, exempt-set) triple. Writing a second
+         gate by copying the first would re-create, inside the gate layer,
+         precisely the drift this slice removed — so "two honest gates" is a
+         permitted answer only if it is argued, not defaulted into.
+       - Red-proved by injection with the injection **confirmed landed in the
+         file the gate reads** before the result is believed, and the base rate
+         of the predicate measured and stated — after 244.2 it is true of every
+         core script but one, so what is being bought is a RATCHET against
+         regrowth, and the entry must say that rather than imply the gate found
+         something.
+       - **Concluding that a gate is not worth it closes this item**, provided
+         the reason engages with the measured twice-regrew evidence rather than
+         waving at it. A refusal is a satisfying outcome here.
+
 ## Slice 243 — 242.1 refused: arm 8 does not become a build gate, and neither of the two arguments its Accept anticipated is what decided it — the predicate is unsound in the one direction nobody injected, red-proved by a score that stays correct while the arm goes red (2026-09-02)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0 — the four open items are
