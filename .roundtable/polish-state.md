@@ -1137,6 +1137,11 @@ cite's locational claim.
 1 of 18 before the fix, 0 of 17 after.** Arms 1-7 verify that something a cite
 NAMES resolves, so all seven are blind to a wrong score by construction.
 
+> ⚠ **Read "No gate" below before using this arm.** That sentence is wrong about
+> the mechanism — nothing here reads a page *import*; 21 of 21 matches are demo
+> content — and 242.1 was answered **REFUSED** on 2026-09-02 (ROADMAP 243): the
+> arm goes red on a correct tree, so it stays a probe a human reads.
+
 Four ownership definitions were measured and discarded before one discriminated:
 a CSS grep (flagged 7 on `.bo-btn` noise, **missed** the true positive — its hook
 regex dropped `__` parts); "every hook in the api.json surface" (`initCombobox`
@@ -1221,6 +1226,39 @@ arm 8 needs none. Against it: post-fix the predicate is true of **0 of 17**,
 94.11's own ceremony test. `check:wrong-choice` is equally uniform and is valued
 because it ratchets, so the two arguments are genuinely opposed and the decision
 is not Polish's to take.
+
+> **ANSWERED 2026-09-02 (ROADMAP 243, dispatched by rule 4): REFUSED — no gate,
+> and the paragraph above is withdrawn on two counts.**
+>
+> - **"Mechanically writable" was true of the unsound version only.** The
+>   narrowing that would make the predicate sound — require the named behaviour
+>   to be the component's OWN — needs an ownership map, which is exactly what the
+>   four discarded definitions above failed to produce. Its cheapest proxy
+>   (behaviour name contains the page slug) **misses `dashboard`/
+>   `initCollapsibleCards`, the only defect arm 8 has ever found.** So arm 8 is
+>   in the same class as the four earlier refusals after all: a different missing
+>   datum, an identical shape.
+> - **Neither of the two opposed arguments decided it.** A third one did, and it
+>   did not exist until the false-positive direction was injected: **the arm goes
+>   red on a correct tree.** `navbar` scores `interaction: na` with the cite *"a
+>   container: it holds controls but introduces none of its own"*; give its page
+>   the same `initDropdowns()` demo `button.astro` already carries and the arm
+>   flags it (`rc=1`) while the score stays right by its own words. All three
+>   original injections varied the true positive; none tested this. 236.2's
+>   precedent applies — a shape that fires on healthy states is a report, not a
+>   gate.
+>
+> **Correction to this arm's own description.** *"whose docs page imports a
+> behaviour"* misstates what it reads. Astro frontmatter runs on the server, so a
+> page cannot wire a browser behaviour there and none tries: **21 of 21** matches
+> sit inside a demo template literal or a body `<script type="module">`. The arm
+> is a text scan of what a page DEMONSTRATES — which is why it cannot tell whose
+> behaviour it found, and why **4 of 21** pages (`button`, `offcanvas`,
+> `richtext`, `form`) name only a neighbour's.
+>
+> **Arm 8 is kept, as a probe a round runs and a human reads.** That is how it
+> found dashboard, and it is what the rubric's own note prescribes for this
+> dimension. Do not re-file it as a gate.
 
 ### Not verified, said plainly
 

@@ -315,6 +315,172 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 243 — 242.1 refused: arm 8 does not become a build gate, and neither of the two arguments its Accept anticipated is what decided it — the predicate is unsound in the one direction nobody injected, red-proved by a score that stays correct while the arm goes red (2026-09-02)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0 — the four open items are
+`242.1`, `112.3`, `112.4` and Slice 15's AT evidence, none of them a bug; GitHub
+intake `list_issues` OPEN → `totalCount: 0`, so Step 1 had nothing to triage and
+no `Roadmap · plan` row was recorded. Rule 2: `Standardize 3 / 4`. Rule 3:
+`Objective 2 / 3 [238, 241]`. **Rule 4 matched and dispatched Continue, build
+mode.** Of the four open items, Slice 15 is owner-hardware-blocked and
+`112.3`/`112.4` are owner-blocked; `242.1` is neither, and it is not
+browser-blocked either — it reads `dsa-scores.json`, `api.json` and page source,
+all of `ENVIRONMENT.md`'s "can run" list. Rules 5-8 were not reached.
+
+### The base rate was re-measured first, as the Accept required
+
+```
+python3 - <<'PY'   # the probe lives as a fenced ```js block in the ledger
+import re; s = open('.roundtable/polish-state.md').read()
+open('/tmp/arm8.mjs','w').write(re.search(r'```js\n(// arm 8 —.*?)```', s, re.S).group(1))
+PY
+npm run build -w @busy-office/ui   # the probe reads packages/core/dist/api.json
+node /tmp/arm8.mjs
+# arm 8 — 17 scored interaction:na; 0 whose docs page imports a behaviour   rc=0
+```
+
+Unchanged from the snapshot: 17 `na`, 0 flagged.
+
+### Finding A — the arm does not read a page IMPORT; 21 of 21 matches are demo content
+
+Astro frontmatter runs on the server, so a component page cannot wire a browser
+behaviour there, and **none tries**. Every one of the 21 component pages that
+names `@busy-office/ui/js` does so inside a demo template literal or a
+`<script type="module">` block in the page body:
+
+```
+node -e "const fs=require('fs'),d='apps/docs/src/pages/components';
+const RE=/from\s+['\"]@busy-office\/ui\/js['\"]/; let a=0,b=0;
+for (const f of fs.readdirSync(d).filter(f=>f.endsWith('.astro'))) {
+  const s=fs.readFileSync(d+'/'+f,'utf8'); if(!RE.test(s)) continue; a++;
+  const body = s.startsWith('---') ? s.slice(s.indexOf('\n---',3)+4) : s;
+  if (RE.test(body)) b++; }
+console.log('names the module:',a,'· also outside frontmatter:',b)"
+# names the module: 21 · also outside frontmatter: 21
+```
+
+`tabs.astro` is the plain illustration — `:21` sits inside the
+`const tabsMarkup = \`…\`` template literal that the demo renders, and `:186` is
+the copyable sample beneath it. Neither is a page import.
+
+So the predicate is a **text scan of what a page DEMONSTRATES**, not of what it
+imports, and the arm's own one-line description misstates the mechanism. That is
+not pedantry — it is the whole defect below: a scan of demo content cannot tell
+*whose* behaviour it found.
+
+### Finding B — 4 of 21 pages name only a NEIGHBOUR's behaviour, confirmed by reading
+
+| page | names | what it actually is |
+|---|---|---|
+| `button` | `initDropdowns` | a dropdown menu demoed inside a button-group section (`button.astro:107-110`) |
+| `offcanvas` | `initDialogs` | it *is* a `<dialog>`; the page says the wiring is "inherited, not reimplemented" |
+| `richtext` | `initDialogs` | its own comment: *"the keyboard-map dialog — data-dialog-trigger, **no new JS**"* |
+| `form` | `initGroupedNumber` | its own comment: *"same mechanism as Money and Quantity"* |
+
+All four score `interaction: 3` today, so the arm is silent on them. **Its
+0-of-17 is therefore not evidence that the predicate is right about them** —
+only that none of the four is scored `na`.
+
+**The instrument used to shortlist these over-reported, and that is recorded
+rather than smoothed over.** A name-match probe (does the behaviour's name
+contain the page's slug?) flagged **9 of 21**; five of the nine ship their own
+behaviour under a non-matching name — `dashboard`/`initCollapsibleCards`,
+`file-upload`/`initFileDropzone`, `pagination`/`initLoadMore`,
+`inline-editing`/`initRowEdit`, `filters`/`initSavedViews`. The four above were
+confirmed by **reading each import's context**, not by the regex. A parser that
+reports more is not self-evidently a fix, and name-matching is not ownership.
+
+### Finding C — the red-proof nobody ran: the arm goes red on a correct tree
+
+Arm 8 was created with three injections and **all three vary the true positive**
+(combobox forced to `na` is flagged; dashboard set to 3 flags nothing; the
+import removed from a page copy makes dashboard clean). The false-positive
+direction — a score that is *right* on a page that names a behaviour — was never
+injected. It is:
+
+`navbar` scores `interaction: na`, cite *"a container: it holds controls but
+introduces none of its own"*. Add to a scratch copy of `navbar.astro` exactly
+what `button.astro` already carries — a `<script type="module">` wiring
+`initDropdowns()` for a menu inside the navbar, which is precisely the case that
+cite anticipates — and the score stays correct by its own words while the arm
+goes red:
+
+```
+CONTROL    arm 8 — 17 scored interaction:na; 0 whose docs page imports a behaviour   rc=0
+INJECTED   arm 8 — 17 scored interaction:na; 1 whose docs page imports a behaviour   rc=1
+           FLAG navbar :: page imports initDropdowns
+```
+
+```
+cp -r apps/docs/src/pages/components /tmp/pages
+python3 - <<'PY'   # assert the match count BEFORE replacing — two copies is common
+p='/tmp/pages/navbar.astro'; s=open(p).read(); assert s.count('</Gallery>')==1
+open(p,'w').write(s.replace('</Gallery>',
+  "  <script type=\"module\">\n    import { initDropdowns } from '@busy-office/ui/js';\n"
+  "    initDropdowns();\n  </script>\n\n</Gallery>"))
+PY
+grep -n "@busy-office/ui/js" /tmp/pages/navbar.astro                      # :64  — injection landed
+grep -c "@busy-office/ui/js" apps/docs/src/pages/components/navbar.astro  # 0    — real tree untouched
+node /tmp/arm8.mjs                        # control  : 0 flagged, rc=0
+ARM_PAGES=/tmp/pages node /tmp/arm8.mjs   # injected : 1 flagged, rc=1
+```
+
+**The injection was confirmed before the result was believed**, per this repo's
+standing rule: the replace asserted **exactly one** `</Gallery>` match before
+substituting, `grep -n` found the injected import at `:64` of the mutated page,
+and the real tree still read **0** — the mutation went to `ARM_PAGES`, which the
+probe exposes for exactly this.
+
+### Why no narrowing rescues it — and it is the SAME missing datum as the four earlier refusals
+
+The obvious narrowing is to require the named behaviour to be the component's
+**own**. That needs an ownership map, which is exactly what four definitions
+failed to produce in the round that created arm 8 (CSS grep, `api.json` surface,
+exclusively-owned block, data-attribute hooks). The cheapest proxy — the
+behaviour's name containing the component's slug — is measurably worse than
+useless: it **misses `dashboard`/`initCollapsibleCards`, the only defect arm 8
+has ever found**. So the predicate cannot be both sound and useful without a
+datum this repo does not carry.
+
+**That puts arm 8 in the same class as 216.2 / 217.2 / 220.2 / 227.2 after
+all.** 242.1's premise — *"Arm 8 needs no such thing … the first member of this
+class that is mechanically writable"* — is **withdrawn**. The missing datum is a
+different one (an ownership map, not a per-cite command); the shape is identical,
+and "mechanically writable" was true of the unsound version only.
+
+### The decision
+
+**Refused: arm 8 does not become a build gate.** It stays what it is — a probe a
+Polish round runs and a **human reads**, which is how it found dashboard, and
+which is what the rubric's own note prescribes for this dimension: *"applied by
+READING all 14 behaviour-backed pages, not by grep — an earlier regex was wrong
+on 4 of 7."* Five of six were wrong here.
+
+**Neither of the two arguments the Accept named is what decided it**, and that is
+said plainly rather than force-fitted to satisfy the criterion's wording. The
+Accept framed the choice as ceremony (0 of 17) versus ratchet, and the ceremony
+argument is **not** the operative fact: `check:wrong-choice` is uniformly true
+too and earns its place by ratcheting, so 0-of-17 alone would not have refused
+this. What refused it is **soundness**, a third argument that did not exist until
+the false-positive direction was injected. 236.2 is the precedent already on the
+books: a checkable shape that "fires on healthy states too" is a **report, not a
+gate**.
+
+This is CLAUDE.md's criterion rule landing as a **control**, the shape 149.1 has.
+The Accept did embed a forecast — which of two named arguments would decide — and
+it was wrong, and it cost nothing, because the same Accept also said outright
+that *finding the predicate un-gateable is a satisfying outcome*. A criterion
+that names the property survives its own wrong prediction.
+
+### Not verified, said plainly
+
+Cloud wake: no Podman and no `localhost:8081`, so the 1440/390 light-and-dark
+screenshot lane could not run. **This round changed no CSS, no page markup and
+no shipped artefact** — the diff is `ROADMAP.md`, `.roundtable/polish-state.md`
+and the bookkeeping files, and the only code written was a scratch injection that
+was never committed. Nothing here rests on a rendered image. The gate figures
+quoted below were produced by gates executing in this container.
+
 ## Slice 242 — Polish round 2 on `component/dashboard`: the seventh recorded defect is the first where the SCORE was wrong, not the cite — `interaction: na` on a component that ships a behaviour, blind re-scored to 3 by a second agent (2026-09-02)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0 (the three open items are
@@ -483,8 +649,17 @@ still `badge · spacing -> badge.css:42`, re-read AT the line · `4` **20/20** �
 coincidentally: the new `spacing` cite quotes `41rem`, which the old one did
 not. Same shape as 241's `check:slice-refs` 692 → 693.
 
-1. [ ] **242.1 — decide whether arm 8 becomes a build gate. NOT a Polish
-       decision.** 101.3's stop rule confines Polish to maintaining the existing
+1. [x] **242.1 — decide whether arm 8 becomes a build gate. NOT a Polish
+       decision. ANSWERED 2026-09-02, Slice 243: REFUSED — no gate.** The
+       predicate is unsound in the direction none of the three original
+       injections covered: a `navbar` whose `interaction: na` cite reads *"a
+       container: it holds controls but introduces none of its own"* makes the
+       arm go red the moment its page demos a neighbour's dropdown, and 4 of 21
+       pages already name only a neighbour's behaviour. The narrowing that would
+       fix it needs an ownership map — the same missing datum as 216.2/217.2/
+       220.2/227.2 — and its cheapest proxy misses the one defect arm 8 has ever
+       found. **Neither argument below is what decided it.** See Slice 243.
+       101.3's stop rule confines Polish to maintaining the existing
        ratchet, so this round refused it and files the question instead.
 
        **What makes it different from the four refusals before it.** 216.2,
