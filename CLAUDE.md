@@ -90,6 +90,17 @@ deliberate follow-ups.
   **stale image from cache** — confirm the served CSS actually contains your change
   (`curl …/_astro/*.css | grep <new-class>`) and rebuild with `--no-cache` if not,
   before trusting a screenshot.
+  - The `chrome-devtools-mcp` plugin drives this end-to-end against the running
+    `:8081` container: `new_page` → `navigate_page` to the component page,
+    `emulate` for each of the 4 viewport/theme combinations, `take_screenshot`
+    for the actual verification, and `evaluate_script` / `list_network_requests`
+    in place of the `curl … | grep` stale-cache check. Its `a11y-debugging` and
+    `debug-optimize-lcp` skills also cover the contrast/ARIA and CWV checks this
+    bar requires.
+  - The `modern-web-guidance` plugin auto-triggers on HTML/CSS/client-JS work
+    (container queries, `:has()`, view transitions, forms, CWV) — no manual
+    invocation, it just keeps suggestions current instead of relying on stale
+    training-data patterns.
 - Keep the seven build gates green: named `@container`, contrast threshold **+ coverage**,
   behaviors-vs-`.d.ts`, dist link resolution, stylelint naming, behavior tests, page-shape
   (every component docs page has its opener/`ClassRef`/demo/`ApiTable`/`Related`/sidebar entry).
