@@ -112,6 +112,15 @@ const EXTENDED = Object.keys(ramps).filter((h) => !CORE.includes(h));
    emitted CORE step (extended is opt-in; a core-bundle reference into an
    extended-only ramp would silently resolve to nothing). ---- */
 const { readdir } = await import('node:fs/promises');
+/* NOT `srcCssFiles` from ./src-css-files.mjs, and this is a deliberate honest
+   copy rather than an oversight. That chokepoint walks src/css with NO
+   exclusions; this one must skip `/scales/` and `scales*` because those two
+   files are THIS script's own generated output, and reading them back as input
+   would make the reference check circular — it would "verify" every palette
+   var against the ramps it just emitted. Same reasoning dist-css.mjs records
+   for staying separate: different tree rule, so an options bag would be the
+   worse abstraction. If you widen the exclusion here, nothing else needs to
+   follow — the other three walkers are supposed to see the shipped output. */
 async function* cssFiles(dir) {
   for (const e of await readdir(dir, { withFileTypes: true })) {
     const p = join(dir, e.name);

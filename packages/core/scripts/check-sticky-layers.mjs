@@ -35,12 +35,12 @@
  * repo has recorded the same bug in `check:rtl`, which matched `left:` inside
  * its own explanation. Strip comments before parsing, every time.
  */
-import { readdir, readFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import { join, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { srcCssFiles, srcCssRoot as CSS } from './src-css-files.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const CSS = join(ROOT, 'src', 'css');
 
 /** Every --bo-z-* token the scale defines. A layer must be one of these. */
 const scale = new Set(
@@ -51,20 +51,12 @@ if (scale.size === 0) {
   process.exit(1);
 }
 
-async function* cssFiles(dir) {
-  for (const e of await readdir(dir, { withFileTypes: true })) {
-    const p = join(dir, e.name);
-    if (e.isDirectory()) yield* cssFiles(p);
-    else if (e.name.endsWith('.css')) yield p;
-  }
-}
-
 const BLOCK_INSET = /(?:inset-block-(?:start|end)|top|bottom)\s*:/;
 const failures = [];
 let checked = 0;
 let inlineOnly = 0;
 
-for await (const file of cssFiles(CSS)) {
+for await (const file of srcCssFiles(CSS)) {
   const raw = await readFile(file, 'utf8');
   const css = raw.replace(/\/\*[\s\S]*?\*\//g, (m) => ' '.repeat(m.length)); // keep offsets
   for (const m of css.matchAll(/position:\s*sticky/g)) {

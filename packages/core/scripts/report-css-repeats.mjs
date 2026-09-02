@@ -48,28 +48,20 @@
  *   - `@media` / `@supports` bodies included: a rule inside an at-rule is still
  *     a rule someone maintains.
  */
-import { readdir, readFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import { join, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
+import { srcCssFiles, srcCssRoot as CSS } from './src-css-files.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const CSS = join(ROOT, 'src', 'css');
 const MIN_DECLS = 3;
-
-async function* cssFiles(dir) {
-  for (const e of await readdir(dir, { withFileTypes: true })) {
-    const p = join(dir, e.name);
-    if (e.isDirectory()) yield* cssFiles(p);
-    else if (e.name.endsWith('.css')) yield p;
-  }
-}
 
 const bodies = new Map();
 let rules = 0;
 let files = 0;
 
-for await (const file of cssFiles(CSS)) {
+for await (const file of srcCssFiles(CSS)) {
   files += 1;
   const root = postcss.parse(await readFile(file, 'utf8'), { from: file });
   root.walkRules((rule) => {

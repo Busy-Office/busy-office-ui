@@ -171,16 +171,10 @@ try {
 // within the same rule and assert each fg/bg combination is a KNOWN pair.
 import { readdir } from 'node:fs/promises';
 import postcss from 'postcss';
+import { srcCssFiles } from './src-css-files.mjs';
 const IGNORE_BG = new Set([
   '--bo-color-bg-muted', // header cells carry secondary text, covered
 ]);
-async function* cssFiles(dir) {
-  for (const e of await readdir(dir, { withFileTypes: true })) {
-    const p = join(dir, e.name);
-    if (e.isDirectory()) yield* cssFiles(p);
-    else if (e.name.endsWith('.css')) yield p;
-  }
-}
 const uncovered = new Set();
 // What this scan STRUCTURALLY CANNOT SEE, counted and reported rather than
 // left to the pass line's imagination (roadmap 241.2). Every branch below
@@ -214,7 +208,7 @@ let literalDecls = 0;
 // primary) coverage for any surface token assigned to a *-bg custom property.
 const INDIRECT_BG_PROP = /--bo-[a-z-]*(?:cell-)?bg[a-z-]*$/;
 for (const dir of ['components', 'primitives']) {
-  for await (const f of cssFiles(join(pkgRoot, 'src/css', dir))) {
+  for await (const f of srcCssFiles(join(pkgRoot, 'src/css', dir))) {
     const rel = f.replace(pkgRoot + '/', '');
     const root = postcss.parse(await readFile(f, 'utf8'));
     root.walkDecls((d) => {
