@@ -224,8 +224,8 @@ const ADJUDICATED_ONCE = new Map([
     why: 'the tempting claim is "7 compositions render type=radio but only 1 uses bo-radio". Measured, 6 of those 7 carry `bo-segmented__input` — the segmented control IS a radio group, and it is the right component for a small exclusive choice. Only /patterns/comparison needs a bare radio. Command: for each file matching `type="radio"`, read the class on that input. Suitability beating reuse, same verdict shape as bo-tree.',
   }],
   ['bo-ordered-list', {
-    verdict: 'NOT EXAMINED — recorded as unexamined rather than guessed',
-    why: 'it carries no wrong-choice clause to reason from, and the corpus proxy tried (pattern pages containing `<ol`) returned 39 of 39 because the pattern recipe mandates an Anatomy list on every page. That proxy measures docs chrome. Rather than invent a verdict, this stays open: 163.1 Accept (a) allows "reads as unexamined".',
+    verdict: 'correct at one',
+    why: 'clause: "Not once each item needs more than one attribute" — order alone does not justify a list once quantities, dates or status per row are needed; that is a data table. Verified 2026-09-02 (component design-grill sweep) — this used to be recorded NOT EXAMINED because the page carried no wrong-choice clause; it now does, so the earlier open item is closed rather than left stale.',
   }],
 ]);
 

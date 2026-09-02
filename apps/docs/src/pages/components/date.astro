@@ -69,18 +69,20 @@ const markup = `<span class="bo-date">
 ---
 <Gallery title="Date">
   <div class="bo-alert bo-alert--warning" role="note">
-    <p><strong>Deprecated.</strong> <code>.bo-date</code> is a
-    <code>display: inline-flex</code>, a <code>gap</code>, tabular numerals and a
-    muted span — a <code>.bo-cluster</code> with two utilities. It ships no
-    forced-colors rule, is not density-aware, and no screen in these docs uses
-    it. A surface review scored it 1 of 12, the lowest in the framework.</p>
-    <p>Compose it instead, as shown below. The one decision worth keeping — that
-    overdue is <strong>two-channel</strong>, so the word "Overdue" must be in the
-    text — now lives on <a href={base + '/components/amount'}>Amount</a>, which
-    documents the same contract for negative values.</p>
-    <p><strong>It still works and is not going anywhere this major.</strong>
-    <code>@busy-office/ui</code> is published, so removal waits for the next
-    major version; this is a deprecation, not a deletion.</p>
+    <div>
+      <p><strong>Deprecated.</strong> <code>.bo-date</code> is a
+      <code>display: inline-flex</code>, a <code>gap</code>, tabular numerals and a
+      muted span — a <code>.bo-cluster</code> with two utilities. It ships no
+      forced-colors rule, is not density-aware, and no screen in these docs uses
+      it. A surface review scored it 1 of 12, the lowest in the framework.</p>
+      <p>Compose it instead, as shown below. The one decision worth keeping — that
+      overdue is <strong>two-channel</strong>, so the word "Overdue" must be in the
+      text — now lives on <a href={base + '/components/amount'}>Amount</a>, which
+      documents the same contract for negative values.</p>
+      <p><strong>It still works and is not going anywhere this major.</strong>
+      <code>@busy-office/ui</code> is published, so removal waits for the next
+      major version; this is a deprecation, not a deletion.</p>
+    </div>
   </div>
 
   <section class="demo">

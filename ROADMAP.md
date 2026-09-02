@@ -315,6 +315,71 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 248 — Component-by-component design-grill: 40 of 40 covered, 1 real defect fixed, one instrument caught lying to itself (2026-09-02)
+
+Live visual grill (`design-grill` skill, `chrome-devtools-mcp`) applied to every
+component docs page — 6 batches of forks, findings in
+`.roundtable/design-grill-components-batch{1..6}-2026-08-31.md` and
+`.roundtable/design-grill-components-SYNTHESIS-2026-08-31.md`.
+
+**Result: removal-first/less-for-more holds.** Zero components needed a
+`remove` or forced `reword` verdict; every wrong-choice clause checked out as
+real and testable. The defects found were documentation/measurement mismatches,
+not design-restraint failures.
+
+1. **Fixed — Date's deprecation notice didn't reflow at 390px.** Three sibling
+   `<p>` elements sat as direct children of `.bo-alert` (`display: flex`,
+   default `flex-direction: row`), so each became its own flex item instead of
+   stacking — every other multi-paragraph `.bo-alert` on the site wraps its
+   content in one child `<div>` first. Fixed in
+   `apps/docs/src/pages/components/date.astro` by wrapping the three
+   paragraphs in a `<div>`, matching the established pattern (see
+   `apps/docs/src/pages/patterns/notification.astro`). Verified live at true
+   390px: paragraph widths went from 168px/134px/99px (side by side) to
+   307px/307px/307px (stacked).
+   - **Accept:** `getComputedStyle` on each `<p>` inside Date's deprecation
+     `.bo-alert` reports a width matching the alert's content width (within
+     rounding), at a true 390px viewport.
+
+2. **Refuted — Key-value facts' "single stack at phone width" claim.** Batch 5
+   reported `kv.css:8`'s `minmax(11rem,1fr)` grid rendering 2 columns at
+   390px, contradicting the docs claim. Red-proved before fixing anything (this
+   file's own rule: *a red-proof that comes back green is a defect in the
+   injection until proven otherwise* — the same discipline applies to a
+   red result the other way): re-measured live with a verified true 390px
+   viewport (`window.innerWidth === 390`, confirmed by screenshot) and the
+   grid renders exactly 1 column, 308px wide, matching the docs claim.
+   Batch 5's `emulate({viewport: …})` call did not actually reach 390px
+   despite believing it had fixed the earlier `resize_page` 500px floor bug —
+   an instrument's first output (and its second) is not evidence. No code or
+   docs change made; this closes as no-defect.
+
+3. **Fixed — Amount/Money/Quantity's "rule for this family" note is a
+   verbatim 3-way duplicate with nothing keeping it in sync.** By design (a
+   shared routing rule across the numeric-value family), not a bug — but
+   batch 4 refuted the duplication by comparing against the wrong paragraph on
+   Amount's page, and batch 5 caught the correction. Added a matching HTML
+   comment above the paragraph in all three of `amount.astro`, `money.astro`,
+   `quantity.astro` naming the other two files to update together.
+
+4. **Fixed — `report-reach.mjs`'s `bo-ordered-list` verdict was stale.** It
+   read "NOT EXAMINED" because the component's docs page carried no
+   wrong-choice clause at the time that verdict was written; the page now has
+   one ("Not once each item needs more than one attribute…", correct on
+   inspection). Updated the verdict entry in
+   `apps/docs/scripts/report-reach.mjs` to `correct at one`, closing the open
+   item rather than leaving a stale claim in a script that runs every build.
+
+5. **Open — Scan feedback's demo placeholder text clips at 390px.** Cosmetic,
+   not yet fixed.
+   - **Accept:** the placeholder text (or its container) in
+     `packages/core/src/css/components/scan/scan.css` or the demo markup in
+     `apps/docs/src/pages/components/scan.astro` no longer clips at a
+     verified true 390px viewport — confirm via `getComputedStyle`
+     (`scrollWidth` vs `clientWidth` on the actual clipping box, not a
+     shrink-wrapped parent, per this file's own "measure the box that carries
+     the constraint" rule) before and after.
+
 ## Slice 247 — 245.1 built: both of 244.3's counts corrected against a named revision, and upholding the "leave the log row alone" bullet found that bullet's OWN citation pointing at the wrong row (2026-09-02)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0 — the four open items were
