@@ -15,7 +15,7 @@ Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_
 - [`surface-baseline.md`](surface-baseline.md) — the scored-surface baseline
 - [`surface-review-rubric.md`](surface-review-rubric.md) — how a surface is scored
 
-## Findings — 162 snapshots, newest first
+## Findings — 169 snapshots, newest first
 
 A **·** marks a file nothing outside `.roundtable/` links to. That is not a defect: a grill can settle a question without anything needing to cite it afterwards. It is here so the uncited set stays visible instead of growing unnoticed.
 
@@ -29,6 +29,13 @@ A **·** marks a file nothing outside `.roundtable/` links to. That is not a def
 | 2026-09-02 | [Objective grill — Slices 238, 241, 243, 244 (2026-09-02, cloud wake)](grill-objective-238-241-243-244-2026-09-02.md) | ✓ |
 | 2026-09-01 | [Objective grill — Slices 232, 233, 234, 235 (2026-09-01, cloud wake)](grill-objective-232-233-234-235-2026-09-01.md) | ✓ |
 | 2026-09-01 | [Objective grill — Slices 232, 234, 236, 237 (2026-09-01, cloud wake)](grill-objective-232-234-236-237-2026-09-01.md) | ✓ |
+| 2026-08-31 | [Design grill — full component sweep, synthesis (2026-08-31)](design-grill-components-SYNTHESIS-2026-08-31.md) | ✓ |
+| 2026-08-31 | [Design grill — components batch 1: alert, amount, approval-workflow, avatar, badge, breadcrumb, ](design-grill-components-batch1-2026-08-31.md) | · |
+| 2026-08-31 | [Design grill — components batch 2: byline, calendar, combobox, dashboard, data-table, date, dial](design-grill-components-batch2-2026-08-31.md) | · |
+| 2026-08-31 | [Design grill — components batch 3: dropdown, file-upload, filters, form, icon, kbd, kv (2026-08-](design-grill-components-batch3-2026-08-31.md) | · |
+| 2026-08-31 | [Design grill — components batch 4 (money, navbar, offcanvas, ordered-list, pagination, progress,](design-grill-components-batch4-2026-08-31.md) | · |
+| 2026-08-31 | [Design grill — components batch 5 (quantity, richtext, scan, segmented, sidebar-nav, skeleton, s](design-grill-components-batch5-2026-08-31.md) | · |
+| 2026-08-31 | [Design grill — components batch 6 (stepper, tabs, tag-input, tree, tree-table)](design-grill-components-batch6-2026-08-31.md) | · |
 | 2026-08-31 | [Objective grill — Slices 222, 226, 227, 228 (2026-08-31, cloud wake)](grill-objective-222-226-227-228-2026-08-31.md) | ✓ |
 | 2026-08-31 | [Objective grill — Slices 229, 230, 231 (2026-08-31, cloud wake)](grill-objective-229-230-231-2026-08-31.md) | ✓ |
 | 2026-08-30 | [Objective grill — Slices 211, 213, 214 (2026-08-30, cloud wake)](grill-objective-211-213-214-2026-08-30.md) | ✓ |
@@ -195,4 +202,4 @@ The signature of a directory that has outgrown retrieval is the same subject inv
 
 Two files on one subject is usually a deliberate follow-up (a grill and its sign-off). Three is worth a look.
 
-— 170 files, 125 cited from outside, 46 uncited snapshots, 4 repeated subject(s).
+— 177 files, 126 cited from outside, 52 uncited snapshots, 4 repeated subject(s).

@@ -19,6 +19,12 @@
     border-radius: var(--bo-radius-md);
     background: var(--bo-color-bg-surface);
     font-size: var(--bo-density-font-size);
+    /* A value or placeholder longer than the control is a truncation, not a
+       cutoff — an ellipsis says so; a raw clip at the border doesn't (found
+       on Scan's demo placeholder at 390px, component design-grill 2026-09-02). */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     transition: border-color var(--bo-motion-duration-fast)
       var(--bo-motion-easing-standard);
   }
@@ -54,6 +60,11 @@
     min-height: calc(var(--bo-density-control-height) * 2);
     padding-block: var(--bo-space-2);
     resize: vertical;
+    /* A single-line control truncates; a textarea wraps — the ellipsis
+       rule above is wrong here and would hide most of the value. */
+    overflow: auto;
+    white-space: pre-wrap;
+    text-overflow: clip;
   }
 
   :is(.bo-input, .bo-quantity__input)::placeholder {

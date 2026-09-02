@@ -370,15 +370,23 @@ not design-restraint failures.
    `apps/docs/scripts/report-reach.mjs` to `correct at one`, closing the open
    item rather than leaving a stale claim in a script that runs every build.
 
-5. **Open — Scan feedback's demo placeholder text clips at 390px.** Cosmetic,
-   not yet fixed.
-   - **Accept:** the placeholder text (or its container) in
-     `packages/core/src/css/components/scan/scan.css` or the demo markup in
-     `apps/docs/src/pages/components/scan.astro` no longer clips at a
-     verified true 390px viewport — confirm via `getComputedStyle`
-     (`scrollWidth` vs `clientWidth` on the actual clipping box, not a
-     shrink-wrapped parent, per this file's own "measure the box that carries
-     the constraint" rule) before and after.
+5. **Fixed (2026-09-02) — Scan feedback's demo placeholder text clipped at
+   390px with no visual affordance.** Shortening the placeholder string was
+   rejected: `Try 4006381333931, then REJECT-1` is the only reader-facing
+   hint to exercise the error path, and dropping it loses content the demo
+   needs, not just characters. Fixed at the framework level instead —
+   `.bo-input`/`.bo-quantity__input` in
+   `packages/core/src/css/components/form/input.css` now carries
+   `overflow: hidden; white-space: nowrap; text-overflow: ellipsis`, general
+   to every input rather than a one-off on Scan's demo, per this file's own
+   less-for-more test. `textarea.bo-input` explicitly resets it back to
+   wrapping — verified live (`white-space: pre-wrap` on a real textarea after
+   the change) so multi-line controls weren't silently broken. CHANGELOG
+   entry added under Unreleased.
+   - **Accept:** `getComputedStyle` on the Scan demo's input reports
+     `text-overflow: ellipsis`, `white-space: nowrap` at a verified true
+     390px viewport; `getComputedStyle` on a `textarea.bo-input` reports
+     `white-space: pre-wrap` (unchanged).
 
 ## Slice 247 — 245.1 built: both of 244.3's counts corrected against a named revision, and upholding the "leave the log row alone" bullet found that bullet's OWN citation pointing at the wrong row (2026-09-02)
 

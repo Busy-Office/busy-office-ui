@@ -9,7 +9,15 @@ pin.
 
 ## Unreleased
 
-_Nothing yet._
+### Fixed
+
+- `.bo-input` (and `.bo-quantity__input`) now truncates an overflowing value
+  or placeholder with an ellipsis instead of a raw clip at the control's
+  edge — `text-overflow: ellipsis`, added alongside the `overflow`/
+  `white-space` it requires. `textarea.bo-input` explicitly resets this back
+  to wrapping, since a multi-line control must never truncate. Found on
+  Scan's demo placeholder at 390px during the component design-grill
+  (ROADMAP.md Slice 226).
 
 
 ## 0.7.0 (2026-08-30)
