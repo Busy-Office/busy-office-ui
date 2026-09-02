@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-02 22:37 UTC
+Generated at: 2026-09-02 22:38 UTC
 
 ## Open items by slice
 
@@ -17,11 +17,12 @@ Generated at: 2026-09-02 22:37 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1306 iterations logged)
+dispatch status — counter-triggered rules (1307 iterations logged)
   Standardize   3 / 4 Continue rounds since 2026-09-02 16:54   ok
   Objective     3 / 3 slices          since 2026-09-02 17:53   OVERDUE  [244, 245, 248]
   -> a counter is at or past its threshold; the dispatcher should pick it
-  Optimize      0 wake-date(s) newer   since 2026-09-02 01:46   ok   [newest pair: axe-violations; 119 sample(s), 13 of 36 name(s) sampled twice]
+  Optimize      1 wake-date(s) newer   since 2026-09-02 01:46   STALE   [newest pair: axe-violations; 119 sample(s), 13 of 36 name(s) sampled twice]
+  -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-02, not this one — record a metric or say the rule could not be evaluated.
 ```
 
 ## Owner-blocked
@@ -34,7 +35,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-02 16:54 · Standardize · tidy · 244.3 — from_disk/from_rev byte-identical in roadmap_scope.py and report_reopen_conditions.py, folded into the _common.py that already exists there; subprocess import dropped from both. Verified in BOTH tree and --rev HEAD modes, all four outputs byte-identical, self-test still green, eight other _common consumers still import. Red-proved twice by discrimination. The cross-file dup scan now reads 0 maximal runs, down from 4 — and the zero is red-proved (novel identical 7-line function into two unrelated scripts in a scratch copy took it 0->1). The scan's own FIRST output was wrong: 11 blocks, six of them sliding windows of one import run · landed · b0b70f96
 - 2026-09-02 16:54 · Roadmap · plan · 244.4 filed OPEN — a gate for the src/css walker chokepoint, since check-dist-walkers.mjs's header records this same convention regrew TWICE when consolidated by convention alone. Not built: bigger than the item, and it carries a real design question (a second gate would duplicate check-dist-walkers' structure, re-creating in the gate layer the drift this slice removed). Accept written as properties; a reasoned refusal closes it. First rule-4-dispatchable item in four wakes · logged · b0b70f96
 - 2026-09-02 17:53 · Objective · grill · Slice 245 — Objective grill of Slices 238, 241, 243, 244: scope narrowed to rows (238 armed only by 238.1; the four Polish rows dropped, so 239/240/242 carry no verdict). 29 of 31 published claims re-run and reproduce — four sweep lanes byte-exact with the eight css-repeat groups compared member-for-member and the 14 prose pages checked by set membership, arm 8's red-proof 0->1 rc 0->1 at :64, contrast 4.83/11.46 against a control matching contrast.json, 238.1's five-commit range. Filed 245.1: 244.3's 'six other loop scripts' and 'eight other _common consumers' are two counts of one set against a tree holding 5 before / 7 after; the 8 counts a different noun. Consolidation itself sound — all 7 real consumers import · logged · 4fcf971b
 - 2026-09-02 17:53 · Meta · refusal · filing the discarded cross-file duplicate detector as a sibling item — 244.4 is already open on the same question and its second criterion asks exactly this; recorded there as a third option instead · refused · 4fcf971b
@@ -44,6 +44,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-02 18:52 · Meta · refusal · routing check-contrast.mjs:135 and build-component-css.mjs:98 through the chokepoint — neither is a drop-in and it would change build output this wake cannot verify visually (recorded as 246.1) · refused · 8f6c1011
 - 2026-09-02 19:46 · Continue · build · 245.1 — 244.3's 'six other loop scripts' and 'eight other _common consumers' are two counts of one set; both sites now carry the figure, the revision read at, the command, and the noun. Command reproduces 5 at 71a61679 / 7 at 1590bc2b, b0b70f96 and c31799a3, so 'other than the two folded' is five; the six is a mid-edit working-tree reading reachable at no revision, the eight counts ten .py minus two folded with three non-importers among them. Third-reading bullet TESTED by command and negative — three widenings all read 5/7. Log row and STATUS mirror left unedited per record_iteration.py's standing rule. Filed 247.1 · landed · b1370408
 - 2026-09-02 22:05 · Continue · fix · Slice 248 item 5 (renumbered from local Slice 226 during the origin rebase — origin had already used 226 for unrelated work): Scan's placeholder-clip nit — added text-overflow:ellipsis to .bo-input framework-wide instead of trimming demo content · landed · 856ede3
+- 2026-09-03 06:38 · Meta · refusal · Rebased 3 local commits (component design-grill + docs) onto origin/main after 80+ autonomous-loop commits landed upstream (through Slice 247); local content used the number Slice 226, already taken upstream for unrelated work, so renumbered to Slice 248 during resolution — no content lost, all gates + 152 tests green post-rebase · landed · ba4dcdf
 
 ## Sunset test
 
