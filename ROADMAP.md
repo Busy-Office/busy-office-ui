@@ -315,6 +315,106 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 245 — Objective grill of Slices 238, 241, 243, 244: twenty-nine of thirty-one published claims reproduce, and the two that do not are ONE item's two counts of one set — six and eight against a tree holding five before and seven after (2026-09-02)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0 — the four open items are
+`244.4`, `112.3`, `112.4` and Slice 15's AT evidence, none of them a bug; GitHub
+intake `list_issues` OPEN → `totalCount: 0`, so Step 1 had nothing to triage and
+no `Roadmap · plan` row was recorded. Rule 2: `Standardize 0 / 4 ok`. Rule 3:
+**`Objective 4 / 3 slices OVERDUE [238, 241, 243, 244]` — dispatched.** Rules
+4-8 were not reached. Full report:
+`.roundtable/grill-objective-238-241-243-244-2026-09-02.md`.
+
+**Scope narrowed before grilling, per §6 step 0.** Slice 238 IS the previous
+grill, so it is armed by new work rather than re-grilled: the only
+Continue/Standardize row naming it after that grill's own `Objective` row is
+**238.1** (`61074ca7`), the build closing the finding it filed. `.roundtable/INDEX.md`
+reads **169 files, 4 repeated subjects**, none in this range. **Dropped:** the
+four `Polish · reconcile` rows in the same window (stepper, tree-table 239,
+calendar 240, dashboard 242) — 161.4 excludes Polish from the counter and none
+of the three slices is in the armed set, so 239, 240 and 242 carry **no verdict
+from this grill**.
+
+**What reproduces — twenty-nine of thirty-one, each re-executed on an
+unshallowed clone (1,806 commits) rather than read.** Lane 1 `0 dead of 1,433`
+and lane 2 `74 / 242 / 230 / 8` are byte-exact, with the eight repeat groups
+compared to LOOPS.md's table **member-for-member by selector** including the x3
+list-reset group the sweep did not print, and the `x4` group still two
+components. Lane 3 reproduces at `118 of 127 · median 748 · total 105,963`, 9 +
+12 flags unioning to **14 distinct pages**, every one inside the sixteen
+verdicted by set membership against the archived lists. Lane 4's ratchet reads
+`CLAUDE.md 29 up · DESIGN.md 22 up · LOOPS.md 6 up, last cut 9198e43f`. 244.2's
+md5s are exact at the pre-change tree `f401c1e2` (`c091aeb7…` ×3, `a4ff6324…`),
+both generated files ship and contribute exactly **2 of 242** rules by a postcss
+count, and both of 244.4's premises hold. 243's arm-8 control reads **17 na, 0
+flagged**, Finding A **21 / 21**, Finding C's injection **0 → 1 flagged, rc 0 →
+1** with the import landing at `:64` and the real tree still 0; the name-match
+probe re-flags **the same nine**, splitting 5 + 4 exactly as the item says.
+241.2's `%23` count is **27** with line 54 a comment, the literals are unchanged
+since `4ef554fa`, `select.css`/`color.css` churn is **6 / 10**, and contrast
+recomputes to **4.83** light and **11.46** dark against a control matching
+`contrast.json` in both themes. 238.1's range holds **five** commits with
+`e29c7c18` at `1575 / 0`.
+
+**Not re-run, named rather than implied:** 241.1's four browser routes. They are
+`ENVIRONMENT.md`'s "can run" list, but re-driving four headless probes to
+re-confirm a refusal four independent measurements already agreed on was judged
+not worth the wake; 241.2's contrast figures — the numbers that decide whether
+that refusal is safe — were re-run instead and hold.
+
+1. [ ] **245.1 — 244.3 publishes TWO counts of one set, six and eight, and
+       neither is what the tree holds. The consolidation itself is sound and is
+       not reopened.**
+
+       `ROADMAP.md:436` — *"`_common.py` is the established shared module there,
+       imported by **six** other loop scripts"*. `ROADMAP.md:446` — *"all
+       **eight** other `_common` consumers still import"*. Same set, two numbers,
+       and they disagree with each other before they disagree with the tree.
+
+       ```
+       for f in $(git ls-tree --name-only $rev scripts/loops/ | grep '\.py$' | grep -v '_common.py'); do
+         git show $rev:$f | grep -q "from _common import" && echo $f; done | wc -l
+       #   71a61679  (before 244.3)                      -> 5
+       #   1590bc2b  (after)                             -> 7
+       #   b0b70f96  (the tree the item was written on)  -> 7
+       ```
+
+       **Five before, seven after; "other than the two folded" is five.** The
+       published **six** is reachable only in the intermediate state — after the
+       first of the two was routed and before the second — which is a figure read
+       from the working tree mid-edit, the exact form `ENVIRONMENT.md`'s standing
+       trap names.
+
+       **The eight is a correct count of a different noun.** `scripts/loops`
+       holds ten `.py` files besides `_common.py`; minus the two this item
+       changed, **eight**. Three of those eight — `generate_roundtable_index.py`,
+       `polish_requeue.py`, `report_loop_prose.py` — do not import `_common` at
+       all, so they are not *"`_common` consumers"*. Counted right, labelled
+       wrong.
+
+       **The substance stands.** All **seven** real consumers import cleanly at
+       `ff28dfdb` (`python3 -c "import …"`, exit 0 each), and the item's four
+       byte-identical output comparisons and two discrimination red-proofs are
+       about `from_disk`/`from_rev`, not about how many callers exist. This is
+       238.1's shape — *the premise reproduces; what fails is the number quoted
+       to size it* — for the second consecutive grill.
+
+       *Accept* — properties, not predicted values:
+
+       - Both sites in `ROADMAP.md` state a figure that **agrees with what the
+         command above prints** at a named revision, and say which revision, so
+         the before/after ambiguity that produced the six cannot recur.
+       - The noun matches the set counted: whatever number is written is
+         labelled with what it counts, verified by re-running the command beside
+         it.
+       - The `loop-log.md:1305` row and its `STATUS.md:45` mirror are **left
+         unedited**, with the reason recorded where a reader of the correction
+         arrives — `record_iteration.py`'s standing rule, upheld by 238.1 for
+         this same class.
+       - Finding that a *third* reading makes one of the two numbers correct is
+         a satisfying outcome and closes this item, provided the reading is
+         produced by a command rather than argued.
+
 ## Slice 244 — Standardize sweep: all four standing lanes clean, and the finding came from the fifth thing the playbook names — `cssFiles` hand-copied four times, one of them already diverged (2026-09-02)
 
 Dispatcher rule 2, `dispatch_status.py` reading `Standardize 4 / 4 OVERDUE`.
@@ -500,6 +600,25 @@ green. **No visual debt was added; nothing visual was looked at.**
        - **Concluding that a gate is not worth it closes this item**, provided
          the reason engages with the measured twice-regrew evidence rather than
          waving at it. A refusal is a satisfying outcome here.
+
+       **A THIRD option for the second criterion, recorded by the 245 grill
+       rather than filed as a sibling item.** 244.3 wrote a general cross-file
+       duplicate detector, red-proved it (`0 → 1` on a novel identical function
+       appended to two unrelated scripts) — and did not commit it:
+
+       ```
+       grep -rln "maximal run\|sliding window\|cross-file" \
+           scripts/ packages/core/scripts/ apps/docs/scripts/    # nothing
+       ```
+
+       So its two published readings (*"now reads 0, down from 4"*) cannot be
+       re-derived, and the lane recurs without an instrument: **166.2** (a fourth
+       copy of `api.pageSlug`), **209.2**, and 244.2/244.3 — three findings from
+       the fifth thing Standardize step 1 names, each found ad hoc, while lanes
+       1-4 each have a committed script. A general detector is a third answer to
+       *"second gate or shared mechanism"*, not a fourth item: filing it
+       separately would re-create one level up the drift 244.2 removed. Whoever
+       closes this item should say which of the three it chose.
 
 ## Slice 243 — 242.1 refused: arm 8 does not become a build gate, and neither of the two arguments its Accept anticipated is what decided it — the predicate is unsound in the one direction nobody injected, red-proved by a score that stays correct while the arm goes red (2026-09-02)
 
