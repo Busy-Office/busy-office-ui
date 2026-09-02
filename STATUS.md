@@ -2,24 +2,24 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-02 18:52 UTC
+Generated at: 2026-09-02 19:46 UTC
 
 ## Open items by slice
 
 - **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS + FOUR ANSWERS (grilled 2026-08-29 at the owner's request; full report `.roundtable/grill-112.3-pilot-still-worth-it-2026-08-29.md`).
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-- **Slice 245** (1 open)
-  - 245.1 — 244.3 publishes TWO counts of one set, six and eight, and neither is what the tree holds. The consolidation itself is sound and is not reopened.
+- **Slice 247** (1 open)
+  - 247.1 — `ROADMAP.md` cites by two idioms. The gated one (slice number) resolves every citation it has. The ungated one (`file:line`) holds 8 of 8 into source files and
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1304 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-09-02 16:54   ok
-  Objective     1 / 3 slice           since 2026-09-02 17:53   ok  [244]
+dispatch status — counter-triggered rules (1305 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-09-02 16:54   ok
+  Objective     2 / 3 slices          since 2026-09-02 17:53   ok  [244, 245]
   Optimize      0 wake-date(s) newer   since 2026-09-02 01:46   ok   [newest pair: axe-violations; 119 sample(s), 13 of 36 name(s) sampled twice]
 ```
 
@@ -33,7 +33,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-02 16:54 · Standardize · sweep · 244.2 — cssFiles hand-copied FOUR times in packages/core/scripts, three byte-identical (md5 c091aeb7) and generate-scales already diverged; extracted src-css-files.mjs and routed the three through it. Obeys dist-css.mjs's 2026-08-17 refusal rather than reversing it — only the three copies that were already the SAME rule are consolidated. All four consumers byte-identical before/after; red-proved by discrimination (injecting a data-table.css exclusion moved repeats 74->73 files and 242->226 rules, sticky 2->1 block-axis and 4->0 inline-axis, contrast's tally; injection confirmed landed, reverted, restored). A suspicion that the walkers count generated CSS as authored source was killed by measuring: both generated files ship · landed · b0b70f96
 - 2026-09-02 16:54 · Meta · refusal · folding generate-scales.mjs into the chokepoint — its exclusion exists so it does not read its own generated output back as input; dist-css.mjs already refuses exactly this options-bag fold · refused · b0b70f96
 - 2026-09-02 16:54 · Standardize · tidy · 244.3 — from_disk/from_rev byte-identical in roadmap_scope.py and report_reopen_conditions.py, folded into the _common.py that already exists there; subprocess import dropped from both. Verified in BOTH tree and --rev HEAD modes, all four outputs byte-identical, self-test still green, eight other _common consumers still import. Red-proved twice by discrimination. The cross-file dup scan now reads 0 maximal runs, down from 4 — and the zero is red-proved (novel identical 7-line function into two unrelated scripts in a scratch copy took it 0->1). The scan's own FIRST output was wrong: 11 blocks, six of them sliding windows of one import run · landed · b0b70f96
 - 2026-09-02 16:54 · Roadmap · plan · 244.4 filed OPEN — a gate for the src/css walker chokepoint, since check-dist-walkers.mjs's header records this same convention regrew TWICE when consolidated by convention alone. Not built: bigger than the item, and it carries a real design question (a second gate would duplicate check-dist-walkers' structure, re-creating in the gate layer the drift this slice removed). Accept written as properties; a reasoned refusal closes it. First rule-4-dispatchable item in four wakes · logged · b0b70f96
@@ -43,6 +42,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-02 18:52 · Meta · refusal · gating the WIDE reading of the predicate — it would exempt six of twenty-six core scripts, which is exempting the tree rather than gating it · refused · 8f6c1011
 - 2026-09-02 18:52 · Meta · refusal · a table-driven single gate over both chokepoints — it satisfies check-selftests once and would accept a third and fourth predicate with no obligation to prove either can fail · refused · 8f6c1011
 - 2026-09-02 18:52 · Meta · refusal · routing check-contrast.mjs:135 and build-component-css.mjs:98 through the chokepoint — neither is a drop-in and it would change build output this wake cannot verify visually (recorded as 246.1) · refused · 8f6c1011
+- 2026-09-02 19:46 · Continue · build · 245.1 — 244.3's 'six other loop scripts' and 'eight other _common consumers' are two counts of one set; both sites now carry the figure, the revision read at, the command, and the noun. Command reproduces 5 at 71a61679 / 7 at 1590bc2b, b0b70f96 and c31799a3, so 'other than the two folded' is five; the six is a mid-edit working-tree reading reachable at no revision, the eight counts ten .py minus two folded with three non-importers among them. Third-reading bullet TESTED by command and negative — three widenings all read 5/7. Log row and STATUS mirror left unedited per record_iteration.py's standing rule. Filed 247.1 · landed · b1370408
 
 ## Sunset test
 
