@@ -64,8 +64,9 @@ repo's own hypothesis (execution tracks whether a playbook step names the thing)
 predicts an unnamed script goes unread. 199.1 is what that costs when it happens.
 """
 import re
-import subprocess
 import sys
+
+from _common import from_disk, from_rev
 
 FILES = ('ROADMAP.md', 'ROADMAP-archive.md')
 
@@ -120,18 +121,6 @@ def scan(read):
             if NEEDLE.search('\n'.join(without_accept(body))):
                 hits.append((path, line, body))
     return items, hits
-
-
-def from_disk(path):
-    with open(path, encoding='utf-8') as fh:
-        return fh.read()
-
-
-def from_rev(rev):
-    def read(path):
-        return subprocess.run(['git', 'show', f'{rev}:{path}'],
-                              capture_output=True, text=True, check=True).stdout
-    return read
 
 
 def self_test():

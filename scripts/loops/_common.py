@@ -5,6 +5,7 @@ loops.db is a derived mirror that can be rebuilt from them at any time.
 """
 import os
 import sqlite3
+import subprocess
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 RT = os.path.join(ROOT, ".roundtable")
@@ -15,6 +16,32 @@ SCHEMA = os.path.join(os.path.dirname(__file__), "schema.sql")
 
 # Canonical log line: "- <ts> · <loop> · <mode> · <item> · <outcome> · <commit>"
 SEP = " · "
+
+
+def from_disk(path):
+    """Read a file from the WORKING TREE.
+
+    Paired with `from_rev` so a report can be pointed at either the tree or a
+    revision. Both live here because `roadmap_scope.py` and
+    `report_reopen_conditions.py` carried byte-identical copies (Standardize
+    sweep, 2026-09-02) — and a reader pair is exactly the thing that must not
+    drift: ENVIRONMENT.md's standing trap says a figure describing a commit is
+    read from THAT COMMIT, so two reports disagreeing about what "read" means
+    would publish figures that cannot be reconciled.
+    """
+    with open(path, encoding="utf-8") as fh:
+        return fh.read()
+
+
+def from_rev(rev):
+    """Return a reader that resolves paths against `rev` instead of the tree."""
+
+    def read(path):
+        return subprocess.run(
+            ["git", "show", f"{rev}:{path}"], capture_output=True, text=True, check=True
+        ).stdout
+
+    return read
 
 
 def connect(db=DB):

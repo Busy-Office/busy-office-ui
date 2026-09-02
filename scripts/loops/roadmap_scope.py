@@ -89,8 +89,9 @@ correct state. `LOOPS.md` rule 4 and the Standardize playbook's lane 4 are what
 keep it from rotting.
 """
 import re
-import subprocess
 import sys
+
+from _common import from_disk, from_rev
 
 LIVE = 'ROADMAP.md'
 ARCHIVE = 'ROADMAP-archive.md'
@@ -180,18 +181,6 @@ def reconcile(path, text, boxes, stray):
         sys.exit(f'REFUSING to report: {path} has {raw[0]} open / {raw[1]} closed '
                  f'raw checkbox markers, but the parse accounted for '
                  f'{seen[0]} / {seen[1]}. A marker shape is going unseen.')
-
-
-def from_disk(path):
-    with open(path, encoding='utf-8') as fh:
-        return fh.read()
-
-
-def from_rev(rev):
-    def read(path):
-        return subprocess.run(['git', 'show', f'{rev}:{path}'],
-                              capture_output=True, text=True, check=True).stdout
-    return read
 
 
 def report(read, min_lines, rev):
