@@ -182,6 +182,32 @@ async function* cssFiles(dir) {
   }
 }
 const uncovered = new Set();
+// What this scan STRUCTURALLY CANNOT SEE, counted and reported rather than
+// left to the pass line's imagination (roadmap 241.2). Every branch below
+// keys off `var(--bo-color-*)`, so a raw colour value — a hex, an rgb()/hsl(),
+// a named colour, or a hex inside a `data:` URI — matches nothing and is
+// skipped in silence. The gate then printed "coverage verified against
+// component CSS", which is a claim about a set it never enumerated:
+// CLAUDE.md's "a derived artefact may not decide, on its own, what it failed
+// to see. Assert the count, not just the content." Same treatment as
+// check:rtl warning that DESIGN.md's flip-site count was NOT verified rather
+// than reporting a clean pass it did not earn.
+//
+// REPORT, not gate, and deliberately: 26 of the 46 are icon.css glyph URIs
+// consumed by `mask-image`, so adding an icon legitimately grows this number
+// and a ratchet over it would go red on a correct tree (236.2's reasoning).
+// It contributes nothing to the exit code, which is why the @exact tag above
+// still holds — the verdict is still ratios and token pairs.
+//
+// Every colour form, not just hex: counting hex alone would under-report, and
+// under-reporting is the exact defect this line exists to fix. Measured
+// 2026-09-02 — components + primitives carry 46 such declarations, all of them
+// hex or %23-hex, with zero rgb()/hsl()/oklch()/named-colour uses and zero
+// `url(#fragment)` sites for the hex pattern to trip on.
+const LITERAL_COLOUR =
+  /(?:^|[^\w&])#[0-9a-fA-F]{3,8}\b|%23[0-9a-fA-F]{3,8}\b|\brgba?\(|\bhsla?\(|\b(?:oklch|oklab|lab|lch)\(|\b(?:white|black|red|green|blue|gray|grey|silver|maroon|yellow|olive|lime|aqua|teal|navy|fuchsia|purple|orange)\b/;
+const literalFiles = new Map();
+let literalDecls = 0;
 // Row/surface backgrounds are often applied by CUSTOM-PROPERTY INDIRECTION
 // (e.g. --bo-cell-bg: var(--bo-color-bg-selected) on a <tr>, text inherited) —
 // those pairs never co-occur in one rule, so also require body text (text-
@@ -191,6 +217,11 @@ for (const dir of ['components', 'primitives']) {
   for await (const f of cssFiles(join(pkgRoot, 'src/css', dir))) {
     const rel = f.replace(pkgRoot + '/', '');
     const root = postcss.parse(await readFile(f, 'utf8'));
+    root.walkDecls((d) => {
+      if (!LITERAL_COLOUR.test(d.value)) return;
+      literalDecls++;
+      literalFiles.set(rel, (literalFiles.get(rel) ?? 0) + 1);
+    });
     root.walkRules((rule) => {
       let fg, bg;
       rule.walkDecls((d) => {
@@ -223,4 +254,13 @@ if (failures) {
   console.error(`\ncontrast check FAILED: ${failures} pair(s) below threshold`);
   process.exit(1);
 }
-console.log(`contrast check passed — ${PAIRS.length} pairs x 2 themes, coverage verified against component CSS`);
+console.log(
+  `contrast check passed — ${PAIRS.length} pairs x 2 themes, TOKEN-PAIR coverage verified against component CSS`
+);
+console.log(
+  `  NOT covered by that scan: ${literalDecls} declaration(s) in ${literalFiles.size} file(s) ` +
+    `carry a raw colour value instead of a var(--bo-color-*), so the coverage guard cannot see them ` +
+    `(reported, not gated — roadmap 241.2):`
+);
+for (const [rel, n] of [...literalFiles].sort((a, b) => b[1] - a[1]))
+  console.log(`    ${String(n).padStart(3)}  ${rel}`);

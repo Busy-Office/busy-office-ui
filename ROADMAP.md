@@ -384,7 +384,119 @@ refuting it closed the item instead of going off-plan.
        base-select`). Not a promise it will; a statement of what would make the
        refusal wrong.
 
-2. [ ] **241.2 — the framework's only PAINTED raw hex sits outside every
+2. [x] **241.2 — DONE 2026-09-02 on criterion 1's SECOND branch: the pairing
+       stays ungated, and the gate's own claim about it was the real defect.**
+
+       **The decision: no gate.** Base rate re-measured this wake with a
+       different instrument from 241.1's grep — a postcss walk over every
+       colour-bearing declaration in `components/` + `primitives/` — and the two
+       agree at **46** non-token colour declarations, which classify:
+
+       | set | n | painted? |
+       |---|---|---|
+       | `icon.css` glyph URIs, consumed by `mask-image` | 26 | no — masked away |
+       | `tabs.css` `#000` inside `linear-gradient` masks | 9 | no — mask alpha |
+       | `@media print` ink (`#000`/`#999`, 4 files) | 9 | no — paper, not a screen surface |
+       | **`select.css` chevron, via `background-image`** | **2** | **yes** |
+
+       26+9+9+2 = 46, and the two probes' one apparent disagreement reconciles
+       exactly: `grep -c "%23" icon.css` reads **27** to postcss's **26**,
+       because line 54 is a *comment* explaining `%23 = '#'`. The scan also found
+       **zero** `rgb()`/`hsl()`/`oklch()`/named-colour uses and **zero**
+       `url(#fragment)` sites for a hex pattern to trip on, so a hex-shaped count
+       is complete for this tree — measured rather than assumed, since counting
+       only hex is the same under-reporting this item is about.
+
+       **The premise was re-checked, not inherited** (CLAUDE.md's rule that a
+       premise from an earlier wake is part of the criterion). Recomputed from
+       `wcag.mjs`: **4.83** light, **11.46** dark, against a 3:1 floor — 241.1's
+       figures to the digit. The control `text-primary` on `bg-surface` reads
+       **17.74**/**16.15**, matching `contrast.json`'s independently computed
+       value in both themes.
+
+       **What decided it was churn, which nothing had measured.** Neither side of
+       the pairing has moved since the initial commit `4ef554fa` (2026-08-12),
+       across **1,796** commits:
+
+       ```
+       git show 4ef554fa:packages/core/src/css/components/form/select.css \
+         | grep -oE "%23[0-9a-f]{6}"       # %236b7280, %23d1d5db — identical today
+       git log -S 'bo-color-bg-surface:' -- packages/core/src/css/tokens/color.css
+         # one commit: f97954ba, the eof- -> bo- prefix rename. Values never moved.
+       ```
+
+       6 commits have touched `select.css` and 10 `color.css`; the literals and
+       the surfaces they are painted on came through all of them unchanged. A
+       ratchet defends a regression path with no history on either end.
+
+       **The refusal is on WEIGHT, not on undiscriminability — say which, because
+       94.11's precedent is the stronger claim and does not apply here.** 94.11's
+       refused gate could not fail at all: injecting `letter-spacing: 7px` still
+       reported 0 unexplained, because "a comment precedes this literal" was
+       uniformly true. A contrast gate over these 2 *would* discriminate — change
+       the hex and the ratio moves. So this is the cheaper argument: 2
+       declarations in 1 file, passing with margin, frozen for 21 days, is not
+       worth a gate's weight. Borrowing 94.11's wording would have overstated it.
+
+       **Reopen condition:** a third painted literal landing anywhere, or either
+       surface token's value changing. The build now prints the number that would
+       show the first of those.
+
+       ### The defect found while deciding: the gate claimed coverage it never had
+
+       `check-contrast.mjs` ended every run with *"coverage verified against
+       component CSS"*. Its coverage guard keys **every** branch off
+       `d.value.match(/var\((--bo-color-[a-z0-9-]+)/)` — so a raw colour value
+       matches nothing, `return`s, and is skipped in silence. The gate was
+       asserting a clean coverage result about a set of 46 declarations it had
+       never enumerated. That is CLAUDE.md's storage doctrine one level out:
+       *a derived artefact may not decide, on its own, what it failed to see.*
+
+       Fixed the way `check:rtl` already handles this — it warns that DESIGN.md's
+       flip-site count was NOT verified rather than reporting a pass it did not
+       earn. The pass line now reads `TOKEN-PAIR coverage`, and beneath it:
+
+       ```
+       NOT covered by that scan: 46 declaration(s) in 7 file(s) carry a raw
+       colour value instead of a var(--bo-color-*) ... (reported, not gated)
+          26  src/css/components/icon/icon.css
+           9  src/css/components/tabs/tabs.css
+           ...
+       ```
+
+       **Report, not gate, and that is the measured choice**: 26 of the 46 are
+       icon glyphs, so adding an icon legitimately grows the number and a ratchet
+       over it would go red on a correct tree — 236.2's reasoning for reporting
+       rather than gating, applied to a predicate that fires on healthy states.
+       It contributes nothing to the exit code, which is why the file's `@exact`
+       tag still holds; `check:selftests` re-classified it green (47 gates: 16
+       heuristic, 31 exact).
+
+       **Red-proved by injection, in both directions, with the injection
+       confirmed in the PARSED tree rather than the file text** — CLAUDE.md's
+       rule that a green red-proof is a defect in the injection until proven
+       otherwise:
+
+       | injection into `primitives/cluster.css` | postcss sees | report |
+       |---|---|---|
+       | `color: #abc123` | 1 decl | **46 → 47**, 7 → 8 files, `primitives/cluster.css` appears |
+       | `color: var(--bo-color-text-primary)` | 1 decl | **stays 46** / 7 files |
+       | reverted (empty `git diff`) | — | back to 46 / 7 |
+
+       The literal case was injected into `primitives/` on purpose: no primitives
+       file appears in the report today, so it also proves that arm of the walk is
+       live rather than dead. The token case is the discrimination check — it
+       counts colour literals, not "any declaration someone added".
+
+       **`contrast.json`'s shape is unchanged, deliberately.** Six consumers read
+       it (`extract-acr`, `ApiTable.astro`, `gen-llms`, `gen-rf-profile`,
+       `new-component`, the gate itself) and a grep for a published coverage
+       claim in `.astro`/`.md` returns **zero** — the overclaim existed only in
+       the gate's stdout, so that is the only place it was fixed.
+
+       *(original filing follows)*
+
+   **241.2 — the framework's only PAINTED raw hex sits outside every
        contrast gate, and it passes today. Filed rather than built.**
 
        Measured this wake, same instrument, reconciled against the gate's own
