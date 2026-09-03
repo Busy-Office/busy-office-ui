@@ -23,11 +23,11 @@ survives none.
 ## In flight: nothing
 
 Last updated 2026-09-03 (**cloud** wake, scheduled routine). Working tree clean
-at hand-off. Two commits this wake, both pushed: Slice 256 and this hand-off.
+at hand-off. Two commits this wake, both pushed: Slice 249.5 and this hand-off.
 
-**`check:resume-slice-ids` will name `249.1` as closed — that is deliberate.**
-It appears below only as *what Slice 253's grill already covered*, i.e. why this
-wake dropped it from scope. Nothing here claims it is open, blocked or queued.
+**`check:resume-slice-ids` will name `249.1` and `249.5` as closed — both are
+deliberate.** Neither appears below as open, blocked or queued: `249.1` is
+named only as history, and `249.5` only as *what this wake closed*.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -44,102 +44,115 @@ blocked. The two standing owner blocks are unchanged: Slice 15's `AT runtime
 evidence` (owner hardware) and `112.3`/`112.4` (owner briefs, then 112.3's
 verdict).
 
+**One thing the owner may want to decide, not blocking:** whether `ubuntu-latest`
+actually carries pnpm/yarn/bun. This wake's new `check:quickstart` step 3b
+verifies whichever are installed and prints `NOT VERIFIED here — <pm> …` for the
+rest. **It is not knowable from a cloud container**; the first CI run after this
+push answers it, and its summary line names exactly which ones ran. If bun is
+absent there, the options are a `setup-bun` step or accepting the printed
+non-verification — no code change is needed either way.
+
 ## Dispatch counters at hand-off
 
 Read `dispatch_status.py` yourself — the sets below are snapshots.
 
-- **Rule 2 (Standardize)** read `0 / 4` at wake start and is unchanged: an
-  Objective round is not a Continue round, so nothing accumulated.
-- **Rule 3 (Objective)** read `3 / 3 OVERDUE [249, 254, 255]` and **fired**. It
-  resets to `0 / 3` once this wake's Objective row is recorded, so **rule 4 is
-  the likely dispatch next wake.**
+- **Rule 2 (Standardize)** read `0 / 4` at wake start; **`1 / 4`** after this
+  wake's Continue row.
+- **Rule 3 (Objective)** read `0 / 3` at wake start (it fired and discharged
+  last wake); **`1 / 3 [249]`** now.
 - **Rule 5 (Optimize)** read `ok` (not STALE) — `0 wake-date(s) newer`, newest
   pair `bundle-gz-kb`, 128 samples. **No sample was recorded this wake,
-  deliberately:** Slice 256 changes 0 files under `packages/core/`, so a
-  `bundle-gz-kb` reading could only reproduce the existing value.
+  deliberately:** the diff changes 0 files under `packages/core/`, so a
+  `bundle-gz-kb` reading could only reproduce the existing value. The gate's own
+  9.2 s wall time was measured but **not** recorded as a metric — it was not
+  measured BEFORE the change, so there is no delta to report and a
+  once-sampled name cannot serve rule 5's "two consecutive runs".
 
 ## Next wake
 
-Rule 3 has just discharged, so expect **rule 4**. Its open set is
-`OPEN: [15, 112, 249, 256]` and the oldest open sub-item is **`249.5`** — install
-commands for pnpm/yarn/bun in `getting-started/installation.astro`, or a
-one-line recorded refusal. Fully cloud-dispatchable and the cheapest next thing.
+Rules 1-3 are clear, so expect **rule 4** again. Open set `OPEN: [15, 112, 249,
+256]`; the oldest open sub-item is **`249.6`** — the "Choose your path"
+adoption-scenario router on `index.astro`.
+
+**`249.6` is dispatchable but is the largest of the remaining 249 items** — six
+rows, each ending in a rendered screen, plus a `check-learning-path`-style arm,
+and its Accept says a row ending in prose alone fails. The theming row currently
+has no terminal page, so it needs one re-themed screen-kit example **or the row
+is cut**; deciding that is part of the item. A cheaper alternative if a wake
+wants a small one: **`256.2`** (a five-line allow-list decision on
+`check:floor`'s stated exemption, plus a two-sided red-proof, no browser), or
+**`249.11`** / **`249.14`**.
 
 - Slice 15's `AT runtime evidence` and `112.3`/`112.4` are **owner-blocked**
   (LOOPS.md 186.2's vocabulary).
-- `249.5`–`249.8`, `249.11`, `249.14` are dispatchable; `249.10`, `249.13` are
-  owner calls; `249.9` depends on 249.8 (tagline) + 249.3 (shipped).
+- `249.6`–`249.8`, `249.11`, `249.14` and `256.2` are dispatchable; `249.10`,
+  `249.13` are owner calls; `249.9` depends on 249.8 (tagline) + 249.3 (shipped).
 - **`249.15` is browser-blocked in the screenshot sense** (a static OG image) —
   a cloud wake should NOT pick it up; a LOCAL wake can. `249.12` names Slice 237,
   which is why the archive sweep leaves 237 in place (236.2).
 
 ## The archive sweep: not due, do not re-raise
 
-`roadmap_scope.py` reads closed-history share **714 / 3,021 = 23.6%** at
+`roadmap_scope.py` reads closed-history share **714 / 3,106 = 23.0%** at
 hand-off — well under the **55.1%** at which 252.1 dispatched the tenth sweep on
-2026-09-03. It read 22.1% at Slice 255's hand-off and 24.7% before this wake's
-own slice landed; the whole movement is Slice 255's body arriving in the closed
-set and Slice 256's arriving in the live denominator, not drift. The tenth sweep
-moved 13 slices three days ago, so this is normal regrowth, not a trigger.
+2026-09-03. It read 23.6% before this wake's item landed; the share FELL because
+249.5's 80 new lines went into the live denominator while Slice 249 stays open,
+so none of them counts as closed history. That is arithmetic, not progress.
 Eligible targets `[255, 254, 253, 252, 237]`, of which 253 and 237 are named by
 the open Slice 249 (249.6, 249.12) and stay per 236.2. Re-run the script; these
 are snapshots.
 
 ## What landed this wake
 
-**Slice 256 — Objective grill of Slices 249 (.2/.3/.4), 254 and 255**, dispatched
-by rule 3. Rule 1 clear (no open P0, GitHub intake `totalCount: 0`); Step 1
-triaged and committed nothing — no new input.
+**Slice 249.5 — install commands for pnpm/yarn/bun**, dispatched by rule 4 as
+the oldest open item. Rule 1 clear (no open P0; GitHub intake `totalCount: 0`);
+Step 1 triaged and committed nothing — no new input.
 
-Scope was narrowed first (§6 step 0): 249 re-arms after every round and Slice 253
-already grilled `249.1` and `249.6`, so both were dropped and the scope is what
-landed since that grill.
+The item allowed *"add the three, or file a one-line refusal"*. **The refusal
+lost on a measurement:** its stated argument ("the no-bundler audience makes it
+noise") is about *bundlers*, while the install line serves the npm-ecosystem
+audience, and the page already answers the no-package-manager case two lines
+below. Confirmed still true at dispatch — `grep -rniE 'pnpm|yarn|\bbun\b'` over
+`apps/docs/src` returned **0 files**.
 
-**60 published assertions re-derived; 57 reproduce exactly**, two do not
-reproduce as stated and one only within a documented gzip tolerance. Both
-failures are the same error — a real count of a set the sentence does not name.
-(One assertion = one figure or statement a command was re-run against; the
-per-slice totals are 23 + 12 + 7 + 9 + 9.) Full report with every command:
-`.roundtable/grill-objective-249-254-255-2026-09-03.md`.
+The three are **executed, not written**, because the page's own opener claims
+they are (*"These steps are executed… If anything here stops working, that build
+fails"*). `check:quickstart` gained **step 3b**: install the local packed build
+with each documented package manager, resolve the same four entry points step 3
+resolves for npm. Page and gate read ONE list —
+`apps/docs/src/data/package-managers.mjs`, the `MARKUP_RULES` precedent.
 
-1. **Finding A, corrected in ROADMAP 249.3:** "20 components floor at Chrome 99"
-   is false — **25** do. The 20 is the largest full-label group. The error
-   flattered the item (63% at the oldest floor, not 50%).
-2. **Finding B, corrected in Slice 255 and by an appended CORRECTION block in
-   `ROADMAP-archive.md`:** the enumeration lane 3 resolves against labels a
-   **fifteen**-name list as "158.1's twelve", absorbing 161.1's three and
-   dropping `/patterns/output-form/`. Lane 3's conclusion is unaffected — the
-   union is 16 pages and covers all 15 flagged.
-3. **Finding C, filed as `ENVIRONMENT.md` §6c:** Slice 254's `928 × 384`
-   container reads **913** × 384 here. Not a change — a 15px classic scrollbar
-   reserved inside `main.bo-app-shell__main` (`overflow-y: auto`), where macOS
-   overlay scrollbars reserve 0. **Every cloud-wake docs width reading is 15px
-   under the owner's**, and the usual page-scrollbar check reads 0 because the
-   shell scrolls `main`, not the document.
+Measured here, all four green (Node v22.22.2; npm 10.9.7, pnpm 10.33.0, yarn
+1.22.22, bun 1.3.11): 191–561 ms per install, whole gate **9.2 s**.
 
-4. **Finding D, left OPEN as `256.2`:** `check:floor` fired on this grill report
-   — correctly; the report was rewritten to print the deriving command instead
-   of three floor labels, and **the gate was not widened**. The finding is that
-   the gate's own header comment exempts *"the .roundtable grills"* while its
-   `ALLOW` list does not contain `.roundtable/**`. Left as a decision because
-   `.roundtable/` also holds living ledgers read as current. 256.2 carries both
-   readings and an accept test that treats *"the comment is wrong"* as a
-   satisfying outcome.
+**The finding worth carrying: the red-proof caught a detector that could not
+fail.** Step 3b's first version put each package manager's directory INSIDE the
+gate's temp dir — which already holds step 2's npm install — so Node's resolver
+walked up into `dir/node_modules` and every documented import resolved whatever
+the package manager had done. The injection (yarn installing `is-number@7.0.0`
+instead of the package) was **confirmed present in the file** and the gate still
+passed. Fixed with a sibling temp root, with the reason in a comment at its
+declaration so it cannot be tidied back. This is CLAUDE.md's *"a green red-proof
+is a defect in the injection until proven otherwise"* landing the other way
+round for once — the injection was fine and the arm was the defect, which is why
+confirming the injection landed is what separated the two.
 
-A second `ENVIRONMENT.md` line landed beside it: **`--unshallow` does not fetch
-tags**, and `git tag` then answers EMPTY rather than erroring — the silent kind
-of wrong, hit while re-deriving 249.3's tag claim. `git fetch --tags origin`
-first.
+Three red-proofs, each injection asserted to match exactly once before
+replacing: (a) yarn pointed at a different package → red, naming the import and
+the documented command; (b) bun pointed at a nonexistent tarball → red, naming
+the documented command; (c) a package manager that is not installed → **rc=0**
+with `NOT VERIFIED here` on stderr and in the summary line.
 
-**`256.2` is the one item this wake leaves open**, and it is cloud-dispatchable
-— it is a five-line allow-list decision plus a two-sided red-proof, no browser.
+**Scope limit, stated rather than glossed:** `yarn` here is **1.22.22
+(classic)**. **Yarn Berry / PnP is NOT covered** — it resolves through a zip and
+no evidence was taken for it. The documented command is right for both; the
+verification is classic-only.
 
 **Not verified, and named rather than implied:** this was a cloud wake, so the
-1440/390 light-and-dark screenshot lane could not run. Slice 256's diff is
-markdown only (the slice, two corrections, the grill report, `ENVIRONMENT.md`) —
-no CSS, no docs page, no component — so there is nothing a screenshot could show.
-Every claim in the grill is a count, a byte size, a computed style or a layout
-geometry, which is the second of `ENVIRONMENT.md`'s two lists. `build`, `test`
-and `docs:build` (with `check:repo`, `check:slice-refs`, page-shape and the
-readme-claims gate) ran green in this container, plus `check:claims`,
-`check:layout` and `test:axe`.
+1440/390 light-and-dark screenshot lane could not run. This item **does** have a
+small visual surface — one new `<p class="bo-u-text-muted">` carrying three
+`<code>` spans — so the honest statement is that its *properties* were swept and
+its *appearance* was not. No new CSS rule ships (existing classes only), and the
+rendered section was read out of the **BUILT** page rather than off the diff.
+All **17** CI entry points, re-derived from `ci.yml`, ran green in this
+container.
