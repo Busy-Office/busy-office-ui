@@ -6,6 +6,15 @@ container queries, native `<dialog>` and `popover`.
 <!-- stat:size -->93 kB minified (15.0 kB gzipped)<!-- /stat --> for the whole
 framework, zero runtime dependencies, tree-shakable per-component files.
 
+![Hand-made screenshot: the list-report pattern at data-density="compact" — a
+saved-view bar, a filter row, and a dense invoice table whose status column pairs
+colour with the word, captured from the docs site at 1440px in the light
+theme.](https://raw.githubusercontent.com/Busy-Office/busy-office-ui/main/packages/core/media/list-report-compact.png)
+
+*Above: `/patterns/list-report` at `data-density="compact"`. Hand-made — a
+screenshot, not a generated artifact, and the one image here no gate keeps
+current. The same file ships in this package at `media/list-report-compact.png`.*
+
 **Docs & live demos:** https://busy-office.github.io/busy-office-ui/
 
 ## Install

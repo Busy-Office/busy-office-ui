@@ -6,6 +6,15 @@ container queries, native `<dialog>` and `popover`.
 **<!-- stat:size -->93 kB minified (15.0 kB gzipped)<!-- /stat -->** for the whole
 framework; tree-shakable per-component files if you want less.
 
+![Hand-made screenshot: the list-report pattern at data-density="compact" — a
+saved-view bar, a filter row, and a dense invoice table whose status column pairs
+colour with the word, captured from the docs site at 1440px in the light
+theme.](packages/core/media/list-report-compact.png)
+
+*Above: `/patterns/list-report` at `data-density="compact"`. Hand-made — it is a
+screenshot, not a generated artifact, and it is the one image in this README that
+no gate keeps current.*
+
 ```sh
 npm i @busy-office/ui
 ```

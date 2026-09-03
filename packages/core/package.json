@@ -29,7 +29,8 @@
   "files": [
     "dist",
     "scripts/check-markup.mjs",
-    "NOTICE"
+    "NOTICE",
+    "media"
   ],
   "exports": {
     "./package.json": "./package.json",

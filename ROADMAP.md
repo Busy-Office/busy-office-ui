@@ -315,6 +315,78 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 254 — 249.16 built: the README screenshot, taken in the lane a cloud wake cannot reach — and the image that reads best is NOT the one the page shows (2026-09-03)
+
+**Dispatcher trace, local session.** Rule 1: no open P0. Rules 2 and 3 clear
+(`Standardize 2 / 4`, `Objective 1 / 3`). **Rule 4 dispatched Continue, build
+mode — but not on the oldest item.** `249.5` is the oldest open, and the cloud
+routine is dispatching the same queue on a schedule; it built `249.1`, `249.2`,
+`249.3` and `249.4` while this session worked, and a collision on `249.5` was
+the likely outcome. `249.15` and `249.16` are the two items the queue marks
+**browser-blocked in the screenshot sense** — `LOOPS.md` rule 4's own
+vocabulary, *a cloud wake cannot take it; a LOCAL wake can*. Taking one of
+those is the dispatch that does not race. Verified before writing: `249.16`
+still open on `origin/main` at commit time.
+
+**The item said "one screenshot of `patterns/list-report` at
+`data-density="compact"`". Taken literally, that is the wrong image**, and the
+first capture proved it: a full-page shot at 1440 is a picture of the *docs
+site* — sidebar, version picker, on-this-page rail — not of the framework. A
+README hero for a CSS framework has to show what the framework BUILDS.
+
+Two further corrections, each caught by measuring rather than by looking:
+
+- **Forcing `data-density="compact"` onto `documentElement` was unnecessary and
+  wrong.** The first demo region already renders at compact natively
+  (`section.demo [data-density="compact"]`), so the override was restyling the
+  docs chrome as well and changing the thing being photographed.
+- **The obvious selector was a 30px box with zero rows.** The first
+  `[data-density="compact"]` match is a toolbar, not the screen —
+  `measure the box that carries the constraint`, landing again. The container
+  that actually holds the table is `.bo-data-table-container` (14 rows,
+  928×384), and the *screen* is that plus two `form.bo-cluster` siblings, with
+  no single wrapper element — so the shot is a computed clip across the demo
+  section's children, excluding its `<h2>` and its trailing caption.
+
+**The bottom row was sliced mid-row** on the first clean attempt — honest,
+since the container really is a 384px scroll region against a 492px table, but
+in a static image it reads as a cropping mistake. The clip now ends at the
+bottom of the last row **fully inside** the container (9 of 14 rows), computed
+rather than eyeballed.
+
+**Resolution was a measured trade, not a default.** At `deviceScaleFactor: 2`
+the PNG is **216 kB**; the package tarball is **364.0 kB**, so a retina asset
+is **+59%** on a package whose own README advertises *93 kB minified*. At 1x
+(952×516) it is **88.9 kB**, **+23.4%** — tarball `364.0 kB → 449.3 kB`, files
+`183 → 184`. 1x chosen, and the number is written here so raising it later is
+an argued change rather than a silent one.
+
+**The two READMEs reference the image differently, on purpose.** The root
+README uses a repo-relative path, which is what GitHub renders. The package
+README uses an absolute `raw.githubusercontent.com` URL, because a
+registry-rendered README cannot be assumed to resolve a relative path — and
+the first draft cited `busy-office.github.io/.../media/...`, a URL nothing had
+published, which is exactly roadmap 185's trap (asserting an artifact at a
+location that has not served it). The file **also** ships in the tarball, so
+the package README's claim that it does is true independently of the URL.
+
+1. [x] **249.16 — DONE.** Accept met, each half checked rather than assumed:
+       both READMEs carry ≥1 image (`grep -c '!\['` → 1 and 1); the referenced
+       file exists in the repo; `npm pack --dry-run` lists
+       `media/list-report-compact.png` at 88.9 kB inside the tarball (`media`
+       added to `packages/core/package.json`'s `files`); `stamp-readme --check`
+       exits **0** and still reports size/behaviors/events/floor/gates/notfor/faq
+       matching their sources on both files.
+
+       **One half of the Accept is deliberately NOT closed by this wake, and
+       saying so beats implying it.** The criterion names `npm view` as the
+       authority on what shipped (roadmap 185). Publishing is owner-triggered,
+       so nothing is published from here — `npm pack --dry-run` is the correct
+       *pre*-publish evidence and is what is recorded. The registry half is
+       verifiable only at the next publish, and the raw-GitHub URL in the
+       package README likewise resolves only once this commit is on `main`.
+       Both are named as open verifications rather than counted as done.
+
 ## Slice 253 — Objective grill of Slices 247, 249, 252: 31 of 34 claims reproduce, and all three that do not are citations about citations — including one in the slice whose whole subject is citation decay (2026-09-03)
 
 **Dispatcher trace, cloud wake.** Step 0: the container started **DETACHED**
@@ -1239,7 +1311,7 @@ box (2026-09-03, cloud wake):**
           is not there. Whether the card LOOKS right is the part that needs the
           local wake's eyes.
 
-16. [ ] **249.16 — the one hand-made README screenshot, split out of 249.4.**
+16. [x] **249.16 — DONE, Slice 254.** The one hand-made README screenshot, split out of 249.4.
         One screenshot of `patterns/list-report` at `data-density="compact"`,
         labelled as hand-made in alt text, in both READMEs. **browser-blocked
         in the screenshot sense** (`ENVIRONMENT.md`'s first list, `LOOPS.md`
