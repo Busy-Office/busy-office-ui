@@ -1320,3 +1320,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-03 05:50 · Standardize · sweep · Slice 252 — Standardize sweep: lanes 1-3 clean a 12th time, lane 4 dispatched the 10th archive sweep (13 slices, ROADMAP.md 3,790 -> 1,917 at the move), lane 5 consolidated compatOf into bcd-compat.mjs · landed · 25e24745
 - 2026-09-03 05:50 · Meta · refusal · Slice 237 not swept though eligible — 249.12's Accept names it (236.2's rule, not a judgement call) · refused · 25e24745
 - 2026-09-03 05:50 · Meta · refusal · rule 5 reported NOT EVALUABLE rather than clear, because dispatch_status.py reads its newest metric pair STALE · refused · 25e24745
+- 2026-09-03 07:46 · Continue · build · 249.1 — bundle-size budget gate: check-size.mjs, 11 gzip buckets over all 139 shipped CSS/JS artifacts, wired into core's build; four arms red-proved live · landed · a9ba847

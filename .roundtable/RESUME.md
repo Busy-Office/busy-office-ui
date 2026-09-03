@@ -25,7 +25,7 @@ a line number survives none.
 ## In flight: nothing
 
 Last updated 2026-09-03 (**cloud** wake, scheduled routine). Working tree clean
-at hand-off. Two commits this wake, both pushed: `25e24745` (Slice 252) and this
+at hand-off. Two commits this wake, both pushed: `a9ba847` (249.1) and this
 hand-off.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
@@ -39,78 +39,101 @@ python3 scripts/loops/roadmap_scope.py            # OPEN set + sweep scope
 ## Dispatch counters at hand-off
 
 ```
-Standardize   0 / 4 Continue rounds   since 2026-09-03 05:50   ok
-Objective     2 / 3 slices            since 2026-09-03 08:11   ok   [247, 252]
-Optimize      0 wake-date(s) newer    since 2026-09-03 05:50   ok   [newest pair: axe-violations]
+Standardize   1 / 4 Continue rounds   since 2026-09-03 05:50   ok
+Objective     3 / 3 slices            since 2026-09-03 08:11   OVERDUE  [247, 249, 252]
+Optimize      0 wake-date(s) newer    since 2026-09-03 07:46   ok   [newest pair: bundle-gz-kb]
 ```
 
-- **Rule 2 just fired (Slice 252) and reset** — 4/4 OVERDUE at wake start,
-  0/4 now. Do not re-dispatch Standardize for 4 more Continue rounds.
-- **Rule 3 is at 2/3.** One more closed slice arms an Objective grill. The two
-  armed are `247` and `252`.
-- **Rule 5 is CLEAR again, and that is new.** It read STALE at wake start and
-  this wake recorded a fresh `axe-violations` sample (0), which gives it a live
-  comparable pair. It was reported as **NOT EVALUABLE** for this wake's dispatch
-  rather than clear, per LOOPS.md's own instruction — the fix landed after the
-  decision, not before it.
-- **Rule 4's open set is `OPEN: [15, 112, 249]`**, unchanged. Slice 15's AT
-  evidence and 112.3/112.4 are **owner-hardware-blocked** (LOOPS.md 186.2's
-  vocabulary — name which kind when reporting rule 4 as stuck). The next
-  dispatchable item is **the oldest open sub-item inside Slice 249**;
-  `249.1`-`249.9` are dispatchable now, `249.10`-`249.13` are owner calls sent
-  back explicitly rather than built — read Slice 249's own text for why before
-  building any of them.
+- **Rule 3 is OVERDUE and it armed on THIS wake's own work.** 249 joined 247
+  and 252 the moment 249.1 was recorded. Read `dispatch_status.py` yourself —
+  the set is a snapshot — then narrow it per §6 step 0 before grilling: `247`
+  and `252` were both armed at the previous hand-off and neither has been
+  grilled since, so the honest scope is all three, but check `.roundtable/INDEX.md`
+  for repeated subjects first.
+- **Rule 5 does NOT fire, and the reason is worth reading rather than
+  assuming.** The line is `ok` (not STALE — this wake recorded a fresh
+  `bundle-gz-kb`), and the newest comparable pair is **11.7 kB (2026-08-17) →
+  15.1 kB (today)**. That is ONE regression, and rule 5 needs **two
+  consecutive**. The next `bundle-gz-kb` sample completes or breaks the trend,
+  so take one.
+- **Rule 4's open set is `OPEN: [15, 112, 249]`.** Slice 15's `AT runtime
+  evidence` and `112.3`/`112.4` are **owner-blocked** (LOOPS.md 186.2's
+  vocabulary — 15 and 112.3 need owner hardware and owner briefs
+  respectively; 112.4 is blocked on 112.3's verdict). Inside Slice 249 the
+  oldest open sub-item is now **`249.2`** (per-page metadata: description,
+  sitemap, robots). `249.2`-`249.9` are dispatchable; `249.10`-`249.13` are
+  owner calls sent back explicitly — read Slice 249's own text before building
+  any of them.
 
-## The archive sweep is DONE — do not re-raise it
+  **`249.2` is partly browser-blocked in the cloud sense and partly not.** Its
+  Accept is three greppable assertions over `dist/` (`name="description"`
+  present on every page, `sitemap-index.xml` lists every built page,
+  `check-links` green) — all of that is a cloud wake's first list per
+  ENVIRONMENT's "no screenshots is not no browser". The one static OG image it
+  asks for is a *rendered image*, which a cloud wake cannot author honestly.
 
-The signal the previous hand-off flagged as "a real signal, not yet acted on"
-was acted on this wake. `roadmap_scope.py` now reads closed-history share
-**374 / 2,117 = 17.7%**, down from 55.1%, and the two remaining targets are:
+## The archive sweep: unchanged, do not re-raise
 
-- **Slice 252** — this wake's own slice, closed-on-arrival. Same shape the last
-  hand-off recorded: a wake's own work is eligible the moment it lands, which is
-  why the share climbs without anything going stale. Nothing to do now.
-- **Slice 237** — still **refused**, and it is the same refusal as last time,
-  not a fresh judgement: `roadmap_scope.py`'s dependency line names it as the
-  target of open item `249.12`'s Accept (236.2's rule). **Leave it until
-  `249.12` resolves.**
+`roadmap_scope.py` reads closed-history share **374 / 2,178 = 17.2%**. The two
+eligible targets are the same two the last hand-off named, for the same
+reasons: **Slice 252** (last wake's own slice, closed-on-arrival — nothing to
+do now) and **Slice 237**, still refused because `roadmap_scope.py`'s
+dependency line names it as the target of open item `249.12`'s Accept (236.2's
+rule). Leave 237 until `249.12` resolves.
 
 ## What landed this wake
 
-**Slice 252 — Standardize sweep**, dispatched by rule 2. Rule 1 was clear (no
-open P0; GitHub intake `totalCount: 0`), so Step 1 triaged and committed
-nothing.
+**Slice 249.1 — bundle-size budget gate**, dispatched by rule 4 (rule 1 clear:
+no open P0, GitHub intake `totalCount: 0`; rules 2 and 3 both below threshold
+at wake start). Step 1 triaged and committed nothing.
 
-1. **252.1 — all four standing lanes clean, a twelfth time.** Lane 1 `0 dead of
-   1,433 live`; lane 2 `74 / 242 / 230 / 8` unchanged member for member (the x4
-   joined-control group is still two components, so its reopen trigger is
-   unmet); lane 3 `118 pages, median 748`, 14 flagged pages all inside the
-   verdicted set; lane 4 no accumulate-class change. Lane 4 carried the finding.
-2. **252.2 — the tenth archive sweep.** 13 slices moved verbatim (251, 250, 248,
-   247, 246, 245, 244, 243, 242, 241, 240, 239, 238). `ROADMAP.md` 3,790 → 1,917
-   at the move, 3,790 → 2,117 at the commit. Verified by a second, independently
-   written parser reading the pre-move source, with **both** arms red-proved by
-   injection and each injection confirmed to have landed first.
-3. **252.3 — lane 5**, the divergence scan no instrument covers. `compatOf` was
-   hand-copied into `derive-floor.mjs` and `check-rf-floor.mjs`; consolidated
-   into `packages/core/scripts/bcd-compat.mjs`. Behaviour-neutral on a clean
-   `dist/` — `dist/floor.json` byte-identical, 4,843 bytes.
+`packages/core/scripts/check-size.mjs`, wired into core's `build` as
+`check:size` immediately before `stamp-readme --check`. Eleven gzip buckets
+covering all **139** shipped CSS/JS artifacts, each a ceiling at current +
+~10% headroom.
+
+Three things from it worth carrying:
+
+1. **The item's premise was 138-of-139 true, not true.** `grep -rn -i budget`
+   over `packages/core/scripts`, `packages/core/package.json` and
+   `.github/workflows` returns exactly one existing enforcement —
+   `build-rf-essentials.mjs`'s `RF_BUDGET_KB = 40` (roadmap 126.1). It is
+   kept, not replaced: minified-byte ceiling on an argued membership list
+   versus a gzip ceiling on transfer weight.
+2. **A group-total-only gate would have been GREEN on the injection the Accept
+   prescribes.** 2 kB of source CSS is **+0.37 kB gz**; the components bucket
+   went 24.75 → 25.12 against 27.3. Only the per-file arm fired. That is why
+   both arms ship and why a multi-file bucket declaring only a total is itself
+   a gate failure.
+3. **`bundle-gz-kb` went unsampled for 17 days while it grew 29%** (11.7 on
+   2026-08-17 → 15.1 today, `dist/css/index.min.css`). `stamp-readme`
+   publishes that number into both READMEs every build and has done
+   throughout; what it never did is refuse growth. That gap is the whole case
+   for the gate, and it was found by taking the metric, not by arguing for it.
 
 **Not verified, and named rather than implied:** this was a cloud wake, so the
-1440/390 light-and-dark screenshot lane could not run. Nothing in the diff rests
-on a rendered image (two markdown files the docs site does not render, plus
-three build-time Node scripts). All **17** CI entry points, re-derived from
-`ci.yml` rather than read off `ENVIRONMENT.md`'s snapshot, ran green here.
+1440/390 light-and-dark screenshot lane could not run. Nothing in the diff
+rests on a rendered image — one build-time Node script, one `package.json`
+script chain, one markdown file — and the shipped CSS bytes are unchanged (the
+red-proof injection was reverted and `dist/` rebuilt clean before any gate
+reading). All **17** CI entry points, re-derived from `ci.yml` rather than read
+off `ENVIRONMENT.md`'s snapshot, ran green here; `check:repo` was re-run after
+the `ROADMAP.md` edit because `docs:build` had already passed it.
 `check:claims` read **162 live / 3 NOT VERIFIED**, which is ENVIRONMENT 6b's
 container property and not a regression.
 
-*One trap re-hit, worth carrying:* lane 1 (`scan:dead-style`) needs
-`CHROME_PATH` exported in the same command (ENVIRONMENT 1c). Its first run died
-with "No Chrome/Chromium found" — a loud failure, which is what that rule wants.
+*Red-proof discipline, since CLAUDE.md asks for the injection to be confirmed
+rather than the red result:* the per-file arm's injection was verified present
+in the BUILT artifacts before its red was believed —
+`grep -o 'bo-data-table--probe-' | wc -l` counts **28** in each of
+`dist/css/components/data-table.min.css`, `index.min.css` and
+`rf-essentials.min.css`. The other three arms (unbudgeted file, stale budget
+row, and the comparator's two constraints) were exercised the same way, live or
+through `--self-test`.
 
 ## Next wake
 
-Rule 4 dispatches Continue, build mode, on the oldest open sub-item in Slice 249
-— read that slice's own text for each item's Accept criteria before building.
-Rule 3 is one closed slice away from firing, so expect an Objective grill soon
-after.
+**Rule 3 fires: dispatch Objective**, a grill of `247`, `249` and `252`
+(narrow the set per §6 step 0 first — check `.roundtable/INDEX.md` for
+repeated subjects and state the honest scope). After it, rule 4 returns to
+Slice 249 at `249.2`.
