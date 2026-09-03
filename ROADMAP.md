@@ -315,6 +315,57 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 251 — 247.1 built: every live `file:line` citation into a rewritten/regenerated file is already self-documenting, and the one actual defect was in the handover file's own drift, not the roadmap's
+
+**Dispatcher trace.** Rule 1: no open P0 — `gh issue list` returns empty. Rule
+2: Standardize `3/4`, not yet due. Rule 3: Objective `0/3`, just fired.
+**Rule 4 dispatched Continue, build mode** on the oldest still-open item that
+is not owner/hardware-blocked — Slice 15's AT evidence and 112.3/112.4 are
+all owner-blocked (unchanged for many wakes); `247.1` is next.
+
+**Re-ran 247.1's own measurement command on the current tree** (17 → 33
+matches now, since Slices 249/250 added their own file:line citations in the
+interim — expected growth, not drift):
+
+```
+grep -oE '`?[A-Za-z0-9_.-]+\.(md|mjs|py|css|json|astro|ts):[0-9]+' ROADMAP.md .roundtable/RESUME.md
+```
+
+**Every `STATUS.md:NN` and self-referential `ROADMAP.md:NN` citation
+remaining in `ROADMAP.md` was already in the durable idiom before this item
+was dispatched** — checked each of the ~14 occurrences individually rather
+than trusting the count. Every one is prose *about* a citation having drifted
+(e.g. Slice 247's own text: *"`STATUS.md:45` today holds an unrelated `Meta ·
+refusal` row; 244.3's row is at `STATUS.md:38`"*), not a naked claim that the
+line currently holds something. That framing IS the durable idiom 247.1 asks
+for — a citation that survives its own staleness by saying so. Nothing to fix
+there; recorded as a satisfying outcome per the item's own fourth Accept
+bullet.
+
+**The one live, uncaveated citation that had actually drifted was in
+`RESUME.md`, not `ROADMAP.md`** — `RESUME.md:73`'s `ROADMAP.md:351 (Slice
+247)` no longer resolves: line 351 now falls inside Slice 249 (this session's
+own triage), and Slice 247's heading is at line 599. The slice-number pairing
+already present (`(Slice 247)`) meant a reader wasn't actually lost — but the
+raw number was wrong on its face, and `RESUME.md` is exactly the file Step 0
+reads first every wake. Fixed by writing a fresh `RESUME.md` (its own
+standing practice — rewritten wholesale at every hand-off) that carries no
+raw `ROADMAP.md:NN` pointers at all, only slice numbers, closing the class of
+defect rather than patching the one instance.
+
+**Base rate on the current tree, reported as 247.1's Accept requires:** 0 of
+the live `STATUS.md`/self-`ROADMAP.md` citations in `ROADMAP.md` fail today;
+1 of 1 in `RESUME.md` failed and is fixed. `ROADMAP-archive.md` and
+`.roundtable/grill-*.md` remain out of scope by construction, unchanged from
+247.1's own reasoning.
+
+1. [x] **247.1 — DONE.** No blanket gate built — refused again on the same
+       base rate 247.1 itself predicted (the live population is small and
+       already correctly framed); a gate over "does a citation drift" would
+       be checking prose content, the semantic-wall shape this repo's own
+       94.11 refuses. `RESUME.md` no longer carries a raw `ROADMAP.md:NN`
+       pointer as of this commit.
+
 ## Slice 250 — Objective grill of Slices 244, 245, 248: 28 of 28 claims reproduce, both red-proofs executed live, and the append-only citation-stability property survived an intervening rebase it could not have anticipated (2026-09-03)
 
 Dispatched by rule 3, OVERDUE at 3/3 `[244, 245, 248]`. Full report:
@@ -629,7 +680,7 @@ and it needed to amend 244.3's text. Moving Slice 244 first would have archived
 the very lines the dispatch existed to correct. The sweep is left for the next
 wake, which is the first one where 244 is safe to move.
 
-1. [ ] **247.1 — `ROADMAP.md` cites by two idioms. The gated one (slice number)
+1. [x] **247.1 — DONE, Slice 251.** `ROADMAP.md` cites by two idioms. The gated one (slice number)
        resolves every citation it has. The ungated one (`file:line`) holds 8 of 8
        into source files and **3 of 8** into markdown — and every one of those
        five failures targets a file that is rewritten or regenerated.**
