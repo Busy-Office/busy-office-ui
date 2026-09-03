@@ -1352,3 +1352,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-03 23:17 · Continue · build · Slice 249.8 — component tagline + category generated from the CSS header; sidebar + homepage tiles + llms.txt now generated, 43-entry array deleted · landed · 4dbec5bd
 - 2026-09-03 23:17 · Meta · refusal · fabricating a DSA score for the throwaway probe component to push a scaffolded stub through check:dsa-scores · refused · 4dbec5bd
 - 2026-09-03 23:17 · Meta · refusal · quoting the tile probe's 'zero prose overflow' reading — red-proved as a dead detector (400 unbreakable chars still read 0) · refused · 4dbec5bd
+- 2026-09-03 23:47 · Continue · build · 256.2 — check:floor's stated .roundtable exemption vs its allow-list: comment corrected, ALLOW unchanged, two-sided red-proof · landed · 0362ba15
+- 2026-09-03 23:47 · Meta · refusal · widening ALLOW to .roundtable/** — the FOR argument's premise was refuted by the one case where the predicate fired · refused · 0362ba15
+- 2026-09-03 23:47 · Meta · refusal · the Accept's suggested grill-*.md subset — 86 of 182 reports, missing 75 equally-historical ones under six other prefixes · refused · 0362ba15
