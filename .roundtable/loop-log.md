@@ -1331,3 +1331,7 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-03 11:58 · Meta · refusal · the item's own mechanism: introduced-version from the first git tag — measured wrong for 38 of 40 components (0.1.0 untagged, v0.2.0 never published, source paths rename); the registry's tarballs are the source instead · refused · 4e93bc3b
 - 2026-09-03 11:58 · Meta · refusal · attributing behaviour JS to a component by name convention for the per-component floor — dist/js is not split per component, so the floor is CSS-only and the label says so · refused · 4e93bc3b
 - 2026-09-03 11:58 · Meta · refusal · adding a <Maturity> line to 40 hand-authored pages by regex — mounted from DsaScore, which check-page-shape already requires on every one · refused · 4e93bc3b
+- 2026-09-03 12:52 · Continue · build · Slice 249.4 — README facts generated (gates/notfor/faq), two of the item's three premises refuted · landed · e1c71d5
+- 2026-09-03 12:52 · Meta · refusal · the item's stated gate predicate (count of check-*.mjs carrying --self-test): 48 files match the string, 18 have the argv branch — the deriver imports scanGates() from the gate instead of re-counting · refused · e1c71d5
+- 2026-09-03 12:52 · Meta · refusal · parsing the BUILT troubleshooting page: its third <h2> is the layout's own Related heading, so the deriver reads the source page · refused · e1c71d5
+- 2026-09-03 12:52 · Meta · refusal · shipping the record in dist/: it is repo provenance, not part of the npm tarball — check:package stayed at 183 files · refused · e1c71d5
