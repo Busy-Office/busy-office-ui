@@ -891,15 +891,118 @@ claimed.
          points, re-derived from `ci.yml` rather than read off `ENVIRONMENT.md`'s
          snapshot, ran green in this container.
 
-3. [ ] **249.3 — Maturity labels with a real source.** Per component page:
-       DSA-scored date (`dsa-scores.json.scored`), introduced-version (first
-       tag containing the component's CSS file, computed at build), floor
-       (per-component `derive-floor.mjs` run), AT evidence rendering "none
-       recorded" until the owner-blocked item closes (STATUS.md's open `AT
-       runtime evidence` row).
-       - **Accept:** every label on the built page traces to a key in `dist/`
-         or `src/data/`; a component with no score renders the stated-absence
-         string, never blank.
+3. [x] **249.3 — Maturity labels with a real source. DONE 2026-09-03 (cloud
+       wake).** Per component page: DSA-scored date (`dsa-scores.json.scored`),
+       introduced-version, per-component floor, AT evidence rendering "none
+       recorded" until the owner-blocked item closes (Slice 15's open `AT
+       runtime evidence` row). A `Maturity` section on all 40 components, four
+       facts each, every one read from a key.
+
+       **THE ITEM'S OWN MECHANISM FOR "introduced-version" IS REFUTED, and
+       that is the finding.** It said *"first tag containing the component's
+       CSS file, computed at build"*. Measured before building — CLAUDE.md's
+       rule that re-checking a premise is part of the criterion — a tag scan is
+       **wrong for 38 of the 40 components**, for three independent reasons:
+
+       - **0.1.0 was published and never tagged.** `git tag --sort=v:refname`
+         starts at `v0.1.1`, so the **26** components of the first release
+         would each be labelled one version late.
+       - **`v0.2.0` is a tag with no release behind it.**
+         `npm view @busy-office/ui versions --json` returns
+         `["0.1.0","0.1.1","0.3.0","0.4.0","0.5.0","0.6.0","0.7.0"]` — no
+         0.2.0, ever. **14** components would have been labelled "introduced in
+         0.2.0", pointing a reader at an `npm i` that cannot resolve.
+       - **A tag scan keys on a SOURCE path, and source paths rename.** The
+         same probe reported `form` UNRELEASED. That was the probe's defect,
+         not a fact: `src/css/components/form/` has never held a `form.css` —
+         it holds five files — so `<dir>/<dir>.css` misses it at every
+         revision. An instrument's first output is not evidence, and this one
+         had a plausible story ready.
+
+       So the source is **the published tarballs**, not git: for each version
+       the registry serves, the earliest one whose tarball carries
+       `dist/css/components/<name>.css`. That is CLAUDE.md's downstream rule in
+       a new place — a tag is an *input* to publishing, not the published
+       thing. Distribution: **26 at 0.1.0, 15 at 0.3.0, 1 at 0.5.0**, and two
+       (`nav`, `record-card`) published once and since removed.
+
+       **Reconciled against an independent derivation before it was trusted.**
+       A throwaway probe in the scratchpad and `derive-introduced.mjs --refresh`
+       were written separately and agree key-for-key on all 42
+       (`JSON.stringify` equality). The record — `packages/core/src/data/
+       introduced.json`, committed — is what an offline build reads, because
+       neither git nor the registry is reachable from the docs container.
+
+       **What shipped**
+
+       - `packages/core/scripts/derive-introduced.mjs` — `--refresh` (network)
+         rebuilds the record from the registry; the default build mode
+         reconciles it against the stylesheets the build actually produced and
+         writes `dist/introduced.json`, exported as `./introduced.json`.
+       - `derive-floor.mjs` gains `perComponent`: the same probe set pointed at
+         one component's sheet instead of `index.css`. **9 distinct floors
+         across 40 components**, Chrome 99 → 119 — the label is worth printing
+         precisely because it is not uniform, and 20 components floor at
+         Chrome 99 where the framework floors at 119. The framework keys are
+         **byte-identical** to the pre-change file (`JSON.stringify(rest) ===
+         baseline`), so the refactor moved nothing it was not meant to.
+       - `apps/docs/src/data/at-evidence.json` — the hand-recorded AT register,
+         empty today, naming Slice 15 as the blocker and `test:axe` +
+         `check:forced-colors` as what automation covers instead.
+       - `Maturity.astro`, mounted from `DsaScore.astro` — which
+         `check-page-shape` already requires on every component page, so it
+         reaches all 40 without a 40-file regex.
+       - `check-maturity.mjs` (`@exact`), wired into `docs build` after
+         `check-metadata`: **280 assertions**, 40 components across 39 pages.
+
+       **Ten red-proofs, each with the injection confirmed first.** Four value
+       arms by mutating a record without rebuilding (version, floor label,
+       score date, AT record) — each failed exactly one assertion and named the
+       component. Three structural arms by mutating the built HTML or the
+       component set (block deleted, an emptied `<dd>`, a shipped component no
+       page documents). Two guards on `derive-introduced` by exit code, not by
+       message: an emptied record and a missing record both `exit 1` (checked
+       with `>/dev/null; echo $?`, because the first attempt read `rc=0` — it
+       was measuring `head`, not `node`). And the two branches live data cannot
+       reach were proved by injecting into the record, rebuilding, and reading
+       the built page: `button` with no published version renders *"Not
+       published yet"*, `dialog` with an NVDA record renders it.
+
+       **The third absence branch is unreachable BY CONSTRUCTION, and the
+       injection is what showed it.** Deleting `tabs` from `dsa-scores.json` to
+       reach *"Not yet scored"* turned the docs build red at
+       `check:dsa-scores` — *"FAIL tabs: the page that renders its score has one
+       to render"* — so the page never rebuilt and the probe read the STALE
+       artefact and reported the string absent. The rc=1 is the only reason
+       that was not filed as a rendering bug. The branch stays, mirroring
+       `DsaScore`'s own fallback; it is defensive, not reachable.
+
+       **`check:pseudo` found a real defect, twice, and neither round would
+       have looked wrong in English.** Round 1 put the explanations inside the
+       `<dd>`s: 9 of the gate's 14 sampled pages overflowed at 390px under
+       ≥44% text expansion, every one naming the same expanded sentence at
+       495px. Round 2 shortened the values to two words — and the same nine
+       failed again, now naming a `<dd>` holding *"None recorded"*: the cause
+       was the `<dt>`, because `.bo-kv--rows` is `max-content 1fr` and
+       "Assistive-tech evidence" sizes that track. Plain `.bo-kv`
+       (`auto-fit, minmax(11rem, 1fr)`) collapses to one column at 390 and
+       passes. `check:layout` and `test:axe` were green through all three
+       rounds — expansion is the only gate that could see it.
+
+       - **Accept:** met. Every label on every built page traces to a key
+         (`check:maturity`, 280 assertions), and each absence renders its
+         stated string — two proved by injection, the third forbidden by an
+         existing gate as recorded above.
+       - **Not verified, and named rather than implied:** cloud wake, so the
+         1440/390 light-and-dark screenshot lane could not run. This item DOES
+         have a visual surface — unlike 249.2 — and the honest statement is
+         that its *properties* were swept and its *appearance* was not: no new
+         CSS rule ships (the block is `.bo-kv` + `.bo-u-text-muted` +
+         `.bo-badge`, all existing), and `check:layout`, `check:scroll`,
+         `check:pseudo`, `test:axe`, `check:forced-colors` and
+         `check:target-size` all passed across the tree at 1440 and 390. All
+         **17** CI entry points, re-derived from `ci.yml`, ran green here, plus
+         a `DOCS_BASE=/busy-office-ui` build (both new links carry the prefix).
 
 4. [ ] **249.4 — README: stamped gate count, one screenshot, who-for/not-for,
        FAQ.** `stamp-readme.mjs` gains a gate-count marker (count of

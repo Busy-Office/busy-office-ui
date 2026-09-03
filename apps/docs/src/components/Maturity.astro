@@ -1,0 +1,111 @@
+---
+/**
+ * Maturity facts for one component (roadmap 249.3), every one of them read
+ * from a generated or recorded key — never typed onto a page.
+ *
+ *   Introduced      dist/introduced.json    the earliest PUBLISHED version
+ *                                           whose tarball ships this
+ *                                           component's stylesheet
+ *   CSS floor       dist/floor.json         floor derived from this ONE
+ *                                           component's sheet, which is at or
+ *                                           below the framework floor
+ *   Alignment       src/data/dsa-scores.json  the date the DSA score was taken
+ *   AT evidence     src/data/at-evidence.json screen-reader runtime results
+ *
+ * **Absence is rendered, never blank.** Three of the four have a real "we do
+ * not have this" state, and each says which: a component that has landed since
+ * the last publish, a component nobody has scored, and — today, for all of them
+ * — assistive-technology evidence, which is Slice 15's owner-blocked item and
+ * not something any gate here can produce. A blank cell would read as an
+ * oversight; naming the reason is the difference between an unknown and a
+ * missing.
+ *
+ * **Why it mounts from `DsaScore.astro` rather than from 40 pages.**
+ * `check-page-shape` already requires `<DsaScore component="…" />` on every
+ * component page, so this reaches all of them by construction — and adding a
+ * line to 40 hand-authored pages by regex is exactly the bulk edit CLAUDE.md
+ * says to verify against the rendered artefact rather than the diff. There is
+ * nothing to verify if the edit never happens. `check-maturity` asserts the
+ * result from the BUILT pages regardless of how it got there.
+ *
+ * No new CSS: `.bo-kv` is the framework's own key-value list, used here exactly
+ * as a record header uses it — **four short values, and the prose
+ * underneath**. The first draft put the explanations in the `<dd>`s and
+ * `check:pseudo` failed 9 of its 14 sampled pages at 390px, every one naming
+ * the same expanded sentence: a `max-content` track sized to an unwrapped
+ * paragraph is 495px wide in a 390px viewport. `kv.css`'s own opener says what
+ * it is for — "Vendor · Cost center · Terms · Total" — so the fix was to use
+ * the component as documented rather than to widen it.
+ *
+ * **And the list is plain `.bo-kv`, not `.bo-kv--rows`.** Shortening the values
+ * was not enough: the second `check:pseudo` run still failed the same nine
+ * pages, now naming a `<dd>` holding two words. `--rows` is
+ * `grid-template-columns: max-content 1fr`, so an expanded LABEL —
+ * "Assistive-tech evidence" is the longest `dt` on the page — sizes the first
+ * track and pushes the value off a 390px viewport. Plain `.bo-kv` is
+ * `repeat(auto-fit, minmax(11rem, 1fr))`, which collapses to one column and
+ * stacks label over value, which is what a narrow screen needs. Two rounds, and
+ * the first fix would have looked right in English.
+ */
+import floor from '@busy-office/ui/floor.json';
+import introduced from '@busy-office/ui/introduced.json';
+import scores from '../data/dsa-scores.json';
+import atEvidence from '../data/at-evidence.json';
+
+const { component } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const perComponent = (floor as any).perComponent as Record<string, any>;
+const componentFloor = perComponent?.[component];
+if (!componentFloor) {
+  throw new Error(
+    `Maturity: no per-component floor for "${component}". floor.json is generated ` +
+      `from dist/css/components/*.css, so either the name is wrong or the ` +
+      `stylesheet did not build.`,
+  );
+}
+
+const introducedIn = (introduced as any).components?.[component] ?? null;
+const scored = (scores.components as Record<string, any>)[component]?.scored ?? null;
+const at = (atEvidence.components as Record<string, any>)[component] ?? null;
+const blocked = (atEvidence as any).blockedBy;
+---
+<section class="demo">
+  <h2>Maturity <span class="bo-badge">generated</span></h2>
+  <dl class="bo-kv">
+    <div>
+      <dt>Introduced</dt>
+      <dd>{introducedIn
+        ? `v${introducedIn}`
+        : <span class="bo-u-text-muted">Not published yet</span>}</dd>
+    </div>
+    <div>
+      <dt>CSS floor</dt>
+      <dd>{componentFloor.label}</dd>
+    </div>
+    <div>
+      <dt>Alignment scored</dt>
+      <dd>{scored ? scored : <span class="bo-u-text-muted">Not yet scored</span>}</dd>
+    </div>
+    <div>
+      <dt>Assistive-tech evidence</dt>
+      <dd>{at
+        ? at.at.map((r: any) => `${r.tool} ${r.version} on ${r.os}: ${r.verdict}`).join('; ')
+        : <span class="bo-u-text-muted">None recorded</span>}</dd>
+    </div>
+  </dl>
+  <p class="bo-u-text-muted">
+    {introducedIn
+      ? <>Pin this component's first release with <code>npm i {'@busy-office/ui@' + introducedIn}</code>. </>
+      : <>This component has landed since {(introduced as any).latestPublished}, the newest published
+        version, so no release ships it yet. </>}
+    The floor is derived from this component's stylesheet alone — set by
+    <code> {componentFloor.drivenBy.chrome ?? '—'}</code> — so it sits at or below the
+    <a href={base + '/getting-started/installation'}> whole framework's {(floor as any).label}</a>.
+    {at
+      ? <> Assistive-technology results were recorded by hand; the ACR cites them.</>
+      : <> No assistive-technology runtime result is recorded for any component: it {blocked.why}.
+        What automation covers instead is {blocked.coveredInstead} — see
+        <a href={base + '/concepts/accessibility'}> accessibility</a>.</>}
+  </p>
+</section>

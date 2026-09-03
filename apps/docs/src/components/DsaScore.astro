@@ -18,6 +18,10 @@
  * 140-215 words each, which is a fifth of some pages' total (roadmap 158.1).
  */
 import scores from '../data/dsa-scores.json';
+/* Maturity mounts here, not on 40 pages — see that file's header for why. This
+   component is on every component page by `check-page-shape`'s own arm, so
+   mounting from it reaches all of them without a 40-file regex. */
+import Maturity from './Maturity.astro';
 const { component } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const entry = (scores.components as Record<string, any>)[component];
@@ -38,6 +42,7 @@ if (entry) {
   pct = Math.round((earned / possible) * 100);
 }
 ---
+<Maturity component={component} />
 <section class="demo">
   <h2>Design-system alignment <span class="bo-badge">generated</span></h2>
   {entry ? (

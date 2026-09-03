@@ -18,7 +18,7 @@
  * this high, not a proof of support. Adding a probe is one line; the list is
  * ordered to be read.
  */
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, readdir, writeFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { compatOf as bcdCompatOf } from './bcd-compat.mjs';
@@ -108,17 +108,27 @@ function earliestUsableVersion(support, emitsPrefixed) {
     .sort((a, b) => parseFloat(a) - parseFloat(b))[0];
 }
 
-const detected = [];
-for (const f of FEATURES) {
-  if (!f.test(css, js)) continue;
-  const support = compatOf(f.path);
-  /* Does the BUILT css carry a -webkit- form of this property? autoprefixer
-     adds them, so the answer is a fact about the artifact, not an intention. */
-  const emitsPrefixed = new RegExp(`-webkit-${f.id.replace(/[^a-z-]/g, '')}\\s*:`).test(css);
-  const versions = {};
-  for (const b of BROWSERS) versions[b] = earliestUsableVersion(support[b], emitsPrefixed);
-  detected.push({ tier: f.tier, id: f.id, prefixed: emitsPrefixed, versions });
+/** Which of FEATURES this stylesheet (and optional JS) actually emits, with the
+ *  earliest version of each browser that supports the emitted form. Factored
+ *  out of the top-level loop by 249.3 so the SAME probe set can be pointed at
+ *  one component's file as at `index.css` — a per-component floor derived by
+ *  re-implementing the probes would be a second instrument to keep in sync. */
+function detect(cssText, jsText) {
+  const out = [];
+  for (const f of FEATURES) {
+    if (!f.test(cssText, jsText)) continue;
+    const support = compatOf(f.path);
+    /* Does the BUILT css carry a -webkit- form of this property? autoprefixer
+       adds them, so the answer is a fact about the artifact, not an intention. */
+    const emitsPrefixed = new RegExp(`-webkit-${f.id.replace(/[^a-z-]/g, '')}\\s*:`).test(cssText);
+    const versions = {};
+    for (const b of BROWSERS) versions[b] = earliestUsableVersion(support[b], emitsPrefixed);
+    out.push({ tier: f.tier, id: f.id, prefixed: emitsPrefixed, versions });
+  }
+  return out;
 }
+
+const detected = detect(css, js);
 
 if (!detected.length) {
   console.error('derive-floor FAILED — detected no modern CSS features at all.');
@@ -141,13 +151,13 @@ if (!detected.length) {
    So there are two honest numbers, and publishing only one of them was the
    original mistake. */
 const TIERS = ['core', 'degrades', 'polish'];
-const floorFor = (tiers) => {
+const floorFor = (tiers, from = detected) => {
   const f = {};
   const by = {};
   for (const b of BROWSERS) {
     let max = null;
     let who = null;
-    for (const d of detected) {
+    for (const d of from) {
       if (!tiers.includes(d.tier)) continue;
       const v = d.versions[b];
       if (v == null) continue;
@@ -183,6 +193,64 @@ const reach = coverage(reachQuery(floor.chrome, floor.firefox, floor.safari));
    publishing the floor alone. */
 const ceiling = coverage(reachQuery(99, 97, 15.4));
 
+/* PER-COMPONENT floors (roadmap 249.3). The published floor is the whole
+   framework's, and it is the MAXIMUM over every file — so it answers "what does
+   `css/index.css` need", not "what does the badge I am about to paste need".
+   A consumer importing `./css/components/badge` is held to 119 by a
+   `:user-invalid` rule that ships in the form stylesheet and that their page
+   never loads.
+
+   CSS ONLY, and the key is named for it. Attributing JS to a component would
+   mean mapping `bo-<name>` to `behaviors/<name>` by NAME, which is the
+   convention-guessing CLAUDE.md refuses ("page slugs are not class names");
+   `dist/js` is not split per component, so there is nothing exact to read. The
+   docs label says "CSS floor" for the same reason — a component whose
+   behaviour needs `showModal()` has a higher REAL floor than its stylesheet
+   does, and overstating the reach of a CSS-only import would be the same class
+   of error the framework floor was invented to fix.
+
+   Degenerate output is the failure to watch for here: every component file is
+   one `@layer` block, so `@layer`'s Chrome 99 is a lower bound all 40 share. It
+   is not the whole answer — the spread is asserted below rather than assumed,
+   because an identical value across many inputs is a defect until proven
+   otherwise, and this is exactly the shape that produces one. */
+const componentDir = join(DIST, 'css', 'components');
+const componentFiles = (await readdir(componentDir))
+  .filter((f) => f.endsWith('.css') && !f.endsWith('.min.css'))
+  .sort();
+const perComponent = {};
+for (const file of componentFiles) {
+  const text = await readFile(join(componentDir, file), 'utf8');
+  const det = detect(text, '');
+  const sup = floorFor(['core', 'degrades'], det);
+  perComponent[file.replace(/\.css$/, '')] = {
+    floor: sup.floor,
+    drivenBy: sup.drivenBy,
+    label: `Chrome/Edge ${sup.floor.chrome} · Firefox ${sup.floor.firefox} · Safari ${sup.floor.safari}`,
+  };
+}
+if (!componentFiles.length) {
+  console.error('derive-floor FAILED — dist/css/components holds no un-minified stylesheet.');
+  console.error('  Refusing to publish a floor.json whose perComponent map is silently empty.');
+  process.exit(1);
+}
+/* Every per-component floor must be at or below the framework floor: the
+   framework number is the max over the same probes, so a component exceeding it
+   means the two disagree about the same artifact. Cheap, and it is the one
+   reconciliation that can catch a refactor of `detect`/`floorFor` drifting. */
+for (const [name, c] of Object.entries(perComponent)) {
+  for (const b of BROWSERS) {
+    if (c.floor[b] == null) continue;
+    if (floor[b] == null || parseFloat(c.floor[b]) > parseFloat(floor[b])) {
+      console.error(
+        `derive-floor FAILED — component ${name} floors ${b} at ${c.floor[b]}, ` +
+          `above the framework floor ${floor[b]}. The two derivations disagree.`,
+      );
+      process.exit(1);
+    }
+  }
+}
+
 const out = {
   generated: 'by scripts/derive-floor.mjs from dist/css — do not edit',
   source: `@mdn/browser-compat-data@${JSON.parse(await readFile(join(HERE, '..', '..', '..', 'node_modules/@mdn/browser-compat-data/package.json'), 'utf8')).version}`,
@@ -197,6 +265,9 @@ const out = {
   ceiling,
   reachSource: `caniuse-lite@${JSON.parse(await readFile(join(HERE, '..', '..', '..', 'node_modules/caniuse-lite/package.json'), 'utf8')).version}`,
   features: detected,
+  /** Per-component CSS floors — what ONE `./css/components/<name>` import
+   *  needs, which is at or below `floor`. See the block that builds it. */
+  perComponent,
 };
 await writeFile(join(DIST, 'floor.json'), JSON.stringify(out, null, 2) + '\n');
 
@@ -206,3 +277,10 @@ console.log(`  from ${detected.length} detected feature(s), against ${out.source
 console.log(`  reach ${reach}% of tracked browser usage (${out.reachSource}); @layer ceiling ${ceiling}%`);
 console.log('full fidelity (every cosmetic enhancement painting too):');
 for (const b of BROWSERS) console.log(`  ${b.padEnd(8)} ${full.floor[b]}  (set by ${full.drivenBy[b]})`);
+{
+  const labels = new Set(Object.values(perComponent).map((c) => c.label));
+  console.log(
+    `  per-component CSS floors: ${componentFiles.length} component(s), ` +
+      `${labels.size} distinct floor(s)`,
+  );
+}

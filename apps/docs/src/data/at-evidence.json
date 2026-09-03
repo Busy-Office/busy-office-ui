@@ -1,0 +1,11 @@
+{
+  "$comment": "Assistive-technology RUNTIME evidence per component: a human listening to a screen reader, not an automated sweep. Hand-recorded, like dsa-scores.json, and deliberately separate from it — a DSA score is a reading of the CSS, this is a reading of what a screen reader said. Empty is the honest state today, not an oversight: the work is Slice 15's open `AT runtime evidence` item, which is NEEDS-RUNTIME (owner hardware) and which the ACR already cites. A component with no entry renders `none recorded` on its page, naming that item, so the absence is legible rather than blank. `check:maturity` asserts both directions — an entry here must reach the page, and a component without one must render the stated-absence string.",
+  "blockedBy": {
+    "item": "AT runtime evidence",
+    "slice": 15,
+    "why": "needs a human listening to VoiceOver and NVDA on owner hardware; no gate in this repo can simulate announcement behaviour",
+    "coveredInstead": "test:axe across every page at 1440 and 390, and check:forced-colors"
+  },
+  "$schema-note": "components: { <name>: { at: [ { tool, version, os, verdict, notes, recorded } ], evidence: '<path under .roundtable/>' } }",
+  "components": {}
+}

@@ -9,6 +9,24 @@ pin.
 
 ## Unreleased
 
+### Added
+
+- **`floor.json` gains `perComponent`** — the browser floor derived from ONE
+  component's stylesheet, alongside the framework-wide `floor` it already
+  carried. A consumer importing `./css/components/badge` is not held to the
+  framework's Chrome 119 by a `:user-invalid` rule that ships in the form
+  sheet: 9 distinct floors across the 40 components, 20 of them at Chrome 99.
+  CSS only — `dist/js` is not split per component, so attributing behaviour
+  JS to a component would mean guessing by name. Additive; every existing key
+  is unchanged.
+- **`@busy-office/ui/introduced.json`** — a new export mapping each shipped
+  component to the earliest PUBLISHED version whose tarball contains its
+  stylesheet, so "introduced in" is a version `npm i` can actually resolve.
+  Derived from the registry, not from git tags: `v0.2.0` is a tag with no
+  release behind it and 0.1.0 was released without one, which between them
+  make a tag scan wrong for 38 of the 40 components. Rebuild with
+  `npm run refresh:introduced -w @busy-office/ui` after a publish.
+
 ### Fixed
 
 - `.bo-input` (and `.bo-quantity__input`) now truncates an overflowing value
