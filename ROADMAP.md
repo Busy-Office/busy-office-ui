@@ -559,13 +559,74 @@ position, the hand-written sidebar/task-tile arrays, DESIGN.md's length and
 dated-section count, the absent stability field) reproduced exactly as
 claimed.
 
-1. [ ] **249.1 — Bundle-size budget gate.** `check-size.mjs`: a budget table
-       per shipped bundle (current gzip + ~10% headroom), wired into
-       `packages/core`'s `build` beside `stamp-readme --check`, `--self-test`,
-       red-proved by injecting 2 kB into a component CSS file.
-       - **Accept:** the gate fails when a shipped bundle exceeds its budget
-         (verified by injection) and passes on the current tree; raising a
-         budget is a one-line diff.
+1. [x] **249.1 — DONE 2026-09-03. Bundle-size budget gate.**
+       `packages/core/scripts/check-size.mjs`, wired into `build` as
+       `check:size` immediately before `stamp-readme --check`. Eleven budget
+       buckets cover all **139** shipped CSS/JS artifacts; every number is a
+       gzip ceiling at current + ~10% headroom.
+
+       **The premise needed correcting first, and the correction shaped the
+       design.** "No bundle-size gate exists" is true of 138 of 139 artifacts,
+       not of all of them —
+
+       ```
+       grep -rn -i budget packages/core/scripts packages/core/package.json .github/workflows
+       ```
+
+       returns exactly one enforcement: `build-rf-essentials.mjs`'s
+       `RF_BUDGET_KB = 40` (roadmap 126.1), a MINIFIED-byte ceiling on one
+       bundle, inline in the script that builds it. It is kept, not replaced —
+       it defends an argued membership list, this gate defends transfer
+       weight, and they fail for different reasons and read differently. So
+       this generalises a precedent rather than inventing one.
+
+       **gzip, against 126.1's explicit argument for minified bytes.** That
+       argument (zlib-build drift; the 2026-08-16 CI failure on identical
+       source) was about an EQUALITY check on a published string. Every number
+       here is a ceiling with ~10% headroom. The claim is not left as an
+       assertion that can go stale: the gate recomputes and prints the
+       **tightest headroom in the whole table, in bytes**, on every run —
+       today 110 bytes, `css/brand-navy.min.css`.
+
+       **Red-proved live, four arms; each injection was confirmed to have
+       LANDED before its red was believed.**
+
+       - *per-file* — 2,062 bytes of unique CSS appended inside
+         `data-table.css`'s `@layer` block.
+         `grep -o 'bo-data-table--probe-' | wc -l` counts **28** in each of
+         `dist/css/components/data-table.min.css`, `index.min.css` and
+         `rf-essentials.min.css`; `npm run build -w @busy-office/ui` then
+         exits 1 **at `check:size`**:
+         `data-table.min.css is 2.28 kB gz > per-file budget 2.2 kB`.
+       - *unbudgeted file* — a `dist/css/themes/nordic.css` no bucket claims:
+         exit 1, the file named. A new shipped artifact must be budgeted
+         deliberately, never absorbed by a wildcard.
+       - *stale row* — `dist/css/brand-*.min.css` moved aside: exit 1,
+         "budget row matched no shipped file". The reconciliation runs both
+         ways.
+       - *blown total* and *a multi-file bucket declaring no per-file max* —
+         `--self-test`, which pins the classifier (14 cases) and the
+         comparator (5) through the ONE `bucketOf`/`findBreaches` pair the
+         real run uses, per check-rf-floor.mjs's lesson.
+
+       **What the item did not name, and it decides the design: a
+       group-total-only gate would have been GREEN on exactly the injection
+       the Accept prescribes.** 2 kB of source CSS is **+0.37 kB gz**.
+       `css/components/*.min.css` went 24.75 → 25.12 against a 27.3 budget,
+       and `css/index.min.css` 15.10 → 15.53 against 16.7. Only the per-file
+       arm fired. So both arms ship, and a bucket holding more than one file
+       that declares only a total is itself a gate failure: a total alone lets
+       one component balloon while its neighbours shrink, and a per-file max
+       alone lets ten new components each land just under it.
+
+       Current tree: 139 payload files, **371.7 kB gz** total. Not budgeted,
+       with counts printed every run so the exemption cannot grow quietly:
+       8 `.json` (build-time data, not per-page browser payload) and 31
+       `.d.ts` (types, stripped before anything ships).
+       - **Accept:** met. Fails on injection (four arms above), passes on the
+         current tree, and raising a budget is a one-line diff — measured,
+         not asserted: changing `css/components/*.min.css`'s `max` from 2.2 to
+         2.4 produces a diff of exactly **-1/+1**.
 
 2. [ ] **249.2 — Per-page metadata: description, sitemap, robots.** `Gallery.astro`
        gains a required `description` prop (new `check-page-shape` arm fails a
