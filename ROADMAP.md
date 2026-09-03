@@ -315,6 +315,186 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 249 — Triaged from an external docs-adoption-surface proposal (2026-09-03)
+
+**Input**: a 16-item proposal comparing this repo (`5b3ab697`) against
+`DibbayajyotiRoy/RoyUI@0e29468` plus eight reviewer notes, covering the "first
+thirty seconds of contact" gap: bundle-size budget, page metadata, terminology,
+maturity labels, a "choose your path" router, README, install commands, docs
+recipe ordering, generated taglines, a visual catalogue, DESIGN.md's split, a
+stability field, an outward "not for you" page, plus three open owner
+questions and a lane of refusals. Full triage:
+`.roundtable/grill-adoption-proposal-2026-09-03.md`.
+
+**Every citation that a verdict depended on was re-run against the live tree
+before trusting it**, per this file's own "a number you report is
+load-bearing" rule — not read off the proposal's own text. Two did not
+survive:
+
+- The terminology-table item's own worked example was **backwards**:
+  cited `components/offcanvas.astro` as missing the word "drawer"; the page
+  actually uses "drawer" as its dominant vocabulary (15+ occurrences across
+  headings, IDs, prose, and its own wrong-choice clause). No gap exists
+  between the two cited pages.
+- An "incidental" browserslist-vs-derived-floor mismatch is **not a
+  defect** — `derive-floor.mjs`'s own header states it is deliberately
+  independent of browserslist, computed from shipped CSS via BCD precisely
+  because a hand-typed floor was once wrong. A derived floor one minor
+  version above the declared browserslist target is the expected
+  relationship. Refused as 94.11 ceremony — the predicate would be
+  near-permanently true.
+
+Everything else re-checked (bundle-size gate absent, page metadata absent,
+DSA/floor/AT-evidence sourcing, README's 0 images/0 FAQ, install page's
+npm-only, the recipe's demo-first/spec-last gate and its exact source
+position, the hand-written sidebar/task-tile arrays, DESIGN.md's length and
+dated-section count, the absent stability field) reproduced exactly as
+claimed.
+
+1. [ ] **249.1 — Bundle-size budget gate.** `check-size.mjs`: a budget table
+       per shipped bundle (current gzip + ~10% headroom), wired into
+       `packages/core`'s `build` beside `stamp-readme --check`, `--self-test`,
+       red-proved by injecting 2 kB into a component CSS file.
+       - **Accept:** the gate fails when a shipped bundle exceeds its budget
+         (verified by injection) and passes on the current tree; raising a
+         budget is a one-line diff.
+
+2. [ ] **249.2 — Per-page metadata: description, sitemap, robots.** `Gallery.astro`
+       gains a required `description` prop (new `check-page-shape` arm fails a
+       page without one); `@astrojs/sitemap`; a one-line `robots.txt`; one
+       static OG image site-wide.
+       - **Accept:** `grep -L 'name="description"' dist/**/*.html` returns
+         empty; `dist/sitemap-index.xml` lists every built page; `check-links`
+         stays green.
+
+3. [ ] **249.3 — Maturity labels with a real source.** Per component page:
+       DSA-scored date (`dsa-scores.json.scored`), introduced-version (first
+       tag containing the component's CSS file, computed at build), floor
+       (per-component `derive-floor.mjs` run), AT evidence rendering "none
+       recorded" until the owner-blocked item closes (STATUS.md's open `AT
+       runtime evidence` row).
+       - **Accept:** every label on the built page traces to a key in `dist/`
+         or `src/data/`; a component with no score renders the stated-absence
+         string, never blank.
+
+4. [ ] **249.4 — README: stamped gate count, one screenshot, who-for/not-for,
+       FAQ.** `stamp-readme.mjs` gains a gate-count marker (count of
+       `check-*.mjs` carrying `--self-test`); one hand-made screenshot
+       (`patterns/list-report` at `data-density="compact"`, labelled as
+       hand-made in alt text); the existing two "Not for" clauses from
+       `scope.astro` as a for/not-for line; the five `troubleshooting.astro`
+       headings as a linked FAQ.
+       - **Accept:** `stamp-readme --check` still exits 0; both READMEs carry
+         ≥1 image.
+
+5. [ ] **249.5 — Install commands for pnpm/yarn/bun, or a recorded refusal.**
+       `getting-started/installation.astro` shows npm only today. Add the
+       three, or file a one-line DA stating the no-bundler audience makes it
+       noise — either closes this.
+
+6. [ ] **249.6 — "Choose your path" router, corrected from the proposal's
+       own miscited version.** The proposal's evidence ("index.astro:118, one
+       CTA") was wrong — that line is the install snippet, and the page
+       already has 2 CTA buttons, 4 nav links and 6 task-tiles. The real gap:
+       every existing router (nav, tiles) sorts by *component category*, none
+       by *adoption scenario* (add to existing app / new app / CSS-only / with
+       behaviours / htmx / custom theme). A six-row block on `index.astro`,
+       each row ending in a rendered screen — the theming row currently has
+       none, so it needs one re-themed screen-kit example or the row is cut.
+       - **Accept:** each row's terminal page contains a `Demo` or pattern
+         link, asserted by a `check-learning-path`-style arm; a row ending in
+         prose alone fails.
+
+7. [ ] **249.7 — Terminology table, re-scoped after its own worked example
+       failed verification.** Drop the offcanvas/drawer pairing (refuted
+       above — no gap exists). Before landing `src/data/terminology.mjs`,
+       spot-check every remaining seed row (select/dropdown/combobox/value
+       help/F4, grid/table/ALV, snackbar/toast/notification,
+       master-data/CRUD/maintain, wizard/stepper/guided-procedure) the same
+       way A3's citation was checked — against the actual built pages, not
+       assumed. Hold the SAP/Fiori-specific rows (value help, ALV, guided
+       procedure, F4, message, maintain) for 249.10 (owner vocabulary).
+       Three consumers once seeded: a visible "Also called" line under
+       `<h1>` (Pagefind-indexed), a `check-search.mjs` `@exact` arm per
+       alias, and a glossary in `gen-llms.mjs`.
+       - **Accept:** every row's claimed gap is independently reproduced by
+         grepping the two pages it names, the same check that refuted the
+         offcanvas row; deleting a row from the table turns its search arm
+         red.
+
+8. [ ] **249.8 — Component tagline + category, generated from the CSS
+       header.** `/* @tagline … @category … */` in each component's CSS
+       header, lifted into `api.json` by `extract-api.mjs`. Deletes two
+       hand-written lists this repo's own gates already police drifting
+       (`Gallery.astro`'s sidebar array, `index.astro`'s task-tile prose) and
+       feeds 249.2's description, 249.7's terminology line, and 249.9's
+       catalogue cards.
+       - **Accept:** a stub component CSS file with the header updates
+         sidebar/tiles/llms with zero hand edits on rebuild; omitting the
+         header fails the build naming the file.
+
+9. [ ] **249.9 — Visual component catalogue.** Depends on 249.8 (tagline) and
+       249.3 (maturity labels). `/components/` index: one card per component
+       — name, tagline, CSS-only/JS-enhanced/JS-required (derived: component
+       classes ∩ `behaviors.json` hooks), DSA score + date, floor, AT line,
+       pattern links, a build-time miniature via `browser-harness.mjs`
+       (already exists, used today for patterns via `PatternPreview.astro`).
+       - **Accept:** every badge on a card traces to a JSON key; the
+         miniature-rendering build-time cost is measured and stated before
+         this closes.
+
+10. [ ] **249.10 — SAP/Fiori terminology column for 249.7.** Owner
+        vocabulary — value help, ALV, guided procedure, F4, message, maintain.
+        **OWNER CALL.**
+
+11. [ ] **249.11 — "Migrate an existing admin UI" path.** No page exists.
+        Which stack is the entry point decides whether this is one page or a
+        pattern family. **OWNER CALL.**
+
+12. [ ] **249.12 — Archival trigger for `ROADMAP.md`.** The archive-sweep
+        *practice* exists (Slices 224, 228, 235.2, 237.1 all did one); no
+        stated trigger (on slice close? every N slices?) exists. **OWNER OR
+        ARCHITECTURE CALL** — low urgency, the sweep keeps happening
+        regardless.
+
+**Sent back to the owner rather than dispatched, because the proposal's own
+justification doesn't hold:**
+
+13. [ ] **249.13 — Reconsider demo-first/spec-last (the proposal's B1),
+        explicitly, not as a ratification.** The facts check out exactly —
+        `data-table.astro`'s Markup section is its 18th and last `<h2>`,
+        `check-page-shape.mjs` gates the position with test cases proving it.
+        But the proposal argues for reversing it as "1 reviewer beats 0
+        readers," which misstates the 2026-08-16 decision: that call came
+        from comparing four established framework docs sites with zero
+        exceptions found for demo-first/spec-last (this file, then
+        `CLAUDE.md`, states the comparison explicitly). The proposed reversal
+        (Markup moves to position 2, spec tables stay generated-only at the
+        end) is a defensible design on its own merits and costs only moving
+        one block — but reversing a dated, gated, cross-referenced decision is
+        the owner's call to make with the real tradeoff in front of them, not
+        something a triage settles by itself. **OWNER CALL**, recommended
+        default: keep spec-last unless the owner weighs the new evidence
+        against the original four-site comparison and prefers the change.
+
+**Refused, recorded as DA (not re-litigated here — see the triage file for
+each item's reasoning):** publish-on-every-push/auto-bump, a `registry.ts`
+model for component metadata, thirteen mandatory page headings, hand-typed
+stability/tested badges, `COMPATIBILITY.md` as prose, `docs/decisions/`
+duplicating `.roundtable/`, per-page generated OG images, a bundlephobia
+badge, an npm keyword blob, Preview/Code tabs (already decided, roadmap 118),
+search-side query expansion, and framework-owned column persistence.
+
+**Concurred without a new item** (already correctly scoped, or resolved by
+an item above): the visual-catalogue and split-DESIGN.md items (B3→249.9,
+B4→ not separately filed, folds into ongoing `.roundtable/` practice already
+in place — `DESIGN.md`'s Principles-only split and a `CONTRIBUTING.md` are
+low-risk and can be built directly without a triage item; flagged here so a
+future wake doesn't re-propose it from scratch), and the stability-field item
+(B5, folds into 249.8's CSS-header convention once that lands — declaring
+`stable`/`experimental`/`deprecated` as a field is a small extension of the
+same `@tagline`/`@category` header mechanism, not a separate design).
+
 ## Slice 248 — Component-by-component design-grill: 40 of 40 covered, 1 real defect fixed, one instrument caught lying to itself (2026-09-02)
 
 Live visual grill (`design-grill` skill, `chrome-devtools-mcp`) applied to every
