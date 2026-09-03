@@ -1545,11 +1545,56 @@ claimed.
        every existing router (nav, tiles) sorts by *component category*, none
        by *adoption scenario* (add to existing app / new app / CSS-only / with
        behaviours / htmx / custom theme). A six-row block on `index.astro`,
-       each row ending in a rendered screen — the theming row currently has
-       none, so it needs one re-themed screen-kit example or the row is cut.
-       - **Accept:** each row's terminal page contains a `Demo` or pattern
-         link, asserted by a `check-learning-path`-style arm; a row ending in
-         prose alone fails.
+       each row ending in a rendered screen.
+
+       **MEASURED 2026-09-03 (cloud wake), and it re-scopes the item: THREE
+       rows lack a qualifying terminal page, not one.** This item said "the
+       theming row currently has none". That premise is a wake-old measurement,
+       so it was re-run before dispatching, per CLAUDE.md's premise rule — and
+       it undercounts the same way the CTA figure did. Against the BUILT tree,
+       reading each scenario's natural terminal page:
+
+       | scenario | terminal page | `demo-pair__preview` | pattern links |
+       |---|---|---|---|
+       | add to an existing app | `/getting-started/installation` | 0 | 1 ✓ |
+       | start something new | `/getting-started/first-screen` | 3 | 3 ✓ |
+       | CSS only, no JS | `/getting-started/scope` | 0 | 0 ✗ |
+       | add behaviours | `/concepts/js-behaviors` | 0 | 0 ✗ |
+       | htmx | `/getting-started/htmx` | 1 | 1 ✓ |
+       | custom theme | `/concepts/theming` | 0 | 0 ✗ |
+
+       So landing this needs three rendered screens, not one — or three of the
+       six rows cut, which leaves a three-row "adoption-scenario router" that
+       does not route the scenarios the gap names. **Deciding that is still
+       part of the item; what changed is the price.**
+
+       **THE GATE MUST ANCHOR TO THE PAGE'S CONTENT REGION, or it cannot
+       fail.** Measured before writing the Accept, per 94.11: the docs shell
+       lists every pattern page in its sidebar, so *"the page contains a
+       pattern link"* read whole-page is **78–81 on all 31 learning-path
+       pages** — a predicate uniformly true, i.e. a detector that cannot fail,
+       and exactly the shape `check-learning-path`'s own header records three
+       of. Anchored to `<section class="demo"` — the anchor that gate already
+       uses — the same predicate reads **17 of 31 (55%)**, so it discriminates.
+       The anchor cuts off the opener (`<h1>` sits ~1,000 chars before the
+       first demo section), so any ABSENCE it reports must be re-checked
+       whole-page before being believed; that is how the three ✗ rows above
+       were confirmed.
+
+       **DECLINED BY A CLOUD WAKE 2026-09-03, left open, and this is the
+       screenshot sense of browser-blocked** (`LOOPS.md` 186.2's vocabulary):
+       three terminal pages must gain a rendered result, and a new six-row
+       block lands on the site's front door — evidence that is a rendered
+       image a human compares. A LOCAL wake can take it. The measurement above
+       is the part a cloud wake could take, and it is banked here so the next
+       wake does not re-derive it.
+       - **Accept:** each row's terminal page contains a `Demo` or a pattern
+         link **inside its content region**, asserted by a
+         `check-learning-path`-style arm that anchors the same way that gate
+         does; a row ending in prose alone fails. The arm's red-proof asserts
+         the injection landed in the BUILT page before the red is believed,
+         and a whole-page reading of the same predicate is recorded beside it
+         so a later reader can see why the anchor is load-bearing.
 
 7. [ ] **249.7 — Terminology table, re-scoped after its own worked example
        failed verification.** Drop the offcanvas/drawer pairing (refuted
@@ -1563,10 +1608,45 @@ claimed.
        Three consumers once seeded: a visible "Also called" line under
        `<h1>` (Pagefind-indexed), a `check-search.mjs` `@exact` arm per
        alias, and a glossary in `gen-llms.mjs`.
+       **THE SPOT-CHECK RAN 2026-09-03 (cloud wake). Four of the five seed
+       rows do not reproduce.** This is the Accept's first clause executed,
+       not a new opinion: each row was grepped against the built pages it
+       names, the same test that refuted the offcanvas row. Counts are of the
+       page's own text (tags stripped), whole-page — the docs sidebar names
+       every component, so an anchored reading undercounts, and every absence
+       below was confirmed at whole-page 0.
+
+       | seed row | pages grepped | verdict |
+       |---|---|---|
+       | select / dropdown / combobox | `combobox`, `dropdown`, `form` | **no gap** — the combobox page already reads `dropdown` 3, `select` 44, `autocomplete` 11; the dropdown page reads `select` 39 |
+       | grid / table | `data-table`, `tree-table` | **no gap** — `grid` 10, `datagrid` 1, `spreadsheet` 1 on the data-table page |
+       | snackbar / toast / notification | `alerts` | **partial** — `toast` 34, `alert` 46, `notification` 3; only **`snackbar`** is absent (0) |
+       | master data / CRUD / maintain | `object-page`, `list-report` | **reproduces whole** — all three read 0 on both pages |
+       | wizard / stepper / guided procedure | `stepper`, `patterns/wizard` | **no gap** — the stepper page reads `wizard` 1, the wizard page reads `stepper` 4 |
+
+       Three of five are refuted the same way the offcanvas row was: the page
+       already carries the alias as live vocabulary. The surviving seed is
+       **one full row (master data / CRUD / maintain) and one single term
+       (`snackbar`)** — plus `typeahead`, absent (0) from all three of
+       combobox/dropdown/form, which no seed row named.
+
+       **So the open question is now a cost question, and it is left open
+       rather than settled here:** three consumers — a visible "Also called"
+       line under every component `<h1>`, a `check-search.mjs` `@exact` arm
+       per alias, and a glossary in `gen-llms.mjs` — built to carry **three
+       aliases**. The Objective's less-for-more test is the one to apply, and
+       249.10 (the owner's SAP/Fiori column) is what would grow the seed, so
+       settling this before the owner answers 249.10 would decide it on the
+       thinnest version of the input. **One thing measured here is worth
+       keeping either way:** the dropdown page never names or links
+       `combobox` in its own content (0 hrefs; the 2 whole-page hits are shell
+       chrome), which is a *Related-link* gap, not a terminology one.
        - **Accept:** every row's claimed gap is independently reproduced by
          grepping the two pages it names, the same check that refuted the
-         offcanvas row; deleting a row from the table turns its search arm
-         red.
+         offcanvas row **(done — table above; a row that does not reproduce is
+         dropped, and finding the seed empty is a satisfying outcome, not an
+         off-plan one)**; then, if a table ships at all, deleting a row from
+         it turns its search arm red.
 
 8. [ ] **249.8 — Component tagline + category, generated from the CSS
        header.** `/* @tagline … @category … */` in each component's CSS
