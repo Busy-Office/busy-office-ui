@@ -9,6 +9,8 @@ import { page } from '../_shell.mjs';
 export const render = () =>
   page({
     title: 'OPP-2201',
+    description:
+      'Opportunity record for the Deck refit 2027 deal: the stage it has reached and the activity trail that got it there.',
     moduleId: 'crm',
     trail: [
       { label: 'Home', href: '/index.html' },

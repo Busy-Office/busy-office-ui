@@ -21,6 +21,8 @@ const lines = [
 export const render = () =>
   page({
     title: 'BOM — PMP-4400',
+    description:
+      'Bill of materials for the PMP-4400 pump assembly, indented by level, with quantity per parent and total required.',
     moduleId: 'prod',
     trail: [
       { label: 'Home', href: '/index.html' },

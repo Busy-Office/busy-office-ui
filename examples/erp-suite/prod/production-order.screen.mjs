@@ -26,6 +26,8 @@ const tone = { ok: ['bo-badge--success', 'Available'], short: ['bo-badge--warnin
 export const render = () =>
   page({
     title: 'PRO-3310',
+    description:
+      'Production order PRO-3310 for the PMP-4400 pump assembly: material requirement, shortfall, and what to raise for it.',
     moduleId: 'prod',
     trail: [
       { label: 'Home', href: '/index.html' },

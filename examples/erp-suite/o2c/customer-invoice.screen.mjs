@@ -8,6 +8,8 @@ import { page } from '../_shell.mjs';
 export const render = () =>
   page({
     title: 'INV-70318',
+    description:
+      'Customer invoice INV-70318 to Cobalt Works Ltd, with the chasing history against it and the document flow it sits in.',
     moduleId: 'o2c',
     trail: [
       { label: 'Home', href: '/index.html' },

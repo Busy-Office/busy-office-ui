@@ -45,6 +45,8 @@ const label = { done: 'Done', current: 'In progress', blocked: 'Blocked', pendin
 export const render = () =>
   page({
     title: 'Period close',
+    description:
+      'Period close for 09/2026, day two of four: each closing task with its owner, due date and current status.',
     moduleId: 'fin',
     trail: [
       { label: 'Home', href: '/index.html' },

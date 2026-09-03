@@ -108,6 +108,8 @@ const group = (g, i) => `
 export const render = () =>
   page({
     title: 'Create purchase orders',
+    description:
+      'Worksheet that turns approved requisition lines into two purchase orders, one per vendor, before either is sent out.',
     moduleId: 'p2p',
     trail: [
       { label: 'Home', href: '/index.html' },

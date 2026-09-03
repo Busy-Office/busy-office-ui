@@ -15,6 +15,8 @@ const lines = [
 export const render = () =>
   page({
     title: 'PO-88213',
+    description:
+      'Purchase order PO-88213 to Northwind Supply: its lines, internal notes, approval chain and surrounding document flow.',
     moduleId: 'p2p',
     trail: [
       { label: 'Home', href: '/index.html' },

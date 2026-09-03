@@ -14,6 +14,8 @@ const rows = [
 export const render = () =>
   page({
     title: 'Vendor invoices',
+    description:
+      'Vendor invoices with the purchase order each is matched against, the amount claimed, and whether that match cleared.',
     moduleId: 'p2p',
     trail: [
       { label: 'Home', href: '/index.html' },

@@ -37,6 +37,8 @@ const fmt = (n) => n.toLocaleString('en-US');
 export const render = () =>
   page({
     title: 'Cycle count',
+    description:
+      'Cycle count worksheet CC-2026-114: system quantity against counted quantity, with the variance recorded per item.',
     moduleId: 'inv',
     trail: [
       { label: 'Home', href: '/index.html' },

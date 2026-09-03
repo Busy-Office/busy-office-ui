@@ -42,6 +42,8 @@ const verdict = {
 export const render = () =>
   page({
     title: 'INV-55710',
+    description:
+      'Vendor invoice INV-55710 from Northwind Supply, matched three ways against what was ordered and what was received.',
     moduleId: 'p2p',
     trail: [
       { label: 'Home', href: '/index.html' },

@@ -15,6 +15,8 @@ const lines = [
 export const render = () =>
   page({
     title: 'REQ-40118',
+    description:
+      'Requisition REQ-40118 with its lines, estimated prices and the total value that decides which approval it needs.',
     moduleId: 'p2p',
     trail: [
       { label: 'Home', href: '/index.html' },

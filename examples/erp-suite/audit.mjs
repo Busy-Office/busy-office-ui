@@ -4,7 +4,8 @@
  * A gap-finding instrument that is itself broken finds the wrong gaps: an axe
  * violation here must mean "the framework let me build this wrong", which is a
  * finding, not background noise to tune out. Runs axe at both harness widths
- * and checks for horizontal overflow at the narrow one.
+ * and checks for horizontal overflow at the narrow one, and asserts that every
+ * built screen carries a distinct <meta name="description"> (249.14).
  *
  * @exact — a real browser reporting violations and measured overflow.
  * Exempt from --self-test: there is no judgement to get wrong.
@@ -15,6 +16,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { serveSuite } from './serve.mjs';
 import { suitePages } from './pages.mjs';
+import { DESCRIPTION_MIN } from './_shell.mjs';
 import { launchDocsBrowser } from '../../apps/docs/scripts/browser-harness.mjs';
 import { WIDTHS, NARROW_WIDTH } from '../../apps/docs/scripts/viewports.mjs';
 
@@ -22,11 +24,63 @@ const here = dirname(fileURLToPath(import.meta.url));
 const DIST = join(here, 'dist');
 const AXE = readFileSync(new URL('../../node_modules/axe-core/axe.min.js', import.meta.url), 'utf8');
 
-const paths = (await suitePages(DIST)).map((p) => p.url);
+const built = await suitePages(DIST);
+const paths = built.map((p) => p.url);
+const failures = [];
+
+/* EVERY SUITE SCREEN DESCRIBES ITSELF, AND NO TWO DESCRIPTIONS MATCH (249.14).
+   249.2 closed this over the 127 built DOCS pages; the suite was deliberately
+   outside that sweep — it is an app, not documentation, `dist-pages.mjs` skips
+   it, and Astro never had it as a route because `copy-suite.mjs` copies it in
+   after the build. So the docs gate structurally cannot see these pages, and
+   `<meta name="description">` was absent from all 28.
+
+   TWO ARMS, and the second is the one that earns its place. `_shell.mjs`'s
+   `page()` already throws below the floor, so arm 1 is the belt to that
+   braces — it reads the BUILT file, which is what a crawler gets, and
+   CLAUDE.md's rule is that when something downstream can rewrite the artefact
+   its output IS the artefact (`build.mjs` rewrites every page through
+   `rebase()` before it reaches disk). Arm 2 is what a presence check cannot
+   see: 28 copies of one sentence pass arm 1 in full, and a shared description
+   is the failure mode a threading job of this shape actually produces.
+
+   Read off the file rather than the DOM on purpose, and reported before the
+   browser starts: a missing description then fails in about a second instead
+   of after 28 screens x 2 widths of axe. The trade, stated rather than
+   glossed: a run that trips here reports ONLY these failures, so a screen with
+   both a missing description and an axe violation shows the description first
+   and the axe violation on the next run. */
+const byDescription = new Map();
+for (const p of built) {
+  const m = readFileSync(p.file, 'utf8').match(/<meta\s+name="description"\s+content="([^"]*)"\s*>/);
+  const content = m ? m[1].trim() : null;
+  if (content === null) {
+    failures.push(`${p.url}: no <meta name="description"> in the built page`);
+    continue;
+  }
+  if (content.length < DESCRIPTION_MIN) {
+    failures.push(
+      `${p.url}: description is ${content.length} characters, under the ${DESCRIPTION_MIN} floor — ${JSON.stringify(content)}`,
+    );
+    continue;
+  }
+  byDescription.set(content, [...(byDescription.get(content) ?? []), p.url]);
+}
+for (const [content, urls] of byDescription) {
+  if (urls.length > 1) {
+    failures.push(`${urls.length} screens share one description — ${urls.join(', ')} — ${JSON.stringify(content)}`);
+  }
+}
+
+if (failures.length) {
+  console.error(`erp-suite audit FAILED (${failures.length}) before the browser started:`);
+  for (const f of failures) console.error(`  ${f}`);
+  process.exit(1);
+}
+
 const { server, port } = await serveSuite();
 const browser = await launchDocsBrowser();
 const page = await browser.newPage();
-const failures = [];
 
 for (const path of paths) {
   for (const [i, width] of WIDTHS.entries()) {
@@ -176,5 +230,6 @@ if (failures.length) {
   process.exit(1);
 }
 console.log(
-  `erp-suite audit passed — ${paths.length} screen(s) x ${WIDTHS.length} widths: zero axe violations, no sideways scroll at ${NARROW_WIDTH}`,
+  `erp-suite audit passed — ${paths.length} screen(s) x ${WIDTHS.length} widths: zero axe violations, no sideways scroll at ${NARROW_WIDTH}, ` +
+    `${byDescription.size} distinct description(s) of >= ${DESCRIPTION_MIN} characters`,
 );

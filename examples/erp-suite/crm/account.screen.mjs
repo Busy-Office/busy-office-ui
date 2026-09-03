@@ -25,6 +25,8 @@ const openItems = [
 export const render = () =>
   page({
     title: 'Halden Marine AS',
+    description:
+      'Customer account record for Halden Marine AS: its contacts, credit standing and the open transactions behind that exposure.',
     moduleId: 'crm',
     trail: [
       { label: 'Home', href: '/index.html' },

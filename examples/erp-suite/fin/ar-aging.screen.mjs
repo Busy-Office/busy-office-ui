@@ -40,6 +40,8 @@ const says = (i) => (i === 4 ? ' — over 90 days' : i === 3 ? ' — 61 to 90 da
 export const render = () =>
   page({
     title: 'AR aging',
+    description:
+      'Receivables aging: every customer against the current, 1-30, 31-60, 61-90 and 90-plus day buckets, with totals.',
     moduleId: 'fin',
     trail: [
       { label: 'Home', href: '/index.html' },

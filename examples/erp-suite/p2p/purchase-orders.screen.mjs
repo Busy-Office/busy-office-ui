@@ -25,6 +25,8 @@ const rows = [
 export const render = () =>
   page({
     title: 'Purchase orders',
+    description:
+      'Purchase orders with vendor, cost centre, needed-by date, value and how much of each order has been received so far.',
     moduleId: 'p2p',
     trail: [
       { label: 'Home', href: '/index.html' },

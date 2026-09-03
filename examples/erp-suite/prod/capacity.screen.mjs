@@ -35,6 +35,8 @@ const note = (n) => (n > 100 ? ' — over capacity' : n > 85 ? ' — near capaci
 export const render = () =>
   page({
     title: 'Capacity',
+    description:
+      'Work centre capacity for Q4: load per week as a percentage of available hours, so an overloaded centre shows early.',
     moduleId: 'prod',
     trail: [{ label: 'Home', href: '/index.html' }, { label: 'Production', href: '/prod/production-orders.html' }, { label: 'Capacity' }],
     body: `

@@ -21,6 +21,8 @@ const rows = [
 export const render = () =>
   page({
     title: 'Sales orders',
+    description:
+      'Open sales orders with customer, requested date, value and the status that decides what happens to each one next.',
     moduleId: 'o2c',
     trail: [
       { label: 'Home', href: '/index.html' },

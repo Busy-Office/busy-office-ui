@@ -45,6 +45,8 @@ const rows = [
 export const render = () =>
   page({
     title: 'Lot trace',
+    description:
+      'Lot genealogy for LOT-A9F4 under recall RC-118 — the components it consumed and the batches it went on to build.',
     moduleId: 'inv',
     trail: [
       { label: 'Home', href: '/index.html' },

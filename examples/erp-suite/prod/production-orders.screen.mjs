@@ -14,6 +14,8 @@ const rows = [
 export const render = () =>
   page({
     title: 'Production orders',
+    description:
+      'Open production orders with the item being built, quantity, due date and current status on the shop floor.',
     moduleId: 'prod',
     trail: [{ label: 'Home', href: '/index.html' }, { label: 'Production', href: '/prod/production-orders.html' }, { label: 'Production orders' }],
     body: `

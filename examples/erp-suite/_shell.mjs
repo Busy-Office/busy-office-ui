@@ -135,13 +135,47 @@ function crumbs(trail) {
   return `<nav aria-label="Breadcrumb"><ol class="bo-breadcrumb">${items}</ol></nav>`;
 }
 
-export function page({ title, moduleId, trail = [], body }) {
+/**
+ * The floor a suite description must clear, in characters.
+ *
+ * ONE definition, two readers — `page()` below refuses to render under it, and
+ * `audit.mjs` asserts it on the BUILT page. It is the same 40 that
+ * `check-metadata.mjs` asserts over the 127 docs pages and that
+ * `Gallery.astro` throws on, and it is the same number for the same reason:
+ * below it a description is a label, not a summary of the screen.
+ */
+export const DESCRIPTION_MIN = 40;
+
+export function page({ title, description, moduleId, trail = [], body }) {
+  /* THROWN, NOT DEFAULTED, and the distinction is the whole point (249.2's
+     lesson, arriving on the suite side). A default would be a string every
+     screen shares — which passes a presence check in full while telling a
+     search result nothing, and would satisfy audit.mjs's length arm too. Only
+     the distinctness arm would catch it, and a gate should not be the first
+     thing that notices a missing description: the render is.
+
+     The double-quote check is not pedantry either. The description is
+     interpolated into a `content="…"` attribute, so one `"` in the prose ends
+     the attribute early and the rest of the sentence becomes stray markup in
+     <head> — which still parses, still ships, and reads as a short-but-present
+     description to any grep. Use a typographic quote if a screen ever needs
+     one. */
+  if (typeof description !== 'string' || description.trim().length < DESCRIPTION_MIN) {
+    throw new Error(
+      `erp-suite: page "${title}" needs a description of at least ${DESCRIPTION_MIN} characters; ` +
+        `got ${typeof description === 'string' ? `${description.trim().length} characters` : typeof description}`,
+    );
+  }
+  if (description.includes('"')) {
+    throw new Error(`erp-suite: the description for "${title}" contains a double quote, which would end the content attribute early`);
+  }
   return `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${title} · Busy Office ERP suite</title>
+<meta name="description" content="${description.trim()}">
 <link rel="stylesheet" href="/bo/index.css">
 </head>
 <body>

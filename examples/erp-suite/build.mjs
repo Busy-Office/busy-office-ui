@@ -48,6 +48,14 @@ for (const m of MODULES.filter((x) => !BUILT_MODULES.includes(x.id))) {
     path: join(m.id, 'index.html'),
     html: page({
       title: m.label,
+      /* Generated, like the body beside it, and distinct because it names the
+         module. This loop yields ZERO pages today — BUILT_MODULES covers all
+         seven entries of MODULES — so it is the one call site the suite build
+         cannot currently exercise. It still carries a description rather than
+         relying on that: page() throws without one, and a module dropped from
+         BUILT_MODULES would otherwise break the build here for a reason a
+         reader would have to work out. */
+      description: `${m.label} is outside the Busy Office ERP pilot; this screen says so and points at the module that was built first.`,
       moduleId: m.id,
       trail: [{ label: 'Home', href: '/index.html' }, { label: m.label }],
       body: `

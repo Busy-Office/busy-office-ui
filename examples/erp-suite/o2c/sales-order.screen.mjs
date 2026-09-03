@@ -27,6 +27,8 @@ const shortNote = (v) => (v === 'ok' ? '' : '<span class="bo-visually-hidden"> â
 export const render = () =>
   page({
     title: 'SO-51204',
+    description:
+      'Sales order SO-51204 for Halden Marine AS: order lines with quantity ordered, quantity available and what was confirmed.',
     moduleId: 'o2c',
     trail: [
       { label: 'Home', href: '/index.html' },

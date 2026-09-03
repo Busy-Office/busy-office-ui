@@ -25,6 +25,8 @@ const lines = [
 export const render = () =>
   page({
     title: 'Stock movement',
+    description:
+      'Stock transfer TR-2026-0338 in transit, line by line, with the source and destination bins each quantity moves between.',
     moduleId: 'inv',
     trail: [
       { label: 'Home', href: '/index.html' },

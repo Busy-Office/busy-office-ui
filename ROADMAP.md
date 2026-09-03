@@ -1706,7 +1706,8 @@ justification doesn't hold:**
 **Split out of 249.2 while building it, rather than left implied by a ticked
 box (2026-09-03, cloud wake):**
 
-14. [ ] **249.14 — A description on each of the 28 `suite/` pages.** 249.2 closed
+14. [x] **249.14 — DONE 2026-09-03 (cloud wake). A description on each of the 28
+        `suite/` pages.** 249.2 closed
         `name="description"` on 127 of 127 built DOCS pages; the suite is the
         other 38 minus the 10 redirect stubs, and it is deliberately outside
         `distPages()` (an app, not documentation, copied in after `astro build`,
@@ -1724,6 +1725,57 @@ box (2026-09-03, cloud wake):**
           (strip one, duplicate one, confirm each injection landed in the BUILT
           file before believing the red). A page whose description is absent or
           shared fails, naming it.
+
+        **Every figure in the premise reproduced before building**, per this
+        file's own rule: `find examples/erp-suite -name '*.screen.mjs' | wc -l`
+        → 28, the built suite is 28 pages, and
+        `grep -rn 'name="description"' examples/erp-suite/` returned **nothing**
+        — so it really was 0 of 28. `page()` really is the only head.
+
+        **Shipped:** `page()` takes a `description` and emits the tag;
+        `DESCRIPTION_MIN = 40` is exported from `_shell.mjs` and read by both
+        the render and the gate, so the floor is one number (the `MARKUP_RULES`
+        precedent). 28 descriptions authored one per `*.screen.mjs`; measured
+        **105–123 characters**, 28 distinct.
+
+        **The render THROWS rather than defaulting, and that is the load-bearing
+        choice.** A default would be a string all 28 share — which passes a
+        presence check in full and would satisfy the length arm too; only the
+        distinctness arm would catch it, and the render should notice before a
+        gate does. `page()` also refuses a description containing `"`, which
+        would end the `content="…"` attribute early and ship the rest of the
+        sentence as stray markup in `<head>` — present to a grep, broken to a
+        consumer.
+
+        **Verified against what it RENDERS, not against the diff.** The
+        insertion touched 31 files in one pass, so the assertion run was
+        CLAUDE.md's row-label pairing: every built page carries the description
+        authored for *that* source file — **28 of 28**, compared value-for-value
+        rather than counted.
+
+        **Four red-proofs, each with the injection confirmed before the red was
+        believed:** (a) the tag stripped from one built page → confirmed 1 → 0
+        tags in the file, gate red naming `/p2p/purchase-order.html`; (b) one
+        page's description copied onto another → confirmed the identical
+        `content` on both files, gate red naming both; (c) a 13-character
+        description → gate red naming the page and the count; (d) source side, a
+        screen with its `description` removed and a second with an 8-character
+        one → the build itself throws, naming the page in both cases.
+
+        **The fail-fast claim was made true rather than softened.** The first
+        version of the comment said a missing description fails in milliseconds
+        instead of after 28 screens × 2 widths of axe — but `failures` was only
+        reported at the very end, so it did not. The arms now report and exit
+        before the browser starts. The trade is stated in the comment: a run
+        that trips here shows only these failures, and an axe violation on the
+        same screen surfaces on the next run.
+
+        **NOT VERIFIED, named rather than implied:** this was a cloud wake, so
+        the 1440/390 light-and-dark screenshot lane could not run. It has
+        **no rendered surface** — `<meta name="description">` is invisible, no
+        CSS or body markup changed, and `check-erp-suite` confirms the suite
+        still ships zero CSS of its own. `npm run suite` swept all 28 screens at
+        both widths: zero axe violations, no sideways scroll at 390.
 
 15. [ ] **249.15 — The one static OG image 249.2 named and did not build.**
         Everything else in 249.2 shipped; this did not, because a social preview

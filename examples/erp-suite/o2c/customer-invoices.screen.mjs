@@ -21,6 +21,8 @@ const money = (v) =>
 export const render = () =>
   page({
     title: 'Customer invoices',
+    description:
+      'Outstanding customer invoices summarised as receivables by customer and days overdue, rather than as a flat document list.',
     moduleId: 'o2c',
     trail: [
       { label: 'Home', href: '/index.html' },

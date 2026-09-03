@@ -14,6 +14,8 @@ const rows = [
 export const render = () =>
   page({
     title: 'Opportunities',
+    description:
+      'Open sales opportunities by stage, each with its probability and the weighted value it contributes to the pipeline.',
     moduleId: 'crm',
     trail: [
       { label: 'Home', href: '/index.html' },

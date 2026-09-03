@@ -42,6 +42,8 @@ const difference = '1,000.00';
 export const render = () =>
   page({
     title: 'Journal entry',
+    description:
+      'Draft journal entry JE-2026-0841 with its accounts and cost centres, and the debit and credit totals that must agree.',
     moduleId: 'fin',
     trail: [
       { label: 'Home', href: '/index.html' },

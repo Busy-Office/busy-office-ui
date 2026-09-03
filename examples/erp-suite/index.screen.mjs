@@ -6,6 +6,8 @@ import { page, MODULES } from './_shell.mjs';
 export const render = () =>
   page({
     title: 'Home',
+    description:
+      'Home screen of the Busy Office ERP sample suite: the work queues waiting this morning and the way in to every module.',
     moduleId: 'home',
     body: `
     <h1>Good morning, Jamie</h1>

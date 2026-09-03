@@ -41,6 +41,8 @@ const rows = [
 export const render = () =>
   page({
     title: 'Trial balance',
+    description:
+      'Trial balance by account showing period movement and closing balance, with the debit and credit sides in agreement.',
     moduleId: 'fin',
     trail: [
       { label: 'Home', href: '/index.html' },

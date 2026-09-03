@@ -20,6 +20,8 @@ const rows = [
 export const render = () =>
   page({
     title: 'Accounts',
+    description:
+      'Customer accounts with location, tier, open exposure and credit standing, so the accounts carrying risk surface first.',
     moduleId: 'crm',
     trail: [{ label: 'Home', href: '/index.html' }, { label: 'CRM', href: '/crm/accounts.html' }, { label: 'Accounts' }],
     body: `

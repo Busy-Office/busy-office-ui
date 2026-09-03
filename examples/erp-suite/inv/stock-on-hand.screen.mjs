@@ -38,6 +38,8 @@ const fmt = (n) => n.toLocaleString('en-US');
 export const render = () =>
   page({
     title: 'Stock on hand',
+    description:
+      'Quantity on hand per item across warehouse, dock, line-side and quarantine locations, measured against its reorder point.',
     moduleId: 'inv',
     trail: [
       { label: 'Home', href: '/index.html' },
