@@ -3,6 +3,7 @@ import floor from '@busy-office/ui/floor.json';
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
 import pkg from '@busy-office/ui/package.json';
+import { NPM, OTHER_PACKAGE_MANAGERS } from '../../data/package-managers.mjs';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const aLaCarte = `# ORDER MATTERS: tokens, then reset, then components
 import "@busy-office/ui/css/tokens";
@@ -76,9 +77,10 @@ const skeleton = `<!doctype html>
 
   <section class="demo">
     <h2>Install</h2>
-    <pre><code>npm i @busy-office/ui</code></pre>
+    <pre><code>{NPM.command}</code></pre>
+    <p class="bo-u-text-muted">Or, with the same result: {OTHER_PACKAGE_MANAGERS.map((pm, i) => (<>{i > 0 ? ' · ' : ''}<code>{pm.command}</code></>))}</p>
     <pre><code>import "@busy-office/ui/css";   /* everything, one line */</code></pre>
-    <p class="bo-u-text-muted"><strong>No npm?</strong> Copy
+    <p class="bo-u-text-muted"><strong>No package manager?</strong> Copy
     <code>dist/css/index.min.css</code> and <code>dist/js/</code> from the
     <a href="https://github.com/Busy-Office/busy-office-ui">repo</a> (or
     <code>npm pack @busy-office/ui</code>) into your assets and link them as plain

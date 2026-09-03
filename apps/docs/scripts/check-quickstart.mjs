@@ -29,6 +29,7 @@ import { fileURLToPath } from 'node:url';
 import { execFileSync, spawn } from 'node:child_process';
 import { createServer } from 'node:http';
 import { launchDocsBrowser } from './browser-harness.mjs';
+import { OTHER_PACKAGE_MANAGERS } from '../src/data/package-managers.mjs';
 import { REPO_ROOT as ROOT } from './paths.mjs';
 import { DESKTOP_WIDTH } from './viewports.mjs';
 
@@ -41,6 +42,13 @@ const fail = (msg, detail = '') => {
 };
 
 const dir = await mkdtemp(join(tmpdir(), 'bo-quickstart-'));
+/* A SIBLING of `dir`, never a child. Step 3b's installs must not be able to
+   resolve up into the npm install step 2 made — that is not a hypothetical:
+   the first version of step 3b put each package manager's directory inside
+   `dir`, so every documented import resolved through `dir/node_modules`
+   whatever the package manager had done, and the arm passed a red-proof that
+   installed a completely different package under yarn. */
+const pmRoot = await mkdtemp(join(tmpdir(), 'bo-quickstart-pm-'));
 let browser;
 try {
   /* ---- step 1: an empty directory ---- */
@@ -74,6 +82,66 @@ try {
       fail(`the documented import "@busy-office/ui/${e}" does not resolve from a fresh install`,
            String(err.stderr ?? err).split('\n')[0]);
     }
+  }
+
+  /* ---- step 3b: the OTHER documented package managers (roadmap 249.5) ----
+     The install section documents pnpm/yarn/bun beside npm, and both the page
+     and this loop read the SAME list — so the page cannot document a command
+     the gate does not run. Steps 2-3 already cover npm.
+
+     What it catches that step 3 cannot: `exports` subpath resolution is the
+     package manager's job, and the four here lay out node_modules differently
+     (pnpm symlinks into a store, bun writes its own tree). A packaging change
+     that npm tolerates and pnpm does not is invisible to step 3.
+
+     A package manager that is NOT INSTALLED is reported, never skipped
+     silently — it is named on stderr as not verified in this context, which is
+     check:rtl's precedent for a legitimately absent input. That is deliberate:
+     bun is not on a stock GitHub runner, and a gate that turned CI red for
+     that would be asserting something about the runner, not about the
+     package. */
+  const pmVerified = [];
+  const pmUnverified = [];
+  for (const pm of OTHER_PACKAGE_MANAGERS) {
+    try {
+      execFileSync(pm.name, ['--version'], { stdio: 'pipe' });
+    } catch {
+      pmUnverified.push(pm);
+      continue;
+    }
+    const pmDir = join(pmRoot, pm.name);
+    await mkdir(pmDir, { recursive: true });
+    execFileSync('npm', ['init', '-y'], { cwd: pmDir, stdio: 'pipe' });
+    try {
+      execFileSync(pm.name, pm.tarballArgv(join(dir, packed)), {
+        cwd: pmDir,
+        stdio: 'pipe',
+        timeout: 180000,
+      });
+    } catch (err) {
+      fail(`the documented \`${pm.command}\` does not install the package about to be published`,
+           String(err.stderr ?? err.stdout ?? err).split('\n')[0]);
+    }
+    for (const e of entries) {
+      try {
+        const out = execFileSync(
+          process.execPath,
+          ['-e', `process.stdout.write(require.resolve(${JSON.stringify('@busy-office/ui/' + e)}))`],
+          { cwd: pmDir, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] },
+        );
+        if (!out.trim()) fail(`"@busy-office/ui/${e}" resolved to nothing after \`${pm.command}\``);
+      } catch (err) {
+        fail(`the documented import "@busy-office/ui/${e}" does not resolve after \`${pm.command}\``,
+             String(err.stderr ?? err).split('\n')[0]);
+      }
+    }
+    pmVerified.push(pm.name);
+  }
+  for (const pm of pmUnverified) {
+    console.error(
+      `  NOT VERIFIED here — \`${pm.name}\` is not installed in this context, so the documented ` +
+        `\`${pm.command}\` was NOT run. The page still shows it.`,
+    );
   }
 
   /* ---- step 4: the documented skeleton, with a REAL screen from the kit ---- */
@@ -214,7 +282,13 @@ ${fragment}
     `  scaffold — npm create @busy-office/ui → its own server.mjs serves a styled screen ` +
       `(${scaffoldSeen.rows} rows, ${scaffoldSeen.sortable} sortable column(s)) → bo-check-markup clean`,
   );
+  console.log(
+    `  package managers — ${resolved.length} documented import(s) resolve after each of: ` +
+      `${['npm', ...pmVerified].join(', ')}` +
+      (pmUnverified.length ? `; NOT verified here: ${pmUnverified.map((p) => p.name).join(', ')}` : ''),
+  );
 } finally {
   if (browser) await browser.close();
   await rm(dir, { recursive: true, force: true });
+  await rm(pmRoot, { recursive: true, force: true });
 }

@@ -1444,10 +1444,86 @@ claimed.
          there is nothing here a screenshot could have shown. The docs gates
          were run across the tree anyway and are reported with the commit.
 
-5. [ ] **249.5 — Install commands for pnpm/yarn/bun, or a recorded refusal.**
-       `getting-started/installation.astro` shows npm only today. Add the
-       three, or file a one-line DA stating the no-bundler audience makes it
-       noise — either closes this.
+5. [x] **249.5 — DONE 2026-09-03 (cloud wake). Install commands for
+       pnpm/yarn/bun — ADDED, and executed rather than written.**
+       `getting-started/installation.astro` showed npm only, confirmed still
+       true at dispatch: `grep -rniE 'pnpm|yarn|\bbun\b'` over `apps/docs/src`
+       returned **0 files**, and over the whole repo (excluding
+       `node_modules`, `dist`, lockfiles) the only hits were this item, its
+       grill row and `STATUS.md`'s copy of it.
+
+       **The refusal was weighed and lost on a measurement, not a preference.**
+       The DA the item offers — "the no-bundler audience makes it noise" —
+       argues about *bundlers*; the install line is for the npm-ecosystem
+       audience, and the page already answers the no-package-manager case in
+       its own paragraph two lines below. So the three were added.
+
+       **What made this more than three lines of prose: the page's own opener
+       claims everything on it is executed** — *"These steps are executed, not
+       just written… If anything here stops working, that build fails."*
+       Three unexecuted commands under that sentence would have falsified it,
+       so `check:quickstart` gained step 3b, which installs the LOCAL packed
+       build with each documented package manager and resolves the same four
+       entry points step 3 resolves for npm. Page and gate read ONE list,
+       `apps/docs/src/data/package-managers.mjs` — the `MARKUP_RULES`
+       precedent (shared by `ai-assistants.astro` and `gen-llms.mjs`), because
+       a restated list is a list that drifts.
+
+       **Measured here, all four green** (Node v22.22.2; npm 10.9.7, pnpm
+       10.33.0, yarn 1.22.22, bun 1.3.11): each installs the 0.7.0 tarball and
+       resolves `css`, `css/reset`, `css/tokens`, `css/components/data-table`.
+       Install cost 191–561 ms each; the whole gate runs in **9.2 s**.
+
+       **The red-proof found a real defect, and it is the finding worth
+       keeping.** Step 3b's first version put each package manager's directory
+       INSIDE the gate's temp dir — which already holds step 2's npm install —
+       so Node's resolver walked up into `dir/node_modules` and every
+       documented import resolved no matter what the package manager had done.
+       The injection (yarn installing `is-number@7.0.0` instead of the
+       package) was confirmed present in the file and the gate still passed:
+       a detector that could not fail, exactly CLAUDE.md's shape. Fixed with a
+       SIBLING temp root; the comment at the `pmRoot` declaration says why, so
+       it cannot be "tidied" back.
+
+       - **Accept (property, not prediction):** the page's install commands
+         come from the same list the gate executes, and each documented
+         command is either run or named as not run.
+       - **Red-proofs, injection asserted to land before the verdict was
+         believed** (each replacement refused unless it matched exactly once):
+         (a) yarn pointed at a different package → red, naming
+         `the documented import "@busy-office/ui/css" does not resolve after
+         \`yarn add @busy-office/ui\``; (b) bun pointed at a nonexistent
+         tarball → red, naming `the documented \`bun add @busy-office/ui\`
+         does not install`; (c) a package manager that is not installed →
+         **rc=0** with `NOT VERIFIED here — \`no-such-pm-xyz\` is not
+         installed in this context` on stderr and in the summary line.
+       - **Why (c) reports instead of failing:** bun is not on a stock GitHub
+         runner, and a gate that turned CI red for that would be asserting
+         something about the runner, not about the package. This is
+         `check:rtl`'s precedent for a legitimately absent input — say it was
+         NOT verified rather than claim a pass it did not earn. Whether the
+         runner carries pnpm/yarn/bun is **not knowable from here**; the gate
+         prints which ones it actually ran either way.
+       - **Scope limit, stated rather than glossed:** `yarn` here is **1.22.22
+         (classic)**, a flat `node_modules`. **Yarn Berry / PnP is NOT
+         covered** — it resolves through a zip and no evidence was taken for
+         it. The documented command is correct for both; the *verification* is
+         classic-only.
+       - **Also changed, and caused by this one:** the paragraph below now
+         reads *"No package manager?"* rather than *"No npm?"*, since the
+         three commands above it are the npm-ecosystem answers. The phrase
+         appears nowhere else in the repo (grepped before editing).
+       - **Not verified, and named rather than implied:** cloud wake, so the
+         1440/390 light-and-dark screenshot lane could not run. This item has
+         a small visual surface — one new `<p class="bo-u-text-muted">` with
+         three `<code>` spans — and the honest statement is that its
+         *properties* were swept and its *appearance* was not: **no new CSS
+         rule ships**, the classes are existing ones, and the rendered section
+         was read out of the BUILT page rather than off the diff.
+         `check:layout`, `check:scroll`, `check:pseudo`, `test:axe`,
+         `check:forced-colors` and `check:target-size` passed across the tree
+         at 1440 and 390. All **17** CI entry points, re-derived from
+         `ci.yml`, ran green here.
 
 6. [ ] **249.6 — "Choose your path" router, corrected from the proposal's
        own undercount.** The proposal's evidence ("index.astro:118, one
