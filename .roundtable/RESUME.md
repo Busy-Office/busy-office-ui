@@ -23,9 +23,9 @@ survives none.
 ## In flight: nothing
 
 Last updated 2026-09-03 (**cloud** wake, scheduled routine). Working tree clean
-at hand-off. Two commits this wake, both pushed: Slice 249.4 and this hand-off.
+at hand-off. Two commits this wake, both pushed: Slice 255 and this hand-off.
 
-**`check:resume-slice-ids` will name `249.4` as closed — that is deliberate.**
+**`check:resume-slice-ids` will name `255.1` as closed — that is deliberate.**
 It is referenced below as history, not as an open or blocked item. Nothing in
 this file claims it is queued.
 
@@ -44,106 +44,88 @@ blocked. The two standing owner blocks are unchanged: Slice 15's `AT runtime
 evidence` (owner hardware) and `112.3`/`112.4` (owner briefs, then 112.3's
 verdict).
 
-**One thing the owner may want to see:** both READMEs — the GitHub front door
-and the npm front page — grew three new sections this wake, and their content
-is generated. Nothing about them was screenshot-verified, because nothing
-rendered changed; but they are the surface a first-time visitor reads, so the
-prose framing around the generated spans is worth an owner's eye.
-
 ## Dispatch counters at hand-off
 
 Read `dispatch_status.py` yourself — the sets below are snapshots.
 
-- **Rule 2 (Standardize)** read `3 / 4` at wake start and is **`4 / 4` after**
-  this wake's Continue round — **so rule 2 fires on the next wake, ahead of any
-  queued build item.** That is the ordering Step 2 states and the reason it was
-  moved above rule 4; do not skip it for 249.5 because 249.5 looks cheaper.
-- **Rule 3 (Objective)** read `1 / 3` before and after, still `[249]` — 249.4 is
-  a sub-item of a slice already counted, so it does not advance the counter.
-- **Rule 5 (Optimize)** read `ok`, not STALE. **No `bundle-gz-kb` sample was
-  taken this wake, deliberately.** The commit changes **0** files under
-  `packages/core/src/css/`, so a sample could only have reproduced the existing
-  reading, and a third identical value is a data point about the instrument
-  rather than the bundle. One metric was recorded instead:
-  `readme-generated-facts=3`.
+- **Rule 2 (Standardize)** read `5 / 4 OVERDUE` at wake start and **fired**; it
+  resets to `0 / 4` after this wake's Standardize round is recorded. It will not
+  fire again until four more Continue rounds accumulate.
+- **Rule 3 (Objective)** read `2 / 3` `[249, 254]` and is unchanged — a
+  Standardize sweep does not close a slice for rule 3's purposes only in the
+  sense that 255 is a Standardize slice, which DOES count (161.4). So expect
+  `dispatch_status.py` to read `3 / 3 [249, 254, 255]` next wake — **rule 3 is
+  armed and sits above rule 4.** Read the counters before assuming a build item.
+- **Rule 5 (Optimize)** read `ok` (not STALE) — `0 wake-date(s) newer`, newest
+  pair `bundle-gz-kb`, 128 samples. **No sample was recorded this wake,
+  deliberately:** Slice 255 changes 0 files under `packages/core/src/css/`, so a
+  `bundle-gz-kb` reading could only reproduce the existing value.
 
 ## Next wake
 
-**Rule 4's open set is `OPEN: [15, 112, 249]`, unchanged.** But **rule 2 is
-armed and sits above rule 4** — read the counters before assuming a build item.
+**Rule 3 is armed** (2/3 → 3/3 once 255 is counted) and sits above rule 4 — an
+Objective grill of Slices 249/254/255 is the likely dispatch, not a build item.
+Confirm with `dispatch_status.py` before assuming.
 
-Inside Slice 249 the oldest open sub-item is now **`249.5`**.
+If rule 3 is somehow not yet at 3, **rule 4's open set is `OPEN: [15, 112,
+249]`** and the oldest open sub-item is **`249.5`** — install commands for
+pnpm/yarn/bun in `getting-started/installation.astro`, or a one-line recorded
+refusal. Fully cloud-dispatchable and the cheapest next thing.
 
 - Slice 15's `AT runtime evidence` and `112.3`/`112.4` are **owner-blocked**
   (LOOPS.md 186.2's vocabulary).
-- **`249.5` is fully cloud-dispatchable** and is the cheapest next thing: add
-  pnpm/yarn/bun install commands to `getting-started/installation.astro`, or
-  file the one-line refusal. Either closes it.
-- `249.6`–`249.9` are dispatchable; `249.10`–`249.13` are owner calls sent back
-  explicitly — read Slice 249's own text first.
-- **`249.15` and the new `249.16` are BOTH browser-blocked in the screenshot
-  sense — a cloud wake should NOT pick either up.** `249.16` is this wake's
-  split: the one hand-made README screenshot that 249.4 carried. Its other
-  three halves shipped, so the screenshot is no longer holding them back, and a
-  LOCAL wake can close it on its own.
-- **`249.9` still has one of its two dependencies** (249.3's maturity labels);
-  it also needs 249.8's tagline.
+- `249.5`–`249.8`, `249.11`, `249.14` are dispatchable; `249.10`, `249.13` are
+  owner calls; `249.9` depends on 249.8 (tagline) + 249.3 (shipped).
+- **`249.15` is browser-blocked in the screenshot sense** (a static OG image) —
+  a cloud wake should NOT pick it up; a LOCAL wake can. `249.12` names Slice 237,
+  which is why the archive sweep leaves 237 in place (236.2).
 
-## The archive sweep: unchanged, do not re-raise
+## The archive sweep: not due, do not re-raise
 
-`roadmap_scope.py` reads closed-history share **539 / 2,684 = 20.1%** at
-hand-off (20.8% at wake start — the share FELL because this wake added live
-text to 249.4, not because anything was archived). The three eligible targets
-are still `[253, 252, 237]`, and **2 of 3 are named by a still-open item**: 253
-by `249.6`, 237 by `249.12` (236.2's rule — leave both). Slice 252 is eligible
-and unnamed, as it has been for four wakes. Re-run the script; these are
+`roadmap_scope.py` reads closed-history share **610 / 2,756 = 22.1%** at
+hand-off — well under the **55.1%** at which 252.1 dispatched the tenth sweep on
+2026-09-03. The tenth sweep moved 13 slices only three days ago; this is normal
+regrowth, not a trigger. Eligible targets `[254, 253, 252, 237]`, of which 253
+and 237 are named by the open Slice 249 (249.6, 249.12) and stay per 236.2. The
+other two (254, 252) are small and unnamed. Re-run the script; these are
 snapshots.
 
 ## What landed this wake
 
-**Slice 249.4 — README facts, generated**, dispatched by rule 4 (rules 1–3 all
-clear: no open P0, GitHub intake `totalCount: 0`, Standardize 3/4, Objective
-1/3). Step 1 triaged and committed nothing — there was no new input.
+**Slice 255 — Standardize sweep, all five lanes clean**, dispatched by rule 2
+(`Standardize 5 / 4 OVERDUE`). Rule 1 clear (no open P0, GitHub intake
+`totalCount: 0`); Step 1 triaged and committed nothing — no new input.
 
-`derive-readme-facts.mjs` derives three repo facts into the committed record
-`packages/core/src/data/readme-facts.json`; `stamp-readme.mjs` stamps them into
-both READMEs as `stat:gates`, `stat:notfor`, `stat:faq`. Both halves are gated
-in `build` (`check:readme-facts`, then `stamp-readme --check`).
+The five lanes and their measured readings are in ROADMAP 255.1; the short
+version, so a later wake need not re-run them to know the state:
 
-**Five things a later wake should not have to re-derive:**
+1. **Lane 1 `scan:dead-style`** — 0 dead / 0 pages / 1,433 live inline
+   declarations. Identical to 252.1/244.1/237.1.
+2. **Lane 2 `report:css-repeats`** — 74 files · 242 rules · 230 bodies · 8
+   repeated, compared member-for-member against the standing table. Zero delta.
+   The x4 joined-control group is still two components (money, quantity), so its
+   reopen trigger (a third) is unmet.
+3. **Lane 3 `report:prose`** — 118 pages, median 781, total 110,518 words. Union
+   of corpus-2x and family-2x outliers is 15 pages; `comm -23 flagged verdicted`
+   is **empty** (all in 158.1+161.1+178.3's set). Checked by set difference, not
+   by the grep-each-path instrument that 228.1 refused.
+4. **Lane 4 `report_loop_prose.py`** — no file changed accumulate class.
+   `CLAUDE.md` 31 up / never cut and `DESIGN.md` 22 up / never cut are 167.1's
+   standing verdicts (CLAUDE.md's watch retired by 193.1). Regrowth signal is
+   22.1% (see the sweep note above) — not actionable.
+5. **Lane 5 (252.3's divergence scan)** — no hand-copied logic. The only
+   two-count pairs are `function exists` (252.3-adjudicated: different args,
+   different workspaces) and `function build` (arity 0 in `derive-introduced.mjs`
+   vs arity 3 in `build-component-css.mjs` — unrelated entrypoints). `compatOf`
+   is gone, consolidated into `bcd-compat.mjs` last wake.
 
-1. **TWO of the item's three stated premises were false**, and the commands are
-   in ROADMAP 249.4 so they are re-runnable rather than re-derivable. The
-   headline one: *"count of `check-*.mjs` carrying `--self-test`"* is the
-   detector CLAUDE.md already records as unable to fail — **48** gate files
-   contain the literal string, **18** contain the argv branch that runs one.
-   Nothing here re-counts; `check-selftests.mjs` now exports `scanGates()` and
-   the deriver imports it.
-2. **The refactor of `check-selftests.mjs` is 19 pure insertions**, measured:
-   `git diff -w --stat` shows zero deletions and zero logic edits, and the gate
-   reads an identical `51 gates / 18 heuristic / 33 exact` before and after.
-   That is the evidence the extraction is behaviour-preserving — not the fact
-   that it still passes.
-3. **The deriver reads the SOURCE pages, not the built ones, and that is
-   load-bearing.** The built troubleshooting page carries **3** `<h2>`; the
-   third is `Related`, the layout's own footer heading. Parsing the built page
-   would have counted layout chrome as an authored question. The same command
-   shows **no heading carries an `id`** — raw `<h2>` in `.astro` gets no
-   auto-slug — so the READMEs link to pages, not anchors.
-4. **The packages-only build context was tested for real**, not reasoned about:
-   `packages/core` was copied to a tree with no `apps/`, and both deriver modes
-   were run in it. It names each missing input on stderr, says the record was
-   NOT rewritten and NOT verified there, leaves the record untouched, exits 0.
-   This is the trap `check:rtl` already paid for once. The record lives in
-   `src/data/`, not `dist/` — `check:package` reads **183 tarball files** both
-   before and after.
-5. **`stamp-readme`'s success line was hard-coding its own stat list** —
-   *"size/behaviors/events"* while checking five. It now names them from the
-   object. Small, but it is the same drift class the whole item is about.
+**Recorded as a no-op sweep rather than manufacturing a fix** — CLAUDE.md's
+standing rule against busywork, the same call 176.1 made on ten re-queued Polish
+surfaces.
 
 **Not verified, and named rather than implied:** this was a cloud wake, so the
-1440/390 light-and-dark screenshot lane could not run. **Unlike 249.3, this
-change has no rendered surface at all** — the diff is two scripts, one JSON
-record, `package.json` and two markdown READMEs; no CSS, no docs page, no
-component. There is nothing a screenshot could have shown. The whole-tree
-browser gates were run anyway and are reported with the commit.
+1440/390 light-and-dark screenshot lane could not run. Slice 255 changes only
+two markdown files (the slice and this hand-off) — no CSS, no docs page, no
+component — so there is nothing a screenshot could show. `build`, `test` and
+`docs:build` (with `check:repo`) ran green in this container to produce the
+`dist/` the lanes read; `check:slice-refs` passes at 237 sections.
