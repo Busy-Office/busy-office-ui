@@ -22,7 +22,7 @@ const inits = Object.entries(manifest.behaviors)
   .filter(([name]) => name.startsWith('init'))
   .map(([name, b]: [string, any]) => [name, b.summary, b.hooks]);
 ---
-<Gallery title="JS behaviors">
+<Gallery title="JS behaviors" description="The framework is CSS-first, not CSS-only. Small zero-dependency behaviors cover what the platform cannot do, each a call-once init using event delegation.">
   <p class="demo-note">
     The framework is CSS-first, not CSS-only. {inits.length} small behaviors
     (zero dependencies) cover what the platform can't do or what

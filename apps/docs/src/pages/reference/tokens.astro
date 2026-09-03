@@ -85,7 +85,7 @@ for (const a of DENSITY_ALIASES)
   if (!densityCss.includes(`--bo-density-${a}:`)) throw new Error(`tokens: density alias --bo-density-${a} not found in density.css`);
 const cell = (t: string, vars: Record<string, string>) => resolve(vars['--bo-color-' + t], vars);
 ---
-<Gallery title="Token reference">
+<Gallery title="Token reference" description="Look-up tables for every shipped token, generated from the CSS on each build: resolved values per theme, spacing, density aliases and gated contrast ratios.">
   <p class="demo-note">
     Look-up tables for every shipped token, generated from the CSS on
     each build: resolved values per theme, spacing, density aliases, and

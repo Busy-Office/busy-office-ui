@@ -15,7 +15,7 @@ import suite from '../../data/suite.json';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const kinds = [...new Set(suite.modules.flatMap((m: any) => m.screens.map((s: any) => s.kind)))];
 ---
-<Gallery title="Screen kit">
+<Gallery title="Screen kit" description="Complete ERP screens across modules, built from this framework and nothing else. Open one, read its markup, and take what you need.">
   <p class="demo-note">
     <strong>{suite.total} complete ERP screens</strong>, across {suite.modules.length}
     modules, built from this framework and <em>nothing else</em> — no CSS of

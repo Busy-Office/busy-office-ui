@@ -278,9 +278,41 @@ async function* allPages(dir, rel = '') {
   }
 }
 let relatedChecked = 0;
+/* ---------- EVERY docs page describes itself (roadmap 249.2) ----------
+   The description becomes <meta name="description"> — the text a search result
+   and a shared link show. Before 249.2, 1 of 165 built HTML files carried one
+   (the landing page, which had always hand-written its own head), so every
+   other page was described by whatever an engine guessed from its body.
+
+   NO EXEMPT SET, deliberately. The Related footer above has eleven exemptions
+   because a page with no navigation chrome is a real, argued shape here; a page
+   nobody should be able to describe in one sentence is not. The eleven pages
+   that own their own <head> — the RF profile mirrors, the iframe demos, the
+   full-screen schedule, the landing page — are precisely the ones Gallery's
+   own throw cannot see, which is why this arm reads the source of ALL of them
+   rather than only the Gallery callers.
+
+   Two spellings, because there are two ways a page gets a head: the `description`
+   prop on <Gallery>, or a literal tag on a page that builds its own. Checked at
+   the SOURCE so the failure names a file a person can open — check-metadata.mjs
+   asserts the same property on the built artifact, where it can also see length
+   and uniqueness. */
+const DESCRIBES_ITSELF = [
+  /<Gallery[^>]*\sdescription="[^"]{40,}"/,
+  /<meta\s+name="description"\s+content="[^"]{40,}"/,
+];
+let describedChecked = 0;
 for await (const [rel, file] of allPages(join(docsRoot, 'src/pages'))) {
-  if (RELATED_EXEMPT.has(rel)) continue;
   const page = await readFile(file, 'utf8');
+  describedChecked++;
+  if (!DESCRIBES_ITSELF.some((re) => re.test(page))) {
+    failures.push(
+      `${rel}: no page description — add description="…" to its <Gallery> call, or a ` +
+        '<meta name="description" content="…"> if the page builds its own <head>. ' +
+        'At least 40 characters; it is what a search result and a shared link show.',
+    );
+  }
+  if (RELATED_EXEMPT.has(rel)) continue;
   relatedChecked++;
   if (!/<Related[\s\S]{0,10}?links=\{\[\s*\[/.test(page)) {
     failures.push(`${rel}: missing a <Related> footer with at least one link`);
@@ -293,4 +325,4 @@ if (failures.length) {
   process.exit(1);
 }
 assertScanned(checked, 'component pages', 'the page source directory is empty or moved');
-console.log(`page-shape check passed: ${checked} component page(s) + ${patternsChecked} pattern page(s), ${rfChecked} checked for a duplicated RF screen verified against the CLAUDE.md skeletons, ${relatedChecked} page(s) carry a Related footer`);
+console.log(`page-shape check passed: ${checked} component page(s) + ${patternsChecked} pattern page(s), ${rfChecked} checked for a duplicated RF screen verified against the CLAUDE.md skeletons, ${relatedChecked} page(s) carry a Related footer, ${describedChecked} page(s) describe themselves`);

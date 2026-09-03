@@ -42,6 +42,23 @@ export const REPO_ROOT = join(DOCS_ROOT, '..', '..');
 export const CORE_DIST = join(REPO_ROOT, 'packages', 'core', 'dist');
 
 /**
+ * Where the built docs are PUBLISHED. One answer, imported.
+ *
+ * This was spelled out twice before 249.2 needed a third: `gen-llms.mjs` held
+ * `const site = 'https://busy-office.github.io/busy-office-ui'` and
+ * `check-published.mjs` held the same string with a trailing slash. The
+ * sitemap needs it too, and a third hand-copy is how the DOCS_ROOT list above
+ * started. Split in two because the two halves answer different questions and
+ * `astro.config.mjs` needs them apart: Astro's `site` is the ORIGIN, and it
+ * joins `base` on itself, so handing it the full published root would emit
+ * `…/busy-office-ui/busy-office-ui/…` in the sitemap.
+ */
+export const SITE_ORIGIN = 'https://busy-office.github.io';
+
+/** The published docs root — SITE_ORIGIN + the Pages base. No trailing slash. */
+export const SITE_URL = `${SITE_ORIGIN}/busy-office-ui`;
+
+/**
  * Directories that are NOT our source: generated output, vendored code, and
  * frozen snapshots.
  *

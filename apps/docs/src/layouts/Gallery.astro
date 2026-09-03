@@ -19,7 +19,24 @@ import SidebarNav from '../components/SidebarNav.astro';
 import pkg from '@busy-office/ui/package.json';
 import versions from '../../versions.json';
 import { PATTERN_GROUPS } from '../data/pattern-groups.mjs';
-const { title } = Astro.props;
+/* `description` is REQUIRED (roadmap 249.2). Every page had a <title> and
+   nothing else in its head, so a search result or a shared link showed the
+   engine's own guess at what the page is about — on a docs site whose pages
+   open with a hand-written one-liner saying exactly that.
+
+   It throws rather than defaulting. A fallback (the title, or an empty string)
+   would render a page that looks fine and ships a useless description, which is
+   the silent-degradation mode this repo's gates exist to refuse; `check:repo`'s
+   page-shape arm catches it earlier and names the file, and check-metadata.mjs
+   asserts the shipped result. This is the layer that makes it impossible. */
+const { title, description } = Astro.props;
+if (typeof description !== 'string' || description.trim().length < 40) {
+  throw new Error(
+    `Gallery: page "${title}" (${Astro.url.pathname}) needs a description prop of at ` +
+      'least 40 characters — it becomes <meta name="description">, the text a search ' +
+      'result and a shared link show. See CLAUDE.md\'s page recipe.',
+  );
+}
 const sections = [
   {
     label: 'Getting started',
@@ -197,6 +214,7 @@ const current =
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" type="image/svg+xml" href={base + '/favicon.svg'} />
     <title>{title} · busy-office-ui</title>
+    <meta name="description" content={description} />
     <PrefBootstrap />
   </head>
   <!-- The docs site navigates with plain full-page loads, not hx-boost

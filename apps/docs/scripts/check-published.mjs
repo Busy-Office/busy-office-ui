@@ -31,7 +31,9 @@
  * @exact — compares the served build id to the built one. Exempt from --self-test: there is no
  *   judgement to get wrong, and ceremony around a lookup is noise.
 */
-const SITE = process.env.PUBLISHED_URL || 'https://busy-office.github.io/busy-office-ui/';
+import { SITE_URL } from './paths.mjs';
+
+const SITE = process.env.PUBLISHED_URL || `${SITE_URL}/`;
 const EXPECTED = process.env.EXPECTED_SHA || process.env.GITHUB_SHA;
 const ATTEMPTS = Number(process.env.PUBLISHED_ATTEMPTS || 6);
 const GAP_MS = Number(process.env.PUBLISHED_GAP_MS || 10000);

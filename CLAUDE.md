@@ -126,7 +126,7 @@ To add or document a component manually:
    is needed for `api.json` / per-file dist.
 2. **Docs page** = `apps/docs/src/pages/components/<name>.astro`, always this skeleton:
    ```
-   <Gallery title="Name">
+   <Gallery title="Name" description="one sentence, 40-160 chars — the meta description">
      <p class="demo-note"> one line: what it is + when to use </p>
      <section class="demo"><h2>…</h2><Demo code={oneString} /><p class="bo-u-text-muted">…</p></section>
      …one demo section per setting/variant…
@@ -136,6 +136,16 @@ To add or document a component manually:
      <Related links={[["/components/x","X"], …]} />
    </Gallery>
    ```
+   **`description` is required and is NOT the opener** (249.2). It becomes
+   `<meta name="description">` — the sentence a search result and a shared link
+   show, which the opener's markup, entities and 200-400 characters cannot be.
+   Three layers enforce it, each seeing something the others cannot:
+   `Gallery.astro` throws (the Gallery callers), `check-page-shape` fails naming
+   the file (all 127 source pages, including the 11 that build their own
+   `<head>`), and `check-metadata.mjs` asserts it on the BUILT page, where it
+   can also see length and **uniqueness** — a copy-paste passes a presence check
+   in full.
+
    **The opener must say when NOT to use it.** One bolded clause —
    `<strong>Not for …</strong>` / `Not when …` — naming a context where this
    component is the wrong choice and linking the alternative. This is a

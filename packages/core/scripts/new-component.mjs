@@ -141,7 +141,7 @@ const canonical = \`<div class="bo-${name}">
   <!-- TODO -->
 </div>\`;
 ---
-<Gallery title="${label}">
+<Gallery title="${label}" description="TODO: one sentence describing ${label} — this becomes the page's meta description, the text a search result and a shared link show.">
   <p class="demo-note">
     TODO: one line — what it is + when to use.
   </p>

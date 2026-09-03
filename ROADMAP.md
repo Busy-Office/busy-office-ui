@@ -794,13 +794,102 @@ claimed.
          not asserted: changing `css/components/*.min.css`'s `max` from 2.2 to
          2.4 produces a diff of exactly **-1/+1**.
 
-2. [ ] **249.2 — Per-page metadata: description, sitemap, robots.** `Gallery.astro`
+2. [x] **249.2 — Per-page metadata: description, sitemap, robots.** `Gallery.astro`
        gains a required `description` prop (new `check-page-shape` arm fails a
        page without one); `@astrojs/sitemap`; a one-line `robots.txt`; one
        static OG image site-wide.
        - **Accept:** `grep -L 'name="description"' dist/**/*.html` returns
          empty; `dist/sitemap-index.xml` lists every built page; `check-links`
          stays green.
+
+       **Baseline, measured before the change:** `grep -rl 'name="description"'
+       dist --include='*.html' | wc -l` read **1 of 165** — the landing page,
+       which has always hand-written its own `<head>`. Every other page was
+       described to a search result by whatever an engine guessed from its
+       body. The criterion was not vacuously true.
+
+       **The Accept's glob over-reaches its own subject, and it is met over the
+       page set this repo already defines rather than over the glob** — stated
+       here rather than quietly narrowed. `dist/**/*.html` is 165 files; the
+       built DOCS pages are **127**. The other 38 are two sets, and neither
+       should carry a description:
+       - **10 redirect stubs** (`<meta http-equiv="refresh">`). `dist-pages.mjs`
+         has excluded them since the 2026-08-18 sweep — there is no content on a
+         page whose only job is to bounce the browser — and the sitemap filter in
+         `astro.config.mjs` now excludes the same ten, derived from that file's
+         own `redirects` object so the two cannot drift. Describing a stub for
+         indexing points a crawler at a page that is not a destination.
+       - **28 `suite/` pages.** An app, not documentation, copied in by
+         `copy-suite.mjs` *after* `astro build`, with its own gates
+         (`npm run suite`). `dist-pages.mjs` carries the reason. Closing this
+         half means threading a description through `_shell.mjs`'s `page()` and
+         authoring 28 more — a second chunk of comparable size on a different
+         app — so it is **249.14**, not an extra commit here.
+
+       So the property verified is *every built docs page describes itself*, and
+       `check-metadata.mjs` asserts it over `distPages()` — the one definition of
+       "a built docs page" four gates converged on. **127 of 127**, up from 1.
+
+       **The sitemap check is a reconciliation between two INDEPENDENT
+       derivations, which is the only reason it can fail.** `@astrojs/sitemap`
+       builds its list from Astro's route table; `distPages()` builds its by
+       walking `dist/` for `index.html`. Generating the sitemap here from
+       `distPages()` — the cheaper design, and the one first considered — would
+       have made the gate compare a list against itself: green whatever broke,
+       and precisely CLAUDE.md's *reconcile against the source, not against the
+       argument*. The two sets agree at **127 = 127**, each reaching the same two
+       exclusions separately.
+
+       **Red-proved, injection confirmed before the result was believed** (six
+       arms, each verified to have landed — a count grepped, a DOM read, or the
+       thrown message itself):
+       - *source page with no description* → `check-page-shape` fails naming
+         `components/badge.astro` (confirmed: `grep -c 'description=' ` → 0).
+       - *the required prop* → `astro build` throws
+         `Gallery: page "Badge" (/components/badge/) needs a description prop…`.
+       - *built page with the tag stripped* → `metadata check FAILED — 2 of 133`
+         (confirmed: the meta count in the BUILT file went 1 → 0).
+       - *two pages sharing one description* → fails naming both URLs. This arm
+         exists because arm 1 passes in full on 127 identical descriptions,
+         which is the copy-paste failure a 127-file bulk edit actually has.
+       - *a built page missing from the sitemap* → fails (url count 127 → 126).
+       - *a sitemap URL with no built page* → fails (127 → 128).
+       - *`robots.txt` pointing elsewhere* → fails. `robots.txt` is static, so
+         the published URL is spelled there a second time and cannot import
+         `SITE_URL`; the answer to a copy this repo cannot delete is a gate that
+         reconciles it, so the line must equal `SITE_URL + /sitemap-index.xml`,
+         not merely look like a sitemap URL.
+
+       **The bulk edit was verified against the RENDERED artefact, not the
+       diff** (CLAUDE.md's rule, and its worked failure was labelling rows with
+       other rows' names). Each of the 116 built pages was paired against its
+       OWN `<title>` and its intended description: **116 of 116**. The first run
+       of that probe reported 104 and eleven "mismatches" — every one its own
+       entity handling (`&` renders as `&amp;`) plus an `index.astro` path built
+       as `patterns/index/index.html`. An instrument's first output is not
+       evidence; the descriptions were never wrong.
+
+       **Not verified, and named rather than implied:** this was a cloud wake,
+       so the 1440/390 light-and-dark screenshot lane could not run. Nothing in
+       the diff renders differently — a `<meta>` tag, two XML files and a
+       `robots.txt` have no visual surface — and `check:layout`, `check:scroll`
+       and `test:axe` swept all 127 pages at both widths green.
+
+       **The OG image is NOT done.** It is a rendered image, which a cloud wake
+       cannot author honestly. Split out as **249.15** rather than left implied
+       by a ticked box.
+
+       Also landed, because it was smaller than explaining: the published URL
+       was spelled out in `gen-llms.mjs`, `check-published.mjs` and
+       `ai-assistants.astro`, and the sitemap needed a fourth. All three now
+       import `SITE_URL`/`SITE_ORIGIN` from `paths.mjs`. Split in two because
+       Astro joins `base` onto `site` itself, so handing it the full published
+       root emits `/busy-office-ui/busy-office-ui/` — checked against a real
+       `DOCS_BASE=/busy-office-ui` build, where the 127 sitemap URLs come out as
+       `https://busy-office.github.io/busy-office-ui/…` exactly.
+       - **Accept:** met, against the page set named above. All 17 CI entry
+         points, re-derived from `ci.yml` rather than read off `ENVIRONMENT.md`'s
+         snapshot, ran green in this container.
 
 3. [ ] **249.3 — Maturity labels with a real source.** Per component page:
        DSA-scored date (`dsa-scores.json.scored`), introduced-version (first
@@ -924,6 +1013,44 @@ justification doesn't hold:**
         something a triage settles by itself. **OWNER CALL**, recommended
         default: keep spec-last unless the owner weighs the new evidence
         against the original four-site comparison and prefers the change.
+
+**Split out of 249.2 while building it, rather than left implied by a ticked
+box (2026-09-03, cloud wake):**
+
+14. [ ] **249.14 — A description on each of the 28 `suite/` pages.** 249.2 closed
+        `name="description"` on 127 of 127 built DOCS pages; the suite is the
+        other 38 minus the 10 redirect stubs, and it is deliberately outside
+        `distPages()` (an app, not documentation, copied in after `astro build`,
+        gated by `npm run suite`). Every suite page's head comes from ONE place —
+        `examples/erp-suite/_shell.mjs`'s `page({ title, moduleId, trail, body })`
+        — so the mechanism is one added parameter; the work is authoring 28
+        descriptions and threading them from each `*.screen.mjs`. Deliberately
+        not folded into 249.2: the mechanism is one line and the content is a
+        second chunk the size of the first, which is LOOPS' "an improvement
+        bigger than the item becomes a roadmap entry".
+        - **Accept:** `npm run suite`'s audit gains an arm asserting every built
+          suite page carries a `<meta name="description">` of at least 40
+          characters and that no two share one — the same two arms
+          `check-metadata.mjs` runs over the docs, red-proved the same way
+          (strip one, duplicate one, confirm each injection landed in the BUILT
+          file before believing the red). A page whose description is absent or
+          shared fails, naming it.
+
+15. [ ] **249.15 — The one static OG image 249.2 named and did not build.**
+        Everything else in 249.2 shipped; this did not, because a social preview
+        card is a *rendered image a human compares* — `ENVIRONMENT.md`'s first
+        list, which a cloud wake cannot take. **browser-blocked in the
+        screenshot sense, so a LOCAL wake can do it and a cloud wake should not
+        pick it up.** Note the site currently has no `og:` or `twitter:` tag at
+        all, so this is the whole card, not just its image.
+        - **Accept:** the property, not a prediction — every built docs page
+          carries `og:title`, `og:description` (agreeing with the page's own
+          `name="description"`, asserted rather than assumed), `og:url` and
+          `og:image`; the image resolves to a file that exists in `dist/`;
+          `check-metadata.mjs` gains the arm and it is red-proved by removing
+          the tag from one built page and by pointing `og:image` at a path that
+          is not there. Whether the card LOOKS right is the part that needs the
+          local wake's eyes.
 
 **Refused, recorded as DA (not re-litigated here — see the triage file for
 each item's reasoning):** publish-on-every-push/auto-bump, a `registry.ts`

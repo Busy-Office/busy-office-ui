@@ -13,7 +13,7 @@ const fmt = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
    .replace(/`([^`]+)`/g, '<code>$1</code>');
 ---
-<Gallery title="Intent-event index">
+<Gallery title="Intent-event index" description="Every event the shipped behaviors dispatch, with its target, trigger and payload, generated from the source on each build. This is the integration API.">
   <p class="demo-note">
     Every event the shipped behaviors dispatch — name, target, when it
     fires, and its payload — generated from the source on each build.

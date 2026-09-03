@@ -1,0 +1,5 @@
+# busy-office-ui docs. Everything here is public documentation.
+User-agent: *
+Allow: /
+
+Sitemap: https://busy-office.github.io/busy-office-ui/sitemap-index.xml

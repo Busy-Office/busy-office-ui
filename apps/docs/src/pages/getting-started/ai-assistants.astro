@@ -5,9 +5,10 @@ import { MARKUP_RULES } from '../../data/markup-rules.mjs';
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { SITE_URL } from '../../../scripts/paths.mjs';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const site = 'https://busy-office.github.io/busy-office-ui';
+const site = SITE_URL;
 
 /* The block below is GENERATED from the same sources the framework already
    maintains — DESIGN.md's two tables and the shared markup rules — so it cannot
@@ -69,7 +70,7 @@ ${MARKUP_RULES.map((r) => wrap(`- ${r.replace(/\n\s+/g, ' ')}`)).join('\n')}
 `;
 const lines = snippet.split('\n').length;
 ---
-<Gallery title="Working with AI assistants">
+<Gallery title="Working with AI assistants" description="Giving a coding assistant the two things it cannot infer about this framework: what exists, and what was deliberately left out.">
   <p class="demo-note">
     If an assistant is writing screens with this framework, give it the two things it
     cannot infer: <strong>what exists</strong>, and <strong>what was deliberately left

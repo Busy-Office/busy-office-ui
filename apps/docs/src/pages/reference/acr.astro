@@ -13,7 +13,7 @@ const verdictBadge = {
 };
 const counts = acr.criteria.reduce((c, r) => ((c[r.verdict] = (c[r.verdict] ?? 0) + 1), c), {} as Record<string, number>);
 ---
-<Gallery title="Accessibility Conformance Report">
+<Gallery title="Accessibility Conformance Report" description="An accessibility conformance report in VPAT shape, generated from the same facts the build gates already produce rather than typed by hand.">
   <p class="demo-note">
     A VPAT-2.5-shaped report — {acr.standard} — <span class="bo-badge">generated</span>
     from the same facts the build gates already produce (contrast pairs, keyboard

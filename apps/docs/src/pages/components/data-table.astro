@@ -61,7 +61,7 @@ const wideCols = [
 const wideRows = Array.from({ length: 10 }, (_, r) =>
   wideCols.map((c, i) => (i === 0 ? `LINE-${String(r + 1).padStart(3, '0')}` : `${c.slice(0, 3).toUpperCase()}-${r + 1}${i}`)));
 ---
-<Gallery title="Data table">
+<Gallery title="Data table" description="The dense ERP grid: sticky header, tabular numerals, density-aware row heights, and a bulk-action toolbar that appears on selection with zero JavaScript.">
   <p class="demo-note">
     Check a row — the bulk-action toolbar appears via <code>:has()</code>, zero JS.
     Sticky header, tabular numerals, density-aware row heights, container-query

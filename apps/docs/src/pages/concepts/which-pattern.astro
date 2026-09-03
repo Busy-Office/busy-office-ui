@@ -51,7 +51,7 @@ const groups = patterns.groups.map((g: any) => ({
 const withNot = groups.flatMap((g: any) => g.rows).filter((r: any) => r.not).length;
 const withWho = groups.flatMap((g: any) => g.rows).filter((r: any) => r.who).length;
 ---
-<Gallery title="Which pattern should I use?">
+<Gallery title="Which pattern should I use?" description="Pick a screen pattern by the job someone is trying to finish, not by the widget. Every pattern says in its own words when it is the wrong choice.">
   <p class="demo-note">
     Pick by the JOB, not by the widget. A screen's pattern follows from what
     the person is trying to finish — find something, work one record, enter

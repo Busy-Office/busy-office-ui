@@ -27,7 +27,7 @@ const dialogMarkup = `<dialog class="bo-dialog" id="approve-dialog"
   initDialogs(); // once, ever — event delegation; HTMX swaps need no re-init
 </script>`;
 ---
-<Gallery title="Dialog">
+<Gallery title="Dialog" description="Modal dialogs on the native dialog element: the browser handles backdrop, Escape and focus return, and the behavior adds trigger wiring and a Tab loop.">
   <p class="demo-note">
     Native <code>&lt;dialog&gt;</code> + <code>initDialogs()</code>: browser handles
     backdrop, ESC, and focus return; the behavior adds trigger wiring, a Tab loop, and

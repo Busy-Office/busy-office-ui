@@ -38,7 +38,7 @@ const swatch = (name: string, r: { steps: Record<string, string> }, s: number) =
   used: usedBy[`${name}-${s}`]?.join(', '),
 });
 ---
-<Gallery title="Color scales">
+<Gallery title="Color scales" description="The raw palette: 24 ranges x 11 steps generated in OKLCH on a shared lightness ladder, so the same step number carries the same visual weight in every range.">
   <p class="demo-note">
     The raw palette: 24 ranges × 11 steps, generated in OKLCH on a shared
     lightness ladder — the same step number carries the same visual weight
