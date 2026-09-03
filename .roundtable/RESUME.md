@@ -14,19 +14,17 @@ picks up work that was left mid-flight, so the instruction stays true across a
 context clear. **Keep it current whenever a slice is left uncommitted, and empty
 it the moment the slice lands.**
 
-**Citation practice for this file, restated after 251 found a live one drift**
-(`ROADMAP.md:351` no longer resolved by the time a later wake read it — the
-file grows above any raw line number cited into it): **cite by slice number
-only, never by raw `ROADMAP.md:NN`.** A slice number survives every rewrite;
-a line number survives none.
+**Citation practice for this file: cite by slice number only, never by raw
+`ROADMAP.md:NN`.** A slice number survives every rewrite; a line number
+survives none. Slice 253 found the same rule needed one wake later in
+`.roundtable/polish-state.md`, which nobody had scoped — see below.
 
 ---
 
 ## In flight: nothing
 
 Last updated 2026-09-03 (**cloud** wake, scheduled routine). Working tree clean
-at hand-off. Two commits this wake, both pushed: `a9ba847` (249.1) and this
-hand-off.
+at hand-off. Two commits this wake, both pushed: Slice 253 and this hand-off.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -38,102 +36,103 @@ python3 scripts/loops/roadmap_scope.py            # OPEN set + sweep scope
 
 ## Dispatch counters at hand-off
 
-```
-Standardize   1 / 4 Continue rounds   since 2026-09-03 05:50   ok
-Objective     3 / 3 slices            since 2026-09-03 08:11   OVERDUE  [247, 249, 252]
-Optimize      0 wake-date(s) newer    since 2026-09-03 07:46   ok   [newest pair: bundle-gz-kb]
-```
+Read `dispatch_status.py` yourself — the sets below are snapshots.
 
-- **Rule 3 is OVERDUE and it armed on THIS wake's own work.** 249 joined 247
-  and 252 the moment 249.1 was recorded. Read `dispatch_status.py` yourself —
-  the set is a snapshot — then narrow it per §6 step 0 before grilling: `247`
-  and `252` were both armed at the previous hand-off and neither has been
-  grilled since, so the honest scope is all three, but check `.roundtable/INDEX.md`
-  for repeated subjects first.
-- **Rule 5 does NOT fire, and the reason is worth reading rather than
-  assuming.** The line is `ok` (not STALE — this wake recorded a fresh
-  `bundle-gz-kb`), and the newest comparable pair is **11.7 kB (2026-08-17) →
-  15.1 kB (today)**. That is ONE regression, and rule 5 needs **two
-  consecutive**. The next `bundle-gz-kb` sample completes or breaks the trend,
-  so take one.
-- **Rule 4's open set is `OPEN: [15, 112, 249]`.** Slice 15's `AT runtime
-  evidence` and `112.3`/`112.4` are **owner-blocked** (LOOPS.md 186.2's
-  vocabulary — 15 and 112.3 need owner hardware and owner briefs
-  respectively; 112.4 is blocked on 112.3's verdict). Inside Slice 249 the
-  oldest open sub-item is now **`249.2`** (per-page metadata: description,
-  sitemap, robots). `249.2`-`249.9` are dispatchable; `249.10`-`249.13` are
-  owner calls sent back explicitly — read Slice 249's own text before building
-  any of them.
-
-  **`249.2` is partly browser-blocked in the cloud sense and partly not.** Its
-  Accept is three greppable assertions over `dist/` (`name="description"`
-  present on every page, `sitemap-index.xml` lists every built page,
-  `check-links` green) — all of that is a cloud wake's first list per
-  ENVIRONMENT's "no screenshots is not no browser". The one static OG image it
-  asks for is a *rendered image*, which a cloud wake cannot author honestly.
-
-## The archive sweep: unchanged, do not re-raise
-
-`roadmap_scope.py` reads closed-history share **374 / 2,178 = 17.2%**. The two
-eligible targets are the same two the last hand-off named, for the same
-reasons: **Slice 252** (last wake's own slice, closed-on-arrival — nothing to
-do now) and **Slice 237**, still refused because `roadmap_scope.py`'s
-dependency line names it as the target of open item `249.12`'s Accept (236.2's
-rule). Leave 237 until `249.12` resolves.
-
-## What landed this wake
-
-**Slice 249.1 — bundle-size budget gate**, dispatched by rule 4 (rule 1 clear:
-no open P0, GitHub intake `totalCount: 0`; rules 2 and 3 both below threshold
-at wake start). Step 1 triaged and committed nothing.
-
-`packages/core/scripts/check-size.mjs`, wired into core's `build` as
-`check:size` immediately before `stamp-readme --check`. Eleven gzip buckets
-covering all **139** shipped CSS/JS artifacts, each a ceiling at current +
-~10% headroom.
-
-Three things from it worth carrying:
-
-1. **The item's premise was 138-of-139 true, not true.** `grep -rn -i budget`
-   over `packages/core/scripts`, `packages/core/package.json` and
-   `.github/workflows` returns exactly one existing enforcement —
-   `build-rf-essentials.mjs`'s `RF_BUDGET_KB = 40` (roadmap 126.1). It is
-   kept, not replaced: minified-byte ceiling on an argued membership list
-   versus a gzip ceiling on transfer weight.
-2. **A group-total-only gate would have been GREEN on the injection the Accept
-   prescribes.** 2 kB of source CSS is **+0.37 kB gz**; the components bucket
-   went 24.75 → 25.12 against 27.3. Only the per-file arm fired. That is why
-   both arms ship and why a multi-file bucket declaring only a total is itself
-   a gate failure.
-3. **`bundle-gz-kb` went unsampled for 17 days while it grew 29%** (11.7 on
-   2026-08-17 → 15.1 today, `dist/css/index.min.css`). `stamp-readme`
-   publishes that number into both READMEs every build and has done
-   throughout; what it never did is refuse growth. That gap is the whole case
-   for the gate, and it was found by taking the metric, not by arguing for it.
-
-**Not verified, and named rather than implied:** this was a cloud wake, so the
-1440/390 light-and-dark screenshot lane could not run. Nothing in the diff
-rests on a rendered image — one build-time Node script, one `package.json`
-script chain, one markdown file — and the shipped CSS bytes are unchanged (the
-red-proof injection was reverted and `dist/` rebuilt clean before any gate
-reading). All **17** CI entry points, re-derived from `ci.yml` rather than read
-off `ENVIRONMENT.md`'s snapshot, ran green here; `check:repo` was re-run after
-the `ROADMAP.md` edit because `docs:build` had already passed it.
-`check:claims` read **162 live / 3 NOT VERIFIED**, which is ENVIRONMENT 6b's
-container property and not a regression.
-
-*Red-proof discipline, since CLAUDE.md asks for the injection to be confirmed
-rather than the red result:* the per-file arm's injection was verified present
-in the BUILT artifacts before its red was believed —
-`grep -o 'bo-data-table--probe-' | wc -l` counts **28** in each of
-`dist/css/components/data-table.min.css`, `index.min.css` and
-`rf-essentials.min.css`. The other three arms (unbudgeted file, stale budget
-row, and the comparator's two constraints) were exercised the same way, live or
-through `--self-test`.
+- **Rule 2 (Standardize)** was `1 / 4 Continue rounds` at wake start; this wake
+  ran no Continue round, so it is unchanged.
+- **Rule 3 (Objective)** fired this wake and is **reset** — the grill of 247,
+  249 and 252 landed as Slice 253.
+- **Rule 5 (Optimize)** read **`ok`, not STALE** (`0 wake-date(s) newer`,
+  newest pair `bundle-gz-kb`) and does **not** fire: the newest comparable
+  pair is ONE regression (11.7 kB 2026-08-17 → 15.1 kB 2026-09-03) and the rule
+  needs two consecutive. **The next `bundle-gz-kb` sample completes or breaks
+  that trend — take one**, as the previous hand-off also asked and this wake
+  did not (it ran no build whose size was worth recording as a new sample; the
+  gate's own figure is unchanged at 371.7 kB gz total).
 
 ## Next wake
 
-**Rule 3 fires: dispatch Objective**, a grill of `247`, `249` and `252`
-(narrow the set per §6 step 0 first — check `.roundtable/INDEX.md` for
-repeated subjects and state the honest scope). After it, rule 4 returns to
-Slice 249 at `249.2`.
+**Rule 4 returns to Slice 249 at `249.2`** (per-page metadata: description,
+sitemap, robots). Rule 4's open set is `OPEN: [15, 112, 249]`:
+
+- Slice 15's `AT runtime evidence` and `112.3`/`112.4` are **owner-blocked**
+  (LOOPS.md 186.2's vocabulary — 15 and 112.3 need owner hardware and owner
+  briefs; 112.4 waits on 112.3's verdict).
+- Inside Slice 249 the oldest open sub-item is **`249.2`**. `249.2`-`249.9` are
+  dispatchable; `249.10`-`249.13` are owner calls sent back explicitly — read
+  Slice 249's own text before building any of them.
+- **`249.2` is partly browser-blocked in the cloud sense and partly not.** Its
+  Accept is three greppable assertions over `dist/` (`name="description"` on
+  every page, `sitemap-index.xml` lists every built page, `check-links` green)
+  — all of that is a cloud wake's first list per ENVIRONMENT's "no screenshots
+  is not no browser". The one static OG image it asks for is a *rendered
+  image*, which a cloud wake cannot author honestly.
+
+**`249.6`'s text changed this wake** (253.2). A wake building it should read
+the corrected version: the proposal's `index.astro:118` citation **resolved**
+and only its count was wrong, which is the opposite of what the item used to
+say.
+
+## The archive sweep: unchanged, do not re-raise
+
+`roadmap_scope.py` reads closed-history share **374 / 2,178 = 17.2%** at wake
+start. The two eligible targets are the same two the last hand-off named:
+**Slice 252** (nothing to do — last wake's own slice) and **Slice 237**, still
+refused because `roadmap_scope.py`'s dependency line names it as the target of
+open item `249.12`'s Accept (236.2's rule). Leave 237 until `249.12` resolves.
+Re-run the script — this wake added Slice 253, so the share has moved.
+
+## What landed this wake
+
+**Slice 253 — Objective grill of Slices 247, 249, 252**, dispatched by rule 3
+(`3 / 3 slices OVERDUE`). Rule 1 clear: no open P0, GitHub intake
+`totalCount: 0`; Step 1 triaged and committed nothing. **31 of 34 checked
+claims reproduce**; full report in
+`.roundtable/grill-objective-247-249-252-2026-09-03.md`.
+
+All three defects are *citations about citations*:
+
+1. **247.1's base rate is wrong by 4x** — it refuses a blanket `file:line`
+   gate on "45 sites across all tracked markdown, ~39 in the archive and grill
+   reports". Re-run with 247.1's own regex at the revision 247.1 names, it is
+   **188 sites across 24 files, 91 in `ROADMAP-archive.md` alone** — the
+   archive by itself is double the stated total, so the figure is internally
+   impossible against 247.1's own correct "17 in `ROADMAP.md`". **The refusal
+   stands and is strengthened**; only the number was corrected (in the archive,
+   struck rather than deleted, per 236.2).
+2. **247.1's scoped "live subset, 6 sites" omitted `.roundtable/polish-state.md`**,
+   which rule 6 and §3b step 1 read every wake and which carries **12**
+   `file:line` sites — and one had drifted (`server.mjs:105` → **106**, after
+   two commits inserted above it). Restated there in the durable idiom.
+3. **249.6 says `index.astro:118` "is the install snippet".** It is not, at any
+   revision — line 118 is the first CTA button, 119 the second, and the install
+   snippet is line **121**; `index.astro` has not changed since `f1be2485`.
+   The item's conclusion (2 CTAs, 4 nav links, 6 task-tiles) reproduces in
+   full.
+
+**Slice 252 reproduced 15 of 15** and Slice 249 12 of 13, including a live
+re-execution of 249.1's per-file red-proof.
+
+**Two instrument failures, this wake's own, recorded in 253.3 rather than
+buried:**
+
+- **A green red-proof was a defect in the injection, twice.** Repetitive probe
+  CSS gzips to nothing against a *gzip* budget; a bigger random probe never
+  reached `check:size` because `build:rf-essentials`' 40 kB **minified**
+  ceiling breaks sixteen steps earlier. The two size gates are not
+  independent, and that ordering is inherent — `check:size` measures
+  rf-essentials' output.
+- **A whole-tree gate cannot be re-read by swapping two files.** Checking out
+  `ROADMAP.md` + the archive at older revisions into the live tree made
+  `check:slice-refs` read one low at *every* anchor, which looked like an
+  off-by-one defect in Slice 252 and was nearly published as one. Real
+  `git worktree` checkouts reproduce 252's numbers exactly. **A uniform
+  off-by-one across three independently derived numbers is a defect in the
+  instrument, not three coincident defects in the subject.**
+
+**Not verified, and named rather than implied:** this was a cloud wake, so the
+1440/390 light-and-dark screenshot lane could not run. Nothing in the diff
+rests on a rendered image — four markdown files, no shipped artifact, and the
+`data-table.css` probe was reverted and `dist/` rebuilt clean before any gate
+reading. All **17** CI entry points, re-derived from `ci.yml` rather than read
+off `ENVIRONMENT.md`'s snapshot, ran green in this container.

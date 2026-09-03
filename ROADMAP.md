@@ -315,6 +315,172 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 253 — Objective grill of Slices 247, 249, 252: 31 of 34 claims reproduce, and all three that do not are citations about citations — including one in the slice whose whole subject is citation decay (2026-09-03)
+
+**Dispatcher trace, cloud wake.** Step 0: the container started **DETACHED**
+and `origin/main` arrived as a forced update (`+ 17b3ba6...dd798da`),
+ENVIRONMENT traps 1 and 2 both biting as usual; `git checkout -B main
+origin/main` before any commit existed, `--unshallow` clean in one attempt
+(1,823 commits, no `shallow.lock`). Rule 1: no open P0 — `list_issues` on
+`Busy-Office/busy-office-ui` returns `totalCount: 0` and the three open slices
+are 15 (owner hardware), 112 (owner briefs) and 249 (the adoption triage), so
+Step 1 committed nothing. Rule 2: `Standardize 1 / 4 ok`. **Rule 3 fired**:
+`Objective 3 / 3 slices OVERDUE [247, 249, 252]`.
+
+*Rule 5, read before quoting:* `dispatch_status.py` reports it **`ok`, not
+STALE** — `0 wake-date(s) newer`, newest pair `bundle-gz-kb`. It does **not**
+fire: the newest comparable pair is one regression (11.7 kB 2026-08-17 →
+15.1 kB 2026-09-03) and the rule needs two consecutive.
+
+**Scope, per §6 step 0.** The armed set is taken whole. `.roundtable/INDEX.md`
+reports 4 repeated subjects across 171 findings, and of the 25 grills the
+heading grep returns, none covers 247, 249 or 252 — the newest is Slice 250
+(244, 245, 248). Nothing dropped, nothing re-grilled. Full report:
+`.roundtable/grill-objective-247-249-252-2026-09-03.md`.
+
+**Slice 252 reproduces 15 of 15**, including all thirteen moved-slice line
+counts measured from the pre-move source by an independently written `^## `
+splitter, and `check:slice-refs` at **709 → 722 → 723 / 234**.
+
+1. [x] **253.1 — DONE 2026-09-03. Slice 247.1's base rate is wrong by 4x, and
+       the "live subset" it scoped omits a ledger the dispatcher reads every
+       wake — where one cite has since drifted.** Both corrected in
+       `ROADMAP-archive.md` (236.2's rule: archived text may be amended for a
+       correction) with the original figures struck rather than deleted.
+
+       - **Finding A.** 247.1 refuses a blanket `file:line` gate *"in advance,
+         on base rate"*, on the figure *"across all tracked markdown the same
+         pattern hits **45** sites, and ~39 are inside `ROADMAP-archive.md` and
+         dated grill reports"*. Re-run with 247.1's own regex at the revision
+         247.1 names, reading each file **out of that revision**:
+
+         ```
+         git ls-tree -r --name-only c31799a3 | grep '\.md$' > /tmp/mdlist.txt
+         while read f; do git show c31799a3:"$f" \
+           | grep -ohE '`?[A-Za-z0-9_.-]+\.(md|mjs|py|css|json|astro|ts):[0-9]+'; \
+         done < /tmp/mdlist.txt | wc -l
+         ```
+
+         **188** sites across **24** files, **91** in `ROADMAP-archive.md`
+         alone. The archive by itself is double the stated whole-tree total, so
+         the figure is **internally impossible against 247.1's own table**,
+         which correctly reports 17 sites in `ROADMAP.md`. Likely instrument
+         error, measured rather than guessed: sites EXCLUDING the archive and
+         `*grill*.md` read **44** at that revision — the residue published as
+         the total, and the archive+grill population (144) reported as ~39.
+
+         **The refusal stands and is strengthened**, which is why this closes
+         as a correction and not as a reopened design question: 188 sites,
+         ~85% of them frozen history, is a stronger case against a blanket gate
+         than 45 was.
+
+       - **Finding B.** 247.1's *"live subset a wake reads as current guidance
+         is `ROADMAP.md` + `.roundtable/RESUME.md`, 6 sites"* omits
+         `.roundtable/polish-state.md`, which LOOPS.md rule 6 and §3b step 1
+         read to pick a Polish surface and which carried **12** `file:line`
+         sites at that same revision — twice the scope named. `STATUS.md` (4)
+         and `.roundtable/loop-log.md` (5) also sit outside it. Resolving all
+         twelve against the live tree, **one has drifted**: `server.mjs:105`
+         for `page()` was correct when written (`72e7021f`, 2026-08-30) and is
+         now line **106**, after `5e5ede6d` and `f1be2485` inserted above it.
+         Restated there in the durable idiom, with a dated note.
+
+         **This confirms 247.1's mechanism and refutes only its scope.** Its
+         split — *a citation survives iff its target is append-only or
+         line-stable source* — predicts that failure exactly. Everything else
+         in 247.1 reproduces: the 17-citation breakdown is 9/3/3/2 as
+         tabulated, and `check:slice-refs` reads **704 / 228** at `c31799a3` in
+         a clean worktree, as stated.
+
+       - **No gate is proposed and that is deliberate**, per 94.11: the
+         predicate now has a *measured* base rate of 221 sites on the current
+         tree, ~85% of them in files that exist to record a moment. A gate over
+         it would fail the build on correct history. What changed is a number
+         and a scope statement, both of which a later wake reads as current.
+       - **Accept:** met. Both corrections state a figure that agrees with
+         re-running the command printed beside it, and the drifted cite either
+         resolves or no longer carries a line number.
+
+2. [x] **253.2 — DONE 2026-09-03. Slice 249.6 says a cited line holds something
+       it has never held.** The item refutes the source proposal with *"that
+       line is the install snippet"*. Measured at `5b3ab697` (the revision
+       Slice 249 names), at `a9ba847`, and at `HEAD` — `index.astro` has not
+       changed since `f1be2485`, well before the triage —
+       `apps/docs/src/pages/index.astro:118` is the **first of the two CTA
+       buttons** (`Build your first screen`); line 119 is the second and the
+       install snippet is line **121**.
+
+       The refutation's conclusion is right and reproduces in full: 2 CTA
+       buttons, 4 nav links, and 6 `bo-widget` cards under *"Find it by task"*
+       (a descriptive name — there is no `task-tile` class, and grepping for
+       one returns 0). What fails is the clause about where the cited line
+       points. The proposal's line reference **resolved**; only its count was
+       wrong.
+
+       **Why this is more than a slip.** Slice 249's preamble asserts *"every
+       citation that a verdict depended on was re-run against the live tree
+       before trusting it"* and names exactly two that did not survive. This is
+       a third, failing in the opposite direction — a citation that did resolve,
+       recorded as not resolving — and it is the **only** `file:line` citation
+       left in `ROADMAP.md` today, i.e. the exact live population 247.1 was
+       dispatched to audit.
+       - **Accept:** met. 249.6 now refutes the count rather than the citation,
+         and every figure in it agrees with re-reading the file.
+
+3. [x] **253.3 — DONE 2026-09-03. Two instrument failures this wake, recorded
+       because both are this repo's own written rules landing on the wake that
+       had read them.**
+
+       - **A green red-proof was a defect in the injection, twice.** Verifying
+         249.1's per-file arm independently: the first probe (28 near-identical
+         rules, 2,158 source bytes) left the gate **green** at 36 bytes of
+         headroom, because repetitive rules gzip to almost nothing and the
+         budget is a *gzip* ceiling. The second (3,109 bytes of random tokens)
+         never reached `check:size` at all — `build:rf-essentials` runs sixteen
+         steps earlier and its 40 kB **minified** ceiling broke first
+         (`40.8 kB min > 40 kB`, against a 38.13 kB baseline). Only the third —
+         1,000 source bytes, incompressible, inside the ~1.87 kB minified
+         headroom rf-essentials allows — landed in the window the per-file arm
+         tests, and the build then exited 1 at `check:size` with
+         `css/components/data-table.min.css is 2.23 kB gz > per-file budget
+         2.2 kB`, injection confirmed at **9** occurrences in each of the three
+         built artifacts (deleted before the rebuild so no stale file could
+         answer).
+
+         *Worth carrying:* the two size gates are **not independent**, and the
+         order is inherent rather than a defect — `check:size` measures
+         rf-essentials' output, so `build:rf-essentials` must precede it. An
+         injection large enough to breach both always reports the rf one.
+
+       - **A whole-tree gate cannot be re-read by swapping two files, and the
+         wrong reading nearly shipped as a finding.** Verifying 252's
+         `check:slice-refs` anchors by checking out `ROADMAP.md` +
+         `ROADMAP-archive.md` at the older revisions into the live tree read
+         **708 / 261 / 233** and **722 / 261 / 234** — one low at *every*
+         anchor, which reads as a tidy off-by-one defect in Slice 252 and was
+         written up as one. It is wrong: `check-slice-refs.mjs` scans the
+         **whole tree** for citations and treats the two roadmap files only as
+         the resolution corpus, so the two commits landed since 252 were
+         contaminating every count. Re-run in real `git worktree` checkouts the
+         readings are **709 / 262 / 233** and **723 / 262 / 234** — precisely
+         what Slice 252 published.
+
+         The tell was present before the correction and was not read: **a
+         uniform off-by-one across three independently derived numbers is a
+         defect in the instrument, not three coincident defects in the
+         subject.** That is CLAUDE.md's "identical value across many inputs"
+         rule wearing a different hat.
+       - **Accept:** met — both are recorded with the command that produced the
+         wrong reading and the command that produced the right one, so neither
+         is re-derived.
+
+**Not verified, said plainly.** This is a cloud wake: there is no Podman and no
+`localhost:8081`, so the 1440/390 light-and-dark screenshot lane could not run.
+Nothing here rests on a rendered image — the diff is four markdown files and no
+shipped artifact — and the one behavioural claim exercised (the size gate's
+per-file arm) is a byte comparison run live in this container, with the CSS
+restored and `dist/` rebuilt clean before any gate reading.
+
 ## Slice 252 — Standardize sweep: lanes 1-3 clean a TWELFTH time, lane 4 dispatched the tenth archive sweep (13 slices, the largest single move since 228.1), and the fifth lane found the BCD walk hand-copied into both floor scripts (2026-09-03)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0 — `list_issues` on
@@ -662,9 +828,22 @@ claimed.
        noise — either closes this.
 
 6. [ ] **249.6 — "Choose your path" router, corrected from the proposal's
-       own miscited version.** The proposal's evidence ("index.astro:118, one
-       CTA") was wrong — that line is the install snippet, and the page
-       already has 2 CTA buttons, 4 nav links and 6 task-tiles. The real gap:
+       own undercount.** The proposal's evidence ("index.astro:118, one
+       CTA") undercounted: the page has 2 CTA buttons, 4 nav links and 6
+       task-tiles.
+
+       *Corrected by Slice 253's grill, finding C.* This item used to say the
+       cited line "is the install snippet". It is not, at any revision: line
+       118 is the FIRST of the two CTA buttons
+       (`Build your first screen`), line 119 is the second, and the install
+       snippet is line **121** — and `index.astro` has not changed since
+       `f1be2485`, well before this triage. The proposal's line reference
+       resolved; only its count was wrong, so what is refuted here is the
+       count, not the citation. The remaining figures reproduce: 2 CTAs, 4
+       nav links, and 6 `bo-widget` cards under *"Find it by task"* (a
+       descriptive name — there is no `task-tile` class).
+
+       The real gap:
        every existing router (nav, tiles) sorts by *component category*, none
        by *adoption scenario* (add to existing app / new app / CSS-only / with
        behaviours / htmx / custom theme). A six-row block on `index.astro`,

@@ -32664,13 +32664,63 @@ wake, which is the first one where 244 is safe to move.
        — read it there rather than from this line.
 
        **A blanket gate is refused in advance, on base rate.** Across all tracked
-       markdown the same pattern hits **45** sites, and ~39 are inside
-       `ROADMAP-archive.md` and dated `.roundtable/grill-*.md` reports, where the
+       markdown the same pattern hits ~~**45** sites, and ~39 are~~ **188 sites
+       across 24 files** (CORRECTED — see the block below), of which **91 in
+       `ROADMAP-archive.md` alone** and the rest largely inside
+       dated `.roundtable/grill-*.md` reports, where the
        citation was true when written and the file exists to record a moment.
        Gating those would force edits to frozen history to fix nothing — the
        ceremony CLAUDE.md's base-rate rule names. The live subset a wake reads as
-       *current guidance* is **`ROADMAP.md` + `.roundtable/RESUME.md`, 6 sites**,
+       *current guidance* is ~~**`ROADMAP.md` + `.roundtable/RESUME.md`, 6 sites**~~
+       **wider than the two files named here** (CORRECTED),
        and 245.1 has already corrected 2 of them.
+
+       **CORRECTED 2026-09-03 by Slice 253's Objective grill, findings A and B.**
+       Amending archived text for a correction is 236.2's settled rule; the
+       original figures are struck rather than deleted so the error stays
+       legible.
+
+       - **The base rate was wrong by 4x, and it is the sole stated basis for
+         the refusal above.** Re-run with THIS item's own regex at the revision
+         THIS item names, reading each file out of that revision:
+
+         ```
+         git ls-tree -r --name-only c31799a3 | grep '\.md$' > /tmp/mdlist.txt
+         while read f; do git show c31799a3:"$f" \
+           | grep -ohE '`?[A-Za-z0-9_.-]+\.(md|mjs|py|css|json|astro|ts):[0-9]+'; \
+         done < /tmp/mdlist.txt | wc -l          # 188, across 24 files
+         ```
+
+         `ROADMAP-archive.md` alone reads **91**, so the archive by itself is
+         double the stated whole-tree total — the figure is internally
+         impossible against this item's own table, which correctly reports 17
+         sites in `ROADMAP.md`. The likely instrument error: sites EXCLUDING
+         the archive and `*grill*.md` read **44** at that revision, so the
+         residue appears to have been published as the total and the
+         archive+grill population (144) reported as ~39.
+
+         **The refusal stands and is strengthened** — 188 sites, ~85% of them
+         frozen history and dated reports, is a stronger case against a blanket
+         gate than 45 was. The conclusion needs no revisiting; the number did.
+
+       - **The "6 sites" live scope omitted a ledger the dispatcher reads every
+         wake, and one of its cites has since drifted.**
+         `.roundtable/polish-state.md` — read by LOOPS.md rule 6 and §3b step 1
+         to pick a Polish surface — carried **12** `file:line` sites at
+         `c31799a3` and carries 12 today, twice the scope named here;
+         `STATUS.md` (4) and `.roundtable/loop-log.md` (5) also sit outside it.
+         Resolving all twelve, `polish-state.md`'s `server.mjs:105` cite for
+         `page()` was correct when written (`72e7021f`, 2026-08-30) and is now
+         line **106**, after `5e5ede6d` and `f1be2485` inserted above it.
+         Corrected in that file to the durable idiom in the same commit as this
+         block.
+
+         **This confirms the mechanism and refutes only the scope.** This
+         item's split — *a `file:line` citation survives iff its target is
+         append-only or line-stable source* — predicts that failure exactly.
+         Everything else here reproduces: the 17-citation table breaks down
+         exactly as tabulated, and `check:slice-refs` reads **704 / 228** at
+         `c31799a3` in a clean worktree, as stated.
 
        *Accept* — properties, not predicted values:
 

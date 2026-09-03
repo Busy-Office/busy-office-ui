@@ -365,10 +365,20 @@ produced a measured change to the published artefact, per 182.1's precedent.
 **The fix removes the quantity rather than refreshing it** — a refreshed count
 decays on the next dogfooded screen, and this item is the proof. The replacement
 states two properties of the code, both verified present first: po-app renders
-the rail from ONE shared shell (`page()`, server.mjs:105; exactly 1
+the rail from ONE shared shell (the `page()` template in
+`examples/po-app/server.mjs`; exactly 1
 `<nav class="bo-sidebar-nav` in the file), and it composes inside `.bo-offcanvas`
-(offcanvas.astro:20). Verified in the BUILT html — `uses it at 6 sites` → 0
-across all of `apps/docs/dist`, new sentence renders 1.
+(the `<dialog class="bo-offcanvas">` block in
+`apps/docs/src/pages/components/offcanvas.astro`). Verified in the BUILT html —
+`uses it at 6 sites` → 0 across all of `apps/docs/dist`, new sentence renders 1.
+
+> **Line numbers dropped 2026-09-03, Slice 253 finding B.** This entry cited
+> `server.mjs:105`, correct when written (`72e7021f`) and now line **106** —
+> `5e5ede6d` and `f1be2485` each inserted above it. `offcanvas.astro:20` still
+> resolves and was restated for the same reason rather than because it had
+> drifted. This file already calls line-number cites "the most decay-prone
+> shape"; Slice 247.1's audit of that shape scoped only `ROADMAP.md` and
+> `RESUME.md` and so never read this ledger's twelve.
 
 **Base rate for the class: 6 of 240 cites carry a bare count; 4 are exact, 2 are
 stale.** `navbar · fit` 3→3, `dialog · fit` 13→13, `offcanvas · fit` 1→1,
