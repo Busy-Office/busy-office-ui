@@ -1,3 +1,6 @@
+/* @tagline Rendered rich content wherever a stored rich-text value is displayed.
+   @category Display
+   @order 70 */
 @layer bo-components {
   /* Prose — rendered rich content wherever a stored rich-text value is
      DISPLAYED: richtext __content, record detail, comment threads,

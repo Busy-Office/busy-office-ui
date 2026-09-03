@@ -1,3 +1,7 @@
+/* @tagline The visible half of a scan acknowledgement, readable in peripheral vision.
+   @category Feedback
+   @label Scan feedback
+   @order 60 */
 /* Scan-result flash (roadmap 126.2, RF-coverage grill R2-Q2).
  *
  * A warehouse scanner user looks at the RACK, not the screen; the moment a

@@ -13,6 +13,7 @@ import PrefBootstrap from '../components/PrefBootstrap.astro';
 import pkg from '@busy-office/ui/package.json';
 import api from '@busy-office/ui/api';
 import patternsIndex from '../data/patterns-index.json';
+import { TASK_TILES } from '../data/component-nav.mjs';
 import contrast from '@busy-office/ui/contrast';
 import behaviors from '@busy-office/ui/behaviors-manifest';
 
@@ -190,16 +191,17 @@ const invoices = [
       <section class="why">
         <h2>Find it by task</h2>
         <div class="bo-widget-grid" style="--bo-widget-min: 19rem">
-          <div class="bo-widget"><div class="bo-widget__header"><span class="bo-widget__title"><a href={base + '/components/button'}>Actions →</a></span></div>
-            <div class="bo-widget__body"><p class="bo-u-text-muted">Button · Dropdown · Combobox · Segmented control</p></div></div>
-          <div class="bo-widget"><div class="bo-widget__header"><span class="bo-widget__title"><a href={base + '/components/form'}>Data input →</a></span></div>
-            <div class="bo-widget__body"><p class="bo-u-text-muted">Forms · Filters · Money field · Tag input · File upload</p></div></div>
-          <div class="bo-widget"><div class="bo-widget__header"><span class="bo-widget__title"><a href={base + '/components/data-table'}>Data display →</a></span></div>
-            <div class="bo-widget__body"><p class="bo-u-text-muted">Data table · Amount · Quantity · Date · Tree · Dashboard …</p></div></div>
-          <div class="bo-widget"><div class="bo-widget__header"><span class="bo-widget__title"><a href={base + '/components/badge'}>Feedback →</a></span></div>
-            <div class="bo-widget__body"><p class="bo-u-text-muted">Badge · Alerts &amp; toasts · Loading states · Progress · Stepper</p></div></div>
-          <div class="bo-widget"><div class="bo-widget__header"><span class="bo-widget__title"><a href={base + '/components/sidebar-nav'}>Navigation &amp; layout →</a></span></div>
-            <div class="bo-widget__body"><p class="bo-u-text-muted">Navigation · Tabs · Dialog · Icon</p></div></div>
+          {/* GENERATED from each component's CSS header (roadmap 249.8): the
+              tile GROUPING is editorial and coarser than the sidebar's — "Data
+              display" spans three categories — so which categories a tile
+              covers is written in component-nav.mjs, and the component names
+              inside it come from `@category`/`@order`. The hand-written prose
+              this replaced had already drifted: its "Actions" tile listed
+              Combobox, which the sidebar groups under Data input. */}
+          {TASK_TILES.map((tile) => (
+            <div class="bo-widget"><div class="bo-widget__header"><span class="bo-widget__title"><a href={base + tile.href}>{tile.label} →</a></span></div>
+              <div class="bo-widget__body"><p class="bo-u-text-muted">{tile.names.join(' · ')}{tile.elided ? ' …' : ''}</p></div></div>
+          ))}
           <div class="bo-widget"><div class="bo-widget__header"><span class="bo-widget__title"><a href={base + '/patterns/'}>Patterns →</a></span></div>
             <div class="bo-widget__body"><p class="bo-u-text-muted">Find · Work one record · Correct data · Clear queues · Monitor — {patternsIndex.count} full screens</p></div></div>
         </div>

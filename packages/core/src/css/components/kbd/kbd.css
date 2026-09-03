@@ -1,3 +1,7 @@
+/* @tagline A keycap chip for rendering a keyboard shortcut inline.
+   @category Display
+   @label Keyboard key
+   @order 50 */
 @layer bo-components {
   /* Keycap chip — render a keyboard key the way power users read one:
      shortcuts help, hint text, docs. Composes anywhere inline text

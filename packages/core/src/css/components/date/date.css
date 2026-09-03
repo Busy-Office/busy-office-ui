@@ -1,3 +1,7 @@
+/* @tagline Deprecated display-only date; compose a cluster with tabular figures instead.
+   @category Reference
+   @label Date display (deprecated)
+   @order 10 */
 @layer bo-components {
   /* DEPRECATED (2026-08-19, roadmap 45.3). Compose instead:
        <span class="bo-cluster">

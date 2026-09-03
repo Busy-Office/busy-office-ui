@@ -19,9 +19,10 @@ const [, , rawName, ...flags] = process.argv;
 const behavior = flags.includes('--behavior');
 const labelFlag = flags.find((f) => f.startsWith('--label='));
 const groupFlag = flags.find((f) => f.startsWith('--group='));
+const taglineFlag = flags.find((f) => f.startsWith('--tagline='));
 // Sidebar is grouped by task (2026-08-16, docs-IA pass) — a new component
 // must be placed deliberately, not silently defaulted into the wrong group.
-/* Derived from Gallery.astro, never hardcoded.
+/* Derived from the shipped taxonomy, never hardcoded.
  *
  * This list said 'Data display' — a group that does not exist — and omitted
  * 'Tables & lists', 'Values' and 'Display', which do. The sidebar was
@@ -29,19 +30,28 @@ const groupFlag = flags.find((f) => f.startsWith('--group='));
  * documented way to add a component rejected every valid answer and accepted
  * one that then failed deeper in the script (roadmap 40.3, found by using it).
  * A hand-maintained mirror of another file's contents is a stale list waiting
- * to happen; the sidebar is the source of truth, so read it.
+ * to happen.
  *
- * Only groups that actually contain /components/ links are offered — the
- * Patterns and Reference groups are real sidebar sections but not places a
- * component belongs. */
+ * It read Gallery.astro's array until 2026-09-03 (roadmap 249.8); that array
+ * is now generated FROM the CSS headers this script writes, so scraping it
+ * would be reading this script's own output. `api.categories` is where the
+ * taxonomy actually lives — `extract-api.mjs` validates every @category
+ * against it and fails the build on a typo.
+ *
+ * 'Reference' is excluded: it is where a DEPRECATED component is parked
+ * (roadmap 135/132.1), not a group a new component belongs in. */
 const GROUPS = (() => {
-  const src = readFileSync(join(docsRoot, 'src/layouts/Gallery.astro'), 'utf8');
-  const groups = [];
-  for (const m of src.matchAll(/label: '([^']+)',\s*items: \[([\s\S]*?)\]/g)) {
-    if (m[2].includes("'/components/")) groups.push(m[1]);
+  const apiPath = join(coreRoot, 'dist/api.json');
+  let categories;
+  try {
+    categories = JSON.parse(readFileSync(apiPath, 'utf8')).categories;
+  } catch {
+    console.error(`new:component: ${apiPath} is missing — run \`npm run build -w @busy-office/ui\` first.`);
+    process.exit(1);
   }
+  const groups = (categories ?? []).filter((c) => c !== 'Reference');
   if (!groups.length) {
-    console.error('new:component: could not read any component groups from Gallery.astro — has its shape changed?');
+    console.error('new:component: dist/api.json carries no categories — has extract-api.mjs changed shape?');
     process.exit(1);
   }
   return groups;
@@ -50,7 +60,7 @@ const GROUPS = (() => {
 if (!rawName || !/^[a-z][a-z0-9]*(-[a-z0-9]+)*$/.test(rawName)) {
   console.error(
     'Usage: npm run new:component -w @busy-office/ui -- <kebab-case-name> --group="<one of: '
-      + GROUPS.join(', ') + '>" [--behavior] [--label="Human Label"]',
+      + GROUPS.join(', ') + '>" --tagline="One plain sentence." [--behavior] [--label="Human Label"]',
   );
   process.exit(1);
 }
@@ -59,9 +69,36 @@ if (!groupFlag || !GROUPS.includes(groupFlag.slice('--group='.length))) {
   process.exit(1);
 }
 const group = groupFlag.slice('--group='.length);
+/* The tagline is a REQUIRED CSS-header directive (roadmap 249.8) — the build
+   refuses a component without one — so the scaffolder asks for it here rather
+   than stamping a TODO that would fail the very next build. Bounds match
+   extract-api.mjs's TAGLINE_MIN/TAGLINE_MAX; a comment-closing delimiter is
+   refused because the tagline is written into a CSS comment. */
+const tagline = taglineFlag ? taglineFlag.slice('--tagline='.length).trim() : '';
+if (tagline.length < 30 || tagline.length > 120) {
+  console.error(
+    `--tagline is required: one plain sentence of 30-120 characters saying what the component is ` +
+      `and what decides its use (got ${tagline.length}).`,
+  );
+  process.exit(1);
+}
+if (tagline.includes('*/') || tagline.includes('\n')) {
+  console.error('--tagline must be a single line and must not contain "*/" — it is written into a CSS comment.');
+  process.exit(1);
+}
 const name = rawName;
 const pascal = name.replace(/(^|-)([a-z])/g, (_, __, c) => c.toUpperCase());
-const label = labelFlag ? labelFlag.slice('--label='.length) : pascal.replace(/([a-z])([A-Z])/g, '$1 $2');
+/* The default label must be spelled the SAME way extract-api.mjs's
+   defaultLabel() spells it, or the scaffolder stamps an @label that says
+   exactly what the derived default already says. It did: `pascal` gave
+   "Probe Widget" where the extractor derives "Probe widget", so a probe run
+   on 2026-09-03 wrote a redundant @label into a brand-new component — two
+   derivations of one default, which is the drift this whole item removes. */
+const derivedLabel = (() => {
+  const words = rawName.replace(/-/g, ' ');
+  return words.charAt(0).toUpperCase() + words.slice(1);
+})();
+const label = labelFlag ? labelFlag.slice('--label='.length) : derivedLabel;
 // The label is interpolated into an Astro attribute and a JS string literal
 // in Gallery.astro — a quote would emit invalid output into a SHARED file
 // (breaking every docs build until hand-fixed), so refuse rather than escape.
@@ -88,11 +125,18 @@ if ((await exists(cssDir)) || (await exists(pagePath))) {
   process.exit(1);
 }
 
-// 1. CSS file
+// 1. CSS file — its header IS the component's registration (roadmap 249.8):
+// @tagline/@category/@label/@order are lifted into api.json by extract-api.mjs
+// and drive the docs sidebar, the homepage task tiles and llms.txt. @label is
+// stamped only when the derived default (the directory name, title-cased) is
+// wrong, and @order is left off so the component appends to the end of its
+// group — move it by adding one.
 await mkdir(cssDir, { recursive: true });
 await writeFile(
   cssFile,
-  `@layer bo-components {
+  `/* @tagline ${tagline}
+   @category ${group}${label === derivedLabel ? '' : `\n   @label ${label}`} */
+@layer bo-components {
   /* Block */
   .bo-${name} {
     /* TODO: base styles */
@@ -161,23 +205,13 @@ const canonical = \`<div class="bo-${name}">
 `,
 );
 
-// 4. Sidebar entry
-const galleryPath = join(docsRoot, 'src/layouts/Gallery.astro');
-let gallery = await readFile(galleryPath, 'utf8');
-const marker = `label: '${group}',\n    items: [`;
-const markerIndex = gallery.indexOf(marker);
-if (markerIndex === -1) throw new Error(`Couldn't find the '${group}' sidebar section in Gallery.astro`);
-// Insert at the END of the group's items, not right after `items: [` —
-// scaffolding always dropped new entries first, which silently pushed the
-// most-established component (Button, Forms, ...) out of pole position
-// every time something newer was added (drift found + fixed 2026-08-16
-// Standardize sweep: Segmented control had displaced Button in "Actions").
-const closeMarker = '\n    ],';
-const closeIndex = gallery.indexOf(closeMarker, markerIndex + marker.length);
-if (closeIndex === -1) throw new Error(`Couldn't find the closing "],\` for the '${group}' section`);
-const entry = `      { href: '/components/${name}', label: '${label}' },\n`;
-gallery = gallery.slice(0, closeIndex + 1) + entry + gallery.slice(closeIndex + 1);
-await writeFile(galleryPath, gallery);
+// 4. Sidebar entry — nothing to do. Until 2026-09-03 this step spliced an
+// entry into Gallery.astro's hand-written array, at the END of the group so
+// that scaffolding could not displace the established component from pole
+// position (drift found + fixed 2026-08-16 Standardize sweep: Segmented
+// control had displaced Button in "Actions"). Both concerns now live in the
+// CSS header stamped in step 1: @category picks the group, and omitting
+// @order appends, which is the same rule that comment describes.
 
 // 5. Stub behavior test — only interactive components get one; there's no
 // per-component test file, all behaviors live in one describe-block file.
@@ -199,7 +233,8 @@ describe('init${pascal}', () => {
 console.log(`Scaffolded "${name}":
   ${cssFile.replace(repoRoot + '/', '')}
   ${pagePath.replace(repoRoot + '/', '')}
-  sidebar entry in apps/docs/src/layouts/Gallery.astro${
+  sidebar entry + homepage tile + llms.txt entry — generated from the CSS
+  header's @tagline/@category, so no shared file was edited${
     behavior ? '\n  stub test in packages/core/tests/behaviors.test.ts' : ''
   }
 

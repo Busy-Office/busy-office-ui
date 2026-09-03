@@ -1,3 +1,6 @@
+/* @tagline A popover menu that renders in the top layer, so a table or sticky header never clips it.
+   @category Actions
+   @order 20 */
 @layer bo-components {
   /* Popover-based dropdown menu: renders in the top layer, so it is never
      clipped by overflow:auto containers (data tables!) and never loses a

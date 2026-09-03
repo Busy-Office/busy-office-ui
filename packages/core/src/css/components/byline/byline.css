@@ -1,3 +1,6 @@
+/* @tagline An author, role and timestamp provenance line for a record header, comment or audit note.
+   @category Display
+   @order 30 */
 @layer bo-components {
   /* Byline: an author · role · timestamp provenance line — for a record
      header, a comment, a feed item, an audit note. Name is emphasis ink;

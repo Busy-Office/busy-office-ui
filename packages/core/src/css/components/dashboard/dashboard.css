@@ -1,3 +1,6 @@
+/* @tagline A responsive widget grid and its cards, both named containers so widgets size to themselves.
+   @category Display
+   @order 10 */
 @layer bo-components {
   /* Widget grid. BOTH levels are NAMED containers (build rule: every
      @container in this codebase is named — bare queries resolve against

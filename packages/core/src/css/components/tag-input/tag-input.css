@@ -1,3 +1,6 @@
+/* @tagline Multi-value entry that looks like one input and commits each value as a tag.
+   @category Data input
+   @order 60 */
 @layer bo-components {
   /* Multi-value entry — cost centers, approval-routing recipients. Looks
      like one input; is really a flex-wrap row of committed tags plus a

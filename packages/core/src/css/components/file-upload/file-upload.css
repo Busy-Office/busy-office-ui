@@ -1,3 +1,6 @@
+/* @tagline A real file input, with the one part of it a browser lets you restyle.
+   @category Data input
+   @order 80 */
 @layer bo-components {
   /* A real <input type="file"> — the platform's own file picker, keyboard
      access, and (in Chrome/Firefox) native drag-drop onto the control all

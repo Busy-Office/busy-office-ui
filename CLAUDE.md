@@ -115,15 +115,32 @@ deliberate follow-ups.
 ## How to document a component (the recipe)
 
 Docs are **generated from the shipped CSS**, then wrapped in a fixed page skeleton.
-Never hand-write API/contrast tables. `npm run new:component -w @busy-office/ui -- <name>`
-stamps steps 1-3 below (CSS file + import, docs page, sidebar entry) in one shot; the
-page-shape gate (build gate 7) then fails the build if the result drifts from this shape.
-To add or document a component manually:
+Never hand-write API/contrast tables. `npm run new:component -w @busy-office/ui -- <name>
+--group="<category>" --tagline="<one sentence>"` stamps steps 1-2 below (CSS file with its
+header + `@import`, docs page) in one shot; the page-shape gate (build gate 7) then fails
+the build if the result drifts from this shape. To add or document a component manually:
 
 1. **Source of truth = the CSS.** `packages/core/src/css/components/<name>/<name>.css`,
    one `@layer bo-components` block: `.bo-<name>`, `__part`, `--modifier`. Add its
    `@import` to `src/css/index.css`. The build globs the dir, so no other registration
    is needed for `api.json` / per-file dist.
+
+   **The file's header carries the component's registration** (roadmap 249.8), as
+   `@directive` lines at the start of a line inside a comment:
+
+   ```css
+   /* @tagline A short status chip for approval states and document statuses.
+      @category Display
+      @label Keyboard key      ← only when the dir name does not title-case into it
+      @order 40 */             ← only to rank it; omitting appends to the group
+   ```
+
+   `@tagline` (30-120 characters, one plain sentence) and `@category` (one of the
+   eight in `extract-api.mjs`'s `CATEGORIES`) are **required — the core build throws
+   naming the file without them**. `extract-api.mjs` lifts them into `api.json`, and
+   the docs sidebar, the homepage "Find it by task" tiles and `llms.txt` are all
+   generated from there. Two components sharing a docs page (skeleton + state) must
+   declare the same `@category`/`@label`/`@order`; disagreeing fails the build.
 2. **Docs page** = `apps/docs/src/pages/components/<name>.astro`, always this skeleton:
    ```
    <Gallery title="Name" description="one sentence, 40-160 chars — the meta description">
@@ -165,9 +182,16 @@ To add or document a component manually:
    the spec table was the single highest-leverage structural fix found.
    `Demo` renders a preview **and** its copyable code from ONE string — never write the
    preview and code twice. Keep captions short and user-facing (say what it does).
-3. **Sidebar**: add `{ href: '/components/<name>', label: '…' }` to the Components group
-   in `apps/docs/src/layouts/Gallery.astro`. The page slug must equal the CSS dir name,
-   or add a `PAGE_SLUG` alias in `extract-api.mjs` (see `alert`→`alerts`).
+3. **Sidebar**: nothing to do — it is generated from step 1's `@category`/`@order`
+   (roadmap 249.8; `apps/docs/src/data/component-nav.mjs` is the one module that
+   builds it, and `Gallery.astro` spreads it). The page slug must equal the CSS dir
+   name, or add a `PAGE_SLUG` alias in `extract-api.mjs` (see `alert`→`alerts`).
+   A docs page with **no CSS directory at all** (`inline-editing`, `table-toolbar`)
+   or an anchor into another component's page (`form#dates`) has no header to carry
+   its metadata, so it goes in that module's `COMPONENT_NAV_EXTRAS` — four entries,
+   each with a reason. `check-page-shape` walks the **pages** and fails on any that
+   no entry reaches; before 249.8 it walked the CSS dirs instead, so those two
+   page-only entries had never been reachability-checked at all.
 4. **New colour pairing?** Add it to `PAIRS` in `scripts/check-contrast.mjs` so the gate
    validates it in both themes (e.g. the Amount field added danger/success-text on
    surface + canvas).

@@ -1,3 +1,7 @@
+/* @tagline Fields, labels, help and error text, sections and fieldsets — the form surface.
+   @category Data input
+   @label Forms
+   @order 10 */
 @layer bo-components {
   /* Field wrapper: label + control + optional hint/error message.
      Error visuals are driven by :has() over native validity or aria-invalid —

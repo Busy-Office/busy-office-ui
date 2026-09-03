@@ -120,6 +120,147 @@ const JS_HOOKS = {
    which made a validator built on the CSS call a correct document wrong. */
 const EXTRA_VALUES = { 'data-tree-level': ['1'] };
 
+// Global class index: class -> owning page slug. Docs page slugs differ from
+// CSS dir names when a component shares a page (site-grill S-2; skeleton +
+// state share one page). Published on api.pageSlug — the SINGLE source of
+// this alias; gen-llms.mjs, check-page-shape.mjs and gen-rf-profile.mjs all
+// read it from dist/api.json rather than keeping their own copies (that
+// drifted once already — Slice 6 item 1 added an alias here and missed
+// gen-llms.mjs's copy until its build broke).
+//
+// gen-rf-profile.mjs is the third reader as of 2026-08-28 and was the second
+// drift: it kept a seven-entry copy keyed on FILE stems while this one is
+// keyed on DIRS, so the sentence above named two readers while three sites
+// existed. Nothing was user-visible — all 14 of its hrefs resolved — but the
+// same alias lived in two places again, which is exactly what this comment
+// says it does not. When adding an alias here, no other file needs editing.
+//
+// Declared HERE, above the component walk, because api.components[…].meta
+// carries each component's page slug too (roadmap 249.8) and the walk needs
+// it. It is still published once, on api.pageSlug, below.
+const PAGE_SLUG = { alert: 'alerts', skeleton: 'state-patterns', state: 'state-patterns' };
+
+/* ---------- component header metadata (roadmap 249.8) ----------
+   Every component's CSS header declares what the component IS and where it
+   belongs, so the docs sidebar, the homepage task tiles and llms.txt are
+   generated from the shipped CSS rather than from three hand-written lists.
+
+   Before this, the sidebar array in Gallery.astro and the tile prose in
+   index.astro were hand-maintained, and neither was fully policed: measured
+   2026-09-03, `check-page-shape.mjs` fails only when a component PAGE has no
+   sidebar entry (one direction, and it reads neither the label nor the
+   group), and the tile prose was policed by nothing at all — `grep -c "Find
+   it by task"` over apps/docs/scripts and packages/core/scripts read 0. The
+   drift that predicts had already happened: the "Actions" tile listed
+   Combobox, which the sidebar groups under Data input.
+
+   Two directives are REQUIRED, two are optional and exist only because the
+   derived default is sometimes wrong:
+
+     @tagline   one plain sentence: what it is, and what decides its use
+     @category  one of CATEGORIES below
+     @label     sidebar text, when the dir name does not title-case into it
+                ("sidebar-nav" -> "Sidebar navigation")
+     @order     rank inside the category; defaults to APPEND_ORDER
+
+   Order is editorial — the groups are ranked by what a reader reaches for
+   first, not alphabetically — so it has to be STATED somewhere. Stating it in
+   the component's own file is the point of this item: a new component's whole
+   registration is its header.
+
+   Omitting a required directive throws here, naming the file, which fails
+   `npm run build -w @busy-office/ui` before anything downstream runs. */
+const CATEGORIES = [
+  'Actions',
+  'Data input',
+  'Tables & lists',
+  'Values',
+  'Display',
+  'Feedback',
+  'Navigation & layout',
+  /* Deprecated surfaces live under Reference, not in a live task group: an
+     unlisted page is unreachable rather than retired, and the owner asked the
+     Date display out of "Values" (roadmap 135/132.1). The docs sidebar
+     appends this category to its hand-written Reference group. */
+  'Reference',
+];
+const APPEND_ORDER = 1000;
+const TAGLINE_MIN = 30;
+const TAGLINE_MAX = 120;
+
+/* A directive is the FIRST thing on its line inside a comment, so a sentence
+   that merely mentions "@tagline" while explaining the rule cannot be read as
+   one. `comment.text` has already had the delimiters stripped by postcss, and
+   a block comment's continuation lines may carry a leading `*`. */
+const DIRECTIVE_RE = /^(?:\*\s*)?@(tagline|category|label|order)\b[ \t]*(.*)$/;
+const DIRECTIVE_NAMES = ['tagline', 'category', 'label', 'order'];
+
+/** Every @directive in a dir's comments, as name -> [{ value, file }]. */
+async function readDirectives(files) {
+  const found = Object.fromEntries(DIRECTIVE_NAMES.map((n) => [n, []]));
+  for (const file of files) {
+    const root = postcss.parse(await readFile(file, 'utf8'));
+    root.walkComments((comment) => {
+      for (const line of comment.text.split('\n')) {
+        const m = DIRECTIVE_RE.exec(line.trim());
+        if (m) found[m[1]].push({ value: m[2].trim(), file });
+      }
+    });
+  }
+  return found;
+}
+
+/** Title-case the dir name the way the sidebar labels already read. */
+const defaultLabel = (dir) => {
+  const words = dir.replace(/-/g, ' ');
+  return words.charAt(0).toUpperCase() + words.slice(1);
+};
+
+const metaErrors = [];
+
+function buildMeta(dir, found, slug) {
+  const rel = (f) => f.slice(f.indexOf('src/css/'));
+  const fail = (msg) => metaErrors.push(`components/${dir}: ${msg}`);
+  const one = (name, required) => {
+    const hits = found[name];
+    if (hits.length > 1) {
+      fail(`@${name} declared ${hits.length} times (${hits.map((h) => rel(h.file)).join(', ')}) — declare it once per component`);
+      return null;
+    }
+    if (!hits.length) {
+      if (required) fail(`no @${name} in any CSS header — add "@${name} …" to a comment in src/css/components/${dir}/`);
+      return null;
+    }
+    if (!hits[0].value) {
+      fail(`@${name} in ${rel(hits[0].file)} has no value`);
+      return null;
+    }
+    return hits[0];
+  };
+
+  const tagline = one('tagline', true);
+  if (tagline && (tagline.value.length < TAGLINE_MIN || tagline.value.length > TAGLINE_MAX)) {
+    fail(`@tagline in ${rel(tagline.file)} is ${tagline.value.length} characters — it must be ${TAGLINE_MIN}-${TAGLINE_MAX}, one plain sentence`);
+  }
+  const category = one('category', true);
+  if (category && !CATEGORIES.includes(category.value)) {
+    fail(`@category "${category.value}" in ${rel(category.file)} is not one of: ${CATEGORIES.join(', ')}`);
+  }
+  const label = one('label', false);
+  const order = one('order', false);
+  if (order && !/^\d+$/.test(order.value)) {
+    fail(`@order "${order.value}" in ${rel(order.file)} is not a whole number`);
+  }
+
+  return {
+    tagline: tagline?.value ?? '',
+    category: category?.value ?? '',
+    label: label?.value ?? defaultLabel(dir),
+    order: order && /^\d+$/.test(order.value) ? Number(order.value) : APPEND_ORDER,
+    slug,
+  };
+}
+
 const componentsDir = join(srcCss, 'components');
 for (const dir of (await readdir(componentsDir, { withFileTypes: true })).filter((d) => d.isDirectory())) {
   const files = (await readdir(join(componentsDir, dir.name)))
@@ -134,7 +275,48 @@ for (const dir of (await readdir(componentsDir, { withFileTypes: true })).filter
   for (const c of JS_HOOKS[dir.name]?.classes ?? []) sets.classes.add(c);
   for (const d of JS_HOOKS[dir.name]?.dataAttrs ?? []) sets.dataAttrs.add(d);
   api.components[dir.name] = shape(sets);
+  api.components[dir.name].meta = buildMeta(dir.name, await readDirectives(files), PAGE_SLUG[dir.name] ?? dir.name);
 }
+
+/* One nav entry per PAGE, not per component: skeleton and state are two
+   components sharing /components/state-patterns, so they must agree about the
+   entry they jointly own. Disagreeing is a build failure rather than a
+   silent last-one-wins — the whole point of generating the sidebar is that
+   nobody can hand-fix a mismatch downstream. Their @tagline still differs;
+   only the nav fields are shared. */
+const navBySlug = new Map();
+for (const [name, c] of Object.entries(api.components)) {
+  const { slug, label, category, order } = c.meta;
+  const prior = navBySlug.get(slug);
+  if (!prior) {
+    navBySlug.set(slug, { slug, label, category, order, components: [name] });
+    continue;
+  }
+  for (const [field, value] of Object.entries({ label, category, order })) {
+    if (prior[field] !== value) {
+      metaErrors.push(
+        `components/${name} and components/${prior.components.join('/')} share the page "${slug}" but declare different @${field} ` +
+          `(${JSON.stringify(value)} vs ${JSON.stringify(prior[field])}) — a shared page has ONE sidebar entry`,
+      );
+    }
+  }
+  prior.components.push(name);
+}
+
+if (metaErrors.length) {
+  throw new Error(
+    `extract-api: ${metaErrors.length} component header problem(s) — every component declares @tagline and @category in its CSS ` +
+      `(see the CATEGORIES block in scripts/extract-api.mjs):\n  ${metaErrors.join('\n  ')}`,
+  );
+}
+
+api.categories = CATEGORIES;
+/* Sorted the way the sidebar renders: by declared @order, then by label so
+   that components which never declare one (APPEND_ORDER) land at the end in a
+   stable, reviewable order rather than in readdir order. */
+api.nav = [...navBySlug.values()].sort(
+  (a, b) => CATEGORIES.indexOf(a.category) - CATEGORIES.indexOf(b.category) || a.order - b.order || a.label.localeCompare(b.label),
+);
 
 const primDir = join(srcCss, 'primitives');
 for (const f of (await readdir(primDir)).filter((f) => f.endsWith('.css') && f !== 'index.css')) {
@@ -156,21 +338,6 @@ api.utilities = shape(utilSets);
 const motionSets = await analyze([join(srcCss, 'motion/motion.css')]);
 api.motion = shape(motionSets);
 
-// Global class index: class -> owning page slug. Docs page slugs differ from
-// CSS dir names when a component shares a page (site-grill S-2; skeleton +
-// state share one page). Published on api.pageSlug — the SINGLE source of
-// this alias; gen-llms.mjs, check-page-shape.mjs and gen-rf-profile.mjs all
-// read it from dist/api.json rather than keeping their own copies (that
-// drifted once already — Slice 6 item 1 added an alias here and missed
-// gen-llms.mjs's copy until its build broke).
-//
-// gen-rf-profile.mjs is the third reader as of 2026-08-28 and was the second
-// drift: it kept a seven-entry copy keyed on FILE stems while this one is
-// keyed on DIRS, so the sentence above named two readers while three sites
-// existed. Nothing was user-visible — all 14 of its hrefs resolved — but the
-// same alias lived in two places again, which is exactly what this comment
-// says it does not. When adding an alias here, no other file needs editing.
-const PAGE_SLUG = { alert: 'alerts', skeleton: 'state-patterns', state: 'state-patterns' };
 /* GLOBAL legal values for every data-* attribute, unioned across all shipped
    CSS including tokens/ (roadmap 32.1). The per-component maps answer "what
    does THIS component switch on"; a validator needs "what is legal anywhere",

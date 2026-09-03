@@ -1,3 +1,6 @@
+/* @tagline A month grid that says which days are special — deliberately not a date picker.
+   @category Display
+   @order 80 */
 @layer bo-components {
   /* A month grid whose job is to say WHICH DAYS ARE SPECIAL.
    *

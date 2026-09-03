@@ -1,3 +1,6 @@
+/* @tagline A monetary or quantity value laid out for scanning down a column, in tabular figures.
+   @category Values
+   @order 10 */
 @layer bo-components {
   /* Amount: a monetary or quantity value, laid out for scanning down a column.
      CSS-first — your app formats the number (locale, grouping, precision, sign)

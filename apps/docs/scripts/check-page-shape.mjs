@@ -34,6 +34,15 @@ const coreRoot = join(repoRoot, 'packages/core');
 const pagesDir = join(docsRoot, 'src/pages/components');
 const galleryPath = join(docsRoot, 'src/layouts/Gallery.astro');
 
+/* The sidebar's component entries, from the ONE module that builds them
+   (roadmap 249.8) — never re-derived here. The anchor entries carry a
+   fragment, which is a link INTO a page rather than the page's own entry, so
+   they are stripped before the membership test. */
+const { ALL_ITEMS } = await import(new URL('../src/data/component-nav.mjs', import.meta.url));
+const sidebarSlugs = new Set(
+  ALL_ITEMS.filter((i) => !i.href.includes('#')).map((i) => i.href.replace('/components/', '')),
+);
+
 // PAGE_SLUG lives on the generated api.json (extract-api.mjs) — the single
 // source; this used to be a hand-maintained copy that drifted out of sync
 // with a THIRD copy in gen-llms.mjs (Slice 6 item 1 caught it the hard way).
@@ -154,8 +163,36 @@ for (const d of dirs) {
     );
   }
 
-  if (!gallery.includes(`href: '/components/${slug}'`)) {
-    failures.push(`${slug}.astro: no sidebar entry in Gallery.astro`);
+}
+
+/* ---------- every component PAGE is reachable from the sidebar ----------
+   An unlisted page is unreachable, not retired. Since 2026-09-03 (roadmap
+   249.8) the component groups are GENERATED from each component's CSS header,
+   so this asks the same question of the same two places the sidebar is built
+   from — api.nav for the generated entries, and component-nav.mjs's four
+   documented extras for the pages with no CSS directory of their own.
+
+   It walks the PAGES, not the CSS directories, and that is the fix rather
+   than an incidental restatement. The assertion this replaces lived inside
+   the loop above, which iterates `src/css/components/*` — so the two docs
+   pages that document data-table BEHAVIOUR rather than a stylesheet,
+   `inline-editing` and `table-toolbar`, were never reachability-checked at
+   all. Measured by injection 2026-09-03: deleting the `inline-editing` entry
+   from COMPONENT_NAV_EXTRAS (its mentions in the module went 1 -> 0) left
+   this gate GREEN. That is the "a skipped page looks exactly like a passing
+   one" failure the `scan` comment above records, in a second place. */
+const PAGE_DIR_ONLY = new Set(['demos']);
+let reachability = 0;
+for (const entry of await readdir(pagesDir, { withFileTypes: true })) {
+  if (!entry.isFile() || !entry.name.endsWith('.astro') || PAGE_DIR_ONLY.has(entry.name)) continue;
+  const slug = entry.name.replace(/\.astro$/, '');
+  reachability++;
+  if (!sidebarSlugs.has(slug)) {
+    failures.push(
+      `${slug}.astro: no sidebar entry — declare @category in the component's CSS header ` +
+        `(packages/core/src/css/components/…), or, for a page with no CSS directory, add it to ` +
+        `COMPONENT_NAV_EXTRAS in src/data/component-nav.mjs`,
+    );
   }
 }
 
@@ -325,4 +362,4 @@ if (failures.length) {
   process.exit(1);
 }
 assertScanned(checked, 'component pages', 'the page source directory is empty or moved');
-console.log(`page-shape check passed: ${checked} component page(s) + ${patternsChecked} pattern page(s), ${rfChecked} checked for a duplicated RF screen verified against the CLAUDE.md skeletons, ${relatedChecked} page(s) carry a Related footer, ${describedChecked} page(s) describe themselves`);
+console.log(`page-shape check passed: ${checked} component page(s) + ${patternsChecked} pattern page(s), ${rfChecked} checked for a duplicated RF screen verified against the CLAUDE.md skeletons, ${relatedChecked} page(s) carry a Related footer, ${describedChecked} page(s) describe themselves, ${reachability} reachable from the sidebar`);

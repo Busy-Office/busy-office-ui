@@ -1,3 +1,6 @@
+/* @tagline Initials or a photo in a disc, em-sized so it tracks the text beside it.
+   @category Display
+   @order 60 */
 @layer bo-components {
   /* Avatar — initials or a photo in a disc. Promoted from Byline's
      __avatar part (owner call 2026-08-16): one primitive, composed by

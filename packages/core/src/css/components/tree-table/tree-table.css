@@ -1,3 +1,6 @@
+/* @tagline Hierarchical rows inside a plain data table, expanded by disclosure buttons.
+   @category Tables & lists
+   @order 60 */
 @layer bo-components {
   /* Hierarchical rows in a data table — BOM explosion, account rollups,
      org-unit budgets. A PLAIN table + disclosure buttons, deliberately

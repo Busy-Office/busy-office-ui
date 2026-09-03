@@ -1,3 +1,7 @@
+/* @tagline A contenteditable rich-text editor whose formatting is native browser behaviour.
+   @category Data input
+   @label Rich text
+   @order 90 */
 @layer bo-components {
   /* @keymap bo-richtext
      Every one of these is NATIVE contenteditable, shipped by the browser

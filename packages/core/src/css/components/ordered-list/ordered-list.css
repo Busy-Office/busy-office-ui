@@ -1,3 +1,6 @@
+/* @tagline A native ordered list where the sequence is real semantics, not decoration.
+   @category Tables & lists
+   @order 70 */
 @layer bo-components {
   /* Ordered list: a native <ol> of items — line items, approval route, release
      steps, ranked entries. Order is real semantics; the number is the list

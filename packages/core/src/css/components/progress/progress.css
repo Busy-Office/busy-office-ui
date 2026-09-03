@@ -1,3 +1,6 @@
+/* @tagline Continuous progress on the native progress element — always paired with visible text.
+   @category Feedback
+   @order 30 */
 @layer bo-components {
   /* Continuous progress (budget consumption, import jobs) — styles the
      NATIVE <progress> element, so value/max semantics and the implicit

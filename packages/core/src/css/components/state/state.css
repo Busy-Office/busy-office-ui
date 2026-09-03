@@ -1,3 +1,7 @@
+/* @tagline Empty and error states for a region with nothing to show, the icon shape differing too.
+   @category Feedback
+   @label Loading, empty & error
+   @order 20 */
 /* One component, two settings: empty (no modifier — the neutral "nothing
    here yet" state) and --error ("something went wrong"). Two-channel:
    the icon SHAPE differs (not just its color) and the title/description

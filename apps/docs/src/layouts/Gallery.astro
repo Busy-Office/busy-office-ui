@@ -19,6 +19,7 @@ import SidebarNav from '../components/SidebarNav.astro';
 import pkg from '@busy-office/ui/package.json';
 import versions from '../../versions.json';
 import { PATTERN_GROUPS } from '../data/pattern-groups.mjs';
+import { COMPONENT_GROUPS, REFERENCE_COMPONENT_ITEMS } from '../data/component-nav.mjs';
 /* `description` is REQUIRED (roadmap 249.2). Every page had a <title> and
    nothing else in its head, so a search result or a shared link showed the
    engine's own guess at what the page is about — on a docs site whose pages
@@ -86,83 +87,14 @@ const sections = [
   // Components grouped by TASK (2026-08-16 docs-IA pass, after DaisyUI/
   // Tailwind comparison) — "what am I trying to do" beats one flat 22-item
   // list or internal file layout. Kept to 2 nesting levels, 3-10 items/group.
-  {
-    label: 'Actions',
-    items: [
-      { href: '/components/button', label: 'Button' },
-      { href: '/components/dropdown', label: 'Dropdown' },
-      { href: '/components/segmented', label: 'Segmented control' },
-    ],
-  },
-  {
-    label: 'Data input',
-    items: [
-      { href: '/components/form', label: 'Forms' },
-      { href: '/components/combobox', label: 'Combobox' },
-      { href: '/components/filters', label: 'Filters' },
-      { href: '/components/money', label: 'Money' },
-      { href: '/components/quantity', label: 'Quantity' },
-      { href: '/components/tag-input', label: 'Tag input' },
-      { href: '/components/form#dates', label: 'Date & time' },
-      { href: '/components/file-upload', label: 'File upload' },
-      { href: '/components/richtext', label: 'Rich text' },
-    ],
-  },
-  {
-    label: 'Tables & lists',
-    items: [
-      { href: '/components/data-table', label: 'Data table' },
-      { href: '/components/inline-editing', label: 'Inline editing' },
-      { href: '/components/table-toolbar', label: 'Toolbar & grid nav' },
-      { href: '/components/pagination', label: 'Pagination' },
-      { href: '/components/tree', label: 'Tree' },
-      { href: '/components/tree-table', label: 'Tree table' },
-      { href: '/components/ordered-list', label: 'Ordered list' },
-    ],
-  },
-  {
-    label: 'Values',
-    items: [
-      { href: '/components/amount', label: 'Amount' },
-      { href: '/components/kv', label: 'Key-value facts' },
-    ],
-  },
-  {
-    label: 'Display',
-    items: [
-      { href: '/components/dashboard', label: 'Dashboard' },
-      { href: '/components/dashboard#card', label: 'Card' },
-      { href: '/components/byline', label: 'Byline' },
-      { href: '/components/badge', label: 'Badge' },
-      { href: '/components/kbd', label: 'Keyboard key' },
-      { href: '/components/avatar', label: 'Avatar' },
-      { href: '/components/prose', label: 'Prose' },
-      { href: '/components/calendar', label: 'Calendar' },
-    ],
-  },
-  {
-    label: 'Feedback',
-    items: [
-      { href: '/components/alerts', label: 'Alerts & toasts' },
-      { href: '/components/state-patterns', label: 'Loading, empty & error' },
-      { href: '/components/progress', label: 'Progress' },
-      { href: '/components/stepper', label: 'Stepper' },
-      { href: '/components/approval-workflow', label: 'Timeline & audit' },
-      { href: '/components/scan', label: 'Scan feedback' },
-    ],
-  },
-  {
-    label: 'Navigation & layout',
-    items: [
-      { href: '/components/navbar', label: 'Navbar' },
-      { href: '/components/sidebar-nav', label: 'Sidebar navigation' },
-      { href: '/components/breadcrumb', label: 'Breadcrumb' },
-      { href: '/components/offcanvas', label: 'Drawers' },
-      { href: '/components/tabs', label: 'Tabs' },
-      { href: '/components/dialog', label: 'Dialog' },
-      { href: '/components/icon', label: 'Icon' },
-    ],
-  },
+  //
+  // GENERATED from each component's own CSS header since 2026-09-03 (roadmap
+  // 249.8) — `@category` picks the group, `@order` the rank, `@label` the text
+  // when the directory name does not title-case into it. The four entries that
+  // are not a component directory (two anchors, two behaviour pages) are the
+  // documented extras in component-nav.mjs. Adding a component's header is now
+  // its whole registration; there is no list here to forget to update.
+  ...COMPONENT_GROUPS,
   // Patterns grouped by JOB FAMILY in a real ERP working day — the shared
   // source is pattern-groups.mjs (roadmap 104.1), so this sidebar and the
   // generated /patterns/ tile index cannot disagree about which patterns
@@ -183,8 +115,10 @@ const sections = [
       /* Deprecated surfaces live here, not in the live component groups: the
          owner asked for the Date display component out of "Values" (135/132.1)
          and check-page-shape rightly refuses to let a component page have no
-         entry at all — an unlisted page is unreachable, not retired. */
-      { href: '/components/date', label: 'Date display (deprecated)' },
+         entry at all — an unlisted page is unreachable, not retired. A
+         component opts in by declaring `@category Reference` in its own CSS
+         header; nothing is listed by hand. */
+      ...REFERENCE_COMPONENT_ITEMS,
     ],
   },
 ];

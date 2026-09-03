@@ -1,3 +1,6 @@
+/* @tagline Hierarchy navigation on native details and summary elements, with no JS.
+   @category Tables & lists
+   @order 50 */
 @layer bo-components {
   /* Hierarchy navigation for deep ERP structures — cost-center trees, BOM
      explorers, org units. Built on native <details>/<summary>: open/closed

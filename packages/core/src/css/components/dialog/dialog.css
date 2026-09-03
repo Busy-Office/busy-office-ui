@@ -1,3 +1,6 @@
+/* @tagline A native dialog element — backdrop, Esc and focus return come from the platform.
+   @category Navigation & layout
+   @order 60 */
 @layer bo-components {
   /* Native <dialog>: browser provides backdrop, ESC, focus return.
      behaviors/dialog.ts adds trigger wiring, Tab loop, and data-state sync. */

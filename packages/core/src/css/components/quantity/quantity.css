@@ -1,3 +1,6 @@
+/* @tagline A count field with increment and decrement buttons around a real number input.
+   @category Data input
+   @order 50 */
 @layer bo-components {
   /* A count field, not a currency one — .bo-amount is for money.
      Increment/decrement buttons flank a real type="number" input so

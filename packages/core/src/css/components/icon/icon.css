@@ -1,3 +1,6 @@
+/* @tagline CSS-rendered mask icons that take currentColor and scale with font size.
+   @category Navigation & layout
+   @order 70 */
 @layer bo-components {
   /* CSS-rendered icons: an inline-SVG data URI as a mask, painted by
      background-color: currentColor — real themable glyphs with zero JS,

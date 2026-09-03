@@ -1,3 +1,6 @@
+/* @tagline An editable currency select and amount input working as one field.
+   @category Data input
+   @order 40 */
 @layer bo-components {
   /* Editable money: a currency select + amount input working as ONE field.
      The read-only counterpart is .bo-amount — same split as Quantity

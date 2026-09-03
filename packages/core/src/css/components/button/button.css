@@ -1,3 +1,6 @@
+/* @tagline The framework's action control, in solid, secondary, ghost and danger settings.
+   @category Actions
+   @order 10 */
 @layer bo-components {
   .bo-btn {
     --bo-btn-bg: var(--bo-color-accent-solid);

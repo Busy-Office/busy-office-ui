@@ -1,3 +1,7 @@
+/* @tagline An ordered timeline of workflow steps, with each step's state in real marker markup.
+   @category Feedback
+   @label Timeline & audit
+   @order 50 */
 @layer bo-components {
   /* Status timeline: <ol class="bo-timeline"> of workflow steps. State via
      data-state="done|current|pending|rejected" on the <li>; the current step

@@ -1,3 +1,7 @@
+/* @tagline Inline alerts and toasts — a message the screen must carry, announced only when it arrives.
+   @category Feedback
+   @label Alerts & toasts
+   @order 10 */
 @layer bo-components {
   /* Inline alerts and toasts. Announcement is the markup's job, and ARRIVAL
      decides it, not severity — this comment used to say "role=alert for

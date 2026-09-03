@@ -1,3 +1,6 @@
+/* @tagline The ARIA tabs pattern — CSS styles the selection, the behaviour supplies arrow keys.
+   @category Navigation & layout
+   @order 50 */
 @layer bo-components {
   /* ARIA tabs pattern. CSS styles aria-selected; initTabs() supplies roving
      tabindex + arrow-key navigation. Panels: role="tabpanel" tabindex="0". */

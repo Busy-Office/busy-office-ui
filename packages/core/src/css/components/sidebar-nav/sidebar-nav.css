@@ -1,3 +1,7 @@
+/* @tagline The fixed navigation rail, wide enough for a two-word ERP label on one line.
+   @category Navigation & layout
+   @label Sidebar navigation
+   @order 20 */
 @layer bo-components {
   /* 14rem rail: wide enough that a two-word ERP label ("Goods receipt",
      "Cost centers") sits on one line at comfortable density, narrow enough

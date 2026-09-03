@@ -1,3 +1,6 @@
+/* @tagline A short status chip for approval states and document statuses.
+   @category Display
+   @order 40 */
 @layer bo-components {
   /* Status badges: approval states, document statuses. */
   .bo-badge {

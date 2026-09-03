@@ -1,3 +1,6 @@
+/* @tagline Page navigation for a long result set, with the current page marked programmatically.
+   @category Tables & lists
+   @order 40 */
 @layer bo-components {
   /* <nav class="bo-pagination" aria-label="Pagination"> with buttons/links;
      the current page carries aria-current="page". */

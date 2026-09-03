@@ -1,3 +1,6 @@
+/* @tagline Numbered steps through a multi-step document, with the current step marked.
+   @category Feedback
+   @order 40 */
 @layer bo-components {
   /* Wizard stepper: <ol class="bo-stepper"> — numbered steps for multi-step
      documents. Current step carries aria-current="step"; completed steps get

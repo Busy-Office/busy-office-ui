@@ -1,3 +1,6 @@
+/* @tagline An editable text field with list autocomplete, following the ARIA combobox pattern.
+   @category Data input
+   @order 20 */
 @layer bo-components {
   /* Editable combobox with list autocomplete (WAI-ARIA APG combobox
      pattern). The listbox is a [popover]: renders in the top layer, so

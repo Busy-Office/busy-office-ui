@@ -1648,7 +1648,7 @@ claimed.
          off-plan one)**; then, if a table ships at all, deleting a row from
          it turns its search arm red.
 
-8. [ ] **249.8 — Component tagline + category, generated from the CSS
+8. [x] **249.8 — Component tagline + category, generated from the CSS
        header.** `/* @tagline … @category … */` in each component's CSS
        header, lifted into `api.json` by `extract-api.mjs`. Deletes two
        hand-written lists this repo's own gates already police drifting
@@ -1658,6 +1658,102 @@ claimed.
        - **Accept:** a stub component CSS file with the header updates
          sidebar/tiles/llms with zero hand edits on rebuild; omitting the
          header fails the build naming the file.
+       - **LANDED 2026-09-03 (cloud wake).** Four directives, two required:
+         `@tagline` (30-120 chars) and `@category` (one of eight in
+         `extract-api.mjs`'s `CATEGORIES`); `@label` and `@order` optional and
+         present only where the derived default is wrong (13 and 40 of 40).
+         `api.json` gains `components[…].meta`, `api.categories` and
+         `api.nav`; `apps/docs/src/data/component-nav.mjs` builds the sidebar
+         groups and the homepage tiles from it, on the `pattern-groups.mjs`
+         precedent. The 43-entry hand-written array is gone; 4 documented
+         extras remain, each with a reason.
+
+       **The item's premise was re-checked before building on it (CLAUDE.md's
+       premise rule) and is half wrong — in the direction that strengthens the
+       item.** "Two hand-written lists this repo's own gates already police
+       drifting" holds only for the sidebar, and only one-way:
+       `check-page-shape.mjs` failed when a component PAGE had no entry, and
+       read neither the label nor the group. The tile prose was policed by
+       **nothing**: `grep -rc "Find it by task" apps/docs/scripts
+       packages/core/scripts` -> **0**, and the single script hit for a tile
+       string (`Segmented control`) is a comment in `new-component.mjs`. The
+       drift that predicts had already happened — the "Actions" tile listed
+       **Combobox**, which the sidebar groups under Data input, and "Money
+       field" and "Loading states" were labels no sidebar entry used.
+
+       **Shape, measured rather than assumed:** 43 sidebar `/components/*`
+       entries, 40 CSS dirs, **39** page slugs (skeleton + state share
+       `state-patterns`; `alert` aliases to `alerts`). The 4-entry difference
+       is 2 anchors (`form#dates`, `dashboard#card`) and 2 pages that document
+       `data-table` behaviour with no stylesheet of their own
+       (`inline-editing`, `table-toolbar`) — none of which has a CSS header to
+       carry metadata, which is why they stay written down.
+
+       **A pre-existing blind spot, found by a red-proof that came back
+       green.** `check-page-shape`'s sidebar arm lived inside a loop over
+       `src/css/components/*`, so `inline-editing` and `table-toolbar` — the
+       two pages with no CSS dir — were **never reachability-checked**.
+       Deleting the `inline-editing` entry (its mentions in the module went
+       1 -> 0, injection confirmed) left the gate GREEN. The arm now walks the
+       PAGES: 41 checked, and the same injection fails it naming the file.
+       Same shape as the `scan` skip that comment already records.
+
+       **Verified against what it RENDERS, not against the diff** (CLAUDE.md's
+       bulk-edit rule). Full `dist` before and after: **45 of ~3,000 files
+       differ — and 1 of 138 HTML pages.** That one is `index.html` (the
+       tiles, the only intended visible change). The other 44: `llms.txt`
+       (new `tagline:`/`category:` lines), `build-id.json` (a per-build
+       stamp), and 42 unminified CSS files carrying the new header comment —
+       **comment-stripped via postcss, all 42 are byte-identical**, and no
+       `.min.css` changed at all. So the sidebar's 39 generated entries
+       reproduce the hand-written array exactly, on every page that renders
+       it.
+
+       That claim is not vacuous and the check is not dead, both measured:
+       a built page carries all **43** `/components/*` links server-rendered
+       (`grep -o 'href="/components/[a-z#-]*"' … | sort -u | wc -l` on
+       `dist/components/badge/index.html`), and changing **one** `@order`
+       (badge 40 -> 5, injection confirmed) makes **41 component pages**
+       differ against the same comparison that reports 0 for the real change.
+
+       **Red-proofs, each with the injection asserted before the red was
+       believed** — and the first harness was itself broken: `git checkout --`
+       restored the *committed* file, which has no header yet, so two "reds"
+       were red for the wrong reason. Redone against a real backup: @tagline
+       removed (1 -> 0, names the file); `@category "Displays"` (names the
+       file and lists the eight legal values); a 14-character tagline (names
+       the file and the count); skeleton/state declaring different `@label`
+       (names both dirs and the shared page); `@category` dropped from tabs.
+
+       **The Accept's first clause was EXECUTED, not asserted.** `npm run
+       new:component -- probe-widget --group=… --tagline=…` touched no shared
+       file (`grep -c probe-widget Gallery.astro index.astro` -> 0, 0); after
+       a rebuild the probe appeared in the built sidebar of an unrelated page,
+       in `llms.txt` with its tagline and category, and — once given a
+       category under the 5-name tile cap — in the built homepage tile
+       (`Button · Dropdown · Segmented control · Probe widget`). The probe was
+       then deleted. Two notes worth keeping: a scaffolded stub still cannot
+       complete a full `docs:build` until its page has a wrong-choice clause
+       and a DSA score, which is **pre-existing content-gate behaviour, not
+       registration**, and no score was fabricated to get past it; and the
+       scaffolder's own default label ("Probe Widget") disagreed with the
+       extractor's ("Probe widget"), so it stamped a redundant `@label` — two
+       derivations of one default, fixed to one.
+
+       **Not verified, named rather than implied:** cloud wake, so the
+       1440/390 light-and-dark screenshot lane could not run. 137 of 138 HTML
+       pages are byte-identical so nothing there can have moved; for
+       `index.html`, the tile cards were measured live in headless Chrome at
+       both widths — 6 cards, grid height **281 -> 281** at 1440 and **854 ->
+       854** at 390, with two individual cards swapping which is the short one
+       (Actions lost "Combobox", Navigation gained names). **A "zero prose
+       overflow" reading from that same probe is discarded as a dead
+       detector**: a `<p>` shrink-wraps, so 400 unbreakable characters
+       (injection confirmed at 400) still read **0**, and it only reached 263
+       when the element was artificially clamped. Overflow is covered instead
+       by `check:layout` (127 pages at 390 and 150% zoom) and `check:scroll`
+       (912 containers x 2 widths), both green. All **17** CI entry points,
+       re-derived from `ci.yml`, ran green in this container.
 
 9. [ ] **249.9 — Visual component catalogue.** Depends on 249.8 (tagline) and
        249.3 (maturity labels). `/components/` index: one card per component

@@ -1,3 +1,6 @@
+/* @tagline The path trail through a deep ERP hierarchy, wrapping rather than truncating.
+   @category Navigation & layout
+   @order 30 */
 @layer bo-components {
   /* Path trail for deep ERP hierarchies (cost center -> PO -> line item).
      <nav aria-label="Breadcrumb"><ol class="bo-breadcrumb">…</ol></nav> —

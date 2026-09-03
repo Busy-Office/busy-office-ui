@@ -1,3 +1,7 @@
+/* @tagline An edge sheet built on the dialog wiring, for navigation and secondary panels.
+   @category Navigation & layout
+   @label Drawers
+   @order 40 */
 @layer bo-components {
   /* Off-canvas panel: a native <dialog> styled as an edge sheet. Opens with
      the SAME wiring as any dialog ([data-dialog-trigger] + initDialogs()),

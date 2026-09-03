@@ -1,3 +1,6 @@
+/* @tagline The application's top bar — brand, primary links and account actions.
+   @category Navigation & layout
+   @order 10 */
 @layer bo-components {
   .bo-navbar {
     display: flex;

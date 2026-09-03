@@ -1,3 +1,7 @@
+/* @tagline A toggle between a handful of mutually exclusive views, built on real radio inputs.
+   @category Actions
+   @label Segmented control
+   @order 30 */
 @layer bo-components {
   /* A toggle between a handful of mutually-exclusive views (My approvals vs
      Team approvals, compact vs comfortable) — the button-group alternative

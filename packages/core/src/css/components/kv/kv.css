@@ -1,3 +1,7 @@
+/* @tagline Key-value facts for a record header, as a native description list.
+   @category Values
+   @label Key-value facts
+   @order 20 */
 @layer bo-components {
   /* Key-value facts — the record-header staple (Vendor · Cost center ·
      Terms · Total). A native <dl> with <div> pair wrappers: one

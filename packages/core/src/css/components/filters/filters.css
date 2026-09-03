@@ -1,3 +1,6 @@
+/* @tagline The filter bar above a table or list, with chips showing what is applied.
+   @category Data input
+   @order 30 */
 @layer bo-components {
   /* Filter bar above tables/lists; chips show applied filters. */
   .bo-filter-bar {
