@@ -1,0 +1,5 @@
+{
+  "gates": "51 build gates, 18 of them heuristic detectors that each ship a `--self-test`",
+  "notfor": "A charting engine · A rich-text editing engine · A virtualised table · A JS component framework · Kanban boards, page builders, WYSIWYG layout · Icons as a shipped set · State management, routing, i18n runtime",
+  "faq": "11 symptom→cause entries, plus “My markup looks right but nothing happens” and “Using with Tailwind or an existing reset”"
+}

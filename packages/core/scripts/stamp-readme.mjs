@@ -53,6 +53,15 @@ const stats = {
      hand-written value had Firefox three versions too high and Safari a point
      release too high, costing reach for nothing. */
   floor: JSON.parse(readFileSync(new URL('../dist/floor.json', import.meta.url), 'utf8')).label,
+  /* Three facts about the REPO rather than the shipped bytes, so they cannot
+     come from dist/: the gate count, the not-in-scope list, and what the
+     troubleshooting page answers. `derive-readme-facts.mjs` owns deriving them
+     and runs immediately before this script in `build`; this file only stamps.
+     The record is read from src/, not dist/, deliberately — it is repo
+     provenance and has no business in the npm tarball (`files` ships dist only),
+     and src/ IS present in every context that runs this script, including the
+     packages-only consumer image. */
+  ...JSON.parse(readFileSync(new URL('../src/data/readme-facts.json', import.meta.url), 'utf8')),
 };
 
 // Tolerance band, kB: covers observed zlib/zlib-ng cross-build drift (a
@@ -110,7 +119,12 @@ for (const { path, requireAll } of readmePaths) {
 }
 if (check) {
   if (drifted) process.exit(1);
-  console.log('readme claims check passed — size/behaviors/events match dist (both READMEs)');
+  /* Name the stats from the object, never from a typed list: this line said
+     "size/behaviors/events" while five stats were being checked, and would have
+     gone on saying it as more were added (roadmap 249.4). */
+  console.log(
+    `readme claims check passed — ${Object.keys(stats).join('/')} match their sources (both READMEs)`,
+  );
 } else {
   console.log('claims:', JSON.stringify(stats.size), `· ${stats.behaviors} behaviors · ${events.size} events`);
 }

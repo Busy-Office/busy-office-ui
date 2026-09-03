@@ -70,6 +70,31 @@ audit trails · wizard stepper · print/report layer.
 
 Browser floor: **<!-- stat:floor -->Chrome/Edge 119 · Firefox 129 · Safari 17.5<!-- /stat -->**.
 
+## What it is not
+
+Deliberately not shipped — each refusal is recorded with its reasoning on the
+[scope page](https://busy-office.github.io/busy-office-ui/getting-started/scope),
+and a real adopter requirement reopens any of them:
+
+<!-- stat:notfor -->A charting engine · A rich-text editing engine · A virtualised table · A JS component framework · Kanban boards, page builders, WYSIWYG layout · Icons as a shipped set · State management, routing, i18n runtime<!-- /stat -->
+
+## When something doesn't work
+
+This framework's failure modes are unusually *silent* — modern CSS degrades by
+doing nothing rather than by erroring. [Troubleshooting](https://busy-office.github.io/busy-office-ui/getting-started/troubleshooting)
+is symptom → cause: <!-- stat:faq -->11 symptom→cause entries, plus “My markup looks right but nothing happens” and “Using with Tailwind or an existing reset”<!-- /stat -->.
+
+Run `npx bo-check-markup dist` over your built HTML to catch the most common
+cause — a `bo-*` class or a framework `data-*` value that does not exist. Both
+fail silently.
+
+## How it's kept honest
+
+Every claim on this page is generated from the shipped artifact or the repo, and
+the build runs <!-- stat:gates -->51 build gates, 18 of them heuristic detectors that each ship a `--self-test`<!-- /stat -->.
+Contrast, named container queries, two-channel state signals, print behaviour and
+the browser floor are all gated rather than aspirational.
+
 ## Links
 
 - [Documentation & component gallery](https://busy-office.github.io/busy-office-ui/)

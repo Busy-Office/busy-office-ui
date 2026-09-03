@@ -1004,15 +1004,99 @@ claimed.
          **17** CI entry points, re-derived from `ci.yml`, ran green here, plus
          a `DOCS_BASE=/busy-office-ui` build (both new links carry the prefix).
 
-4. [ ] **249.4 — README: stamped gate count, one screenshot, who-for/not-for,
-       FAQ.** `stamp-readme.mjs` gains a gate-count marker (count of
-       `check-*.mjs` carrying `--self-test`); one hand-made screenshot
-       (`patterns/list-report` at `data-density="compact"`, labelled as
-       hand-made in alt text); the existing two "Not for" clauses from
-       `scope.astro` as a for/not-for line; the five `troubleshooting.astro`
-       headings as a linked FAQ.
-       - **Accept:** `stamp-readme --check` still exits 0; both READMEs carry
-         ≥1 image.
+4. [x] **249.4 — README: stamped gate count, who-for/not-for, FAQ.**
+       *(The screenshot half is split out as 249.16 — see below.)*
+       `derive-readme-facts.mjs` derives three repo facts into the committed
+       record `packages/core/src/data/readme-facts.json`, and
+       `stamp-readme.mjs` stamps them into both READMEs as `stat:gates`,
+       `stat:notfor` and `stat:faq`.
+
+       **TWO of this item's three source premises were false, and were measured
+       before anything was built on them.**
+
+       *Worth naming, because this slice's own header says every citation a
+       verdict depended on was re-run against the live tree:* what that sweep
+       covered on this item was the **README side** — "README's 0 images/0 FAQ",
+       which reproduces exactly. The three counts the item's *mechanism* rested
+       on are on the **source side** (`scope.astro`, `troubleshooting.astro`,
+       the gate files), and none of them was in that list. Two were wrong. A
+       re-check of the evidence for *whether* to build something does not cover
+       the figures describing *what to build*, and the header reads as though it
+       did.
+
+       Commands, so the next wake re-runs rather than re-derives:
+
+       ```
+       ALL=$(find . -name 'check-*.mjs' -not -path './node_modules/*' -not -path '*/dist/*')
+       grep -l -- '--self-test' $ALL | wc -l                              # 48
+       grep -lE "argv.*includes\(['\"]--self-test" $ALL | wc -l           # 18
+       grep -c 'Not for' apps/docs/src/pages/getting-started/scope.astro  # 0
+       grep -cE '<h[1-6][ >]' apps/docs/src/pages/getting-started/troubleshooting.astro  # 3
+       ```
+
+       - **"count of `check-*.mjs` carrying `--self-test`" is the detector
+         CLAUDE.md already records as unable to fail.** 48 gate files contain
+         the literal string; only **18** contain the `process.argv` branch that
+         runs one — because the tag text itself says *"Carries --self-test"*.
+         Stamping the stated predicate would have published **48**, or **49**
+         after any gate that merely mentions it. So nothing here re-counts:
+         `check-selftests.mjs` now exports `scanGates()` and the deriver imports
+         it, because a second regex over the same tree is a copy of a known trap.
+         The published figure is **51 gates, 18 heuristic**.
+       - **"the existing two 'Not for' clauses from `scope.astro`"** — `grep -c
+         'Not for'` on that page returns **0**. It carries an `In scope` list of
+         5 and a `Not in scope — decided, not forgotten` table of **7**; neither
+         is spelled "Not for". The 7 table subjects are what shipped.
+       - **"the five `troubleshooting.astro` headings"** — that page has **3**
+         headings (2 `<h2>`, 1 `<h3>`), and its substance is an **11-row symptom
+         table carrying no heading at all**. Shipped as the 11 entries plus the
+         two `<h2>` questions.
+
+         Two things measured against the BUILT page rather than assumed, with
+         one command —
+         `grep -oE '<h[123][^>]*>[^<]{0,70}' apps/docs/dist/getting-started/troubleshooting/index.html`:
+         the built page carries **3** `<h2>`, the third being `Related`, the
+         layout's own footer heading. So the deriver reads the SOURCE page, not
+         the built one — parsing the built page would have counted layout chrome
+         as an authored question, which is the failure CLAUDE.md's instrument
+         section records. And **no heading carries an `id`**: raw `<h2>` in a
+         `.astro` file gets no auto-slug, so the README links to the page, not
+         to an anchor. Add ids first if a deep link is ever wanted.
+
+       **Context safety, the trap `check:rtl` already paid for.**
+       `stamp-readme --check` runs inside `npm run build -w @busy-office/ui`,
+       which builds in contexts that copy only `packages/` (the po-app consumer
+       image). So the deriver refuses to re-derive when an input is absent: it
+       names each missing input on stderr, says the record was NOT rewritten and
+       NOT verified there, leaves the record untouched, and exits 0. Verified by
+       building a real packages-only tree and running both modes in it. The
+       record lives in `src/data/`, not `dist/` — `files` ships `dist` only, so
+       the tarball stayed at **183 files**.
+
+       - **Accept (property, not prediction):** `npm run check:readme-facts`
+         agrees with the repo and `stamp-readme --check` agrees with the record,
+         both wired into `build`; each derived fact is red-proved by injection
+         with the injection confirmed to have landed.
+       - **Red-proofs, all with the injection verified before the verdict was
+         believed:** (a) a row added to `scope.astro`'s table → `--check` red
+         naming `notfor`; (b) a real gate file added → 51 → 52, `--check` red
+         naming `gates`; (c) **the discrimination proof** — a prose mention of
+         `--self-test` added to a gate that lacked the string, confirmed to move
+         the literal count **48 → 49** while the argv count stayed 18 and the
+         derived fact did **not** move; (d) a heuristic gate stripped of its
+         argv branch → the deriver refuses to stamp at all rather than publish a
+         count for a tree failing its own meta-gate; (e) each of the three
+         markers corrupted in turn in both READMEs → `stamp-readme --check`
+         rc=1; (f) a marker deleted → `requireAll` throws.
+       - **Also fixed, found while doing it:** `stamp-readme`'s success line
+         hard-coded *"size/behaviors/events"* while checking five stats. It now
+         names them from the object.
+       - **Not verified, named rather than implied:** this was a cloud wake, so
+         the 1440/390 light-and-dark screenshot lane could not run. **No CSS,
+         no docs page and no rendered surface changed** — the diff is two
+         scripts, one JSON record, `package.json` and two markdown READMEs — so
+         there is nothing here a screenshot could have shown. The docs gates
+         were run across the tree anyway and are reported with the commit.
 
 5. [ ] **249.5 — Install commands for pnpm/yarn/bun, or a recorded refusal.**
        `getting-started/installation.astro` shows npm only today. Add the
@@ -1154,6 +1238,19 @@ box (2026-09-03, cloud wake):**
           the tag from one built page and by pointing `og:image` at a path that
           is not there. Whether the card LOOKS right is the part that needs the
           local wake's eyes.
+
+16. [ ] **249.16 — the one hand-made README screenshot, split out of 249.4.**
+        One screenshot of `patterns/list-report` at `data-density="compact"`,
+        labelled as hand-made in alt text, in both READMEs. **browser-blocked
+        in the screenshot sense** (`ENVIRONMENT.md`'s first list, `LOOPS.md`
+        rule 4's vocabulary): its evidence is a rendered image a human
+        compares, and a cloud wake must not take it. Split from 249.4 on
+        2026-09-03 because the other three halves are plain derivation and were
+        being held behind it.
+        - **Accept:** both READMEs carry ≥1 image; the referenced file exists in
+          the repo and, for the package README, inside the published tarball
+          (`npm view @busy-office/ui` is the authority on what shipped, not
+          `npm pack` — roadmap 185); `stamp-readme --check` still exits 0.
 
 **Refused, recorded as DA (not re-litigated here — see the triage file for
 each item's reasoning):** publish-on-every-push/auto-bump, a `registry.ts`

@@ -65,7 +65,7 @@
     "check:rtl": "node scripts/check-rtl.mjs",
     "check:motion": "node scripts/check-motion.mjs",
     "build:js": "tsc -p tsconfig.json",
-    "build": "node scripts/generate-scales.mjs --check && npm run lint:css && npm run build:css && npm run build:js && npm run build:api && npm run build:behaviors && npm run build:events && npm run build:keymap && npm run check:contrast && npm run check:composited && npm run check:rtl && npm run check:motion && npm run check:sticky-layers && npm run build:acr && npm run build:floor && npm run build:introduced && npm run build:rf-essentials && npm run check:rf-floor && npm run check:token-refs && npm run check:size && node scripts/stamp-readme.mjs --check && npm run check:package",
+    "build": "node scripts/generate-scales.mjs --check && npm run lint:css && npm run build:css && npm run build:js && npm run build:api && npm run build:behaviors && npm run build:events && npm run build:keymap && npm run check:contrast && npm run check:composited && npm run check:rtl && npm run check:motion && npm run check:sticky-layers && npm run build:acr && npm run build:floor && npm run build:introduced && npm run build:rf-essentials && npm run check:rf-floor && npm run check:token-refs && npm run check:size && npm run check:readme-facts && node scripts/stamp-readme.mjs --check && npm run check:package",
     "lint:css": "stylelint \"src/css/**/*.css\"",
     "new:component": "node scripts/new-component.mjs",
     "pretest": "npm run build:js",
@@ -85,7 +85,9 @@
     "check:sticky-layers": "node scripts/check-sticky-layers.mjs",
     "report:css-repeats": "node scripts/report-css-repeats.mjs",
     "check:token-refs": "node scripts/check-token-refs.mjs",
-    "check:size": "node scripts/check-size.mjs"
+    "check:size": "node scripts/check-size.mjs",
+    "build:readme-facts": "node scripts/derive-readme-facts.mjs",
+    "check:readme-facts": "node scripts/derive-readme-facts.mjs --check"
   },
   "browserslist": [
     "chrome >= 119",

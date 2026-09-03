@@ -50,6 +50,20 @@ approval timelines · audit trails · wizard stepper · print/report layer.
 
 Browser floor: **<!-- stat:floor -->Chrome/Edge 119 · Firefox 129 · Safari 17.5<!-- /stat -->**.
 
+## What it is not
+
+Deliberately not shipped, each with its reasoning recorded on the
+[scope page](https://busy-office.github.io/busy-office-ui/getting-started/scope)
+— a "not in scope" list says the gap was decided, not forgotten:
+
+<!-- stat:notfor -->A charting engine · A rich-text editing engine · A virtualised table · A JS component framework · Kanban boards, page builders, WYSIWYG layout · Icons as a shipped set · State management, routing, i18n runtime<!-- /stat -->
+
+## When something doesn't work
+
+Failure modes here are unusually *silent* — modern CSS degrades by doing nothing
+rather than by erroring. [Troubleshooting](https://busy-office.github.io/busy-office-ui/getting-started/troubleshooting)
+is symptom → cause: <!-- stat:faq -->11 symptom→cause entries, plus “My markup looks right but nothing happens” and “Using with Tailwind or an existing reset”<!-- /stat -->.
+
 ## Docs
 
 **Live site:** https://busy-office.github.io/busy-office-ui/ — component gallery
@@ -63,6 +77,10 @@ Every slice was reviewed by an adversarial multi-seat panel before sign-off —
 findings, gates, and fix outcomes are in [`.roundtable/`](.roundtable/). Two rules
 that came out of it are build-enforced: every `@container` query is named, and every
 state signal ships both a visible non-color cue and a programmatic channel.
+
+The build runs <!-- stat:gates -->51 build gates, 18 of them heuristic detectors that each ship a `--self-test`<!-- /stat -->.
+A heuristic gate is one whose verdict rests on *recognising* something, so it can
+be fooled — each of those must prove it can fail before it is trusted.
 
 ## Project docs
 
