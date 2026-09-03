@@ -32441,3 +32441,1928 @@ correction. No finding against it.
        scripts, one shared helper, `package.json` and this file — so nothing in
        it rests on a rendered image. The browser-driven readings quoted come
        from gates executing in this container.
+## Slice 251 — 247.1 built: every live `file:line` citation into a rewritten/regenerated file is already self-documenting, and the one actual defect was in the handover file's own drift, not the roadmap's
+
+**Dispatcher trace.** Rule 1: no open P0 — `gh issue list` returns empty. Rule
+2: Standardize `3/4`, not yet due. Rule 3: Objective `0/3`, just fired.
+**Rule 4 dispatched Continue, build mode** on the oldest still-open item that
+is not owner/hardware-blocked — Slice 15's AT evidence and 112.3/112.4 are
+all owner-blocked (unchanged for many wakes); `247.1` is next.
+
+**Re-ran 247.1's own measurement command on the current tree** (17 → 33
+matches now, since Slices 249/250 added their own file:line citations in the
+interim — expected growth, not drift):
+
+```
+grep -oE '`?[A-Za-z0-9_.-]+\.(md|mjs|py|css|json|astro|ts):[0-9]+' ROADMAP.md .roundtable/RESUME.md
+```
+
+**Every `STATUS.md:NN` and self-referential `ROADMAP.md:NN` citation
+remaining in `ROADMAP.md` was already in the durable idiom before this item
+was dispatched** — checked each of the ~14 occurrences individually rather
+than trusting the count. Every one is prose *about* a citation having drifted
+(e.g. Slice 247's own text: *"`STATUS.md:45` today holds an unrelated `Meta ·
+refusal` row; 244.3's row is at `STATUS.md:38`"*), not a naked claim that the
+line currently holds something. That framing IS the durable idiom 247.1 asks
+for — a citation that survives its own staleness by saying so. Nothing to fix
+there; recorded as a satisfying outcome per the item's own fourth Accept
+bullet.
+
+**The one live, uncaveated citation that had actually drifted was in
+`RESUME.md`, not `ROADMAP.md`** — `RESUME.md:73`'s `ROADMAP.md:351 (Slice
+247)` no longer resolves: line 351 now falls inside Slice 249 (this session's
+own triage), and Slice 247's heading is at line 599. The slice-number pairing
+already present (`(Slice 247)`) meant a reader wasn't actually lost — but the
+raw number was wrong on its face, and `RESUME.md` is exactly the file Step 0
+reads first every wake. Fixed by writing a fresh `RESUME.md` (its own
+standing practice — rewritten wholesale at every hand-off) that carries no
+raw `ROADMAP.md:NN` pointers at all, only slice numbers, closing the class of
+defect rather than patching the one instance.
+
+**Base rate on the current tree, reported as 247.1's Accept requires:** 0 of
+the live `STATUS.md`/self-`ROADMAP.md` citations in `ROADMAP.md` fail today;
+1 of 1 in `RESUME.md` failed and is fixed. `ROADMAP-archive.md` and
+`.roundtable/grill-*.md` remain out of scope by construction, unchanged from
+247.1's own reasoning.
+
+1. [x] **247.1 — DONE.** No blanket gate built — refused again on the same
+       base rate 247.1 itself predicted (the live population is small and
+       already correctly framed); a gate over "does a citation drift" would
+       be checking prose content, the semantic-wall shape this repo's own
+       94.11 refuses. `RESUME.md` no longer carries a raw `ROADMAP.md:NN`
+       pointer as of this commit.
+
+## Slice 250 — Objective grill of Slices 244, 245, 248: 28 of 28 claims reproduce, both red-proofs executed live, and the append-only citation-stability property survived an intervening rebase it could not have anticipated (2026-09-03)
+
+Dispatched by rule 3, OVERDUE at 3/3 `[244, 245, 248]`. Full report:
+`.roundtable/grill-objective-244-245-248-2026-09-03.md`.
+
+Both of 244.4's red-proofs (Slice 246) were executed live, not read off the
+write-up: injecting the removed walker body into
+`packages/core/scripts/check-sticky-layers.mjs` flips `check:src-css-walkers`
+to `exit 1`; injecting `readdir(join(DIST,'patterns'))` into
+`apps/docs/scripts/copy-suite.mjs` **at the exact cited line, 113**, flips
+`check:dist-walkers` to `exit 1`. Both reverted clean. 245.1's citation
+stability claim (`loop-log.md:1305`/`:1279`) was independently re-confirmed
+after this session's own unrelated rebase — a stronger check than a
+same-session re-read, since neither 245.1's nor 247.1's author could have
+anticipated it. Slice 248 (my own work, self-grilled since nobody else had)
+checked out: 40 components, 40 synthesis-table rows, no discrepancy.
+
+One process note from mid-grill: the first red-proof injection targeted the
+wrong file (a stray `cd` earlier in the session left the shell inside
+`apps/docs`, silently doubling a path that looked repo-root-relative).
+`git status` caught it before it was believed — recorded as a small addition
+to this repo's own red-proof discipline: an untracked file that already
+contains what you were about to inject is not a coincidence.
+
+**No new item filed.** Nothing to re-prioritize; Slice 249 (filed the same
+day) stands as triaged and untouched by this grill, since nothing in it has
+been built yet to red-prove.
+
+## Slice 248 — Component-by-component design-grill: 40 of 40 covered, 1 real defect fixed, one instrument caught lying to itself (2026-09-02)
+
+Live visual grill (`design-grill` skill, `chrome-devtools-mcp`) applied to every
+component docs page — 6 batches of forks, findings in
+`.roundtable/design-grill-components-batch{1..6}-2026-08-31.md` and
+`.roundtable/design-grill-components-SYNTHESIS-2026-08-31.md`.
+
+**Result: removal-first/less-for-more holds.** Zero components needed a
+`remove` or forced `reword` verdict; every wrong-choice clause checked out as
+real and testable. The defects found were documentation/measurement mismatches,
+not design-restraint failures.
+
+1. **Fixed — Date's deprecation notice didn't reflow at 390px.** Three sibling
+   `<p>` elements sat as direct children of `.bo-alert` (`display: flex`,
+   default `flex-direction: row`), so each became its own flex item instead of
+   stacking — every other multi-paragraph `.bo-alert` on the site wraps its
+   content in one child `<div>` first. Fixed in
+   `apps/docs/src/pages/components/date.astro` by wrapping the three
+   paragraphs in a `<div>`, matching the established pattern (see
+   `apps/docs/src/pages/patterns/notification.astro`). Verified live at true
+   390px: paragraph widths went from 168px/134px/99px (side by side) to
+   307px/307px/307px (stacked).
+   - **Accept:** `getComputedStyle` on each `<p>` inside Date's deprecation
+     `.bo-alert` reports a width matching the alert's content width (within
+     rounding), at a true 390px viewport.
+
+2. **Refuted — Key-value facts' "single stack at phone width" claim.** Batch 5
+   reported `kv.css:8`'s `minmax(11rem,1fr)` grid rendering 2 columns at
+   390px, contradicting the docs claim. Red-proved before fixing anything (this
+   file's own rule: *a red-proof that comes back green is a defect in the
+   injection until proven otherwise* — the same discipline applies to a
+   red result the other way): re-measured live with a verified true 390px
+   viewport (`window.innerWidth === 390`, confirmed by screenshot) and the
+   grid renders exactly 1 column, 308px wide, matching the docs claim.
+   Batch 5's `emulate({viewport: …})` call did not actually reach 390px
+   despite believing it had fixed the earlier `resize_page` 500px floor bug —
+   an instrument's first output (and its second) is not evidence. No code or
+   docs change made; this closes as no-defect.
+
+3. **Fixed — Amount/Money/Quantity's "rule for this family" note is a
+   verbatim 3-way duplicate with nothing keeping it in sync.** By design (a
+   shared routing rule across the numeric-value family), not a bug — but
+   batch 4 refuted the duplication by comparing against the wrong paragraph on
+   Amount's page, and batch 5 caught the correction. Added a matching HTML
+   comment above the paragraph in all three of `amount.astro`, `money.astro`,
+   `quantity.astro` naming the other two files to update together.
+
+4. **Fixed — `report-reach.mjs`'s `bo-ordered-list` verdict was stale.** It
+   read "NOT EXAMINED" because the component's docs page carried no
+   wrong-choice clause at the time that verdict was written; the page now has
+   one ("Not once each item needs more than one attribute…", correct on
+   inspection). Updated the verdict entry in
+   `apps/docs/scripts/report-reach.mjs` to `correct at one`, closing the open
+   item rather than leaving a stale claim in a script that runs every build.
+
+5. **Fixed (2026-09-02) — Scan feedback's demo placeholder text clipped at
+   390px with no visual affordance.** Shortening the placeholder string was
+   rejected: `Try 4006381333931, then REJECT-1` is the only reader-facing
+   hint to exercise the error path, and dropping it loses content the demo
+   needs, not just characters. Fixed at the framework level instead —
+   `.bo-input`/`.bo-quantity__input` in
+   `packages/core/src/css/components/form/input.css` now carries
+   `overflow: hidden; white-space: nowrap; text-overflow: ellipsis`, general
+   to every input rather than a one-off on Scan's demo, per this file's own
+   less-for-more test. `textarea.bo-input` explicitly resets it back to
+   wrapping — verified live (`white-space: pre-wrap` on a real textarea after
+   the change) so multi-line controls weren't silently broken. CHANGELOG
+   entry added under Unreleased.
+   - **Accept:** `getComputedStyle` on the Scan demo's input reports
+     `text-overflow: ellipsis`, `white-space: nowrap` at a verified true
+     390px viewport; `getComputedStyle` on a `textarea.bo-input` reports
+     `white-space: pre-wrap` (unchanged).
+
+## Slice 247 — 245.1 built: both of 244.3's counts corrected against a named revision, and upholding the "leave the log row alone" bullet found that bullet's OWN citation pointing at the wrong row (2026-09-02)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0 — the four open items were
+`245.1`, `112.3`, `112.4` and Slice 15's AT evidence, none a bug; GitHub intake
+`list_issues` OPEN -> `totalCount: 0`, so Step 1 had nothing to triage and no
+`Roadmap · plan` row was recorded. Rule 2: `Standardize 1 / 4 ok`. Rule 3:
+`Objective 1 / 3 ok [244]`. Rule 5: `0 wake-date(s) newer`, newest pair
+`axe-violations` — evaluable, not stale, and clear. **Rule 4 dispatched
+Continue, build mode** on the oldest still-open item that is not owner-blocked,
+`245.1`; the three older ones are owner- and owner-hardware-blocked, unchanged
+for fifteen wakes.
+
+**What landed.** Both sites in 244.3 now state a figure with the revision it was
+read at, the command that prints it, and the noun it counts. The item's premise
+reproduced exactly at every revision it named, and the fourth Accept bullet — a
+third reading rescuing one of the numbers — was **tested by command and came
+back negative**, which is recorded rather than left implied.
+
+**The finding came out of the Accept bullet that asked for the least.** Bullet
+three said only to leave `loop-log.md:1305` and its `STATUS.md:45` mirror
+unedited and record why. Going to read them first, as this repo's rule requires
+before asserting anything about a line, showed `STATUS.md:45` holding an
+unrelated row — and 245.1's own two citations 237 lines from where it filed
+them, one wake later. Filed as `247.1` with the full 17-citation measurement.
+
+**This wake did NOT run the archive sweep, and says so rather than leaving it
+implied.** `roadmap_scope.py` reads closed-history share **50.9%** with nine
+eligible targets, and 236.2's dependency report flags Slice **244** as named by
+an open item — which was `245.1`, the item this wake was dispatched to build,
+and it needed to amend 244.3's text. Moving Slice 244 first would have archived
+the very lines the dispatch existed to correct. The sweep is left for the next
+wake, which is the first one where 244 is safe to move.
+
+1. [x] **247.1 — DONE, Slice 251.** `ROADMAP.md` cites by two idioms. The gated one (slice number)
+       resolves every citation it has. The ungated one (`file:line`) holds 8 of 8
+       into source files and **3 of 8** into markdown — and every one of those
+       five failures targets a file that is rewritten or regenerated.**
+
+       Found while upholding 245.1's third Accept bullet, not by going looking:
+       the bullet's own `STATUS.md:45` pointed at the wrong row, and 245.1's own
+       two citations had moved 237 lines in one wake.
+
+       **The measurement.** All 17 `file:line` citations in `ROADMAP.md`, each
+       re-read AT the line:
+
+       ```
+       grep -oE '`?[A-Za-z0-9_.-]+\.(md|mjs|py|css|json|astro|ts):[0-9]+' ROADMAP.md
+       ```
+
+       | target class | instances | resolve | note |
+       |---|---|---|---|
+       | source files (`.css` `.mjs` `.astro`) | 9 | **8** | `badge.css:42` ×3, `select.css:12`, `check-selftests.mjs:51-52,90`, `button.astro:107-110`, `check-contrast.mjs:135`, `build-component-css.mjs:98` all read exactly as cited |
+       | `loop-log.md` (append-only) | 3 | **3** | `:1305` = 244.3's row, `:1279` ×2 = 237.2's row |
+       | `STATUS.md` (regenerated, rolling 10) | 3 | **0** | `:45` is an unrelated row; `:43`'s target has left the file — `grep -c '237.2' STATUS.md` → 0 |
+       | `ROADMAP.md` (grows above the cite) | 2 | **0** | `:436`/`:446` → `:673`/`:685` in one wake |
+
+       The ninth source citation, `check-sticky-layers.mjs:43`, names a **reverted
+       injection point**, so it has no standing target and is excluded from the
+       denominator rather than scored as a failure — 8 of 8 verifiable, 11 of 16
+       overall.
+
+       **The split is mechanical, not a judgement**: a `file:line` citation
+       survives iff its target is append-only or line-stable source. It cannot
+       survive into a file that grows above the cited line or is regenerated as a
+       rolling window. `check:slice-refs` already validates the durable idiom:
+       **704 citations / 228 slice numbers** at `c31799a3`, the tree this was
+       measured on, and **705 / 229** once this slice's own heading landed. Both
+       readings are the gate's own output, and it reports the count on every run
+       — read it there rather than from this line.
+
+       **A blanket gate is refused in advance, on base rate.** Across all tracked
+       markdown the same pattern hits **45** sites, and ~39 are inside
+       `ROADMAP-archive.md` and dated `.roundtable/grill-*.md` reports, where the
+       citation was true when written and the file exists to record a moment.
+       Gating those would force edits to frozen history to fix nothing — the
+       ceremony CLAUDE.md's base-rate rule names. The live subset a wake reads as
+       *current guidance* is **`ROADMAP.md` + `.roundtable/RESUME.md`, 6 sites**,
+       and 245.1 has already corrected 2 of them.
+
+       *Accept* — properties, not predicted values:
+
+       - Every `file:line` citation remaining in `ROADMAP.md` and
+         `.roundtable/RESUME.md` whose target is a rewritten or regenerated file
+         either states a figure that agrees with re-reading that line, or is
+         restated in the durable idiom. The three `STATUS.md:NN` sites are the
+         known population; re-run the grep rather than trusting that count.
+       - Whatever is built reports its own scope and **base rate on the current
+         tree**, so a later wake can see whether it distinguishes anything. If
+         the base rate after correction is 0 and the predicate is exact, say so;
+         if it can only be made to fire by forbidding a live idiom nobody uses,
+         that is a refusal and closes this item.
+       - `ROADMAP-archive.md` and `.roundtable/grill-*.md` are **out of scope by
+         construction**, with the 45-vs-6 measurement as the reason, not taste.
+       - Amending 238.1's two `STATUS.md:43` sites is permitted — 236.2 settled
+         that archived and closed text may be corrected — and leaving the
+         `loop-log.md` rows unedited is required, per `record_iteration.py`.
+       - Finding that the live population is already clean when this is
+         dispatched is a satisfying outcome: record the re-run and close it.
+
+## Slice 246 — 244.4 built: the src/css chokepoint gets its gate, and the design question it carried is answered by a count nobody had taken — there are FOUR chokepoints in this repo, one of them gated (2026-09-02)
+
+**Dispatcher trace, cloud wake.** Step 0: container started **DETACHED** and
+`origin/main` arrived as a forced update (`+ 17b3ba6...41abd4b`), both
+`ENVIRONMENT.md` traps 1 and 2 biting as usual; `git checkout -B main
+origin/main` before any commit existed, `--unshallow` clean in one attempt →
+**1,808** commits, `is-shallow-repository` → `false`. Rule 1: no open P0 —
+GitHub intake `list_issues` OPEN → `totalCount: 0`, no owner message, so Step 1
+had nothing to triage. Rule 2: Standardize `0 / 4`. Rule 3: Objective `0 / 3`.
+**Rule 4 dispatched Continue, build mode**, on the oldest still-open item it
+can take, which is `244.4`.
+
+**The item's own premise was re-checked first, and it is wrong in one of its two
+readings.** 244.4 states the predicate is *"true of every core script but one"*.
+That holds for one predicate and not for the one its FIRST criterion words.
+Both counts, over the 26 scripts in `packages/core/scripts`:
+
+```
+node <probe>   # both predicates over packages/core/scripts, comments blanked
+#   Reading A — "enumerates src/css itself" (criterion 1's wording):     7
+#     build-component-css, check-contrast, extract-acr, extract-api,
+#     extract-keymap, generate-scales, src-css-files
+#   Reading B — defines its own RECURSIVE .css walker (base-rate clause): 2
+#     generate-scales :: cssFiles, src-css-files :: srcCssFiles
+```
+
+Reading A is **six scripts besides the chokepoint**, not one. Four of them —
+`build-component-css`, `extract-api`, `extract-acr`, `extract-keymap` —
+enumerate `src/css/components` as a **directory structure**, one entry per
+component dir and then the files inside it, which a flat file stream cannot
+express; `srcCssFiles` is not what they should be calling. Gating reading A
+would mean exempting six of twenty-six scripts, which is exempting the tree
+rather than gating it. **The gate takes reading B**, the shape that actually
+drifted and actually regrew, and the gate's header carries both numbers so the
+next wake does not re-derive them.
+
+**The second criterion — "second gate or shared mechanism" — is answered by a
+count nobody had taken.** This repo has **four** walker chokepoints, not two:
+
+| chokepoint | tree | gated? |
+|---|---|---|
+| `dist-pages.mjs` | `apps/docs/dist` | yes, since 103.2 |
+| `src-css-files.mjs` | `packages/core/src/css` | **yes, this slice** |
+| `source-files.mjs` | the repo source tree | no |
+| `dist-css.mjs` | `packages/core/dist/css` | no |
+
+`source-files.mjs`'s own header is the evidence, and it states the gap outright:
+*"`dist-pages.mjs` already owns dist enumeration, and `check:dist-walkers`
+enforces that nothing re-rolls it. Source had no equivalent, so the first two
+scripts that needed one each hand-rolled a recursive walk."* So "a second gate
+by copying the first" was never the choice on offer — it is the second of four,
+and four hand-copied drivers is exactly the drift Slice 244 removed, re-created
+one layer up.
+
+**Answer: a shared DRIVER (`gate-source-scan.mjs`), one gate FILE per
+chokepoint.** Not a table-driven single gate, and the reason is a measured
+property of an existing gate rather than taste: `check-selftests.mjs` enforces
+`@heuristic`/`@exact` + a real `--self-test` per `check-*.mjs` **file**
+(`check-selftests.mjs:51-52,90` — it keys on filename and requires the
+`process.argv` branch). A table of rows inside one gate satisfies that meta-gate
+**once**, and would then accept a third and fourth predicate with no new
+obligation to prove either can fail — in a repo whose Slice 39.2 shipped four
+detectors in a row that could not fail. One file per chokepoint makes the
+meta-gate demand a self-test from every new predicate. Confirmed by the count
+moving: **47 → 48 gates, 17 heuristic (all self-tested)**, `+1` exactly.
+
+**The predicates cannot be shared, and that is red-proved rather than asserted.**
+`check-dist-walkers`' own `walksDist`, run against the exact body 244.2 removed
+from three core scripts (`git show 71a61679`):
+
+```
+walksDist(the removed src/css walker body)  = false
+walksDist(body + its call site)             = false
+walksDist("fs.readdirSync(join(DIST,'patterns'))")  = true   # control
+```
+
+The dist signal is *"a directory-listing call whose ARGUMENT names the tree"*.
+A recursive src/css walker names its tree only at the **call site** — the
+`readdir` inside it takes `dir`. **A retargeted copy of the dist gate would have
+been a detector that cannot fail on the drift it was written for**, which is the
+defect this repo's doctrine names most often. So only the plumbing is common;
+each chokepoint brings its own predicate and its own self-test.
+
+**Where it lives, and why not in `packages/core/scripts`.** It reads core's
+scripts as TEXT and does not import them. A gate wired into core's own build
+chain could not import `apps/docs/scripts` at all — `examples/po-app/Dockerfile`
+runs `npm run build -w @busy-office/ui` in a context holding `packages` and
+`apps/docs/package.json` **only**, which is exactly how `check:rtl`'s DESIGN.md
+assertion broke that image build. `check-selftests.mjs` is the precedent: a
+repo-wide gate in `apps/docs/scripts` that scans
+`['apps/docs/scripts', 'packages/core/scripts']` by source text via `REPO_ROOT`.
+Wired into `check:repo`, not into core's `build`.
+
+**Two red-proofs, each with the injection confirmed landed in the file the gate
+reads before the result was believed** — CLAUDE.md's rule that a green red-proof
+is a defect in the injection until proven otherwise:
+
+- Restored the removed `async function* cssFiles` into
+  `check-sticky-layers.mjs`. Injection confirmed at **line 43** by grep, then
+  `check:src-css-walkers` → **exit 1** naming the file. Reverted → exit 0,
+  grep count 0.
+- The rewired dist gate too, since its driver changed: appended
+  `readdir(join(DIST, 'patterns'))` to `copy-suite.mjs`, injection confirmed at
+  **line 113**, gate → **exit 1** naming the file. Reverted → exit 0.
+
+**What this buys is a RATCHET, not a discovery**, stated rather than implied:
+both gates are green on the tree they landed against, exactly as
+`check-dist-walkers.mjs` was on 2026-08-22 (`cdffe03a` changed no other script).
+The evidence that a ratchet is worth it is the measured twice-regrew history in
+that gate's header, plus the disagreement 244.2 found already present here.
+
+**The third option 245 recorded is neither chosen nor lost.** 244.3's general
+cross-file duplicate detector would have found the ORIGINAL drift — three
+identical copies — but **cannot catch regrowth**, because a duplicate detector
+needs n ≥ 2 and regrowth is the n = 1 case: `component-scores.mjs`'s single
+private `readdirSync(join(DIST,'patterns'))` (103.1) had no twin. The two are
+complementary lanes, not alternatives, and 244.4 asked for the chokepoint gate.
+The general detector stays where 245.1 put it — recorded inside `244.4` as a
+third answer rather than filed as a fourth roadmap entry — and closing `244.4`
+does not close it. It remains available to a future Standardize sweep.
+
+**Not verified, said plainly:** no Podman and no `localhost:8081` here, so the
+1440/390 light-and-dark screenshot lane could not run. This wake changed **no
+CSS, no page markup and no shipped artefact** — the diff is two new gate scripts,
+one rewired gate, `apps/docs/package.json` and markdown. `check:layout`
+(127 pages) and `test:axe` (127 × 2, zero violations) executed here regardless
+and are green.
+
+1. [x] **246.1 — the two flat `src/css` listings that COULD route through the
+       chokepoint, recorded as a finding rather than changed.** Of the seven
+       reading-A matches, two are flat single-directory `.css` listings that
+       `srcCssFiles` could serve: `check-contrast.mjs:135` (`src/css/brand`) and
+       `build-component-css.mjs:98` (the same directory). Neither is a drop-in —
+       both use the bare filename, while `srcCssFiles` yields full paths — and
+       routing them would change build output, which is the one thing this wake
+       cannot verify visually. Left alone deliberately; noted so the next
+       Standardize sweep has the call sites rather than re-deriving them.
+
+## Slice 245 — Objective grill of Slices 238, 241, 243, 244: twenty-nine of thirty-one published claims reproduce, and the two that do not are ONE item's two counts of one set — six and eight against a tree holding five before and seven after (2026-09-02)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0 — the four open items are
+`244.4`, `112.3`, `112.4` and Slice 15's AT evidence, none of them a bug; GitHub
+intake `list_issues` OPEN → `totalCount: 0`, so Step 1 had nothing to triage and
+no `Roadmap · plan` row was recorded. Rule 2: `Standardize 0 / 4 ok`. Rule 3:
+**`Objective 4 / 3 slices OVERDUE [238, 241, 243, 244]` — dispatched.** Rules
+4-8 were not reached. Full report:
+`.roundtable/grill-objective-238-241-243-244-2026-09-02.md`.
+
+**Scope narrowed before grilling, per §6 step 0.** Slice 238 IS the previous
+grill, so it is armed by new work rather than re-grilled: the only
+Continue/Standardize row naming it after that grill's own `Objective` row is
+**238.1** (`61074ca7`), the build closing the finding it filed. `.roundtable/INDEX.md`
+reads **169 files, 4 repeated subjects**, none in this range. **Dropped:** the
+four `Polish · reconcile` rows in the same window (stepper, tree-table 239,
+calendar 240, dashboard 242) — 161.4 excludes Polish from the counter and none
+of the three slices is in the armed set, so 239, 240 and 242 carry **no verdict
+from this grill**.
+
+**What reproduces — twenty-nine of thirty-one, each re-executed on an
+unshallowed clone (1,806 commits) rather than read.** Lane 1 `0 dead of 1,433`
+and lane 2 `74 / 242 / 230 / 8` are byte-exact, with the eight repeat groups
+compared to LOOPS.md's table **member-for-member by selector** including the x3
+list-reset group the sweep did not print, and the `x4` group still two
+components. Lane 3 reproduces at `118 of 127 · median 748 · total 105,963`, 9 +
+12 flags unioning to **14 distinct pages**, every one inside the sixteen
+verdicted by set membership against the archived lists. Lane 4's ratchet reads
+`CLAUDE.md 29 up · DESIGN.md 22 up · LOOPS.md 6 up, last cut 9198e43f`. 244.2's
+md5s are exact at the pre-change tree `f401c1e2` (`c091aeb7…` ×3, `a4ff6324…`),
+both generated files ship and contribute exactly **2 of 242** rules by a postcss
+count, and both of 244.4's premises hold. 243's arm-8 control reads **17 na, 0
+flagged**, Finding A **21 / 21**, Finding C's injection **0 → 1 flagged, rc 0 →
+1** with the import landing at `:64` and the real tree still 0; the name-match
+probe re-flags **the same nine**, splitting 5 + 4 exactly as the item says.
+241.2's `%23` count is **27** with line 54 a comment, the literals are unchanged
+since `4ef554fa`, `select.css`/`color.css` churn is **6 / 10**, and contrast
+recomputes to **4.83** light and **11.46** dark against a control matching
+`contrast.json` in both themes. 238.1's range holds **five** commits with
+`e29c7c18` at `1575 / 0`.
+
+**Not re-run, named rather than implied:** 241.1's four browser routes. They are
+`ENVIRONMENT.md`'s "can run" list, but re-driving four headless probes to
+re-confirm a refusal four independent measurements already agreed on was judged
+not worth the wake; 241.2's contrast figures — the numbers that decide whether
+that refusal is safe — were re-run instead and hold.
+
+1. [x] **245.1 — DONE 2026-09-02. 244.3 publishes TWO counts of one set, six
+       and eight, and neither is what the tree holds. The consolidation itself is
+       sound and is not reopened.**
+
+       In **244.3** — *"`_common.py` is the established shared module there,
+       imported by **six** other loop scripts"* and *"all **eight** other
+       `_common` consumers still import"*. Same set, two numbers, and they
+       disagree with each other before they disagree with the tree.
+
+       *(Both sites were filed as `ROADMAP.md:436` and `:446`. By the time this
+       item was dispatched — one wake later — they had moved to `:673` and
+       `:685`, because Slice 246's write-up landed above them. The citations are
+       restated by slice number above for that reason; the measurement is
+       `247.1`.)*
+
+       ```
+       for f in $(git ls-tree --name-only $rev scripts/loops/ | grep '\.py$' | grep -v '_common.py'); do
+         git show $rev:$f | grep -q "from _common import" && echo $f; done | wc -l
+       #   71a61679  (before 244.3)                      -> 5
+       #   1590bc2b  (after)                             -> 7
+       #   b0b70f96  (the tree the item was written on)  -> 7
+       ```
+
+       **Five before, seven after; "other than the two folded" is five.** The
+       published **six** is reachable only in the intermediate state — after the
+       first of the two was routed and before the second — which is a figure read
+       from the working tree mid-edit, the exact form `ENVIRONMENT.md`'s standing
+       trap names.
+
+       **The eight is a correct count of a different noun.** `scripts/loops`
+       holds ten `.py` files besides `_common.py`; minus the two this item
+       changed, **eight**. Three of those eight — `generate_roundtable_index.py`,
+       `polish_requeue.py`, `report_loop_prose.py` — do not import `_common` at
+       all, so they are not *"`_common` consumers"*. Counted right, labelled
+       wrong.
+
+       **The substance stands.** All **seven** real consumers import cleanly at
+       `ff28dfdb` (`python3 -c "import …"`, exit 0 each), and the item's four
+       byte-identical output comparisons and two discrimination red-proofs are
+       about `from_disk`/`from_rev`, not about how many callers exist. This is
+       238.1's shape — *the premise reproduces; what fails is the number quoted
+       to size it* — for the second consecutive grill.
+
+       *Accept* — properties, not predicted values:
+
+       - Both sites in `ROADMAP.md` state a figure that **agrees with what the
+         command above prints** at a named revision, and say which revision, so
+         the before/after ambiguity that produced the six cannot recur.
+       - The noun matches the set counted: whatever number is written is
+         labelled with what it counts, verified by re-running the command beside
+         it.
+       - The `loop-log.md:1305` row and its `STATUS.md:45` mirror are **left
+         unedited**, with the reason recorded where a reader of the correction
+         arrives — `record_iteration.py`'s standing rule, upheld by 238.1 for
+         this same class.
+       - Finding that a *third* reading makes one of the two numbers correct is
+         a satisfying outcome and closes this item, provided the reading is
+         produced by a command rather than argued.
+
+       **What was done.** Both sites in 244.3 now carry a figure with the
+       revision it was read at, the command that prints it, and the noun it
+       counts. The command reproduces the item's premise exactly — **5** at
+       `71a61679`, **7** at `1590bc2b`, `b0b70f96` and `c31799a3` — and the two
+       folded by 244.3 are `report_reopen_conditions.py` and `roadmap_scope.py`
+       (`git diff --name-only 71a61679 1590bc2b -- scripts/loops/`), so *"other
+       than the two folded"* is **five**.
+
+       **No third reading rescues either number, and this was measured before
+       being ruled out** (the fourth Accept bullet). Three widenings, each by
+       command at `HEAD`, all still read 5 before / 7 after:
+
+       ```
+       git grep -l -E '(from _common import|import _common)' $rev -- '*.py' | grep -v '_common.py' | wc -l
+       #  whole repo, any import syntax:  71a61679 -> 5   HEAD -> 7
+       git grep -l '_common' HEAD -- 'scripts/loops/*.py' | grep -v '_common.py' | wc -l
+       #  any MENTION at all, not just an import:          HEAD -> 7
+       ```
+
+       So the **six** is reachable at no revision under any reading — it is the
+       mid-edit working-tree figure the item diagnosed. The **eight** keeps its
+       diagnosis too: `scripts/loops` holds ten `.py` besides `_common.py`, minus
+       the two folded; the three non-importers are named at the corrected site.
+
+       **The log row and its mirror are left unedited, and the reason lands
+       here** — `record_iteration.py`'s standing rule is that historical rows are
+       never edited, so the figure stays immortal in `loop-log.md` and the
+       durable site carries the correction. That is 238.1's disposition for the
+       same class, applied unchanged.
+
+       **The mirror citation in the bullet above is itself wrong, found while
+       upholding it.** `STATUS.md:45` today holds an unrelated `Meta · refusal`
+       row; 244.3's row is at `STATUS.md:38`. `STATUS.md` renders a rolling *last
+       ten iterations*, so a cited row does not merely shift — it leaves the file
+       (`grep -c '237.2' STATUS.md` → **0**, against `238.1`'s `STATUS.md:43`).
+       `loop-log.md:1305` and `:1279`, into the append-only log, both still
+       resolve. Measured in full as `247.1`.
+
+## Slice 244 — Standardize sweep: all four standing lanes clean, and the finding came from the fifth thing the playbook names — `cssFiles` hand-copied four times, one of them already diverged (2026-09-02)
+
+Dispatcher rule 2, `dispatch_status.py` reading `Standardize 4 / 4 OVERDUE`.
+Rule 1 found no open P0 (the three open items are Slice 15's AT evidence and
+112.3/112.4, all owner-blocked) and GitHub intake is empty (`list_issues` OPEN →
+`totalCount: 0`), so nothing preempted it. Rule 3 is ALSO overdue (`3 / 3`,
+`[238, 241, 243]`) and waits one more wake: rule 2 sits above it in Step 2's
+stated order, which is 2026-08-18's decision.
+
+**Cloud wake: no Podman, no `localhost:8081`, no screenshots at 1440px/390px in
+light and dark.** Nothing in this slice renders — the diff is four build scripts,
+two loop scripts and this file. No CSS, no page markup, no shipped artefact
+changed, and every consumer's output is byte-identical before and after, which is
+a stronger statement than a screenshot would have been. `check:layout` (127
+pages) and `test:axe` (127 × 2, zero violations) swept everything anyway and are
+green. **No visual debt was added; nothing visual was looked at.**
+
+1. [x] **244.1 — the four standing lanes: all clean, and the delta is the
+       finding in each.** `n of 4` said explicitly, per the playbook's own
+       correction that four consecutive sweeps ran three.
+
+       ```
+       npm run scan:dead-style -w docs                 # lane 1 of 4
+       npm run report:css-repeats -w @busy-office/ui   # lane 2 of 4
+       npm run report:prose -w docs                    # lane 3 of 4
+       python3 scripts/loops/report_loop_prose.py      # lane 4 of 4
+       ```
+
+       - **Lane 1 — `scan:dead-style`: 0 dead on 0 pages, 1,433 live inline
+         declarations.** Against 166.1's 1,428 that is +5 live and the same
+         zero; 0 declarations dead on screen but live in print.
+       - **Lane 2 — `report:css-repeats`: zero delta in the GROUPS, which is
+         what the table's own rule asks for.** 74 files · **242** rules with 3+
+         declarations · **230** distinct · **8** repeated, against LOOPS.md's
+         recorded 74 / 237 / 225 / 8 (2026-08-28). Five new rules, all five
+         distinct, no new repeat and no existing group grown — the eight groups
+         were compared by their named selectors, not by the count, and match the
+         table one for one. The `x4` joined-control group is still **two
+         components** (money ×2, quantity ×2), so its stated reopen trigger — a
+         THIRD component — is unmet.
+       - **Lane 3 — `report:prose`: zero unverdicted pages, checked by SET
+         MEMBERSHIP.** 118 documentation pages of 127 built · median **748** ·
+         total **105,963** words. Nine over 2x the corpus median and twelve over
+         a family median; the union is **fourteen distinct pages** and every one
+         is inside the sixteen already verdicted — 158.1's twelve, 161.1's three
+         (`/base/motion/`, `/concepts/js-behaviors/`, `/concepts/design-language/`)
+         and 178.3's `/concepts/scale/`. `tabs` and `output-form` are verdicted
+         and no longer flagged. Membership was checked against the enumerated
+         sixteen because 228.1 already recorded that grepping each page path out
+         of ROADMAP + archive returns hits for all fourteen whatever the truth is.
+       - **Lane 4 — `report_loop_prose.py`: no file changed accumulate class,
+         and the `ratchet` block was read first.** `CLAUDE.md` **29 up, never
+         cut** and `DESIGN.md` **22 up, never cut** are 167.1's standing verdicts
+         (HONEST, and DESIGN.md is its control) — `CLAUDE.md`'s watch was
+         executed and **retired** by 193.1, so it is not re-raised here.
+         `LOOPS.md` now reads `6 up, last cut 9198e43f (2026-08-29)`, which
+         discharges 191.1's condition; `RESUME.md` was cut at the tip
+         (`f401c1e2`). Every file the loop reads every wake has a cut behind it
+         except the two 167.1 already adjudicated.
+
+2. [x] **244.2 — DONE 2026-09-02. `cssFiles` was hand-copied FOUR times in
+       `packages/core/scripts`, three byte-identical and one already diverged.
+       Consolidated the three; the fourth stays, carrying its reason.**
+
+       Found by the divergence scan step 1 names and no instrument covers —
+       *"duplicated token values or logic (e.g. the same lookup table
+       hand-copied into multiple scripts)"* — the same lane that produced 166.2
+       and 209.2.
+
+       ```
+       grep -rn 'function\* cssFiles' packages/core/scripts/
+       for f in generate-scales check-contrast check-sticky-layers report-css-repeats; do
+         awk '/async function\* cssFiles/,/^}/' packages/core/scripts/$f.mjs | md5sum; done
+       #   c091aeb7b75b57ed727d0cbd8e954710  x3   (contrast, sticky-layers, css-repeats)
+       #   a4ff6324c6f1783dbf55207399326b22        (generate-scales — excludes /scales/)
+       ```
+
+       **The precedent is exact and it is in this repo.** `check-dist-walkers.mjs`
+       exists because the identical convention regrew **twice** on the docs side
+       — its header: *"a script with its own walker works fine right up until its
+       hand-copied exclusion set disagrees with everyone else's."* Here that
+       disagreement was already present before anyone looked.
+
+       **`src-css-files.mjs` obeys `dist-css.mjs`'s 2026-08-17 refusal rather
+       than reversing it.** That module declines to absorb `check-contrast.mjs`
+       and `generate-scales.mjs` because *"those walk different trees with
+       different filters, and folding four different rules behind one options bag
+       would be a worse abstraction than two honest copies."* Correct, and it
+       decides the shape here: what is consolidated is **only the three copies
+       that were already the same rule**. `generate-scales.mjs` keeps its own and
+       now states why — it must not read its own generated output back as input,
+       or the palette-reference check verifies the ramps against the ramps it
+       just emitted.
+
+       **A suspicion this raised and MEASUREMENT killed, recorded because it
+       nearly shipped as a finding.** The three plain walkers pick up
+       `tokens/scales.css` and `scales/extended.css`, which are generated — so
+       `report:css-repeats` looked like it was counting generated output as
+       authored source. It is not a defect: both files **ship**
+       (`tokens/index.css` imports the first; the second is the opt-in
+       `@busy-office/ui/css/scales` entry), so a report over the shipped tree is
+       right to include them. Two of 242 rules. Checked before writing it down,
+       not after.
+
+       **Verified behaviour-preserving, then red-proved by discrimination** —
+       because byte-identical output cannot distinguish a working chokepoint from
+       an unused one, which is this repo's dominant failure mode. Injecting an
+       exclusion for `data-table.css` into `srcCssFiles` (injection confirmed
+       present in the module before running) moved all three: repeats 74 → 73
+       files and 242 → 226 rules, sticky-layers 2 → 1 block-axis and 4 → 0
+       inline-axis, and contrast's per-file tally. Reverted; all three restored
+       byte-identical.
+
+3. [x] **244.3 — DONE 2026-09-02. The same drift in `scripts/loops`:
+       `from_disk`/`from_rev` byte-identical in two reports, folded into the
+       `_common.py` that already exists.**
+
+       Not a new pattern — `_common.py` is the established shared module there,
+       imported by **five** other loop scripts before this item (`71a61679`) and
+       **seven** after it (`1590bc2b`), counting every `.py` in `scripts/loops`
+       that imports `_common` other than `_common.py` itself:
+
+       ```
+       for f in $(git ls-tree --name-only $rev scripts/loops/ | grep '\.py$' | grep -v '_common.py'); do
+         git show $rev:$f | grep -q "from _common import" && echo $f; done | wc -l
+       #  71a61679 -> 5   1590bc2b -> 7   b0b70f96 -> 7   c31799a3 -> 7
+       ```
+
+       *Corrected by 245.1 (2026-09-02).* The figure published here was **six**,
+       which no revision produces: it is a working-tree reading taken between the
+       two foldings, the form ENVIRONMENT.md's standing trap names.
+
+       **Why a READER pair in particular must not drift:** ENVIRONMENT.md's
+       standing trap says a figure describing a commit is read from THAT COMMIT,
+       never the working tree. Two reports disagreeing about what "read" means
+       would publish figures that cannot be reconciled — the class of error
+       228.1 and 229.5 are on the record for.
+
+       Verified in **both** modes rather than the default only: tree and
+       `--rev HEAD`, both scripts, all four outputs byte-identical.
+       `report_reopen_conditions.py --self-test` still passes; all **five**
+       pre-existing `_common` consumers still import — the same five the command
+       above prints at `71a61679`, joined by the two folded here to make seven at
+       `1590bc2b`.
+
+       *Corrected by 245.1 (2026-09-02).* The figure published here was
+       **eight**, and it counts a different noun: `scripts/loops` holds ten `.py`
+       files besides `_common.py`, minus the two this item changed. Three of
+       those eight — `generate_roundtable_index.py`, `polish_requeue.py`,
+       `report_loop_prose.py` — do not import `_common` at all, so they are not
+       consumers. Counted right, labelled wrong. Red-proved twice by discrimination —
+       truncating `from_disk` moved both tree-mode outputs, truncating `from_rev`
+       moved both `--rev` outputs, each injection confirmed landed and reverted.
+
+       **The scan that found 244.2 and this now reads 0, and the zero is
+       red-proved rather than trusted** — appending a novel identical 7-line
+       function to two unrelated scripts in a scratch copy took the detector
+       **0 → 1** with both sites named. It was 4 at the start of the sweep.
+
+       *Instrument note, because its first output was wrong and this repo's rule
+       says to expect that.* The scan's first version reported **11** cross-file
+       blocks; six were sliding windows of one `import` run reported as separate
+       findings, because "drop a window whose key is a substring of another" does
+       not deduplicate SHIFTED windows. Fixed by extending each match along its
+       diagonal into a maximal run and skipping import lines. The first number
+       this instrument produced was not evidence.
+
+4. [x] **244.4 — a gate for the `src/css` walker chokepoint, so the
+       consolidation does not regrow. BUILT in Slice 246 (2026-09-02) —
+       `check-src-css-walkers.mjs`, on a shared driver `gate-source-scan.mjs`
+       that `check-dist-walkers.mjs` was rewired onto.**
+
+       Against each *Accept*, and the first criterion's premise did not survive
+       re-checking:
+
+       - **The gate exists**, wired into `check:repo`, with `generate-scales.mjs`
+         exempt and its reason in the `EXEMPT` Map rather than a comment above a
+         Set, so the reason cannot drift from the entry granting it.
+         `dist-css.mjs` is deliberately NOT exempted — the tree test already
+         excludes it, which is stronger than a name-based exemption because
+         repointing it at `src/css` would then be caught.
+       - **The design decision is recorded**: a shared DRIVER, one gate FILE per
+         chokepoint. Argued from a count nobody had taken (there are FOUR
+         chokepoints here, one gated) and from a measured property of
+         `check-selftests.mjs` (it demands a `--self-test` per FILE, so a table
+         of rows would satisfy the meta-gate once and accept predicates three and
+         four unproved). Full argument in Slice 246.
+       - **Red-proved by injection, injection confirmed landed** at
+         `check-sticky-layers.mjs:43` before the exit-1 was believed; reverted to
+         green. The base rate is measured and stated in the gate's header: **2 of
+         26** under the predicate the gate implements, **both exempt** — so what
+         is bought is a RATCHET against regrowth, and the entry says that rather
+         than implying the gate found something.
+       - **The premise is corrected, not passed over.** *"After 244.2 it is true
+         of every core script but one"* holds for the base-rate clause's
+         predicate and NOT for this criterion's own wording, *"enumerates
+         `src/css` itself"* — that reads **7 of 26**, six besides the chokepoint.
+         Four of the six enumerate `src/css/components` as a directory structure
+         a flat file stream cannot express. Gating the wide reading would mean
+         exempting six of twenty-six scripts. The narrow predicate was chosen and
+         both counts are in the gate's header.
+
+       LOOPS.md's operating rules ask, of every fix, *"does the gate that should
+       have caught this exist, and can it fail?"* Here it does not, and the
+       answer is not speculative: `check-dist-walkers.mjs`'s header records that
+       this exact convention, consolidated by convention alone, **regrew twice**
+       on the docs side and that nothing noticed either regrowth for days. 244.2
+       shipped the same consolidation with the same absence of a gate.
+
+       Filed rather than built because the same rules say an improvement bigger
+       than the item becomes a roadmap entry, and this one carries a real design
+       question rather than being mechanical (see the second criterion).
+       `check-selftests.mjs` already scans `packages/core/scripts`, so a
+       `check-*.mjs` there is automatically held to `@heuristic`/`@exact` + a
+       `--self-test`; the machinery exists.
+
+       *Accept* — properties, not predicted values:
+
+       - A gate that fails when a script under `packages/core/scripts`
+         enumerates `src/css` itself instead of importing `src-css-files.mjs`,
+         with `generate-scales.mjs` exempt **and its reason stated in the gate**,
+         the way `check-dist-walkers.mjs` states its two.
+       - **A recorded decision on whether it is a second gate or a shared
+         mechanism**, since `check-dist-walkers.mjs` asks the identical question
+         of a different (tree, chokepoint, exempt-set) triple. Writing a second
+         gate by copying the first would re-create, inside the gate layer,
+         precisely the drift this slice removed — so "two honest gates" is a
+         permitted answer only if it is argued, not defaulted into.
+       - Red-proved by injection with the injection **confirmed landed in the
+         file the gate reads** before the result is believed, and the base rate
+         of the predicate measured and stated — after 244.2 it is true of every
+         core script but one, so what is being bought is a RATCHET against
+         regrowth, and the entry must say that rather than imply the gate found
+         something.
+       - **Concluding that a gate is not worth it closes this item**, provided
+         the reason engages with the measured twice-regrew evidence rather than
+         waving at it. A refusal is a satisfying outcome here.
+
+       **A THIRD option for the second criterion, recorded by the 245 grill
+       rather than filed as a sibling item.** 244.3 wrote a general cross-file
+       duplicate detector, red-proved it (`0 → 1` on a novel identical function
+       appended to two unrelated scripts) — and did not commit it:
+
+       ```
+       grep -rln "maximal run\|sliding window\|cross-file" \
+           scripts/ packages/core/scripts/ apps/docs/scripts/    # nothing
+       ```
+
+       So its two published readings (*"now reads 0, down from 4"*) cannot be
+       re-derived, and the lane recurs without an instrument: **166.2** (a fourth
+       copy of `api.pageSlug`), **209.2**, and 244.2/244.3 — three findings from
+       the fifth thing Standardize step 1 names, each found ad hoc, while lanes
+       1-4 each have a committed script. A general detector is a third answer to
+       *"second gate or shared mechanism"*, not a fourth item: filing it
+       separately would re-create one level up the drift 244.2 removed. Whoever
+       closes this item should say which of the three it chose.
+
+## Slice 243 — 242.1 refused: arm 8 does not become a build gate, and neither of the two arguments its Accept anticipated is what decided it — the predicate is unsound in the one direction nobody injected, red-proved by a score that stays correct while the arm goes red (2026-09-02)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0 — the four open items are
+`242.1`, `112.3`, `112.4` and Slice 15's AT evidence, none of them a bug; GitHub
+intake `list_issues` OPEN → `totalCount: 0`, so Step 1 had nothing to triage and
+no `Roadmap · plan` row was recorded. Rule 2: `Standardize 3 / 4`. Rule 3:
+`Objective 2 / 3 [238, 241]`. **Rule 4 matched and dispatched Continue, build
+mode.** Of the four open items, Slice 15 is owner-hardware-blocked and
+`112.3`/`112.4` are owner-blocked; `242.1` is neither, and it is not
+browser-blocked either — it reads `dsa-scores.json`, `api.json` and page source,
+all of `ENVIRONMENT.md`'s "can run" list. Rules 5-8 were not reached.
+
+### The base rate was re-measured first, as the Accept required
+
+```
+python3 - <<'PY'   # the probe lives as a fenced ```js block in the ledger
+import re; s = open('.roundtable/polish-state.md').read()
+open('/tmp/arm8.mjs','w').write(re.search(r'```js\n(// arm 8 —.*?)```', s, re.S).group(1))
+PY
+npm run build -w @busy-office/ui   # the probe reads packages/core/dist/api.json
+node /tmp/arm8.mjs
+# arm 8 — 17 scored interaction:na; 0 whose docs page imports a behaviour   rc=0
+```
+
+Unchanged from the snapshot: 17 `na`, 0 flagged.
+
+### Finding A — the arm does not read a page IMPORT; 21 of 21 matches are demo content
+
+Astro frontmatter runs on the server, so a component page cannot wire a browser
+behaviour there, and **none tries**. Every one of the 21 component pages that
+names `@busy-office/ui/js` does so inside a demo template literal or a
+`<script type="module">` block in the page body:
+
+```
+node -e "const fs=require('fs'),d='apps/docs/src/pages/components';
+const RE=/from\s+['\"]@busy-office\/ui\/js['\"]/; let a=0,b=0;
+for (const f of fs.readdirSync(d).filter(f=>f.endsWith('.astro'))) {
+  const s=fs.readFileSync(d+'/'+f,'utf8'); if(!RE.test(s)) continue; a++;
+  const body = s.startsWith('---') ? s.slice(s.indexOf('\n---',3)+4) : s;
+  if (RE.test(body)) b++; }
+console.log('names the module:',a,'· also outside frontmatter:',b)"
+# names the module: 21 · also outside frontmatter: 21
+```
+
+`tabs.astro` is the plain illustration — `:21` sits inside the
+`const tabsMarkup = \`…\`` template literal that the demo renders, and `:186` is
+the copyable sample beneath it. Neither is a page import.
+
+So the predicate is a **text scan of what a page DEMONSTRATES**, not of what it
+imports, and the arm's own one-line description misstates the mechanism. That is
+not pedantry — it is the whole defect below: a scan of demo content cannot tell
+*whose* behaviour it found.
+
+### Finding B — 4 of 21 pages name only a NEIGHBOUR's behaviour, confirmed by reading
+
+| page | names | what it actually is |
+|---|---|---|
+| `button` | `initDropdowns` | a dropdown menu demoed inside a button-group section (`button.astro:107-110`) |
+| `offcanvas` | `initDialogs` | it *is* a `<dialog>`; the page says the wiring is "inherited, not reimplemented" |
+| `richtext` | `initDialogs` | its own comment: *"the keyboard-map dialog — data-dialog-trigger, **no new JS**"* |
+| `form` | `initGroupedNumber` | its own comment: *"same mechanism as Money and Quantity"* |
+
+All four score `interaction: 3` today, so the arm is silent on them. **Its
+0-of-17 is therefore not evidence that the predicate is right about them** —
+only that none of the four is scored `na`.
+
+**The instrument used to shortlist these over-reported, and that is recorded
+rather than smoothed over.** A name-match probe (does the behaviour's name
+contain the page's slug?) flagged **9 of 21**; five of the nine ship their own
+behaviour under a non-matching name — `dashboard`/`initCollapsibleCards`,
+`file-upload`/`initFileDropzone`, `pagination`/`initLoadMore`,
+`inline-editing`/`initRowEdit`, `filters`/`initSavedViews`. The four above were
+confirmed by **reading each import's context**, not by the regex. A parser that
+reports more is not self-evidently a fix, and name-matching is not ownership.
+
+### Finding C — the red-proof nobody ran: the arm goes red on a correct tree
+
+Arm 8 was created with three injections and **all three vary the true positive**
+(combobox forced to `na` is flagged; dashboard set to 3 flags nothing; the
+import removed from a page copy makes dashboard clean). The false-positive
+direction — a score that is *right* on a page that names a behaviour — was never
+injected. It is:
+
+`navbar` scores `interaction: na`, cite *"a container: it holds controls but
+introduces none of its own"*. Add to a scratch copy of `navbar.astro` exactly
+what `button.astro` already carries — a `<script type="module">` wiring
+`initDropdowns()` for a menu inside the navbar, which is precisely the case that
+cite anticipates — and the score stays correct by its own words while the arm
+goes red:
+
+```
+CONTROL    arm 8 — 17 scored interaction:na; 0 whose docs page imports a behaviour   rc=0
+INJECTED   arm 8 — 17 scored interaction:na; 1 whose docs page imports a behaviour   rc=1
+           FLAG navbar :: page imports initDropdowns
+```
+
+```
+cp -r apps/docs/src/pages/components /tmp/pages
+python3 - <<'PY'   # assert the match count BEFORE replacing — two copies is common
+p='/tmp/pages/navbar.astro'; s=open(p).read(); assert s.count('</Gallery>')==1
+open(p,'w').write(s.replace('</Gallery>',
+  "  <script type=\"module\">\n    import { initDropdowns } from '@busy-office/ui/js';\n"
+  "    initDropdowns();\n  </script>\n\n</Gallery>"))
+PY
+grep -n "@busy-office/ui/js" /tmp/pages/navbar.astro                      # :64  — injection landed
+grep -c "@busy-office/ui/js" apps/docs/src/pages/components/navbar.astro  # 0    — real tree untouched
+node /tmp/arm8.mjs                        # control  : 0 flagged, rc=0
+ARM_PAGES=/tmp/pages node /tmp/arm8.mjs   # injected : 1 flagged, rc=1
+```
+
+**The injection was confirmed before the result was believed**, per this repo's
+standing rule: the replace asserted **exactly one** `</Gallery>` match before
+substituting, `grep -n` found the injected import at `:64` of the mutated page,
+and the real tree still read **0** — the mutation went to `ARM_PAGES`, which the
+probe exposes for exactly this.
+
+### Why no narrowing rescues it — and it is the SAME missing datum as the four earlier refusals
+
+The obvious narrowing is to require the named behaviour to be the component's
+**own**. That needs an ownership map, which is exactly what four definitions
+failed to produce in the round that created arm 8 (CSS grep, `api.json` surface,
+exclusively-owned block, data-attribute hooks). The cheapest proxy — the
+behaviour's name containing the component's slug — is measurably worse than
+useless: it **misses `dashboard`/`initCollapsibleCards`, the only defect arm 8
+has ever found**. So the predicate cannot be both sound and useful without a
+datum this repo does not carry.
+
+**That puts arm 8 in the same class as 216.2 / 217.2 / 220.2 / 227.2 after
+all.** 242.1's premise — *"Arm 8 needs no such thing … the first member of this
+class that is mechanically writable"* — is **withdrawn**. The missing datum is a
+different one (an ownership map, not a per-cite command); the shape is identical,
+and "mechanically writable" was true of the unsound version only.
+
+### The decision
+
+**Refused: arm 8 does not become a build gate.** It stays what it is — a probe a
+Polish round runs and a **human reads**, which is how it found dashboard, and
+which is what the rubric's own note prescribes for this dimension: *"applied by
+READING all 14 behaviour-backed pages, not by grep — an earlier regex was wrong
+on 4 of 7."* Five of six were wrong here.
+
+**Neither of the two arguments the Accept named is what decided it**, and that is
+said plainly rather than force-fitted to satisfy the criterion's wording. The
+Accept framed the choice as ceremony (0 of 17) versus ratchet, and the ceremony
+argument is **not** the operative fact: `check:wrong-choice` is uniformly true
+too and earns its place by ratcheting, so 0-of-17 alone would not have refused
+this. What refused it is **soundness**, a third argument that did not exist until
+the false-positive direction was injected. 236.2 is the precedent already on the
+books: a checkable shape that "fires on healthy states too" is a **report, not a
+gate**.
+
+This is CLAUDE.md's criterion rule landing as a **control**, the shape 149.1 has.
+The Accept did embed a forecast — which of two named arguments would decide — and
+it was wrong, and it cost nothing, because the same Accept also said outright
+that *finding the predicate un-gateable is a satisfying outcome*. A criterion
+that names the property survives its own wrong prediction.
+
+### Not verified, said plainly
+
+Cloud wake: no Podman and no `localhost:8081`, so the 1440/390 light-and-dark
+screenshot lane could not run. **This round changed no CSS, no page markup and
+no shipped artefact** — the diff is `ROADMAP.md`, `.roundtable/polish-state.md`
+and the bookkeeping files, and the only code written was a scratch injection that
+was never committed. Nothing here rests on a rendered image. The gate figures
+quoted below were produced by gates executing in this container.
+
+## Slice 242 — Polish round 2 on `component/dashboard`: the seventh recorded defect is the first where the SCORE was wrong, not the cite — `interaction: na` on a component that ships a behaviour, blind re-scored to 3 by a second agent (2026-09-02)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0 (the three open items are
+`112.3`, `112.4`, Slice 15's AT evidence — none a bug); GitHub intake
+`list_issues` OPEN → `totalCount: 0`, so Step 1 had nothing to triage and no
+`Roadmap · plan` row was recorded. Rule 2: `Standardize 3 / 4`. Rule 3:
+`Objective 2 / 3 [238, 241]`. Rule 4: three open items, all blocked —
+`112.3`/`112.4` owner-blocked, Slice 15 owner-hardware-blocked; **none
+browser-blocked**, so 241's mis-sort does not repeat here. **Rule 5 was
+genuinely evaluated, not reported clear from a dead instrument**:
+`dispatch_status.py` reads `ok`, newest pair `axe-violations 0.0 → 0.0 → 0.0`
+across three consecutive runs, and the one live absolute budget
+(`RF_BUDGET_KB = 40`) passed inside `npm run build -w @busy-office/ui` at
+`min 38.0 kB`. **Rule 6 dispatched Polish.**
+
+**The tie-break discriminated for the first time since 176.1.**
+`polish_requeue.py --apply` re-queued **5** surfaces (the hand-off predicted 4;
+`component/alerts` is the fifth). §3b picks lowest score, then fewest rounds:
+`alert`, `icon` and `scan` sit at `2/3`, leaving `dashboard` and
+`inline-editing` at `1/3` — and `inline-editing` drops for 217.1's reason,
+**verified rather than inherited**:
+
+```
+node -e "console.log('inline-editing' in require('./apps/docs/src/data/dsa-scores.json').components)"   # false
+```
+
+So `dashboard` was the only re-queued surface at `1/3` with an entry. Six
+consecutive rounds have had to invent a discriminator; this one did not.
+
+### Finding A — `interaction: na` is wrong, and wrong under either reading
+
+The cite read *"ships no behavior — auto-compaction is a named container query,
+not JS"*. The component ships `initCollapsibleCards`.
+
+```
+node -e "const b=require('./packages/core/dist/behaviors.json').behaviors;
+console.log(JSON.stringify(b.initCollapsibleCards))"
+# {"module":"behaviors/collapsible-card","summary":"Collapsible card sections (.bo-widget)",
+#  "hooks":["bo-widget__collapse","data-collapse-trigger","data-state"]}
+```
+
+All three hooks are on dashboard's own generated surface — `bo-widget__collapse`
+in `api.json`'s `classes`, `data-collapse-trigger`/`data-state` in its
+`dataAttrs` — and `dashboard.css` defines the part. The docs page demos it, with
+**two** copies of `import { initCollapsibleCards } from "@busy-office/ui/js"`.
+
+**Not decay — wrong when written.** `collapsible-card.ts` and dashboard.css's
+`.bo-widget__collapse` landed in the SAME commit, `055a706a`, **2026-08-14**;
+the entry is stamped `"scored": "2026-08-23"`, nine days later. 216.1's class,
+not 217.2's.
+
+**And `na` is unjustifiable under the cite's own false premise.** The rubric:
+*"a component that ships NO behavior earns 3 by saying so. `na` only when there
+is no interaction surface at all."* So even if "ships no behavior" had been
+true, the score should have been **3**, not `na`.
+
+**Blind re-scored by a second agent — the first this ledger has actually run.**
+§3b step 4's re-score has been recorded as *owed* by every round since 182.1,
+each correctly saying it could not run one. This wake could. The agent was given
+the surface, the dimension and the rubric text, and told not to open
+`dsa-scores.json`, `polish-state.md`, `ROADMAP.md` or `ROADMAP-archive.md`; it
+was never told the old score or that anything was suspected wrong. It returned
+**3**, ruling out `na` independently (*"there is an interaction surface"*) and
+citing the page's platform-versus-behavior line and `check:claims`'s live
+assertion of both channels.
+
+**`scored` stays `2026-08-23` deliberately.** One dimension was re-scored, not
+six; moving the entry-level stamp would claim an independent opinion on the
+other five that nobody gave. The 2026-09-02 blind re-score is stamped inside the
+`interaction` cite, which is the house style `content`'s cite already uses.
+
+### Finding B — the `spacing` cite misstates which literals are live
+
+It read *"…the 32px and 20rem/1rem a scan flags are numbers quoted INSIDE the
+comments that explain them, and the only real literal left is a font-size"*.
+Comment-stripped, `dashboard.css` carries **three** live length literals:
+
+| literal | where | in the cite? |
+|---|---|---|
+| `20rem` | `:16`, `minmax(min(var(--bo-widget-min, 20rem), 100%), 1fr)` | named as comment-only — **wrong** |
+| `41rem` | `:145`, `@container bo-widget-grid (max-width: 41rem)` | **not mentioned at all** |
+| `3rem` | `:185` `font-size` | correct, scored under typography |
+
+`32px` and `1rem` are comment-only, as claimed. **The set is `20rem 41rem 3rem`
+in 9 of 9 revisions of the file**, the newest 2026-08-21 — again before the
+score, so again wrong when written.
+
+**The score stays 3 and no blind re-score is owed for it**: both live literals
+carry their reason in place — `20rem` is the fallback of the documented
+consumer-override hook `--bo-widget-min` (`check:token-refs`: *"11
+consumer-override hook(s) carrying a fallback"*), and `41rem` is derived in the
+comment directly above it. The evidence record was wrong; the thing it described
+was right. 216.1's shape.
+
+**This supersedes the stepper round's "recorded and deliberately NOT called a
+defect"** (2026-09-01), which examined the `20rem` alone, judged it a blessed
+override-hook fallback and declined on the ground that calling it a defect would
+need "a scan the cite names and this repo does not ship". That reasoning holds
+for the *score* and is why the score does not move. It does not reach the cite's
+own locational claim — `20rem` is live at `:16` whatever a scan says — and it
+never saw `41rem`, which the cite omits entirely.
+
+**Red-proved in three directions, each injection confirmed before the result was
+believed:** a live literal added (`7px` appears), the at-rule-prelude literal
+replaced by a `var()` (`41rem` drops, proving the scan reads `@container`
+preludes while the comment's surviving `41rem` is correctly ignored), and a
+literal placed inside a comment (not reported). Control `20rem 41rem 3rem`, real
+tree untouched. **The first attempt at the first injection did not land** — the
+`sed` anchor matched nothing and the scan returned the control set, which is
+CLAUDE.md's "a green red-proof is a defect in the injection until proven
+otherwise" firing on the wake that had just read it.
+
+### The new arm, and the four instruments discarded getting to it
+
+**Arm 8 — a component scored `interaction: na` whose own docs page imports a
+behaviour. Base rate 1 of 18 before the fix, 0 of 17 after.** Arms 1-7 are all
+blind to this by construction: they verify that something a cite NAMES resolves,
+and this is a defect in the *score*.
+
+**Four ownership definitions were measured and discarded first**, recorded so
+the next wake does not re-derive them:
+
+1. **CSS grep for hook classes** — flagged 7 components on `.bo-btn` noise and
+   **missed the true positive**, its hook regex having dropped `__` parts.
+2. **"every hook in the component's `api.json` surface"** — under-reported:
+   `initCombobox` also drives the shared `bo-visually-hidden`, so a combobox
+   injected as `na` escaped.
+3. **"a hook on an exclusively-owned block"** — `api.json`'s `blocks` records
+   blocks a component *references*, not only those it declares (`bo-widget` is
+   listed by **both** `dashboard` and `form`), so dashboard itself escaped.
+4. **Data-attribute hooks** — right on dashboard, but combobox's own
+   `data-name`/`data-open-on-focus`/`data-value` are absent from its recorded
+   `dataAttrs`, so the injected combobox escaped again.
+
+Only the fifth — reading the **docs page's own import**, which is what the
+rubric actually scores — discriminates. Red-proved three ways, each injection
+confirmed: combobox forced to `na` **is** flagged; dashboard set to 3 flags
+nothing; both copies of the import removed from a page copy makes dashboard
+clean. **The second copy is why the page-side proof needed two passes** — the
+first `sed` left one of the two imports standing and the gate stayed red, which
+is "count the matches before replacing" landing for real.
+
+**This reproduces, independently and five days later, what the rubric already
+recorded about this dimension**: *"Applied by READING all 14 behaviour-backed
+pages in 94.9, not by grep — an earlier regex was wrong on 4 of 7."* Four
+regexes wrong here, out of five.
+
+**What the 0-of-17 does NOT cover, said before the number can be quoted as
+more.** Arm 8 clears a component when its docs page imports no behaviour; that
+is not a confirmation that `na` is the right score for it. `kbd · interaction`
+is the live illustration — its cite *also* reads *"ships no behavior"*, the same
+words just found false on dashboard, and for `kbd` it is true, a `<kbd>` having
+no interaction surface at all. But the rubric makes the `3`-versus-`na` boundary
+a **reading** (*"a component that ships NO behavior earns 3 by saying so"*), and
+an import test cannot see it. The other sixteen are unexamined on that question
+and are **not asserted here to be right**.
+
+### The seven standing arms all reproduce
+
+`1` `156 assertions / 80 pages / 1 outstanding` (the skipped `date`) · `2`
+`360 assertions / 40 scored`, zero `Not yet scored` in dist · `3` **1 of 40**,
+still `badge · spacing -> badge.css:42`, re-read AT the line · `4` **20/20** ·
+`5` **81/81** · `6` **9/9** · `7` **42/42**.
+
+**Arm 5 moves 81 → 82** after the fix, and that reconciles exactly rather than
+coincidentally: the new `spacing` cite quotes `41rem`, which the old one did
+not. Same shape as 241's `check:slice-refs` 692 → 693.
+
+1. [x] **242.1 — decide whether arm 8 becomes a build gate. NOT a Polish
+       decision. ANSWERED 2026-09-02, Slice 243: REFUSED — no gate.** The
+       predicate is unsound in the direction none of the three original
+       injections covered: a `navbar` whose `interaction: na` cite reads *"a
+       container: it holds controls but introduces none of its own"* makes the
+       arm go red the moment its page demos a neighbour's dropdown, and 4 of 21
+       pages already name only a neighbour's behaviour. The narrowing that would
+       fix it needs an ownership map — the same missing datum as 216.2/217.2/
+       220.2/227.2 — and its cheapest proxy misses the one defect arm 8 has ever
+       found. **Neither argument below is what decided it.** See Slice 243.
+       101.3's stop rule confines Polish to maintaining the existing
+       ratchet, so this round refused it and files the question instead.
+
+       **What makes it different from the four refusals before it.** 216.2,
+       217.2, 220.2 and 227.2 each refused a gate over a *decaying cite*, and
+       each refused it on the same ground: the gate would need every cite to
+       carry its own command, which is a rubric change. **Arm 8 needs no such
+       thing** — it reads `dsa-scores.json`, `behaviors.json` and a page's
+       import list, all generated or source, and it has been red-proved to
+       discriminate. It is the first member of this class that is mechanically
+       writable.
+
+       **The argument against, stated as honestly:** post-fix the predicate is
+       true of **0 of 17**, i.e. uniformly true of the tree, which is 94.11's
+       own test for ceremony. The counter is that `check:wrong-choice` is also
+       uniformly true and is valued because it **ratchets** — it catches the
+       regression, not the current state. Which of those two this is, is the
+       decision.
+
+       **Accept:** either a gate ships with a red-proof by injection recorded
+       (an `interaction: na` written onto a behaviour-backed component makes it
+       go red, with the injection confirmed present before the run), **or** a
+       one-line refusal is recorded here naming which of the two arguments above
+       decided it. **Finding the predicate un-gateable is a satisfying
+       outcome.** Re-measure the base rate first — `node <arm 8b probe>`, kept in
+       `.roundtable/polish-state.md`; the figures above are snapshots.
+
+### Not verified, said plainly
+
+Cloud wake: no Podman and no `localhost:8081`, so the 1440/390 light-and-dark
+screenshot lane could not run. **This round changed no CSS and no page markup** —
+the diff is `dsa-scores.json`'s two cite strings and one score, `ROADMAP.md`,
+the Polish ledger and the bookkeeping files — so nothing in it rests on a
+rendered image. Every browser-derived number quoted came from a gate executing
+in this container.
+
+## Slice 241 — 240.1 closed on its OWN second branch: the chevron's two hex literals are not removable, measured four ways — and the item was never browser-blocked, only its first branch was (2026-09-02)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0; GitHub intake
+`list_issues` OPEN → `totalCount: 0`, so Step 1 had nothing to triage and no
+`Roadmap · plan` row was recorded. Rule 2: `Standardize 1 / 4`. Rule 3:
+`Objective 1 / 3 [238]`. **Rule 4 dispatched Continue, build mode** — the first
+wake in five not to fall through to rule 6. Four open items: Slice 15's AT
+evidence owner-hardware-blocked (unchanged — it needs a human listening),
+`112.3`/`112.4` owner-blocked (re-checked from `git log`, not mtime:
+`.roundtable/pilot-112/briefs.md` is still the 16-line scaffold, single commit
+`e58ea3ca` 2026-08-23), and **`240.1`, which the hand-off classified
+browser-blocked and which is not**. Rules 5-8 were not reached.
+
+**The mis-sort, named, because it is the mirror of the one LOOPS.md rule 4
+already records.** 240.1's Accept criterion 1 is a disjunction and the hand-off
+read only its first half. Branch 1 — convert the chevron to a mask — needs
+screenshots at 1440/390 in both themes, and a cloud wake genuinely cannot take
+it. **Branch 2 — "or a one-line reason is recorded in the cite for why the mask
+technique is wrong for a chevron specifically", with "finding the mask approach
+unworkable is a satisfying outcome" written into the criterion itself — is a
+DOM/computed-style/pixel-count question, which is entirely `ENVIRONMENT.md`'s
+"can run" list.** 189 §D2 records the loop declining a whole ITEM a cloud wake
+could take; this is the same error one level down, declining a BRANCH. Cost:
+one wake, against 173.2's four.
+
+**This is exactly what 158/191's criterion rule bought.** 240.1's Accept was
+written to name the property and to make finding the premise false a satisfying
+outcome. The premise *was* false, and because the criterion said so in advance,
+refuting it closed the item instead of going off-plan.
+
+1. [x] **241.1 — DONE 2026-09-02: four routes to a tokenised chevron, all
+       measured in headless Chrome, all refuted. `240.1` closes on branch 2.**
+
+       240.1 proposed rendering the chevron as `mask-image` +
+       `background-color: currentcolor`, "exactly as `icon.css` does". Measured
+       rather than reasoned, each route against a control that must paint, on a
+       page whose select borders are forced to a green that appears nowhere else
+       so a chevron count can never be a border count:
+
+       | route | reading | control |
+       |---|---|---|
+       | `stroke='currentColor'` in the URI | **0 red px**, 6 px BLACK, against a pure-red host | the shipped literal, same geometry: 6 px of `107,114,128` |
+       | `stroke='var(--bo-color-text-muted)'` | **0 px painted at all** | as above — the same 6 px core paints when the value is legal |
+       | mask on `.bo-select` itself | painted pixels **1010 → 22** on a 240×36 control: border, surface and option text erased | the same select unmasked, at 1010 |
+       | mask on `.bo-select::before` | **0 px** — `<select>` generates no pseudo-element box | the identical rule on a `<div>`: **1080 px** |
+
+       The first two are one fact: **an SVG in a `data:` URI is a separate
+       document**, so it cannot read this one's `currentColor` or its custom
+       properties. The last two are the other: **`icon.css`'s technique needs an
+       element whose whole box IS the glyph**, and a `<select>` is neither empty
+       nor able to lend a pseudo-element. The only remaining route is a wrapper
+       element around every select — new markup for a colour literal, refused as
+       widening the public API. Recorded in `select.css`'s own comment and in
+       the `form · colour` cite, as the six other components carrying raw hex
+       already do.
+
+       **The instrument's first output was wrong, as the base rate says.** The
+       first run clipped the chevron strip wide enough to include the control's
+       border — whose shipped colour is *also* `#6b7280` — so the chevron and
+       the border were one indistinguishable count of 44-50 px, and the reading
+       that mattered (is any pixel red?) was buried. Forcing the border green
+       and insetting the clip by 2px separated them: 6 px, exactly, in every
+       case that paints.
+
+       **Reopen condition, named rather than left implicit:** `<select>` gaining
+       a styleable pseudo-element at the support floor (`appearance:
+       base-select`). Not a promise it will; a statement of what would make the
+       refusal wrong.
+
+2. [x] **241.2 — DONE 2026-09-02 on criterion 1's SECOND branch: the pairing
+       stays ungated, and the gate's own claim about it was the real defect.**
+
+       **The decision: no gate.** Base rate re-measured this wake with a
+       different instrument from 241.1's grep — a postcss walk over every
+       colour-bearing declaration in `components/` + `primitives/` — and the two
+       agree at **46** non-token colour declarations, which classify:
+
+       | set | n | painted? |
+       |---|---|---|
+       | `icon.css` glyph URIs, consumed by `mask-image` | 26 | no — masked away |
+       | `tabs.css` `#000` inside `linear-gradient` masks | 9 | no — mask alpha |
+       | `@media print` ink (`#000`/`#999`, 4 files) | 9 | no — paper, not a screen surface |
+       | **`select.css` chevron, via `background-image`** | **2** | **yes** |
+
+       26+9+9+2 = 46, and the two probes' one apparent disagreement reconciles
+       exactly: `grep -c "%23" icon.css` reads **27** to postcss's **26**,
+       because line 54 is a *comment* explaining `%23 = '#'`. The scan also found
+       **zero** `rgb()`/`hsl()`/`oklch()`/named-colour uses and **zero**
+       `url(#fragment)` sites for a hex pattern to trip on, so a hex-shaped count
+       is complete for this tree — measured rather than assumed, since counting
+       only hex is the same under-reporting this item is about.
+
+       **The premise was re-checked, not inherited** (CLAUDE.md's rule that a
+       premise from an earlier wake is part of the criterion). Recomputed from
+       `wcag.mjs`: **4.83** light, **11.46** dark, against a 3:1 floor — 241.1's
+       figures to the digit. The control `text-primary` on `bg-surface` reads
+       **17.74**/**16.15**, matching `contrast.json`'s independently computed
+       value in both themes.
+
+       **What decided it was churn, which nothing had measured.** Neither side of
+       the pairing has moved since the initial commit `4ef554fa` (2026-08-12),
+       across **1,796** commits:
+
+       ```
+       git show 4ef554fa:packages/core/src/css/components/form/select.css \
+         | grep -oE "%23[0-9a-f]{6}"       # %236b7280, %23d1d5db — identical today
+       git log -S 'bo-color-bg-surface:' -- packages/core/src/css/tokens/color.css
+         # one commit: f97954ba, the eof- -> bo- prefix rename. Values never moved.
+       ```
+
+       6 commits have touched `select.css` and 10 `color.css`; the literals and
+       the surfaces they are painted on came through all of them unchanged. A
+       ratchet defends a regression path with no history on either end.
+
+       **The refusal is on WEIGHT, not on undiscriminability — say which, because
+       94.11's precedent is the stronger claim and does not apply here.** 94.11's
+       refused gate could not fail at all: injecting `letter-spacing: 7px` still
+       reported 0 unexplained, because "a comment precedes this literal" was
+       uniformly true. A contrast gate over these 2 *would* discriminate — change
+       the hex and the ratio moves. So this is the cheaper argument: 2
+       declarations in 1 file, passing with margin, frozen for 21 days, is not
+       worth a gate's weight. Borrowing 94.11's wording would have overstated it.
+
+       **Reopen condition:** a third painted literal landing anywhere, or either
+       surface token's value changing. The build now prints the number that would
+       show the first of those.
+
+       ### The defect found while deciding: the gate claimed coverage it never had
+
+       `check-contrast.mjs` ended every run with *"coverage verified against
+       component CSS"*. Its coverage guard keys **every** branch off
+       `d.value.match(/var\((--bo-color-[a-z0-9-]+)/)` — so a raw colour value
+       matches nothing, `return`s, and is skipped in silence. The gate was
+       asserting a clean coverage result about a set of 46 declarations it had
+       never enumerated. That is CLAUDE.md's storage doctrine one level out:
+       *a derived artefact may not decide, on its own, what it failed to see.*
+
+       Fixed the way `check:rtl` already handles this — it warns that DESIGN.md's
+       flip-site count was NOT verified rather than reporting a pass it did not
+       earn. The pass line now reads `TOKEN-PAIR coverage`, and beneath it:
+
+       ```
+       NOT covered by that scan: 46 declaration(s) in 7 file(s) carry a raw
+       colour value instead of a var(--bo-color-*) ... (reported, not gated)
+          26  src/css/components/icon/icon.css
+           9  src/css/components/tabs/tabs.css
+           ...
+       ```
+
+       **Report, not gate, and that is the measured choice**: 26 of the 46 are
+       icon glyphs, so adding an icon legitimately grows the number and a ratchet
+       over it would go red on a correct tree — 236.2's reasoning for reporting
+       rather than gating, applied to a predicate that fires on healthy states.
+       It contributes nothing to the exit code, which is why the file's `@exact`
+       tag still holds; `check:selftests` re-classified it green (47 gates: 16
+       heuristic, 31 exact).
+
+       **Red-proved by injection, in both directions, with the injection
+       confirmed in the PARSED tree rather than the file text** — CLAUDE.md's
+       rule that a green red-proof is a defect in the injection until proven
+       otherwise:
+
+       | injection into `primitives/cluster.css` | postcss sees | report |
+       |---|---|---|
+       | `color: #abc123` | 1 decl | **46 → 47**, 7 → 8 files, `primitives/cluster.css` appears |
+       | `color: var(--bo-color-text-primary)` | 1 decl | **stays 46** / 7 files |
+       | reverted (empty `git diff`) | — | back to 46 / 7 |
+
+       The literal case was injected into `primitives/` on purpose: no primitives
+       file appears in the report today, so it also proves that arm of the walk is
+       live rather than dead. The token case is the discrimination check — it
+       counts colour literals, not "any declaration someone added".
+
+       **`contrast.json`'s shape is unchanged, deliberately.** Six consumers read
+       it (`extract-acr`, `ApiTable.astro`, `gen-llms`, `gen-rf-profile`,
+       `new-component`, the gate itself) and a grep for a published coverage
+       claim in `.astro`/`.md` returns **zero** — the overclaim existed only in
+       the gate's stdout, so that is the only place it was fixed.
+
+       *(original filing follows)*
+
+   **241.2 — the framework's only PAINTED raw hex sits outside every
+       contrast gate, and it passes today. Filed rather than built.**
+
+       Measured this wake, same instrument, reconciled against the gate's own
+       numbers before being quoted: the chevron reads **4.83:1** against the
+       light surface and **11.46:1** against the dark one, so both clear WCAG
+       1.4.11's 3:1 for a non-text graphical object. The control — the
+       documented `text-primary` on `bg-surface` pairing — read **17.74** light
+       and **16.15** dark, which is `contrast.json`'s independently computed
+       value to the digit in both themes.
+
+       What is missing is the ratchet, not the value: **0 of the 36 gated
+       pairings in each theme covers this**, because `check:contrast` takes two
+       token names and the chevron's colour is a literal inside a URI.
+
+       *Accept* — names the property, not the value:
+
+       1. Either `check:contrast` (or a sibling gate) asserts the chevron
+          literals against the surface token they are painted on, extracting the
+          hex from the URI rather than from a parallel token that could diverge
+          — **or** a recorded reason why the pairing stays ungated.
+       2. If built, it is tagged `@heuristic` and ships `--self-test`: deciding
+          which `data:` URI hexes are PAINTED (`background-image`) versus masked
+          away (`mask-image`) is recognition, and this repo's own history says
+          that class of detector must demonstrate it can fail.
+       3. Its base rate is stated before it lands. **The argument against is on
+          the record now so a later wake weighs it rather than rediscovering
+          it:** the predicate covers 2 literals in 1 file, both passing with
+          margin since the initial commit, which is thin ground for a gate under
+          94.11's test.
+
+## Slice 240 — Polish round 2 on `component/calendar`: six arms clean, and a SEVENTH finds the sixth recorded defect — the one cite in the framework that claims an absence the shipped CSS does not have (2026-09-02)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0; GitHub intake
+`list_issues` OPEN → `totalCount: 0`, so Step 1 had nothing to triage and no
+`Roadmap · plan` row was recorded. Rule 2: `Standardize 1 / 4`. Rule 3:
+`Objective 1 / 3 [238]`. Rule 4: three open items, **all blocked** — `112.3`
+and `112.4` owner-blocked (re-checked: `.roundtable/pilot-112/briefs.md` is
+still the 16-line scaffold, single commit `e58ea3ca` 2026-08-23, read from
+`git log` not mtime), Slice 15's AT evidence owner-hardware-blocked; **none
+browser-blocked or agent-blocked**, so a local wake gains nothing on them.
+Rule 5: `ok` — not stale; newest pair `axe-violations 0.0 → 0.0 → 0.0` over
+three runs, every other repeated name 13+ days old, and the one absolute budget
+(`RF_BUDGET_KB = 40`) passed inside `build`. **Rule 6 dispatched**;
+`polish_requeue.py --apply` re-queued **6** surfaces.
+
+**The pick was measured, and it is robust to the instrument.** §3b's tie-break
+left three re-queued surfaces at `1/3`; `inline-editing` drops out for 217.1's
+stated reason — verified rather than assumed, `dsa-scores.json` has **no entry**
+for it, so no arm can disagree with it. That leaves calendar and dashboard, both
+`content: 3`, both `scored 2026-08-23`. The two wakes have used **two different
+instruments** for this tie-break, and they disagree on dashboard:
+
+```
+                     BOUNDARY reading (239's)      STAMP reading (this wake's)
+calendar             2 commits  +18/-2             2 commits  +18/-2
+dashboard            0 commits                     1 commit   +7/-1  (e034a6eb)
+```
+
+Neither is wrong. 239 measured commits after the scored DATE closed
+(`git rev-list -1 --before=2026-08-23T23:59:59+08:00 HEAD` → `a9ba5c7e`);
+this wake measured movement since the ledger's own `src` digest was **stamped**,
+which is what actually re-queued the surface. `e034a6eb` lands 2026-08-23 21:04
+— after the stamp, before the boundary — so it is counted by one and not the
+other. **Recorded rather than resolved**, because the pick is the same under
+both: calendar exceeds dashboard either way. The stamp reading is the one that
+answers "what changed since this score was earned", so it is the one used here.
+
+1. [x] **240.1 — CLOSED 2026-09-02 by Slice 241, on this item's OWN Accept
+       criterion 1 branch 2: the mask technique is wrong for a chevron, and that
+       was measurable without a screenshot. The "BROWSER-BLOCKED" call below was
+       right about branch 1 and wrong about the item — see Slice 241 for the
+       four routes and their controls.** Original text kept verbatim:
+
+       **The select chevron is the framework's only PAINTED raw hex, and the mask technique to remove it already ships. BROWSER-BLOCKED (screenshots at 1440/390, both themes) — a LOCAL wake can take this.**
+
+       **Found by arm 7 (new, below), red-proved three ways.** `form · colour`'s cite
+       read *"zero raw hex; the error state is border + message + aria-invalid, never
+       colour alone"*. `packages/core/src/css/components/form/select.css` carries
+       **two** — `%236b7280` (light, line 4) and `%23d1d5db` (dark, line 25) — as the
+       `stroke` of the chevron's SVG `data:` URI.
+
+       **The cite was wrong when written, not decayed.** Both hexes were present on
+       2026-08-23, the day the dimension was scored:
+       `git show "$(git rev-list -1 --before=2026-08-24 HEAD):packages/core/src/css/components/form/select.css" | grep -c "%23"` → **2**.
+       They date to `4ef554fa`, the initial commit. This is a different class from the
+       four decay defects the ledger records, and from 227.1's cite-side defect: the
+       claim never held.
+
+       **Reconciled against six independent siblings, which is what makes it a defect
+       rather than a wording preference.** Every other component with a raw hex
+       discloses it in its own cite and says why it is not a defect — badge,
+       `data-table`, `stepper` and `approval-workflow` (*"raw hex appears ONLY inside
+       `@media print`, where theme tokens would be wrong on paper"*), `tabs` (*"the
+       nine `#000` are MASK alpha inside `linear-gradient()`"*), `icon` (*"the `%23000`
+       inside the data URIs is SVG stroke … under a MASK and is never painted"*). All
+       seven score `colour: 3`. **`form` was the only one of the seven claiming zero.**
+
+       **And form's two are the only ones that are actually PAINTED.** Verified in the
+       CSS, not inferred: `select.css:12` is `background-image: var(--bo-select-chevron)`,
+       while `icon.css` is `mask-image: var(--bo-icon-src)` + `background-color:
+       currentcolor`. The print-only hexes never reach a screen; icon's are masked away.
+       The chevron's stroke colour is the pixel the user sees, in both themes, and
+       `check:contrast` cannot reach inside a `data:` URI to gate it.
+
+       **The cite was corrected this wake** (evidence only — no CSS, no rendering
+       change), and the corrected claim was kept CHECKABLE by moving it into arm 6's
+       count table rather than leaving it as prose: `form · colour :: the (two)
+       select-chevron greys`, red-proved by injecting a third hex (`8/9`, *"cite says
+       two, tree reads 3"*) with the clean control at `9/9`.
+
+       **What is left OPEN is the CSS**, because the framework already ships the
+       technique that removes the hex entirely: render the chevron as `mask-image` +
+       `background-color: currentcolor`, exactly as `icon.css` does. That would drop
+       both literals AND the `[data-theme="dark"]` duplicate rule, and let the chevron
+       take a colour token — one definition instead of two.
+
+       **Not attempted this wake: it is BROWSER-BLOCKED, in the screenshot sense.**
+       It changes how every `<select>` in the framework paints, across both themes, the
+       `--seamless` variant and the RTL position flip, and the evidence a human needs
+       is a rendered image at 1440 and 390 in light and dark. A cloud wake has no
+       Podman. Left open for a local wake per the standing instruction; **this is the
+       first browser-blocked item in the open set**, so rule 4 has real work to hand a
+       local dispatcher rather than three blocked items.
+
+       *Accept* — each criterion names a property to verify, not a value it will have:
+
+       1. Either `packages/core/src/css/components/form/` contains **no** raw hex,
+          or a one-line reason is recorded in the cite for why the mask technique is
+          wrong for a chevron specifically. **Finding the mask approach unworkable is a
+          satisfying outcome**, not an off-plan one — record it and close.
+       2. `form · colour`'s cite **agrees with a raw-hex count of the shipped CSS**,
+          whatever that count turns out to be, and arm 6's `form · colour` row agrees
+          with the tree (its regex updated if the claim's shape changes).
+       3. If converted: screenshots at 1440 and 390, light and dark, show the chevron
+          rendering in the base select, the `--seamless` variant and under `[dir="rtl"]`
+          — the three sites `select.css` distinguishes.
+       4. `npm run lint:css`, `check:contrast` coverage and `test:axe` stay green.
+
+2. [x] **240.2 — DONE 2026-09-02: arm 7, the absence-claim class arms 4-6 structurally cannot see.**
+
+       Arms 4, 5 and 6 all check that something a cite NAMES is present in the tree —
+       a quoted clause, a unit-bearing literal, a bare count. **An absence claim names
+       nothing to look up**, so all three are blind to it by construction, and it
+       decays the same way a count does: any commit adding a `font-size` or a hex
+       falsifies a cite nobody re-reads.
+
+       Measured, following arm 6's method rather than asserting a size: **111 of 240**
+       cites contain an absence word, but most are prose (*"no select needed"*,
+       *"never colour alone"*). Hand-classified to claims that are mechanically
+       checkable against the component's own CSS: **43, across 27 components** —
+       23 `no/zero raw font-size`, 14 `zero raw hex`, 6 `zero raw dimension literals`.
+       **42 of 43 were exact**; the 43rd is 240.1.
+
+       Two definitional choices, written down because they are judgements and not
+       derivable:
+
+       - **Comments are stripped before every test.** `badge.css:42`'s own cite says
+         its bare numbers are *"measurements quoted INSIDE a comment, not
+         declarations"*, so counting them would contradict a cite the ledger has
+         already verified at the line.
+       - **`dimension` means LENGTH units only** (`px rem em ch vw vh`), not `s`/`ms`
+         (time) or `%` (a ratio). The six spacing cites are about space tokens.
+
+       **Red-proved three times, each injection confirmed present in the copy and
+       absent from the real tree before the run**, and each went red on exactly the
+       injected row: a tree-side mutation (a raw `font-size: 13px` into `calendar.css`
+       → `41/43`), a cite-side mutation (`zero raw hex` prepended to `badge · colour`,
+       which genuinely has `#000` → `42/44`, the claim count RISING by one), and a
+       cite-SHAPE mutation (form's *"zero raw hex"* reworded → **43 claims → 42**,
+       proving the claim is parsed from the cite rather than hard-coded).
+
+       **A limitation, stated rather than discovered later.** Arm 7 derives its set
+       from the cites, so *fixing a false claim by rewording it removes it from the
+       checked set* — which is exactly what happened here: arm 7 read `42/43` before
+       the fix and `42/42` after, and the improvement is the DELTA and its reason, not
+       the ratio. Arm 6 has a fixed `CLAIMS` table and reports `CITE NO LONGER MATCHES`
+       instead; arm 7 cannot tell "reworded because fixed" from "reworded to dodge".
+       That is why 240.1's corrected claim was moved into arm 6 rather than left for
+       arm 7 to re-derive.
+
+       **No gate proposed — the sixth refusal, and the base rate is the reason again.**
+       42 of 43 held before the fix and 42 of 42 after: 94.11's own test says a
+       predicate already true of nearly everything distinguishes nothing. The check
+       also needs a per-phrasing rule (three today) that only a human reading the cite
+       can extend, which is 217.2/220.2/227.2/239's standing reason.
+
+## Slice 239 — Polish round 2 on `component/tree-table`: NO-OP on six arms, and the sixth is the class arm 5 structurally cannot see — where 3 of this ledger's 5 recorded defects lived (2026-09-01)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0, GitHub intake
+`list_issues` OPEN → `totalCount: 0`, so Step 1 had nothing to triage and no
+`Roadmap · plan` row was recorded. Rule 2: `Standardize 1 / 4`. Rule 3:
+`Objective 1 / 3 [238]`. Rule 4: three open items, **all blocked** — `112.3`
+and `112.4` owner-blocked, Slice 15's AT evidence owner-hardware-blocked; none
+browser-blocked or agent-blocked. Rule 5: `ok`, newest pair
+`axe-violations 0.0 → 0.0 → 0.0`, and the one absolute budget in the tree
+(`RF_BUDGET_KB = 40`) passed inside `build`. **Rule 6 dispatched**;
+`polish_requeue.py --apply` re-queued **7** surfaces.
+
+**The pick was measured.** §3b's tie-break left four re-queued surfaces at
+`1/3`; `inline-editing` drops out for 217.1's stated reason (no
+`dsa-scores.json` entry, so no arm can disagree with it), leaving calendar,
+dashboard and tree-table, all `content: 3`. Source movement since each
+surface's own `scored` date, with 217.1's `+08:00` boundary
+(`git rev-list -1 --before=2026-08-23T23:59:59+08:00 HEAD` → `a9ba5c7e`):
+
+```
+calendar    2 commits  +18/-2    last touch 2026-08-24 05:08
+dashboard   0 commits    0/0     last touch 2026-08-23 21:04  (predates the boundary — 227.1's reading, unchanged)
+tree-table  1 commit   +20/-12   last touch 2026-08-25 22:07  <- picked
+```
+
+tree-table wins on recency and on churn, and what moved is real CSS rather than
+whitespace: `td` → `:is(td, th)` across the eleven-rule indent ladder, so a
+`<th scope="row">` first column keeps its indentation. Its cites also carry the
+most cross-file claims of the three, which is 217.2's decay-prone shape.
+
+### 239.1 — six arms, all clean; the round is a NO-OP
+
+1. **Wrong-choice clause** — `check:wrong-choice` passed, `156 assertions / 80
+   pages (components: 37 carry / 1 outstanding / 3 exempt)`; the one
+   outstanding is the skipped `date`.
+2. **Entry rendered by its page** — `check:dsa-scores` passed, `360 assertions
+   / 40 scored (40 requested by a page, all scored)`.
+3. **Line-number cites: still 1 of 40**, still `badge · spacing → badge.css:42`,
+   re-read at the line rather than trusted — line 42 reads `pushed the whole
+   PAGE sideways: measured 373px wide against a 390px`.
+4. **`content` cites quoting a page clause verbatim — 20 of 20**, unchanged
+   from 2026-09-01.
+5. **CSS dimension literals quoted in any cite — 81 of 81**, unchanged.
+6. **NEW — bare (unitless) counts in any cite, re-verified against the tree
+   each one names: 8 of 8.**
+
+**Arm 6 exists because arm 5's literal regex is unit-bearing only
+(`\d+(px|rem|em|ms|s|ch|vw|vh|%)`), so a cite claiming *"po-app uses it at 13
+sites"* is invisible to it — and that is where three of the five defects this
+ledger has recorded lived**: `sidebar-nav · fit` (a usage count falsified by a
+new po-app screen), `breadcrumb · fit` (a denominator falsified by the pattern
+corpus growing 19 → 39), `icon · fit` (*"12 ERP glyphs"* against 26, and the
+same 12 hard-coded as a published divisor). Arms 4 and 5 could not have caught
+one of them.
+
+**The claimed number is parsed FROM THE CITE, never hard-coded.** A probe with
+the expectation baked in only sees the tree move, and 227.1's defect was on the
+cite side. Red-proved three times, each injection confirmed present in the
+parsed JSON or the measured tree before the run, each going red on exactly the
+injected row and nothing else: a tree-side mutation (a fourth `bo-navbar` line
+→ `cite says 3, tree reads 4`), a cite-side mutation (`13 sites` → `12` →
+`cite says 12, tree reads 13`), and a cite-SHAPE mutation (`across its 5 CSS
+files` → `across its CSS files` → `CITE NO LONGER MATCHES`). Clean tree: 8/8.
+The probe source is in `.roundtable/polish-state.md` so the next wake re-runs
+it instead of re-deriving it.
+
+### 239.2 — the class is 8 claims, not the 4 this ledger records, and 2 of the 8 are instrument-ambiguous
+
+217.2 measured this class at **6 of 240 cites**, and 220.2 recorded it
+"shrinking by construction" to **4 of 240** after the two stale ones were
+repaired by removing the quantity. Re-measured this wake — which CLAUDE.md
+makes part of the criterion, not a courtesy, since the premise is an earlier
+wake's measurement and 217.2 recorded no command beside it:
+
+```
+node -e "const d=require('./apps/docs/src/data/dsa-scores.json').components; …"
+#   31 of 240 cites carry a bare integer — but most are noise: dates (2026),
+#   Polish round numbers, roadmap slice refs (73.2, 45.3, 36.1), badge's line
+#   number (arm 3), and icon's %23000 hex fragment.
+```
+
+Hand-classified down to **checkable quantitative claims about the tree, 8 of
+them across 7 cites**, every one verified exact this wake:
+
+| cite | claim | live |
+|---|---|---|
+| `navbar · fit` | po-app uses it at **3** sites | 3 |
+| `dialog · fit` | po-app uses it at **13** sites | 13 |
+| `offcanvas · fit` | used in **1** pattern screen | 1 |
+| `tabs · fit` | used in **2** pattern screens | 2 |
+| `form · typography` | zero raw font-size across its **5** CSS files | 5 |
+| `scan · fit` | rf-essentials' **40** kB RF budget gate | `RF_BUDGET_KB = 40` |
+| `date · fit` | **1** prose mention on `/components/amount`, the only occurrence off its own page | 1 |
+| `date · fit` | **zero** screens use it | 0 in `examples/` |
+
+**So the recorded base rate understated the live class by 3** — 217.2's six
+were all in `fit`, and `form · typography`, `scan · fit` and `date · fit` were
+never in it. Not a defect in any published artefact: every one of the eight is
+exact today. It is the ledger's own figure that was wrong, and the reason it
+went wrong is the reason 220.1 gave for a different figure — a count recorded
+without the command that produced it.
+
+**Two of the eight cannot be re-verified without guessing the instrument, and
+that cost a round of this wake's own time.** Arm 6's first run reported
+`dialog · fit :: cite says 13, tree reads 14`. Neither number is wrong:
+
+```
+grep -c  'bo-dialog' examples/po-app/server.mjs   # 13  lines containing
+grep -o  'bo-dialog' examples/po-app/server.mjs | wc -l   # 14  occurrences
+#   line 470 carries bo-dialog__header AND bo-dialog__title
+```
+
+Walking every revision of `server.mjs`, both readings have been stable at
+13/14 since `4d9014d2` (2026-08-20), three days *before* the score — so `13` is
+exact under the instrument that produced it and has not decayed. `navbar`'s 3
+happens to agree under both readings, which is why the ambiguity did not
+surface until a second cite of the same shape was checked. **Arm 6 counts
+lines, chosen from that revision history rather than because it is the reading
+that passes** — a detector fitted to whichever method makes the number match is
+the "detector that cannot fail" this repo's doctrine names, so the reason is
+recorded and the occurrence count is written down beside it.
+
+**The comparative claim beside the number was checked too, per 192.1.**
+`dialog · fit` also says *"the heaviest real usage in this family"* — within
+the overlay family in po-app it is 13 against `bo-offcanvas`, `bo-popover`,
+`bo-tooltip`, `bo-drawer` all at **0**, so the claim holds as scoped. (It is
+not the heaviest usage in po-app overall — `bo-data-table` 53, `bo-btn` 40 —
+but the cite says *family*.)
+
+**No gate proposed, and this is the fifth consecutive refusal.** 101.3's stop
+rule confines Polish to maintaining the existing ratchet, and 217.2/220.2/227.2
+each refused this class on the ground that a gate would need every cite to
+carry its own command — which is exactly what arm 6's claim table *is*, and it
+is a hand-maintained table of eight, not a rule a detector derives. 8 of 8 is
+also a uniformly-true predicate today, 94.11's own test for ceremony. Recorded,
+not gated.
+
+### 239.3 — `polish_requeue.py` answered a fresh container with a bare traceback
+
+Noticed rather than searched for, and fixed because the fix is smaller than the
+explanation. LOOPS.md rule 6 mandates `polish_requeue.py --apply` **before**
+rule 6 is evaluated, so on a cloud wake it is the first loop script to run —
+and a cloud container starts with no `packages/core/dist/` at all. It exited
+with `FileNotFoundError: …/packages/core/dist/api.json`, which names a path and
+not the command that produces it.
+
+Same shape as ENVIRONMENT.md trap 2b, where git's refusal names the lock file
+and the obvious way to shorten the output drops exactly that line. It failed
+loudly rather than skipping quietly, so the doctrine held; what was missing was
+the next step. Now:
+
+```
+polish_requeue: packages/core/dist/api.json is missing, so the slug -> css-dir
+map cannot be read (it is generated, never guessed).
+  Run `npm run build -w @busy-office/ui` first, then re-run this command.
+```
+
+Red-proved by removal — `api.json` moved aside, its absence confirmed before
+the run, the guard fired with exit 1; restored, and `--check` reports the same
+7 surfaces as before. Not a gate and not a rubric change, so 101.3 is untouched.
+
+**Not verified, said plainly.** Cloud wake: no Podman and no `localhost:8081`,
+so the 1440/390 light-and-dark screenshot lane could not run. **This slice
+changed no CSS and no page markup** — the diff is `ROADMAP.md`,
+`.roundtable/polish-state.md` and one Python error message — so nothing in it
+rests on a rendered image. Every browser-derived number quoted came from a gate
+executing in this container.
+
+## Slice 238 — Objective grill of Slices 232, 234, 236, 237: twenty-four of twenty-five published claims reproduce, and the one that does not is the count written BESIDE a premise that was correctly re-run — five archive commits reported as four, at two durable sites (2026-09-01)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0, and GitHub intake
+`list_issues` OPEN → `totalCount: 0`, so Step 1 had nothing to triage and no
+`Roadmap · plan` row was recorded. Rule 2: `Standardize 0 / 4 ok`. Rule 3:
+**`Objective 4 / 3 slices OVERDUE [232, 234, 236, 237]` — dispatched.** Rule 4
+was not reached. Full report:
+`.roundtable/grill-objective-232-234-236-237-2026-09-01.md`.
+
+**Arming set narrowed to ROWS, because two of the four slices were already
+grilled in full.** Slice 236 is *"Objective grill of Slices 232, 233, 234,
+235"*, so 232 and 234 appear here for the second time — the re-arming shape the
+playbook's step 0 names. Resolved by listing every Continue/Standardize row
+logged after the last `Objective` row (`a5f5007a`, 06:45): **232.3**
+(`fd9affed`), **234.1**, **236.1**, **236.2** (all `ede706af`), **237.1**,
+**237.2** (both `7e861867`). All six landed *after* grill 236 read those slices,
+and 236.1/236.2 are items that grill itself filed. **So 232 and 234 are armed by
+genuinely new work, not by being re-grilled**, and 236's verdicts on 233/235 and
+232's on 229/230/231 are untouched here.
+
+**What reproduces — twenty-four of twenty-five published claims, each re-run
+rather than read, and the twenty-five are enumerated in the report so the total
+is auditable rather than asserted.** 237.1's sweep was re-verified by a **third** independently written
+parser reading `git show 7e861867^:ROADMAP.md`: the four blocks measure
+381 / 368 / 161 / 500 = **1,410**, each appears exactly once in the archive and
+zero times in the live file, archive headings **212 → 216**, and
+`2,907 − 1,410 + 12` (four 3-line pointers) = the stated **1,509** at move time
+against **1,659** committed. `check:slice-refs` reads **685 / 219**, and its
+430 → 434 → 435 uniqueness arm plus a flat **250** citation arm reconciles at
+all three points. Lanes 2 and 3 reproduce byte for byte (`74 · 242 · 230 · 8`;
+118 of 127, median **748**, total **105,705**). 232.3's gate reads `149 scanned,
+8 read a file, none parses without asserting` against an independent grep of
+**8**, its `--self-test` passes 11 cases, `check:selftests` reads **47 / 16 /
+31** and `check:ci-ignores` **130 / 128**. 236.1's published command prints
+`any=1 excl=0` × 5 and `any=3 excl=2`; `roadmap_scope.py --self-test` passes
+**A–E**. 234.1's aggregate is **1 / 6 / 5 / 0** at its four named commits.
+
+1. [x] **238.1 — 237.2's supporting commit count is FIVE, not four, and the
+       wrong number now stands at two durable sites, one of them the archive
+       header that item was written to correct.**
+
+       **237.2's headline premise reproduces exactly and is not reopened** —
+       ten commits on `ROADMAP-archive.md` at `7e861867^`, eight sweeps and two
+       edits with no move (`d3d76a28` `27 / 0`, `dc861a25` `0 / 12`), with
+       `dc861a25` deleting exactly the stubs for Slices 24, 17 and 23 and
+       nothing else. *"Four days"* is right too. The conclusion — a correct
+       twelve-line deletion deferred by a sentence already false when it was
+       read — **stands**. What fails is the number quoted to size it.
+
+       ```
+       git log --format='%h %ad %s' --date=short 2ae54a4a..dc861a25^ -- ROADMAP-archive.md
+       #   574a8634  2026-09-01  235.2 — eighth archive sweep
+       #   d701e619  2026-08-30  228.1 — seventh archive sweep
+       #   e29c7c18  2026-08-30  214.1 — sixth archive sweep     <-- MISSING from both sites
+       #   83192cd1  2026-08-29  208.1 — fifth archive sweep
+       #   d3d76a28  2026-08-29  199.1 — a RE-VERIFIED block, no move
+       git log --format='%h' 2ae54a4a..dc861a25^ -- ROADMAP-archive.md | wc -l   # 5
+       ```
+
+       `e29c7c18` is in the range and does touch the file — both checked, not
+       read off a list: `git merge-base --is-ancestor` holds in both directions
+       and `git show --numstat e29c7c18 -- ROADMAP-archive.md` reads `1575 0`,
+       the third-largest of the five by insertions (4369, 2381, **1575**, 1424,
+       27).
+
+       **The two sites** (quoted as first published; **both were corrected in
+       place when this item closed**, so neither string is findable in the live
+       tree any more — the quotations are the record of what stood):
+       - `ROADMAP.md` 237.2 — *"Four commits landed on the file in between
+         (`d3d76a28`, `83192cd1`, `d701e619`, `574a8634`)"*.
+       - `ROADMAP-archive.md`'s header, which 237.2 itself rewrote — *"they sat
+         through four further commits to this file until 235.3 deleted them"*.
+
+       **Why it failed, named rather than guessed.** The five carry near
+       identical subjects — *fifth*, *sixth*, *seventh*, *eighth archive sweep*
+       — and **the one dropped is the middle of three consecutive `— Nth archive
+       sweep` lines**. The enumeration was made by eye down a list of near
+       duplicates, and no command was published beside it, while the premise
+       three lines above it ships its command in a fenced block and is correct.
+
+       **The same commit counts `e29c7c18` correctly one item earlier.** 237.1
+       calls its own sweep *"the ninth"*, which is right only if the eight
+       before it are `16ef2bb8`, `063211cc`, `187ab92d`, `2ae54a4a`, `83192cd1`,
+       **`e29c7c18`**, `d701e619`, `574a8634`. So one enumeration of this file's
+       history in `7e861867` includes the commit and the other drops it. That is
+       the strongest available evidence the failure is transcription rather than
+       a wrong mental model of the range.
+       That is **192.1's shape a fourth time**: the expensive treatment goes to
+       the claim that motivated the work, and what ships beside it goes out on
+       credibility it has not earned — the same shape 236.1 filed against 234.1
+       and 232.1 filed against itself. The recurrence is the reason to file.
+
+       **One further detail, in the same three-line block:** the annotation
+       renders `dc861a25` as `-0 / -12` where `git log --numstat` prints the
+       two columns as `0` and `12`, so the insertion column is signed wrong.
+
+       **`loop-log.md:1279` and `STATUS.md:43` carry the same wrong phrase and
+       must NOT be edited** — `record_iteration.py`'s standing rule is that
+       historical rows are never edited, which the archive states twice
+       (`:21535`, `:25832`) and 237.2's own scope sweep correctly identified as a
+       different rule about a different file. The figure is immortal in the log,
+       and that is exactly why the two durable sites must carry the correction.
+
+       **No gate proposed, refused on measurement.** 79 phrases of the form
+       `<word-or-number> commits` exist across the two roadmap files
+       (`grep -ohE '\b([a-z]+|[0-9,]+) commits\b' … | wc -l`). **One was
+       checked and is wrong; the other 78 were not checked** — said that way
+       rather than as "one in 79", because the honest denominator is 1. What the
+       79 settles is the gate question alone: a detector keyed on the phrase
+       shape fires on all 79 and is green on everything, and one that recovers
+       each phrase's intended range out of prose is doing 94.11's semantic step
+       and would be red on a correct tree. Third consecutive grill to reach the
+       same answer about its own proposal.
+
+       *Accept* — properties, not predicted values:
+       - (a) Both durable sites agree with what the `git log … | wc -l` command
+         above actually prints, **or** record why the four-commit figure is
+         preferred anyway. Both close this.
+       - (b) The command sits beside the claim at each site, since this item
+         exists because a count was published without one.
+       - (c) 237.2's conclusion, its ten-commit premise, and the *"four days"*
+         figure are left standing. A change that reopens any of them does not
+         satisfy this item.
+       - (d) The loop-log and `STATUS.md` rows are left unedited, and whichever
+         way (a) is answered, the reason they stay wrong is recorded where a
+         reader of the correction will meet it.
+       - (e) **Finding the distinction not worth drawing is a satisfying
+         outcome**, recorded with its reason — the conclusion survives either
+         count, so "imprecise and right" is a defensible close. Note it would be
+         the fourth instance of that shape (232.1, 236.1, 192.1's general form).
+
+       **Kind of work needed, so rule 4 sorts it correctly: NOT browser-blocked,
+       NOT owner-blocked, NOT agent-blocked.** It is a `git log` over one file on
+       an unshallowed clone plus a markdown edit at two sites. No screenshot is
+       evidence for any part of it.
+
+       **CLOSED 2026-09-01 (cloud wake, rule 4 — the first rule-4 dispatch in
+       six hand-offs). Corrected to five at both sites; (e) considered and
+       refused, with a reason.**
+
+       Every premise was **re-run on this wake's own unshallowed clone** before
+       anything was edited, not read out of the item — `is-shallow-repository`
+       → `false`, 1,786 commits:
+
+       - The range prints **5** (`574a8634`, `d701e619`, `e29c7c18`,
+         `83192cd1`, `d3d76a28`). `e29c7c18` is in it in **both** directions
+         (`git merge-base --is-ancestor 2ae54a4a e29c7c18` and
+         `… e29c7c18 dc861a25^`, rc=0 each) and reads `1575 0`, third of
+         `4369 · 2381 · 1575 · 1424 · 27` — the item's own ordering, reproduced.
+       - **(c) holds, measured, not assumed.** The ten-commit premise reads
+         **10** at `7e861867^`, with numstats `0/12` and `27/0` the only two
+         non-appends; `dc861a25`'s diff deletes exactly the Slice 24, 17 and 23
+         stubs and nothing else (12 lines); and `2026-08-28 → 2026-09-01` is
+         **4 days** exactly. None of the three moved.
+       - **(a) + (b) — both sites now carry the number AND the command**
+         (`ROADMAP.md` 237.2's cost paragraph, and the archive header). The
+         header's correction says what it used to read and why, so the file
+         records its own amendment rather than silently reading right.
+       - **(d) — the two log rows are untouched**, and the
+         reason is written into 237.2's cost paragraph itself, which is where a
+         reader of the correction arrives. The dated grill report
+         `grill-objective-232-234-236-237-2026-09-01.md` also keeps the
+         pre-correction quotation, for the same reason.
+       - The `-0 / -12` annotation is now `+0 / -12`, matching what
+         `git log --numstat` prints for `dc861a25` (`0` and `12`).
+
+       **(e) refused, and it is the interesting half.** *"Imprecise and right"*
+       was genuinely available — the conclusion survives either count — and it
+       is refused because **the number is not decorative here: it is the size of
+       the cost**, the whole point of a paragraph whose subject is how long a
+       correct deletion was deferred. It would also have left the wrong figure
+       in the one file whose header instructs future wakes about its own
+       editability. So this is *not* the fourth instance of 232.1/236.1's shape;
+       it is the first case in that series where the disputed number is
+       load-bearing for the claim it sits in.
+
+       **Scope: counted before AND after editing, never enumerated by eye** —
+       which is the failure mode this whole item is about:
+
+       ```
+       git grep -in "four commits landed\|four further commits" -- . | wc -l   # 6
+       git grep -in "four commits" -- . | wc -l                                # 21
+       git grep -in "four commits landed on the file\|sat through four further commits" \
+         -- ROADMAP.md ROADMAP-archive.md | grep -v '\*"' | wc -l              # 0
+       ```
+
+       The third is the one that matters: **zero surviving live assertions of
+       the wrong figure.** Of the 6, none is a claim — 238.1's two quotations
+       (labelled above as pre-correction text), this paragraph's own grep
+       command, the dated grill report, and the two immortal log rows
+       (the Slice 238 grill row in `loop-log.md`, and the copy of it `STATUS.md`
+       renders). **Neither is cited by line number here, and that is a finding
+       of its own**: 238.1 filed them as `loop-log.md:1279` / `STATUS.md:43` and
+       BOTH numbers were already wrong by the time this item closed — the log
+       had grown to `:1281`, and `STATUS.md` regenerates its "last 10
+       iterations" on every `record_iteration.py` run, moving the row to `:38`
+       within this very wake. A line number into a regenerated mirror rots by
+       construction; grep the row instead. The remaining 15 of the 21 are about entirely
+       different ranges, including two script headers and the archive's own
+       *"silently produced FOUR commits, not five"* at `:22793`; all untouched.
+
+       **That third command exists because the obvious check cannot pass.** A
+       plain `'four commits landed' not in ROADMAP.md` is red on a correct
+       tree — the item's evidence quotes the string it removed, and the grep
+       written to verify the removal *is itself a match*. Both are CLAUDE.md's
+       "an assertion tripped on its own explanation", met twice in one
+       paragraph; the fix is to assert on the claim's shape, excluding quoted
+       forms, not on the substring.
+
+       **No new gate**, per the item's own refusal, which was not re-litigated.
+
+**NOT VERIFIED, said plainly:** cloud wake — no Podman and no
+`localhost:8081`, so the 1440/390 light-and-dark screenshot lane could not run.
+**This slice changes no code**: the diff is `ROADMAP.md` and one new
+`.roundtable/` report; no shipped artefact, CSS, markup or rendered output
+moved, and the docs site renders neither file. Nothing here rests on a rendered
+image. Every gate reading quoted came from that gate executing in this
+container.
+

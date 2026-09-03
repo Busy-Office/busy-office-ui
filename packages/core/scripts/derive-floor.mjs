@@ -21,7 +21,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import bcd from '@mdn/browser-compat-data' with { type: 'json' };
+import { compatOf as bcdCompatOf } from './bcd-compat.mjs';
 import browserslist from 'browserslist';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -69,15 +69,9 @@ try {
   /* JS is optional for the CSS-only consumer; probes that need it just miss. */
 }
 
-/** Walk a BCD path, or throw — a silently-missing key would lower the floor. */
-function compatOf(path) {
-  let node = bcd;
-  for (const k of path) {
-    node = node?.[k];
-    if (!node) throw new Error(`derive-floor: no BCD entry at ${path.join('.')} — has the key moved?`);
-  }
-  return node.__compat.support;
-}
+/** Walk a BCD path, or throw — a silently-missing key would lower the floor.
+ *  Shared with check-rf-floor.mjs; see bcd-compat.mjs for why. */
+const compatOf = (path) => bcdCompatOf(path, 'derive-floor');
 
 /**
  * The earliest version a browser supports this feature in a form THE FRAMEWORK

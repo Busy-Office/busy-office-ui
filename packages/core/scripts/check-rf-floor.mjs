@@ -68,7 +68,7 @@ import { readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
-import bcd from '@mdn/browser-compat-data' with { type: 'json' };
+import { compatOf as bcdCompatOf } from './bcd-compat.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const DIST = join(HERE, '..', 'dist');
@@ -89,12 +89,8 @@ const FEATURES = [
   { id: ':has()', path: ['css', 'selectors', 'has'], kind: 'selector', pattern: () => /:has\(/g },
 ];
 
-function compatOf(path) {
-  let node = bcd;
-  for (const k of path) node = node?.[k];
-  if (!node) throw new Error(`check-rf-floor: no BCD entry at ${path.join('.')} — has the key moved?`);
-  return node.__compat.support;
-}
+/** Shared with derive-floor.mjs; see bcd-compat.mjs for why. */
+const compatOf = (path) => bcdCompatOf(path, 'check-rf-floor');
 
 /** Earliest Chrome version supporting this feature in a form THIS PROFILE
     ACTUALLY EMITS — the same rule `derive-floor.mjs`'s `earliestUsableVersion`
