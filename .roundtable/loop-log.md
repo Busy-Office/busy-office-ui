@@ -1349,3 +1349,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-03 21:53 · Meta · refusal · the whole-page form of 249.6's gate predicate — 78-81 pattern links on all 31 learning-path pages, so it could not fail; the Accept now names the content-region anchor · refused · 6cdcab4b
 - 2026-09-03 21:53 · Continue · build · Slice 249.14 — a distinct meta description on all 28 erp-suite screens, thrown at render and gated in the suite audit, four red-proofs · landed · 6cdcab4b
 - 2026-09-03 21:53 · Meta · refusal · reading the descriptions off the DOM in audit.mjs — the built file is what a crawler gets and needs no browser, so the arms run and report before Chrome starts · refused · 6cdcab4b
+- 2026-09-03 23:17 · Continue · build · Slice 249.8 — component tagline + category generated from the CSS header; sidebar + homepage tiles + llms.txt now generated, 43-entry array deleted · landed · 4dbec5bd
+- 2026-09-03 23:17 · Meta · refusal · fabricating a DSA score for the throwaway probe component to push a scaffolded stub through check:dsa-scores · refused · 4dbec5bd
+- 2026-09-03 23:17 · Meta · refusal · quoting the tile probe's 'zero prose overflow' reading — red-proved as a dead detector (400 unbreakable chars still read 0) · refused · 4dbec5bd
