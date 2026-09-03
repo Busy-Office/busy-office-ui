@@ -24,10 +24,9 @@ a line number survives none.
 
 ## In flight: nothing
 
-Last updated 2026-09-03 (**local** wake, interactive session). Working tree
-clean at hand-off. Four commits this wake, all pushed: `7813b1d` (Roadmap 249
-triage), `e3c8c57` (Slice 250 Objective grill), and the two carrying Slice
-251 (247.1) and this hand-off.
+Last updated 2026-09-03 (**cloud** wake, scheduled routine). Working tree clean
+at hand-off. Two commits this wake, both pushed: `25e24745` (Slice 252) and this
+hand-off.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -40,75 +39,78 @@ python3 scripts/loops/roadmap_scope.py            # OPEN set + sweep scope
 ## Dispatch counters at hand-off
 
 ```
-Standardize   3 / 4 Continue rounds   since 2026-09-02 16:54   ok
-Objective     0 / 3 slices            since 2026-09-03 08:11   ok
-Optimize      1 wake-date(s) newer    since 2026-09-02 01:46   STALE   [newest pair: axe-violations]
+Standardize   0 / 4 Continue rounds   since 2026-09-03 05:50   ok
+Objective     2 / 3 slices            since 2026-09-03 08:11   ok   [247, 252]
+Optimize      0 wake-date(s) newer    since 2026-09-03 05:50   ok   [newest pair: axe-violations]
 ```
 
-- **Rules 1-3 clear.** Rule 3 just fired (Slice 250) and reset — do not
-  re-dispatch Objective for at least 3 more closed slices.
-- **Rule 5 is STALE, not clear** — say it could not be evaluated rather than
-  reporting no regression; do not read a metric older than the newest loop
-  activity as current.
-- **Rule 4's open set is `OPEN: [15, 112, 249]`.** Slice 15's AT evidence and
-  112.3/112.4 are owner-hardware-blocked, unchanged for many wakes (name
-  which kind of blocked if reporting rule 4 as stuck — LOOPS.md 186.2). The
-  next dispatchable item is **the oldest open sub-item inside Slice 249**
-  (`249.1` through `249.9` are dispatchable now; `249.10`-`249.13` are owner
-  calls, sent back explicitly rather than built — see Slice 249's own text
-  for why before building any of them).
+- **Rule 2 just fired (Slice 252) and reset** — 4/4 OVERDUE at wake start,
+  0/4 now. Do not re-dispatch Standardize for 4 more Continue rounds.
+- **Rule 3 is at 2/3.** One more closed slice arms an Objective grill. The two
+  armed are `247` and `252`.
+- **Rule 5 is CLEAR again, and that is new.** It read STALE at wake start and
+  this wake recorded a fresh `axe-violations` sample (0), which gives it a live
+  comparable pair. It was reported as **NOT EVALUABLE** for this wake's dispatch
+  rather than clear, per LOOPS.md's own instruction — the fix landed after the
+  decision, not before it.
+- **Rule 4's open set is `OPEN: [15, 112, 249]`**, unchanged. Slice 15's AT
+  evidence and 112.3/112.4 are **owner-hardware-blocked** (LOOPS.md 186.2's
+  vocabulary — name which kind when reporting rule 4 as stuck). The next
+  dispatchable item is **the oldest open sub-item inside Slice 249**;
+  `249.1`-`249.9` are dispatchable now, `249.10`-`249.13` are owner calls sent
+  back explicitly rather than built — read Slice 249's own text for why before
+  building any of them.
 
-## ⚠ The archive sweep is a real signal, not yet acted on
+## The archive sweep is DONE — do not re-raise it
 
-`roadmap_scope.py` reads closed-history share **55.1%** (2,087 of 3,790
-lines), up from 51.9% two commits ago in this same wake — this session's own
-work (Slices 250, 251) is closed-on-arrival, which is why the share keeps
-climbing without anything going stale. **14 eligible targets**, none flagged
-by a still-open item's Accept **except Slice 237** (named by `249.12`'s
-archival-trigger question — leave it until `249.12` resolves, same 236.2
-reasoning Slice 247 applied to Slice 244 last time).
+The signal the previous hand-off flagged as "a real signal, not yet acted on"
+was acted on this wake. `roadmap_scope.py` now reads closed-history share
+**374 / 2,117 = 17.7%**, down from 55.1%, and the two remaining targets are:
 
-**Not run this wake.** Reason: this wake's dispatch was `247.1` (a citation
-audit) and `249.x` triage/build, neither of which needed the sweep, and
-running it mid-audit would have moved the very lines `247.1` was reading. The
-next wake that dispatches a Standardize round is the natural place for it —
-13 of 14 targets are unflagged and safe to move in one sweep.
+- **Slice 252** — this wake's own slice, closed-on-arrival. Same shape the last
+  hand-off recorded: a wake's own work is eligible the moment it lands, which is
+  why the share climbs without anything going stale. Nothing to do now.
+- **Slice 237** — still **refused**, and it is the same refusal as last time,
+  not a fresh judgement: `roadmap_scope.py`'s dependency line names it as the
+  target of open item `249.12`'s Accept (236.2's rule). **Leave it until
+  `249.12` resolves.**
 
 ## What landed this wake
 
-Four pieces of work, in order:
+**Slice 252 — Standardize sweep**, dispatched by rule 2. Rule 1 was clear (no
+open P0; GitHub intake `totalCount: 0`), so Step 1 triaged and committed
+nothing.
 
-1. **Roadmap 249** — triaged a 16-item external docs-adoption proposal
-   (RoyUI comparison). Every load-bearing citation re-run against the live
-   tree before trusting it; two of the proposal's own claims were refuted
-   (a terminology-table worked example that was backwards, and a
-   browserslist/floor "mismatch" that isn't one). 9 dispatchable items filed
-   (`249.1`-`249.9`), 3 sent to the owner as-is (`249.10`-`249.12`), one sent
-   back for explicit reconsideration rather than ratified (`249.13`, a
-   proposed reversal of the 2026-08-16 demo-first/spec-last decision — the
-   facts check out but the proposal's own justification misstates the
-   original decision). Full triage: `.roundtable/grill-adoption-proposal-2026-09-03.md`.
-2. **Slice 250** — Objective grill, dispatched by rule 3 (OVERDUE 3/3
-   `[244, 245, 248]`). 28 of 28 checked claims reproduce; both of 244.4's
-   red-proofs were executed live (not read off the write-up) and hold
-   exactly, including the cited line number. No item filed — nothing to
-   correct. Full report: `.roundtable/grill-objective-244-245-248-2026-09-03.md`.
-3. **Slice 251** — `247.1` built. Audited every live `file:line` citation
-   into a rewritten/regenerated file (`STATUS.md`, self-`ROADMAP.md`); all
-   were already in the durable idiom except one, which was in THIS file
-   (`RESUME.md:73`'s `ROADMAP.md:351`, drifted by this wake's own edits).
-   Fixed by this rewrite rather than a patch — see the citation-practice note
-   above.
-4. **This hand-off.**
+1. **252.1 — all four standing lanes clean, a twelfth time.** Lane 1 `0 dead of
+   1,433 live`; lane 2 `74 / 242 / 230 / 8` unchanged member for member (the x4
+   joined-control group is still two components, so its reopen trigger is
+   unmet); lane 3 `118 pages, median 748`, 14 flagged pages all inside the
+   verdicted set; lane 4 no accumulate-class change. Lane 4 carried the finding.
+2. **252.2 — the tenth archive sweep.** 13 slices moved verbatim (251, 250, 248,
+   247, 246, 245, 244, 243, 242, 241, 240, 239, 238). `ROADMAP.md` 3,790 → 1,917
+   at the move, 3,790 → 2,117 at the commit. Verified by a second, independently
+   written parser reading the pre-move source, with **both** arms red-proved by
+   injection and each injection confirmed to have landed first.
+3. **252.3 — lane 5**, the divergence scan no instrument covers. `compatOf` was
+   hand-copied into `derive-floor.mjs` and `check-rf-floor.mjs`; consolidated
+   into `packages/core/scripts/bcd-compat.mjs`. Behaviour-neutral on a clean
+   `dist/` — `dist/floor.json` byte-identical, 4,843 bytes.
 
-Earlier in this session (previous conversation turns, same working copy):
-component-by-component design-grill (Slice 248, all 40 components, one real
-`.bo-alert` reflow bug fixed, one framework-level `text-overflow: ellipsis`
-fix), and a rebase of three local commits onto ~90 upstream commits that had
-landed while this session worked (renumbered a local "Slice 226" to 248 —
-origin had already used 226 for unrelated work).
+**Not verified, and named rather than implied:** this was a cloud wake, so the
+1440/390 light-and-dark screenshot lane could not run. Nothing in the diff rests
+on a rendered image (two markdown files the docs site does not render, plus
+three build-time Node scripts). All **17** CI entry points, re-derived from
+`ci.yml` rather than read off `ENVIRONMENT.md`'s snapshot, ran green here.
+`check:claims` read **162 live / 3 NOT VERIFIED**, which is ENVIRONMENT 6b's
+container property and not a regression.
+
+*One trap re-hit, worth carrying:* lane 1 (`scan:dead-style`) needs
+`CHROME_PATH` exported in the same command (ENVIRONMENT 1c). Its first run died
+with "No Chrome/Chromium found" — a loud failure, which is what that rule wants.
 
 ## Next wake
 
-Rule 4 dispatches Continue, build mode, on the oldest open item in Slice 249
+Rule 4 dispatches Continue, build mode, on the oldest open sub-item in Slice 249
 — read that slice's own text for each item's Accept criteria before building.
+Rule 3 is one closed slice away from firing, so expect an Objective grill soon
+after.

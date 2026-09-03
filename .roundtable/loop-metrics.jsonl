@@ -117,3 +117,6 @@
 {"ts": "2026-09-01 19:43", "name": "dsa-cite-bare-counts-resolved", "value": 8.0, "unit": "count"}
 {"ts": "2026-09-02 01:46", "name": "axe-violations", "value": 0.0, "unit": "count"}
 {"ts": "2026-09-02 01:46", "name": "dsa-cite-absence-claims-resolved", "value": 42.0, "unit": "count"}
+{"ts": "2026-09-03 05:50", "name": "axe-violations", "value": 0.0, "unit": "count"}
+{"ts": "2026-09-03 05:50", "name": "roadmap-live-lines", "value": 2117.0, "unit": "lines"}
+{"ts": "2026-09-03 05:50", "name": "roadmap-closed-share-pct", "value": 17.7, "unit": "percent"}

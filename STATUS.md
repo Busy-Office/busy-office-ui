@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-03 00:16 UTC
+Generated at: 2026-09-03 05:50 UTC
 
 ## Open items by slice
 
@@ -29,10 +29,9 @@ Generated at: 2026-09-03 00:16 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1311 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-09-02 16:54   OVERDUE
-  Objective     1 / 3 slice           since 2026-09-03 08:11   ok  [247]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+dispatch status — counter-triggered rules (1314 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-09-03 05:50   ok
+  Objective     2 / 3 slices          since 2026-09-03 08:11   ok  [247, 252]
   Optimize      1 wake-date(s) newer   since 2026-09-02 01:46   STALE   [newest pair: axe-violations; 119 sample(s), 13 of 36 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-02, not this one — record a metric or say the rule could not be evaluated.
 ```
@@ -50,9 +49,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-02 18:52 · Meta · refusal · gating the WIDE reading of the predicate — it would exempt six of twenty-six core scripts, which is exempting the tree rather than gating it · refused · 8f6c1011
-- 2026-09-02 18:52 · Meta · refusal · a table-driven single gate over both chokepoints — it satisfies check-selftests once and would accept a third and fourth predicate with no obligation to prove either can fail · refused · 8f6c1011
-- 2026-09-02 18:52 · Meta · refusal · routing check-contrast.mjs:135 and build-component-css.mjs:98 through the chokepoint — neither is a drop-in and it would change build output this wake cannot verify visually (recorded as 246.1) · refused · 8f6c1011
 - 2026-09-02 19:46 · Continue · build · 245.1 — 244.3's 'six other loop scripts' and 'eight other _common consumers' are two counts of one set; both sites now carry the figure, the revision read at, the command, and the noun. Command reproduces 5 at 71a61679 / 7 at 1590bc2b, b0b70f96 and c31799a3, so 'other than the two folded' is five; the six is a mid-edit working-tree reading reachable at no revision, the eight counts ten .py minus two folded with three non-importers among them. Third-reading bullet TESTED by command and negative — three widenings all read 5/7. Log row and STATUS mirror left unedited per record_iteration.py's standing rule. Filed 247.1 · landed · b1370408
 - 2026-09-02 22:05 · Continue · fix · Slice 248 item 5 (renumbered from local Slice 226 during the origin rebase — origin had already used 226 for unrelated work): Scan's placeholder-clip nit — added text-overflow:ellipsis to .bo-input framework-wide instead of trimming demo content · landed · 856ede3
 - 2026-09-03 06:38 · Meta · refusal · Rebased 3 local commits (component design-grill + docs) onto origin/main after 80+ autonomous-loop commits landed upstream (through Slice 247); local content used the number Slice 226, already taken upstream for unrelated work, so renumbered to Slice 248 during resolution — no content lost, all gates + 152 tests green post-rebase · landed · ba4dcdf
@@ -60,6 +56,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-03 08:05 · Meta · refusal · the proposal's browserslist-vs-derived-floor 'incidental' finding — derive-floor.mjs is deliberately independent by design, not a defect · refused · 5b3ab69
 - 2026-09-03 08:11 · Objective · grill · Slice 250 — grill of Slices 244, 245, 248: 28 of 28 claims reproduce, both 244.4 red-proofs executed live (check:src-css-walkers, check:dist-walkers), 245.1's citation stability confirmed across an intervening rebase, 248 self-grilled clean · logged · 7813b1d
 - 2026-09-03 08:16 · Continue · build · 247.1 — audited every live file:line citation into a rewritten/regenerated file; all in ROADMAP.md were already durable-idiom-compliant, the one real drift was RESUME.md's own ROADMAP.md:351 pointer, fixed by rewriting RESUME.md to cite by slice number only · landed · e3c8c57
+- 2026-09-03 05:50 · Standardize · sweep · Slice 252 — Standardize sweep: lanes 1-3 clean a 12th time, lane 4 dispatched the 10th archive sweep (13 slices, ROADMAP.md 3,790 -> 1,917 at the move), lane 5 consolidated compatOf into bcd-compat.mjs · landed · 25e24745
+- 2026-09-03 05:50 · Meta · refusal · Slice 237 not swept though eligible — 249.12's Accept names it (236.2's rule, not a judgement call) · refused · 25e24745
+- 2026-09-03 05:50 · Meta · refusal · rule 5 reported NOT EVALUABLE rather than clear, because dispatch_status.py reads its newest metric pair STALE · refused · 25e24745
 
 ## Sunset test
 
