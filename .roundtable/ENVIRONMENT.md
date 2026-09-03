@@ -103,6 +103,13 @@ printing wrong figures; that guard was red-proved against a real
 `git clone --depth 1`. Nothing else refuses, so any wake whose finding is a
 history measurement must unshallow first.
 
+**`--unshallow` does NOT bring the tags, and `git tag` then answers EMPTY rather
+than erroring** (measured 2026-09-03, Slice 256). A fresh container returns
+nothing at all for `git tag --sort=v:refname`, so a claim of the form "the tag
+list starts at vX" reads as an absence instead of a disagreement — the silent
+kind of wrong this file exists for. `git fetch --tags origin` first; it took
+under a second here and returned all seven.
+
 ## 2b. A TIMED-OUT UNSHALLOW LEAVES `.git/shallow.lock`, AND EVERY LATER FETCH THEN FAILS QUIETLY
 
 Bit for real on 2026-08-30 (Slice 216, cloud wake) and cost three attempts. The
@@ -213,6 +220,36 @@ That has now been measured **both ways within two days**, on the same repo:
 needs a fix. **Do not "restore" the zero** — an environment fact here is a
 property of the container, not of the date. Read the count beside it: the
 corpus grows, so 154 → 158 is prose landing, not claims being skipped.
+
+## 6c. EVERY DOCS CONTENT-COLUMN WIDTH MEASURED HERE IS 15px NARROWER THAN ON THE OWNER'S MACHINE
+
+Measured 2026-09-03 (Objective grill of 254, Slice 256 finding C) while
+re-deriving a local session's live reading. The local wake measured
+`.bo-data-table-container` on `/patterns/list-report/` at **928** × 384; the same
+built page in this container reads **913** × 384. Nothing changed — the 15px is a
+scrollbar, and it is deterministic:
+
+```
+main.bo-app-shell__main  overflow-y: auto
+  offsetWidth 1216 − clientWidth 1201 = 15    ← reserved classic scrollbar
+docs-main    = 1201 − 48 padding             = 1153
+docs-content = 1153 − 208 (13rem rail) − 32 (gap) = 913     (928 with a 0px scrollbar)
+```
+
+**The usual check finds nothing, which is what makes this a trap.** The docs
+shell scrolls `main`, not the document, so
+`window.innerWidth - document.documentElement.clientWidth` reads **0** on every
+docs page. Linux headless Chrome reserves a 15px classic scrollbar inside that
+scroller; macOS overlay scrollbars reserve 0. Two hypotheses were tried and
+refuted before this one — a page scrollbar (0, above) and font-metric-driven rail
+sizing (dead: `.docs-main` is `grid-template-columns: minmax(0, 1fr) 13rem`, a
+FIXED rail, `Gallery.astro:801`).
+
+So: a width you measure here will not match a width the owner measured, by
+exactly 15px, and the difference looks like a layout regression. Measure the box
+that carries the constraint — `main`'s own `offsetWidth − clientWidth` — before
+filing one. Heights, row counts and overflow booleans are unaffected: the same
+probe reproduced 14 rows, 384px and 9 rows fully inside exactly.
 
 ## 7. A BARE `wc -w` UNDERCOUNTS THIS REPO BY 2.4-4.5%
 

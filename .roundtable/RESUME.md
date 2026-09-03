@@ -23,11 +23,11 @@ survives none.
 ## In flight: nothing
 
 Last updated 2026-09-03 (**cloud** wake, scheduled routine). Working tree clean
-at hand-off. Two commits this wake, both pushed: Slice 255 and this hand-off.
+at hand-off. Two commits this wake, both pushed: Slice 256 and this hand-off.
 
-**`check:resume-slice-ids` will name `255.1` as closed — that is deliberate.**
-It is referenced below as history, not as an open or blocked item. Nothing in
-this file claims it is queued.
+**`check:resume-slice-ids` will name `249.1` as closed — that is deliberate.**
+It appears below only as *what Slice 253's grill already covered*, i.e. why this
+wake dropped it from scope. Nothing here claims it is open, blocked or queued.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -48,29 +48,22 @@ verdict).
 
 Read `dispatch_status.py` yourself — the sets below are snapshots.
 
-- **Rule 2 (Standardize)** read `5 / 4 OVERDUE` at wake start and **fired**; it
-  resets to `0 / 4` after this wake's Standardize round is recorded. It will not
-  fire again until four more Continue rounds accumulate.
-- **Rule 3 (Objective)** read `2 / 3` `[249, 254]` and is unchanged — a
-  Standardize sweep does not close a slice for rule 3's purposes only in the
-  sense that 255 is a Standardize slice, which DOES count (161.4). So expect
-  `dispatch_status.py` to read `3 / 3 [249, 254, 255]` next wake — **rule 3 is
-  armed and sits above rule 4.** Read the counters before assuming a build item.
+- **Rule 2 (Standardize)** read `0 / 4` at wake start and is unchanged: an
+  Objective round is not a Continue round, so nothing accumulated.
+- **Rule 3 (Objective)** read `3 / 3 OVERDUE [249, 254, 255]` and **fired**. It
+  resets to `0 / 3` once this wake's Objective row is recorded, so **rule 4 is
+  the likely dispatch next wake.**
 - **Rule 5 (Optimize)** read `ok` (not STALE) — `0 wake-date(s) newer`, newest
   pair `bundle-gz-kb`, 128 samples. **No sample was recorded this wake,
-  deliberately:** Slice 255 changes 0 files under `packages/core/src/css/`, so a
+  deliberately:** Slice 256 changes 0 files under `packages/core/`, so a
   `bundle-gz-kb` reading could only reproduce the existing value.
 
 ## Next wake
 
-**Rule 3 is armed** (2/3 → 3/3 once 255 is counted) and sits above rule 4 — an
-Objective grill of Slices 249/254/255 is the likely dispatch, not a build item.
-Confirm with `dispatch_status.py` before assuming.
-
-If rule 3 is somehow not yet at 3, **rule 4's open set is `OPEN: [15, 112,
-249]`** and the oldest open sub-item is **`249.5`** — install commands for
-pnpm/yarn/bun in `getting-started/installation.astro`, or a one-line recorded
-refusal. Fully cloud-dispatchable and the cheapest next thing.
+Rule 3 has just discharged, so expect **rule 4**. Its open set is
+`OPEN: [15, 112, 249, 256]` and the oldest open sub-item is **`249.5`** — install
+commands for pnpm/yarn/bun in `getting-started/installation.astro`, or a
+one-line recorded refusal. Fully cloud-dispatchable and the cheapest next thing.
 
 - Slice 15's `AT runtime evidence` and `112.3`/`112.4` are **owner-blocked**
   (LOOPS.md 186.2's vocabulary).
@@ -82,50 +75,71 @@ refusal. Fully cloud-dispatchable and the cheapest next thing.
 
 ## The archive sweep: not due, do not re-raise
 
-`roadmap_scope.py` reads closed-history share **610 / 2,756 = 22.1%** at
+`roadmap_scope.py` reads closed-history share **714 / 3,021 = 23.6%** at
 hand-off — well under the **55.1%** at which 252.1 dispatched the tenth sweep on
-2026-09-03. The tenth sweep moved 13 slices only three days ago; this is normal
-regrowth, not a trigger. Eligible targets `[254, 253, 252, 237]`, of which 253
-and 237 are named by the open Slice 249 (249.6, 249.12) and stay per 236.2. The
-other two (254, 252) are small and unnamed. Re-run the script; these are
-snapshots.
+2026-09-03. It read 22.1% at Slice 255's hand-off and 24.7% before this wake's
+own slice landed; the whole movement is Slice 255's body arriving in the closed
+set and Slice 256's arriving in the live denominator, not drift. The tenth sweep
+moved 13 slices three days ago, so this is normal regrowth, not a trigger.
+Eligible targets `[255, 254, 253, 252, 237]`, of which 253 and 237 are named by
+the open Slice 249 (249.6, 249.12) and stay per 236.2. Re-run the script; these
+are snapshots.
 
 ## What landed this wake
 
-**Slice 255 — Standardize sweep, all five lanes clean**, dispatched by rule 2
-(`Standardize 5 / 4 OVERDUE`). Rule 1 clear (no open P0, GitHub intake
-`totalCount: 0`); Step 1 triaged and committed nothing — no new input.
+**Slice 256 — Objective grill of Slices 249 (.2/.3/.4), 254 and 255**, dispatched
+by rule 3. Rule 1 clear (no open P0, GitHub intake `totalCount: 0`); Step 1
+triaged and committed nothing — no new input.
 
-The five lanes and their measured readings are in ROADMAP 255.1; the short
-version, so a later wake need not re-run them to know the state:
+Scope was narrowed first (§6 step 0): 249 re-arms after every round and Slice 253
+already grilled `249.1` and `249.6`, so both were dropped and the scope is what
+landed since that grill.
 
-1. **Lane 1 `scan:dead-style`** — 0 dead / 0 pages / 1,433 live inline
-   declarations. Identical to 252.1/244.1/237.1.
-2. **Lane 2 `report:css-repeats`** — 74 files · 242 rules · 230 bodies · 8
-   repeated, compared member-for-member against the standing table. Zero delta.
-   The x4 joined-control group is still two components (money, quantity), so its
-   reopen trigger (a third) is unmet.
-3. **Lane 3 `report:prose`** — 118 pages, median 781, total 110,518 words. Union
-   of corpus-2x and family-2x outliers is 15 pages; `comm -23 flagged verdicted`
-   is **empty** (all in 158.1+161.1+178.3's set). Checked by set difference, not
-   by the grep-each-path instrument that 228.1 refused.
-4. **Lane 4 `report_loop_prose.py`** — no file changed accumulate class.
-   `CLAUDE.md` 31 up / never cut and `DESIGN.md` 22 up / never cut are 167.1's
-   standing verdicts (CLAUDE.md's watch retired by 193.1). Regrowth signal is
-   22.1% (see the sweep note above) — not actionable.
-5. **Lane 5 (252.3's divergence scan)** — no hand-copied logic. The only
-   two-count pairs are `function exists` (252.3-adjudicated: different args,
-   different workspaces) and `function build` (arity 0 in `derive-introduced.mjs`
-   vs arity 3 in `build-component-css.mjs` — unrelated entrypoints). `compatOf`
-   is gone, consolidated into `bcd-compat.mjs` last wake.
+**60 published assertions re-derived; 57 reproduce exactly**, two do not
+reproduce as stated and one only within a documented gzip tolerance. Both
+failures are the same error — a real count of a set the sentence does not name.
+(One assertion = one figure or statement a command was re-run against; the
+per-slice totals are 23 + 12 + 7 + 9 + 9.) Full report with every command:
+`.roundtable/grill-objective-249-254-255-2026-09-03.md`.
 
-**Recorded as a no-op sweep rather than manufacturing a fix** — CLAUDE.md's
-standing rule against busywork, the same call 176.1 made on ten re-queued Polish
-surfaces.
+1. **Finding A, corrected in ROADMAP 249.3:** "20 components floor at Chrome 99"
+   is false — **25** do. The 20 is the largest full-label group. The error
+   flattered the item (63% at the oldest floor, not 50%).
+2. **Finding B, corrected in Slice 255 and by an appended CORRECTION block in
+   `ROADMAP-archive.md`:** the enumeration lane 3 resolves against labels a
+   **fifteen**-name list as "158.1's twelve", absorbing 161.1's three and
+   dropping `/patterns/output-form/`. Lane 3's conclusion is unaffected — the
+   union is 16 pages and covers all 15 flagged.
+3. **Finding C, filed as `ENVIRONMENT.md` §6c:** Slice 254's `928 × 384`
+   container reads **913** × 384 here. Not a change — a 15px classic scrollbar
+   reserved inside `main.bo-app-shell__main` (`overflow-y: auto`), where macOS
+   overlay scrollbars reserve 0. **Every cloud-wake docs width reading is 15px
+   under the owner's**, and the usual page-scrollbar check reads 0 because the
+   shell scrolls `main`, not the document.
+
+4. **Finding D, left OPEN as `256.2`:** `check:floor` fired on this grill report
+   — correctly; the report was rewritten to print the deriving command instead
+   of three floor labels, and **the gate was not widened**. The finding is that
+   the gate's own header comment exempts *"the .roundtable grills"* while its
+   `ALLOW` list does not contain `.roundtable/**`. Left as a decision because
+   `.roundtable/` also holds living ledgers read as current. 256.2 carries both
+   readings and an accept test that treats *"the comment is wrong"* as a
+   satisfying outcome.
+
+A second `ENVIRONMENT.md` line landed beside it: **`--unshallow` does not fetch
+tags**, and `git tag` then answers EMPTY rather than erroring — the silent kind
+of wrong, hit while re-deriving 249.3's tag claim. `git fetch --tags origin`
+first.
+
+**`256.2` is the one item this wake leaves open**, and it is cloud-dispatchable
+— it is a five-line allow-list decision plus a two-sided red-proof, no browser.
 
 **Not verified, and named rather than implied:** this was a cloud wake, so the
-1440/390 light-and-dark screenshot lane could not run. Slice 255 changes only
-two markdown files (the slice and this hand-off) — no CSS, no docs page, no
-component — so there is nothing a screenshot could show. `build`, `test` and
-`docs:build` (with `check:repo`) ran green in this container to produce the
-`dist/` the lanes read; `check:slice-refs` passes at 237 sections.
+1440/390 light-and-dark screenshot lane could not run. Slice 256's diff is
+markdown only (the slice, two corrections, the grill report, `ENVIRONMENT.md`) —
+no CSS, no docs page, no component — so there is nothing a screenshot could show.
+Every claim in the grill is a count, a byte size, a computed style or a layout
+geometry, which is the second of `ENVIRONMENT.md`'s two lists. `build`, `test`
+and `docs:build` (with `check:repo`, `check:slice-refs`, page-shape and the
+readme-claims gate) ran green in this container, plus `check:claims`,
+`check:layout` and `test:axe`.

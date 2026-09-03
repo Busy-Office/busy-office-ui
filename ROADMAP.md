@@ -315,6 +315,166 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 256 — Objective grill of Slices 249 (.2/.3/.4), 254, 255: 57 of 60 assertions reproduce, both that do not are counts of the WRONG SET — a label group read as a browser floor and a width that is a platform scrollbar — and writing the report tripped a gate whose own comment exempts the file it fired on (2026-09-03)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** and
+`origin/main` a forced update (`+ 17b3ba6...03aab90`), ENVIRONMENT traps 1 and 2
+both biting as usual — `git checkout -B main origin/main` before any commit, then
+`--unshallow` clean in one attempt (1,834 commits, no `shallow.lock`). Rule 1: no
+open P0 — `list_issues` on `Busy-Office/busy-office-ui` returns `totalCount: 0`;
+Step 1 triaged and committed nothing. Rule 2 clear (`Standardize 0 / 4`). **Rule
+3 fired**: `Objective 3 / 3 slices OVERDUE [249, 254, 255]`. Rules 4-8 not
+reached. `git fetch origin main` re-run immediately before the first commit
+(Step 0c): unmoved, no collision.
+
+**Scope narrowed before grilling, per §6 step 0.** 249 is an open sixteen-item
+slice, so it re-arms after every round and Slice 253 already grilled it — `249.1`
+and `249.6`, the only items that existed then. Dropped both; the scope is what
+landed *since* that grill: `249.2`, `249.3`, `249.4`, Slice 254, Slice 255.
+`.roundtable/INDEX.md` reports **4 repeated subject(s)** across 180 files and this
+grill does not add a fifth.
+
+Full report, with every command:
+`.roundtable/grill-objective-249-254-255-2026-09-03.md`.
+
+1. [x] **256.1 — DONE 2026-09-03. Sixty published assertions re-derived; 57
+       reproduce exactly, two do not reproduce as stated, one reproduces only
+       within a documented tolerance — and both failures are the same error, a
+       real count of a set the sentence does not name.**
+
+       *The unit is defined, because a tally is only checkable if it is:* one
+       assertion = one distinct figure or statement a command was re-run
+       against, totalled per slice in the report — 23 (255) + 12 (254) + 7
+       (249.2) + 9 (249.3) + 9 (249.4) = 60. **This line first read "50 claims,
+       47 reproduce", which was estimated rather than counted**; it is corrected
+       here rather than quietly, since a number going into a summary is the
+       exact case CLAUDE.md says to red-prove.
+
+       Two were corrected in place in this commit; the third is an environment
+       fact and went to `ENVIRONMENT.md` §6c. A **fourth** finding is not about
+       a claim at all — `check:floor` went red on this report while it was being
+       written, and it is filed as the open **256.2** below rather than fixed
+       here, because widening a gate in the wake that tripped it is the pattern
+       this repo refuses.
+
+       - **A — `249.3`: "20 components floor at Chrome 99" is false; 25 do.**
+         `{ '99': 25, '105': 9, '114': 1, '117': 4, '119': 1 }`. The 20 is the
+         size of the largest full-LABEL group; two more Chrome-99 labels carry
+         3 and 2 (20 + 3 + 2 = 25). The sentence's
+         subject is the label and its predicate is the browser, which is how it
+         survived review. It is the only figure in 249.3 that argues why the
+         per-component floor is worth shipping, and the error **flattered the
+         item** — 25 of 40 is 63% at the framework's oldest floor, not 50%.
+         Everything else in the sentence holds: 9 distinct labels, range
+         99 → 119, framework floor 119.
+       - **B — Slice 255's lane 3 resolves against an enumeration that labels
+         FIFTEEN names as "158.1's twelve".** The conclusion stands and was
+         re-derived by set difference: 118 pages of 127, median 781, total
+         110,518, union of corpus-2x and family-2x = 15 distinct pages, every
+         one verdicted. What fails is the citation. The archive passage absorbs
+         **161.1's** `/base/motion/`, `/concepts/design-language/` and
+         `/concepts/js-behaviors/` into 158.1 — 158.1's own text names them as
+         the three that swap IN and leaves them for the next round — then counts
+         them again as "161.1's three", while dropping `/patterns/output-form/`,
+         which 158.1 did verdict. The union is **16**. Same shape as all three
+         of Slice 253's findings: a citation about citations. Corrected in
+         Slice 255's live text and by an appended CORRECTION block in
+         `ROADMAP-archive.md` (236.2 permits amending the archive).
+       - **C — Slice 254's `.bo-data-table-container` at "928 × 384" reads
+         913 × 384 here, and the 15px is a reserved scrollbar.** Re-measured
+         live on the built page via `browser-harness.mjs` + `serve-dist.mjs`:
+         14 rows ✓, 384px ✓, 9 of 14 fully inside ✓, first
+         `[data-density="compact"]` a 30px `FORM.bo-cluster` with 0 rows ✓ —
+         every load-bearing figure of the crop decision reproduces. Only the
+         width moves, by exactly the 15px classic scrollbar Linux headless
+         Chrome reserves inside `main.bo-app-shell__main` (`overflow-y: auto`;
+         `offsetWidth 1216 − clientWidth 1201 = 15`), where macOS overlay
+         scrollbars reserve 0. **Nothing is broken.** Two hypotheses were tried
+         and refuted first — a page scrollbar (`innerWidth −
+         documentElement.clientWidth` = **0**, because the shell scrolls `main`
+         and not the document) and a font-sized rail (dead: `.docs-main` is
+         `minmax(0, 1fr) 13rem`, fixed). Filed as a trap because any future
+         cloud-wake width reading will disagree with the owner's by 15px and
+         look like a regression.
+
+       **Soft note, not filed as a defect.** 254's `364.0 kB → 449.3 kB` packs
+       here as `363.6 → 449.1` (files exact at 183 → 184, the pre-254 figure
+       taken by building a worktree at `82d14bf`). Both byte figures land
+       0.2-0.4 kB low in the same direction — the classic-zlib-vs-zlib-ng
+       difference LOOPS.md §2 already records as the reason never to gate a
+       compressed byte count exactly. Derived ratio +23.5% against a published
+       +23.4%; the 1x-over-2x trade is unaffected at either reading.
+
+       **What reproduced, so it is not re-derived a third time.** All five of
+       255's lanes, reading identically: dead-style 0/0/1,433; css-repeats
+       74 · 242 · 230 · 8 with the x4 group still two components; prose
+       118/127 · 781 · 937 · 110,518; loop-prose `CLAUDE.md` 31 up /
+       `DESIGN.md` 22 up / `LOOPS.md` 6 up `9198e43f` / `RESUME.md` 0 up
+       `82d14bf`; the divergence scan's two false positives, `build()` arity 0
+       vs 3 and `exists` across workspaces. 249.2's 165 = 127 + 10 + 28 split,
+       127 of 127 descriptions, **127 distinct** description strings, sitemap
+       127 = 127, and the "116 built pages" set is exactly the 116 source pages
+       using `<Gallery` against **11** that build their own `<head>`. 249.3's
+       280 maturity assertions over 40 components / 39 pages, and its whole
+       refutation: tags start at `v0.1.1`, `npm view` has no 0.2.0,
+       `components/form/` holds five files and no `form.css`, `introduced.json`
+       is 42 keys = 26 + 15 + 1 with `nav` and `record-card` the two removed.
+       249.4's `48 / 18 / 0 / 3`, the 5-item In-scope list and 7-row
+       Not-in-scope table, `51 gates, 18 heuristic`, the built page's third
+       `<h2>` being the layout's `Related`, and 183 files at that commit.
+
+       - **Accept (property, not prediction):** every published figure in the
+         narrowed scope is either re-derived with the command recorded, or named
+         as not re-derivable here with the reason. Met: 50 checked, 3 corrected
+         or filed, 2 named as out of reach (254's 2x branch needs a re-taken
+         screenshot; the registry half of its Accept needs a publish).
+       - **Not verified, and named rather than implied:** cloud wake — no
+         Podman, no `localhost:8081`, so the 1440/390 light-and-dark screenshot
+         lane could not run. Every claim above is a count, a byte size, a
+         computed style or a layout geometry, which is the second of
+         `ENVIRONMENT.md`'s two lists. The diff is markdown only (this slice,
+         two corrections, the grill report, `ENVIRONMENT.md`) plus no code, so
+         there is nothing a screenshot could have shown.
+
+2. [ ] **256.2 — `check:floor`'s stated exemption names `.roundtable` grills;
+       its allow-list does not. Decide which one is wrong.**
+       Found by tripping it: this grill's first draft quoted three floor labels
+       verbatim and `docs:build` went red with *"3 hand-typed browser
+       floor(s)"*. **The gate is right to fire and nothing was widened to let
+       the report pass** — it was rewritten to print the deriving command
+       instead of the values. What is filed here is the mismatch inside the
+       gate itself:
+
+       ```
+       # check-floor.mjs, header comment:
+       #   "ROADMAP and the .roundtable grills QUOTE the old value as history"
+       const ALLOW = ['scripts/check-floor.mjs', 'scripts/derive-floor.mjs',
+                      'CHANGELOG.md', 'ROADMAP.md', 'ROADMAP-archive.md'];
+       ```
+
+       `.roundtable/**` is absent. The comment grants an exemption the code does
+       not, and nothing noticed because **no grill report had ever quoted a full
+       label** — the predicate was never exercised, which is 94.11's base-rate
+       lesson arriving from the other direction.
+
+       The argument runs both ways and that is why this is a decision, not a
+       patch. FOR widening: a dated grill in `.roundtable/` is history by
+       construction, the same reason `ROADMAP-archive.md` is exempt, and
+       rewriting one to satisfy a gate erases the finding it records. AGAINST:
+       `.roundtable/` also holds **living ledgers** read as current
+       (`ENVIRONMENT.md`, `polish-state.md`, `RESUME.md`), so a blanket
+       directory exemption is wider than the comment claims — a floor literal
+       in `ENVIRONMENT.md` would rot exactly like one in a docs page.
+
+       - **Accept (property, not prediction):** the comment and the allow-list
+         agree, whichever way that is settled — either `.roundtable/` (or a
+         `grill-*.md` subset of it) joins `ALLOW`, or the comment is corrected
+         to name only the files actually exempt. **Finding the comment wrong is
+         a satisfying outcome**, not an off-plan one. Whichever way it goes,
+         red-prove it: inject a hand-typed label into one file on each side of
+         the new boundary and confirm the gate fires on exactly one, checking
+         that the injection landed before believing either result.
+
 ## Slice 255 — Standardize sweep: all five lanes clean, nothing to consolidate — lane 4's regrowth signal is 22.1%, well under the 55.1% that dispatched the tenth sweep three days ago, and lane 5's only two-count pair is a false positive by arity (2026-09-03)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0 — `list_issues` on
@@ -371,8 +531,16 @@ live).
          mean 937 · total **110,518** words. Ten over 2x the corpus median and
          five more over a family median; the union is **fifteen distinct pages**,
          and `comm -23 flagged verdicted` is **empty** — all 15 are inside the
-         verdicted set (158.1's twelve, 161.1's three, 178.3's `/concepts/scale/`),
-         extracted from the archive rather than quoted. The grep-each-path
+         verdicted set, extracted from the archive rather than quoted.
+         *(Corrected 2026-09-03 by the Objective grill, Slice 256 finding B.
+         This said the set is "158.1's twelve, 161.1's three, 178.3's
+         `/concepts/scale/`". The conclusion is unaffected — the union is
+         **16** distinct pages and covers all 15 — but the archive passage it
+         extracts from labels a **fifteen**-name list as "158.1's twelve",
+         absorbing 161.1's `/base/motion/`, `/concepts/design-language/` and
+         `/concepts/js-behaviors/` into 158.1 and then counting them again as
+         "161.1's three", while dropping `/patterns/output-form/`, which 158.1
+         did verdict. 158.1's own numbered list is exactly twelve.)* The grep-each-path
          instrument stays refused (228.1): it returns a non-zero count for 15 of
          15 whatever the truth is.
        - **Lane 4 — `report_loop_prose.py`: no file changed accumulate class,
@@ -1111,8 +1279,17 @@ claimed.
        - `derive-floor.mjs` gains `perComponent`: the same probe set pointed at
          one component's sheet instead of `index.css`. **9 distinct floors
          across 40 components**, Chrome 99 → 119 — the label is worth printing
-         precisely because it is not uniform, and 20 components floor at
-         Chrome 99 where the framework floors at 119. The framework keys are
+         precisely because it is not uniform, and **25** components floor at
+         Chrome 99 where the framework floors at 119 — spread across **three**
+         distinct labels that agree on Chrome and differ on Firefox/Safari,
+         sized **20 / 3 / 2** (read the labels from `floor.json`; they are not
+         typed here, per `check:floor`).
+         *(Corrected 2026-09-03 by the Objective grill, Slice 256 finding A:
+         this said "20 components floor at Chrome 99", which is the size of the
+         largest label group, not the Chrome-99 set — 20 + 3 + 2 = 25. The
+         command is in that grill; the error flattered the item, since 25 of 40
+         is 63% at the framework's oldest floor rather than 50%.)*
+         The framework keys are
          **byte-identical** to the pre-change file (`JSON.stringify(rest) ===
          baseline`), so the refactor moved nothing it was not meant to.
        - `apps/docs/src/data/at-evidence.json` — the hand-recorded AT register,

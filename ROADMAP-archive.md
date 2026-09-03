@@ -29248,6 +29248,19 @@ editable-grid, list-report, output-form), **161.1**'s three family-split adds,
 and **178.3** for `/concepts/scale/` — which is the one a naive check misses,
 because it is flagged on the FAMILY axis only and is absent from 158.1's list.
 
+> **CORRECTION appended 2026-09-03 (Objective grill, Slice 256 finding B; the
+> archive is amendable for a correction — 236.2).** The parenthesis above holds
+> **fifteen** names, not twelve. `/base/motion/`, `/concepts/design-language/`
+> and `/concepts/js-behaviors/` are **161.1's** three — 158.1's own text names
+> them as the three that swap IN on the family axis and leaves them for the next
+> round — so they are absorbed into 158.1 here and then counted a second time as
+> "161.1's three family-split adds". 158.1's own numbered verdict list is
+> exactly twelve: data-table, richtext, which-pattern, form, editable-grid,
+> list-report, calendar, money, combobox, tabs, layouts, output-form. The union
+> is **16** distinct pages, and the verdict this passage reaches is unchanged by
+> the correction. This phrasing has been carried forward at four places in this
+> file and once into the live ROADMAP; that one is corrected in Slice 255.
+
 **Lane 4 — the finding. The live file is 50.8% closed history one day after the
 fifth sweep.** Two independent instruments agree on the scope:
 
