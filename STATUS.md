@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-03 00:05 UTC
+Generated at: 2026-09-03 00:11 UTC
 
 ## Open items by slice
 
@@ -31,10 +31,9 @@ Generated at: 2026-09-03 00:05 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1309 iterations logged)
+dispatch status — counter-triggered rules (1310 iterations logged)
   Standardize   3 / 4 Continue rounds since 2026-09-02 16:54   ok
-  Objective     3 / 3 slices          since 2026-09-02 17:53   OVERDUE  [244, 245, 248]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-09-03 08:11   ok
   Optimize      1 wake-date(s) newer   since 2026-09-02 01:46   STALE   [newest pair: axe-violations; 119 sample(s), 13 of 36 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-02, not this one — record a metric or say the rule could not be evaluated.
 ```
@@ -52,7 +51,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-02 17:53 · Meta · refusal · filing the discarded cross-file duplicate detector as a sibling item — 244.4 is already open on the same question and its second criterion asks exactly this; recorded there as a third option instead · refused · 4fcf971b
 - 2026-09-02 18:52 · Continue · build · 244.4 — src/css chokepoint gate built: check-src-css-walkers.mjs on a shared driver (gate-source-scan.mjs) that check-dist-walkers.mjs is rewired onto. Design question answered by a count nobody had taken — FOUR chokepoints here, one gated; one gate FILE per chokepoint because check-selftests demands a --self-test per file, so a table would accept predicates 3 and 4 unproved (47->48 gates, 17 heuristic). Predicates cannot be shared, red-proved: walksDist reads FALSE on the exact body 244.2 removed. Item's own premise corrected — 'true of every core script but one' holds for the base-rate clause (2 of 26) and not for criterion 1's wording (7 of 26). Red-proved twice with injections confirmed landed (check-sticky-layers.mjs:43; copy-suite.mjs:113) · landed · 8f6c1011
 - 2026-09-02 18:52 · Meta · refusal · gating the WIDE reading of the predicate — it would exempt six of twenty-six core scripts, which is exempting the tree rather than gating it · refused · 8f6c1011
 - 2026-09-02 18:52 · Meta · refusal · a table-driven single gate over both chokepoints — it satisfies check-selftests once and would accept a third and fourth predicate with no obligation to prove either can fail · refused · 8f6c1011
@@ -62,6 +60,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-03 06:38 · Meta · refusal · Rebased 3 local commits (component design-grill + docs) onto origin/main after 80+ autonomous-loop commits landed upstream (through Slice 247); local content used the number Slice 226, already taken upstream for unrelated work, so renumbered to Slice 248 during resolution — no content lost, all gates + 152 tests green post-rebase · landed · ba4dcdf
 - 2026-09-03 08:05 · Roadmap · plan · Slice 249 — triaged 16-item docs-adoption-surface proposal (RoyUI comparison + reviewer notes); 9 dispatchable items filed, 3 owner calls, refutation of two proposal claims (offcanvas/drawer terminology gap, browserslist/floor mismatch) · triaged · 5b3ab69
 - 2026-09-03 08:05 · Meta · refusal · the proposal's browserslist-vs-derived-floor 'incidental' finding — derive-floor.mjs is deliberately independent by design, not a defect · refused · 5b3ab69
+- 2026-09-03 08:11 · Objective · grill · Slice 250 — grill of Slices 244, 245, 248: 28 of 28 claims reproduce, both 244.4 red-proofs executed live (check:src-css-walkers, check:dist-walkers), 245.1's citation stability confirmed across an intervening rebase, 248 self-grilled clean · logged · 7813b1d
 
 ## Sunset test
 

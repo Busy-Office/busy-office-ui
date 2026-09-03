@@ -315,6 +315,34 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 250 — Objective grill of Slices 244, 245, 248: 28 of 28 claims reproduce, both red-proofs executed live, and the append-only citation-stability property survived an intervening rebase it could not have anticipated (2026-09-03)
+
+Dispatched by rule 3, OVERDUE at 3/3 `[244, 245, 248]`. Full report:
+`.roundtable/grill-objective-244-245-248-2026-09-03.md`.
+
+Both of 244.4's red-proofs (Slice 246) were executed live, not read off the
+write-up: injecting the removed walker body into
+`packages/core/scripts/check-sticky-layers.mjs` flips `check:src-css-walkers`
+to `exit 1`; injecting `readdir(join(DIST,'patterns'))` into
+`apps/docs/scripts/copy-suite.mjs` **at the exact cited line, 113**, flips
+`check:dist-walkers` to `exit 1`. Both reverted clean. 245.1's citation
+stability claim (`loop-log.md:1305`/`:1279`) was independently re-confirmed
+after this session's own unrelated rebase — a stronger check than a
+same-session re-read, since neither 245.1's nor 247.1's author could have
+anticipated it. Slice 248 (my own work, self-grilled since nobody else had)
+checked out: 40 components, 40 synthesis-table rows, no discrepancy.
+
+One process note from mid-grill: the first red-proof injection targeted the
+wrong file (a stray `cd` earlier in the session left the shell inside
+`apps/docs`, silently doubling a path that looked repo-root-relative).
+`git status` caught it before it was believed — recorded as a small addition
+to this repo's own red-proof discipline: an untracked file that already
+contains what you were about to inject is not a coincidence.
+
+**No new item filed.** Nothing to re-prioritize; Slice 249 (filed the same
+day) stands as triaged and untouched by this grill, since nothing in it has
+been built yet to red-prove.
+
 ## Slice 249 — Triaged from an external docs-adoption-surface proposal (2026-09-03)
 
 **Input**: a 16-item proposal comparing this repo (`5b3ab697`) against
