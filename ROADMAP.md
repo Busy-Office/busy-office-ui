@@ -315,6 +315,103 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 255 — Standardize sweep: all five lanes clean, nothing to consolidate — lane 4's regrowth signal is 22.1%, well under the 55.1% that dispatched the tenth sweep three days ago, and lane 5's only two-count pair is a false positive by arity (2026-09-03)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0 — `list_issues` on
+`Busy-Office/busy-office-ui` returns `totalCount: 0`, and the three open slices
+are 15 (owner-hardware AT evidence), 112 (owner briefs) and 249 (the triaged
+adoption proposal). Nothing new to triage, so Step 1 committed nothing. Rule 2
+fired: `dispatch_status.py` read `Standardize 5 / 4 Continue rounds OVERDUE`.
+Rules 3-8 not reached.
+
+*Read before quoting rule 5:* `dispatch_status.py` reports Optimize **`ok`**
+this wake (not STALE) — `0 wake-date(s) newer`, newest pair `bundle-gz-kb`,
+128 samples. So rule 5 *could* be evaluated and finds nothing: no tracked metric
+regressed on two consecutive runs and no size budget is breached. No new sample
+was recorded, deliberately — this sweep changes **0** files under
+`packages/core/src/css/` (it changes only two markdown files), so a fresh
+`bundle-gz-kb` reading could only reproduce the existing value, and a repeated
+identical value is a data point about the instrument, not the bundle (252.1's
+own note, inverted: it recorded a sample because rule 5 was STALE; here it is
+live).
+
+1. [x] **255.1 — DONE 2026-09-03. A clean Standardize pass: all four standing
+       lanes and the ad-hoc fifth lane find nothing to consolidate. Recorded as
+       a no-op sweep rather than manufacturing a fix — CLAUDE.md's standing rule
+       against busywork.**
+
+       ```
+       npm run scan:dead-style -w docs                 # lane 1 of 4
+       npm run report:css-repeats -w @busy-office/ui   # lane 2 of 4
+       npm run report:prose -w docs                    # lane 3 of 4
+       python3 scripts/loops/report_loop_prose.py      # lane 4 of 4
+       grep -rhoE '^(async )?function\*? [a-zA-Z0-9_]+' \
+         packages/core/scripts apps/docs/scripts scripts/loops \
+         --include=*.mjs --include=*.py | sed 's/^async //' \
+         | sort | uniq -c | sort -rn                    # lane 5 (252.3's scan)
+       ```
+
+       - **Lane 1 — `scan:dead-style`: 0 dead on 0 pages, 1,433 live inline
+         declarations**, screen + print, with 0 declarations dead on screen but
+         live in print. Identical to 252.1's, 244.1's and 237.1's readings.
+         *Trap re-hit and worth one line:* this lane needs `CHROME_PATH`
+         exported in the same command (ENVIRONMENT 1c); its first run here died
+         with the loud "No Chrome/Chromium found", which is the behaviour that
+         rule wants, not a quiet skip.
+       - **Lane 2 — `report:css-repeats`: zero delta, compared member for
+         member rather than by count.** 74 source files · **242** rules with 3+
+         declarations · **230** distinct bodies · **8** repeated — the same three
+         totals as 252.1, and the same eight groups by their counts: x4
+         joined-control radius (money ×2, quantity ×2), x3 list reset, x3
+         visually-hidden and five x2 pairs. The x4 group is still **two
+         components**, so its stated reopen trigger — a THIRD component — is
+         unmet.
+       - **Lane 3 — `report:prose`: zero unverdicted pages, checked by SET
+         DIFFERENCE.** 118 documentation pages of 127 built · median **781** ·
+         mean 937 · total **110,518** words. Ten over 2x the corpus median and
+         five more over a family median; the union is **fifteen distinct pages**,
+         and `comm -23 flagged verdicted` is **empty** — all 15 are inside the
+         verdicted set (158.1's twelve, 161.1's three, 178.3's `/concepts/scale/`),
+         extracted from the archive rather than quoted. The grep-each-path
+         instrument stays refused (228.1): it returns a non-zero count for 15 of
+         15 whatever the truth is.
+       - **Lane 4 — `report_loop_prose.py`: no file changed accumulate class,
+         `ratchet` block read first.** `CLAUDE.md` **31 up, never cut** (30 at
+         252.1, 29 at 244.1) and `DESIGN.md` **22 up, never cut** are 167.1's
+         standing verdicts, and `CLAUDE.md`'s watch was executed and **retired**
+         by 193.1, so neither is re-raised. Every file the loop reads every wake
+         has a cut behind it except those two: `LOOPS.md` `6 up, last cut
+         9198e43f`; `RESUME.md` `0 up, last cut 82d14bf` (2026-09-03).
+         **The regrowth signal this lane carries is NOT actionable this wake**:
+         `roadmap_scope.py` reads closed-history share **610 / 2,756 = 22.1%**,
+         well under the **55.1%** at which 252.1 dispatched the tenth archive
+         sweep three days ago. Of the four eligible targets `[254, 253, 252,
+         237]`, two (253, 237) are named by the still-open Slice 249 (249.6,
+         249.12) and left per 236.2; the remaining two are 254 and 252, both
+         small. No sweep — the doctrine's recurring sweep fires on regrowth to
+         scale, not on 22.1% days after a 13-slice move.
+       - **Lane 5 — the divergence scan step 1 names (252.3's, which produced
+         166.2/209.2/244.2): no hand-copied logic.** The scan's only two-count
+         pairs are `function exists` and `function build`, both **false
+         positives**: `exists` is 252.3's standing adjudication (different args,
+         different workspaces — a file path vs a URL path), and `build` is new
+         only because 252.3 consolidated `compatOf` away — its two definitions
+         are `derive-introduced.mjs`'s `build()` (arity 0, reads a JSON record)
+         and `build-component-css.mjs`'s `build(entrySource, from, to)` (arity 3,
+         a PostCSS pipeline). Same name, opposite arity and body — the same
+         suitability-not-collision verdict as `exists`. `compatOf` no longer
+         appears; it lives in `bcd-compat.mjs` since 252.3.
+
+       **Not verified, said plainly.** This is a cloud wake: no Podman, no
+       `localhost:8081`, so the 1440/390 light-and-dark screenshot lane could
+       not run. Nothing here rests on a rendered image — the diff is two
+       markdown files (this slice and the loop log); no CSS, no docs page, no
+       component changed, so there is nothing a screenshot could have shown.
+       `npm run build -w @busy-office/ui`, `npm run test -w @busy-office/ui` and
+       `npm run docs:build` (which runs `check:repo`, the page-shape gate and the
+       readme-claims gate) all ran green in this container while producing the
+       `dist/` the lanes read.
+
 ## Slice 254 — 249.16 built: the README screenshot, taken in the lane a cloud wake cannot reach — and the image that reads best is NOT the one the page shows (2026-09-03)
 
 **Dispatcher trace, local session.** Rule 1: no open P0. Rules 2 and 3 clear
