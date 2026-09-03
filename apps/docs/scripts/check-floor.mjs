@@ -33,9 +33,6 @@ async function* files(dir) {
   }
 }
 
-/* ROADMAP and the .roundtable grills QUOTE the old value as history — that is
-   a record of what was believed, not a live claim, and rewriting it would erase
-   the finding. Everything a consumer reads is generated. */
 if (process.argv.includes('--self-test')) {
   /* The detector greps prose for a hand-typed browser floor. Two ways to be
      wrong: miss a real literal (the thing that rots), or flag ordinary prose
@@ -53,6 +50,32 @@ if (process.argv.includes('--self-test')) {
   ]);
 }
 
+/* The files whose JOB is to hold the old value: the two scripts that derive and
+   police it, and the three records that keep history. Everything a consumer
+   reads is generated.
+
+   `.roundtable/**` is deliberately NOT here, and this comment used to say
+   otherwise — "ROADMAP and the .roundtable grills QUOTE the old value as
+   history" — granting an exemption the code never had. Settled 2026-09-03
+   (roadmap 256.2): the COMMENT was the wrong half, not the list. Measured
+   before deciding, rather than argued:
+
+     - `.roundtable/` is 185 of the 556 files this gate checks, and **0 of them
+       trip the literal** — including `rf-scanner-floor-study-2026-08-19.md`, a
+       study entirely about the browser floor, which names single browsers
+       ("Chrome 119", which this detector permits by design) and never a full
+       multi-browser label. The file most likely to need the exemption does not.
+     - The predicate has fired exactly once, on the first draft of
+       `grill-objective-249-254-255-2026-09-03.md`. That is the whole evidence
+       base, and it points the other way: the report was rewritten to print the
+       deriving command instead of three labels, so the finding was PRESERVED
+       and made re-runnable. "Rewriting a grill to satisfy this gate erases the
+       finding it records" was the one argument for widening, and the only case
+       we have refutes it.
+
+   A grill that genuinely must pin a historical label writes it into its ROADMAP
+   entry, which is exempt. Reopen if a report is ever made WORSE by this — that
+   is the condition, not the mere inconvenience of citing a command. */
 const ALLOW = ['scripts/check-floor.mjs', 'scripts/derive-floor.mjs', 'CHANGELOG.md', 'ROADMAP.md', 'ROADMAP-archive.md'];
 const bad = [];
 let checked = 0;

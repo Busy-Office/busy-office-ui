@@ -436,8 +436,9 @@ Full report, with every command:
          two corrections, the grill report, `ENVIRONMENT.md`) plus no code, so
          there is nothing a screenshot could have shown.
 
-2. [ ] **256.2 — `check:floor`'s stated exemption names `.roundtable` grills;
-       its allow-list does not. Decide which one is wrong.**
+2. [x] **256.2 — DONE 2026-09-03 (cloud wake). The COMMENT was wrong; the
+       allow-list stands. `check:floor`'s stated exemption named `.roundtable`
+       grills; its allow-list did not.**
        Found by tripping it: this grill's first draft quoted three floor labels
        verbatim and `docs:build` went red with *"3 hand-typed browser
        floor(s)"*. **The gate is right to fire and nothing was widened to let
@@ -474,6 +475,75 @@ Full report, with every command:
          red-prove it: inject a hand-typed label into one file on each side of
          the new boundary and confirm the gate fires on exactly one, checking
          that the injection landed before believing either result.
+
+       **RESOLVED 2026-09-03: the comment is corrected to name only the files
+       actually exempt; `ALLOW` is unchanged.** This is the Accept's second
+       branch, and it is the branch the *evidence* picked rather than the one
+       that was cheaper — the FOR argument was refuted by the only case in which
+       the predicate has ever fired.
+
+       - **The FOR argument's premise is false, measured against its own worked
+         example.** It claimed "rewriting one to satisfy a gate erases the
+         finding it records". The rewrite is
+         `.roundtable/grill-objective-249-254-255-2026-09-03.md:84-95`: it still
+         records that three distinct labels share a Chrome floor of 99 and that
+         the largest full-label group is 20, and it now ships the `node -e`
+         command that derives them from `floor.json`. The finding was
+         **preserved and made re-runnable**, not erased. That report's own prose
+         (line 86) already describes the CODE's boundary — *"`check:floor`
+         forbids a hand-typed floor outside `ROADMAP.md` and it is right to"* —
+         while its Finding D quotes the comment's wider claim. The grill
+         disagreed with itself; the code was the half that was right.
+       - **Base rate: `.roundtable/` is 185 of the 556 files this gate checks,
+         and 0 of them trip the literal.** Re-runnable (reconciles against the
+         gate's own `556` = 561 walked − 5 allow-skipped, and 185 = 182
+         top-level `*.md` + 3 under `pilot-112/`):
+
+         ```
+         node -e "
+         const {readdirSync,readFileSync}=require('fs'),{join}=require('path');
+         const L=/(Chrome|Firefox|Safari|Edge)(\/Edge)?\s+\d+(\.\d+)?\s*(·|,)\s*(Chrome|Firefox|FF|Safari|Edge)/i;
+         let n=0,hit=0;(function w(d){for(const e of readdirSync(d,{withFileTypes:true})){const p=join(d,e.name);
+          if(e.isDirectory())w(p); else if(/\.(astro|mjs|js|ts|md)$/.test(e.name)){n++;
+           const s=readFileSync(p,'utf8').replace(/<!-- stat:[a-z]+ -->[\s\S]*?<!-- \/stat -->/g,'');
+           if(s.split('\n').some(l=>L.test(l)))hit++;}}})('.roundtable');
+         console.log(n,hit)"        # -> 185 0
+         ```
+
+         The strongest counter-case fails too: `rf-scanner-floor-study-2026-08-19.md`
+         is a study *entirely about the browser floor* and never quotes a full
+         label — it names single browsers ("Chrome 119", "Chrome 99"), which
+         this detector permits by design (self-test case 4). The file most
+         likely to need the exemption does not need it.
+       - **Both subsets the Accept imagined were measured, and NEITHER is a
+         clean boundary** — worth recording, because they read as obvious:
+         `grill-*.md` matches **86 of 182** top-level reports and would miss
+         **75** equally-historical ones under `design-grill-`,
+         `objective-grill-`, `research-`, `explore-`, `scorecard-`,
+         `pattern-sweep-` and `rf-`. And "a dated filename means history" is
+         false in the other direction: 168 of 182 are dated, but
+         `reopen-conditions-2026-08-29.md` is dated *and* read as current, which
+         is the AGAINST argument's living-ledger hazard wearing a date.
+       - **Red-proved two-sided, injection confirmed before either verdict was
+         believed** (`cp` backups, not `git checkout` — 249.8's trap). Label
+         injected: `Chrome/Edge 119 · Firefox 128 · Safari 17.4`.
+
+         | side | file | injection landed | gate |
+         |---|---|---|---|
+         | inside `ALLOW` | `ROADMAP.md` | `grep -cF` → 1 | **passed**, rc=0, 556 files |
+         | outside `ALLOW` | `.roundtable/grill-objective-249-254-255-2026-09-03.md` | `grep -cF` → 1 | **FAILED**, rc=1, *"1 hand-typed browser floor(s)"* naming exactly that file |
+
+         Fires on exactly one, as the Accept required. Both files restored
+         (`grep -cF` → 0) and the post-restore baseline is green.
+       - **Also fixed, and plausibly the mechanism of the drift:** the stale
+         comment did not sit above `ALLOW` — it floated above the `--self-test`
+         block, describing a constant ~20 lines away. It now sits on `ALLOW`.
+         `check:selftests` still classifies 51 gates, 18 heuristic all
+         self-tested, so moving it did not disturb the `process.argv` detection.
+       - **Reopen condition (a property, not a forecast):** a report is made
+         WORSE by this — not merely inconvenienced by having to cite a deriving
+         command. A grill that must pin a historical label writes it into its
+         ROADMAP entry, which is exempt.
 
 ## Slice 255 — Standardize sweep: all five lanes clean, nothing to consolidate — lane 4's regrowth signal is 22.1%, well under the 55.1% that dispatched the tenth sweep three days ago, and lane 5's only two-count pair is a false positive by arity (2026-09-03)
 
