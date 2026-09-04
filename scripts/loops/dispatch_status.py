@@ -430,6 +430,14 @@ def report_metrics(all_rows):
         )
         return True
     newest = max(pairs, key=lambda s: s["ts"])
+    # DISTINCT log dates strictly after the pair, never a count of wakes. Several
+    # wakes on one date age this by zero, and a wake on a fresh date ages it by
+    # one however little it did. A hand-off read it the other way on 2026-09-04
+    # ("every decline ages the rule by one wake-date"): Slices 255 and 256 both
+    # declined a sample on 2026-09-03, the same date as the newest pair, and
+    # aged it by nothing; only 257 moved it, by falling on 2026-09-04 (roadmap
+    # 258.1). The advisory line below says the unit, because that is where the
+    # misreading happens.
     stale = [d for d in log_dates if d > newest["ts"][:10]]
     flag = "ok" if not stale else "STALE"
     print(
@@ -444,6 +452,11 @@ def report_metrics(all_rows):
             f"loop activity. Any regression verdict quoted from it is about the tree as "
             f"it was on {newest['ts'][:10]}, not this one — record a metric or say the "
             f"rule could not be evaluated."
+        )
+        print(
+            f"     the unit is DISTINCT LOG DATES after {newest['ts'][:10]} "
+            f"({', '.join(stale)}), not wakes: several wakes on one date add "
+            f"nothing, and one wake on a new date adds the whole step."
         )
     return bool(stale)
 

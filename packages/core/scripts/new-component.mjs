@@ -91,13 +91,16 @@ const name = rawName;
 const pascal = name.replace(/(^|-)([a-z])/g, (_, __, c) => c.toUpperCase());
 /* The default label must be the SAME value extract-api.mjs derives, or the
    scaffolder stamps an @label that says exactly what the derived default
-   already says. It did: `pascal` gave "Probe Widget" where the extractor
-   derives "Probe widget", so a probe run on 2026-09-03 wrote a redundant
-   @label into a brand-new component. 249.8 fixed that by hand-copying the
-   extractor's derivation here; the copy is now gone and both call one
-   function (component-label.mjs, Standardize sweep 2026-09-04) — so the
-   equality test below compares one rule against itself rather than two
-   spellings of it. */
+   already says. It did: the old default was `pascal.replace(/([a-z])([A-Z])/g,
+   '$1 $2')`, which gave "Probe Widget" where the extractor derives
+   "Probe widget", so a probe run on 2026-09-03 wrote a redundant @label into a
+   brand-new component. 249.8 fixed that by hand-copying the extractor's
+   derivation here; the copy is now gone and both call one function
+   (component-label.mjs, Standardize sweep 2026-09-04) — so the equality test
+   below compares one rule against itself rather than two spellings of it.
+   NOTE the full expression, not `pascal` alone: `pascal` gives "ProbeWidget"
+   and is still live below for `init${pascal}`, so blaming it for the spaced
+   value names an identifier that does not produce it (roadmap 258.1). */
 const derivedLabel = defaultLabel(rawName);
 const label = labelFlag ? labelFlag.slice('--label='.length) : derivedLabel;
 // The label is interpolated into an Astro attribute and a JS string literal

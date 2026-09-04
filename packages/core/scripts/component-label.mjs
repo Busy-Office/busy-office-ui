@@ -21,11 +21,20 @@
  * — so the two spellings meet in an equality test, and any disagreement between
  * them is silently written into a shipped file. That is not a hypothetical: it
  * happened on 2026-09-03, inside the wake that introduced the second copy.
- * `pascal` (`(^|-)([a-z])` → upper) derived "Probe Widget" where the extractor
+ * the scaffolder's own default derived "Probe Widget" where the extractor
  * derives "Probe widget", so a probe run stamped a redundant `@label` saying
  * exactly what the default already said. That wake fixed it by hand-copying the
  * extractor's derivation instead of sharing it, which removes the symptom and
  * leaves the mechanism.
+ *
+ * The expression that produced "Probe Widget" was
+ * `pascal.replace(/([a-z])([A-Z])/g, '$1 $2')` — pascal-case, then split back
+ * apart on the case change. `pascal` ALONE gives "ProbeWidget", and it is still
+ * live in new-component.mjs for `init${pascal}`, so naming it as the source of
+ * the spaced value (as this comment and roadmap 257.1 first did) points at an
+ * identifier that does not produce it. Corrected by the Objective grill,
+ * roadmap 258.1: `node -e` on both spellings gives "ProbeWidget" and
+ * "Probe Widget" respectively.
  *
  * Nothing else folds. The two scripts stay different in what they ASK — the
  * extractor reads a header that exists, the scaffolder decides whether to write

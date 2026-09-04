@@ -315,6 +315,180 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 258 — Objective grill of Slices 256, 257: 58 of 62 assertions reproduce, and two of the four that do not are the same defect the grilled slice records one item earlier — a real count of a set the sentence does not name (2026-09-04)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** (`git branch
+--show-current` empty) with local `main` at `2554b39` = `origin/main`, so trap 1
+in its milder shape; `git checkout -B main origin/main` before any commit.
+`--unshallow` clean in one attempt (**1,847** commits, no `shallow.lock`), and
+it brought the tags this time, unprompted. Rule 1: no open P0 — `list_issues` on
+`Busy-Office/busy-office-ui` returns `totalCount: 0`; Step 1 triaged and
+committed nothing. Rule 2 clear (`Standardize 0 / 4`). **Rule 3 fired**:
+`Objective 3 / 3 slices OVERDUE [249, 256, 257]`, exactly as the previous
+hand-off predicted. Rules 4-8 not reached.
+
+*Read before quoting rule 5:* `dispatch_status.py` reports Optimize **STALE**,
+`1 wake-date(s) newer`. Per `LOOPS.md` rule 5's own text, **this rule could not
+be evaluated this wake** and is not reported clear. No sample recorded: this
+grill changes **0** files under `packages/core/src/css/`, so a `bundle-gz-kb`
+reading could only reproduce the existing value. See 258.1 finding D for what
+that STALE number actually counts — it is not what the last hand-off said.
+
+**Scope narrowed before grilling, per §6 step 0.** The armed set is
+`[249, 256, 257]` and **249 is dropped**: it is an open sixteen-item slice that
+re-arms after every round, Slice 253 grilled `249.1`/`249.6` and Slice 256
+grilled `249.2`/`249.3`/`249.4`, and what remains open in it is unbuilt — owner
+calls, two browser-blocked items, one cost question. A grill re-derives what
+shipped. The scope is **256** (itself a grill, never re-derived by anyone) and
+**257** (never grilled). `.roundtable/INDEX.md` reports **4 repeated subject(s)**
+across 181 files; this grill does not add a fifth.
+
+Full report, with every command:
+`.roundtable/grill-objective-256-257-2026-09-04.md`.
+
+1. [x] **258.1 — DONE 2026-09-04. Sixty-two published assertions re-derived; 58
+       reproduce, 4 do not. All four are prose, none changes a verdict, and two
+       are the grilled slices' own recorded defect arriving inside their own
+       write-ups.**
+
+       *The unit is defined, because a tally is only checkable if it is:* one
+       assertion = one distinct figure or statement a command was re-run
+       against — **34** from Slice 257, **28** from Slice 256.
+
+       - **A — 256.2's "would miss `75` equally-historical ones" is `65`.**
+         The seven filename prefixes the sentence enumerates cover 65 files, at
+         **256.2's own commit** rather than at a later tree, and the tree has not
+         moved: `git ls-tree -r --name-only 0362ba15 -- .roundtable` gives 182
+         top-level `*.md`, 86 `grill-*` and 65 across
+         `design-grill-`(35) `scorecard-`(10) `research-`(7) `explore-`(7)
+         `objective-grill-`(2) `pattern-sweep-`(2) `rf-`(2). The neighbouring
+         sets a reader might reach for are **85** (dated non-`grill-*`) and
+         **96** (all non-`grill-*`); none of the three is 75. The verdict —
+         `grill-*.md` is not a clean boundary — is unaffected. **This is
+         256.1 finding A's own shape, one item later in the same commit**: a
+         real count of a set the sentence does not name. Corrected in place.
+       - **B — 257.1's correction of 255.1 undercounts `compatOf`: three, not
+         two.** `grep -rn compatOf packages/core/scripts apps/docs/scripts
+         scripts/loops --include=*.mjs --include=*.py` returns ten lines and
+         **three** definitions — the two bound aliases the sentence enumerates
+         plus the canonical `export function compatOf` at `bcd-compat.mjs:31`,
+         which is the definition both aliases point at and the reason the group
+         is a duplicate at all. Conclusion unaffected. Worth recording for the
+         same reason as A: 257.1's own sentence names the defect it was fixing
+         as *"asserting an ABSENCE in the repo from an instrument that
+         structurally cannot see the construct"*, and its replacement count came
+         from that same blind spot — the arrow pattern sees two, the
+         `export function` pattern sees the third. Corrected in place.
+       - **C — `pascal` derives `"ProbeWidget"`, not `"Probe Widget"`.** Three
+         live sites attributed the scaffolder's old default label to `pascal`:
+         `new-component.mjs:94`, `component-label.mjs:24` and ROADMAP 257.1. The
+         value is right; the attribution is short by one step. The expression
+         that produced it was `pascal.replace(/([a-z])([A-Z])/g, '$1 $2')`,
+         recovered from `git show 01fd7fc5:packages/core/scripts/new-component.mjs`
+         rather than reasoned about, and `node -e` on both spellings gives
+         `"ProbeWidget"` and `"Probe Widget"` respectively.
+
+         **Why it is worth correcting rather than shrugging at:** `pascal` is
+         still live at `new-component.mjs:91`, used for `init${pascal}` in the
+         generated behaviour test, so the comment names an identifier a reader
+         can evaluate — and evaluating it contradicts the comment. A citation
+         that no longer resolves, sitting in the header of the module Slice 257
+         created to stop this class of drift. **Both code comments corrected**;
+         the ROADMAP text stays and is corrected here.
+       - **D — the rule-5 hand-off reads the staleness counter as wakes; it
+         counts DATES.** `.roundtable/RESUME.md` said *"255, 256 and 257 have
+         now each declined a sample … and every decline ages the rule by one
+         wake-date."* `dispatch_status.report_metrics()` computes
+         `stale = [d for d in log_dates if d > newest["ts"][:10]]` — distinct
+         log **dates** strictly after the newest comparable pair. Against the
+         log: the pair is `bundle-gz-kb` at 2026-09-03 09:54; Slice 255 (09-03
+         14:40) and Slice 256 (09-03 17:47) are the same date and aged it by
+         **zero**; only Slice 257 (09-04 00:56) moved it, by falling on a new
+         date rather than by declining anything. **And 256 declined nothing** —
+         its trace says rules 4-8 were not reached, and its body carries no
+         `rule 5` note, where 255 and 257 both carry an explicit one.
+
+         **What it costs:** the hand-off's watch condition — *"if this reaches
+         ~5 wake-dates with no CSS change in sight, the rule is dead again"* —
+         reads as five wakes and means five calendar dates of loop activity. At
+         an hourly cadence those differ by more than an order of magnitude.
+
+         **Fixed in the layer where the misreading happens** (169.3's lesson:
+         a correction in the wholesale-rewritten hand-off dies there), not in
+         `RESUME.md` and not in `LOOPS.md`'s prose:
+         `dispatch_status.py`'s rule-5 advisory now prints the unit and
+         enumerates the dates, and the comment beside `stale` records the
+         misreading. **Red-proved by discrimination, injection confirmed
+         before the verdict**, `cp` backup rather than `git checkout` (249.8's
+         trap): one synthetic 2026-09-05 row appended to `loop-log.md`
+         (`grep -cF INJECTEDPROBE` → 1) took the line to `2 wake-date(s)`
+         listing `2026-09-04, 2026-09-05`; restored (`grep -cF` → 0), the line
+         back to one date and `git status` clean.
+
+       **What reproduced, so it is not re-derived a third time.** All five of
+       257's lanes, member for member: dead-style **0 / 0 / 1,433**;
+       css-repeats **74 · 242 · 230 · 8** with the x4 group still two
+       components; prose **118/127 · 781 · 937 · 110,537** with the union of 15
+       inside the 16-page verdicted set; loop-prose ratchet `CLAUDE.md` 32 up /
+       `DESIGN.md` 22 up / `LOOPS.md` 6 up `9198e43f` / `ENVIRONMENT.md` 3 up
+       `1005d1db`, with `RESUME.md` and `ROADMAP.md` moved by exactly the two
+       commits that landed after 257's reading; lane 5's **69 / 48 / 41**.
+       257's consolidation itself: one definition of the rule, both callers
+       importing it, the shared body byte-identical to the pre-consolidation
+       extractor's, the pre-state's two differently-named copies meeting at
+       `label === derivedLabel`, the diff at 5 files with **0** under
+       `packages/core/src/css/`, 1,845 commits at its parent, **17** CI entry
+       points compared as SETS, **138** built pages, `check:claims`
+       **162 live · 3 NOT VERIFIED**. And all of 256: finding A's
+       `{99: 25, 105: 9, 114: 1, 117: 4, 119: 1}` over 40 components with 9
+       labels and the largest full-label group at 20 (20 + 3 + 2 = 25); finding
+       B's corrections present on both sides and 158.1's own tally confirmed at
+       twelve; finding C re-measured live at **913 × 384**, 14 rows, 9 fully
+       inside, 15px reserved in the shell's scrolling `main`, page scrollbar 0,
+       first `[data-density="compact"]` a 30px `FORM.bo-cluster` with 0 rows;
+       256.2's **185 / 0**, 182, 86, 168, the comment now sitting on `ALLOW`,
+       and `check:selftests` **51 gates, 18 heuristic**.
+
+       **One thing 257 did not assert, checked anyway:** the shared module is
+       dev-only. `packages/core`'s `files` is
+       `["dist","scripts/check-markup.mjs","NOTICE","media"]`, so
+       `component-label.mjs` never reaches the tarball; `check:package` passes
+       at **184** files.
+
+       **This wake's own probe was wrong on first output** (CLAUDE.md's base
+       rate). The live width probe first read `clientWidth`/`clientHeight` and
+       counted rows document-wide: **896 × 382, 36 rows**, which would have
+       reported 256 finding C as not reproducing. Both errors are the same
+       mistake — measuring a box other than the one the claim is about:
+       `clientWidth` excludes the container's own 15px scrollbar and 2px border
+       (913 − 17 = 896), `clientHeight` excludes the border (384 − 2 = 382), and
+       the page carries **three** `.bo-data-table-container` elements. The tell
+       was an independent figure already in hand: `rowsFullyInside` came back
+       **9**, matching 256 exactly, while the width and row count did not.
+
+       - **Accept (property, not prediction):** every published figure in the
+         narrowed scope is either re-derived with the command recorded, or named
+         as not re-derivable here with the reason. Met: 62 checked, 4 corrected,
+         0 out of reach. **Finding a premise false is a satisfying outcome** —
+         four of them were.
+       - **Not verified, and named rather than implied:** cloud wake — no
+         Podman, no `localhost:8081`, so the 1440/390 light-and-dark screenshot
+         lane could not run. Every claim above is a count, a grep, a git
+         reading, a computed style or a layout geometry, which is
+         `ENVIRONMENT.md`'s second list. The diff is two build-script comments,
+         one loop script's output text, and markdown — **0** files under
+         `packages/core/src/css/`, no page markup, built page count unchanged at
+         **138** — so there is nothing a screenshot could have shown.
+       - **Refused, so it is not re-proposed:** a gate for C. *"This comment
+         names the expression that produced this value"* is semantic, which is
+         94.11's line exactly; the checkable shape would have to evaluate prose.
+         Corrected by hand in both places with no ceremony wrapped around it.
+         Also refused: a gate for A or B — both are counts inside prose, and
+         `check:slice-refs` answers whether a citation resolves, which neither
+         of these is. And widening lane 5's pattern, on 257's own base rate,
+         which re-derives: B makes the `compatOf` group larger, not more of a
+         finding.
+
 ## Slice 257 — Standardize sweep: all five lanes clean, and the finding came from none of them — the default-label rule was hand-copied into the scaffolder by the wake that introduced it, kept in sync by a comment, after it had already drifted once (2026-09-04)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** — `git branch
@@ -472,7 +646,17 @@ about the instrument, not the bundle.
          `bcd-compat.mjs` since 252.3"*. The second clause is true; **the first
          is not** — the name appears twice, as
          `const compatOf = (path) => bcdCompatOf(path, 'derive-floor')` and the
-         same line for `'check-rf-floor'`. Those are deliberate bound aliases
+         same line for `'check-rf-floor'`. *(Corrected 2026-09-04 by the
+         Objective grill, roadmap 258.1: **three**, not two. The two bound
+         aliases are the two this sentence enumerates, and the third is the
+         canonical `export function compatOf` at `bcd-compat.mjs:31` — the
+         definition both aliases point at, and the one that makes the group a
+         duplicate at all. Ten lines name it in total.
+         `grep -rn compatOf packages/core/scripts apps/docs/scripts
+         scripts/loops --include=*.mjs --include=*.py`. Same shape as the error
+         being corrected here: a count of the repo taken from an instrument
+         whose pattern cannot see one of the constructs involved.)* Those are
+         deliberate bound aliases
          that supply each caller's own name to the shared function, so the
          *conclusion* (no hand-copied logic) is unaffected and 252.3's
          consolidation is intact. What is wrong is the form of the claim: it
@@ -734,9 +918,19 @@ Full report, with every command:
        - **Both subsets the Accept imagined were measured, and NEITHER is a
          clean boundary** — worth recording, because they read as obvious:
          `grill-*.md` matches **86 of 182** top-level reports and would miss
-         **75** equally-historical ones under `design-grill-`,
+         **65** equally-historical ones under `design-grill-`,
          `objective-grill-`, `research-`, `explore-`, `scorecard-`,
-         `pattern-sweep-` and `rf-`. And "a dated filename means history" is
+         `pattern-sweep-` and `rf-`. *(Read **75** until 2026-09-04, corrected
+         by the Objective grill, roadmap 258.1. Measured at this item's own
+         commit `0362ba15`, not at a later tree, and the tree has not moved:
+         `git ls-tree -r --name-only 0362ba15 -- .roundtable` gives 182
+         top-level `*.md`, 86 `grill-*`, and **65** across the seven prefixes
+         named here. The two neighbouring sets a reader might reach for are
+         85 (dated non-`grill-*`) and 96 (all non-`grill-*`); none of the three
+         is 75. The verdict — `grill-*.md` is not a clean boundary — is
+         unaffected, and this is the same defect 256.1 finding A records one
+         item earlier: a real count of a set the sentence does not name.)* And
+         "a dated filename means history" is
          false in the other direction: 168 of 182 are dated, but
          `reopen-conditions-2026-08-29.md` is dated *and* read as current, which
          is the AGAINST argument's living-ledger hazard wearing a date.
