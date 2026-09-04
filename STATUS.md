@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-04 05:04 UTC
+Generated at: 2026-09-04 07:06 UTC
 
 ## Open items by slice
 
@@ -24,8 +24,8 @@ Generated at: 2026-09-04 05:04 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1365 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-09-04 00:56   ok
+dispatch status — counter-triggered rules (1369 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-09-04 00:56   ok
   Objective     1 / 3 slice           since 2026-09-04 02:05   ok  [249]
   Optimize      1 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-03, not this one — record a metric or say the rule could not be evaluated.
@@ -45,16 +45,16 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-04 02:05 · Meta · refusal · a gate for the two miscounts — both are counts inside prose, and check:slice-refs answers whether a citation resolves, which neither of these is · refused · 50964eea
-- 2026-09-04 02:05 · Meta · refusal · widening lane 5's definition pattern, on 257's own base rate re-derived: the blind spot's one duplicate group is compatOf, correct by design, so the widened predicate is 1-of-1 false positives · refused · 50964eea
-- 2026-09-04 02:49 · Continue · build · 249.9 both Accept clauses measured before the page: browser-harness is not a build-time renderer (13 consumers, 0 in the build), PatternPreview launches no browser (10 hand-authored fragments of 39), both cost routes stated (~8.0s warm/11.6s cold + 1.23MB, vs zero build time), and the badge audit finds 2 of 7 with no JSON key and 1 empty for all 40 · landed · e6631a88
-- 2026-09-04 02:49 · Meta · refusal · recording a bundle-gz-kb sample to un-STALE rule 5 — the name has no generator anywhere (only record_metric.py's docstring example), so any value would be a guessed convention · refused · e6631a88
 - 2026-09-04 02:49 · Meta · refusal · building the /components/ catalogue page itself — browser-blocked in the screenshot sense, left OPEN for a local wake · refused · e6631a88
 - 2026-09-04 02:49 · Meta · refusal · closing 249.9 on the strength of the measurement — the Accept's deliverable is the page, not the numbers · refused · e6631a88
 - 2026-09-04 05:04 · Continue · build · 249.17 (split from 249.15) — og:/twitter: tags on every built page + check-metadata arm 5, red-proved four ways; Slice 260 · landed · 93ad43a
 - 2026-09-04 05:04 · Meta · refusal · a placeholder og:image and twitter:card=summary_large_image — the card image needs a rendered-image check a cloud wake cannot do (249.15) · refused · 93ad43a
 - 2026-09-04 05:04 · Meta · refusal · adding <link rel=canonical> alongside og:url — the item names the social tags; og:url already carries the published URL · refused · 93ad43a
 - 2026-09-04 05:04 · Meta · refusal · retyping each self-head page's title/description into the SocialMeta call — hoisted to one const per page instead, so the two uses cannot drift · refused · 93ad43a
+- 2026-09-04 07:06 · Continue · build · 249.18 — component→patterns mapping split out of 249.9 and landed; the audit's 'no JSON key exists' refuted and one false zero (sidebar-nav) corrected · landed · 96dc182
+- 2026-09-04 07:06 · Meta · refusal · publishing the inverse into llms.txt as used-by: — the file already carries the full relation forward as uses: per pattern, so the inverse duplicates bytes for a reader that already has both halves · refused · 96dc182
+- 2026-09-04 07:06 · Meta · refusal · keying byComponent by component NAME — skeleton and state share /components/state-patterns, so a name-keyed map has to invent which of the two a link meant · refused · 96dc182
+- 2026-09-04 07:06 · Meta · refusal · checking byComponent against the groups beside it in the same JSON — one script writes both, so that comparison is self-consistent by construction and could never fail · refused · 96dc182
 
 ## Sunset test
 

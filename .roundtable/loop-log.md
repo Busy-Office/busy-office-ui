@@ -1371,3 +1371,7 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-04 05:04 · Meta · refusal · a placeholder og:image and twitter:card=summary_large_image — the card image needs a rendered-image check a cloud wake cannot do (249.15) · refused · 93ad43a
 - 2026-09-04 05:04 · Meta · refusal · adding <link rel=canonical> alongside og:url — the item names the social tags; og:url already carries the published URL · refused · 93ad43a
 - 2026-09-04 05:04 · Meta · refusal · retyping each self-head page's title/description into the SocialMeta call — hoisted to one const per page instead, so the two uses cannot drift · refused · 93ad43a
+- 2026-09-04 07:06 · Continue · build · 249.18 — component→patterns mapping split out of 249.9 and landed; the audit's 'no JSON key exists' refuted and one false zero (sidebar-nav) corrected · landed · 96dc182
+- 2026-09-04 07:06 · Meta · refusal · publishing the inverse into llms.txt as used-by: — the file already carries the full relation forward as uses: per pattern, so the inverse duplicates bytes for a reader that already has both halves · refused · 96dc182
+- 2026-09-04 07:06 · Meta · refusal · keying byComponent by component NAME — skeleton and state share /components/state-patterns, so a name-keyed map has to invent which of the two a link meant · refused · 96dc182
+- 2026-09-04 07:06 · Meta · refusal · checking byComponent against the groups beside it in the same JSON — one script writes both, so that comparison is self-consistent by construction and could never fail · refused · 96dc182
