@@ -315,6 +315,141 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 261 — 249.9's "no JSON key exists" is false, and the key it asked for is an inversion of one this repo already ships (2026-09-04)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** (`git branch
+--show-current` empty) with local `main` stale at `26447ba` while `HEAD` sat on
+the pushed `7bd795d` — trap 1 in its milder shape, fixed with
+`git checkout -B main origin/main` before any work. `git fetch origin main`
+moved `26447ba..7bd795d`, which is the previous wake's own hand-off commit, not
+a second dispatcher; working tree clean, `RESUME.md` "In flight: nothing".
+Step 1: no new input — `list_issues` on `Busy-Office/busy-office-ui` returns
+`totalCount: 0`, so nothing was triaged and nothing committed there. Step 0b:
+rule 2 `2 / 4`, rule 3 `1 / 3` (both `ok`), rule 5 **STALE** by 1 wake-date and
+therefore reported as *could not be evaluated*, per `LOOPS.md` rule 5. Rule 1
+clear — no open `N. [ ]` item is a P0. So **rule 4, Continue, build mode**.
+
+**Rule 4 found a takeable item where three consecutive hand-offs had said there
+was none**, by doing what `RESUME.md`'s correction block says to do: ask what
+each CLAUSE of an Accept needs, not what the item is labelled. 249.9's Accept
+opens *"every badge on a card either traces to a JSON key or the card renders
+the absence"* — and its own audit names **two badges tracing to no key**. A
+badge tracing to a key is derivation; the card is the rendered image. Split as
+**249.18** and landed.
+
+### The finding: the audit was right about its number and wrong about its cost
+
+The `pattern links` row reads **29/40, and no JSON key exists**, sourced to
+*"only the BUILT pattern pages' 'Components used' lists"*. Re-checking the
+premise before building (CLAUDE.md's premise rule) split that into three claims
+with different answers:
+
+| claim | verdict |
+|---|---|
+| 29 of 40 components are named by ≥1 pattern | **reproduces exactly**, incl. all 11 names |
+| no JSON key carries the relation | **false** — `patterns-index.json` per tile, and `llms.txt` `uses:` |
+| it needs a generator that does not exist | **false** — the inversion is ~12 lines over data already emitted |
+
+The first is what makes the other two worth believing: the reproduction came
+from inverting `patterns-index.json` (source-generated, pre-`astro build`),
+which is not the route the audit used, and it landed on the same 29 and the
+same eleven names character for character. Reconciling against something
+independent before quoting is the rule; here it also happens to be the refuting
+evidence, because the file that reproduced the number is the file the audit
+said had no such key.
+
+### And the number that reproduced was still one short
+
+The eleven zero-reach names contain a false zero. `/components/nav` is a
+**registered redirect** to `/components/sidebar-nav`, and `app-frame` and
+`suite-home` cite the component by that old href — 5 links across 2 pages. A
+literal href match reads that as an absence:
+
+```
+raw href match      -> 29/40 reached, 11 zero
+hash+redirect aware -> 30/40 reached, 10 zero      (removed: sidebar-nav)
+```
+
+`/components/nav` was checked as a possible broken link first — it is not; the
+redirect is in `astro.config.mjs` and `check-links.mjs` is right to pass. The
+defect is in reading hrefs literally, and it would have shipped INTO the
+catalogue: 249.9's consequence 3 asks that a card "render *no pattern uses
+this* without it reading as a fault", and the literal reading would have
+rendered exactly that, falsely, for a component two patterns use.
+
+### What landed
+
+- **`src/data/redirects.mjs`** — the redirect map gets one home. It was a
+  `const` local to `astro.config.mjs`, reachable by a second reader only via a
+  regex over the config, which is the "two accounts of one list" shape
+  `pattern-extract.mjs` and `paths.mjs` exist to prevent. The map is stored
+  base-less with a `withBase()` applying the production prefix; the extraction
+  was proved equivalent to the old literal at **both** bases (`''` and
+  `/busy-office-ui`) by `JSON.stringify` equality before anything else ran,
+  which is the check that matters — site-grill S-1 is base-blind redirect
+  destinations 404ing in production.
+- **`byComponent` in `patterns-index.json`**, emitted by the generator that
+  already owns the forward relation. Keyed by docs page slug, not component
+  name, because a pattern links a *page*: `skeleton` and `state` share
+  `/components/state-patterns`, so a name-keyed map would have to invent which
+  of the two a link meant. **41 component pages, 31 named by ≥1 pattern, 10 by
+  none, from 165 links.**
+
+  The key set is `component-nav.mjs`'s `ALL_ITEMS`, and reaching for `api.json`
+  instead was the first draft's mistake — caught by the new gate arm on its
+  first run, not by review. `inline-editing` and `table-toolbar` are component
+  docs pages with **no CSS dir**, so `api.json` cannot list them, and patterns
+  do cite both (`detail-form`, `bulk-actions`). They came out cited-but-unkeyed.
+  `ALL_ITEMS` is where the generated set and the four editorial exceptions are
+  already reconciled, so it is the right chokepoint; the two ANCHOR extras
+  collapse onto their own pages under `resolveHref` and add no keys. Hence 41
+  = 39 component pages + 2 page-only, against the audit's 40-component framing.
+- **A third arm on `check-patterns-index.mjs`** that re-derives the mapping
+  from the **BUILT** pattern pages' rendered hrefs and fails on disagreement.
+
+### Red-proved three ways, each injection confirmed in the artefact first
+
+| injection | confirmed by | result |
+|---|---|---|
+| `byComponent["sidebar-nav"]` shortened to one pattern in the generated JSON | re-read the file, asserted the value changed | RED, names the entry |
+| an extra `bo-badge--type` link spliced into **`dist/patterns/approval/index.html`** | re-ran the arm's OWN regex on the built file, 2 links → 3 | RED, names `icon` |
+| `resolveHref` removed from the generator ONLY (gate still resolves) | grepped the changed expression back out of the script | RED, names 2 entries |
+
+The second is the one that proves the arm reads the built artefact rather than
+the JSON beside it: nothing in source or in `patterns-index.json` changed.
+
+The third injection was deliberately one-sided. Neutering `resolveHref` in
+`redirects.mjs` would have neutered it for the generator AND the gate, which
+agree by construction and would have gone **green** — the self-consistency trap
+one level down from the one the arm is designed around.
+
+**It also measured something the plan had not.** Resolution was justified by
+the `sidebar-nav` redirect alone; the unresolved run went red on **two**
+entries, because `master-detail` and `schedule` cite `/components/dashboard#card`
+and the ANCHOR strip is separately load-bearing (`dashboard` 8 patterns → 10).
+Unresolved reads 30 reached / 11 zero; resolved reads 31 / 10. The zero-name
+list is the half that moves by one; the pattern LISTS move by more.
+
+**A fourth injection was refused before it ran**, and the refusal is the
+worked example: the obvious way to red-prove arm 3 is to pick a component the
+built page does not mention and inject a badge for it. Every one of the ten
+zero-reach names is already present in every built page's markup — the docs
+sidebar lists all 43 components on all 127 pages. A presence check over the
+bare href would have picked an injection target that was never absent. The
+badge-class anchor is what makes the arm read 165 links instead of thousands,
+which is 249.6's anchor finding arriving in a different gate.
+
+### Why the arm reads the built pages and not the file it is checking
+
+Checking `byComponent` against the `groups` in the same JSON would have been
+self-consistent by construction — one script writes both — which is
+CLAUDE.md's *reconcile against the SOURCE, not against the argument* trap, the
+one whose tell is that nothing in the check re-reads an independent artefact.
+The built page's hrefs are resolved markup; `pattern-extract.mjs`'s regex reads
+`href={base + '…'}` template syntax in `.astro` source. Neither can see the
+other, so a stale committed JSON, a source badge the regex missed, and a
+hand-edit of the generated file are all visible from this side.
+
 ## Slice 260 — 249.15's tag half split out and landed: every built page now says what a shared link should show, and the three equalities are what makes the arm able to fail (2026-09-04)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** (`git branch
@@ -2645,6 +2780,47 @@ claimed.
           and the other two false negatives: this badge needs a recorded key,
           not a set intersection.
 
+       **CORRECTION TO THE AUDIT'S `pattern links` ROW — measured 2026-09-04
+       (cloud wake), and it is what 249.18 was split out to land.** Two of the
+       three things that row and consequence 2 assert do not hold. The **29/40
+       reproduces exactly**, from a route the audit did not use, which is what
+       makes the rest of the correction believable rather than a second opinion:
+       inverting `patterns-index.json`'s per-tile `components` gives 29/40 and
+       the same eleven names, character for character.
+
+       - **"No JSON key exists … only the BUILT pattern pages' lists" is
+         false.** `src/data/patterns-index.json` has carried the relation per
+         tile all along — `groups[].tiles[].components` as `{href,label}` — and
+         `gen-llms.mjs:155` already republishes it in `llms.txt` as `uses:`.
+         `node -e "const t=require('./apps/docs/src/data/patterns-index.json').groups.flatMap(g=>g.tiles); console.log(t.length, t.flatMap(x=>x.components).length)"`
+         → `39 165`.
+       - **"A generator that does not exist, and it cannot read `dist/`" is
+         false, and it named the answer without recognising it.** Consequence 2
+         describes building a generator "the shape `gen-patterns-index.mjs` and
+         `gen-patterns.mjs` already have, both of which run before `astro build`
+         and read `src/pages/patterns/*.astro`" — which is not a shape to copy
+         but the script that already does it. The missing piece was the
+         **inversion**, a dozen lines over data already in the tree, not a new
+         page-parsing generator. That is the whole cost delta this correction
+         buys.
+       - **The eleven zero-reach names contain one FALSE zero: `sidebar-nav`.**
+         `/components/nav` is a registered redirect to `/components/sidebar-nav`
+         (`astro.config.mjs`), and `app-frame` and `suite-home` both cite the
+         component by that old href — 5 links across the two pages. Matching
+         hrefs literally, as the audit did, reads that as an absence.
+         Redirect- and anchor-aware, the count is **30/40 reached, 10 zero**;
+         the removed name is `sidebar-nav` alone, and the other ten stand. So
+         consequence 3's list is ten, not eleven, and a card built on the
+         literal reading would have rendered "no pattern uses this" for a
+         component two patterns do use — the exact mis-render consequence 3
+         warns about, arriving through its own input rather than its layout.
+
+       **What this does NOT change:** the AT badge (0/40, Slice 15, owner
+       hardware) and the JS-tier badge (consequence 4 — still needs a recorded
+       key, not a set intersection) are untouched, and the deliverable is still
+       a catalogue page whose point is rendered miniatures. Only the pattern-
+       links badge's data half moved, and it moved to 249.18.
+
        **STILL OPEN, and browser-blocked in the SCREENSHOT sense**
        (`LOOPS.md` 186.2's vocabulary): the deliverable is a catalogue page
        whose point is rendered miniatures a human compares. A LOCAL wake can
@@ -2824,6 +3000,31 @@ box (2026-09-03, cloud wake):**
           a built page, and one page's `og:title` made to disagree with its own
           `<title>` — with each injection confirmed present in the built HTML
           before the red is believed.
+
+18. [x] **249.18 — DONE, Slice 261.** The component→patterns mapping, split out
+        of 249.9 on 2026-09-04. It is one of the two badges 249.9's own audit
+        found tracing to no JSON key, and it is pure derivation — no rendered
+        image, `ENVIRONMENT.md`'s SECOND list — so a cloud wake can take it in
+        full while the catalogue PAGE (rendered miniatures a human compares)
+        stays with 249.9. Third split of this shape in three days, after 249.16
+        out of 249.4 and 249.17 out of 249.15.
+
+        **It exists because 249.9's stated cost for this badge is wrong**, and
+        that premise was re-checked before the split rather than inherited
+        (CLAUDE.md's premise rule). See the correction block under 249.9.
+        - **Accept:** `patterns-index.json` carries a `byComponent` key emitted
+          by the same generator that already emits the forward relation, with
+          **one entry per component docs page including the ones no pattern
+          names** (an absence is an empty array, never a missing key — 249.3's
+          "absence is rendered, never blank"); hrefs are resolved through a
+          redirect map with exactly ONE home in the repo, imported by both
+          `astro.config.mjs` and the build-time reader rather than re-parsed,
+          and the resulting reached/zero counts agree with an inversion taken
+          independently of the generator; a gate arm re-derives the mapping
+          from the **BUILT** pattern pages — a route the source-side regex
+          cannot see — and fails when the shipped key disagrees, red-proved by
+          injection with the injection confirmed present in the artefact before
+          the red is believed.
 
 **Refused, recorded as DA (not re-litigated here — see the triage file for
 each item's reasoning):** publish-on-every-push/auto-bump, a `registry.ts`

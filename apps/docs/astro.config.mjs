@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { SITE_ORIGIN } from './scripts/paths.mjs';
+import { withBase } from './src/data/redirects.mjs';
 
 // DOCS_BASE is set by the Pages workflow (/busy-office-ui); local dev serves at /.
 // Redirect DESTINATIONS must carry the base themselves — Astro prefixes only
@@ -8,23 +9,11 @@ import { SITE_ORIGIN } from './scripts/paths.mjs';
 // production).
 const base = (process.env.DOCS_BASE ?? '').replace(/\/$/, '');
 
-const redirects = {
-  '/htmx': `${base}/getting-started/htmx`,
-  '/theming': `${base}/concepts/theming`,
-  '/printing': `${base}/base/print`,
-  '/tokens': `${base}/reference/tokens`,
-  '/base/tokens': `${base}/reference/tokens`,
-  '/patterns/keyboard-help': `${base}/reference/keyboard`,
-  // 109.2: shape-not-domain rename — the invoice was always sample data
-  // on the generic list screen; the industry name is List Report.
-  '/patterns/invoice-list': `${base}/patterns/list-report`,
-  // 109.19: field-editor folded into detail-form's field-per-row variant
-  // (109.4's verdict — thin anatomy, one distinction expressible as a
-  // paragraph on an existing pattern rather than a standalone page).
-  '/patterns/field-editor': `${base}/patterns/detail-form`,
-  '/components/nav': `${base}/components/sidebar-nav`,
-  '/primitives': `${base}/base/primitives`,
-};
+// The map itself lives in src/data/redirects.mjs — build-time readers need it
+// too (gen-patterns-index.mjs resolves "Components used" hrefs through it), and
+// a config-local const is reachable only by re-parsing this file. See that
+// module's header for why resolving is load-bearing and not tidiness.
+const redirects = withBase(base);
 
 /* The redirect stubs, as PATHNAMES, for the sitemap's exclusion set (249.2).
    Derived from the `redirects` object above rather than re-listed, so the two
