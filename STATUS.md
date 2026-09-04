@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-04 13:53 UTC
+Generated at: 2026-09-04 15:48 UTC
 
 ## Open items by slice
 
@@ -24,7 +24,7 @@ Generated at: 2026-09-04 13:53 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1390 iterations logged)
+dispatch status — counter-triggered rules (1393 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-09-04 09:57   ok
   Objective     0 / 3 slices          since 2026-09-04 13:02   ok
   Optimize      1 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
@@ -45,9 +45,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-04 12:07 · Meta · refusal · a required/enhanced/optional JS tier — the only source in the repo is the hand-written page prose this key exists to check, so sourcing it would be circular; stays 249.9's open question · refused · 1b4c3365
-- 2026-09-04 12:07 · Meta · refusal · blanking comments in extract-behaviors' hook scan — measured: it deletes real published hooks on 25 of 33 exports, one of them 12 · refused · 1b4c3365
-- 2026-09-04 12:07 · Meta · refusal · publishing byComponent into llms.txt — behaviors.json is already an export and llms.txt already lists all 26 inits with their hooks; a fourth spelling of one relation · refused · 1b4c3365
 - 2026-09-04 12:07 · Meta · refusal · gating gen-llms' hand-written paste-in block — it names 5 of 26 inits deliberately, and all 5 were checked to agree with byComponent · refused · 1b4c3365
 - 2026-09-04 13:02 · Objective · grill · Slice 265 — Objective grill of 263, 264: gate header still encoding the declaration its slice corrected; pattern text published undecoded, one badge visible as 'Dashboard &amp; widgets'; 53rd gate added · landed · 234677f7
 - 2026-09-04 13:02 · Meta · refusal · widening html-entities.mjs's NAMED map for the 7 residual references — measured: the first argument against it (code samples) is false, the real risk is unescaped live content like '&times; EA' · refused · 234677f7
@@ -55,6 +52,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-04 13:53 · Polish · round · Slice 266 — Polish round 2 on component/avatar: 249.8's 3-line @tagline header decayed all four live line-number pointers, two of them published and one printed; fixed by naming the property · landed · 62fec2ae
 - 2026-09-04 13:53 · Meta · refusal · a gate for line-number cites, sixth refusal — after the fix the class has no members (0 live <component>.css:NN), so it would be 94.11 ceremony · refused · 62fec2ae
 - 2026-09-04 13:53 · Meta · refusal · correcting the 21 archive / 24 roundtable / 2 frozen-version-snapshot citations the same shift invalidated — history is read from the commit it describes · refused · 62fec2ae
+- 2026-09-04 15:48 · Polish · round · Slice 267 — Polish round 2 on component/progress: six cites and all eight arms clean; the finding is step 0's polish_requeue.py --apply announcing a write over a byte-identical ledger · landed · e34e936e
+- 2026-09-04 15:48 · Meta · refusal · a gate for 'a script's report line matches what it did' — semantic predicate (94.11), class of exactly one member, and 101.3 confines Polish to the existing ratchet · refused · e34e936e
+- 2026-09-04 15:48 · Meta · refusal · changing the RE-QUEUED marker's lifecycle — it records 'has been re-queued at some point', not 'is re-queued now'; rule 6 reads neither, so it is ledger semantics rather than maintenance · refused · e34e936e
 
 ## Sunset test
 
