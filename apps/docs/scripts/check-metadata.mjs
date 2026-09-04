@@ -38,6 +38,7 @@ import { join } from 'node:path';
 import { DIST, SITE_ORIGIN, SITE_URL } from './paths.mjs';
 import { distPages } from './dist-pages.mjs';
 import { gate, assertScanned } from './gate-report.mjs';
+import { decodeEntities } from './html-entities.mjs';
 
 /* Same expression astro.config.mjs uses, for the same env var — the built URLs
    carry the base, and the local build and CI's differ. */
@@ -195,13 +196,11 @@ const TWITTER_REQUIRED = ['twitter:card', 'twitter:title', 'twitter:description'
    ONE PASS over every entity form, not a chain of replaces: a chain that
    resolves `&amp;` first would then re-read the `&#38;` it just produced and
    decode it a second time, turning a literal "&#38;" into "&". */
-const NAMED = { lt: '<', gt: '>', quot: '"', apos: "'", amp: '&', nbsp: ' ' };
-const decode = (s) =>
-  s.replace(/&(?:#(\d+)|#[xX]([0-9a-fA-F]+)|([a-zA-Z]+));/g, (whole, dec, hex, name) => {
-    if (dec !== undefined) return String.fromCodePoint(Number(dec));
-    if (hex !== undefined) return String.fromCodePoint(parseInt(hex, 16));
-    return name in NAMED ? NAMED[name] : whole;
-  });
+/* The implementation MOVED to html-entities.mjs (Standardize sweep, roadmap
+   263.1). It was one of three decoders in this directory, under three names,
+   and that file's header carries the measured disagreement — 8 of 11 inputs —
+   plus the reason no chained order can be right in both directions. The
+   paragraphs above stay here because they are about THIS gate's two sides. */
 
 /** every <meta> in a built page's HEAD, keyed by its name= or property=.
  *  Scoped to the head on purpose: this is a docs site whose pages render HTML
@@ -213,7 +212,7 @@ function metaMap(head) {
   for (const [tag] of head.matchAll(/<meta\b[^>]*>/g)) {
     const key = tag.match(/\b(?:property|name)="([^"]*)"/)?.[1];
     const content = tag.match(/\bcontent="([^"]*)"/)?.[1];
-    if (key !== undefined && content !== undefined) out.set(key, decode(content));
+    if (key !== undefined && content !== undefined) out.set(key, decodeEntities(content));
   }
   return out;
 }
@@ -236,19 +235,19 @@ for (const p of pages) {
   const titleText = head.match(/<title>([\s\S]*?)<\/title>/)?.[1];
   g.check(
     `${p.url} og:title repeats the page's own <title>`,
-    titleText !== undefined && meta.get('og:title') === decode(titleText),
+    titleText !== undefined && meta.get('og:title') === decodeEntities(titleText),
     titleText === undefined
       ? 'the built page has no <title> at all'
-      : `<title> is ${JSON.stringify(decode(titleText))}, og:title is ${JSON.stringify(meta.get('og:title'))}`,
+      : `<title> is ${JSON.stringify(decodeEntities(titleText))}, og:title is ${JSON.stringify(meta.get('og:title'))}`,
   );
 
   const description = head.match(/<meta\s+name="description"\s+content="([^"]*)"/)?.[1];
   g.check(
     `${p.url} og:description repeats the page's own meta description`,
-    description !== undefined && meta.get('og:description') === decode(description),
+    description !== undefined && meta.get('og:description') === decodeEntities(description),
     description === undefined
       ? 'the built page has no meta description at all'
-      : `description is ${JSON.stringify(decode(description))}, og:description is ${JSON.stringify(meta.get('og:description'))}`,
+      : `description is ${JSON.stringify(decodeEntities(description))}, og:description is ${JSON.stringify(meta.get('og:description'))}`,
   );
 
   /* The same expression arm 3 builds `expected` from, for the same reason: the

@@ -34,6 +34,7 @@ import { join } from 'node:path';
 import { DIST } from './paths.mjs';
 import { distPages } from './dist-pages.mjs';
 import { gate, assertScanned } from './gate-report.mjs';
+import { decodeEntities } from './html-entities.mjs';
 
 const CORE = new URL('../../../packages/core/dist/', import.meta.url);
 const readJson = async (url) => JSON.parse(await readFile(url, 'utf8'));
@@ -90,12 +91,7 @@ assertScanned(mounted.size, 'component pages mounting <DsaScore>', 'did the docs
  *  sentence it is asserting. */
 function maturityBlocks(html) {
   return [...html.matchAll(/<h2>Maturity[\s\S]*?<\/section>/g)].map((m) =>
-    m[0]
-      .replace(/<[^>]+>/g, ' ')
-      .replace(/&#(\d+);/g, (_, d) => String.fromCharCode(Number(d)))
-      .replace(/&amp;/g, '&')
-      .replace(/&quot;/g, '"')
-      .replace(/&#39;|&apos;/g, "'")
+    decodeEntities(m[0].replace(/<[^>]+>/g, ' '))
       .replace(/\s+/g, ' ')
       .trim(),
   );

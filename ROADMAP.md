@@ -315,6 +315,248 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 263 — Standardize sweep: all five lanes clean again, and the finding is again from none of them — three HTML-entity decoders in one directory, disagreeing on 8 of 11 inputs, where the fix one copy credits to a grill is exactly what makes it wrong on the mirror case (2026-09-04)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** —
+`git branch --show-current` empty, `HEAD` on `7691dec3` with no local branch
+current; ENVIRONMENT trap 1, fixed with `git checkout -B main origin/main`
+before any work. `--unshallow` clean in one attempt (**1,857** commits, no
+`shallow.lock`) and it brought all seven tags with it this time, so the
+`git fetch --tags origin` trap 2 names did not bite. Rule 1: no open P0 —
+`list_issues` on `Busy-Office/busy-office-ui` returns `totalCount: 0`, and no
+open `N. [ ]` item is a P0. Step 1 triaged and committed nothing: no new input.
+**Rule 2 fired**, exactly as the previous hand-off predicted:
+`dispatch_status.py` read `Standardize 4 / 4 Continue rounds … OVERDUE`. Rules
+3-8 not reached (`Objective 1 / 3 [249]`).
+
+*Read before quoting rule 5:* `dispatch_status.py` reports Optimize **STALE**,
+`1 wake-date(s) newer` — the newest comparable pair predates a day of loop
+activity. `LOOPS.md` rule 5 is explicit that STALE means the rule has no input,
+so it is reported here as **could not be evaluated**, not as clear. No metric
+was recorded to "fix" that: this sweep changes **0** files under
+`packages/core/src/css/`, so a fresh `bundle-gz-kb` sample could only reproduce
+the existing value — and the reason that name cannot be sampled at all is
+unchanged for a fourth wake (`RESUME.md`'s 259.1 finding: the only file naming
+it is `record_metric.py`'s docstring example).
+
+1. [x] **263.1 — DONE 2026-09-04. Three HTML-entity decoders existed in
+       `apps/docs/scripts`, under three different names, and they disagreed on
+       8 of 11 inputs. Consolidated into
+       `apps/docs/scripts/html-entities.mjs`; all three consumers now read one
+       function.**
+
+       *Accept was*, written as properties rather than predictions:
+       (a) exactly one entity decoder exists in the directory, counted
+       STRUCTURALLY over comment-stripped source rather than by name — the
+       three copies were `unescapeHtml`, `decode` and an unnamed inline chain,
+       so no name search can answer this;
+       (b) all three consumers are shown to READ the shared module by an
+       injection that changes each one's own output, never by reading import
+       lines;
+       (c) the consolidation's effect on each consumer is MEASURED — neutral
+       where it is neutral, with the reason, and explained where it is not;
+       (d) the disagreement that motivates the change is measured, with the
+       reproduction command written beside the claim.
+       All four are executed below.
+
+       **The finding.** One directory held three answers to "turn escaped HTML
+       text back into the text it stands for":
+
+       | copy | shape | ampersand order |
+       |---|---|---|
+       | `highlight-code.mjs` `unescapeHtml()` | 7 chained `replaceAll` | named, then numeric — **last** |
+       | `check-maturity.mjs` (inline, unnamed) | 4 chained `replace` | numeric **first**, then named |
+       | `check-metadata.mjs` `decode()` | one pass, named + decimal + hex | n/a — single pass |
+
+       **They disagree on 8 of 11 inputs**, measured by copying each body
+       verbatim out of `7691dec3` and running all three over one list. The
+       command is in `html-entities.mjs`'s header beside the claim; the two
+       rows that matter are mirror images of each other:
+
+       ```
+       input        the text it means   ampersand-last   numeric-first   one pass
+       &#38;amp;    &amp;               &amp;   ✓        &        ✗      &amp;   ✓
+       &amp;#38;    &#38;               &        ✗        &#38;    ✓      &#38;   ✓
+       ```
+
+       **The fix one copy credits to a grill is what makes it wrong on the
+       other row.** `highlight-code.mjs` carried
+       `// both ampersand forms last — they guard double-escapes (grill H1:
+       &#38; before &amp; double-decoded '&#38;amp;')`. That is true, and it is
+       the whole reason a chain cannot be made correct: whichever order it
+       picks, it re-reads the ampersand it just emitted, so fixing one
+       direction breaks the mirror. Only the single pass has neither bug,
+       because a character it emits is never scanned again — which
+       `check-metadata.mjs`'s own header had already argued, one directory over
+       and one day earlier, without either file knowing about the other.
+
+       **Red-proved on all three consumers, with the injection confirmed
+       before any verdict was believed** (`grep -cF INJECTED` on the shared
+       module, `cp` backup rather than `git checkout`, per 249.8's recorded
+       trap):
+
+       - **`highlight-code.mjs`** — with the decoder returning only the marker,
+         a rebuild produced **256 highlighted blocks across 96 pages** whose
+         entire body is `INJECTED`; restored, the same 256 blocks carry their
+         code. This is the consumer whose output a reader copies.
+       - **`check-metadata.mjs`** — `metadata check FAILED — 254 of 1022 page
+         metadata assertions do not hold`, which is both of arm 5's
+         equality-bearing checks on all 127 pages; restored, green.
+       - **`check-maturity.mjs`** — `160 of 280 maturity label assertions do
+         not hold`; restored, green.
+
+       **The first injection on that third consumer came back GREEN, and it was
+       the injection that was wrong** — CLAUDE.md's standing rule landing
+       immediately. Prefixing every decoded string with `INJECTED` left
+       `check:maturity` fully green, because its arms ask whether a block
+       CONTAINS an expected string and a prefix does not disturb containment. A
+       constant-return injection is what discriminates. Recorded because the
+       green result would otherwise have read as "this consumer does not use
+       the module", which is the opposite of the truth.
+
+       **What the consolidation changed for each consumer, measured before the
+       switch rather than asserted after it:**
+
+       - **`check-maturity.mjs` — output-neutral by BASE RATE, and the base
+         rate is the interesting part.** Its input is the text of every
+         `<h2>Maturity …</section>` block in `dist/`; a walk of the built site
+         found **0 entity references of any form across all 40 blocks**. Its
+         copy has never decoded anything, so the duplication's cost here was
+         never a wrong answer — it was a third opinion nobody had compared.
+       - **`check-metadata.mjs`** — unchanged by construction: the shared
+         module IS its implementation, moved.
+       - **`highlight-code.mjs`** — gains hex (`&#x3C;`), `&nbsp;`, `&apos;`
+         and arbitrary numeric forms, and loses the `&amp;#38;` bug. Proved
+         output-neutral on the current corpus against the RENDERED artefact,
+         not the diff: `dist/` was removed and rebuilt, and `diff -rq` over the
+         WHOLE tree against the pre-change build names exactly one differing
+         file — `build-id.json`, whose `dirty` and `builtAt` fields are
+         supposed to move. All **138** built `index.html` files are byte-
+         identical, and so is every asset beside them.
+
+       **One copy was deliberately NOT folded in**, with the reason:
+       `check-po-app.mjs`'s `removeHref.replace(/&amp;/g, '&')`. That is one
+       entity on one URL taken from one attribute, inside a smoke test that
+       boots the app as a child process — importing a shared module there adds
+       a dependency for a single `&` rather than removing a duplication.
+
+       **No `--self-test` on the new module, and that is a refusal rather than
+       an omission.** `check-selftests.mjs` walks `check-*` files only, so a
+       self-test here is a test nothing runs — the same "report that rots
+       because no lane runs it" the Standardize playbook names as the reason
+       lanes 1-3 exist. The durable form is the reproduction command written
+       beside the claim in the module header.
+
+       **Lane readings — `n of 5`.** No ordinal in this slice's heading,
+       deliberately: 235 called lanes 1-3 clean a TENTH time, 237 an ELEVENTH,
+       244 recorded "all four standing lanes clean" with no ordinal, and 252 a
+       TWELFTH — so the series already skips a sweep and the next number is not
+       derivable without re-reading every sweep. A count nobody can re-derive
+       from the file is the kind this repo's own doctrine says not to publish.
+
+       ```
+       npm run scan:dead-style -w docs                 # lane 1 of 4
+       npm run report:css-repeats -w @busy-office/ui   # lane 2 of 4
+       npm run report:prose -w docs                    # lane 3 of 4
+       python3 scripts/loops/report_loop_prose.py      # lane 4 of 4
+       grep -rhoE '^(async )?function\*? [a-zA-Z0-9_]+' \
+         packages/core/scripts apps/docs/scripts scripts/loops \
+         --include=*.mjs --include=*.py | sed 's/^async //' \
+         | sort | uniq -c | sort -rn                    # lane 5 (252.3's scan)
+       ```
+
+       - **Lane 1 — `scan:dead-style`: 0 dead on 0 pages, 1,433 live inline
+         declarations**, screen + print, 0 dead on screen but live in print.
+         Identical to 257.1, 255.1, 252.1, 244.1 and 237.1. `CHROME_PATH`
+         exported in the same command (ENVIRONMENT 1c).
+       - **Lane 2 — `report:css-repeats`: zero delta, compared member for
+         member rather than by count.** 74 source files · **242** rules with 3+
+         declarations · **230** distinct bodies · **8** repeated — the same
+         three totals as 257.1, 255.1 and 252.1, and the same eight groups. The
+         x4 joined-control radius group is still **two** components (money ×2,
+         quantity ×2), so its reopen trigger — a THIRD component — is unmet.
+       - **Lane 3 — `report:prose`: zero unverdicted pages, by SET
+         DIFFERENCE.** 118 documentation pages of 127 built · median **781** ·
+         mean 937 · total **110,597** words. Ten over 2x the corpus median and
+         five more over a family median; the union is **15** distinct pages and
+         `comm -23 flagged verdicted` is **empty** against the **16**-page
+         verdicted set. `/patterns/output-form/` is verdicted and no longer
+         flagged, the same single asymmetry 257.1 recorded.
+
+         *The corpus total moved 110,537 → 110,597 (+60 words) since 257.1.*
+         Attribution was NOT measured to a page and nothing here rests on it;
+         no page crossed a threshold it had not already crossed. The flagged
+         set is identical to 257.1's, member for member.
+
+         The `/script/style/` false sixteenth 257.1 tripped over did not recur:
+         the extraction anchors on the six real page families rather than on
+         `/[a-z-]+/[a-z-]+/`, so the report's own explanatory header cannot
+         supply a match.
+       - **Lane 4 — `report_loop_prose.py`: no file changed accumulate class,
+         `ratchet` block read first, never the delta.** `CLAUDE.md` **32 up,
+         never cut** (32 at 257.1, 31 at 255.1) and `DESIGN.md` **22 up, never
+         cut** are 167.1's standing verdicts, and `CLAUDE.md`'s watch was
+         executed and **retired** by 193.1, so neither is re-raised. Every file
+         the loop reads every wake has a cut behind it except those two:
+         `LOOPS.md` `6 up, last cut 9198e43f`; `RESUME.md` `0 up, last cut
+         7691dec3`; `ENVIRONMENT.md` `4 up, last cut 1005d1db` (3 at 257.1);
+         `ROADMAP.md` `20 up, last cut 25e24745`.
+
+         **The regrowth signal is NOT actionable this wake.**
+         `roadmap_scope.py` reads closed-history share **1,909 / 4,665 =
+         40.9%**, under the **55.1%** at which 252.1 dispatched the tenth
+         archive sweep. Of the twelve eligible targets, four are named by the
+         still-open Slice 249 and stay per 236.2. No sweep.
+       - **Lane 5 — the divergence scan step 1 names: the only two-count pairs
+         are `function exists` and `function build`**, both standing false
+         positives adjudicated by arity in 252.3 and 255.1 and re-checked here
+         rather than taken on trust: `exists(p)` is a filesystem path in
+         `new-component.mjs` and `exists(urlPath)` a URL in `check-links.mjs`;
+         `build()` takes no arguments in `derive-introduced.mjs` and
+         `build(entrySource, from, to)` three in `build-component-css.mjs`. The
+         scan's whole-set count moved **69 → 70** definitions since 257.1.
+
+       **And lane 5 could not have found this wake's drift either**, for the
+       second sweep running: the three copies had two different names and one
+       no name at all. 257.1 recorded that no name-collision scan at any width
+       finds two differently-named spellings of one rule, and refused to widen
+       the pattern on a measured base rate; this is the same conclusion reached
+       from a second, independent instance. What found it was step 1's own
+       instruction — *"duplicated token values or logic (e.g. the same lookup
+       table hand-copied into multiple scripts)"* — applied by reading the
+       newest large change — everything since the previous sweep, **24
+       non-roadmap files** across Slices 258-262
+       (`git diff --stat 49d2c901..7691dec3 -- ':!ROADMAP*.md' ':!.roundtable'
+       ':!STATUS.md'`) — rather than by running anything. **Two sweeps in a row is a pattern worth naming and
+       not yet a detector**: the checkable shape is still semantic, and the
+       thing both instances share is a REVIEW HABIT — read what the newest
+       slices added, ask what job each new helper does, and ask whether
+       something already in the tree does that job.
+
+       **The improvement question, answered rather than skipped** (`LOOPS.md`'s
+       first operating rule). The same read turned up a SECOND duplicate beside
+       this one, and it is **logged, not fixed**, because the explaining is
+       smaller than the change: `stripTags` is defined twice, byte-identically
+       apart from the `export` keyword —
+       `apps/docs/scripts/pattern-extract.mjs:40` and
+       `packages/core/scripts/derive-readme-facts.mjs:98`. Unlike the decoders
+       these sit on **opposite sides of a package boundary**: core is the
+       published package and must not import from the docs app, and the reverse
+       direction would make a docs gate depend on a script that ships in
+       nobody's tarball. It is also one line with no branch to diverge in —
+       there is no ordering to get wrong, which is exactly what made the
+       decoders worth a module. Reopen if either copy grows a case the other
+       does not have; that is the divergence, not the count.
+
+       **Not verified, said plainly.** This is a cloud wake: no Podman, no
+       `localhost:8081`, so the 1440/390 light-and-dark screenshot lane could
+       not run. Nothing here rests on a rendered image — the diff is three
+       build scripts plus one new module and markdown; **0** files under
+       `packages/core/src/css/` and no docs page source. For this particular
+       change the whole-tree `dist/` diff above is stronger evidence than a
+       screenshot: a screenshot samples one viewport of one page, and the diff
+       covers every page and every asset.
+
 ## Slice 262 — 249.7's one banked gap measured against its own base rate: the symmetry gate is refused, and what survives is a hole in Dropdown's own wrong-choice clause (2026-09-04)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again

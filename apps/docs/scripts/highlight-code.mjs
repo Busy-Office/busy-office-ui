@@ -14,6 +14,7 @@ import { writeFile } from 'node:fs/promises';
 import { codeToHtml } from 'shiki';
 import { DIST } from './paths.mjs';
 import { distPages } from './dist-pages.mjs';
+import { decodeEntities } from './html-entities.mjs';
 
 
 // github-light hexes → semantic slots (many→few on purpose; the docs need
@@ -41,16 +42,12 @@ function detectLang(code) {
   return 'text';
 }
 
-function unescapeHtml(s) {
-  return s
-    .replaceAll('&lt;', '<')
-    .replaceAll('&gt;', '>')
-    .replaceAll('&quot;', '"')
-    .replaceAll('&#39;', "'")
-    .replaceAll('&#x27;', "'")
-    .replaceAll('&amp;', '&')
-    .replaceAll('&#38;', '&'); // both ampersand forms last — they guard double-escapes (grill H1: &#38; before &amp; double-decoded '&#38;amp;')
-}
+/* The local `unescapeHtml()` that used to sit here is now `decodeEntities` in
+   html-entities.mjs — one of three copies, and the only one whose comment
+   named the double-decode hazard. Its fix (ampersand forms last) is correct
+   for `&#38;amp;` and wrong for `&amp;#38;`; the shared one-pass decoder is
+   right on both. Measurements and the reproduction command are in that file's
+   header (Standardize sweep, roadmap 263.1). */
 
 /* distPages, not a local walker (Standardize, 2026-08-21). This was the sixth
    script walking dist with its own copy; the chokepoint exists precisely so
@@ -84,7 +81,7 @@ for (const page of await distPages(DIST)) {
   let last = 0;
   for (const m of html.matchAll(BLOCK)) {
     const { classes, rest } = mergeAttrs(m[1]);
-    const code = unescapeHtml(m[2]);
+    const code = decodeEntities(m[2]);
     const lang = detectLang(code);
     let hl = await codeToHtml(code, {
       lang,
