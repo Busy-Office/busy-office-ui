@@ -315,6 +315,95 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 259 — 249.9's two Accept clauses answered before the page is built: the miniature mechanism the item names does not exist, and two of its seven badges trace to no JSON key (2026-09-04)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** (`git branch
+--show-current` empty) with local `main` at `9ba1ef4` = `origin/main`, so trap 1
+in its milder shape; `git checkout -B main origin/main` before any commit.
+`--unshallow` clean in one attempt (**1,849** commits, no `shallow.lock`), and
+it brought all seven tags. Rule 1: no open P0 — `list_issues` on
+`Busy-Office/busy-office-ui` returns `totalCount: 0`; Step 1 triaged and
+committed nothing, no new input. Rule 2 clear (`Standardize 0 / 4`), rule 3
+clear (`Objective 0 / 3`, discharged by Slice 258). **Rule 4 fired**, on
+`OPEN: [15, 112, 249]`, 11 open items: Slice 15's `AT runtime evidence` and
+`112.3`/`112.4` are owner-blocked; `249.6` and `249.15` are browser-blocked in
+the screenshot sense; `249.7` is a cost question the owner's `249.10` would
+re-scope; `249.10`/`.11`/`.13` are owner calls and `249.12` owner-or-
+architecture. **`249.9`** is the item two hand-offs running have named as the
+best remaining cloud-takeable work, because its Accept's second clause — *"the
+miniature-rendering build-time cost is measured and stated"* — is measurable
+anywhere. Taken, measured, and the item left OPEN: its deliverable is a
+catalogue page of rendered miniatures a human compares.
+
+*Read before quoting rule 5:* `dispatch_status.py` reports Optimize **STALE**,
+`1 wake-date(s) newer` (newest pair `bundle-gz-kb` 2026-09-03 09:54, **128**
+samples). Per `LOOPS.md` rule 5's own text, **this rule could not be evaluated
+this wake** and is not reported clear. No sample recorded, and this wake can
+now say more than "the value would not have moved":
+
+**`bundle-gz-kb` has no generator, and that is why every wake declines it.**
+Measured rather than asserted:
+`grep -rln 'bundle-gz-kb' --include='*.mjs' --include='*.py' --include='*.ts' --include='*.js' --include='*.json' . | grep -v node_modules`
+returns exactly **one** file — `scripts/loops/record_metric.py`, and the hit is
+its **docstring example**, `--value 7.0`, a placeholder. **Nothing derives the
+number and no document records how it is computed** — its provenance is not
+asserted here, only its absence, which is the checkable half. This wake's core
+build prints `css/*.css 6 file(s) 14.05 / 15.5 kB gz` and `375.8 kB gz total`,
+and the last recorded value is `15.1 kB`: not equal to any of the three, so a wake
+wanting to sample must guess which figure (or which subset) the name means.
+CLAUDE.md's *"derive names from the generated source, never from a convention"*
+is what forbids guessing. The standing decline reason (*"0 files under
+`packages/core/src/css/`, so the reading could only reproduce the value"*) is
+true and is **not** the binding constraint: even a wake that DID change the CSS
+could not reproduce this metric. That is the dead-instrument finding
+`RESUME.md`'s standing watch was waiting for, and it is recorded rather than
+fixed — writing the derivation command is a change to a loop script, which is
+not what rule 4 dispatched.
+
+1. [x] **259.1 — DONE 2026-09-04. Both of 249.9's Accept clauses measured in
+       advance of the page, and both re-scope it.** The full text, tables and
+       commands are banked in **249.9 itself**, where the wake that builds the
+       page will read them, rather than duplicated here. In summary:
+
+       - **The mechanism premise is false.** `browser-harness.mjs` has 13
+         consumers and **0** run at build time; `PatternPreview.astro` launches
+         no browser at all — it is 10 hand-authored fragments of 39 patterns,
+         scaled by a CSS custom property. The item's "already exists" names a
+         different mechanism than the one that ships, and the two have opposite
+         cost shapes.
+       - **Both routes costed, so the second clause is satisfied either way.**
+         The browser route: **~8.0 s warm / 11.6 s cold** for 39 component
+         pages, **+1,284,734 bytes** in `dist/` (**8.8%** on 14,549,590). The
+         shipped route: zero build time, and an authoring cost paid 10 times in
+         39 since 2026-08-23.
+       - **Of seven badges, four resolve cleanly, two trace to no JSON key,
+         and one traces to a key that is empty for all 40.** No key:
+         `pattern links` (the mapping exists only in the built pages'
+         "Components used" lists, and `astro build` runs before every
+         dist-walker, so a generator must emit it from source first), and the
+         `JS-required` third of the maturity label — the stated
+         `classes ∩ hooks` derivation is **binary for a ternary** label and
+         mis-classifies in both directions (23/40 naive, with
+         `approval-workflow` a confirmed false positive on `data-state` alone
+         and no `approval*.ts` in the tree; 20/40 own-block-anchored, dropping
+         `dialog` and `scan`, both genuinely JS-driven). Empty key: `AT line`,
+         where `at-evidence.json`'s `components` is `{}` and its own
+         `blockedBy` names Slice 15.
+
+       *Why this does not close 249.9:* the item's deliverable is the
+       `/components/` catalogue page, whose point is rendered miniatures. That
+       is `ENVIRONMENT.md`'s first list — evidence a human compares — so it
+       stays open for a local wake.
+
+       **NOT VERIFIED, named rather than implied:** cloud wake, so the
+       1440/390 light-and-dark screenshot lane could not run. The diff is
+       `ROADMAP.md` and `.roundtable/` only — **0** files under
+       `packages/core/src/css/`, no page markup, no script — so there is
+       nothing a screenshot could show. Built page count unchanged at **138**.
+       All **17** CI entry points, re-derived from `ci.yml` rather than read
+       off `ENVIRONMENT.md`'s snapshot, ran green in this container after the
+       `ROADMAP.md` edit.
+
 ## Slice 258 — Objective grill of Slices 256, 257: 58 of 62 assertions reproduce, and two of the four that do not are the same defect the grilled slice records one item earlier — a real count of a set the sentence does not name (2026-09-04)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** (`git branch
@@ -2244,9 +2333,140 @@ claimed.
        classes ∩ `behaviors.json` hooks), DSA score + date, floor, AT line,
        pattern links, a build-time miniature via `browser-harness.mjs`
        (already exists, used today for patterns via `PatternPreview.astro`).
-       - **Accept:** every badge on a card traces to a JSON key; the
-         miniature-rendering build-time cost is measured and stated before
-         this closes.
+       - **Accept:** every badge on a card either traces to a JSON key **or
+         the card renders the absence and names its reason** — 249.3's
+         "absence is rendered, never blank", and the audit below says which
+         badge is which; the miniature-rendering build-time cost is measured
+         and stated before this closes **(DONE — both routes costed below)**.
+
+       **THE MECHANISM PREMISE IS FALSE — measured 2026-09-04 (cloud wake),
+       per CLAUDE.md's rule that re-checking an item's premise is part of the
+       criterion.** Neither half of "a build-time miniature via
+       `browser-harness.mjs` (already exists, used today for patterns via
+       `PatternPreview.astro`)" holds:
+
+       - `browser-harness.mjs` has **13** consumers and **0** of them run at
+         build time. Every one is a gate or audit invoked separately, after
+         `astro build`, against `dist/`. Commands:
+         `grep -rln browser-harness --include='*.mjs' --include='*.astro' . | grep -v node_modules`
+         → 13; each of the 11 docs names checked against
+         `require('./apps/docs/package.json').scripts.build` → **0** present;
+         `packages/core`'s own build script matches neither `browser-harness`
+         nor `puppeteer`.
+       - `PatternPreview.astro` renders **no image and launches no browser**.
+         It is a map of **10** hand-authored HTML fragments (of **39**
+         patterns) drawn inline and scaled by a CSS custom property.
+         `grep -E 'puppeteer|browser-harness|screenshot'` on that file → 0,
+         and its own header states the scoping is deliberate: *"only patterns
+         whose screens read at tile size get one — a dense list-report shrunk
+         to 16rem is grey noise, and a preview that cannot be read is worse
+         than text."*
+
+       So "already exists" names a **different mechanism** than the one that
+       ships, and the two have opposite cost shapes: the shipped one costs
+       authoring per tile and zero build time; the named one costs build time
+       and zero authoring. **That scoping sentence is the live design question
+       this item now has to answer** — **40** components at tile size (from
+       **39** pages) is exactly the case the pattern precedent refused for
+       dense screens, and it refused it for **29 of 39** patterns.
+
+       **COST, ROUTE A (the mechanism the item names).** One browser launch
+       plus navigate-and-screenshot the first `<section class="demo">` on each
+       component page, at 1440x900, against the built `dist/` served by
+       `serve-dist.mjs` — i.e. the build step this item would add. Three runs
+       in a cloud container; the probe is ad-hoc, not a gate, so the figures
+       are snapshots:
+
+       | | run 1 (cold) | run 2 | run 3 |
+       |---|---|---|---|
+       | browser launch, paid once | 2,337 ms | 259 ms | 243 ms |
+       | wall for all 39 pages | **11,640 ms** | **8,013 ms** | **8,022 ms** |
+       | median navigate / page | 106 ms | 87 ms | 88 ms |
+       | median screenshot / page | 111 ms | 93 ms | 97 ms |
+       | PNG bytes emitted | 1254 kB | 1255 kB | 1255 kB |
+
+       So **~8 s warm, ~11.6 s cold, and +1.23 MB in `dist/`** — **8.8%** on
+       top of the tree as built here (14,549,590 bytes over 526 files,
+       `find apps/docs/dist -type f -printf '%s\n'`). Navigate p90 119 ms /
+       p50 88 ms, screenshot p90 131 ms / p50 97 ms; slowest page
+       `data-table` at 632 ms cold.
+
+       **The byte column is stated at the precision it was taken, which is
+       not the precision it is tempting to claim.** Only run 3's per-page
+       bytes were kept (**1,284,734** exactly); runs 1 and 2 are the probe's
+       own rounded kB print. So the honest reading is *the three agree to
+       within 0.1% while the wall times move by 45%* — enough to reconcile
+       the probe as measuring rendering rather than load, and NOT the
+       byte-identical claim a first draft of this table asserted from one
+       run's JSON.
+
+       **39, not 40, and that reconciles rather than surprising:** `skeleton`
+       and `state` share `/components/state-patterns/`
+       (`api.pageSlug`), which is the pair CLAUDE.md's recipe already names.
+       Every one of the 39 had a `<section class="demo">` — a 100% that is
+       structural, not a dead detector: `check-page-shape` requires a demo
+       section on every component page, so any other answer would be a gate
+       failure.
+
+       **COST, ROUTE B (the mechanism that actually ships).** Zero build time
+       and zero bytes; the cost is authoring, and the shipped precedent has
+       paid it **10 times in 39** patterns since 2026-08-23. This route has no
+       measurable build cost to state, which is itself the answer the Accept's
+       second clause wanted.
+
+       **BADGE AUDIT — the Accept's first clause, run in advance against every
+       component in `api.json` (n = 40).** Four resolve cleanly; **two trace
+       to no JSON key at all** (`pattern links`, and the `JS-required` third
+       of the maturity label), and **one traces to a key that is empty for
+       every component** (`AT line`) — a distinct case, not a third failure:
+
+       | badge | resolves | source |
+       |---|---|---|
+       | name | 40/40 *(tautological — the name IS the `api.json` key)* | `api.json.components` |
+       | tagline | 40/40 | `meta.tagline` — 249.8 makes the core build **throw** without one, so this is structural |
+       | DSA score + date | 40/40 | `dsa-scores.json` (`scored` = a date; 3 distinct: 2026-08-21/23/28) |
+       | floor | 40/40 | `floor.json.perComponent` |
+       | AT line | **0/40** | `at-evidence.json.components` is `{}`; the file's own `blockedBy` names Slice 15, owner hardware |
+       | pattern links | **29/40**, and **no JSON key exists** | only the BUILT pattern pages' "Components used" lists (39 of them); `patterns-index.json` and `patterns.json` contain no such key |
+       | CSS-only / JS-enhanced / JS-required | **binary, not ternary** | the intersection is computable; **nothing in the repo distinguishes "JS-required"** |
+
+       Four consequences, each a real change of scope:
+
+       1. **The AT badge is an absence on every card, not on some.** That is
+          the state 249.3 built `Maturity.astro` to render, so this is
+          designed-for rather than blocking — but a card laid out assuming a
+          populated AT line is laid out for a case that does not exist.
+       2. **Pattern links need a generator that does not exist, and it cannot
+          read `dist/`.** `astro build` runs before every dist-walker in the
+          build script, so a page consuming this mapping needs it emitted
+          from source beforehand — the shape `gen-patterns-index.mjs` and
+          `gen-patterns.mjs` already have, both of which run before
+          `astro build` and read `src/pages/patterns/*.astro`.
+       3. **11 components are named by zero patterns**: `breadcrumb`, `date`,
+          `file-upload`, `icon`, `navbar`, `ordered-list`, `prose`,
+          `richtext`, `sidebar-nav`, `tree`, `tree-table`. `date` reading
+          zero is the deprecation working (45.3); the rest are the
+          zero-reach question 150.1 already says is not automatically a
+          defect. A card must render "no pattern uses this" without it
+          reading as a fault.
+       4. **The stated derivation over-reports, and the obvious fix
+          under-reports.** `classes ∩ hooks` reads **23/40** — but
+          `approval-workflow` matches on `data-state` alone, a vocabulary
+          **6** components share and **6** behaviors hook, and no
+          `approval*.ts` exists in `packages/core/src/js/behaviors/`.
+          Anchoring the match to the component's own block instead reads
+          **20/40** and drops `dialog` and `scan`, which are genuinely
+          JS-driven through data attributes (`scan` is the documented
+          attribute-only component `check-components-used.mjs` already
+          carries an exception for). So one rule produces a false positive
+          and the other two false negatives: this badge needs a recorded key,
+          not a set intersection.
+
+       **STILL OPEN, and browser-blocked in the SCREENSHOT sense**
+       (`LOOPS.md` 186.2's vocabulary): the deliverable is a catalogue page
+       whose point is rendered miniatures a human compares. A LOCAL wake can
+       build it. What a cloud wake could take is measured above and banked
+       here so the next wake does not re-derive it.
 
 10. [ ] **249.10 — SAP/Fiori terminology column for 249.7.** Owner
         vocabulary — value help, ALV, guided procedure, F4, message, maintain.
