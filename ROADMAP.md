@@ -315,6 +315,158 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 262 — 249.7's one banked gap measured against its own base rate: the symmetry gate is refused, and what survives is a hole in Dropdown's own wrong-choice clause (2026-09-04)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty) — trap 1, fixed with
+`git checkout -B main origin/main` before any work. `git fetch origin main`
+moved `26447ba..681a88e`, which is the previous wake's own hand-off commit, not
+a second dispatcher; working tree clean, `RESUME.md` "In flight: nothing".
+Step 1: no new input — `list_issues` on `Busy-Office/busy-office-ui` returns
+`totalCount: 0`, so nothing was triaged and nothing committed there. Step 0b:
+rule 2 `3 / 4`, rule 3 `1 / 3` (both `ok`), rule 5 **STALE** by 1 wake-date and
+therefore reported as *could not be evaluated*, per `LOOPS.md` rule 5. Rule 1
+clear — no open `N. [ ]` item is a P0. So **rule 4, Continue, build mode**.
+
+**Rule 4's oldest open item is `249.6`, and it is declined again — but at the
+CLAUSE level this time**, which is what `RESUME.md`'s correction block asks
+for. 249.6's Accept reads *"each row's terminal page contains a `Demo` or a
+pattern link inside its content region"*, and the item's own banked table says
+three of six rows have neither. So the gate arm cannot land green until those
+three pages gain something, and the two ways to do that split cleanly: a `Demo`
+is a rendered screen (`ENVIRONMENT.md`'s FIRST list, no cloud wake), and a bare
+pattern link would be fitting the page to the gate rather than the reader —
+which is the item's own still-open question (*"or three of the six rows cut …
+deciding that is still part of the item"*), not a wake's to settle by padding.
+The premise was re-run rather than trusted: all three pages still read **0**
+`Demo` and **0** `/patterns/` hrefs in source
+(`grep -c Demo …; grep -o "/patterns/[a-z-]*" …` on `getting-started/scope`,
+`concepts/js-behaviors`, `concepts/theming`). 249.6 stays open, unchanged.
+
+Next-oldest is `249.7`, which the hand-off records as a **cost** question
+waiting on the owner's `249.10` — but with one measurement inside it flagged
+*"worth keeping either way"* and owned by no item: **the dropdown page never
+names or links `combobox` in its own content.** That is the clause this wake
+took, split as **249.19**.
+
+### The banked claim reproduced, and then stopped being the finding
+
+Reproduced independently, on the BUILT tree rather than from source: the
+dropdown page carries exactly **2** `href="…/components/combobox"` whole-page
+and **0** inside its content region — 249.7's *"0 hrefs; the 2 whole-page hits
+are shell chrome"*, confirmed by a different route.
+
+Then the base rate was measured before anything was fixed (CLAUDE.md 94.11),
+and it refuted the obvious next step. A probe read every built component
+page's content region — anchored at `class="… docs-content"` through
+`</main>`, because the docs shell lists all 43 components in its sidebar on
+every page and a whole-page reading is the uniformly-true predicate that
+anchor exists to avoid:
+
+```
+built component dirs 43 · content region found on 41 · 1 without one
+  (the one is /components/nav — the registered redirect Slice 261 already
+   found; a redirect stub has no content region, which is the right answer)
+component→component links inside the content region: 126, min 1 max 11 per page
+distinct page pairs linked at least one way: 97
+  symmetric (both directions): 29 = 29.9%      asymmetric: 68
+  of the 68, the target never even NAMES the source: 55
+```
+
+**The command, next to the claim** (CLAUDE.md — a count without its command
+gets re-derived, and re-deriving is where the second, different mistake comes
+from). Run after any `docs:build`; it reproduces on the `DOCS_BASE` build too,
+which is a second reading of the same graph:
+
+```
+node -e '
+const {readFileSync,readdirSync,existsSync}=require("fs"), D="apps/docs/dist/components";
+const L=new Map();
+for(const s of readdirSync(D)){const f=`${D}/${s}/index.html`; if(!existsSync(f))continue;
+  const h=readFileSync(f,"utf8"), m=h.match(/<div class="[^"]*docs-content[ "]/); if(!m)continue;
+  const r=h.slice(m.index,h.indexOf("</main>",m.index));
+  L.set(s,new Set([...r.matchAll(/href="[^"]*\/components\/([a-z0-9-]+)(?:[\/#][a-z0-9-]*)?"/g)].map(x=>x[1]).filter(t=>t!==s)));}
+const P=new Map();
+for(const [f,ts] of L) for(const t of ts){ if(!L.has(t))continue; const k=[f,t].sort().join("|"),[a]=k.split("|");
+  const p=P.get(k)||{ab:0,ba:0}; f===a?p.ab=1:p.ba=1; P.set(k,p);}
+const all=[...P.values()], sym=all.filter(p=>p.ab&&p.ba).length;
+console.log(`pages ${L.size} · pairs ${all.length} · symmetric ${sym} (${(sym/all.length*100).toFixed(1)}%) · asymmetric ${all.length-sym}`);'
+# before this slice: pages 41 · pairs 97 · symmetric 29 (29.9%) · asymmetric 68
+# after:             pages 41 · pairs 97 · symmetric 30 (30.9%) · asymmetric 67
+```
+
+**A committed report script was refused rather than shipped.** The repo's
+existing not-a-gate reports (`report:prose`, `report:css-repeats`,
+`report_loop_prose.py`) each earn their place by having a Standardize lane
+that runs them — `LOOPS.md` says outright that the lane is *"the only thing
+keeping it from rotting"*, and four consecutive sweeps still ran three lanes
+of four. A fifth report with no lane is a script nobody runs; a fifth lane is
+a recurring cost for a question this slice answers once, with no standing
+delta to watch (a new component adds links; asymmetry stays the norm either
+way). The command above is the durable form.
+
+So **`dropdown` never names `combobox` is 1 of 55 pairs of exactly that
+shape**, and reciprocal linking is not the norm here — it is the exception, at
+29.9%. Most of the asymmetry is correct: the graph has hubs — in-degree
+`data-table` **16**, `form` **15**, `badge` 7 — and a hub that linked back to
+all sixteen would be a worse page, not a better one. A
+symmetry gate is therefore **refused** — it would go red on 68 pairs that are
+mostly right, which is 94.11's shape exactly.
+
+A second candidate gate was measured and refused the same way. CLAUDE.md's
+recipe says the wrong-choice clause names a wrong context *"and links the
+alternative"*, and `check:wrong-choice` enforces only the clause. Base rate of
+the missing half: **37 of 37** non-exempt component openers and **39 of 39**
+pattern openers already carry at least one link — 100% on both, a predicate
+uniformly true, so a gate over it distinguishes nothing.
+
+### What survived: a page-local hole, argued without the statistic
+
+What makes dropdown/combobox different from the other 54 is not the count, it
+is that **the other page has already claimed the boundary from its side**.
+`combobox`'s opener routes readers away twice — to `form` for a short fixed
+list, and *"For picking **several** values, use the multi-select dropdown
+instead — different job"*. Dropdown's opener answers only the too-FEW-options
+case (`segmented`) and says nothing about too many. It documents a
+multi-select menu, so the reader arriving from combobox's pointer lands
+correctly; the reader who starts at Dropdown with a 200-row list is sent
+nowhere.
+
+Fixed in the two places the recipe has for it: a second `<strong>Not …</strong>`
+clause in the opener pointing at Combobox, and Combobox added to `Related`.
+Not the other 54 — those are a general property with no page-local argument
+behind them, and fixing them because a number is 29.9% is the busywork
+`LOOPS.md`'s operating rules refuse.
+
+### Verification
+
+The probe was red-proved by injection before its numbers were believed, and
+the injection was confirmed present in the file first (CLAUDE.md's green
+red-proof rule): inserting one `<a href="/components/combobox">` into the
+BUILT dropdown page took its combobox href count `2 → 3` and moved the probe
+`29 → 30` symmetric, `55 → 54` never-names, with the `dropdown never names
+combobox` row disappearing. The file was restored byte-for-byte and the probe
+re-read the baseline exactly. **The real source change then reproduced the
+same three movements** on a fresh `docs:build` — the injection and the fix
+agree, which is the discrimination check the anchor is there to make possible.
+
+All 17 cloud-toolchain entry points green in this container, re-derived from
+`ci.yml` rather than read off the list. `check:claims` reports its documented
+**3 NOT VERIFIED** (`ENVIRONMENT.md` 6b — this container reports
+`(hover: hover) and (pointer: fine)` false; 162 live, up from 158 as prose
+lands, not claims being skipped). The `DOCS_BASE=/busy-office-ui` parity build
+was run and its base-stripping branch **confirmed exercised**, not merely
+green: the built dropdown page carries **4** `href="/busy-office-ui/components/combobox"`
+— two sidebar, one opener, one Related — with no unprefixed variant.
+
+**Not verified, and named rather than implied:** cloud wake, so the 1440/390
+light-and-dark screenshot lane could not run. The change is prose plus one
+`Related` entry on ONE page; `check:layout` (127 pages at 390 and 150% zoom),
+`check:scroll` (912 containers × 2 widths) and `test:axe` (127 pages × 2
+widths) are green over it, and those assert properties, not pixels — whether
+the longer opener *reads* well at 390px is the part a local wake's eyes would
+settle.
+
 ## Slice 261 — 249.9's "no JSON key exists" is false, and the key it asked for is an inversion of one this repo already ships (2026-09-04)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** (`git branch
@@ -2478,6 +2630,21 @@ claimed.
        image a human compares. A LOCAL wake can take it. The measurement above
        is the part a cloud wake could take, and it is banked here so the next
        wake does not re-derive it.
+
+       **DECLINED AGAIN 2026-09-04 (cloud wake), this time at the CLAUSE
+       level, which is the question `RESUME.md`'s correction block says to
+       ask instead of "is this item browser-blocked".** The answer is that
+       this Accept has no separable cloud-takeable half: the arm cannot land
+       green until the three ✗ rows gain something, and the two ways to give
+       them something are a `Demo` (a rendered screen — `ENVIRONMENT.md`'s
+       FIRST list) or a bare pattern link, which would be fitting the page to
+       the gate rather than the reader. Choosing between those is this item's
+       own open question (*"or three of the six rows cut"*), not a wake's to
+       settle by padding. The premise was re-run rather than trusted: all
+       three pages still read **0** `Demo` and **0** `/patterns/` hrefs in
+       source — `grep -c Demo` and `grep -o "/patterns/[a-z-]*"` over
+       `getting-started/scope.astro`, `concepts/js-behaviors.astro` and
+       `concepts/theming.astro`.
        - **Accept:** each row's terminal page contains a `Demo` or a pattern
          link **inside its content region**, asserted by a
          `check-learning-path`-style arm that anchors the same way that gate
@@ -2531,6 +2698,17 @@ claimed.
        keeping either way:** the dropdown page never names or links
        `combobox` in its own content (0 hrefs; the 2 whole-page hits are shell
        chrome), which is a *Related-link* gap, not a terminology one.
+
+       **That clause is SPLIT OUT as 249.19 and LANDED (Slice 262,
+       2026-09-04) — do not re-derive it.** Both readings above reproduced
+       independently on the built tree, and the wake that took it measured the
+       base rate before fixing anything: reciprocal linking is the exception
+       at **29 of 97 pairs (29.9%)**, with **55** pairs where the target never
+       names the source, so this gap is not distinctive and a symmetry gate is
+       refused. The fix landed on a page-local argument instead. **Nothing
+       about the terminology table moved** — this item is still the same cost
+       question, still waiting on 249.10, and its seed is still one full row
+       (master data / CRUD / maintain) plus `snackbar` and `typeahead`.
        - **Accept:** every row's claimed gap is independently reproduced by
          grepping the two pages it names, the same check that refuted the
          offcanvas row **(done — table above; a row that does not reproduce is
@@ -3025,6 +3203,35 @@ box (2026-09-03, cloud wake):**
           cannot see — and fails when the shipped key disagrees, red-proved by
           injection with the injection confirmed present in the artefact before
           the red is believed.
+
+19. [x] **249.19 — DONE, Slice 262.** The Related-link gap 249.7 banked as
+        *"worth keeping either way"*, split out of 249.7 on 2026-09-04. 249.7
+        is a COST question about a terminology table and waits on the owner's
+        `249.10`; this is the one measurement inside it that is neither
+        terminology nor owner-blocked, and it is `ENVIRONMENT.md`'s SECOND
+        list — hrefs and prose in the built artifact, no rendered image.
+        Fourth split of this shape in three days, after 249.16 out of 249.4,
+        249.17 out of 249.15 and 249.18 out of 249.9. The route to it is the
+        same one `RESUME.md`'s correction block names: read the clause, not
+        the item's label.
+
+        **The banked premise was re-derived independently before acting and
+        held** (CLAUDE.md's premise rule) — and then the base rate refuted the
+        obvious fix. Reciprocal linking is NOT the norm here: 29 of 97 pairs
+        (29.9%), with 55 pairs where the target never names the source, so
+        `dropdown`/`combobox` is one instance of a general property and a
+        symmetry gate is refused. What justifies fixing this ONE pair is
+        page-local: combobox's opener already claims the boundary from its
+        side, and dropdown's answered only the too-few-options case. Full
+        commands and figures in Slice 262.
+        - **Accept:** the dropdown page's own content region links `combobox`,
+          in the opener as a wrong-choice alternative and in `Related`, with
+          the change argued from that page's own clause rather than from the
+          symmetry statistic; the whole-page-versus-content-region readings
+          are recorded side by side so a later reader can see why the anchor
+          is load-bearing; and any gate proposed off this finding is measured
+          for base rate BEFORE it is written, with the refusal recorded when
+          the predicate is uniformly true.
 
 **Refused, recorded as DA (not re-litigated here — see the triage file for
 each item's reasoning):** publish-on-every-push/auto-bump, a `registry.ts`

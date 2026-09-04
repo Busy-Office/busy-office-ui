@@ -38,6 +38,12 @@ const multiselectMarkup = `<button class="bo-btn bo-btn--secondary" popovertarge
     hiding a short, mutually exclusive choice behind a click costs a click and
     hides the alternatives; that is
     <a href={base + '/components/segmented'}>Segmented control</a>.
+    <strong>Not for picking one value out of a long list</strong> — a menu is
+    scanned, and past a screenful scanning is the wrong task; when the reader
+    needs to type to narrow it down, that is
+    <a href={base + '/components/combobox'}>Combobox</a>. The multi-select
+    menu below is the other half of that boundary: several values, from a list
+    short enough to read.
   </p>
   <section class="demo">
     <div class="bo-cluster">
@@ -142,5 +148,5 @@ const multiselectMarkup = `<button class="bo-btn bo-btn--secondary" popovertarge
       `Open/close motion needs Firefox 129 / Safari 17.5, the <a href="${base}/getting-started/installation#browser-floor">degrades tier</a> of the browser floor — below it the menu still opens and closes, just without the fade.`,
     ]} />
   <DsaScore component="dropdown" />
-  <Related links={[["/concepts/js-behaviors", "JS behaviors"], ["/components/data-table", "Data table"]]} />
+  <Related links={[["/components/combobox", "Combobox (filter to one)"], ["/concepts/js-behaviors", "JS behaviors"], ["/components/data-table", "Data table"]]} />
 </Gallery>
