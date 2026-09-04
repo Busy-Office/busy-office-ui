@@ -315,6 +315,152 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 266 — Polish round on `avatar`: 249.8's 3-line header moved every line-number pointer in the framework, and all four live ones were published or printed while pointing at the wrong line (2026-09-04)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty, `HEAD` on `2d01c25` with no local branch) —
+ENVIRONMENT trap 1, fixed with `git checkout -B main origin/main` before any
+work. `--unshallow` clean in one attempt (**1,863** commits, no `shallow.lock`)
+and it brought all seven tags, so trap 2 did not bite. Rule 1: no open P0 —
+`list_issues` on `Busy-Office/busy-office-ui` returns `totalCount: 0`, and no
+open `N. [ ]` item is a P0. Step 1 triaged and committed nothing: no new input.
+Rule 2 **1 / 4 … ok**. Rule 3 **0 / 3 … ok**. **Rule 4 found nothing
+dispatchable**, and per `LOOPS.md` 186.2 the kind is named rather than lumped:
+**owner-blocked** Slice 15, `112.3`, `112.4`, `249.7`, `249.10`-`249.13`;
+**browser-blocked in the SCREENSHOT sense** (a LOCAL wake can take these)
+`249.6`, `249.9`, `249.15`; **agent-blocked** none. Rule 5 **STALE**
+(`1 wake-date(s) newer`), so it is reported as *could not be evaluated*, not as
+clear, and no metric was invented to silence it. **Rule 6 fired** —
+`polish_requeue.py --apply` re-queued **20** surfaces.
+
+**The tie-break this ledger has used five times discriminated NOTHING this
+round, and that is a measurement, not a shrug.** Source movement since each
+surface's own `scored` date reads **+4/-1 across 2 commits for all seven**
+fewest-rounds candidates — an identical value across many inputs, which this
+repo treats as a defect in the instrument until proven otherwise. It is not one:
+`4dbec5bd` (249.8) touched **40 of 40** component stylesheets and `01fd7fc5`
+(249.2) touched every docs page, so the uniformity is structural. Picked instead
+on the count of falsifiable assertions each entry carries — `avatar` at 4 unit
+literals + 4 absence claims + 1 quoted clause over 949 characters, the largest
+in the tier.
+
+1. [x] **266.1 — DONE 2026-09-04. Arm 3 disagreed with the ledger on both its
+       count and its content, and the disagreement was real.** The ledger has
+       recorded arm 3 as *"**1 of 40**, `badge · spacing -> badge.css:42`,
+       re-read AT the line"* in four consecutive rounds, most recently
+       2026-09-02. This round it read **2 of 40** — the dashboard round added
+       `dashboard.css:16` on 2026-09-02 without updating the arm's headline —
+       and **neither pointer resolved any more**:
+
+       | cite / comment | claims | line now reads | actual location |
+       |---|---|---|---|
+       | `badge · spacing` | bare numbers inside a comment at `badge.css:42` | *"the fix simply had not been propagated…"* | line **45** (`373px` / `390px`) |
+       | `dashboard · spacing` | `20rem` live at `dashboard.css:16` | `.bo-widget-grid {` | line **19** |
+       | `report-reach.mjs:130` | `avatar.css:40` reads the stack comment | `object-fit: cover;` | line **43** |
+       | `_shell.mjs:134` | `breadcrumb.css:3` documents the `<ol>` | `@order 30 */` | lines **6-7** |
+
+       **One cause, and it is a bulk edit.** `4dbec5bd` (249.8, 2026-09-03
+       23:16Z) prepended the `@tagline`/`@category` header to **40 of 40**
+       component stylesheets — `+3/-0` on 27 files and `+4/-0` on the 13 that
+       also carry `@label` or `@order`. Every pointer into a component
+       stylesheet authored before it is therefore stale by construction, which
+       is what makes 4-of-4 a reconciliation rather than a surprising 100%.
+       All four predate it: `git blame` dates them **2026-08-20**, **2026-09-02**,
+       **2026-08-27** and **2026-08-23**.
+
+       **Two of the four were being published and one printed.** `badge` and
+       `dashboard`'s cites render inside the DSA table on `/components/badge`
+       and `/components/dashboard`; `report-reach.mjs`'s string is printed by
+       the reach report on **every** `docs:build`. Only `_shell.mjs`'s is a
+       plain source comment.
+
+       **Fixed by naming the property, not by refreshing the number** — this
+       ledger's own precedent twice over (217.2, 220.1) and Slice 253 finding B,
+       which dropped line numbers from this very ledger for exactly this reason.
+       A refreshed 45/19/43/6 decays on the next header the build asks for. Each
+       replacement was verified present before being written: the numbers sit
+       inside the `WRAP` comment on `.bo-badge` (the enclosing selector confirmed
+       by walking the braces, not by eye); `20rem` is live in
+       `.bo-widget-grid`'s `grid-template-columns`; `avatar.css` carries the
+       stack comment; `breadcrumb.css`'s opening comment documents the `<ol>`.
+
+       **The first fix was tripped by its own explanation, caught before the
+       commit.** Writing *"this cite pointed at badge.css:42 and the
+       measurements now sit at line 45"* into the cite left the stale pointer
+       in the **built page** — `grep -rl 'badge.css:42' apps/docs/dist` still
+       returned 1 after a full rebuild, and arm 3 still read 2 of 40. That is
+       CLAUDE.md's *"an assertion tripped by its own explanation"* trap, and
+       the rule it breaks is this repo's own: the correction narrative belongs
+       in the ledger, not inside the published evidence. Rewritten; the
+       narrative is in `.roundtable/polish-state.md`.
+
+       - **Accept:** no live surface cites a line inside a component stylesheet,
+         and each replacement names something re-readable in the file it
+         describes; verified against the BUILT artefact rather than the diff.
+         **Met:** after the fix `0 of 40` cites carry a line number, the old
+         pointers read **0** files across `apps/docs/dist` (`badge.css:42`,
+         `dashboard.css:16`, `avatar.css:40` each), the two replacements render
+         on exactly `components/badge/index.html` and
+         `components/dashboard/index.html`, and the rebuilt reach report prints
+         *"the stack comment in avatar.css reads"* with **0** occurrences of
+         `avatar.css:40`.
+
+       **What this does NOT cover, said outright.** The same shift invalidated
+       **21** such citations in `ROADMAP-archive.md`, **24** in
+       `.roundtable/*.md` and **2** inside the frozen `apps/docs/versions/0.3.0`
+       and `0.4.0` docs snapshots. None is touched: a figure describing a commit
+       is read from that commit, and a released snapshot is the record of what
+       that release published. Only the surfaces a reader meets **today** were
+       repaired.
+
+2. [x] **266.2 — Gate refused a sixth time, and this time the base rate is
+       zero.** 216.2, 217.2, 220.2, 227.2 and 240.2 each refused a gate for a
+       decaying cite because it would need every cite to carry its own command.
+       That argument still holds, and 101.3's stop rule independently confines
+       Polish to the existing ratchet — but the decisive reading is simpler:
+       **after this fix the class has no members.** A live-surface sweep for
+       `<component>.css:NN` returns **0**, so a gate would be 94.11 ceremony by
+       that rule's own test — a predicate uniformly true of the tree
+       distinguishes nothing. Recorded rather than built, and the sweep is one
+       `git grep` if the class ever regrows.
+
+3. [x] **266.3 — Three instrument defects, each caught before it became a
+       finding, which is the base rate holding rather than an anecdote.**
+       (a) Reading taglines off `api.json.components[n].tagline` reported
+       **0 of 40** — a plain zero, and wrong: they live at `meta.tagline`.
+       (b) `behaviors.json.behaviors` is an **object of 33**, not an array;
+       `.filter` threw rather than returning a quiet zero, which is the lucky
+       version of 220.1's identical trap. (c) The tempting confirmation that
+       `avatar` has a behaviour — `'avatar' in byComponent` → **true** — is a
+       false positive: the key exists for **40 of 40** components and **22**
+       of them, `avatar` included, hold `[]`. A presence test on a key present
+       for everything is a detector that cannot fail.
+       **And one caught by comparing against what a human wrote down, not by
+       looking at the output:** the arm-6 `CLAIMS` table copied from this
+       ledger's tree-table round holds **8** rows while the two rounds after it
+       record **9/9**. Reporting 8/8 would have under-counted the class by one
+       and looked clean doing it; the ninth row (`form · colour`) was recovered
+       from the calendar round's own entry and arm 6 reads **9/9**.
+
+**Every gate CI runs was run here, green.** The 17 entry points were re-derived
+from `ci.yml` rather than trusted: `build`/`test`/`lint:css` on core,
+`docs:build`, `check:claims` (162 live, 3 NOT VERIFIED — ENVIRONMENT trap 6b,
+the container's `pointer: fine` reading, not a regression), `check:formatting`,
+`check:scroll` (912 containers × 118 pages), `check:layout` (127 pages),
+`check:forced-colors`, `test:axe` (127 pages × 2 widths, zero violations),
+`check:target-size`, `check:search`, `check:pseudo`, `check:quickstart`,
+`check:po-app` (19 behaviours), `check -w @busy-office/create-ui`, `suite`
+(28 screens × 2 widths) and `check:ci-ignores`.
+
+**Not verified, named rather than implied.** Cloud wake: no Podman and no
+`localhost:8081`, so the 1440/390 light-and-dark screenshot lane could not run.
+**0** files under `packages/core/src/css/` changed and no page markup changed;
+what changed on a rendered page is the **text of two cells** inside the existing
+DSA table on two component pages, established by grepping the rebuilt `dist/`
+(old strings 0, new strings on exactly those two files) and by the whole-tree
+`check:layout` and `test:axe` sweeps at both widths. That is narrower evidence
+than a screenshot for "does it look right" and wider for "did anything move".
+
 ## Slice 265 — Objective grill of Slices 263, 264: both slices' own numbers reproduce, and both defects are in what shipped BESIDE them — a gate header that still encodes the declaration its own slice corrected, and an entity decoder consolidated everywhere except the one place a reader could see it missing (2026-09-04)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again

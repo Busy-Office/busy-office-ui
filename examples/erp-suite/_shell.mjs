@@ -131,7 +131,9 @@ function crumbs(trail) {
         : `<li><a href="${t.href}">${t.label}</a></li>`,
     )
     .join('');
-  // The class sits on the <ol>, not the <nav> — breadcrumb.css:3 documents it.
+  // The class sits on the <ol>, not the <nav> — breadcrumb.css's opening comment
+  // documents it. Named rather than cited by line: this carried a line number until
+  // 249.8's 3-line @tagline header moved it (Polish round on avatar, 2026-09-04).
   return `<nav aria-label="Breadcrumb"><ol class="bo-breadcrumb">${items}</ol></nav>`;
 }
 

@@ -852,7 +852,7 @@
         },
         "spacing": {
           "score": 3,
-          "cite": "every live dimension literal carries its reason in place: the 20rem is the fallback of the documented consumer-override hook --bo-widget-min, and the 41rem container threshold is derived in the comment directly above it (2 x 20rem min + 1rem gap); the only other literal is a font-size, scored under typography. 32px and 1rem occur in explanatory comments only. Corrected 2026-09-02 (Polish round 2): the previous wording counted 20rem among the comment-only numbers, where it is live at dashboard.css:16, and never mentioned 41rem at all."
+          "cite": "every live dimension literal carries its reason in place: the 20rem is the fallback of the documented consumer-override hook --bo-widget-min, and the 41rem container threshold is derived in the comment directly above it (2 x 20rem min + 1rem gap); the only other literal is a font-size, scored under typography. 32px and 1rem occur in explanatory comments only. Corrected 2026-09-02 (Polish round 2): the previous wording counted 20rem among the comment-only numbers, where it is live in .bo-widget-grid's grid-template-columns, and never mentioned 41rem at all. Line number dropped 2026-09-04 (Polish round 1 on avatar): that reference named a line in dashboard.css which 249.8's 3-line @tagline header moved underneath it; the declaration is named instead, and does not move."
         },
         "interaction": {
           "score": 3,
@@ -910,7 +910,7 @@
         },
         "spacing": {
           "score": 3,
-          "cite": "the chip hug and the unconditional 1px boundary both carry their reason; the bare numbers a scan flags at badge.css:42 are measurements quoted INSIDE a comment, not declarations"
+          "cite": "the chip hug and the unconditional 1px boundary both carry their reason; the bare numbers a scan flags are measurements quoted INSIDE the WRAP comment on .bo-badge, not declarations. Corrected 2026-09-04 (Polish round 1 on avatar): this cite used to point at a line number in badge.css, which 249.8's 3-line @tagline header moved underneath it; it names the comment instead, which does not move"
         },
         "interaction": {
           "score": "na",

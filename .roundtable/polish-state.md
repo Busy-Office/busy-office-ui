@@ -87,26 +87,26 @@ a no-op recorded in one line.
 | surface | dimension | score | rounds | dry | src | status |
 |---|---|---|---|---|---|---|
 | component/alerts | content | **3** | 2/3 | 0 | 4ee5ad51 | round 1 landed — blind re-score 2→3, off the gate's TODO; **round 2 (2026-08-31) NO-OP — reconciliation clean on all four arms; the sweep around it filed ROADMAP 231.2, see below** · **RE-QUEUED — source changed** |
-| component/avatar | content | **3** | 1/3 | 0 | a21b88a7 | round 1 landed — blind 2→3, "not the only way to name someone" |
-| component/badge | content | **3** | 2/3 | 0 | 1f69e677 | round 1 landed — blind 2→3, "not for anything actionable"; **round 2 (2026-08-28) NO-OP — reconciliation clean on all four arms, see below** |
-| component/breadcrumb | content | **3** | 1/3 | 0 | dcbde565 | **round 1 (2026-08-30) FOUND A DEFECT — `fit` counted "2 of 19 pattern screens" against 39; re-entry from 217.2's filing, see below** |
-| component/byline | content | **3** | 1/3 | 0 | 29ededaf | round 1 landed — blind 2→3; scorer caught the boundary, redrawn |
-| component/calendar | content | **3** | 2/3 | 0 | 6b36b863 | round 1 landed — blind 2→3, "not for a plain date field"; **round 2 (2026-09-02) six arms clean on calendar itself, and a NEW arm 7 FOUND A DEFECT elsewhere — `form · colour` claimed "zero raw hex" against two painted ones; cite corrected, CSS left open as 240.1, see below** |
-| component/dashboard | content | **3** | 2/3 | 0 | 3780542a | round 1 landed — blind 2→3, "not a wrapper round every section"; **round 2 (2026-09-02) FOUND TWO DEFECTS, and the first is the only one in this ledger where the SCORE was wrong rather than the cite — `interaction: na` on a component that ships `initCollapsibleCards`; blind re-scored to 3 by a second agent, the first blind re-score this ledger has actually run. See below** |
-| component/data-table | content | **3** | 2/3 | 0 | 36c4bbe3 | round 1 landed — blind 2→3, "not for laying out a page"; **round 2 (2026-08-30) FOUND A DEFECT — the `spacing` cite named a literal 94.3 had removed two days before the score was taken, see below** |
+| component/avatar | content | **3** | 2/3 | 0 | 3147e6c1 | round 1 landed — blind 2→3, "not the only way to name someone"; **round 2 (2026-09-04) FOUND A DEFECT, and it is arm 3's WHOLE class at once — 249.8's 3-line header moved every line-number pointer in the framework; all four live ones were published or printed. ROADMAP 266, see below** |
+| component/badge | content | **3** | 2/3 | 0 | 1f69e677 | round 1 landed — blind 2→3, "not for anything actionable"; **round 2 (2026-08-28) NO-OP — reconciliation clean on all four arms, see below** · **RE-QUEUED — source changed** |
+| component/breadcrumb | content | **3** | 1/3 | 0 | dcbde565 | **round 1 (2026-08-30) FOUND A DEFECT — `fit` counted "2 of 19 pattern screens" against 39; re-entry from 217.2's filing, see below** · **RE-QUEUED — source changed** |
+| component/byline | content | **3** | 1/3 | 0 | 29ededaf | round 1 landed — blind 2→3; scorer caught the boundary, redrawn · **RE-QUEUED — source changed** |
+| component/calendar | content | **3** | 2/3 | 0 | 6b36b863 | round 1 landed — blind 2→3, "not for a plain date field"; **round 2 (2026-09-02) six arms clean on calendar itself, and a NEW arm 7 FOUND A DEFECT elsewhere — `form · colour` claimed "zero raw hex" against two painted ones; cite corrected, CSS left open as 240.1, see below** · **RE-QUEUED — source changed** |
+| component/dashboard | content | **3** | 2/3 | 0 | 3780542a | round 1 landed — blind 2→3, "not a wrapper round every section"; **round 2 (2026-09-02) FOUND TWO DEFECTS, and the first is the only one in this ledger where the SCORE was wrong rather than the cite — `interaction: na` on a component that ships `initCollapsibleCards`; blind re-scored to 3 by a second agent, the first blind re-score this ledger has actually run. See below** · **RE-QUEUED — source changed** |
+| component/data-table | content | **3** | 2/3 | 0 | 36c4bbe3 | round 1 landed — blind 2→3, "not for laying out a page"; **round 2 (2026-08-30) FOUND A DEFECT — the `spacing` cite named a literal 94.3 had removed two days before the score was taken, see below** · **RE-QUEUED — source changed** |
 | component/date | content | 2 | — | — | 399709aa | **SKIPPED** — deprecated, see note below |
 | component/icon | content | **3** | 2/3 | 0 | f0d9f50b | round 1 landed — blind 2→3; scorer caught the demo contradiction, clause narrowed; **round 2 (2026-08-30) FOUND A DEFECT — `fit` cited "12 ERP glyphs" against 26 shipped, and the same 12 was hard-coded as the DIVISOR of the page's published size projection, see below** · **RE-QUEUED — source changed** |
 | component/inline-editing | content | **3** | 1/3 | 0 | eadd116a | round 1 landed — blind 3, "not for creating a record" (unscored in DSA) · **RE-QUEUED — source changed** |
-| component/navbar | content | **3** | 1/3 | 0 | 1e50d24a | round 1 landed — blind 2→3, "not the page's own title or actions" |
-| component/pagination | content | **3** | 1/3 | 0 | 2a48579c | round 1 landed — blind 2→3, "not for stepping through a process" |
-| component/progress | content | **3** | 1/3 | 0 | ab66183b | round 1 landed — blind 2→3, "not for work of unknown duration" |
+| component/navbar | content | **3** | 1/3 | 0 | 1e50d24a | round 1 landed — blind 2→3, "not the page's own title or actions" · **RE-QUEUED — source changed** |
+| component/pagination | content | **3** | 1/3 | 0 | 2a48579c | round 1 landed — blind 2→3, "not for stepping through a process" · **RE-QUEUED — source changed** |
+| component/progress | content | **3** | 1/3 | 0 | ab66183b | round 1 landed — blind 2→3, "not for work of unknown duration" · **RE-QUEUED — source changed** |
 | component/scan | colour+interaction+fit | **3** | 2/3 | 0 | e1c34049 | round 1 (2026-08-23) fixed all three; **round 2 (2026-08-28) discovered the round-1 score was never written to `dsa-scores.json` at all** — see below · **RE-QUEUED — source changed** |
-| component/sidebar-nav | content | **3** | 2/3 | 0 | 904b544f | round 1 landed — blind 2→3, "not for navigating within one screen"; **round 2 (2026-08-30) FOUND A DEFECT — the `fit` cite's usage count was EXACT when written and decayed two days later, see below** |
-| component/state-patterns | content | **3** | 2/3 | 0 | 7d3f0e38 | round 1 landed — blind 2→3 (clears skeleton AND state); **round 2 (2026-08-28) FOUND A DEFECT — `skeleton · colour` cited the removed token pairing, see below** |
-| component/stepper | content | **3** | 2/3 | 0 | efba2799 | round 1 landed — blind 2→3, "not for independent sections"; **round 2 (2026-09-01) NO-OP — reconciliation clean on five arms; arm 4 re-measured 20/20 and a new arm 5 reads 81/81, see below** |
-| component/table-toolbar | content | **3** | 1/3 | 0 | f7950a7f | round 1 landed — blind 3, "do not add to a read-mostly list" (unscored in DSA) |
-| component/tree | content | **3** | 1/3 | 0 | b92740e4 | round 1 landed — blind 2→3, pair-coherent with tree-table |
-| component/tree-table | content | **3** | 2/3 | 0 | 298374cc | round 1 landed — blind 2→3, pair-coherent with tree; **round 2 (2026-09-01) NO-OP — reconciliation clean on six arms; a new arm 6 reads 8/8 and corrects this ledger's own base rate for the class, see below** |
+| component/sidebar-nav | content | **3** | 2/3 | 0 | 904b544f | round 1 landed — blind 2→3, "not for navigating within one screen"; **round 2 (2026-08-30) FOUND A DEFECT — the `fit` cite's usage count was EXACT when written and decayed two days later, see below** · **RE-QUEUED — source changed** |
+| component/state-patterns | content | **3** | 2/3 | 0 | 7d3f0e38 | round 1 landed — blind 2→3 (clears skeleton AND state); **round 2 (2026-08-28) FOUND A DEFECT — `skeleton · colour` cited the removed token pairing, see below** · **RE-QUEUED — source changed** |
+| component/stepper | content | **3** | 2/3 | 0 | efba2799 | round 1 landed — blind 2→3, "not for independent sections"; **round 2 (2026-09-01) NO-OP — reconciliation clean on five arms; arm 4 re-measured 20/20 and a new arm 5 reads 81/81, see below** · **RE-QUEUED — source changed** |
+| component/table-toolbar | content | **3** | 1/3 | 0 | f7950a7f | round 1 landed — blind 3, "do not add to a read-mostly list" (unscored in DSA) · **RE-QUEUED — source changed** |
+| component/tree | content | **3** | 1/3 | 0 | b92740e4 | round 1 landed — blind 2→3, pair-coherent with tree-table · **RE-QUEUED — source changed** |
+| component/tree-table | content | **3** | 2/3 | 0 | 298374cc | round 1 landed — blind 2→3, pair-coherent with tree; **round 2 (2026-09-01) NO-OP — reconciliation clean on six arms; a new arm 6 reads 8/8 and corrects this ledger's own base rate for the class, see below** · **RE-QUEUED — source changed** |
 
 ## Re-entry: scan (2026-08-23) — the queue's first source-change entry
 
@@ -1277,3 +1277,206 @@ screenshot lane could not run. **This round changed no CSS and no page markup** 
 the diff is `dsa-scores.json`'s two cite strings and one score, `ROADMAP.md`,
 this ledger and the bookkeeping files — so nothing rests on a rendered image.
 Every browser-derived number quoted came from a gate executing in this container.
+
+---
+
+## Round 2: avatar (2026-09-04, cloud wake) — NOT a no-op, and the finding is arm 3's whole class (ROADMAP 266)
+
+Dispatcher rule 6, reached because rules 1-5 were clear or had no input: no open
+P0, Standardize `1 / 4`, Objective `0 / 3`, rule 4's eleven open items all
+blocked (eight owner, three browser-blocked in the SCREENSHOT sense), and rule 5
+**STALE** — reported as *could not be evaluated*, per `LOOPS.md`, rather than
+clear. `polish_requeue.py --apply` re-queued **20** surfaces, the widest re-queue
+this ledger has recorded.
+
+### The pick, and the tie-break that stopped working
+
+§3b's "fewest rounds used" discriminated for the first time in seven rounds:
+nine surfaces sat at `1/3` against eleven at `2/3`. `inline-editing` and
+`table-toolbar` drop for 217.1's stated reason (no `dsa-scores.json` entry, so
+no arm can disagree with them), leaving seven.
+
+**216.1's discriminator — source movement since each surface's own `scored`
+date — then returned the same value for all seven**, which this repo treats as a
+defect in the instrument until proven otherwise:
+
+```
+# per candidate, with 217.1's +08:00 boundary
+BASE=$(git rev-list -1 --before=<scored>T23:59:59+08:00 HEAD)
+git diff --numstat $BASE HEAD -- <page> <css dir>
+#  avatar breadcrumb byline navbar pagination progress tree  ->  +4/-1, 2 commits, ALL
+```
+
+It is not a defect. The two commits are `4dbec5bd` (249.8 — a `@tagline` header
+on **40 of 40** component stylesheets) and `01fd7fc5` (249.2 — a `description`
+on every docs page), so a repo-wide edit is *supposed* to move every surface by
+the same amount. The instrument is fine and simply has nothing to say about a
+round whose re-queue was caused by one commit touching everything.
+
+Picked instead on the count of falsifiable assertions each entry carries, which
+is the property the arms actually consume:
+
+| surface | quotes | unit literals | bare counts | absence claims | cite chars |
+|---|---|---|---|---|---|
+| **avatar** | 1 | **4** | 0 | **4** | **949** |
+| progress | 1 | 2 | 1 | 4 | 926 |
+| navbar | 1 | 1 | 1 | 3 | 868 |
+| tree | 1 | 2 | 0 | 3 | 808 |
+| byline | 2 | 0 | 0 | 4 | 800 |
+| pagination | 1 | 0 | 0 | 3 | 689 |
+| breadcrumb | 0 | 0 | 0 | 5 | 511 |
+
+### avatar's own six cites all hold
+
+Checked at the source, not inferred. `typography` — `font-size: 0.7em` ×1 and
+`1.8em` ×2 (`inline-size`/`block-size`), present. `colour` *"zero raw colour"* —
+**0** hex/`rgb(`/`hsl(` outside comments, and the `forced-colors: active` block
+does add `border: 1px solid CanvasText`. `spacing` — the `2px` ring
+(`border: 2px solid var(--bo-color-bg-surface)`) and the `-0.5em` overlap
+(`margin-inline-start`) both present, one each. `interaction: na` — **0 of 33**
+behaviours match `/avatar/i` and the page imports none. `content`'s quoted clause
+is in the built page (arm 4). `fit` *"em-sized … instead of shipping size
+modifiers"* — `api.json` records `variants: []`, and the only `px` in the file
+are the `1px` forced-colors border and the `2px` ring, neither a size.
+
+The newly published `@tagline` makes the same claim in the sidebar and
+`llms.txt` — *"em-sized so it tracks the text beside it"* — and it holds for the
+same reading.
+
+### The finding: arm 3 read 2 of 40, and neither pointer resolved
+
+This ledger has recorded arm 3 as *"**1 of 40**, `badge · spacing ->
+badge.css:42`, re-read AT the line"* in four consecutive rounds, most recently
+2026-09-02. Both halves were wrong by the time this round ran.
+
+- The **count** is 2: the 2026-09-02 dashboard round added `dashboard.css:16`
+  to a cite without updating the arm's headline.
+- The **content** decayed on **2026-09-03 23:16Z**, when `4dbec5bd` prepended
+  the `@tagline` header to every component stylesheet — `+3/-0` on 27 files,
+  `+4/-0` on the 13 carrying `@label` or `@order`.
+
+Four live pointers into a component stylesheet existed; **all four were stale**,
+and `git blame` puts every one of them before `4dbec5bd`:
+
+| pointer | authored | claims | line now reads | actual |
+|---|---|---|---|---|
+| `badge · spacing` cite | 2026-08-20 | bare numbers at `badge.css:42` | *"the fix simply had not been propagated…"* | **45** |
+| `dashboard · spacing` cite | 2026-09-02 | `20rem` live at `dashboard.css:16` | `.bo-widget-grid {` | **19** |
+| `report-reach.mjs:130` | 2026-08-27 | `avatar.css:40` reads the stack comment | `object-fit: cover;` | **43** |
+| `_shell.mjs:134` | 2026-08-23 | `breadcrumb.css:3` documents the `<ol>` | `@order 30 */` | **6-7** |
+
+**4 of 4 is a reconciliation, not a surprising 100%**: every component
+stylesheet gained a header, so every pre-249.8 pointer into one is stale by
+construction. The first two are **published** in the DSA table on
+`/components/badge` and `/components/dashboard`; the third is **printed by the
+reach report on every `docs:build`**; only the fourth is a plain source comment.
+
+**A fifth class, and it is different from the three this ledger already has.**
+216.1's cite was wrong the day it was written; 217.2's and 220.1's were right
+then and falsified by a change in **another tree**; 227.1's was falsified inside
+the very file it described. This one was falsified in the file it describes, by
+an edit that changed **nothing the cite was about** — the header carries no
+declaration and no measurement. There is no wrong moment to catch and no
+content change to notice; only a line count moved.
+
+### Fixed by naming the property, not by refreshing the number
+
+217.2 and 220.1 both replaced a decaying count with a property, and Slice 253
+finding B dropped line numbers from *this ledger* for the same reason. A
+refreshed 45/19/43/6 decays on the next header the build asks for — and 249.8 is
+the proof that such a header can arrive across 40 files in one commit. Each
+replacement was verified present before being written: the enclosing selector for
+badge's `WRAP` comment was found by walking the braces (`.bo-badge`, opened at
+line 6) rather than by eye.
+
+**The first attempt was tripped by its own explanation.** Writing *"this cite
+pointed at badge.css:42 and the measurements now sit at line 45"* into the cite
+left the stale pointer in the **built page**: after a full rebuild
+`grep -rl 'badge.css:42' apps/docs/dist` still returned **1**, and arm 3 still
+read **2 of 40**. CLAUDE.md names this trap for assertions; it applies to
+corrections too, and the rule is that the narrative belongs here rather than
+inside the published evidence.
+
+### Verified against the RENDERED artefact
+
+| check | before | after |
+|---|---|---|
+| `badge.css:42` in `apps/docs/dist` | 1 file | **0** |
+| `dashboard.css:16` in `apps/docs/dist` | 1 file | **0** |
+| `avatar.css:40` in the reach report | printed every build | **0** |
+| replacement text | 0 files | **1 each**, on `components/badge/` and `components/dashboard/` |
+| arm 3 | 2 of 40 | **0 of 40** |
+
+### The eight arms
+
+| arm | reading |
+|---|---|
+| 1 wrong-choice clause | `156 assertions / 80 pages / 1 outstanding` (the skipped `date`) |
+| 2 score rendered by its page | `360 assertions / 40 scored`; `Not yet scored` absent from dist |
+| 3 line-number cites | **2 of 40, both stale — the finding.** After the fix, **0 of 40**, so the arm now has no members |
+| 4 content quotes in built pages | **20/20** |
+| 5 css dimension literals | **82/82** |
+| 6 bare counts in any cite | **9/9** |
+| 7 absence claims | **42/42** |
+| 8 `interaction: na` pages demonstrating a behaviour | **0 of 17** |
+
+**Arm 3 is now empty and that is worth saying rather than reporting a clean
+`0/0`.** It was the only arm whose subject this round removed entirely; it stays
+in the list so a regrown pointer is visible, and its sweep is one `git grep`.
+
+### Three instrument defects, caught before any became a finding
+
+- Reading taglines off `api.json.components[n].tagline` reported **0 of 40**.
+  A plain zero is a defect in the instrument until proven otherwise, and it was:
+  they live at `meta.tagline`.
+- `behaviors.json.behaviors` is an **object of 33**, not an array. `.filter`
+  threw — the lucky version of 220.1's identical trap, which returned a quiet
+  wrong number instead.
+- The tempting confirmation that `avatar` has a behaviour, `'avatar' in
+  byComponent` → **true**, is a false positive: the key exists for **40 of 40**
+  components and **22** of them hold `[]`, `avatar` among them.
+
+**And one caught by a number disagreeing with what a human wrote down.** The
+arm-6 `CLAIMS` table copied from the tree-table round holds **8** rows, while
+the two rounds after it record **9/9**. Reporting `8/8` would have under-counted
+the class by one and looked clean doing it. The ninth row (`form · colour`,
+added by the calendar round) was recovered from that round's own entry, and arm
+6 reads **9/9**.
+
+### No gate — the sixth refusal, and the first decided on an empty class
+
+216.2, 217.2, 220.2, 227.2 and 240.2 each refused a gate for a decaying cite
+because it would need every cite to carry its own command. That still holds, and
+101.3 independently confines Polish to the existing ratchet. The decisive
+reading here is simpler: **after the fix the class has no members** — a
+live-surface sweep for `<component>.css:NN` returns **0** — so a gate would be
+94.11 ceremony by that rule's own test.
+
+### What this does NOT cover
+
+The same shift invalidated **21** such citations in `ROADMAP-archive.md`, **24**
+in `.roundtable/*.md` (this ledger's own past rounds among them) and **2** inside
+the frozen `apps/docs/versions/0.3.0` and `0.4.0` docs snapshots. **None is
+touched.** A figure describing a commit is read from that commit, and a released
+snapshot is the record of what that release published. Only the surfaces a
+reader meets today were repaired.
+
+### Score, and what is owed
+
+**The score does not move and no blind re-score is owed.** Naming a comment is
+stronger evidence than naming a line that moves under it, so `badge · spacing`
+and `dashboard · spacing` were and remain 3; `avatar`'s own six cites all
+reconciled clean. `scored` stays as recorded on each entry — moving a date would
+claim the independent second opinion §3b step 4 requires, which this wake could
+not run. `rounds` moves 1→2 for `avatar` on 182.1's precedent: the round changed
+the published artefact.
+
+### Not verified, said plainly
+
+Cloud wake: no Podman, no `localhost:8081`, so the 1440/390 light-and-dark
+screenshot lane could not run. **0** files under `packages/core/src/css/`
+changed and no page markup changed; what changed on a rendered page is the
+**text of two cells** inside the existing DSA table on two component pages,
+established by grepping the rebuilt `dist/` and by the whole-tree `check:layout`
+and `test:axe` sweeps at both widths. Every browser-derived number quoted above
+came from a gate executing in this container.

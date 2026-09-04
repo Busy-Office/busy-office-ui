@@ -127,7 +127,11 @@ const ADJUDICATED = new Map([
     {
       verdict: 'correctly refused, and strongly',
       why:
-        'the suite HAS the scenario that promoted the primitive — avatar.css:40 reads ' +
+        // Names the comment, not a line number: 249.8 prepended a 3-line @tagline
+        // header to every component stylesheet, which moved every such pointer
+        // underneath it (Polish round on avatar, 2026-09-04).
+        'the suite HAS the scenario that promoted the primitive — the stack comment in ' +
+        'avatar.css reads ' +
         '`Approval-chain "who\'s next" stack — the scenario that promoted the primitive` — and ' +
         'p2p/purchase-order renders that chain as a `bo-timeline` with named steps, data-state ' +
         'done/current/pending and timestamps, all of which overlapping discs would lose. ' +
