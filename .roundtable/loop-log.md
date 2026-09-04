@@ -1390,3 +1390,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-04 12:07 · Meta · refusal · blanking comments in extract-behaviors' hook scan — measured: it deletes real published hooks on 25 of 33 exports, one of them 12 · refused · 1b4c3365
 - 2026-09-04 12:07 · Meta · refusal · publishing byComponent into llms.txt — behaviors.json is already an export and llms.txt already lists all 26 inits with their hooks; a fourth spelling of one relation · refused · 1b4c3365
 - 2026-09-04 12:07 · Meta · refusal · gating gen-llms' hand-written paste-in block — it names 5 of 26 inits deliberately, and all 5 were checked to agree with byComponent · refused · 1b4c3365
+- 2026-09-04 13:02 · Objective · grill · Slice 265 — Objective grill of 263, 264: gate header still encoding the declaration its slice corrected; pattern text published undecoded, one badge visible as 'Dashboard &amp; widgets'; 53rd gate added · landed · 234677f7
+- 2026-09-04 13:02 · Meta · refusal · widening html-entities.mjs's NAMED map for the 7 residual references — measured: the first argument against it (code samples) is false, the real risk is unescaped live content like '&times; EA' · refused · 234677f7
+- 2026-09-04 13:02 · Meta · refusal · re-grilling Slice 249, armed for the sixth wake — already grilled whole and per item on 2026-09-03 · refused · 234677f7

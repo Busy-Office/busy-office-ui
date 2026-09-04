@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-04 12:07 UTC
+Generated at: 2026-09-04 13:02 UTC
 
 ## Open items by slice
 
@@ -24,10 +24,9 @@ Generated at: 2026-09-04 12:07 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1384 iterations logged)
+dispatch status — counter-triggered rules (1387 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-09-04 09:57   ok
-  Objective     3 / 3 slices          since 2026-09-04 02:05   OVERDUE  [249, 263, 264]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-09-04 13:02   ok
   Optimize      1 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-03, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-03 (2026-09-04), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -46,9 +45,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-04 09:57 · Standardize · sweep · Slice 263.1 — three HTML-entity decoders consolidated into html-entities.mjs; all five lanes clean, finding from step 1's reading habit · landed · bdb73d8f
-- 2026-09-04 09:57 · Meta · refusal · widening lane 5's function-name scan — 257.1's base rate stands and no name scan finds three differently-named copies · refused · bdb73d8f
-- 2026-09-04 09:57 · Meta · refusal · a --self-test on the new module — check-selftests walks check-* only, so nothing would run it · refused · bdb73d8f
 - 2026-09-04 09:57 · Meta · refusal · folding check-po-app.mjs's single &amp; replace into the shared module · refused · bdb73d8f
 - 2026-09-04 09:57 · Meta · refusal · consolidating the two byte-identical stripTags — opposite sides of the published-package boundary; logged instead · refused · bdb73d8f
 - 2026-09-04 12:07 · Continue · build · Slice 264.1 — 249.20: which component a behavior serves is DECLARED (@serves in 26 behavior headers -> behaviors.json byComponent), not intersected; new check-js-serves gate red on 6 real pages first · landed · 1b4c3365
@@ -56,6 +52,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-04 12:07 · Meta · refusal · blanking comments in extract-behaviors' hook scan — measured: it deletes real published hooks on 25 of 33 exports, one of them 12 · refused · 1b4c3365
 - 2026-09-04 12:07 · Meta · refusal · publishing byComponent into llms.txt — behaviors.json is already an export and llms.txt already lists all 26 inits with their hooks; a fourth spelling of one relation · refused · 1b4c3365
 - 2026-09-04 12:07 · Meta · refusal · gating gen-llms' hand-written paste-in block — it names 5 of 26 inits deliberately, and all 5 were checked to agree with byComponent · refused · 1b4c3365
+- 2026-09-04 13:02 · Objective · grill · Slice 265 — Objective grill of 263, 264: gate header still encoding the declaration its slice corrected; pattern text published undecoded, one badge visible as 'Dashboard &amp; widgets'; 53rd gate added · landed · 234677f7
+- 2026-09-04 13:02 · Meta · refusal · widening html-entities.mjs's NAMED map for the 7 residual references — measured: the first argument against it (code samples) is false, the real risk is unescaped live content like '&times; EA' · refused · 234677f7
+- 2026-09-04 13:02 · Meta · refusal · re-grilling Slice 249, armed for the sixth wake — already grilled whole and per item on 2026-09-03 · refused · 234677f7
 
 ## Sunset test
 
