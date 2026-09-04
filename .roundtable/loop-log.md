@@ -1367,3 +1367,7 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-04 02:49 · Meta · refusal · recording a bundle-gz-kb sample to un-STALE rule 5 — the name has no generator anywhere (only record_metric.py's docstring example), so any value would be a guessed convention · refused · e6631a88
 - 2026-09-04 02:49 · Meta · refusal · building the /components/ catalogue page itself — browser-blocked in the screenshot sense, left OPEN for a local wake · refused · e6631a88
 - 2026-09-04 02:49 · Meta · refusal · closing 249.9 on the strength of the measurement — the Accept's deliverable is the page, not the numbers · refused · e6631a88
+- 2026-09-04 05:04 · Continue · build · 249.17 (split from 249.15) — og:/twitter: tags on every built page + check-metadata arm 5, red-proved four ways; Slice 260 · landed · 93ad43a
+- 2026-09-04 05:04 · Meta · refusal · a placeholder og:image and twitter:card=summary_large_image — the card image needs a rendered-image check a cloud wake cannot do (249.15) · refused · 93ad43a
+- 2026-09-04 05:04 · Meta · refusal · adding <link rel=canonical> alongside og:url — the item names the social tags; og:url already carries the published URL · refused · 93ad43a
+- 2026-09-04 05:04 · Meta · refusal · retyping each self-head page's title/description into the SocialMeta call — hoisted to one const per page instead, so the two uses cannot drift · refused · 93ad43a

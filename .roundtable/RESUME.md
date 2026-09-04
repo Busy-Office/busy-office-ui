@@ -23,12 +23,14 @@ survives none.
 ## In flight: nothing
 
 Last updated 2026-09-04 (**cloud** wake, scheduled routine). Working tree clean
-at hand-off. Two commits this wake, both pushed: Slice 259 and this hand-off.
+at hand-off. Two commits this wake, both pushed: Slice 260 and this hand-off.
 
-**`check:resume-slice-ids` names closed ids, and they are deliberate.** `259.1`
-appears below only as *what this wake closed*. The `249.x` ids below are the
-live open set and are the point of the section. Nothing here queues or blocks
-on a closed id.
+**`check:resume-slice-ids` reports three closed ids, and all three are
+deliberate.** It names `249.17`, `249.16` and `249.4`: the first is *what this
+wake closed*, the other two are the 2026-09-03 split this wake took as its
+precedent. The live open set is `249.6`, `249.7`, `249.9`, `249.10`-`249.13`,
+`249.15`, plus Slice 15 and `112.3`/`112.4`. Nothing here queues or blocks on a
+closed id.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -41,56 +43,64 @@ python3 scripts/loops/roadmap_scope.py            # OPEN set + sweep scope
 ## Direction
 
 Nothing new from the owner this wake, and nothing owner-facing is newly
-blocked. The two standing owner blocks are unchanged: Slice 15's `AT runtime
-evidence` (owner hardware) and `112.3`/`112.4` (owner briefs, then 112.3's
-verdict).
+blocked. GitHub intake is empty (`list_issues` → `totalCount: 0`). The two
+standing owner blocks are unchanged: Slice 15's `AT runtime evidence` (owner
+hardware) and `112.3`/`112.4` (owner briefs, then 112.3's verdict).
 
-Nothing this wake needs an owner decision. What landed is measurement banked
-into an already-open item; every judgement it forces is a design call the wake
-that builds the page makes, not one only the owner can make.
+What landed needs no owner decision. It does, however, make a user-facing
+change to what the published site emits — every page now carries `og:`/
+`twitter:` tags — which the owner may want to eyeball once Pages redeploys.
 
 ## ⚠ The correction most likely to be re-broken
 
-**`bundle-gz-kb` cannot be sampled, and "the CSS did not change" is not why**
-(259.1's rule-5 finding). Three consecutive hand-offs declined a sample on the
-grounds that the reading *"could only reproduce the existing value"*. That is
-true and it is not the constraint. Measured this wake:
+**A "browser-blocked" classification is per-EVIDENCE, not per-item, and this
+wake found one item where the two halves differ.** `249.15` was carried by
+three consecutive hand-offs as browser-blocked in the screenshot sense — true of
+its card IMAGE, false of its `og:`/`twitter:` TAGS, which are `<head>` content
+in the built artifact and squarely on `ENVIRONMENT.md`'s SECOND list. Split as
+`249.17` and landed in a single cloud wake.
+
+This is 186.2's own lesson arriving one level down. That rule fixed
+*"all open items are blocked"* by making a wake say WHICH KIND. The next
+mis-sort is a wake saying which kind **for the item as a whole**, when the item
+bundles two kinds of evidence. `249.16` out of `249.4` (2026-09-03) was the same
+split; this is the second in two days, so treat it as a shape rather than a
+coincidence.
+
+**Before declining an item as browser-blocked, ask what each CLAUSE of its
+Accept needs.** `249.15`'s Accept named six things and exactly two of them —
+the image existing, and whether the card looks right — needed a human's eyes.
+
+**`bundle-gz-kb` still cannot be sampled, and the reason is unchanged from last
+wake** (259.1's rule-5 finding, re-verified this wake, not re-derived):
 
 ```
 grep -rln 'bundle-gz-kb' --include='*.mjs' --include='*.py' --include='*.ts' \
   --include='*.js' --include='*.json' . | grep -v node_modules
 ```
 
-returns exactly **one** file — `scripts/loops/record_metric.py` — and the hit is
-its **docstring example**, `--value 7.0`. Nothing derives the number and no
-document records how it is computed. The last recorded value is `15.1 kB`; the
-core build prints `14.05 / 15.5 kB gz` for `css/*.css` and `375.8 kB gz total`,
-none of which is 15.1. **So a wake that DID change the CSS still could not reproduce
-this metric.** Do not "fix" rule 5's staleness by recording a guessed value —
-that is the convention-guessing CLAUDE.md forbids. The fix is to write the
-derivation command next to the name, which is a loop-script change and wants its
-own dispatch.
+still returns exactly **one** file — `scripts/loops/record_metric.py` — and the
+hit is its **docstring example**, `--value 7.0`. Nothing derives the number.
+Do not "fix" rule 5's staleness by recording a guessed value. The fix is to
+write the derivation command next to the name, which is a loop-script change
+and wants its own dispatch.
 
 ## Dispatch counters at hand-off
 
 Read `dispatch_status.py` yourself — the sets below are snapshots.
 
-- **Rule 2 (Standardize)** reads `1 / 4` — this wake ran one Continue round.
-- **Rule 3 (Objective)** reads `1 / 3`, and **the slice it names is `[249]`,
-  not 259.** Read after recording, per `LOOPS.md`'s instruction that this
-  counter is only ever caught by a number disagreeing with something a human
-  just wrote down — this hand-off's draft said "259" and the instrument says
-  "249". Both are defensible and the COUNT is unaffected: `SLICE_TOP` takes the
-  leading id from the row's item text, which begins `249.9` because that is the
-  item the round built, while the slice the round *closed* is 259. **Recorded,
-  not fixed** — `LOOPS.md` rule 3 already refuses a sixth regex over this
-  parser, and nothing downstream reads the attribution.
+- **Rule 2 (Standardize)** reads `2 / 4` — this wake ran one Continue round.
+- **Rule 3 (Objective)** reads `1 / 3`, naming `[249]`. Read after recording,
+  per `LOOPS.md`'s instruction that this counter is only ever caught by a
+  number disagreeing with something a human just wrote down: this wake's row
+  begins `249.17`, so `SLICE_TOP` attributes it to 249 while the slice it
+  closed is 260. **Same disagreement the last hand-off recorded, same verdict —
+  recorded, not fixed**; `LOOPS.md` rule 3 refuses a sixth regex over that
+  parser and nothing downstream reads the attribution.
 - **Rule 5 (Optimize) reads STALE, `1 wake-date(s) newer`** — unchanged from
   wake start, because this wake's rows land on 2026-09-04, a date already
   counted. `LOOPS.md` rule 5 is explicit that STALE means the rule has no input
-  and must be reported as *could not be evaluated*; it was reported that way and
-  should be again. See the correction block above for why no sample was taken —
-  the reason is now stronger than the one the last three hand-offs carried.
+  and must be reported as *could not be evaluated*; it was reported that way.
 
 ## Next wake
 
@@ -99,40 +109,41 @@ Read `dispatch_status.py` yourself — the sets below are snapshots.
 `dispatch_status.py`; this is a snapshot.
 
 Rule 4's open set is `OPEN: [15, 112, 249]`, **11** open items, unchanged in
-count: 259 closed fully and 249.9 stayed open by design. Classifications
-re-read against `ROADMAP.md` this wake:
+count: 249.17 was filed already closed. Classifications re-read against
+`ROADMAP.md` this wake, in the shape `LOOPS.md` 186.2 requires — per item, not
+for the backlog as a whole:
 
 - Slice 15's `AT runtime evidence` and `112.3`/`112.4` are **owner-blocked**.
-- **`249.6`, `249.15` are browser-blocked in the SCREENSHOT sense** — a LOCAL
-  wake can take them; a cloud wake should not.
-- **`249.7` is open as a COST question, not unstarted work.** Its Accept's first
-  clause is executed — 4 of 5 seed rows do not reproduce, table is in the item.
-  Do not re-run that grep. Settling it before the owner answers `249.10` decides
-  it on the thinnest input.
-- **`249.9` is no longer the best cloud-takeable item — this wake took it.**
-  Both Accept clauses are now measured and banked *inside the item*: the
-  mechanism premise is refuted, both cost routes are stated, and the badge audit
-  is a table. What remains is the `/components/` catalogue **page**, which is
-  browser-blocked in the screenshot sense. **A local wake should pick this up
-  next**; it now has every number it needs and should not re-derive them.
+- **`249.6`, `249.9`, `249.15` are browser-blocked in the SCREENSHOT sense** —
+  a LOCAL wake can take them; a cloud wake should not. Each now has its cloud-
+  takeable measurement already banked in the item, so none should be
+  re-derived: 249.6 has the six-row terminal-page table, 249.9 has both cost
+  routes and the badge audit, 249.15 has the before/after tag counts and the
+  gate arm that will hold its `og:image` clause.
+- **`249.7` is open as a COST question, not unstarted work.** Its Accept's
+  first clause is executed — 4 of 5 seed rows do not reproduce, table is in the
+  item. Do not re-run that grep. Settling it before the owner answers `249.10`
+  decides it on the thinnest input.
 - `249.10`, `249.11`, `249.13` are owner calls; `249.12` is owner-or-
-  architecture, low urgency.
+  architecture, low urgency and carries **no Accept criteria**, so it cannot be
+  dispatched as written — giving it one is itself a triage-sized task.
 
-**So a cloud wake reaching rule 4 next has no clearly cloud-takeable item left
-in the 249 set.** Say that in the shape `LOOPS.md` 186.2 requires — name WHICH
-kind of blocked, per item — rather than reporting the backlog blocked as a
-whole, which is the mis-sort that cost four wakes on 173.2.
+**So a cloud wake reaching rule 4 next again has no clearly cloud-takeable item
+in the 249 set** — but read that against the correction block above before
+believing it, because that is exactly what the last three hand-offs said about
+`249.15`. Ask what each CLAUSE of an Accept needs, not what the item is labelled.
 
 ## The archive sweep: not due, do not re-raise
 
-`roadmap_scope.py` reads closed-history share **1,440 / 4,032 = 35.7%** at
+`roadmap_scope.py` reads closed-history share **1,624 / 4,257 = 38.1%** at
 hand-off — well under the **55.1%** at which 252.1 dispatched the tenth sweep on
-2026-09-03. It read 35.5% at wake start; the share rose because Slice 259 closed
+2026-09-03. It read 35.7% at wake start; the share rose because Slice 260 closed
 *fully*, so its whole body is closed history the moment it lands. That is
-arithmetic, not a backlog signal — the same mechanism the last three hand-offs
-recorded for Slices 256, 257 and 258, now four wakes running. Eligible targets
-`[259, 258, 257, 256, 255, 254, 253, 252, 237]`, of which 253 and 237 are named
-by the still-open Slice 249 and stay per 236.2. Re-run the script; snapshots.
+arithmetic, not a backlog signal — the same mechanism the last four hand-offs
+recorded, now five wakes running. Eligible targets
+`[260, 259, 258, 257, 256, 255, 254, 253, 252, 237]`, of which 253, 237 and now
+260 are named by the still-open Slice 249 and stay per 236.2. Re-run the script;
+snapshots.
 
 ## What landed this wake
 
@@ -140,37 +151,35 @@ by the still-open Slice 249 and stay per 236.2. Re-run the script; snapshots.
 clear (no open P0; GitHub intake `totalCount: 0`); Step 1 triaged and committed
 nothing — no new input.
 
-### Slice 259 — 249.9's two Accept clauses answered before the page exists
+### Slice 260 — 249.15's tag half split out as 249.17 and landed
 
-Three things worth carrying:
+Four things worth carrying:
 
-1. **The item's mechanism premise was false, and re-checking it is what the
-   round was for.** 249.9 said the miniature comes "via `browser-harness.mjs`
-   (already exists, used today for patterns via `PatternPreview.astro`)".
-   `browser-harness.mjs` has **13** consumers and **0** run at build time — all
-   are gates invoked after `astro build` against `dist/`. `PatternPreview.astro`
-   launches no browser at all: **10** hand-authored HTML fragments (of **39**
-   patterns), scaled by a CSS custom property. "Already exists" named a
-   different mechanism than the one that ships.
-2. **Both cost routes measured, so the Accept's second clause is satisfied
-   whichever the build takes.** Browser route: ~**8.0 s** warm / **11.6 s** cold
-   for 39 component pages, **+1.23 MB** in `dist/` (**8.8%** of 14,549,590
-   bytes). Shipped route: zero build time, authoring paid 10 times in 39.
-3. **The badge audit found two badges with no JSON key and one with an empty
-   one** — `pattern links` (mapping exists only in built HTML, and `astro build`
-   runs before every dist-walker, so a generator must emit from source),
-   `JS-required` (the stated derivation is binary for a ternary label and
-   mis-classifies both ways), and `AT line` (`at-evidence.json.components` is
-   `{}` for all 40, blocked by Slice 15).
-
-**The probe was wrong on its first draft, caught before commit:** the cost table
-first claimed the PNG byte total was *byte-identical* across all three runs. Only
-run 3's per-page bytes were kept; runs 1 and 2 were the probe's rounded kB print
-(1254 / 1255 / 1255 kB). The table now states the precision it was taken at and
-the reconciliation is "agree to within 0.1% while wall times move 45%".
+1. **The split is the finding.** See the correction block above.
+2. **The three EQUALITIES are what make arm 5 able to fail**, not its eight
+   presence checks: `og:title === <title>`, `og:description ===` the page's own
+   description, and `og:url ===` the URL `dist-pages.mjs` derives by walking
+   `dist/`. A presence check over eight tag names passes in full on a site
+   where every page claims to be the home page — arm 2's failure mode exactly.
+   133 → **1,022** assertions across 127 pages; 0 → **127** of 138 built
+   `index.html` carry the tags, the 11 uncovered being the 10 redirect stubs
+   and `suite/`.
+3. **Red-proved four ways, and the FIFTH came back green because the injection
+   was wrong** — a guessed page title (`Buttons ·` for `Button ·`). It cost
+   nothing only because the probe asserted its match count before replacing and
+   raised on `0`. Assert before replacing; never let a replace silently match
+   nothing.
+4. **An `import` after a non-import statement in Astro frontmatter corrupts the
+   file**, and esbuild reports it at a line inside an unrelated CSS comment.
+   Added to `ENVIRONMENT.md` with the diagnosis command, along with its sibling:
+   the re-placement then landed an import inside `index.astro`'s copy-paste
+   template literal, the third time that has happened here.
 
 **Not verified, and named rather than implied:** cloud wake, so the 1440/390
-light-and-dark screenshot lane could not run. The diff is `ROADMAP.md` and
-`.roundtable/` only — **0** files under `packages/core/src/css/`, no page
-markup, no script — so there is nothing a screenshot could have shown. Built
-page count unchanged at **138**.
+light-and-dark screenshot lane could not run. The diff adds `<head>` content and
+touches **0** files under `packages/core/src/css/`, no visible markup and no
+layout; `check:layout`, `check:scroll` and `test:axe` swept all 127 pages at
+both widths green. All 15 cloud-toolchain gates green, plus the
+`DOCS_BASE=/busy-office-ui` parity build this change specifically needed —
+`og:url` carries the base there, which is what `pages.yml` ships. Built page
+count unchanged at **138**.
