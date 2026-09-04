@@ -23,7 +23,7 @@ survives none.
 ## In flight: nothing
 
 Last updated 2026-09-04 (**cloud** wake, scheduled routine). Working tree clean
-at hand-off. Two commits this wake, both pushed: Slice 267 and this hand-off.
+at hand-off. Two commits this wake, both pushed: Slice 268 and this hand-off.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -34,13 +34,13 @@ python3 scripts/loops/roadmap_scope.py            # OPEN set + sweep scope
 ```
 
 The live open set is `249.6`, `249.7`, `249.9`, `249.10`-`249.13`, `249.15`,
-plus Slice 15 and `112.3`/`112.4` — **11 open, unchanged**, because Slice 267's
-item was filed already closed, the way 263.1, 264's item, 265's three and 266's
-three were.
+plus Slice 15 and `112.3`/`112.4` — **11 open, unchanged**, because Slice 268's
+two items were filed already closed, the way 263.1, 264's, 265's three, 266's
+three and 267's were.
 
 **`check:resume-slice-ids` will report the closed ids named below, and all are
-deliberate** — `267.1`, `266.1`, `249.8`, `249.2`, `249.17` appear here only as
-history. Nothing here queues or blocks on a closed id.
+deliberate** — `268.1`, `268.2`, `267.1`, `266.1`, `249.18`, `249.20` appear
+here only as history. Nothing here queues or blocks on a closed id.
 
 ## ⚠ THE FIRST RULE THAT FIRES NEXT WAKE IS RULE 4 — re-run it, this is a snapshot
 
@@ -48,63 +48,49 @@ history. Nothing here queues or blocks on a closed id.
 
 - **Rule 2 (Standardize)** `1 / 4 Continue round … ok` — this wake ran
   **Polish**, which adds no Continue round, so the counter did not move.
-- **Rule 3 (Objective)** `0 / 3 slices … ok`. **Slice 267 closed and the
-  counter still reads 0, which is correct, not a bug**: 161.4 admits only
-  `Continue` and `Standardize` rows as slice-closers, and this wake's row is
-  `Polish`. Expect rule 3 to stay at 0 while Polish is the loop that runs.
+- **Rule 3 (Objective)** `0 / 3 slices … ok`. Slice 268 closed and the counter
+  stays 0, which is correct rather than a bug: 161.4 admits only `Continue` and
+  `Standardize` rows as slice-closers and this wake's row is `Polish`. Expect
+  rule 3 to stay at 0 for as long as Polish is the loop that runs — this is the
+  **fourth** consecutive wake in that state.
 - **Rule 5 (Optimize)** — read the line, do not assume. Its TREND clause was
-  STALE this wake, so it was reported *could not be evaluated*, not clear. Do
-  not "fix" that by recording a guessed value (see the bottom of this file).
-  **Its SECOND clause is separately evaluable and was clear** — 184.2's "a size
-  budget breached outright": `check-size.mjs` passed at *376.2 kB gz over 139
-  payload files, tightest headroom 110 bytes* (`css/brand-navy.min.css`).
-  Answering rule 5 as "no input at all" under-reports it; answer both clauses.
+  STALE again, so it was reported *could not be evaluated*, not clear. Do not
+  "fix" that by recording a guessed value (see the bottom of this file). **Its
+  SECOND clause is separately evaluable and was clear** — 184.2's "a size budget
+  breached outright": `check-size.mjs` passed at *376.2 kB gz over 139 payload
+  files, tightest headroom 110 bytes* (`css/brand-navy.min.css`), the identical
+  reading to last wake. Answer both clauses.
 
 So the next wake reaches **rule 4**, finds every open item blocked, and falls
-through to **rule 6**, which is what dispatched this wake. A cloud wake reaching
-rule 4 should say which KIND of blocked, per `LOOPS.md` 186.2 — the
-classification is under Direction below.
+through to **rule 6**, which is what dispatched this wake.
 
 ## ⚠ The correction most likely to be re-broken
 
-**A script that reports on its own write must read the write, not its argument.**
-`polish_requeue.py --apply` — §3b step 0, run at the top of every Polish round —
-printed `ledger updated — 19 surface(s) marked for re-score` over a file it left
-**byte-identical**, because the `RE-QUEUED` marker is sticky and all 19 rows
-already carried it. The number was right; the verb was not.
+**A blind re-score is not blind because you withheld the score file.** §3b step
+4's instruction named `dsa-scores.json`, `polish-state.md`, `ROADMAP.md` and
+`.roundtable/**` — every place the score lives **except the built page the agent
+was sent to read**, where `DsaScore.astro` renders it. Every blind re-score this
+ledger has run was taken under that instruction, the dashboard round's included.
 
-It survived because the steady state is the common case: the message reads
-plausible exactly when nothing happened. The red-proof is the part to keep — it
-discriminates rather than merely going red:
+This wake's scorer **disclosed it unprompted**; nothing in the procedure caught
+it, and a scorer that simply agreed would have looked identical to a real
+independent confirmation. `LOOPS.md` §3b step 4 now carries the fix, and the
+part to keep is the reasoning rather than the wording:
 
-```
-# strip the marker from ONE row, assert the count moved, then run --apply
-grep -c '^| component/.*RE-QUEUED' .roundtable/polish-state.md   # 19 -> 18 after the strip
-python3 scripts/loops/polish_requeue.py --apply                  # must now say "1 row(s) newly marked"
-```
+> a leaked prior can only pull a scorer **toward** the published value, so a
+> re-score that AGREES with it is weak evidence and one that CONTRADICTS it is
+> not weakened at all.
 
-**If a future edit makes both runs print the same sentence again, the fix has
-been undone.** The steady-state reading a healthy tree gives is:
+**If a future round reports a blind re-score that confirmed the existing score
+and says nothing about the leak, it has been undone.**
 
-```
-0 row(s) newly marked for re-score; 18 already carried the marker; 18 re-queued in total
-ledger UNCHANGED — nothing to write
-```
-
-**And the trap the fix itself walked into:** `grep -rn 'surface(s) marked for
-re-score'` still returns **1** hit — the comment this change wrote to explain the
-old wording. That is CLAUDE.md's removal rule arriving on schedule; the check
-that matters is that **no parser** reads the string (0 hits in any `*.md`, and
-the one `*.py` hit is the explanation itself), not that the substring is gone.
-
-**The standing shape, fifth grill/round running:** the claim a slice spends its
-red-proof on is the one that holds; the claims it ships **alongside** go out on
-credibility. This round's near-miss was beside the finding — **arm 8 was
-reinvented rather than run**, and the loose reinvention (behaviour names as bare
-substrings of the built HTML) flagged `stepper :: initWizard`, which is ApiTable
-prose. The canonical arm reads the page's own **import** and returns 0 of 17.
-The dashboard round had already measured and discarded four looser definitions.
-**Run the arm the ledger carries; do not re-derive it.**
+**The standing shape, sixth round running:** the claim a round spends its
+red-proof on is the one that holds; the claims shipped **alongside** go out on
+credibility. This round's near-miss was arm 9 — `stepper :: initWizard` is a
+real, *declared* relation and still not a defect, because being SERVED by a
+behaviour is not HAVING an interaction surface. Two consecutive wakes have now
+been pointed at that same stepper flag by two different instruments, and it is
+correct both times. **It is not a defect; stop re-finding it.**
 
 ## Direction
 
@@ -123,22 +109,29 @@ vocabulary), re-read this wake rather than copied:
   a LOCAL wake can take these): `249.6`, `249.9`, `249.15`.
 - **agent-blocked:** none.
 
-`249.6` has been declined twice at the CLAUSE level, `249.9`'s remaining clause
-is the catalogue PAGE whose point is rendered miniatures, and `249.15` is the OG
-image. All three want a rendered image a human compares.
+The clause-level re-read (the question `RESUME.md`'s correction block has asked
+for three wakes running) found **no cloud-takeable half left in any of the
+three**. `249.9` is the one worth stating, because it is where the last two
+splits came from: both of its derivation halves are now split out and landed
+(`249.18` the component→patterns mapping, `249.20` the JS-tier key), and what
+remains is the catalogue page's rendered miniatures plus the AT badge, which is
+Slice 15's owner hardware. `249.6` has been declined twice at the clause level
+and `249.15` is the OG image. All three want a rendered image a human compares.
 
-**What landed needs no owner decision.** One report line in a loop script, and
-the bookkeeping around it.
+**What landed needs no owner decision.** One score and one cite in
+`dsa-scores.json`, and the playbook correction around them.
 
 ## The archive sweep: not due, do not re-raise
 
-`roadmap_scope.py` reads closed-history share **2,896 / 5,692 = 50.9%** at
-hand-off (49.1% at wake start), under the **55.1%** at which 252.1 dispatched
-the tenth sweep on 2026-09-03. The rise is arithmetic, not a backlog signal:
-Slice 267 closed fully, so its whole body is closed history the moment it lands
-— the same mechanic 264, 265 and 266 recorded. **Re-run the script rather than
-quoting this line**; eleven wakes running now. Note `roadmap_scope.py` also
-reports targets NAMED by the still-open Slice 249 which stay put per 236.2.
+`roadmap_scope.py` reads closed-history share **3,198 / 5,995 = 53.3%** at
+hand-off (50.9% at wake start), still under the **55.1%** at which 252.1
+dispatched the tenth sweep on 2026-09-03. The rise is arithmetic, not a backlog
+signal: Slice 268 closed fully, so its whole body is closed history the moment
+it lands — the same mechanic 264, 265, 266 and 267 recorded. **Re-run the script
+rather than quoting this line**; twelve wakes running now, and the share is
+within two points of the trigger, so the next wake or two may genuinely reach
+it. Note `roadmap_scope.py` also reports targets NAMED by the still-open Slice
+249, which stay put per 236.2.
 
 ## What landed this wake
 
@@ -146,39 +139,44 @@ reports targets NAMED by the still-open Slice 249 which stay put per 236.2.
 `totalCount: 0`); Step 1 triaged and committed nothing — no new input. Rule 2
 `1 / 4 … ok`; rule 3 `0 / 3 … ok`; **rule 4 found nothing dispatchable**, all
 eleven open items blocked in the kinds above; rule 5 trend STALE and size budget
-clear. Rule 6 fired — `polish_requeue.py --apply` re-queued **19** surfaces.
-Step 0 hit **trap 1** again — the container started DETACHED on `8962c09` with
-no local branch — fixed with `git checkout -B main origin/main` before any work.
-`--unshallow` was clean in one attempt (**1,865** commits) and
+clear. Rule 6 fired — `polish_requeue.py --apply` re-queued **18** surfaces and
+printed 267.1's steady-state pair over a byte-identical file, so that fix holds
+one wake on. Step 0 hit **trap 1** again — the container started DETACHED on
+`ebfd2ed` with no local branch — fixed with `git checkout -B main origin/main`
+before any work. `--unshallow` was clean in one attempt (**1,867** commits) and
 `git fetch --tags origin` brought all seven, so trap 2 did not bite.
 
-### Slice 267 — Polish round 2 on `component/progress`
+### Slice 268 — Polish round 2 on `component/navbar`
 
-Full entry: `.roundtable/polish-state.md`, *"Round 2: progress (2026-09-04)"*.
+Full entry: `.roundtable/polish-state.md`, *"Round 2: navbar (2026-09-04)"*.
 Four things worth carrying:
 
-1. **The pick needed no invented discriminator.** 266's falsifiable-assertion
-   table already ranked `progress` second behind `avatar`; re-derived this wake,
-   it reproduces with `avatar` removed. `progress` leads on cite characters
-   (926), unit literals (2) and quotes among the six eligible `1/3` candidates.
-2. **`progress` itself is clean on all six cites, and all eight arms
-   reproduce** — arm 3 in particular has not regrown since 266 emptied it.
-3. **The finding is in the loop's own step 0**, not on the surface — see the
-   correction block above.
-4. **A gate was refused a seventh time**, and for the first time because the
-   predicate is *semantic* (does a report line match what it did) rather than
-   structural — 94.11's distinction, with a class of exactly one member.
+1. **The pick needed no invented discriminator, third wake running.** 266's
+   falsifiable-assertion table, re-derived, reproduces to the character with
+   `progress` removed; `navbar` was 267's own second-ranked candidate.
+2. **navbar itself is clean on all six cites** — including the
+   `interaction: na` that no arm covered, which is the cite the round went
+   looking at. Its CSS paints zero interaction-state selectors and both of its
+   documented parts are `<span>`s.
+3. **The finding is on breadcrumb, and it is a sixth defect class**: the cite is
+   still true word for word, and the score it justified stopped being available
+   **7h14m after it was written**, when 94.9 added *"`na` only when there is no
+   interaction surface at all"*. Nothing in the repo moved. `sidebar-nav` — same
+   two signals, zero behaviours, born in the same commit — is the control.
+4. **A gate was refused an eighth time**, and for the first time because the arm
+   is red on a **correct** tree even after the fix (stepper), which is 243's
+   ground for refusing arm 8's.
 
 **Not verified, and named rather than implied:** cloud wake, so the 1440/390
 light-and-dark screenshot lane could not run. **0** files under
-`packages/core/src/` changed and **0** docs pages changed; the only
-non-markdown edit is a Python report line in `scripts/loops/` that no built
-artefact reads. All **17** CI entry points were re-derived from `ci.yml` and run
-green here. `check:claims`'s `3 NOT VERIFIED` is ENVIRONMENT 6b's container
-property, and its live count read **162** (158 previously) — prose landing, not
-claims being skipped.
+`packages/core/src/` changed and **0** docs page markup changed; the only
+non-markdown edit is one score and one cite in `dsa-scores.json`, whose
+rendering was read back off the BUILT page rather than inferred. All **17** CI
+entry points were re-derived from `ci.yml` and run green here. `check:claims`'s
+`3 NOT VERIFIED` is ENVIRONMENT 6b's container property, and its live count read
+**162**, unchanged from last wake.
 
-**`bundle-gz-kb` still cannot be sampled, unchanged for an eighth wake**
+**`bundle-gz-kb` still cannot be sampled, unchanged for a ninth wake**
 (259.1's rule-5 finding, re-verified rather than re-derived):
 
 ```
