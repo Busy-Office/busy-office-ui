@@ -341,7 +341,8 @@ grilled `249.2`/`249.3`/`249.4`, and what remains open in it is unbuilt — owne
 calls, two browser-blocked items, one cost question. A grill re-derives what
 shipped. The scope is **256** (itself a grill, never re-derived by anyone) and
 **257** (never grilled). `.roundtable/INDEX.md` reports **4 repeated subject(s)**
-across 181 files; this grill does not add a fifth.
+across 182 files, re-read AFTER `record_iteration.py` regenerated it with this
+report in the set rather than predicted before: this grill does not add a fifth.
 
 Full report, with every command:
 `.roundtable/grill-objective-256-257-2026-09-04.md`.
@@ -357,8 +358,8 @@ Full report, with every command:
 
        - **A — 256.2's "would miss `75` equally-historical ones" is `65`.**
          The seven filename prefixes the sentence enumerates cover 65 files, at
-         **256.2's own commit** rather than at a later tree, and the tree has not
-         moved: `git ls-tree -r --name-only 0362ba15 -- .roundtable` gives 182
+         **256.2's own commit** rather than at a later tree:
+         `git ls-tree -r --name-only 0362ba15 -- .roundtable` gives 182
          top-level `*.md`, 86 `grill-*` and 65 across
          `design-grill-`(35) `scorecard-`(10) `research-`(7) `explore-`(7)
          `objective-grill-`(2) `pattern-sweep-`(2) `rf-`(2). The neighbouring
@@ -922,10 +923,12 @@ Full report, with every command:
          `objective-grill-`, `research-`, `explore-`, `scorecard-`,
          `pattern-sweep-` and `rf-`. *(Read **75** until 2026-09-04, corrected
          by the Objective grill, roadmap 258.1. Measured at this item's own
-         commit `0362ba15`, not at a later tree, and the tree has not moved:
+         commit `0362ba15` rather than at a later tree:
          `git ls-tree -r --name-only 0362ba15 -- .roundtable` gives 182
          top-level `*.md`, 86 `grill-*`, and **65** across the seven prefixes
-         named here. The two neighbouring sets a reader might reach for are
+         named here. The seven-prefix column still reads 65 at HEAD; the other
+         two moved to 183 / 87, by exactly the one file the correcting grill
+         added. The two neighbouring sets a reader might reach for are
          85 (dated non-`grill-*`) and 96 (all non-`grill-*`); none of the three
          is 75. The verdict — `grill-*.md` is not a clean boundary — is
          unaffected, and this is the same defect 256.1 finding A records one
