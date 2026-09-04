@@ -830,6 +830,25 @@ remaining, per `.roundtable/polish-state.md`.
    this file's own doctrine already says an instrument's first output is
    not evidence. Without this the dry-round exit can never fire and the
    3/10 budgets become a guarantee of self-approved work.
+
+   **⚠ WITHHOLDING `dsa-scores.json` DOES NOT MAKE THE RE-SCORE BLIND**
+   (roadmap 268.2, 2026-09-04, disclosed unprompted by the scorer rather
+   than caught by review). `DsaScore.astro` renders the score and its cite
+   **onto the built page**, so a scorer told to read the artifact — which
+   is what scoring against the shipped thing means — sees the old value on
+   screen. The instruction used until now ("do not open `dsa-scores.json`,
+   `polish-state.md`, `ROADMAP.md`, `.roundtable/**`") named every place
+   the score lives EXCEPT the one the agent was sent to. Every blind
+   re-score this ledger has run, the dashboard round's included, was taken
+   under it.
+
+   So: tell the scorer the page publishes a prior verdict, that it is not
+   evidence, and to reach its own reading from the shipped CSS and the page
+   source first. Then **state the direction of the bias in the write-up** —
+   a leaked prior can only pull a scorer TOWARD the published value, so a
+   re-score that AGREES with it is weak evidence and one that CONTRADICTS
+   it is not weakened at all. 268.1's returned the opposite of the
+   published value, which is why it stands.
 5. **Did the score move?**
    - **Yes** → commit, `round++`, reset that surface's dry counter.
    - **No** → `dry++`. **Two dry rounds in a row mark the surface DRY and

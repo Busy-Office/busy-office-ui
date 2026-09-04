@@ -536,8 +536,8 @@
           "cite": "zero raw dimension literals — every gap from a space token"
         },
         "interaction": {
-          "score": "na",
-          "cite": "plain links; no behavior ships for it"
+          "score": 3,
+          "cite": "plain links ARE an interaction surface: the platform supplies the anchor's focus ring, Enter activation and navigation, and the component paints `.bo-breadcrumb a:hover` and renders the current crumb as non-link text under [aria-current=\"page\"]. No behaviour ships for it, which the API table's JS row states as \"None — CSS-only.\" and check-js-serves holds against behaviors.json's empty byComponent entry. Blind re-scored na->3 on 2026-09-04: the rubric admits na only where there is no interaction surface AT ALL, and a component shipping no behaviour earns 3 by saying so."
         },
         "content": {
           "score": 3,

@@ -89,7 +89,7 @@ a no-op recorded in one line.
 | component/alerts | content | **3** | 2/3 | 0 | 4ee5ad51 | round 1 landed — blind re-score 2→3, off the gate's TODO; **round 2 (2026-08-31) NO-OP — reconciliation clean on all four arms; the sweep around it filed ROADMAP 231.2, see below** · **RE-QUEUED — source changed** |
 | component/avatar | content | **3** | 2/3 | 0 | 3147e6c1 | round 1 landed — blind 2→3, "not the only way to name someone"; **round 2 (2026-09-04) FOUND A DEFECT, and it is arm 3's WHOLE class at once — 249.8's 3-line header moved every line-number pointer in the framework; all four live ones were published or printed. ROADMAP 266, see below** |
 | component/badge | content | **3** | 2/3 | 0 | 1f69e677 | round 1 landed — blind 2→3, "not for anything actionable"; **round 2 (2026-08-28) NO-OP — reconciliation clean on all four arms, see below** · **RE-QUEUED — source changed** |
-| component/breadcrumb | content | **3** | 1/3 | 0 | dcbde565 | **round 1 (2026-08-30) FOUND A DEFECT — `fit` counted "2 of 19 pattern screens" against 39; re-entry from 217.2's filing, see below** · **RE-QUEUED — source changed** |
+| component/breadcrumb | content | **3** | 1/3 | 0 | dcbde565 | **round 1 (2026-08-30) FOUND A DEFECT — `fit` counted "2 of 19 pattern screens" against 39; re-entry from 217.2's filing, see below** · **`interaction` corrected `na`→3 by navbar's round 2 (2026-09-04) — a blind re-score, NOT a round on this surface: `rounds` stays 1/3** · **RE-QUEUED — source changed** |
 | component/byline | content | **3** | 1/3 | 0 | 29ededaf | round 1 landed — blind 2→3; scorer caught the boundary, redrawn · **RE-QUEUED — source changed** |
 | component/calendar | content | **3** | 2/3 | 0 | 6b36b863 | round 1 landed — blind 2→3, "not for a plain date field"; **round 2 (2026-09-02) six arms clean on calendar itself, and a NEW arm 7 FOUND A DEFECT elsewhere — `form · colour` claimed "zero raw hex" against two painted ones; cite corrected, CSS left open as 240.1, see below** · **RE-QUEUED — source changed** |
 | component/dashboard | content | **3** | 2/3 | 0 | 3780542a | round 1 landed — blind 2→3, "not a wrapper round every section"; **round 2 (2026-09-02) FOUND TWO DEFECTS, and the first is the only one in this ledger where the SCORE was wrong rather than the cite — `interaction: na` on a component that ships `initCollapsibleCards`; blind re-scored to 3 by a second agent, the first blind re-score this ledger has actually run. See below** · **RE-QUEUED — source changed** |
@@ -97,7 +97,7 @@ a no-op recorded in one line.
 | component/date | content | 2 | — | — | 399709aa | **SKIPPED** — deprecated, see note below |
 | component/icon | content | **3** | 2/3 | 0 | f0d9f50b | round 1 landed — blind 2→3; scorer caught the demo contradiction, clause narrowed; **round 2 (2026-08-30) FOUND A DEFECT — `fit` cited "12 ERP glyphs" against 26 shipped, and the same 12 was hard-coded as the DIVISOR of the page's published size projection, see below** · **RE-QUEUED — source changed** |
 | component/inline-editing | content | **3** | 1/3 | 0 | eadd116a | round 1 landed — blind 3, "not for creating a record" (unscored in DSA) · **RE-QUEUED — source changed** |
-| component/navbar | content | **3** | 1/3 | 0 | 1e50d24a | round 1 landed — blind 2→3, "not the page's own title or actions" · **RE-QUEUED — source changed** |
+| component/navbar | content | **3** | 2/3 | 0 | 35528cb6 | round 1 landed — blind 2→3, "not the page's own title or actions"; **round 2 (2026-09-04) NO-OP on the surface — all six cites hold, including the `interaction: na` no arm covered — and two NEW arms found a defect elsewhere: `breadcrumb · interaction` scored `na` 7h14m before the rubric clause that forbids it existed. ROADMAP 268, see below** |
 | component/pagination | content | **3** | 1/3 | 0 | 2a48579c | round 1 landed — blind 2→3, "not for stepping through a process" · **RE-QUEUED — source changed** |
 | component/progress | content | **3** | 2/3 | 0 | 1154a4d7 | round 1 landed — blind 2→3, "not for work of unknown duration"; **round 2 (2026-09-04) NO-OP on the surface — six cites and all eight arms clean — and the finding is in this loop's own step 0: `polish_requeue.py --apply` announced a write over a byte-identical file. ROADMAP 267, see below** · **RE-QUEUED — source changed** |
 | component/scan | colour+interaction+fit | **3** | 2/3 | 0 | e1c34049 | round 1 (2026-08-23) fixed all three; **round 2 (2026-08-28) discovered the round-1 score was never written to `dsa-scores.json` at all** — see below · **RE-QUEUED — source changed** |
@@ -1580,3 +1580,250 @@ screenshot lane could not run. **0** files under `packages/core/src/` and **0**
 docs pages changed; the only non-markdown edit is a Python report line no built
 artefact reads. All **17** CI entry points, re-derived from `ci.yml`, ran green
 in this container.
+
+## Round 2: navbar (2026-09-04, cloud wake) — NO-OP on the surface; two new arms find `breadcrumb · interaction` (ROADMAP 268)
+
+Dispatcher rule 6, reached because rules 1-5 were clear or had no input: no open
+P0, Standardize `1 / 4`, Objective `0 / 3`, rule 4's eleven open items all
+blocked (eight owner, three browser-blocked in the SCREENSHOT sense, and the
+three re-read at the CLAUSE level rather than the item label), and rule 5
+**STALE** on its trend clause — reported as *could not be evaluated*; its second
+clause was evaluable and clear (`check-size.mjs`, *376.2 kB gz, tightest
+headroom 110 bytes*). `polish_requeue.py --apply` re-queued **18** surfaces and
+printed the steady-state pair 267.1 introduced, over a file whose md5 was
+identical before and after — so that fix holds one wake on, checked rather than
+assumed.
+
+### The pick
+
+§3b's "fewest rounds" discriminated: **7** rows at `1/3` against 13 at `2/3`;
+`inline-editing` and `table-toolbar` drop for 217.1's reason (no
+`dsa-scores.json` entry), leaving five. Picked on 266's falsifiable-assertion
+count, **re-derived rather than copied**, reproducing 267's table to the
+character with `progress` removed:
+
+| surface | quotes | unit literals | bare counts | absence claims | cite chars |
+|---|---|---|---|---|---|
+| **navbar** | 1 | 1 | **9** | 5 | **868** |
+| tree | 1 | 2 | 6 | 5 | 808 |
+| byline | 2 | 0 | 4 | 5 | 800 |
+| pagination | 1 | 0 | 5 | 4 | 689 |
+| breadcrumb | 0 | 0 | 0 | 7 | 511 |
+
+`navbar` was 267's second-ranked candidate, so the ranking pre-dates the round
+that used it — third consecutive wake on which it reproduces.
+
+### navbar's own six cites all hold
+
+`typography` — **0** `font-size` declarations; `--bo-font-weight-semibold` ×1 on
+`__brand`. `colour` *"zero raw colour"* — **0** hex/`rgb(`/`hsl(`, and all three
+named roles present (`--bo-color-bg-surface`, `--bo-color-border-default`,
+`--bo-color-text-primary`). `spacing` — the declaration is
+`min-block-size: 3rem` and the comment above it makes both halves of the cite's
+argument (landmark floor; WCAG 1.4.12). `content` — arm 4. `fit` *"po-app uses
+it at 3 sites"* — arm 6, parsed from the cite. **`interaction: na`** *"a
+container: it holds controls but introduces none of its own"* — the cite no arm
+covered, and the one this round went looking at: `navbar.css` paints **zero**
+interaction-state selectors, and `api.json` records exactly three classes whose
+two parts the canonical markup and the demo both render as `<span>`.
+
+### The ten arms
+
+| arm | reading |
+|---|---|
+| 1 wrong-choice clause | `156 assertions / 80 pages / 1 outstanding` (the skipped `date`) |
+| 2 score rendered by its page | `360 assertions / 40 scored`; `Not yet scored` in **0** dist files |
+| 3 line-number cites | **0 of 40**, and **0** repo-wide `<name>.css:NN` pointers |
+| 4 content quotes in built pages | **20/20** |
+| 5 css dimension literals | **82/82** |
+| 6 bare counts in any cite | **9/9** |
+| 7 absence claims | **42/42** |
+| 8 `interaction: na` pages importing a behaviour | **0 of 17** — **run, not re-derived** |
+| 9 NEW — score vs the DECLARED behaviour relation | 1 flagged, explained |
+| 10 NEW — `na` against the rubric's own `na` clause | **2 of 17** |
+
+### Arm 9 — `byComponent` replaces arm 8's proxy, and fires on a correct tree
+
+Since Slice 264 (`249.20`) the behaviour→component relation is **declared** in
+`behaviors.json`'s `byComponent` (a `@serves` directive per module, gated by the
+core build), so arm 8's page-import proxy has a real source to be checked
+against. Cross-tab of `interaction` against it: `na`+served **1**, `na`+none 16,
+`3`+served 17, `3`+none 6.
+
+The one flag is `stepper :: initWizard` and it is **not a defect** —
+`wizard.ts` does write `data-state`/`aria-current` onto `.bo-stepper__step`, but
+stepper's cite already says *"an `<ol>` reporting position; the wizard's
+controls live elsewhere"* and its JS row says *"None to display progress.
+`initWizard()` is opt-in…"*. Being SERVED is not HAVING a surface. **Arm 9 alone
+is red on a correct tree**, which is half the reason no gate is proposed.
+
+```js
+// arm 9 — save as a scratch .mjs and run with node; ARM_SCORES / ARM_BEHAVIORS
+// point at mutated copies, which is how the red-proof re-runs.
+import fs from 'node:fs';
+const R = process.env.ARM_ROOT || process.cwd();
+const S = JSON.parse(fs.readFileSync(process.env.ARM_SCORES || `${R}/apps/docs/src/data/dsa-scores.json`,'utf8')).components;
+const bc = JSON.parse(fs.readFileSync(process.env.ARM_BEHAVIORS || `${R}/packages/core/dist/behaviors.json`,'utf8')).byComponent;
+const cells = { 'na+served': [], 'na+none': [], '3+served': [], '3+none': [], other: [] };
+for (const [k, e] of Object.entries(S)) {
+  const s = e.dimensions?.interaction?.score;
+  if (!(k in bc)) { cells.other.push(`${k} NOT IN byComponent (score ${s})`); continue; }
+  const served = bc[k].length > 0;
+  if (s === 'na') cells[served ? 'na+served' : 'na+none'].push(`${k}${served ? ' :: ' + bc[k].join(',') : ''}`);
+  else if (s === 3) cells[served ? '3+served' : '3+none'].push(k);
+  else cells.other.push(`${k} score=${JSON.stringify(s)} served=${served}`);
+}
+for (const [k, v] of Object.entries(cells)) console.log(`${k.padEnd(10)} ${String(v.length).padStart(2)}  ${v.join(' ')}`);
+```
+
+### Arm 10 — the finding
+
+The rubric admits `na` *"only when there is no interaction surface at all"* and
+says a component shipping **no** behaviour earns **3 by saying so**. Arms 1-9
+cannot see whether that boundary was drawn right; arm 8's own record says so
+(*"the boundary between `3` and `na` is a reading, not an import … Sixteen of
+the seventeen are unexamined"*). Arm 10 makes the reading measurable: does the
+component's own CSS paint an interaction STATE, comments stripped?
+
+| component | signals | kinds |
+|---|---|---|
+| stepper | 3 | `[aria-current` |
+| **breadcrumb** | **2** | **`:hover`, `[aria-current`** |
+| the other 15, navbar included | 0 | — |
+
+`.bo-breadcrumb a:hover` sets `color` **and** `text-decoration: underline` on a
+real anchor, and `[aria-current="page"]` styles the one crumb that is
+deliberately not a link — a rule that only makes sense because the others are.
+
+**The control sits inside the rubric's own data.** The six `interaction: 3`
+components served by zero behaviours read 9/5/5/4/**2**/2 signals — button,
+tree, richtext, segmented, **sidebar-nav**, calendar — and every cite is the
+same sentence in different words: *the platform provides this, no JS needed*.
+`sidebar-nav`'s signal set is **identical to breadcrumb's**.
+
+**Red-proved both directions, each injection confirmed in the mutated copy
+first**: `:hover` added to `navbar.css` takes it 0 → 1 and the headline 2 → 3 of
+17; `.bo-breadcrumb a:hover` renamed away takes breadcrumb 2 → 1. Clean tree
+2 of 17; after the fix, **1 of 16**.
+
+```js
+// arm 10 — save as a scratch .mjs and run with node; ARM_CSS / ARM_SCORES point
+// at mutated copies, which is how the red-proof re-runs.
+import fs from 'node:fs';
+import path from 'node:path';
+const R = process.env.ARM_ROOT || process.cwd();
+const S = JSON.parse(fs.readFileSync(process.env.ARM_SCORES || `${R}/apps/docs/src/data/dsa-scores.json`,'utf8')).components;
+const B = JSON.parse(fs.readFileSync(`${R}/packages/core/dist/behaviors.json`,'utf8')).byComponent;
+const A = JSON.parse(fs.readFileSync(`${R}/packages/core/dist/api.json`,'utf8'));
+const CSS = process.env.ARM_CSS || `${R}/packages/core/src/css/components`;
+const slug = (k) => (A.pageSlug || {})[k] || k;
+// select dirs by isDirectory, never by <dir>/<dir>.css — `form/` has no form.css (arm 5)
+const dirs = fs.readdirSync(CSS).filter((d) => fs.statSync(path.join(CSS, d)).isDirectory());
+const strip = (s) => s.replace(/\/\*[\s\S]*?\*\//g, ' ');
+const readDir = (d) => fs.readdirSync(path.join(CSS, d)).filter((f) => f.endsWith('.css'))
+  .map((f) => strip(fs.readFileSync(path.join(CSS, d, f), 'utf8'))).join('\n');
+// SELECTOR-side signals only — `cursor: pointer` is a declaration, not a state.
+const SIG = /:hover|:focus-visible|:focus\b|:active\b|:disabled|:checked|\[aria-expanded|\[aria-current|\[aria-selected|\[aria-pressed|:user-invalid|\[open\b/g;
+for (const [k, e] of Object.entries(S)) {
+  const s = e.dimensions?.interaction?.score;
+  if (s !== 'na' && s !== 3) continue;
+  const d = [k, slug(k)].find((x) => dirs.includes(x));
+  const hits = d ? (readDir(d).match(SIG) || []) : [];
+  console.log(String(s).padStart(3), String(hits.length).padStart(2), 'sig  served=' + (B[k] || []).length, k.padEnd(20), [...new Set(hits)].join(' '));
+}
+```
+
+### A sixth class: nothing in the repo moved — the STANDARD did
+
+Every defect this ledger records is a cite that stopped being true. This cite is
+**still true word for word** — *"plain links; no behavior ships for it"* —
+attached to a score that stopped being available seven hours later:
+
+```
+37a1143a  2026-08-21 06:16 +0800  Slice 94 batch 3: Navigation & layout scored (7 components, none triggered)
+8ef4c5e2  2026-08-21 13:30 +0800  94.9: interaction kept and now discriminates; hierarchy retired
+```
+
+`8ef4c5e2` introduced *"`na` only when there is no interaction surface at all"*.
+The morning batch of seven was never re-read against it. So this joins the five
+classes rather than repeating one: 216.1 wrong when written; 217.2 and 220.1
+falsified by another tree; 227.1 falsified inside the file it described; 266.1
+falsified by an edit that changed nothing the cite was about; **this one
+falsified by nothing in the repo moving at all.**
+
+`893a551d` (2026-08-17) split one `nav/` directory into breadcrumb, navbar,
+offcanvas and sidebar-nav in a single commit, so breadcrumb and sidebar-nav have
+carried the same `:hover` + `[aria-current]` pair since the same minute.
+Breadcrumb was scored in the 06:16 batch and got `na`; sidebar-nav two days
+later, after the clause, and got 3.
+
+### §3b step 4 ran — and disclosed that this ledger's blind is leaky
+
+The second agent got the surface, the dimension and the rubric text, was told
+not to open `dsa-scores.json`, `polish-state.md`, `ROADMAP.md`,
+`ROADMAP-archive.md` or anything under `.roundtable/`, and was told nothing
+about the old score or that anything was suspected. It returned **3**, ruled out
+`na` on the clause's wording, and named the same evidence independently.
+
+**It then disclosed, unprompted, that the built page it was told to read
+publishes the DSA table** — so the prior verdict was on screen. That is true of
+every blind re-score this ledger will ever run, the dashboard round's included:
+the instruction named every place the score lives EXCEPT the artifact the agent
+was sent to. `LOOPS.md` §3b step 4 now names the leak and says what to withhold.
+
+The verdict stands for a directional reason, not a charitable one: **a leaked
+prior can only pull a scorer TOWARD the published value**, so agreement is weak
+evidence and disagreement is not weakened at all. This one returned the
+opposite.
+
+### Verified against the RENDERED artefact
+
+| check | before | after |
+|---|---|---|
+| `/components/breadcrumb` alignment figure | `100% (15/15)` | `100% (18/18)` |
+| its Interaction row | `n/a` — *"plain links; no behavior ships for it"* | `3 / 3`, new cite |
+| old cite string in `apps/docs/dist` | 1 file | **0** |
+| new cite string in `apps/docs/dist` | 0 files | **1** |
+| arm 10 | 2 of 17 | **1 of 16** |
+
+The percentage does not move, and that is the point: what moved is the claim the
+page makes. It told a reader that interaction *does not apply* to a list of
+links.
+
+### No gate — the eighth refusal, and the first where the arm is red on a correct tree
+
+243 refused a gate over arm 8 because it goes red on a correct tree. Arms 9 and
+10 have the same property **by construction and after the fix**: `stepper` is a
+legitimate `na` that both is served by a behaviour and paints `[aria-current]`.
+Base rate is not the problem — 2 of 17, then 1 of 16, so they discriminate;
+precision is. 101.3 independently confines Polish to the existing ratchet. Both
+stay probes a human reads.
+
+### Score, and what is owed
+
+`breadcrumb · interaction` moved `na` → **3** on a blind re-score; `scored`
+stays **2026-08-21** (one dimension was re-scored, not six) and the date is
+stamped inside the cite, the dashboard round's form. Breadcrumb's `rounds` stays
+**1/3** — a round was not spent on it. `navbar`'s `rounds` moves 1→2 on badge's,
+alerts' and calendar's precedent (a round that reconciled its own surface
+cleanly and changed a published artefact elsewhere); `dry` stays 0, there being
+no re-score of navbar to fail.
+
+### What this does NOT cover
+
+Arm 10 reads the component's own CSS for a painted state. A component can own an
+interaction surface it paints nothing for. `navbar` is the one of the fifteen
+zeroes examined by hand — its container reading holds because both of its parts
+are `<span>`s in the documented markup — and **the other fourteen are unexamined
+on that question and are not asserted to be right**, exactly as arm 8 records
+for its own sixteen.
+
+### Not verified, said plainly
+
+Cloud wake: no Podman, no `localhost:8081`, so the 1440/390 light-and-dark
+screenshot lane could not run. **0** files under `packages/core/src/` changed and
+**0** docs page markup changed; the only non-markdown edit is one score and one
+cite in `dsa-scores.json`, read back off the BUILT page rather than inferred.
+All **17** CI entry points were re-derived from `ci.yml` and run green here;
+`check:claims`'s `3 NOT VERIFIED` is ENVIRONMENT 6b's container property and its
+live count read **162**, unchanged.

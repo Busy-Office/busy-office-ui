@@ -315,6 +315,303 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 268 — Polish round on `navbar`: navbar's six cites hold, and a new arm reading the rubric's own `na` boundary finds `breadcrumb · interaction` scored `na` seven hours before the clause that forbids it existed (2026-09-04)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty, `HEAD` on `ebfd2ed` with no local branch) —
+ENVIRONMENT trap 1, fixed with `git checkout -B main origin/main` before any
+work. `--unshallow` clean in one attempt (**1,867** commits, no `shallow.lock`);
+`git fetch --tags origin` brought all **seven**, so trap 2 did not bite. Rule 1:
+no open P0 — `list_issues` on `Busy-Office/busy-office-ui` returns
+`totalCount: 0`, and no open `N. [ ]` item is a P0. Step 1 triaged and committed
+nothing: no new input. Rule 2 **1 / 4 … ok**. Rule 3 **0 / 3 … ok**. **Rule 4
+found nothing dispatchable**, and per `LOOPS.md` 186.2 the kind is named rather
+than lumped, each item re-read this wake rather than copied from the hand-off:
+**owner-blocked** Slice 15, `112.3`, `112.4`, `249.7`, `249.10`-`249.13`;
+**browser-blocked in the SCREENSHOT sense** (a LOCAL wake can take these)
+`249.6`, `249.9`, `249.15`; **agent-blocked** none. The clause-level re-read
+found no cloud-takeable half left in any of the three: `249.9`'s two derivation
+halves are already split out and landed (`249.18`, `249.20`), and what remains
+of it is the catalogue page's rendered miniatures plus the AT badge, which is
+Slice 15's owner hardware. Rule 5: `dispatch_status.py` reads
+`1 wake-date(s) newer … STALE`, so the trend clause **could not be evaluated**
+rather than being reported clear; the rule's SECOND clause (184.2's, "a size
+budget breached outright") **was** evaluable and is clear — `check-size.mjs`
+passed at *139 shipped payload file(s) in 11 budget bucket(s), 376.2 kB gz
+total; tightest headroom 110 bytes* (`css/brand-navy.min.css`). Rule 6 fired.
+
+**267.1's fix holds one wake on, checked rather than assumed.** `--apply`
+printed the steady-state reading the hand-off documents, over a file whose md5
+was identical before and after:
+
+```
+0 row(s) newly marked for re-score; 18 already carried the marker; 18 re-queued in total
+ledger UNCHANGED — nothing to write
+```
+
+### The pick
+
+§3b's "fewest rounds used" discriminated: **7** rows sit at `1/3` against 13 at
+`2/3`. `inline-editing` and `table-toolbar` drop for 217.1's stated reason (no
+`dsa-scores.json` entry, so no arm can disagree with them), leaving **five**.
+Picked on 266's falsifiable-assertion count, **re-derived rather than copied**,
+and it reproduces 267's table to the character with `progress` removed:
+
+| surface | quotes | unit literals | bare counts | absence claims | cite chars |
+|---|---|---|---|---|---|
+| **navbar** | 1 | 1 | **9** | 5 | **868** |
+| tree | 1 | 2 | 6 | 5 | 808 |
+| byline | 2 | 0 | 4 | 5 | 800 |
+| pagination | 1 | 0 | 5 | 4 | 689 |
+| breadcrumb | 0 | 0 | 0 | 7 | 511 |
+
+`navbar` was 267's own second-ranked candidate, so this ranking pre-dates the
+round that used it — the third consecutive wake on which it reproduces.
+
+### `navbar`'s own six cites all hold
+
+Checked at the source, comment-stripped where the claim is about declarations.
+
+- **typography** *"no raw font-size; weight via `--bo-font-weight-semibold`"* —
+  **0** `font-size` declarations, and the token appears once, on `__brand`.
+- **colour** *"zero raw colour — surface/border/text all tokens"* — **0** hex,
+  `rgb(` or `hsl(`, and all three named roles are present:
+  `--bo-color-bg-surface`, `--bo-color-border-default`,
+  `--bo-color-text-primary`.
+- **spacing** *"the 3rem bar height states why it is a FLOOR and not a fixed
+  height … which is also the WCAG 1.4.12 answer"* — the declaration is
+  `min-block-size: 3rem` and the comment above it makes exactly that argument,
+  in those two parts.
+- **content** — the quoted wrong-choice clause renders on the built page
+  (arm 4).
+- **fit** *"po-app uses it at 3 sites"* — arm 6, which parses the number out of
+  the cite rather than hard-coding it.
+- **interaction: na** *"a container: it holds controls but introduces none of
+  its own"* — **this is the cite no arm covered**, and it is what the round went
+  looking at. It holds, on two readings: `navbar.css` carries **zero**
+  interaction-state selectors (arm 10 below), and its documented markup makes
+  both of its own parts non-interactive — `api.json` records exactly
+  `bo-navbar`, `bo-navbar__brand`, `bo-navbar__spacer`, and the canonical markup
+  and the demo both render the latter two as `<span>`. The controls a navbar
+  holds belong to other components.
+
+### The ten arms
+
+| arm | reading |
+|---|---|
+| 1 wrong-choice clause | `156 assertions / 80 pages / 1 outstanding` (the skipped `date`) |
+| 2 score rendered by its page | `360 assertions / 40 scored`; `Not yet scored` in **0** dist files |
+| 3 line-number cites | **0 of 40**, and **0** repo-wide `<name>.css:NN` pointers — 266's fix has not regrown |
+| 4 content quotes in built pages | **20/20** |
+| 5 css dimension literals | **82/82** |
+| 6 bare counts in any cite | **9/9** |
+| 7 absence claims | **42/42** |
+| 8 `interaction: na` pages importing a behaviour | **0 of 17** |
+| 9 **NEW** — `interaction` score vs the DECLARED behaviour relation | 1 flagged, explained — see below |
+| 10 **NEW** — `interaction: na` against the rubric's own `na` clause | **2 of 17**, and the second is the finding |
+
+Arm 8 was **run, not re-derived** — the hand-off's standing correction, and the
+one 267 nearly paid for. It reads the page's own import and returns `0 of 17`.
+
+### Arm 9 — the relation is declared now, so the proxy can be replaced
+
+Arm 8 uses the docs page's `import` as a proxy for "does a behaviour drive this
+component", and its own record says why four looser definitions failed. Since
+Slice 264 (`249.20`) the relation is **declared** in the shipped artifact:
+`behaviors.json`'s `byComponent`, written from a `@serves` directive in each
+behaviour module's header and gated by the core build. Arm 9 cross-tabs the
+`interaction` score against it:
+
+| | served by ≥1 behaviour | served by none |
+|---|---|---|
+| `interaction: na` | **1** — `stepper :: initWizard` | 16 |
+| `interaction: 3` | 17 | 6 |
+
+The one flag is **not a defect**, and reading it as one is the trap: `wizard.ts`
+does write into stepper's markup (`data-state="done"`, `aria-current="step"` on
+`.bo-stepper__step`), but stepper's own cite already says *"an `<ol>` reporting
+position; the wizard's controls live elsewhere"*, and its page's JS row says
+*"None to display progress. `initWizard()` is opt-in…"*. Being SERVED by a
+behaviour is not the same as HAVING an interaction surface, which is the same
+distinction the four discarded definitions were about. **So arm 9 alone fires on
+a correct tree** — recorded, and it is half of why no gate is proposed below.
+
+### Arm 10 — the finding: read the rubric's `na` clause literally
+
+The rubric admits `na` *"only when there is no interaction surface at all"*, and
+says a component that ships **no** behaviour earns **3 by saying so**. Arms 1-9
+are all blind to whether that boundary was drawn correctly — arm 8's own record
+says so outright: *"the boundary between `3` and `na` is a **reading**, not an
+import, and arm 8 cannot see it. Sixteen of the seventeen are unexamined."*
+
+Arm 10 makes the reading measurable from the shipped CSS: does the component
+paint an interaction STATE of its own — `:hover`, `:focus`, `:focus-visible`,
+`:active`, `:disabled`, `:checked`, `:user-invalid`, `[open]`, or an
+`aria-expanded`/`current`/`selected`/`pressed` selector — comments stripped.
+
+**2 of 17 `interaction: na` components do.**
+
+| component | signals | kinds |
+|---|---|---|
+| stepper | 3 | `[aria-current` |
+| **breadcrumb** | **2** | **`:hover`, `[aria-current`** |
+| the other 15 (navbar among them) | 0 | — |
+
+Stepper is the arm-9 case again, and the same explanation covers it: it paints a
+state a behaviour writes onto inert `<li>`s. Breadcrumb has no such explanation.
+`.bo-breadcrumb a:hover` sets `color` **and** `text-decoration: underline` on a
+real anchor, and `[aria-current="page"]` styles the one crumb that is
+deliberately *not* a link — a rule that only makes sense because the others are.
+
+**The control is inside the rubric's own data.** The six components scoring
+`interaction: 3` while served by zero behaviours read 9, 5, 5, 4, **2** and 2
+signals — `button`, `tree`, `richtext`, `segmented`, **`sidebar-nav`**,
+`calendar` — and every one of their cites is the same sentence in different
+words: *the platform provides this, no JS needed*. `sidebar-nav`'s signal set is
+**identical to breadcrumb's** (`:hover`, `[aria-current`), it ships zero
+behaviours, and it scores **3**.
+
+**Red-proved in both directions, each injection confirmed in the mutated copy
+before the reading was believed** — `:hover` added to `navbar.css` (which reads
+0) takes it to 1 and the headline to 3 of 17; `.bo-breadcrumb a:hover` renamed
+away takes breadcrumb 2 → 1. The clean tree reads 2 of 17.
+
+### A sixth class: the artefact never changed — the STANDARD did
+
+Every defect this ledger has recorded is a cite that stopped being true. This
+one is a cite that is **still true word for word** — *"plain links; no behavior
+ships for it"* — attached to a score that stopped being available:
+
+```
+37a1143a  2026-08-21 06:16 +0800  Slice 94 batch 3: Navigation & layout scored (7 components, none triggered)
+8ef4c5e2  2026-08-21 13:30 +0800  94.9: interaction kept and now discriminates; hierarchy retired
+```
+
+`8ef4c5e2` is the commit that introduced *"`na` only when there is no
+interaction surface at all"*. Breadcrumb's `na` was written **7 hours 14 minutes
+before that clause existed**, and the batch of seven scored that morning was
+never re-read against it.
+
+So it joins the five classes already recorded rather than repeating one: 216.1's
+was wrong the day it was written; 217.2's and 220.1's were right then and
+falsified by a change in **another tree**; 227.1's was falsified inside the very
+file it described; 266.1's was falsified by an edit that changed nothing the
+cite was about. **This one was falsified by nothing in the repo moving at all.**
+It has no wrong moment to catch and no changed artefact to notice — only a
+definition that got sharper after the fact.
+
+**And the four siblings make the miss legible.** `893a551d` (2026-08-17) split
+one `nav/` directory into `breadcrumb`, `navbar`, `offcanvas` and `sidebar-nav`
+in a single commit, so breadcrumb and sidebar-nav have carried the same
+`:hover` + `[aria-current]` pair since the same minute. Breadcrumb was scored in
+the 06:16 batch and got `na`; sidebar-nav was scored two days later, after the
+clause landed, and got 3.
+
+### §3b step 4 ran, and it disclosed a hole in its own procedure
+
+A second agent was given the surface, the dimension and the rubric text, told
+not to open `dsa-scores.json`, `polish-state.md`, `ROADMAP.md`,
+`ROADMAP-archive.md` or anything under `.roundtable/`, and told nothing about
+the old score or that anything was suspected. It returned **3**, ruled out `na`
+on the clause's own wording, and named the same evidence independently
+(`breadcrumb.css`'s hover rule surviving into the served CSS, the focusable
+anchors, the `[aria-current]` rule existing only because the others are links).
+
+**It then disclosed, unprompted, that the blind was leaky:** the built page it
+was told to read *publishes the DSA table*, so the old score was on screen. That
+is true of every blind re-score this ledger will ever run, including the
+dashboard round's, whose instruction had the same shape — **withholding
+`dsa-scores.json` cannot make a re-score blind, because `DsaScore.astro` renders
+the score onto the artefact.**
+
+The verdict still stands, and the reason is directional rather than charitable:
+a leaked prior can only pull a scorer **toward** the published value, and this
+one returned the opposite. `LOOPS.md` §3b step 4 now names the leak and says
+what to withhold instead.
+
+### The fix, verified against the RENDERED artefact
+
+| check | before | after |
+|---|---|---|
+| `/components/breadcrumb` alignment figure | `100% (15/15)` | `100% (18/18)` |
+| its Interaction row | `n/a` — *"plain links; no behavior ships for it"* | `3 / 3`, new cite |
+| old cite string in `apps/docs/dist` | 1 file | **0** |
+| new cite string in `apps/docs/dist` | 0 files | **1** |
+| arm 10 | 2 of 17 | **1 of 16** |
+
+The percentage is unchanged and that is the point: what moved is the claim the
+page makes about the component. It told a reader that interaction *does not
+apply* to a list of links.
+
+`scored` stays **2026-08-21** — one dimension was blind re-scored, not six, and
+moving the entry stamp would claim an opinion on the other five that nobody
+gave. The date is stamped inside the `interaction` cite instead, which is the
+form the dashboard round used and the form `content`'s cites already use.
+
+### No gate — the eighth refusal, and the first where the arm fires on a correct tree BEFORE any fix
+
+216.2, 217.2, 220.2, 227.2, 240.2, 266's and 267's each refused a gate. This one
+is refused on the property 243 used to refuse arm 8's: **arm 10 is red on a
+correct tree even with the defect fixed** — stepper is a legitimate `na` that
+paints `[aria-current]`, so the predicate has a standing false positive by
+construction, and a gate over it would fail the build on a right answer. Its
+base rate is not the problem (2 of 17 flagged, then 1 of 16 — it discriminates);
+its precision is. 101.3 independently confines Polish to the existing ratchet.
+Both new arms stay **probes a human reads**, which is what 243 decided for arm 8
+and is now decided the same way twice.
+
+### What this does NOT cover
+
+Arm 10 reads the component's **own CSS** for a painted state. A component can
+own an interaction surface it paints nothing for — a link part with no hover
+rule would read 0 signals. `navbar` is the one of the fifteen zeroes examined by
+hand this round, and its container reading holds because both of its parts are
+`<span>`s in the documented markup; **the other fourteen are unexamined on that
+question and are not asserted to be right**, exactly as arm 8 records for its
+own sixteen. Naming the limit is the point: the sweep narrows where a defect can
+hide, it does not prove there is none.
+
+1. [x] **268.1 — DONE 2026-09-04. The published `interaction` verdict for
+       `breadcrumb` agrees with the rubric's own definition of `na`.**
+       - **Accept:** the score published on `/components/breadcrumb` is
+         whatever a blind re-score by a second agent returns — including `na`,
+         if that is what it returns — with the reading recorded against the
+         shipped CSS and the built page rather than against this entry; the arm
+         that raised it is red-proved in BOTH directions with each injection
+         confirmed present in the mutated copy before the reading is believed;
+         the predicate's base rate is measured before any gate is proposed, and
+         a gate is refused in writing if the predicate fires on a correct tree.
+       - **Landed** — second agent returned 3 and ruled out `na` unprompted;
+         the before/after readings are taken off `apps/docs/dist`; the
+         red-proof moves the headline in both directions; the gate is refused
+         above because the arm's one surviving flag (`stepper`) is correct.
+
+2. [x] **268.2 — DONE 2026-09-04. §3b step 4's blind re-score names the leak it
+       actually has.**
+       - **Accept:** the playbook's instruction for the blind re-score states
+         what a second agent will see anyway and what must therefore be
+         withheld or discounted, derived from what the built page actually
+         renders rather than from what the instruction hoped; and any verdict
+         taken under the old instruction is either re-run or has its direction
+         of bias stated.
+       - **Landed** — `LOOPS.md` §3b step 4 amended; this round's verdict is
+         kept with its bias direction stated (a leaked prior pulls toward the
+         published value; this scorer returned the opposite).
+
+### Not verified, said plainly
+
+**Cloud wake: no Podman and no `localhost:8081`, so the 1440/390 light-and-dark
+screenshot lane could not run.** Nothing in this round rests on a rendered
+image: **0** files under `packages/core/src/` changed and **0** docs page
+markup changed — the only non-markdown edit is one cite string and one score in
+`apps/docs/src/data/dsa-scores.json`, whose rendering was read back off the
+BUILT page rather than inferred. Every browser-derived number quoted above came
+from a gate executing in this container. All **17** CI entry points were
+re-derived from `ci.yml` and run green here; `check:claims`'s `3 NOT VERIFIED`
+is ENVIRONMENT 6b's container property — this container reports
+`(hover: hover) and (pointer: fine)` false — and its live count read **162**,
+unchanged from last wake.
+
 ## Slice 267 — Polish round on `progress`: every arm reproduces, and the finding is in the loop's own step 0 — `polish_requeue.py --apply` reports the size of its argument, not the rows it wrote, and says "ledger updated" over a byte-identical file (2026-09-04)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
