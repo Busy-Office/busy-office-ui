@@ -1385,3 +1385,8 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-04 09:57 · Meta · refusal · a --self-test on the new module — check-selftests walks check-* only, so nothing would run it · refused · bdb73d8f
 - 2026-09-04 09:57 · Meta · refusal · folding check-po-app.mjs's single &amp; replace into the shared module · refused · bdb73d8f
 - 2026-09-04 09:57 · Meta · refusal · consolidating the two byte-identical stripTags — opposite sides of the published-package boundary; logged instead · refused · bdb73d8f
+- 2026-09-04 12:07 · Continue · build · Slice 264.1 — 249.20: which component a behavior serves is DECLARED (@serves in 26 behavior headers -> behaviors.json byComponent), not intersected; new check-js-serves gate red on 6 real pages first · landed · 1b4c3365
+- 2026-09-04 12:07 · Meta · refusal · a required/enhanced/optional JS tier — the only source in the repo is the hand-written page prose this key exists to check, so sourcing it would be circular; stays 249.9's open question · refused · 1b4c3365
+- 2026-09-04 12:07 · Meta · refusal · blanking comments in extract-behaviors' hook scan — measured: it deletes real published hooks on 25 of 33 exports, one of them 12 · refused · 1b4c3365
+- 2026-09-04 12:07 · Meta · refusal · publishing byComponent into llms.txt — behaviors.json is already an export and llms.txt already lists all 26 inits with their hooks; a fourth spelling of one relation · refused · 1b4c3365
+- 2026-09-04 12:07 · Meta · refusal · gating gen-llms' hand-written paste-in block — it names 5 of 26 inits deliberately, and all 5 were checked to agree with byComponent · refused · 1b4c3365
