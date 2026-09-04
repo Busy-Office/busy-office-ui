@@ -105,7 +105,7 @@ a no-op recorded in one line.
 | component/state-patterns | content | **3** | 2/3 | 0 | 7d3f0e38 | round 1 landed — blind 2→3 (clears skeleton AND state); **round 2 (2026-08-28) FOUND A DEFECT — `skeleton · colour` cited the removed token pairing, see below** · **RE-QUEUED — source changed** |
 | component/stepper | content | **3** | 2/3 | 0 | efba2799 | round 1 landed — blind 2→3, "not for independent sections"; **round 2 (2026-09-01) NO-OP — reconciliation clean on five arms; arm 4 re-measured 20/20 and a new arm 5 reads 81/81, see below** · **RE-QUEUED — source changed** |
 | component/table-toolbar | content | **3** | 1/3 | 0 | f7950a7f | round 1 landed — blind 3, "do not add to a read-mostly list" (unscored in DSA) · **RE-QUEUED — source changed** |
-| component/tree | content | **3** | 1/3 | 0 | b92740e4 | round 1 landed — blind 2→3, pair-coherent with tree-table · **RE-QUEUED — source changed** |
+| component/tree | content | **3** | 2/3 | 0 | f77bea6d | round 1 landed — blind 2→3, pair-coherent with tree-table; **round 2 (2026-09-04) NO-OP on the surface — all six cites hold, including the `1.25em`/`1em` pair no arm had read — and a new arm 12 FOUND A DEFECT in `check:slice-refs` itself: its file filter omits `.ts` and `.json`, so 11 slice references are cited from nowhere the gate looks. ROADMAP 270, see below** |
 | component/tree-table | content | **3** | 2/3 | 0 | 298374cc | round 1 landed — blind 2→3, pair-coherent with tree; **round 2 (2026-09-01) NO-OP — reconciliation clean on six arms; a new arm 6 reads 8/8 and corrects this ledger's own base rate for the class, see below** · **RE-QUEUED — source changed** |
 
 ## Re-entry: scan (2026-08-23) — the queue's first source-change entry
@@ -1954,3 +1954,100 @@ screenshot lane could not run. **0** files under `packages/core/src/` changed an
 **0** docs page markup changed; the only non-markdown edit is one `$comment`
 string that renders on zero built pages. All **17** CI entry points were
 re-derived from `ci.yml` and run green here.
+
+## Round 2: tree (2026-09-04, cloud wake) — NO-OP on the surface; the finding is in the citation gate (ROADMAP 270)
+
+Dispatcher rule 6, reached because rules 1-5 were all clear or unevaluable: no
+P0, Standardize `1 / 4`, Objective `0 / 3`, rule 4's eleven open items all
+blocked (eight owner, three browser-blocked in the screenshot sense), and rule
+5's trend clause **STALE** so reported *could not be evaluated* rather than
+clear, with its size-budget clause clear at *376.2 kB gz, tightest headroom 110
+bytes*. `polish_requeue.py --apply` re-queued **16**, printing 267.1's
+steady-state pair over an unchanged ledger for the third wake running.
+
+### The pick — fifth wake running with no invented discriminator
+
+§3b's "fewest rounds" left **5** rows at `1/3`; `inline-editing` and
+`table-toolbar` drop for 217.1's stated reason (no `dsa-scores.json` entry),
+leaving three. 266's falsifiable-assertion ranking, re-derived from scratch:
+**tree 808** cite characters, byline 800, pagination 689.
+
+**Reconciled against 269's published table before it was used** — run against
+`a783a08^` it returns navbar 868 / tree 808 / byline 800 / pagination 689 /
+breadcrumb **511**, every figure exact, **5 of 5**. (269's table reads 5 higher
+on four rows because that run joined the cites with a separator; it says so.)
+
+`tree` also carries **2 unit literals**, the only one of the three that does —
+arm 5's class, where three of this ledger's recorded defects lived.
+
+### All six cites hold
+
+`no raw font-size` reads **0** with the possessive regex the stepper round
+established; **zero** raw hex, and tree's five colour tokens are a strict
+**subset** of sidebar-nav's eight with `accent-text`/`accent-subtle` gated at
+4.5 in `check-contrast.mjs`'s `PAIRS` — the arm that caught 240.1, clean here;
+`1.25em` and `1em` both present and both commented with their em-relative
+reason, and `94.2` resolves; `byComponent.tree` is **present with value `[]`**,
+so "zero JS" is exact; the quoted clause renders on the built page (2
+occurrences); and the page carries *"When you'd need a real TreeView instead"*,
+naming `APG TreeView` 3 times.
+
+**One instrument trap avoided:** matching behaviour *names* against `/tree/i`
+returns `initTreeTable` — a behaviour tree does not have. `byComponent` is the
+right instrument, and 220.1's `Object.keys` trap was avoided by re-deriving the
+array (33 behaviours, 40 `byComponent` entries, 22 present-but-empty).
+
+Corpus arms: **arm 4 20/20**, **arm 5 82/82** (81 when stepper's round wrote
+it — the corpus gained one literal, so the base rate is stable across a real
+change), **arm 11 17/19**, its two dissenters the same two 269 established.
+
+### Arm 12 — slice citations in files the gate does not scan: 11 with zero coverage
+
+`tree · spacing` cites a slice number, which sent this round to
+`check-slice-refs.mjs`. Its file filter admits `css|mjs|js|astro|md|py` —
+**`.ts` and `.json` are absent**, so the shipped behaviour sources, the core
+tests and `dsa-scores.json` are invisible to the gate that keeps slice
+citations resolvable.
+
+In the gate's own frame (its header records *"16 are cited from nowhere else"*
+as the reason not to stop scanning `.roundtable/`): **282** distinct refs are
+cited from scanned files, **38** appear in unscanned ones, and **11 are cited
+from nowhere the gate looks**. Excluding the frozen `apps/docs/versions/**`
+snapshots moves that by **zero**.
+
+**Nothing is broken today** — all 11 resolve, and the unscanned set is 99
+distinct citations with 0 unresolved. The defect is reach, and reach is what
+this gate is for; its header names the failure mode itself.
+
+**Red-proved two-sidedly**, the same citation text pointing at a slice number
+occurring **0** times in the corpus, injection confirmed present in the file
+before either result was believed: appended to a behaviour `.ts` → gate
+**passed** at a byte-identical `760 … (282 cited …)`; appended to `tree.css` →
+gate **failed**, exit 1. The green half alone proves nothing — CLAUDE.md's rule
+— and the red half is what discharges it. Both reverted; `git status` clean.
+
+**Base rate 11 of 293 (3.8%)** — neither 0 nor 100%, so it discriminates.
+
+**Filed as ROADMAP 270.1, not fixed here.** 101.3 confines Polish to the
+existing ratchet and no DSA dimension flags this — the ground 231.2 and 240.1
+were filed on. It also gives rule 4 its first genuinely dispatchable,
+non-blocked item in six wakes.
+
+**Refused, and recorded so it is not re-proposed:** a rubric arm asserting the
+**56** slice numbers inside `dsa-scores.json` cites resolve. All 56 do, and
+widening the gate makes such an arm redundant by construction rather than
+adding a twelfth thing to re-measure by hand each round.
+
+### No blind re-score is owed, and `rounds` moves 1→2
+
+No score moved, so `scored` stays **2026-08-23** and `dry` stays **0** — there
+was no re-score to fail. `rounds` moves 1→2 on badge's and alerts' precedent:
+this round changed no artefact on the surface itself.
+
+### Not verified, said plainly
+
+Cloud wake: no Podman, no `localhost:8081`, so the 1440/390 light-and-dark
+screenshot lane could not run. **0** files under `packages/core/src/` changed
+and **0** docs page markup changed — the round's entire diff is this ledger,
+`ROADMAP.md` and the hand-off, so nothing in it rests on a rendered image. Every
+number quoted above came from a gate or a probe executing in this container.

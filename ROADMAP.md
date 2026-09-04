@@ -315,6 +315,166 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 270 — Polish round on `tree`: all six cites hold, and the finding is that `check:slice-refs` cannot see the file extensions the shipped BEHAVIOURS are authored in — 11 slice references are cited from nowhere the gate looks (2026-09-04)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again —
+`git branch --show-current` empty, local `main` stale at `26447ba9` while
+`HEAD` sat on the pushed `e3a08f9`. ENVIRONMENT trap 1, fixed with
+`git checkout -B main origin/main` before any work. `--unshallow` clean in one
+attempt (**1,871** commits, no `shallow.lock`) and it brought all **seven**
+tags, so trap 2 did not bite. Rule 1: no open P0 — `list_issues` on
+`Busy-Office/busy-office-ui` returns `totalCount: 0`, and no open `N. [ ]` item
+is a P0. Step 1 triaged and committed nothing: no new input. Rule 2
+**1 / 4 … ok**. Rule 3 **0 / 3 … ok** (sixth consecutive wake at 0 — 161.4
+admits only `Continue`/`Standardize` rows as slice-closers and this wake's row
+is `Polish`). **Rule 4 found nothing dispatchable**; per `LOOPS.md` 186.2 the
+kind is named rather than lumped, and every item was re-read from `ROADMAP.md`
+this wake rather than copied from the hand-off: **owner-blocked** Slice 15,
+`112.3`, `112.4`, `249.7`, `249.10`-`249.13`; **browser-blocked in the
+SCREENSHOT sense** (a LOCAL wake can take these) `249.6`, `249.9`, `249.15`;
+**agent-blocked** none. Rule 5: `dispatch_status.py` reads
+`1 wake-date(s) newer … STALE`, so the trend clause **could not be evaluated**
+rather than reported clear; the SECOND clause (184.2's, "a size budget breached
+outright") **was** evaluable and is clear — `check-size.mjs` passed at
+*139 shipped payload file(s) in 11 budget bucket(s), 376.2 kB gz total;
+tightest headroom 110 bytes* (`css/brand-navy.min.css`), the identical reading
+for the fourth wake running. Rule 6 fired.
+
+267.1's fix holds a third wake on: `--apply` printed `0 row(s) newly marked for
+re-score; 16 already carried the marker; 16 re-queued in total` /
+`ledger UNCHANGED — nothing to write`.
+
+### The pick, and the instrument reproduces 269's published table exactly
+
+§3b's "fewest rounds used" left **5** rows at `1/3`; `inline-editing` and
+`table-toolbar` drop for 217.1's stated reason (no `dsa-scores.json` entry, so
+no arm can disagree with them), leaving **three** — `tree`, `byline`,
+`pagination`. Ranked on 266's falsifiable-assertion count, re-derived from
+scratch: **tree 808** cite characters, byline 800, pagination 689.
+
+**The instrument was reconciled against an independent prior measurement before
+it was used**, which is the discipline 269 established. Run against
+`a783a08^` — the tree 268 ranked — it returns navbar **868** / tree **808** /
+byline **800** / pagination **689** / breadcrumb **511**, reproducing 269's
+published table **5 of 5, exactly**. (269's own table reads 5 higher on four
+rows because that run joined the six cites with a separator; its note says so.)
+
+`tree` is picked as the highest of the three, and it is the only one of them
+carrying **unit literals** in a cite — arm 5's class, and the class three of
+this ledger's recorded defects lived in.
+
+### All six of tree's cites hold
+
+- **typography** *"no raw font-size"* — **0**, with the possessive
+  `grep -cP 'font-size\s*+:\s*+(?!var\()'` the stepper round established (the
+  non-possessive form backtracks to zero width and discriminates nothing). The
+  file's one `font-size` declaration is `var(--bo-density-font-size)`; a second
+  textual hit is inside a comment.
+- **colour** *"zero raw hex; reuses gated sidebar pairings"* — **0** hex
+  literals, and both halves of the second clause were checked rather than the
+  first only. tree's five colour tokens are a strict **subset** of
+  sidebar-nav's eight, and the load-bearing pairing is gated:
+  `['--bo-color-accent-text', '--bo-color-accent-subtle', 4.5]` and
+  `text-secondary` on surface/muted/canvas all appear in `check-contrast.mjs`'s
+  `PAIRS`. This is the arm that caught `form · colour` in 240.1, run the same
+  way; here it is clean.
+- **spacing** *"1.25em indent and 1em chevron slot both carry their em-relative
+  reason (94.2)"* — both literals present, both commented (`1.25em` "em so it
+  tracks the density font size"; `1em` "the number IS the type size, so any
+  indirection would just rename it"), and `94.2` resolves.
+- **interaction** *"native `<details>`/`<summary>` … zero JS/ARIA"* —
+  `behaviors.json`'s `byComponent.tree` is **present with value `[]`**, so
+  "zero JS" is exact. **One instrument trap avoided:** matching behaviour
+  *names* against `/tree/i` returns `initTreeTable`, which would have reported
+  a behaviour tree does not have; `byComponent` is the right instrument and
+  220.1's `Object.keys` trap was avoided by re-deriving the array (33
+  behaviours, 40 `byComponent` entries, 22 present-but-empty).
+- **content** — the quoted clause *"Not for rows that carry data columns"*
+  renders on the built page (2 occurrences).
+- **fit** *"its page states when the heavier pattern would be needed instead"* —
+  the built page carries the section *"When you'd need a real TreeView
+  instead"* and names `APG TreeView` 3 times.
+
+Corpus arms re-run and clean: **arm 4 20/20**, **arm 5 82/82** (81 when the
+stepper round wrote it — the corpus gained one literal, so the base rate is
+stable across a real change), **arm 11 17/19** — the two dissenters being the
+same two 269 established are correct under the amended contract.
+
+### The finding — arm 12, and it is the gate's own analytic frame turned on itself
+
+`tree · spacing` cites a slice number, which sent this round to
+`check-slice-refs.mjs`. Its file filter is one line:
+
+```
+/\.(css|mjs|js|astro|md|py)$/
+```
+
+**`.ts` and `.json` are absent.** The shipped behaviours are authored in
+TypeScript, so `packages/core/src/js/behaviors/*.ts`, the core tests, and
+`apps/docs/src/data/dsa-scores.json` are all invisible to the gate that exists
+to keep slice citations resolvable.
+
+Measured, in the frame the gate's own header uses — it records *"42 of the
+distinct refs are cited from `.roundtable/`, and **16 are cited from nowhere
+else**"* as the reason not to stop scanning that directory:
+
+- **282** distinct refs are cited from files the gate scans.
+- **38** distinct refs appear in files it does not.
+- **11 of those are cited from nowhere the gate looks** — zero coverage:
+  `269.1`, `94.7`, `94.9`, `57.3`, `240.1` (all `dsa-scores.json`), `55.1`
+  (`schedule-data.ts`), and `73.1`, `48.3`, `105.1`, `173.3`, `148.1` (the
+  behaviour sources, a util, and the core tests).
+- Excluding the frozen `apps/docs/versions/**` snapshots changes that count by
+  **zero** — all 11 have a live, non-frozen citer.
+
+**Nothing is broken today: all 11 resolve, and the whole unscanned set is
+99 distinct citations, 0 unresolved.** The defect is reach, not content — and
+reach is precisely what this gate is for. Its own header states the failure
+mode: *"Trim the archive and those become dead references, silently."* These 11
+would rot with nothing to catch them.
+
+**Base rate: 11 of 293 distinct refs (3.8%) have zero coverage.** Neither 0 nor
+100%, so the predicate discriminates — this is not 94.11 ceremony.
+
+**Red-proved two-sidedly, and the injection was confirmed present before either
+result was believed.** The same citation text, pointing at a slice number that
+occurs **0** times in `ROADMAP.md` and `ROADMAP-archive.md`:
+
+- appended to `packages/core/src/js/behaviors/anchor-nav.ts` → gate **passed**,
+  at a byte-identical `760 slice citation(s) checked (282 cited …)`;
+- appended to `packages/core/src/css/components/tree/tree.css` → gate **failed**,
+  exit 1.
+
+One injection alone would have proved nothing: a green result on the `.ts` side
+is what CLAUDE.md calls a defect in the injection until proven otherwise, and
+the `.css` half is what discharges that — the detector can fail, on this exact
+string, and does not only because of the extension list. Both files were
+reverted; `git status` is clean and `redproof` appears in neither.
+
+1. [ ] **270.1 — `check:slice-refs` cannot see `.ts` or `.json`.** Widen the
+       file filter so the shipped behaviour sources, the core tests and
+       `dsa-scores.json` are scanned. **Not fixed in this round**: 101.3's stop
+       rule confines Polish to maintenance of the existing ratchet and no DSA
+       dimension flags this, which is the same ground 231.2 and 240.1 were
+       filed on rather than fixed.
+       - **Accept:** the extension filter admits the file types the 11
+         zero-coverage citations live in; the gate's reported citation count
+         agrees with an independent enumeration over the widened set, asserted
+         rather than assumed; the change is red-proved by a dangling citation
+         in a `.ts` file, with the injection confirmed present in the file
+         before the red is believed, and the *same* injection is confirmed to
+         have been invisible beforehand; and the gate's run line is re-read
+         afterwards rather than predicted — per CLAUDE.md's criterion rule this
+         names the property, not the number it will land on. If widening turns
+         up dangling citations in the newly-scanned files, each is either fixed
+         or recorded in the gate's known-dangling baseline **with a reason**.
+
+**Refused in this round, and recorded so it is not re-proposed:** a rubric arm
+asserting that slice numbers inside `dsa-scores.json` cites resolve. All **56**
+of them resolve today, and the honest fix is upstream — widening the gate makes
+that arm redundant by construction rather than adding a twelfth thing to
+re-measure by hand each round.
+
 ## Slice 269 — Polish round on `breadcrumb`: all six cites hold, and the finding is that the only two blind re-scores this ledger has ever run that MOVED a score both left the entry's `scored` stamp behind — obeying a rule nothing had written down, and disobeying the one the file's own `$comment` states (2026-09-04)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again —
