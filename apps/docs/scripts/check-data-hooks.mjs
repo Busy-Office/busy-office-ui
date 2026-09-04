@@ -43,6 +43,7 @@ const EXCEPTIONS = new Set([
   // docs-site chrome (search, nav, reference tooling) — never shipped to consumers
   'data-cmdk-hint', 'data-cmdk-open', 'data-navgroup', 'data-search-keep',
   'data-api-notes', 'data-copy', 'data-hex', 'data-var',
+  'data-js-required',                                   // ApiTable's JS row anchor (249.20) — names the component so check-js-serves reads the cell by membership, not by recognising a label
   // demo-local wiring: page scripts driving their own fixtures
   'data-vh-pick', 'data-vh-row', 'data-group',          // value-help picker demo
   'data-line-remove', 'data-line-total',                // editable-grid totals demo

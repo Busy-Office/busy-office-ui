@@ -20,6 +20,8 @@
  * (container-query breakpoint, column-visibility toggle, content change)
  * so the offsets never go stale — no re-call convention needed, unlike
  * the toolbar/data-table behaviors that only react to explicit DOM swaps.
+ *
+ * @serves data-table
  */
 const observed = new WeakSet<Element>();
 

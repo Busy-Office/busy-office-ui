@@ -16,6 +16,8 @@
  *   </div>
  * Steps before the current index get data-state="done"; the current step
  * gets aria-current="step"; steps after get neither.
+ *
+ * @serves stepper
  */
 let installed = false;
 

@@ -17,6 +17,8 @@
  * This behavior never reads file contents, uploads anything, or renders a
  * file list — that's your code, same "framework does visuals, you do the
  * data" split as every other field component here.
+ *
+ * @serves file-upload
  */
 let installed = false;
 

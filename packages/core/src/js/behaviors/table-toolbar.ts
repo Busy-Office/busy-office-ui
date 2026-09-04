@@ -34,6 +34,8 @@
  * Click dispatches bo:table-export ({ format }) on the button — this
  * behavior only tracks the intent; generating and downloading the actual
  * file is the consumer's code (same split as bo:row-save / bo:scan).
+ *
+ * @serves data-table
  */
 let installed = false;
 

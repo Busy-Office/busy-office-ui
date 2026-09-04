@@ -20,6 +20,8 @@
  * into the input and dispatches bo:combobox-select ({value, text}). Escape
  * and click-outside close without changing the value — native popover
  * behavior, no extra code. Call once.
+ *
+ * @serves combobox
  */
 import { positionPopover } from '../utils/popover-position.js';
 

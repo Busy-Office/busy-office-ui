@@ -203,6 +203,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   </section>
   <ClassRef component="dashboard" />
   <ApiTable component="dashboard"
+    js="Optional: initCollapsibleCards() — needed only for collapsible widgets. It flips a [data-collapse-trigger] button's aria-expanded and the data-state on the panel its aria-controls names; the CSS does the transition. A widget that never collapses needs no JS."
     notes={['Delta valence needs two channels: the visible <code>⚠</code> on bad deltas AND visually-hidden text ("increase, worse,").',
             'Stat values use proportional figures; compact big numbers server-side (12.9K, $4.2M). One hero per view.',
             'Widgets are named containers (<code>bo-widget</code>); the grid is <code>bo-widget-grid</code> — span-2 collapses at the grid&#39;s 2-column threshold.',

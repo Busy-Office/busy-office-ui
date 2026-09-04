@@ -58,6 +58,8 @@
  *                          per tick, so same-tick reformats (money/unit)
  *                          land before the save reads the row and a
  *                          row removed in the same tick is never saved.
+ *
+ * @serves data-table
  */
 let installed = false;
 

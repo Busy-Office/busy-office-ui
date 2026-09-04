@@ -13,6 +13,8 @@
  * Markup contract:
  *   <form class="bo-filter-bar">…named fields…</form>
  *   <nav data-saved-views><a href="?status=pending">…</a>…</nav>
+ *
+ * @serves filters
  */
 export function initSavedViews(root: ParentNode = document): void {
   const params = new URLSearchParams(location.search);

@@ -58,6 +58,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   </section>
   <ClassRef component="stepper" />
   <ApiTable component="stepper"
+    js="None to display progress. initWizard() is opt-in and only for the case where the stepper drives a multi-step flow: it shows one [data-wizard-panel] at a time and keeps this stepper in sync, setting data-state=done behind the current step and aria-current=step on it."
     notes={['<code>aria-current="step"</code> marks the current step; do not combine with <code>data-state="done"</code> (current wins by source order but the combination is out of contract).',
             'Steps are inert <code>&lt;li&gt;</code> by contract — interactive (clickable) steps are not yet specified.',
             'Print: markers render outlined black-on-white automatically.']} />

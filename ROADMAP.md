@@ -315,6 +315,172 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 264 — 249.9's last no-JSON-key badge: which component a behavior serves is now declared, and the first declaration written from the headers' prose was wrong about one of the 26 (2026-09-04)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty, `HEAD` on `758349a` with no local branch) —
+ENVIRONMENT trap 1, fixed with `git checkout -B main origin/main` before any
+work. `--unshallow` clean in one attempt (**1,859** commits) and it brought all
+seven tags, so trap 2 did not bite. Rule 1: no open P0, and GitHub intake is
+empty (`list_issues` on `Busy-Office/busy-office-ui` → `totalCount: 0`); Step 1
+triaged and committed nothing, because there was no new input. Rule 2
+**0 / 4**, rule 3 **2 / 3** `[249, 263]` — neither fires. Rule 4: the open set
+is `15`, `112.3`, `112.4`, `249.6`, `249.7`, `249.9`, `249.10`-`249.13`,
+`249.15` (11 open, `grep -cE '^\s*[0-9]+\. \[ \]'` → 11, agreeing with the
+hand-off). Walking it oldest-first: 15 and 112.3/112.4 are owner-blocked;
+249.6 was declined at the CLAUSE level by the previous wake and re-reading it
+does not change that; 249.7 is a cost question waiting on the owner's 249.10.
+**249.9 is the oldest item with a cloud-takeable clause**, and this is that
+clause.
+
+### The split, and the premise re-derived rather than inherited
+
+249.9's badge audit found two badges tracing to no JSON key. 249.18 took the
+first (component→patterns). This is the second — the CSS-only /
+JS-enhanced / JS-required tier — and its consequence 4 reproduces to the
+number against `dist/api.json` + `dist/behaviors.json`:
+
+| reading | components matched | what it gets wrong |
+|---|---|---|
+| `(classes + dataAttrs) ∩ hooks` | **23 / 40** | admits `approval-workflow`, which matches on `data-state` alone — a vocabulary **6** components declare and **6** behaviors hook, with no approval behavior in the package |
+| `classes ∩ hooks` | **20 / 40** | drops `dialog` and `scan` |
+| module filename == component dir | **9 / 26** | misses `file-dropzone`→`file-upload`, `wizard`→`stepper`, `collapsible-card`→`dashboard`, `anchor-nav`, `load-more`→`pagination`, `validation-summary`→`form`, `context-menu`→`dropdown`, and the six data-table behaviors carrying none of its name |
+
+Two things the audit did not say, measured here. The intersection's false
+positives are **structural rather than incidental**: `form` matches 16
+behaviors and `button` 5, because behaviors hook the shared primitives
+(`bo-input`, `bo-btn`) those components define — that is composition, not a JS
+requirement, and no threshold separates it. And `scan` declares **zero**
+classes, so no class-anchored rule can ever see it, which is why it is missing
+from the narrow reading and present in the wide one.
+
+### What landed
+
+`@serves <dir>[, <dir>…]` in each of the **26** behavior module headers, lifted
+by `extract-behaviors.mjs` into `behaviors.json` as a per-behavior `serves` and
+a top-level `byComponent` with **one entry per component, empty array included**
+(249.3's "absence is rendered, never blank"). **18 of 40** components are
+served. `ApiTable` marks its JS cell with `data-js-required=<component>`, and
+`check-js-serves.mjs` — the 52nd gate, `@exact` — re-derives the relation from
+the BUILT pages and fails when the two disagree.
+
+### The first declaration was wrong about one of the 26, and prose is why
+
+Written from the module headers, `anchor-nav.ts` was declared `@serves
+sidebar-nav`, because its header says the aria-current it sets is *"the same
+signal `.bo-sidebar-nav` and `.bo-pagination` already style"*. Reading its
+**selectors** instead says otherwise: it queries `[data-anchor-nav]`,
+`[data-anchor-collapse]` and `a[href^="#"]`, and nothing else. It touches no
+component's markup — the class names in its header name what STYLES its output,
+not what it requires. `data-anchor-nav` is documented on exactly one page in the
+tree and it is a PATTERN (`/patterns/object-page`).
+
+So `@serves none — <reason>` exists, the reason is required and required to be
+a sentence, and it is used **once in 26**. Red-proved both ways: `none` bare and
+`none — n/a` are both refused naming the file. The general lesson is the one
+CLAUDE.md already states about instruments and is worth restating for
+declarations: **a header's prose says what a thing is FOR; its selectors say
+what it operates ON, and only the second is the relation.**
+
+### The directive published a phantom hook, and the manifest diff is what caught it
+
+`@serves data-table` sits in the same comments the hook scan reads, and
+component directories are spelled exactly like `data-*` attributes. Landing the
+directive added a phantom `data-table` hook to **five** behaviors
+(`initDataTables`, `initDataGrid`, `initRowEdit`, `initTableToolbar`,
+`initTableSum`) — a change to a **published semver surface**, from a comment.
+
+Blanking comments before the scan was measured and **refused**: those headers'
+markup contracts are where much of the hook surface is published from, and
+blanking loses hooks on **25 of 33** exports, one of them 12
+(`initRowEdit` loses `bo-data-table__row-edit-actions`, `bo-input--seamless`
+and ten more). The fix is one line — the `@serves` line is stripped before the
+scan — and the check that it worked is an export-for-export comparison against
+the previous build's `behaviors.json`: **0 regressions, `exports` and
+`initCount` identical**.
+
+### The gate is red on six real pages before it is green
+
+The base rate was measured before the gate was written (94.11): **13 of 19**
+served components named a serving init in their JS row, so the predicate was
+false of six and the gate went red on its first run against the built tree.
+Every one is a page contradicting the shipped package, and **two contradict
+themselves**:
+
+| component | the row said | what the same page says elsewhere |
+|---|---|---|
+| `offcanvas` | None — CSS-only. | an API note: *"initDialogs() wires it exactly like any other"*, and the page's own `<script>` calls it |
+| `dashboard` | None — CSS-only. | a note naming `initCollapsibleCards()` |
+| `form` | None — CSS-only. | — (`initValidationSummary`, `initGroupedNumber`) |
+| `quantity` | None — CSS-only. | a note: *"kept in sync reactively by initQuantity()"* |
+| `stepper` | None — CSS-only. | — (`initWizard`) |
+| `sidebar-nav` | None — CSS-only. | **correct** — this one was the wrong declaration, not a wrong page |
+
+Five pages gained an accurate JS row; the sixth was the bug in the declaration.
+
+**Anchored, not whole-page**, and both readings are recorded so a later reader
+can see why: whole-page, **52** built pages mention an `init*` name somewhere —
+`button` names `initDropdowns` in a menu-button demo, `richtext` names
+`initDialogs` because a demo opens one. Read from the cell, **18** do, and every
+one is a statement about that component. The anchor is an ATTRIBUTE carrying the
+component name rather than the row's *"JS required"* label, so reading it is
+membership rather than recognition — and it removes the page-slug guess as well
+(`alert` renders at `/components/alerts/`; `skeleton` and `state` share
+`/components/state-patterns/`, which is why 39 pages hold 40 cells).
+
+### Red-proofs — six, each with the injection confirmed before the red was believed
+
+Core build: `@serves` removed (`@serves` count 1 → 0, names the file); an
+unknown component (`tabsheet` — names the file and the name); empty; a repeated
+name; `none` with no reason and with a two-character one. Docs gate, injected
+into the BUILT `dist/components/offcanvas/index.html` and each injection printed
+back from the file before running the gate: the cell claiming `initTabs` (red on
+both arms), the cell reset to *"None — CSS-only."* (red on the coverage arm),
+and `data-js-required="offcanvaz"` (red on the membership arm, naming the
+unknown name). The gate returns green when the file is restored.
+
+### Verified against what it RENDERS
+
+Every one of the **40** built cells carries the text ITS OWN source page passes
+— **40 of 40**, compared value-for-value rather than counted, which is
+CLAUDE.md's row-label pairing rather than a diff read. 19 components now render
+a non-default JS row (14 before, 5 added). All **17** CI entry points,
+re-derived from `ci.yml` this wake rather than read off a snapshot, ran green,
+plus the `DOCS_BASE=/busy-office-ui` parity build — whose base branch was
+confirmed exercised (91 prefixed `/busy-office-ui/components/` hrefs and a
+base-carrying `og:url` on the built drawer page) rather than merely green.
+`check:claims` reports `162 verified live · 3 NOT VERIFIED` — ENVIRONMENT 6b's
+container property, not a regression.
+
+**NOT VERIFIED, named rather than implied:** this was a cloud wake, so the
+1440/390 light-and-dark screenshot lane could not run. What changed visually is
+one table row's TEXT on five component pages, inside a generated table every one
+of them already renders; **no CSS changed** (0 files under
+`packages/core/src/css/`), and the whole-tree browser sweeps that assert the
+properties a screenshot would be read for are green — `check:layout` 127 pages
+at 390 and 150% zoom, `check:scroll` 912 containers × 2 widths, `test:axe`
+127 pages × 2 widths, `check:pseudo` 14 pages at +44% text expansion.
+
+### Refused, each with its reason
+
+- **A required/enhanced/optional TIER.** 249.9's audit says nothing in the repo
+  distinguishes "JS-required", and re-checking found only hand-written page
+  prose — the very surface this key exists to check, so sourcing the tier from
+  it would be circular. The tier stays 249.9's open question rather than being
+  invented here.
+- **Blanking comments in the hook scan** (above): it would delete published
+  hooks on 25 of 33 exports to fix a one-line problem.
+- **Publishing `byComponent` into `llms.txt`.** `behaviors.json` is already an
+  export (`./behaviors-manifest`), `llms.txt` already lists all 26 inits with
+  their hooks, and each component page now states it in its own JS row. A
+  fourth spelling of one relation is what the Standardize doctrine refuses.
+- **Gating `gen-llms.mjs`'s hand-written "paste-in" block.** It names 5 of 26
+  inits deliberately — a quick-start, not a mapping — and gating it would either
+  force all 26 into it or require the tier just refused. It was checked rather
+  than waved off: all **5** of its claims agree with `byComponent`
+  (`initDialogs`→dialog, `initTabs`→tabs, `initDataTables`→data-table,
+  `initDropdowns`→dropdown, `initAlerts`→alert).
+
 ## Slice 263 — Standardize sweep: all five lanes clean again, and the finding is again from none of them — three HTML-entity decoders in one directory, disagreeing on 8 of 11 inputs, where the fix one copy credits to a grill is exactly what makes it wrong on the mirror case (2026-09-04)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** —
@@ -3474,6 +3640,41 @@ box (2026-09-03, cloud wake):**
           is load-bearing; and any gate proposed off this finding is measured
           for base rate BEFORE it is written, with the refusal recorded when
           the predicate is uniformly true.
+
+20. [x] **249.20 — DONE, Slice 264.** The JS-tier badge's recorded key, split
+        out of 249.9 on 2026-09-04. It is the second of the two badges 249.9's
+        own audit found tracing to no JSON key — 249.18 took the first — and
+        like it, it is pure derivation, `ENVIRONMENT.md`'s SECOND list, so a
+        cloud wake can take it in full while the catalogue PAGE (rendered
+        miniatures a human compares) stays with 249.9. Fifth split of this
+        shape, after 249.16 out of 249.4, 249.17 out of 249.15, 249.18 out of
+        249.9 and 249.19 out of 249.7.
+
+        **249.9's consequence 4 was re-derived before the split rather than
+        inherited** (CLAUDE.md's premise rule) and reproduces to the number:
+        `(classes+dataAttrs) ∩ hooks` reads **23/40**, `classes ∩ hooks` reads
+        **20/40** and drops `dialog` and `scan`, and `approval-workflow`
+        matches on `data-state` alone — a vocabulary **6** components declare
+        and **6** behaviors hook. Two things it did not say, measured here:
+        the intersection's false positives are **structural, not incidental**
+        (`form` matches 16 behaviors and `button` 5, because behaviors hook the
+        shared primitives `bo-input`/`bo-btn` that those components define —
+        composition, not a JS requirement); and `scan` declares **zero**
+        classes, so no class-anchored rule can ever see it.
+        - **Accept:** the relation is DECLARED in the shipped artifact — a
+          directive in each behavior module's header, with the core build
+          throwing and naming the file when it is missing, empty, or names a
+          component `api.json` does not have — and published as a key carrying
+          **one entry per component including the ones nothing serves** (an
+          absence is an empty array, never a missing key — 249.3's "absence is
+          rendered, never blank"); the published hook surface is asserted
+          byte-identical to the previous build, because the directive sits in
+          the same comments the hook scan reads; and a gate re-derives the
+          relation from an INDEPENDENT source — what the BUILT component pages
+          claim in their own "JS required" row — and fails when the two
+          disagree, with its base rate measured before it is written and its
+          red-proof asserting the injection landed in the built page before the
+          red is believed.
 
 **Refused, recorded as DA (not re-litigated here — see the triage file for
 each item's reasoning):** publish-on-every-push/auto-bump, a `registry.ts`

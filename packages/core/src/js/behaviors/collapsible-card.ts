@@ -7,6 +7,8 @@
  * Markup contract:
  *   <button data-collapse-trigger aria-expanded="true" aria-controls="ID">…</button>
  *   <div class="bo-widget__collapse" id="ID" data-state="open">…</div>
+ *
+ * @serves dashboard
  */
 let installed = false;
 

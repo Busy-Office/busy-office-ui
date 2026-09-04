@@ -21,6 +21,8 @@
  * duration tokens) and a consumer who loaded the JS without the CSS. Neither
  * gains a frame of delay, and the dismiss contract stays synchronous wherever
  * there is no animation to wait for.
+ *
+ * @serves alert
  */
 let installed = false;
 

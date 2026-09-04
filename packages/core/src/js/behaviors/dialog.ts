@@ -10,6 +10,8 @@ import { trapFocus } from '../utils/focus-trap.js';
  *
  * Call initDialogs() once; calling again is a no-op. No re-init needed after
  * HTMX swaps.
+ *
+ * @serves dialog, offcanvas
  */
 const boundDialogs = new WeakSet<HTMLDialogElement>();
 let delegationInstalled = false;

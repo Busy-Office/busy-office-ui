@@ -11,6 +11,19 @@ pin.
 
 ### Added
 
+- **`behaviors.json` gains `byComponent`, and each behavior gains `serves`** —
+  which component a behavior powers is now DECLARED in the behavior module's
+  header (`@serves`) and the build throws naming the file when it is missing or
+  names a component that does not exist. `byComponent` carries an entry for
+  every component, an empty array included, so an unserved component is
+  distinguishable from a typo. This is the answer to the `floor.json`
+  `perComponent` note below: attributing behaviour JS to a component no longer
+  means guessing by name — a filename match resolves 9 of 26 modules, and
+  intersecting a component's classes with the published hooks reads 20 of 40
+  with false positives in both directions (`form` matches 16 behaviors through
+  the shared `bo-input`; `scan` declares no classes at all). Additive; the
+  published hook surface is unchanged, asserted export-for-export against the
+  previous build.
 - **`floor.json` gains `perComponent`** — the browser floor derived from ONE
   component's stylesheet, alongside the framework-wide `floor` it already
   carried. A consumer importing `./css/components/badge` is not held to the

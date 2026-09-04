@@ -22,6 +22,8 @@
  *     <input class="bo-input bo-input--numeric bo-money__amount"
  *            type="number" step="0.01" aria-label="Amount" />
  *   </div>
+ *
+ * @serves money
  */
 import { decimalsOverride } from '../utils/decimal-input.js';
 import { applyDecimals } from './grouped-number.js';

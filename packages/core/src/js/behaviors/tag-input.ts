@@ -18,6 +18,8 @@
  * field; YOUR code decides whether it's valid/a duplicate and, if so,
  * appends the actual .bo-tag-input__tag markup. Same "framework does
  * visuals, you do the data" split as row-edit/file-upload.
+ *
+ * @serves tag-input
  */
 let installed = false;
 

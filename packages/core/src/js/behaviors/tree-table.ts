@@ -25,6 +25,8 @@
  * Two-channel: indent + chevron (visible) / aria-expanded + rows
  * genuinely `hidden` (programmatic). Totals note: data-sum-of keeps
  * counting collapsed rows — collapse is a view state, not a filter.
+ *
+ * @serves tree-table
  */
 let installed = false;
 

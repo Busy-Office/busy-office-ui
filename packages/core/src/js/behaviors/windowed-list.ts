@@ -54,6 +54,8 @@
  * find an evicted (spacer) row, and printing gets only what is currently
  * loaded — both are the argument for filtering server-side first, which
  * stays the recommended default even for scanning.
+ *
+ * @serves data-table
  */
 import { refreshDataTable } from './data-table.js';
 

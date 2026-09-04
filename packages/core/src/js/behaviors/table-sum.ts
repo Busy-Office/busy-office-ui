@@ -34,6 +34,8 @@
  * the sum in the table that owns the fields). Checkboxes/radios sharing
  * the name are excluded. Steps with no precision info ("any", missing)
  * fall back to the values' own decimal places.
+ *
+ * @serves data-table
  */
 import { parseDecimalsAttr, stepDecimals, valueDecimals } from '../utils/decimal-input.js';
 

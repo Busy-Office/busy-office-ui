@@ -27,6 +27,8 @@
  * bo:table-load-more's full contract (including the optional chunk-offset
  * detail a windowed list re-request carries) is documented once, in
  * windowed-list.ts — this file's own fires carry no detail, unchanged.
+ *
+ * @serves pagination
  */
 let installed = false;
 let observer: IntersectionObserver | undefined;

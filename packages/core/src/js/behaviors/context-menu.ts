@@ -20,6 +20,8 @@
  * framework — data-col-toggle (initTableToolbar) for hide/show, an
  * ordinary sort control for sorting — this behavior does not own or invent
  * either; it only opens the menu where the user right-clicked.
+ *
+ * @serves dropdown
  */
 import { pointAnchor, positionPopover } from '../utils/popover-position.js';
 

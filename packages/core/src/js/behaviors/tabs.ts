@@ -12,6 +12,8 @@
  * reads the rendered direction, sets `aria-orientation` itself, and swaps the
  * arrow keys and the fade axis to match — including when a narrow container
  * collapses the rail back into a horizontal strip.
+ *
+ * @serves tabs
  */
 let installed = false;
 

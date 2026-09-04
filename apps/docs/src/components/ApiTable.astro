@@ -57,9 +57,15 @@ const aa = (contrast.themes.light as any[])
             <td>{values.map((v: string) => <code style="margin-inline-end: 0.5rem">{v}</code>)}</td>
           </tr>
         ))}
+        {/* data-js-required carries the COMPONENT NAME, not a value: it is the
+            anchor `check-js-serves` reads this cell by (roadmap 249.20). Reading
+            the row by its "JS required" label would be recognition; reading an
+            attribute whose value names the component is membership, and it also
+            removes the page-slug guess — two components share
+            /components/state-patterns/ and `alert` renders at /components/alerts/. */}
         <tr>
           <th scope="row">JS required</th>
-          <td>{js}</td>
+          <td data-js-required={component}>{js}</td>
         </tr>
       </tbody>
     </table>

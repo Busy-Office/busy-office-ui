@@ -13,6 +13,8 @@
  *     <input class="bo-quantity__input" type="number" min max step />
  *     <button class="bo-quantity__step" type="button" tabindex="-1" data-quantity-step="1">+</button>
  *   </div>
+ *
+ * @serves quantity
  */
 import { decimalsOverride, stepDecimals, valueDecimals } from '../utils/decimal-input.js';
 import { numericInputValue, setGroupedValue, applyDecimals } from './grouped-number.js';

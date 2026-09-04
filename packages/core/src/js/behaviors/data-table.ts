@@ -13,6 +13,8 @@
  *
  * Event delegation on the container; call initDataTables() once. Swapped-in
  * rows are picked up automatically.
+ *
+ * @serves data-table
  */
 const boundContainers = new WeakSet<Element>();
 

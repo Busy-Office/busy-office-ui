@@ -33,6 +33,8 @@
  * `data-locale` on the input, else the document's `lang`, else en-US —
  * explicit, never the browser default (Indian en-IN groups 12,34,567,
  * which an every-3-digits rule cannot produce).
+ *
+ * @serves form, money, quantity
  */
 import {
   parseDecimalsAttr, stepDecimals, valueDecimals, stepAttrFor, losslessFixed, setInputDecimals,

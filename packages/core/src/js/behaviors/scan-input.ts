@@ -27,6 +27,8 @@
  * rejects a scan, call `flashScanResult('error', 'why')` — the error wash
  * plus the same live region, two channels either way. The framework never
  * decides validity (it cannot); it only paints the moment.
+ *
+ * @serves scan
  */
 let installed = false;
 let flashTimer: ReturnType<typeof setTimeout> | undefined;

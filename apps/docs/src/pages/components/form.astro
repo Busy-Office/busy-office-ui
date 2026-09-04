@@ -479,6 +479,7 @@ const fieldMarkup = `<div class="bo-form-field">
 
   <ClassRef component="form" />
   <ApiTable component="form"
+    js="None for the fields themselves. Two opt-in behaviors compose with them: initValidationSummary() lists a submitted form's invalid fields as links and moves focus to the summary before any field, and initGroupedNumber() adds thousands separators to a [data-grouped] numeric input on blur."
     notes={['Error semantics are YOUR markup: <code>aria-invalid</code> + <code>aria-describedby</code> pointing at the message (with <code>role="alert"</code> if dynamic) — CSS covers visuals only.',
             'Required marker needs a real <code>required</code>/<code>aria-required</code> on the control (or the <code>--required</code> modifier).']} />
   <DsaScore component="form" />

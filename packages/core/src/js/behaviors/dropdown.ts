@@ -27,6 +27,8 @@
  * A trigger with element children (icon + label) must nest a
  * `<span data-multiselect-count>` for the label text — the behavior never
  * rewrites a trigger's children, only that span or a plain-text trigger.
+ *
+ * @serves dropdown
  */
 import { positionPopover } from '../utils/popover-position.js';
 

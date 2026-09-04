@@ -13,6 +13,8 @@
  *     </div>
  *     ...fields with a <label for="id">
  *   </form>
+ *
+ * @serves form
  */
 import { reveal } from '../utils/reveal.js';
 

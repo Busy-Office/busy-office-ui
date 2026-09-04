@@ -116,7 +116,9 @@ const offcanvasMarkup = `<button class="bo-btn bo-btn--secondary"
   </script>
 
   <ClassRef component="offcanvas" />
-  <ApiTable component="offcanvas" notes={[
+  <ApiTable component="offcanvas"
+    js="REQUIRED: initDialogs() — a drawer is a native dialog and never opens without it. It is the same one call as any other dialog, so backdrop, Esc, focus-return and the Tab loop are inherited rather than reimplemented."
+    notes={[
     'It is a <code>&lt;dialog&gt;</code>: <code>initDialogs()</code> wires it exactly like any other — backdrop, Esc, focus-return and the Tab loop are inherited, not reimplemented.',
     'Give it an accessible name with <code>aria-labelledby</code> pointing at the header title.',
     'A drawer is modal: while it is open the page behind is inert. For a panel that must stay open alongside the content, use a layout column, not a drawer.',

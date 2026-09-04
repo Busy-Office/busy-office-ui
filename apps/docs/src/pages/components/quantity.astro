@@ -343,6 +343,7 @@ const markup = `<!-- basic: ( qty | unit ), joined — no buttons needed -->
 
   <ClassRef component="quantity" />
   <ApiTable component="quantity"
+    js="Optional: initQuantity() — the +/− buttons and their disabled state at min/max. The input is a real type=number, so typing and Up/Down already work without it. initGroupedNumber() is separate and opt-in per input via data-grouped."
     notes={['A count, not currency — see Amount for money values.',
             'The +/− buttons are optional pointer/touch affordances carrying <code>tabindex="-1"</code> — <kbd>↑</kbd>/<kbd>↓</kbd> on the input steps natively, so each field costs one tab stop, not three. Omitted entirely, the unit-select joins the input into ( qty | unit ).',
             '<code>min</code>/<code>max</code>/<code>step</code> live on the native <code>&lt;input type="number"&gt;</code>; the step buttons read the same attributes, so there is only one source of truth for the valid range.',

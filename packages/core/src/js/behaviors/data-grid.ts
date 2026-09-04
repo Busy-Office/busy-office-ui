@@ -25,6 +25,8 @@
  * Ctrl+End = grid start/end; Enter focuses the cell's single interactive
  * descendant, if any; Escape (from inside that descendant) returns focus to
  * the cell.
+ *
+ * @serves data-table
  */
 const boundGrids = new WeakSet<Element>();
 
