@@ -246,7 +246,7 @@
               "the sidebar's active entry carries aria-current=\"page\" + the visible marker — two channels"
             ],
             [
-              "Narrow (&lt;900px shell width)",
+              "Narrow (<900px shell width)",
               "the sidebar collapses to its icon rail; labels stay in the accessibility tree. A bottom-nav tier is deliberately NOT shipped — re-opens on a real consumer need"
             ],
             [
@@ -362,7 +362,7 @@
           "href": "/patterns/app-launch",
           "title": "App launch",
           "group": "Patterns: enter & find",
-          "opener": "Who uses it: anyone opening the suite, every session — the first screen after sign-in. What \"done\" looks like: the right app is one tap away, whether it's a favourite or three deep in a category. A suite entry screen — the icon-grid launcher (the \"Bento UI\" / tablet-launcher archetype from the device-coverage table — same .bo-widget-grid container-query mechanism as a dashboard, at a smaller tile size, not a new grid component). Tiles are plain links composed into .bo-widget cards with real CSS icons (themable currentColor glyphs) where a glyph is genuinely right, an initials chip where none is, and inline &lt;svg&gt; where a tenant brings their own; the category row is the ordinary tabs pattern; a \"folder\" tile is just a widget whose body holds a cluster of small tiles. Zero new CSS. Not for returning a user to a specific record they already know — a bookmark, a notification, or a saved link should land directly on the object page or the list report, never route back through the launcher grid to get there.",
+          "opener": "Who uses it: anyone opening the suite, every session — the first screen after sign-in. What \"done\" looks like: the right app is one tap away, whether it's a favourite or three deep in a category. A suite entry screen — the icon-grid launcher (the \"Bento UI\" / tablet-launcher archetype from the device-coverage table — same .bo-widget-grid container-query mechanism as a dashboard, at a smaller tile size, not a new grid component). Tiles are plain links composed into .bo-widget cards with real CSS icons (themable currentColor glyphs) where a glyph is genuinely right, an initials chip where none is, and inline <svg> where a tenant brings their own; the category row is the ordinary tabs pattern; a \"folder\" tile is just a widget whose body holds a cluster of small tiles. Zero new CSS. Not for returning a user to a specific record they already know — a bookmark, a notification, or a saved link should land directly on the object page or the list report, never route back through the launcher grid to get there.",
           "complexity": 1,
           "components": [
             {
@@ -401,7 +401,7 @@
             ],
             [
               "No JS",
-              "the category tabs are plain &lt;button role=\"tab\"&gt; elements with no native switching behavior — without initTabs()'s click handler, the second panel (marked hidden in the markup) never un-hides, so only the Finance tiles are ever reachable; the Logistics apps behind the second tab are effectively invisible"
+              "the category tabs are plain <button role=\"tab\"> elements with no native switching behavior — without initTabs()'s click handler, the second panel (marked hidden in the markup) never un-hides, so only the Finance tiles are ever reachable; the Logistics apps behind the second tab are effectively invisible"
             ]
           ],
           "dataContract": [
@@ -474,7 +474,7 @@
             ],
             [
               "No JS",
-              "fully functional — this page has no JS dependency; every card is static markup and there is no &lt;script&gt; block to lose"
+              "fully functional — this page has no JS dependency; every card is static markup and there is no <script> block to lose"
             ]
           ],
           "dataContract": [
@@ -538,7 +538,7 @@
               "\"No records or actions match xyz\" inside the list region, plus what would help — most misses are a wrong prefix, so say which formats are searchable."
             ],
             [
-              "Slow source (&gt; ~200ms)",
+              "Slow source (> ~200ms)",
               "A busy state on the list region, not a spinner over the input — the user is still typing and must never be blocked. Keep the previous results visible underneath."
             ],
             [
@@ -555,7 +555,7 @@
             ],
             [
               "No JS",
-              "The trigger button has no popovertarget or other native affordance — its &lt;dialog&gt; is opened purely by a click listener in this page's script. With no JS, clicking the trigger does nothing at all: the palette is unreachable, not degraded, and the combobox filtering inside it never comes into play."
+              "The trigger button has no popovertarget or other native affordance — its <dialog> is opened purely by a click listener in this page's script. With no JS, clicking the trigger does nothing at all: the palette is unreachable, not degraded, and the combobox filtering inside it never comes into play."
             ]
           ],
           "dataContract": [
@@ -572,7 +572,7 @@
               "\"No records or actions match xyz\" inside the list region, plus what would help — most misses are a wrong prefix, so say which formats are searchable."
             ],
             [
-              "Slow source (&gt; ~200ms)",
+              "Slow source (> ~200ms)",
               "A busy state on the list region, not a spinner over the input — the user is still typing and must never be blocked. Keep the previous results visible underneath."
             ],
             [
@@ -589,7 +589,7 @@
             ],
             [
               "No JS",
-              "The trigger button has no popovertarget or other native affordance — its &lt;dialog&gt; is opened purely by a click listener in this page's script. With no JS, clicking the trigger does nothing at all: the palette is unreachable, not degraded, and the combobox filtering inside it never comes into play."
+              "The trigger button has no popovertarget or other native affordance — its <dialog> is opened purely by a click listener in this page's script. With no JS, clicking the trigger does nothing at all: the palette is unreachable, not degraded, and the combobox filtering inside it never comes into play."
             ]
           ],
           "wrongChoice": {
@@ -680,13 +680,13 @@
             ],
             [
               "No JS",
-              "row checkboxes and the bulk-action buttons are real inputs inside a native &lt;form&gt;, so picking rows and submitting still works end to end; only initDataTables()'s conveniences are lost — the header checkbox no longer toggles every row (it's just an unwired checkbox), and the \"n selected\" live region never updates, so a screen-reader user gets no running count of the selection"
+              "row checkboxes and the bulk-action buttons are real inputs inside a native <form>, so picking rows and submitting still works end to end; only initDataTables()'s conveniences are lost — the header checkbox no longer toggles every row (it's just an unwired checkbox), and the \"n selected\" live region never updates, so a screen-reader user gets no running count of the selection"
             ]
           ],
           "dataContract": [
             [
-              "GET /invoices?status=&amp;cc=&amp;q=&amp;page=",
-              "the &lt;tbody&gt; rows + an out-of-band footer#invoice-rows"
+              "GET /invoices?status=&cc=&q=&page=",
+              "the <tbody> rows + an out-of-band footer#invoice-rows"
             ],
             [
               "POST /invoices/bulk-approve",
@@ -701,7 +701,7 @@
               "the server RESOLVES the view name to its filters and renders the list — the view is a saved query living server-side, not a client blob; the response also re-renders the switcher so counts and the selected chip are never stalefull page (a view change is a navigation)"
             ],
             [
-              "POST /views &#123;name, query, scope&#125;",
+              "POST /views {name, query, scope}",
               "201 + the re-rendered switcher including the new chip. scope is private or shared: a shared view others depend on cannot be silently redefined, so editing one is a new version with the old URL still resolvingthe switcher"
             ],
             [
@@ -794,7 +794,7 @@
           ],
           "dataContract": [
             [
-              "GET /invoices?status=…&amp;cc=…",
+              "GET /invoices?status=…&cc=…",
               "the list fragment only, swapped into the table region. The bar is not re-rendered — re-rendering it closes an open menu and loses focus mid-selection"
             ],
             [
@@ -1061,7 +1061,7 @@
             ],
             [
               "No JS",
-              "fully functional — this page has no JS dependency. Every card, the status timeline, the audit trail and the field-diff table are static markup; the composer's \"Add\" control has no &lt;form&gt; wrapper or script wiring either way, so it is illustrative only, never a working control, regardless of JS"
+              "fully functional — this page has no JS dependency. Every card, the status timeline, the audit trail and the field-diff table are static markup; the composer's \"Add\" control has no <form> wrapper or script wiring either way, so it is illustrative only, never a working control, regardless of JS"
             ]
           ],
           "dataContract": [
@@ -1146,7 +1146,7 @@
             ],
             [
               "No JS",
-              "the primary side-panel view (facts, badges) is plain markup and reads fully without JS. The drawer and edit-dialog variants depend on initDialogs()'s click delegation to call the native showModal() — without it, neither &lt;dialog&gt; ever opens, so \"Open the detail as a drawer\" and \"Edit vendor V-1001\" do nothing and those two views are unreachable"
+              "the primary side-panel view (facts, badges) is plain markup and reads fully without JS. The drawer and edit-dialog variants depend on initDialogs()'s click delegation to call the native showModal() — without it, neither <dialog> ever opens, so \"Open the detail as a drawer\" and \"Edit vendor V-1001\" do nothing and those two views are unreachable"
             ]
           ],
           "dataContract": [
@@ -1262,7 +1262,7 @@
           "href": "/patterns/editable-grid",
           "title": "Editable grid",
           "group": "Patterns: enter & correct data",
-          "opener": "Who uses it: whoever enters or corrects line items — a buyer building a PO, a warehouse clerk keying a pick list. What \"done\" looks like: every row either saved or still marked unsaved, never silently dropped. Line-item entry — a PO, an invoice, a pick list — composed entirely from existing pieces, presented as a graded path. Simple: plain text/number cells with dirty-state + Save/Cancel — that's the data-table page's multi-row inline edit, start there. Medium (first demo below): a combobox lookup cell, cell-level validation, add/remove lines. Money &amp; unit cells: currency and unit as real separate fields inside a row. Advanced: every cell type, realtime totals, and the save-per-change mode. The full picture: a composite PO line-items editor putting all of it in one table. Not for a table that's read far more often than edited — a plain data table costs nothing and doesn't ship Save/Cancel machinery nobody triggers. Zero new CSS at every step — the grid is the same primitives, composed harder.",
+          "opener": "Who uses it: whoever enters or corrects line items — a buyer building a PO, a warehouse clerk keying a pick list. What \"done\" looks like: every row either saved or still marked unsaved, never silently dropped. Line-item entry — a PO, an invoice, a pick list — composed entirely from existing pieces, presented as a graded path. Simple: plain text/number cells with dirty-state + Save/Cancel — that's the data-table page's multi-row inline edit, start there. Medium (first demo below): a combobox lookup cell, cell-level validation, add/remove lines. Money & unit cells: currency and unit as real separate fields inside a row. Advanced: every cell type, realtime totals, and the save-per-change mode. The full picture: a composite PO line-items editor putting all of it in one table. Not for a table that's read far more often than edited — a plain data table costs nothing and doesn't ship Save/Cancel machinery nobody triggers. Zero new CSS at every step — the grid is the same primitives, composed harder.",
           "complexity": 4,
           "components": [
             {
@@ -1313,7 +1313,7 @@
             ],
             [
               "No JS",
-              "every field is a real, focusable, typable input — but initRowEdit() is what reveals Save/Cancel, so a row can be edited yet never submitted; a genuinely no-JS row needs a native &lt;form&gt; per row with its own submit button instead of this behavior"
+              "every field is a real, focusable, typable input — but initRowEdit() is what reveals Save/Cancel, so a row can be edited yet never submitted; a genuinely no-JS row needs a native <form> per row with its own submit button instead of this behavior"
             ]
           ],
           "dataContract": [
@@ -1962,7 +1962,7 @@
             ],
             [
               "No JS",
-              "fully functional — this page has no JS dependency; the stepper, status timeline and audit trail are all plain lists with no hidden state to reveal. The decision dialog and Approve/Reject buttons are not part of this static demo (see the note above); in a real build those would be an ordinary &lt;form&gt; POST, which also needs no JS to submit"
+              "fully functional — this page has no JS dependency; the stepper, status timeline and audit trail are all plain lists with no hidden state to reveal. The decision dialog and Approve/Reject buttons are not part of this static demo (see the note above); in a real build those would be an ordinary <form> POST, which also needs no JS to submit"
             ]
           ],
           "dataContract": [
@@ -2043,13 +2043,13 @@
             ],
             [
               "No JS",
-              "fully functional — this page has no JS dependency; the rows, checkboxes and bulk buttons in the real screen are plain form controls that POST natively (see the Markup section's hx-post sample — the underlying &lt;form&gt; submits without htmx too). What is lost without JS is the out-of-band summary swap and htmx's per-id focus restoration described in the keyboard walkthrough; a plain form submit reloads the page with the same result instead of swapping in place"
+              "fully functional — this page has no JS dependency; the rows, checkboxes and bulk buttons in the real screen are plain form controls that POST natively (see the Markup section's hx-post sample — the underlying <form> submits without htmx too). What is lost without JS is the out-of-band summary swap and htmx's per-id focus restoration described in the keyboard walkthrough; a plain form submit reloads the page with the same result instead of swapping in place"
             ]
           ],
           "dataContract": [
             [
               "POST /invoices/bulk-approve(ids as repeated form fields)",
-              "the affected &lt;tbody&gt; plus an out-of-band summary block — one request, both truths"
+              "the affected <tbody> plus an out-of-band summary block — one request, both truths"
             ],
             [
               "…all succeeded",
@@ -2078,7 +2078,7 @@
           "components": [
             {
               "href": "/components/dashboard",
-              "label": "Dashboard &amp; widgets"
+              "label": "Dashboard & widgets"
             },
             {
               "href": "/components/dropdown",
@@ -2194,7 +2194,7 @@
             ],
             [
               "No JS",
-              "widgets render with their initial server-rendered data; row checkboxes still toggle individually as native inputs, but the select-all checkbox and the live \"n selected\" count need initDataTables() to sync. Saved-view links stay real, navigable &lt;a&gt; hrefs, but their aria-current active marking and re-populating the filter bar's fields from the URL need initSavedViews(). Collapsible cards stay fixed in whichever data-state the server rendered — the trigger buttons do nothing without initCollapsibleCards(), so a card rendered collapsed can never be reopened"
+              "widgets render with their initial server-rendered data; row checkboxes still toggle individually as native inputs, but the select-all checkbox and the live \"n selected\" count need initDataTables() to sync. Saved-view links stay real, navigable <a> hrefs, but their aria-current active marking and re-populating the filter bar's fields from the URL need initSavedViews(). Collapsible cards stay fixed in whichever data-state the server rendered — the trigger buttons do nothing without initCollapsibleCards(), so a card rendered collapsed can never be reopened"
             ]
           ],
           "dataContract": [
@@ -2280,11 +2280,11 @@
               "the result fragment INCLUDING its run-line; parameters echoed back so the header cannot disagree with what ran. 422 → the form re-rendered with field errors, result region untouched"
             ],
             [
-              "GET /reports/open-items?cc=…&amp;period=…",
+              "GET /reports/open-items?cc=…&period=…",
               "the same result, addressable — a report you cannot link to cannot be cited in an email; an agent re-runs it by URL"
             ],
             [
-              "GET …&amp;format=csv|xlsx",
+              "GET …&format=csv|xlsx",
               "the export, same parameters, same figures; export is a format of the SAME request, never a second query that might disagree"
             ],
             [
@@ -2575,7 +2575,7 @@
             ],
             [
               "No JS",
-              "fully functional — this page has no JS dependency; each day is a real &lt;a href=\"#schedule-detail\"&gt; fragment link (native anchor navigation, no script), and the page imports no @busy-office/ui/js behavior"
+              "fully functional — this page has no JS dependency; each day is a real <a href=\"#schedule-detail\"> fragment link (native anchor navigation, no script), and the page imports no @busy-office/ui/js behavior"
             ]
           ],
           "dataContract": [
@@ -2706,7 +2706,7 @@
             ],
             [
               "No JS",
-              "fully functional — this page has no JS dependency; each tile is a real &lt;a href&gt; (native navigation to the task queue), and the page imports no @busy-office/ui/js behavior"
+              "fully functional — this page has no JS dependency; each tile is a real <a href> (native navigation to the task queue), and the page imports no @busy-office/ui/js behavior"
             ]
           ],
           "dataContract": [
@@ -2922,7 +2922,7 @@
               "bin + item + qty; 422 names WHICH check failed (wrong bin / wrong item / qty over need) so the worker fixes one thing, not everything"
             ],
             [
-              "POST … short (qty &lt; need)",
+              "POST … short (qty < need)",
               "requires a reason code (select) — a silent short is tomorrow's stock discrepancy"
             ],
             [

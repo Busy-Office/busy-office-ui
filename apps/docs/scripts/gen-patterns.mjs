@@ -24,7 +24,7 @@
  */
 import { writeFile } from 'node:fs/promises';
 import { opener as extractOpener } from './wrong-choice-rule.mjs';
-import { extractComplexity, extractComponents, stripTags, patternGroups } from './pattern-extract.mjs';
+import { extractComplexity, extractComponents, textOf, patternGroups } from './pattern-extract.mjs';
 
 const patternsDir = new URL('../src/pages/patterns/', import.meta.url);
 
@@ -37,14 +37,14 @@ const ROW_RE = /<tr>\s*<td[^>]*>([\s\S]*?)<\/td>\s*<td[^>]*>([\s\S]*?)<\/td>\s*<
 function extractRows(src, heading) {
   const m = SECTION_RE(heading).exec(src);
   if (!m) return null; // page has no such section — legitimate for a few (staging has no filtered States, etc.)
-  return [...m[1].matchAll(ROW_RE)].map(([, a, b]) => [stripTags(a), stripTags(b)]);
+  return [...m[1].matchAll(ROW_RE)].map(([, a, b]) => [textOf(a), textOf(b)]);
 }
 
 function extractWrongChoice(src) {
   const op = extractOpener(src);
   const m = WRONG_CHOICE_RE.exec(op);
   if (!m) return null;
-  const clause = stripTags(m[1]);
+  const clause = textOf(m[1]);
   const rest = m[2] ?? '';
   const link = LINK_RE.exec(rest)?.[1] ?? null;
   return { clause, alternative: link };
@@ -72,9 +72,18 @@ if (process.argv.includes('--self-test')) {
     ['wrong-choice clause WITH an alternative link',
       JSON.stringify(extractWrongChoice('<p class="demo-note"><strong>Not for X</strong> — see <a href={base + \'/patterns/y\'}>Y</a> instead.</p>')),
       JSON.stringify({ clause: 'Not for X', alternative: '/patterns/y' })],
-    ['a nested <code> tag inside a Data-contract cell does not break the row',
+    /* The escaped `&lt;tbody&gt;` must come out as the TEXT it stands for.
+       This case used to assert `'the &lt;tbody&gt; swap'` — it pinned the
+       source spelling as the expected output, which is the defect roadmap
+       265.2 found rendering on `/patterns/`, not a property worth holding. */
+    ['a nested <code> tag inside a Data-contract cell does not break the row, and its entities decode',
       JSON.stringify(extractRows('<h2>Data contract</h2><table><tbody><tr><td class="bo-data-table__col--code">POST <code>/x</code></td><td>the <code>&lt;tbody&gt;</code> swap</td></tr></tbody></table>', 'Data contract')),
-      JSON.stringify([['POST /x', 'the &lt;tbody&gt; swap']])],
+      JSON.stringify([['POST /x', 'the <tbody> swap']])],
+    /* Strip-then-decode, in that order: decoding first would turn this into
+       real tags that the tag strip then deletes, losing the text entirely. */
+    ['an escaped tag in a cell survives as text rather than being stripped as markup',
+      JSON.stringify(extractRows('<h2>States</h2><table><tbody><tr><td>Empty</td><td>renders &lt;b&gt;none&lt;/b&gt; inline</td></tr></tbody></table>', 'States')),
+      JSON.stringify([['Empty', 'renders <b>none</b> inline']])],
     ['a page with no opener/wrong-choice clause returns null',
       extractWrongChoice('<p class="demo-note">Just an opener, no strong clause.</p>'),
       null],

@@ -315,6 +315,215 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 265 — Objective grill of Slices 263, 264: both slices' own numbers reproduce, and both defects are in what shipped BESIDE them — a gate header that still encodes the declaration its own slice corrected, and an entity decoder consolidated everywhere except the one place a reader could see it missing (2026-09-04)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty, `HEAD` on `fbca625` with no local branch) —
+ENVIRONMENT trap 1, fixed with `git checkout -B main origin/main` before any
+work. `--unshallow` clean in one attempt (**1,861** commits, no `shallow.lock`)
+and it brought all seven tags, so trap 2 did not bite. Rule 1: no open P0 —
+`list_issues` on `Busy-Office/busy-office-ui` returns `totalCount: 0`, and no
+open `N. [ ]` item is a P0. Step 1 triaged and committed nothing: no new input.
+Rule 2 **1 / 4 … ok**. **Rule 3 fired**: `dispatch_status.py` read
+`Objective 3 / 3 slices … OVERDUE [249, 263, 264]`, exactly as the previous
+hand-off predicted. Rules 4-8 not reached.
+
+*Read before quoting rule 5:* `dispatch_status.py` reports Optimize **STALE**,
+`1 wake-date(s) newer`. `LOOPS.md` rule 5 is explicit that STALE means the rule
+has no input, so it is reported here as **could not be evaluated**, not as
+clear. No metric was recorded to "fix" it: `bundle-gz-kb` still has nothing
+deriving it (259.1's finding, re-verified — `grep -rln 'bundle-gz-kb'` over
+`*.mjs *.py *.ts *.js *.json` outside `node_modules` returns exactly one file,
+`scripts/loops/record_metric.py`, and the hit is its docstring example).
+
+**Scope, narrowed per §6 step 0.** The armed set names **249**, which is the
+re-arming case that step exists for: 249 is an open umbrella whose items have
+armed a grill on five consecutive wakes, and it has already been grilled in
+full (`grill-objective-247-249-252-2026-09-03.md`) and again per-item
+(`grill-objective-249-254-255-2026-09-03.md`). It is dropped here except as the
+parent of the item Slice 264 built. **Grilled: 263 and 264**, in full.
+
+**What reproduced.** Every measured number in both slices was re-derived from
+the built tree rather than read, and all but one hold exactly: 264's derivation
+table (`(classes+dataAttrs) ∩ hooks` **23/40**, `classes ∩ hooks` **20/40**
+dropping `dialog` and `scan`, filename-match **9/26**, `form` matching **16**
+behaviors and `button` **5**, `scan` declaring **0** classes, `data-state`
+declared by **6** and hooked by **6**), its **40** cells over **39** pages, its
+**19** non-default JS rows, its **52**-of-127 whole-page reading, its
+`@serves none` used **once in 26**, `anchor-nav`'s three selectors, and all
+**5** of `gen-llms.mjs`'s paste-in claims agreeing with `byComponent`; 263's
+`check-selftests.mjs` walking `check-*.mjs` only, and its **0** entity
+references across all **40** maturity blocks. The commands are beside each
+item below.
+
+1. [x] **265.1 — DONE 2026-09-04. `check-js-serves.mjs`'s WHY header still
+       says the package ships a behavior for 19 components and lists
+       `sidebar-nav initAnchorNav` among six wrong pages — which is the
+       declaration Slice 264 itself corrected, preserved in the durable
+       artefact a later wake reads.**
+
+       *Accept was*, as properties: (a) the header's served-component figure
+       agrees with what `behaviors.json` reports, re-counted from the built
+       manifest rather than from the slice's prose; (b) whichever of the six
+       rows the same slice concluded was a wrong DECLARATION rather than a
+       wrong page is not listed as a wrong page; (c) any figure kept as a
+       pre-correction reading says so on its face, so no reader has to date it
+       from context.
+
+       **Measured.** `packages/core/dist/behaviors.json` `byComponent` holds
+       **40** entries, **18** non-empty, and `byComponent['sidebar-nav']` is
+       **`[]`** — the package ships no behavior for it, so it can be neither
+       one of "the 19" nor one of the six pages the gate went red on.
+
+       ```
+       node -e "const b=require('./packages/core/dist/behaviors.json').byComponent;
+       console.log(Object.keys(b).length, Object.values(b).filter(v=>v.length).length, JSON.stringify(b['sidebar-nav']))"
+       # 40 18 []
+       ```
+
+       The arithmetic closes on the corrected reading rather than being
+       asserted: **13** components named a serving init before the fix, five
+       pages were fixed, and **18 of 18** served components name one now
+       (13 + 5 = 18), so the honest pre-correction base rate is **13 of 18**
+       with **five** silent pages — not 13 of 19 with six. The sixth was
+       `sidebar-nav`, and 264's own table says so one column over: *"correct —
+       this one was the wrong declaration, not a wrong page"*.
+
+       **Two numbers in the same header were suspected and cleared**, because a
+       stale-looking figure is not evidence: *"21 of 41 component pages mention
+       an `init*` name"* reproduces **exactly** — 44 built pages sit under
+       `/components/`, three of them `/components/demos/*`, leaving 41 real
+       component pages of which 21 mention one, and 0 of the 3 demo pages do.
+       *"Anchored to the cell, the reading is 13"* is the same pre-correction
+       reading as the base rate and is correct as of that moment; it is now
+       **18**, and the header says which is which.
+
+       This is CLAUDE.md's *"the defect lands in what shipped BESIDE the
+       number"* (192.1) landing again, one level in: the correction reached the
+       declaration, the manifest, five docs pages and the roadmap narrative,
+       and stopped at the gate's own explanation of why it exists.
+
+2. [x] **265.2 — DONE 2026-09-04. Text extracted from a pattern page's HTML
+       into published JSON was never entity-decoded, and one label reached a
+       reader: `/patterns/` rendered a badge whose visible text is
+       `Dashboard &amp; widgets`. 263.1 counted DECODERS in that directory and
+       found one; it could not see the place that needed one and had none.**
+
+       *Accept was*, as properties: (a) the count of visible entity references
+       is taken from the **DOM of the built site**, not from the source or the
+       diff, and every hit is classified by whether it sits inside `pre`/`code`
+       — where the reference IS the content and is correct; (b) the detector is
+       red-proved by injection before any verdict is read off it; (c) the fix's
+       effect is measured against the RENDERED artefact, whole-tree, with each
+       changed string paired to the page source it came from; (d) the sibling
+       generator's self-test, which currently pins the un-decoded output as
+       expected, is corrected and fails without the fix.
+
+       **The defect, in the DOM.** Sweeping all **127** built pages for text
+       nodes containing an entity reference: **33** hits on **7** pages,
+       **32** of them inside `pre`/`code`, and exactly **one** outside —
+       `/patterns/`, `<span class="bo-badge bo-badge--type">`, visible text
+       `Dashboard &amp; widgets`. **Red-proved**: on `/components/badge/`, which
+       reports 0, appending `&amp; INJECTED` to the `h1`'s text took the
+       outside-code count 0 → 1 and printed the mutated `h1` back before the
+       count was believed.
+
+       **The chain, each link measured rather than inferred.**
+       `kanban.astro:243` writes the correct markup `Dashboard &amp; widgets`;
+       `pattern-extract.mjs`'s `BADGE_RE` captures `([^<]+)` — nine characters
+       of SOURCE — into `patterns-index.json` and `patterns.json`;
+       `patterns/index.astro:38` renders `{c.label}` as a text node, so Astro
+       escapes the `&` again and the reader gets the source spelling. The same
+       omission had put **52** entity references into `patterns.json`'s
+       `opener`/`states`/`dataContract` fields; `dist/llms.txt`, the other
+       consumer, carried **0**, so the badge was the whole visible blast radius.
+
+       **Why 263.1's criterion could not see it, which is the transferable
+       part.** Its Accept read *"exactly one entity decoder exists in the
+       directory, counted STRUCTURALLY over comment-stripped source"*. That is
+       true and was executed honestly — and it counts the answers, not the
+       questions. A file that needed to decode and did not is invisible to a
+       census of decoders, in the same way a survey of alarms cannot find the
+       room without one. **The property that finds it is downstream: does any
+       text this directory PUBLISHES still carry the spelling of its source?**
+       That is checkable in the DOM, which is where it was found.
+
+       **The fix.** `stripTags` → `textOf` in `pattern-extract.mjs`: strip
+       tags, `decodeEntities`, collapse, trim — reading `decodeEntities` from
+       the module 263.1 created, one directory over. **Order is load-bearing
+       and is red-proved, not argued**: decode-first turns `&lt;b&gt;` into
+       real tags the strip then deletes, and the new self-test case fails with
+       `renders none inline` when the two are swapped, and with
+       `renders &lt;b&gt;none&lt;/b&gt; inline` when the decode is removed —
+       both with the mutated line grepped back out of the file before the run.
+
+       **The rename is the point of the rename.** 263.1 logged
+       `packages/core/scripts/derive-readme-facts.mjs`'s byte-identical
+       `stripTags` as a deliberate non-consolidation (opposite sides of a
+       package boundary) and said to reopen *"if either copy grows a case the
+       other does not have"*. This is that case, so the shared name goes:
+       two functions that no longer agree must not keep a name that says they
+       do. **Core's copy is correct as it stands and was checked, not assumed**
+       — `readme-facts.json` carries **0** entity references, so it has nothing
+       to decode.
+
+       **Verified against what it renders, whole-tree.** `dist/` was removed
+       and rebuilt and compared file-for-file against the pre-change build:
+       **9** paths differ — `build-id.json`, whose fields are supposed to move;
+       six pagefind index files, because the indexed text changed; and
+       `/patterns/index.html`, with **one** changed value on one line,
+       `Dashboard &amp;amp; widgets` → `Dashboard &amp; widgets`, paired to its
+       own source page. All **138** built `index.html` files except that one
+       are byte-identical, and `<h2>monitor &amp; output</h2>` three tags away
+       is untouched — a correctly escaped single ampersand is not a finding.
+
+       The JSON was paired the same way rather than diff-read: **27 of 27**
+       changed strings in `patterns.json` equal `decodeEntities(old)` exactly,
+       compared against an independent re-implementation of the decoder rather
+       than against the module under test.
+
+       **The gate that should have caught it now exists**:
+       `check-escaped-entities.mjs`, the **53rd**, `@heuristic` (the verdict
+       rests on POSITION — inside a code sample or not) with `--self-test`,
+       registered in the docs build. Its base rate was measured before it was
+       written and the predicate was **false of one real page** an hour
+       earlier, so it is not ceremony. Red-proved twice, the stronger proof
+       first: `offenders()` over the **kept pre-fix `/patterns/index.html`**
+       returns `["&amp;amp;"]` and over the new one `[]`; and an injection into
+       the live built tree, confirmed present by `grep -c` → 1 before the red
+       was believed and gone → 0 after restoring, produced
+       `FAIL /components/badge/ … shows &amp;mdash; to the reader`.
+
+3. [x] **265.3 — DONE 2026-09-04. `data-anchor-nav` is documented on TWO built
+       pages, not one. Correction to Slice 264 and to the `@serves none` reason
+       that ships in `anchor-nav.ts`.**
+
+       264 states the attribute is *"documented on exactly one page in the tree
+       and it is a PATTERN (`/patterns/object-page`)"*, and the reason line in
+       the module header says the same. `grep -rl 'data-anchor-nav'
+       apps/docs/dist --include=index.html` returns **two**:
+       `/patterns/object-page/` and `/concepts/js-behaviors/` — the second
+       being the generated hook reference, which lists every declared hook and
+       therefore could never have failed to name it.
+
+       **The conclusion the number supports is unaffected**, which is why this
+       is a correction and not a reopening: both pages are a pattern page and a
+       reference page, so *no component's markup is involved* still holds, and
+       `@serves none` remains right. Recorded because a count that does not
+       reproduce is worth the same treatment whether or not it changes the
+       verdict — and because this one shipped inside the package, in the
+       comment that justifies the one escape hatch in 26.
+
+**No CHANGELOG entry, and the compatibility was measured rather than judged.**
+Two files under `packages/` changed: `anchor-nav.ts`'s `@serves none` reason
+(a comment) and the derived `readme-facts.json` gate stat. The published
+manifest is unchanged **export for export** against the previous build —
+`initCount` 26 → 26, `exports` identical, `byComponent` identical, and every
+one of the 26 behavior entries identical — so nothing a consumer can import,
+match or style moved. **0** files under `packages/core/src/css/` changed. The
+gate count in both READMEs moved 52 → 53 because a gate was added, which is a
+derived documentation stat, not a contract.
+
 ## Slice 264 — 249.9's last no-JSON-key badge: which component a behavior serves is now declared, and the first declaration written from the headers' prose was wrong about one of the 26 (2026-09-04)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
@@ -375,6 +584,11 @@ component's markup — the class names in its header name what STYLES its output
 not what it requires. `data-anchor-nav` is documented on exactly one page in the
 tree and it is a PATTERN (`/patterns/object-page`).
 
+**CORRECTED by 265.3 (2026-09-04): TWO built pages, not one** —
+`/patterns/object-page/` and `/concepts/js-behaviors/`, the generated hook
+reference. The conclusion is unaffected (neither is a component page, so
+`@serves none` stands); the count is not.
+
 So `@serves none — <reason>` exists, the reason is required and required to be
 a sentence, and it is used **once in 26**. Red-proved both ways: `none` bare and
 `none — n/a` are both refused naming the file. The general lesson is the one
@@ -404,6 +618,13 @@ the previous build's `behaviors.json`: **0 regressions, `exports` and
 The base rate was measured before the gate was written (94.11): **13 of 19**
 served components named a serving init in their JS row, so the predicate was
 false of six and the gate went red on its first run against the built tree.
+
+**CORRECTED by 265.1 (2026-09-04): 13 of 18, false of FIVE.** The 19 and the
+six are the reading taken under the wrong `anchor-nav` declaration this same
+slice went on to fix — with it corrected, `byComponent` holds 18 non-empty
+entries, `sidebar-nav` is `[]`, and the sixth row below was the declaration
+bug, not a page. The gate's own header carried the pre-correction figures for
+a wake; it now carries these.
 Every one is a page contradicting the shipped package, and **two contradict
 themselves**:
 

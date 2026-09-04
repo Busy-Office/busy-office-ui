@@ -12,7 +12,7 @@
  * WHY. `ApiTable`'s `js` prop is hand-written and defaults to
  * `'None — CSS-only.'`, so a component whose page never passes it renders a
  * claim about runtime behaviour that nothing checks. Measured on the built
- * tree the day this gate landed, SIX of the 19 components the package ships a
+ * tree the day this gate landed, FIVE of the 18 components the package ships a
  * behavior for said exactly that:
  *
  *   dashboard    initCollapsibleCards    — and the page's own demo imports it
@@ -21,7 +21,6 @@
  *                                          "initDialogs() wires it exactly
  *                                          like any other"
  *   quantity     initQuantity, initGroupedNumber
- *   sidebar-nav  initAnchorNav
  *   stepper      initWizard
  *
  * Two of those contradicted their OWN page: the drawer's note and the
@@ -31,19 +30,37 @@
  * artifact" exists to stop, arriving in the one row of `ApiTable` that is
  * still hand-written.
  *
+ * THIS PARAGRAPH SAID "SIX OF 19" AND LISTED `sidebar-nav initAnchorNav`
+ * (corrected by roadmap 265.1). Those figures come from the FIRST @serves
+ * declaration, which read the behavior headers' prose and got `anchor-nav`
+ * wrong — the same slice that wrote this header then corrected the
+ * declaration to `@serves none` and left the explanation behind. So the
+ * package ships a behavior for 18 components, not 19; `byComponent`
+ * ['sidebar-nav'] is `[]`; and its page's "None — CSS-only." was RIGHT.
+ * Re-count rather than trusting either reading:
+ *
+ *   node -e "const b=require('./packages/core/dist/behaviors.json').byComponent;
+ *   console.log(Object.values(b).filter(v=>v.length).length, JSON.stringify(b['sidebar-nav']))"
+ *
  * THE BASE RATE WAS MEASURED BEFORE THIS WAS WRITTEN (roadmap 94.11: a
- * predicate already true of everything cannot fail). It was 13 of 19 — the
- * gate went red on 6 real pages on its first run, which is why it is a gate
- * and not a report.
+ * predicate already true of everything cannot fail). It was 13 of 18 — the
+ * gate went red on 5 real pages on its first run, which is why it is a gate
+ * and not a report. The arithmetic closes: 13 named an init, 5 pages were
+ * fixed, and all 18 served components name one now.
  *
  * WHY THE CELL AND NOT THE PAGE. Whole-page, 21 of 41 component pages mention
  * an `init*` name somewhere; the extra mentions are incidental — `button` names
  * `initDropdowns` in a menu-button demo, `richtext` names `initDialogs` because
- * one demo opens a dialog. Anchored to the cell, the reading is 13, and every
- * one of those 13 is a statement ABOUT that component. Both readings are
- * recorded here so a later reader can see why the anchor is load-bearing, and
- * the anchor is an attribute rather than the row's label text, so reading it
- * is membership rather than recognition.
+ * one demo opens a dialog. Anchored to the cell, the reading was 13 on the same
+ * pre-fix tree (18 now that the five pages are accurate), and every one of them
+ * is a statement ABOUT that component. Both readings are recorded here so a
+ * later reader can see why the anchor is load-bearing, and the anchor is an
+ * attribute rather than the row's label text, so reading it is membership
+ * rather than recognition.
+ *
+ * The 21 and the 41 were re-derived when 265.1 corrected the figures above and
+ * both hold exactly: 44 built pages sit under `/components/`, three of them
+ * `/components/demos/*` (0 of which mention an init), leaving 41.
  *
  * WHAT IT DOES NOT CHECK. Whether the prose is any good, and whether the JS is
  * "required" or merely an enhancement — nothing in the repo records that

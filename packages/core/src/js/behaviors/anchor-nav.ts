@@ -23,7 +23,7 @@
  * top has passed below the nav's own bottom edge. That edge is measured, so it
  * follows the chrome automatically at any width.
  *
- * @serves none — it drives a plain [data-anchor-nav] rail of in-page links, documented on /patterns/object-page; no component's markup is involved.
+ * @serves none — it drives a plain [data-anchor-nav] rail of in-page links, shown on the /patterns/object-page floorplan and listed in the generated hook reference; no component's markup is involved.
  */
 let installed = false;
 

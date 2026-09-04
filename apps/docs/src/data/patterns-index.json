@@ -289,7 +289,7 @@
         {
           "href": "/patterns/app-launch",
           "title": "App launch",
-          "opener": "Who uses it: anyone opening the suite, every session — the first screen after sign-in. What \"done\" looks like: the right app is one tap away, whether it's a favourite or three deep in a category. A suite entry screen — the icon-grid launcher (the \"Bento UI\" / tablet-launcher archetype from the device-coverage table — same .bo-widget-grid container-query mechanism as a dashboard, at a smaller tile size, not a new grid component). Tiles are plain links composed into .bo-widget cards with real CSS icons (themable currentColor glyphs) where a glyph is genuinely right, an initials chip where none is, and inline &lt;svg&gt; where a tenant brings their own; the category row is the ordinary tabs pattern; a \"folder\" tile is just a widget whose body holds a cluster of small tiles. Zero new CSS. Not for returning a user to a specific record they already know — a bookmark, a notification, or a saved link should land directly on the object page or the list report, never route back through the launcher grid to get there.",
+          "opener": "Who uses it: anyone opening the suite, every session — the first screen after sign-in. What \"done\" looks like: the right app is one tap away, whether it's a favourite or three deep in a category. A suite entry screen — the icon-grid launcher (the \"Bento UI\" / tablet-launcher archetype from the device-coverage table — same .bo-widget-grid container-query mechanism as a dashboard, at a smaller tile size, not a new grid component). Tiles are plain links composed into .bo-widget cards with real CSS icons (themable currentColor glyphs) where a glyph is genuinely right, an initials chip where none is, and inline <svg> where a tenant brings their own; the category row is the ordinary tabs pattern; a \"folder\" tile is just a widget whose body holds a cluster of small tiles. Zero new CSS. Not for returning a user to a specific record they already know — a bookmark, a notification, or a saved link should land directly on the object page or the list report, never route back through the launcher grid to get there.",
           "openerShort": "Who uses it: anyone opening the suite, every session — the first screen after sign-in.…",
           "complexity": 1,
           "components": [
@@ -813,7 +813,7 @@
         {
           "href": "/patterns/editable-grid",
           "title": "Editable grid",
-          "opener": "Who uses it: whoever enters or corrects line items — a buyer building a PO, a warehouse clerk keying a pick list. What \"done\" looks like: every row either saved or still marked unsaved, never silently dropped. Line-item entry — a PO, an invoice, a pick list — composed entirely from existing pieces, presented as a graded path. Simple: plain text/number cells with dirty-state + Save/Cancel — that's the data-table page's multi-row inline edit, start there. Medium (first demo below): a combobox lookup cell, cell-level validation, add/remove lines. Money &amp; unit cells: currency and unit as real separate fields inside a row. Advanced: every cell type, realtime totals, and the save-per-change mode. The full picture: a composite PO line-items editor putting all of it in one table. Not for a table that's read far more often than edited — a plain data table costs nothing and doesn't ship Save/Cancel machinery nobody triggers. Zero new CSS at every step — the grid is the same primitives, composed harder.",
+          "opener": "Who uses it: whoever enters or corrects line items — a buyer building a PO, a warehouse clerk keying a pick list. What \"done\" looks like: every row either saved or still marked unsaved, never silently dropped. Line-item entry — a PO, an invoice, a pick list — composed entirely from existing pieces, presented as a graded path. Simple: plain text/number cells with dirty-state + Save/Cancel — that's the data-table page's multi-row inline edit, start there. Medium (first demo below): a combobox lookup cell, cell-level validation, add/remove lines. Money & unit cells: currency and unit as real separate fields inside a row. Advanced: every cell type, realtime totals, and the save-per-change mode. The full picture: a composite PO line-items editor putting all of it in one table. Not for a table that's read far more often than edited — a plain data table costs nothing and doesn't ship Save/Cancel machinery nobody triggers. Zero new CSS at every step — the grid is the same primitives, composed harder.",
           "openerShort": "Who uses it: whoever enters or corrects line items — a buyer building a PO, a warehouse clerk keying a pick list.…",
           "complexity": 4,
           "components": [
@@ -928,7 +928,7 @@
           "components": [
             {
               "href": "/components/dashboard",
-              "label": "Dashboard &amp; widgets"
+              "label": "Dashboard & widgets"
             },
             {
               "href": "/components/dropdown",
