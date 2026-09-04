@@ -23,16 +23,12 @@ survives none.
 ## In flight: nothing
 
 Last updated 2026-09-04 (**cloud** wake, scheduled routine). Working tree clean
-at hand-off. Two commits this wake, both pushed: Slice 258 and this hand-off.
+at hand-off. Two commits this wake, both pushed: Slice 259 and this hand-off.
 
-**`check:resume-slice-ids` names five closed ids, and all five are deliberate.**
-It reported `258.1, 249.1, 249.2, 249.3, 249.4` when this file was written.
-`258.1` appears below only as *what this wake closed*; `249.1`-`249.4` appear
-only inside the sentence explaining why Slice 249 was dropped from this wake's
-grill scope — *which earlier grills already covered it* — which is a historical
-reference, not a claim that any of them is open. Nothing below queues or blocks
-on any of the five. The check says outright it cannot tell the two apart; this
-paragraph is the answer so the next wake does not re-derive it.
+**`check:resume-slice-ids` names closed ids, and they are deliberate.** `259.1`
+appears below only as *what this wake closed*. The `249.x` ids below are the
+live open set and are the point of the section. Nothing here queues or blocks
+on a closed id.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -49,139 +45,132 @@ blocked. The two standing owner blocks are unchanged: Slice 15's `AT runtime
 evidence` (owner hardware) and `112.3`/`112.4` (owner briefs, then 112.3's
 verdict).
 
-Nothing this wake needs an owner decision. The item closed was an Objective
-grill; its four corrections are all to prose or to an advisory line, none
-changes a shipped behaviour, and none is a judgement call anyone else has to
-make.
+Nothing this wake needs an owner decision. What landed is measurement banked
+into an already-open item; every judgement it forces is a design call the wake
+that builds the page makes, not one only the owner can make.
 
 ## ⚠ The correction most likely to be re-broken
 
-**Rule 5's staleness counter counts DISTINCT LOG DATES, not wakes** (258.1
-finding D). The hand-off you are replacing said *"every decline ages the rule by
-one wake-date"*, and that is false: Slices 255 and 256 both sat on 2026-09-03,
-the same date as the newest comparable pair, and aged the rule by **zero**;
-only Slice 257 moved it, by falling on 2026-09-04. Several wakes on one date add
-nothing; one wake on a new date adds the whole step.
+**`bundle-gz-kb` cannot be sampled, and "the CSS did not change" is not why**
+(259.1's rule-5 finding). Three consecutive hand-offs declined a sample on the
+grounds that the reading *"could only reproduce the existing value"*. That is
+true and it is not the constraint. Measured this wake:
 
-**Do not re-derive this from here** — `dispatch_status.py` now prints it under
-the rule-5 advisory, which is the point of reading, and its `stale` line carries
-the comment. That placement is deliberate: a correction written only into this
-file dies in the next wholesale rewrite (169.3).
+```
+grep -rln 'bundle-gz-kb' --include='*.mjs' --include='*.py' --include='*.ts' \
+  --include='*.js' --include='*.json' . | grep -v node_modules
+```
+
+returns exactly **one** file — `scripts/loops/record_metric.py` — and the hit is
+its **docstring example**, `--value 7.0`. Nothing derives the number and no
+document records how it is computed. The last recorded value is `15.1 kB`; the
+core build prints `14.05 / 15.5 kB gz` for `css/*.css` and `375.8 kB gz total`,
+none of which is 15.1. **So a wake that DID change the CSS still could not reproduce
+this metric.** Do not "fix" rule 5's staleness by recording a guessed value —
+that is the convention-guessing CLAUDE.md forbids. The fix is to write the
+derivation command next to the name, which is a loop-script change and wants its
+own dispatch.
 
 ## Dispatch counters at hand-off
 
 Read `dispatch_status.py` yourself — the sets below are snapshots.
 
-- **Rule 2 (Standardize)** reads `0 / 4` and is unmoved: this wake ran
-  Objective, and rule 2 counts Continue rounds.
-- **Rule 3 (Objective)** read `3 / 3 OVERDUE [249, 256, 257]` at wake start and
-  was **discharged** by this wake's grill. It resets to `0 / 3`.
+- **Rule 2 (Standardize)** reads `1 / 4` — this wake ran one Continue round.
+- **Rule 3 (Objective)** reads `1 / 3`, and **the slice it names is `[249]`,
+  not 259.** Read after recording, per `LOOPS.md`'s instruction that this
+  counter is only ever caught by a number disagreeing with something a human
+  just wrote down — this hand-off's draft said "259" and the instrument says
+  "249". Both are defensible and the COUNT is unaffected: `SLICE_TOP` takes the
+  leading id from the row's item text, which begins `249.9` because that is the
+  item the round built, while the slice the round *closed* is 259. **Recorded,
+  not fixed** — `LOOPS.md` rule 3 already refuses a sixth regex over this
+  parser, and nothing downstream reads the attribution.
 - **Rule 5 (Optimize) reads STALE, `1 wake-date(s) newer`** — unchanged from
   wake start, because this wake's rows land on 2026-09-04, a date already
-  counted. `LOOPS.md` rule 5 is explicit that a STALE line means the rule has no
-  input and must be reported as *could not be evaluated*; it was reported that
-  way this wake and should be again until a sample lands.
-
-  **No sample was recorded this wake, deliberately.** The diff is two build
-  script comments, one loop script's output text and markdown, and changes **0**
-  files under `packages/core/src/css/` — a `bundle-gz-kb` reading could only
-  reproduce the existing value.
-
-  **The previous hand-off's watch on this stands, with its arithmetic
-  corrected.** It said 255, 256 and 257 had each declined a sample and that each
-  decline aged the rule. Two of those three claims are wrong (256 declined
-  nothing — rule 3 fired and rules 4-8 were never reached), and the aging is by
-  date. So the honest form of the watch: **the counter will keep climbing one
-  step per calendar date of loop activity until a wake genuinely changes the
-  bundle**, whatever any wake decides about sampling. If it reaches ~5 with no
-  CSS change in sight, the rule is dead again and that is the finding.
+  counted. `LOOPS.md` rule 5 is explicit that STALE means the rule has no input
+  and must be reported as *could not be evaluated*; it was reported that way and
+  should be again. See the correction block above for why no sample was taken —
+  the reason is now stronger than the one the last three hand-offs carried.
 
 ## Next wake
 
-**Rule 4 (Continue, build mode) is the first rule that can fire** — rules 1-3
-are clear and rule 5 is not a dispatch rule. Re-run `dispatch_status.py`; this
-is a snapshot.
+**Rule 4 (Continue, build mode) is again the first rule that can fire** — rules
+1-3 are clear at hand-off and rule 5 is not a dispatch rule. Re-run
+`dispatch_status.py`; this is a snapshot.
 
-Rule 4's open set is `OPEN: [15, 112, 249]`, **11** open items. The
-classifications below were each re-read against `ROADMAP.md` this wake, not
-inherited, and are unchanged from the last hand-off:
+Rule 4's open set is `OPEN: [15, 112, 249]`, **11** open items, unchanged in
+count: 259 closed fully and 249.9 stayed open by design. Classifications
+re-read against `ROADMAP.md` this wake:
 
 - Slice 15's `AT runtime evidence` and `112.3`/`112.4` are **owner-blocked**.
-- **`249.6` is browser-blocked in the SCREENSHOT sense** (`LOOPS.md` 186.2's
-  vocabulary) — a LOCAL wake can take it; a cloud wake should not.
-- **`249.7` is open as a COST question, not as unstarted work.** Its Accept's
-  first clause has been executed: 4 of the 5 seed rows do not reproduce. Do not
-  re-run that grep — the table is in the item. Settling it before the owner
-  answers `249.10` would decide it on the thinnest possible input.
-- **`249.9` is browser-blocked in the screenshot sense** — it builds a
-  `/components/` catalogue whose point is rendered miniature previews. Its
-  Accept's second half — *"the miniature-rendering build-time cost is measured
-  and stated before this closes"* — is measurable anywhere, so a cloud wake
-  could usefully measure and record that number without building the page.
-  **This is still the best remaining cloud-takeable item on rule 4**, and it is
-  now two hand-offs old without being taken.
+- **`249.6`, `249.15` are browser-blocked in the SCREENSHOT sense** — a LOCAL
+  wake can take them; a cloud wake should not.
+- **`249.7` is open as a COST question, not unstarted work.** Its Accept's first
+  clause is executed — 4 of 5 seed rows do not reproduce, table is in the item.
+  Do not re-run that grep. Settling it before the owner answers `249.10` decides
+  it on the thinnest input.
+- **`249.9` is no longer the best cloud-takeable item — this wake took it.**
+  Both Accept clauses are now measured and banked *inside the item*: the
+  mechanism premise is refuted, both cost routes are stated, and the badge audit
+  is a table. What remains is the `/components/` catalogue **page**, which is
+  browser-blocked in the screenshot sense. **A local wake should pick this up
+  next**; it now has every number it needs and should not re-derive them.
 - `249.10`, `249.11`, `249.13` are owner calls; `249.12` is owner-or-
   architecture, low urgency.
-- **`249.15` is browser-blocked in the screenshot sense** (a static OG image).
+
+**So a cloud wake reaching rule 4 next has no clearly cloud-takeable item left
+in the 249 set.** Say that in the shape `LOOPS.md` 186.2 requires — name WHICH
+kind of blocked, per item — rather than reporting the backlog blocked as a
+whole, which is the mis-sort that cost four wakes on 173.2.
 
 ## The archive sweep: not due, do not re-raise
 
-`roadmap_scope.py` reads closed-history share **1,351 / 3,814 = 35.4%** at
-hand-off — still well under the **55.1%** at which 252.1 dispatched the tenth
-sweep on 2026-09-03. It read 32.0% at wake start; the share rose because Slice
-258 closed *fully*, so its whole body is closed history the moment it lands.
-That is arithmetic, not a backlog signal — the same mechanism the last two
-hand-offs recorded for Slices 256 and 257, now three wakes running, which is
-worth knowing before anyone reads the trend as regrowth. Eligible targets
-`[258, 257, 256, 255, 254, 253, 252, 237]`, of which 253 and 237 are named by
-the still-open Slice 249 and stay per 236.2. Re-run the script; these are
-snapshots.
+`roadmap_scope.py` reads closed-history share **1,440 / 4,032 = 35.7%** at
+hand-off — well under the **55.1%** at which 252.1 dispatched the tenth sweep on
+2026-09-03. It read 35.5% at wake start; the share rose because Slice 259 closed
+*fully*, so its whole body is closed history the moment it lands. That is
+arithmetic, not a backlog signal — the same mechanism the last three hand-offs
+recorded for Slices 256, 257 and 258, now four wakes running. Eligible targets
+`[259, 258, 257, 256, 255, 254, 253, 252, 237]`, of which 253 and 237 are named
+by the still-open Slice 249 and stay per 236.2. Re-run the script; snapshots.
 
 ## What landed this wake
 
-**One commit of substance, dispatched by rule 3 (Objective).** Rule 1 clear (no
-open P0; GitHub intake `totalCount: 0`); Step 1 triaged and committed nothing —
-no new input. Full report:
-`.roundtable/grill-objective-256-257-2026-09-04.md`.
+**One commit of substance, dispatched by rule 4 (Continue, build mode).** Rule 1
+clear (no open P0; GitHub intake `totalCount: 0`); Step 1 triaged and committed
+nothing — no new input.
 
-### Slice 258 — 58 of 62 assertions reproduce, and two failures are the grilled slices' own recorded defect
+### Slice 259 — 249.9's two Accept clauses answered before the page exists
 
-Scope narrowed per §6 step 0: the armed set was `[249, 256, 257]` and 249 was
-dropped — Slice 253 grilled `249.1`/`249.6` and Slice 256 grilled
-`249.2`/`249.3`/`249.4`, and what remains open in it is unbuilt. Four things
-worth carrying:
+Three things worth carrying:
 
-1. **Two of the four failures are "a real count of a set the sentence does not
-   name" — which is 256.1 finding A's own headline defect, appearing inside
-   256.2 one item later and inside 257.1 one wake later.** 256.2's *"would miss
-   75"* is **65** across the seven prefixes it enumerates (85 and 96 are the
-   neighbouring sets; none is 75), and 257.1's *"`compatOf` appears twice"* is
-   **three** definitions — the two bound aliases plus the canonical
-   `export function` they point at. Both conclusions are unaffected; both were
-   corrected in place.
-2. **A citation that no longer resolves, in the header of the module built to
-   stop that.** `pascal` derives `"ProbeWidget"`; the value `"Probe Widget"`
-   came from `pascal.replace(/([a-z])([A-Z])/g, '$1 $2')`, the pre-249.8
-   expression. `pascal` is still live for `init${pascal}`, so a reader who
-   evaluates the identifier the comment names contradicts the comment. Both code
-   comments corrected.
-3. **The rule-5 date correction above**, fixed in `dispatch_status.py`'s output
-   rather than in prose, and red-proved by discrimination with the injection
-   confirmed first (`grep -cF` → 1, line moved 1 → 2 and listed both dates;
-   restored → 0, `git status` clean).
-4. **This wake's own probe was wrong on first output**, caught before use: the
-   live width probe read `clientWidth`/`clientHeight` and counted rows
-   document-wide (**896 × 382, 36 rows**) and would have reported 256 finding C
-   as not reproducing. The container's own 15px scrollbar and 2px border, and
-   three `.bo-data-table-container` elements on the page, account for all three
-   numbers. The tell was `rowsFullyInside` coming back **9**, matching 256
-   exactly, while the others did not.
+1. **The item's mechanism premise was false, and re-checking it is what the
+   round was for.** 249.9 said the miniature comes "via `browser-harness.mjs`
+   (already exists, used today for patterns via `PatternPreview.astro`)".
+   `browser-harness.mjs` has **13** consumers and **0** run at build time — all
+   are gates invoked after `astro build` against `dist/`. `PatternPreview.astro`
+   launches no browser at all: **10** hand-authored HTML fragments (of **39**
+   patterns), scaled by a CSS custom property. "Already exists" named a
+   different mechanism than the one that ships.
+2. **Both cost routes measured, so the Accept's second clause is satisfied
+   whichever the build takes.** Browser route: ~**8.0 s** warm / **11.6 s** cold
+   for 39 component pages, **+1.23 MB** in `dist/` (**8.8%** of 14,549,590
+   bytes). Shipped route: zero build time, authoring paid 10 times in 39.
+3. **The badge audit found two badges with no JSON key and one with an empty
+   one** — `pattern links` (mapping exists only in built HTML, and `astro build`
+   runs before every dist-walker, so a generator must emit from source),
+   `JS-required` (the stated derivation is binary for a ternary label and
+   mis-classifies both ways), and `AT line` (`at-evidence.json.components` is
+   `{}` for all 40, blocked by Slice 15).
+
+**The probe was wrong on its first draft, caught before commit:** the cost table
+first claimed the PNG byte total was *byte-identical* across all three runs. Only
+run 3's per-page bytes were kept; runs 1 and 2 were the probe's rounded kB print
+(1254 / 1255 / 1255 kB). The table now states the precision it was taken at and
+the reconciliation is "agree to within 0.1% while wall times move 45%".
 
 **Not verified, and named rather than implied:** cloud wake, so the 1440/390
-light-and-dark screenshot lane could not run. The diff is two build-script
-comments, one loop script's output text and markdown — **0** files under
-`packages/core/src/css/`, no page markup, built page count unchanged at **138**
-— so there is nothing a screenshot could have shown. Every CI entry point that
-runs in this container was run green here after the edits, including the ones
-`docs:build` covers; `docs:build` and `check:floor` were re-run *after* the
-`ROADMAP.md` edit.
+light-and-dark screenshot lane could not run. The diff is `ROADMAP.md` and
+`.roundtable/` only — **0** files under `packages/core/src/css/`, no page
+markup, no script — so there is nothing a screenshot could have shown. Built
+page count unchanged at **138**.
