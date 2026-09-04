@@ -418,11 +418,22 @@ in the tier.
        decaying cite because it would need every cite to carry its own command.
        That argument still holds, and 101.3's stop rule independently confines
        Polish to the existing ratchet — but the decisive reading is simpler:
-       **after this fix the class has no members.** A live-surface sweep for
-       `<component>.css:NN` returns **0**, so a gate would be 94.11 ceremony by
-       that rule's own test — a predicate uniformly true of the tree
-       distinguishes nothing. Recorded rather than built, and the sweep is one
+       **after this fix the class has no members.** A sweep of the surfaces
+       where a pointer would be USED as a pointer — `apps/docs/src`,
+       `apps/docs/scripts`, `packages/core/{src,scripts}`, `scripts`,
+       `examples`, `LOOPS.md`, `CLAUDE.md`, `DESIGN.md`, `README.md`, excluding
+       `apps/docs/versions` — returns **0**, so a gate would be 94.11 ceremony
+       by that rule's own test. Recorded rather than built, and the sweep is one
        `git grep` if the class ever regrows.
+
+       **The scoping is load-bearing, and the first version of that sweep was
+       wrong in the way this slice is about.** Run over `ROADMAP.md` and the
+       frozen `versions/` snapshots too, it returns **14 hits across 3 files** —
+       every one either this slice's own description of the defect or a released
+       snapshot. A detector that reads the write-up explaining the fix reports
+       the bug as unfixed forever, which is 266.1's own trap arriving one level
+       up, in the instrument rather than the correction. The command as scoped
+       is in `.roundtable/RESUME.md`.
 
 3. [x] **266.3 — Three instrument defects, each caught before it became a
        finding, which is the base rate holding rather than an anecdote.**
