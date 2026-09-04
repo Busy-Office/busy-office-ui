@@ -53,23 +53,36 @@ Read `dispatch_status.py` yourself — the sets below are snapshots.
 
 - **Rule 2 (Standardize)** read `4 / 4 OVERDUE` at wake start and was
   **discharged** by this wake's sweep. It resets to `0 / 4`.
-- **Rule 3 (Objective)** read `2 / 3 [249, 256]` at wake start. Slice 257
-  closed fully this wake and is a **Standardize** row, which counts as a slice
-  closure per 161.4 — so expect **`3 / 3 OVERDUE`** and **rule 3 to fire next
-  wake**, above the queued build item. Re-read the counter rather than
-  trusting this sentence.
-- **Rule 5 (Optimize)** read `ok` (not STALE), so the rule *could* be evaluated
-  and finds nothing. **No sample was recorded this wake, deliberately:** the
-  diff is three build scripts plus markdown and changes **0** files under
-  `packages/core/src/css/`, so a `bundle-gz-kb` reading could only reproduce the
-  existing value — and a repeated identical value is a data point about the
-  instrument, not the bundle.
+- **Rule 3 (Objective)** read `2 / 3 [249, 256]` at wake start and reads
+  **`3 / 3 OVERDUE [249, 256, 257]`** after this wake's row — measured from
+  `dispatch_status.py` after recording, not predicted. Slice 257 is a
+  **Standardize** row, which counts as a slice closure per 161.4. **Rule 3
+  sits above rule 4, so the next wake dispatches Objective, not a build item.**
+- **Rule 5 (Optimize) read `ok` at wake start and reads `STALE` at hand-off**
+  — `1 wake-date(s) newer`. **Do not report this rule clear next wake**;
+  `LOOPS.md` rule 5 is explicit that a STALE line means the rule has no input
+  and must be reported as *could not be evaluated*.
+
+  **No sample was recorded this wake, deliberately**, and the flip is the
+  direct consequence: the diff is three build scripts plus markdown and changes
+  **0** files under `packages/core/src/css/`, so a `bundle-gz-kb` reading could
+  only reproduce the existing value — and a repeated identical value is a data
+  point about the instrument, not the bundle.
+
+  **Worth watching rather than acting on yet:** 255, 256 and 257 have now each
+  declined a sample for that same correct reason, and every decline ages the
+  rule by one wake-date. This is the mechanism 184.1 documents, caught at 1
+  rather than at 10. The fix is a wake that genuinely changes the bundle, not a
+  manufactured sample — but if this reaches ~5 wake-dates with no CSS change in
+  sight, the rule is dead again and that is the finding.
 
 ## Next wake
 
-**Expect rule 3 (Objective), not rule 4** — see the counter above. The grill
-scope would be the three slices the counter names; re-read them rather than
-inheriting this list.
+**Rule 3 (Objective) fires — measured, not expected.** `dispatch_status.py`
+reads `Objective 3 / 3 slices OVERDUE [249, 256, 257]` at hand-off. The grill
+scope is those three; 249 is an open sixteen-item slice, so narrow it per §6
+step 0 rather than grilling the whole thing. Re-run the counter first — it is a
+snapshot like everything else here.
 
 If rule 3 has already been discharged, rule 4's open set is `OPEN: [15, 112,
 249]`, **11** open items. The classifications below were each re-read against

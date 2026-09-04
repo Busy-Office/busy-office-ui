@@ -1355,3 +1355,7 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-03 23:47 · Continue · build · 256.2 — check:floor's stated .roundtable exemption vs its allow-list: comment corrected, ALLOW unchanged, two-sided red-proof · landed · 0362ba15
 - 2026-09-03 23:47 · Meta · refusal · widening ALLOW to .roundtable/** — the FOR argument's premise was refuted by the one case where the predicate fired · refused · 0362ba15
 - 2026-09-03 23:47 · Meta · refusal · the Accept's suggested grill-*.md subset — 86 of 182 reports, missing 75 equally-historical ones under six other prefixes · refused · 0362ba15
+- 2026-09-04 00:56 · Standardize · sweep · Slice 257 — default-label rule consolidated into component-label.mjs; five lanes clean · landed · 49d2c901
+- 2026-09-04 00:56 · Meta · refusal · widening lane 5's scan to arrow/export functions — base rate 1-of-1 false positives, and it would not have caught this drift (the two copies had different names) · refused · 49d2c901
+- 2026-09-04 00:56 · Meta · refusal · re-raising CLAUDE.md's 32-up ratchet and DESIGN.md's 22-up — 167.1 standing verdicts, CLAUDE.md's watch retired by 193.1 · refused · 49d2c901
+- 2026-09-04 00:56 · Meta · refusal · an eleventh archive sweep — closed-history share 32.0%, well under the 55.1% that dispatched the tenth · refused · 49d2c901
