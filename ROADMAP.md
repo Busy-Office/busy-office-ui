@@ -315,6 +315,189 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 260 — 249.15's tag half split out and landed: every built page now says what a shared link should show, and the three equalities are what makes the arm able to fail (2026-09-04)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** (`git branch
+--show-current` empty) with local `main` stale at the pre-fetch tip, so trap 1
+in its milder shape; `git checkout -B main origin/main` before any work.
+`git fetch origin main` at Step 0 moved `26447ba..3e1dac1`, which is the
+previous wake's own hand-off commit, not a second dispatcher. Step 1: no new
+input — `list_issues` on `Busy-Office/busy-office-ui` returns
+`totalCount: 0`, so nothing was triaged and nothing committed there. Step 0b:
+rule 2 `1 / 4`, rule 3 `1 / 3` (both `ok`), rule 5 **STALE** by 1 wake-date —
+reported as *could not be evaluated*, per `LOOPS.md` rule 5, and see the
+standing note on `bundle-gz-kb` below. Rule 1 clear (no open `N. [ ]` item is a
+P0). So **rule 4, Continue, build mode.**
+
+**Which item, and why not the oldest.** Rule 4's OPEN set is
+`[15, 112, 249]`, 11 open items. Slice 15's `AT runtime evidence` and
+`112.3`/`112.4` are **owner-blocked**. Inside 249: `249.6`, `249.9` and
+`249.15` were all classified **browser-blocked in the screenshot sense**;
+`249.7` is a cost question deliberately held until the owner answers `249.10`;
+`249.10`, `249.11`, `249.13` are owner calls and `249.12` is owner-or-
+architecture. Re-read rather than taken from the hand-off, and **one of those
+classifications is only half true**: `249.15` is one item covering two
+different kinds of evidence. Its card IMAGE is a rendered image a human
+compares; its `og:`/`twitter:` TAGS are `<head>` content in the built artifact,
+which is `ENVIRONMENT.md`'s second list and takeable here. Split as `249.17`,
+on the precedent of `249.16` out of `249.4` three days earlier — same shape,
+same reason.
+
+**The premise was re-checked on the BUILT artifact, not on source** (CLAUDE.md's
+premise rule, and its downstream rule: `astro build` is what turns a prop into a
+tag). A full `docs:build` was run at `3e1dac1` with this wake's files stashed:
+
+```
+find apps/docs/dist -name index.html | wc -l                     # 138
+grep -rl 'property="og:' apps/docs/dist --include='*.html' | wc -l   # 0
+grep -rl 'name="twitter:' apps/docs/dist --include='*.html' | wc -l  # 0
+```
+
+So the item's *"the site currently has no `og:` or `twitter:` tag at all"* holds,
+and it now holds as a measurement of the artifact rather than of the source. The
+source reading agreed and was taken first — with a trap worth recording: the
+looser `grep -rn 'og:'` over `apps/docs/src` reads **4**, and every one of the
+four is the substring inside `dialog:` in prose. Plain fixed string first.
+
+**What shipped.**
+
+- `apps/docs/src/components/SocialMeta.astro` — one component, emitting
+  `og:type`, `og:site_name`, `og:title`, `og:description`, `og:url` and
+  `twitter:card`/`title`/`description`. **Twelve source files own a `<head>`
+  here** (`Gallery.astro` plus eleven pages that deliberately do not use it),
+  so the alternative was twelve copies, and `PrefBootstrap.astro`'s header
+  already records what twelve copies of head logic cost: its two copies
+  disagreed on the default density and a first-time visitor measurably got a
+  different density on the landing page.
+- The eleven self-head pages **hoist** their title and description into
+  `socialTitle` / `socialDescription` and pass the same literal to `<title>`,
+  `<meta name="description">` and `SocialMeta`. Hoisted, never retyped —
+  CLAUDE.md's bulk-edit rule is about a pass that labels rows with other rows'
+  names, and moving the literal is how not to do that. The wiring ran as a
+  script that refuses rather than guesses: exactly one `<title>` and one meta
+  description per file, or nothing is written.
+- `check-metadata.mjs` arm 5.
+
+**No `og:image`, and `twitter:card` is `summary` rather than
+`summary_large_image`.** The large card promises an image this site does not
+yet ship; the value is asserted by the arm so it cannot be set aspirationally.
+249.15 keeps the image and the switch.
+
+**THE THREE EQUALITIES ARE WHAT MAKES ARM 5 ABLE TO FAIL**, and this is the
+point the slice is really about. A presence check over eight tag names passes
+in full on a site where every page claims to be the home page — the identical
+failure arm 2 (duplicate descriptions) exists for, on the identical corpus. So
+the arm asserts `og:title === <title>`, `og:description ===
+<meta name="description">`, and `og:url ===` the URL `dist-pages.mjs` produces
+by WALKING `dist/`. The third is a reconciliation between two derivations that
+cannot see each other — Astro's route table on one side, a filesystem walk on
+the other — which is exactly what arm 3's own header says makes a
+reconciliation able to fail at all.
+
+**Two things the parser was corrected on before it was believed**, both found by
+asking what would make it wrong rather than by a red run:
+
+1. It first read every `<meta>` in the whole page. This is a docs site whose
+   pages render HTML samples; a page that ever showed a `<meta>` in its body
+   would silently overwrite the real one in the map, since a `Map.set` keeps
+   the last. Scoped to the `<head>`, with an explicit assertion that a
+   `</head>` exists at all rather than a `slice(0, -1 + 1)` that quietly
+   returns the empty string.
+2. It first compared the raw attribute value against the raw `<title>` text.
+   Those are escaped by different rules, so a difference in ESCAPING would have
+   been reported as a difference in CONTENT. Both sides now go through one
+   decoder — which cannot invent an agreement, because two different strings
+   stay different through the same function.
+
+**And the decoder's FIRST version was wrong, which the arm caught by going red
+on 10 of 127 pages.** It handled the five named entities only. Astro writes `&`
+unescaped inside `<title>` and as the NUMERIC `&#38;` inside an attribute, so
+every title containing an ampersand — `Print & reports`, `Alerts & toasts`,
+`Concurrency & conflicts`, and seven more — reported `og:title` disagreeing with
+a `<title>` it matched exactly. Numeric forms are not defensive coding here;
+they are the case this repo has. The rewrite decodes every entity form in ONE
+pass rather than a chain of `.replace()`s, because a chain that resolves
+`&amp;` first would then re-read the `&#38;` it had just produced.
+
+**Measured after (`3e1dac1` + this change, full `docs:build`):**
+
+| | before | after |
+|---|---|---|
+| built `index.html` | 138 | 138 |
+| carrying `property="og:` | **0** | **127** |
+| carrying `name="twitter:` | **0** | **127** |
+| carrying `og:image` | 0 | **0** (249.15) |
+| `check-metadata.mjs` assertions | 133 | **1,022** |
+
+The **11** built files with no card are the 10 redirect stubs and `suite/` — the
+same two exclusions `distPages()` and the sitemap already reach separately, and
+the gate walks the same 127 pages it did before.
+
+**Red-proved four ways, each injection confirmed present in the BUILT page
+before the red was believed** (`apps/docs/dist/components/button/index.html`,
+restored after each):
+
+| injection | result |
+|---|---|
+| `og:url` tag deleted | FAIL `carries the social-card tags` |
+| `og:title` → another page's title | FAIL `og:title repeats the page's own <title>` (+ the twitter pair) |
+| `og:description` → a different sentence | FAIL `og:description repeats …` (+ the twitter pair) |
+| `og:url` → `/components/badge/` | FAIL `og:url is the page's published URL` |
+
+**A fifth attempt came back GREEN, and it was the injection**, exactly as
+CLAUDE.md says to assume: the `og:title` replacement was written against a
+guessed title (`Buttons · busy-office-ui`) and the page's own is
+`Button · busy-office-ui`. It cost nothing because the probe asserted its match
+count before replacing and raised on `0` rather than silently matching nothing
+— which is the whole difference between that and a green red-proof believed.
+
+**`check-page-shape.mjs` needed a third spelling, and it resolves the constant
+rather than accepting one.** Its description arm reads the SOURCE for a literal
+`content="…"`, so hoisting broke it on all 11 self-head pages. Accepting
+`content={anything}` would have turned that arm into a detector that cannot
+fail — a page can always name a constant it never defines. It now finds the
+declaration and applies the same 40-character floor to the literal there.
+Red-proved both ways on `patterns/schedule/full.astro`: shortening
+`socialDescription` to `'Too short.'` fails, and pointing `content=` at an
+identifier that is never declared fails.
+
+**TWO TRAPS THE WIRING HIT, both caught by the build rather than by review, and
+both are the same shape CLAUDE.md's bulk-edit rule names.**
+
+1. **An `import` placed after a non-import statement in Astro frontmatter
+   CORRUPTS the file.** The wiring script appended its import at the end of the
+   frontmatter. In 8 of the 11 pages that put it after a `const`, and
+   `@astrojs/compiler` emitted
+   `const cssHref = base + '/assets/rf-essentials.min` / newline / `astro';` —
+   an unterminated string literal, reported by esbuild at a line and column
+   inside an unrelated CSS comment. The compiler's own output is what showed
+   it; the source read fine. Imports now sit with the other imports.
+2. **The re-placement then put the import INSIDE a template literal that ships
+   to users** — `index.astro`'s `pilotSnippet`, a copy-paste sample whose lines
+   begin `import "@busy-office/ui/css/…"`, so "the last line starting with
+   `import`" was sample text, not code. This is the third time this repo has
+   recorded an import landing in a template literal. `astro build` failed with
+   `SocialMeta is not defined`; the assertion that the snippet no longer
+   contains the string is what closed it.
+
+**Verified: `npm run build -w @busy-office/ui`, `npm run docs:build`, and all
+15 cloud-toolchain gates in `ENVIRONMENT.md` green** — core tests 152 passed,
+`check:claims` 162 live (3 NOT VERIFIED, the container's `pointer: fine`
+reading, trap 6b, not a regression), `check:layout` 127 pages, `test:axe`,
+`check:po-app`, `suite` 28 screens. Plus the base-path parity build
+(`DOCS_BASE=/busy-office-ui`), which this change specifically needs: `og:url`
+there reads `https://busy-office.github.io/busy-office-ui/components/button/`,
+and the base is what `pages.yml`, `ci.yml` and `publish.yml` all set. Under a
+base-less local build `og:url` omits the base — the same property the sitemap
+has had since 249.2, and correct in what actually ships.
+
+**NOT VERIFIED, named rather than implied:** cloud wake, so the 1440/390
+light-and-dark screenshot lane could not run. What a screenshot could have shown
+here is nothing — the diff adds `<head>` content and touches no CSS, no visible
+markup and no layout; `check:layout`, `check:scroll` and `test:axe` swept all
+127 pages at both widths and are green. The one thing a human's eyes are still
+needed for is the card itself, and that is 249.15, left open.
+
 ## Slice 259 — 249.9's two Accept clauses answered before the page is built: the miniature mechanism the item names does not exist, and two of its seven badges trace to no JSON key (2026-09-04)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** (`git branch
@@ -2583,14 +2766,32 @@ box (2026-09-03, cloud wake):**
         screenshot sense, so a LOCAL wake can do it and a cloud wake should not
         pick it up.** Note the site currently has no `og:` or `twitter:` tag at
         all, so this is the whole card, not just its image.
-        - **Accept:** the property, not a prediction — every built docs page
-          carries `og:title`, `og:description` (agreeing with the page's own
-          `name="description"`, asserted rather than assumed), `og:url` and
+
+        **RE-SCOPED 2026-09-04 (cloud wake): the TAG half is split out as
+        249.17 and has landed (Slice 260); what is left here is the image.**
+        Same split as 249.16 out of 249.4, for the same reason — a derivation
+        half was being held behind the one half that needs a human's eyes. The
+        premise was re-checked on the BUILT artifact before splitting, per
+        CLAUDE.md's premise rule, and it held:
+        `grep -rl 'property="og:' apps/docs/dist --include='*.html'` returned
+        **0 of 138** built `index.html` files on a full `docs:build` of
+        `3e1dac1` (`name="twitter:` likewise 0).
+        - **Accept, image half (this item):** every built docs page carries
+          `og:image`; the referenced path resolves to a file that exists in
+          `dist/`; `check-metadata.mjs` gains that arm and it is red-proved by
+          pointing `og:image` at a path that is not there. `twitter:card` moves
+          from `summary` to `summary_large_image` in the same change, and
+          arm 5's assertion that it is `summary` while no image ships is
+          removed rather than left contradicting the new tag. Whether the card
+          LOOKS right is the part that needs the local wake's eyes.
+        - *(As first written, before the split — the clauses now covered by
+          249.17 are struck through.)* ~~every built docs page carries
+          `og:title`, `og:description` (agreeing with the page's own
+          `name="description"`, asserted rather than assumed), `og:url`~~ and
           `og:image`; the image resolves to a file that exists in `dist/`;
-          `check-metadata.mjs` gains the arm and it is red-proved by removing
-          the tag from one built page and by pointing `og:image` at a path that
-          is not there. Whether the card LOOKS right is the part that needs the
-          local wake's eyes.
+          `check-metadata.mjs` gains the arm and it is red-proved by ~~removing
+          the tag from one built page and by~~ pointing `og:image` at a path that
+          is not there.
 
 16. [x] **249.16 — DONE, Slice 254.** The one hand-made README screenshot, split out of 249.4.
         One screenshot of `patterns/list-report` at `data-density="compact"`,
@@ -2604,6 +2805,25 @@ box (2026-09-03, cloud wake):**
           the repo and, for the package README, inside the published tarball
           (`npm view @busy-office/ui` is the authority on what shipped, not
           `npm pack` — roadmap 185); `stamp-readme --check` still exits 0.
+
+17. [x] **249.17 — DONE, Slice 260.** The `og:`/`twitter:` tag set, split out
+        of 249.15 on 2026-09-04. 249.15 is the social CARD; this is everything
+        about that card which is not a rendered image, and a cloud wake can
+        take it in full — the evidence is `<head>` content in the built
+        artifact, which is `ENVIRONMENT.md`'s SECOND list. Split for the same
+        measured reason 249.16 was split out of 249.4: the derivation half was
+        being held behind the half that needs a human's eyes.
+        - **Accept:** every built docs page carries `og:type`, `og:site_name`,
+          `og:title`, `og:description`, `og:url` and the three `twitter:` tags;
+          `og:title` EQUALS that page's own `<title>` and `og:description`
+          EQUALS its own `<meta name="description">`, asserted on the BUILT
+          page rather than assumed; `og:url` equals the published URL
+          `dist-pages.mjs` derives by WALKING `dist/`, which is a second
+          derivation that cannot see the one `SocialMeta.astro` builds from
+          Astro's route table; the arm is red-proved twice — a tag deleted from
+          a built page, and one page's `og:title` made to disagree with its own
+          `<title>` — with each injection confirmed present in the built HTML
+          before the red is believed.
 
 **Refused, recorded as DA (not re-litigated here — see the triage file for
 each item's reasoning):** publish-on-every-push/auto-bump, a `registry.ts`

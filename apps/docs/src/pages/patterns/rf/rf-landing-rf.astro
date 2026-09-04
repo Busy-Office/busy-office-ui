@@ -5,8 +5,14 @@
    rf-essentials profile (Chrome/WebView 108) is sufficient on its own. */
 import RfTaskMenu from '../../../components/RfTaskMenu.astro';
 import PrefBootstrap from '../../../components/PrefBootstrap.astro';
+import SocialMeta from '../../../components/SocialMeta.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const cssHref = base + '/assets/rf-essentials.min.css';
+/* Hoisted, not retyped (roadmap 249.17): <title>, <meta name="description">
+   and the og:/twitter: tags all read the SAME literal, so they cannot drift.
+   check-metadata.mjs asserts on the BUILT page that they agree. */
+const socialTitle = 'RF task menu — rf-essentials profile';
+const socialDescription = 'The RF task menu as an isolated document, loading only the rf-essentials CSS profile to prove that profile is sufficient on its own.';
 ---
 <!doctype html>
 <html lang="en" data-density="spacious">
@@ -14,8 +20,9 @@ const cssHref = base + '/assets/rf-essentials.min.css';
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <PrefBootstrap density="spacious" lockDensity />
-    <title>RF task menu — rf-essentials profile</title>
-    <meta name="description" content="The RF task menu as an isolated document, loading only the rf-essentials CSS profile to prove that profile is sufficient on its own." />
+    <title>{socialTitle}</title>
+    <meta name="description" content={socialDescription} />
+    <SocialMeta title={socialTitle} description={socialDescription} />
     <link rel="stylesheet" href={cssHref} />
     <style>
       body {

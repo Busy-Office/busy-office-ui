@@ -400,6 +400,18 @@ broadly wrong. When declining an item, say which of the two lists it needs.
   were missing before this was understood the first time. Carried up here when
   226.1 cleared `check:po-app` out of the exceptions block: the shape outlives
   the specific trap that taught it.
+- **An `import` added AFTER a non-import statement in Astro frontmatter
+  silently corrupts the file.** `@astrojs/compiler` hoists imports by rewriting
+  text, and on 8 of 11 pages wired in Slice 260 it turned
+  `const cssHref = base + '/assets/rf-essentials.min.css';` into
+  `…'/assets/rf-essentials.min` + newline + `astro';`. esbuild then reports
+  *"Unterminated string literal"* at a line and column **inside an unrelated CSS
+  comment**, because the location is in the COMPILED output. The source reads
+  fine; `c.transform(src, {filename})` from `@astrojs/compiler` and printing the
+  generated code is what shows it. Put a new import with the other imports —
+  and note the sibling trap: "the last line starting with `import`" may be
+  inside a template literal that ships to users (`index.astro`'s
+  `pilotSnippet`), which is the third time an import has landed in one here.
 - **`git stash` is not a way to A/B one file in a dirty tree.** It reverts the
   data along with the script, so two parsers get compared against two different
   logs. Extract the old version to a probe file *in the same directory*, run

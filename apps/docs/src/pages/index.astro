@@ -16,6 +16,7 @@ import patternsIndex from '../data/patterns-index.json';
 import { TASK_TILES } from '../data/component-nav.mjs';
 import contrast from '@busy-office/ui/contrast';
 import behaviors from '@busy-office/ui/behaviors-manifest';
+import SocialMeta from '../components/SocialMeta.astro';
 
 const require = createRequire(import.meta.url);
 const minCss = readFileSync(
@@ -81,6 +82,11 @@ const invoices = [
   ['INV-10238', 'Stark Components', 'CC-1180', '$56,000.00', 'Approved', 'success'],
   ['INV-10239', 'Wayne Industrial', 'CC-2205', '$9,320.75', 'Pending', 'warning'],
 ];
+/* Hoisted, not retyped (roadmap 249.17): <title>, <meta name="description">
+   and the og:/twitter: tags all read the SAME literal, so they cannot drift.
+   check-metadata.mjs asserts on the BUILT page that they agree. */
+const socialTitle = 'busy-office-ui — CSS for screens that do work';
+const socialDescription = 'CSS-first UI framework for ERP and back-office: semantic components, density as a dimension, the cascade as the API.';
 ---
 <html lang="en" data-density="compact">
   <head>
@@ -88,8 +94,9 @@ const invoices = [
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href={base + '/favicon.svg'} />
-    <title>busy-office-ui — CSS for screens that do work</title>
-    <meta name="description" content="CSS-first UI framework for ERP and back-office: semantic components, density as a dimension, the cascade as the API." />
+    <title>{socialTitle}</title>
+    <meta name="description" content={socialDescription} />
+    <SocialMeta title={socialTitle} description={socialDescription} />
   </head>
   <body>
     <header class="bo-navbar">

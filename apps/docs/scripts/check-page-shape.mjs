@@ -329,23 +329,40 @@ let relatedChecked = 0;
    own throw cannot see, which is why this arm reads the source of ALL of them
    rather than only the Gallery callers.
 
-   Two spellings, because there are two ways a page gets a head: the `description`
-   prop on <Gallery>, or a literal tag on a page that builds its own. Checked at
-   the SOURCE so the failure names a file a person can open — check-metadata.mjs
-   asserts the same property on the built artifact, where it can also see length
-   and uniqueness. */
+   THREE spellings, because there are three ways a page gets a head: the
+   `description` prop on <Gallery>, a literal tag on a page that builds its own,
+   or — since 249.17 — that literal HOISTED into a frontmatter constant, so the
+   <title>, the description tag and the og:/twitter: tags all read one string
+   and cannot drift. Checked at the SOURCE so the failure names a file a person
+   can open — check-metadata.mjs asserts the same property on the built
+   artifact, where it can also see length and uniqueness.
+
+   THE THIRD SPELLING RESOLVES THE IDENTIFIER; it does not merely accept one.
+   `content={anything}` passing would turn this arm into a detector that cannot
+   fail, since a page can always name a constant it never defines — the exact
+   shape this repo's gates keep being written to avoid. It finds the constant's
+   own declaration and applies the same 40-character floor to the literal there,
+   so a hoisted page that ships a two-word description still fails. Red-proved
+   by shortening one, not by reading the code. */
 const DESCRIBES_ITSELF = [
-  /<Gallery[^>]*\sdescription="[^"]{40,}"/,
-  /<meta\s+name="description"\s+content="[^"]{40,}"/,
+  (page) => /<Gallery[^>]*\sdescription="[^"]{40,}"/.test(page),
+  (page) => /<meta\s+name="description"\s+content="[^"]{40,}"/.test(page),
+  (page) => {
+    const name = page.match(/<meta\s+name="description"\s+content=\{([A-Za-z_$][\w$]*)\}/)?.[1];
+    if (!name) return false;
+    const decl = page.match(new RegExp(`\\bconst ${name} = (['"])([^'"]{40,})\\1;`));
+    return decl !== null;
+  },
 ];
 let describedChecked = 0;
 for await (const [rel, file] of allPages(join(docsRoot, 'src/pages'))) {
   const page = await readFile(file, 'utf8');
   describedChecked++;
-  if (!DESCRIBES_ITSELF.some((re) => re.test(page))) {
+  if (!DESCRIBES_ITSELF.some((describes) => describes(page))) {
     failures.push(
       `${rel}: no page description — add description="…" to its <Gallery> call, or a ` +
-        '<meta name="description" content="…"> if the page builds its own <head>. ' +
+        '<meta name="description" content="…"> if the page builds its own <head> ' +
+        '(a frontmatter `const x = \'…\'` passed as content={x} counts). ' +
         'At least 40 characters; it is what a search result and a shared link show.',
     );
   }

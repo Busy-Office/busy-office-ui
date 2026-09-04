@@ -15,6 +15,7 @@ import '../styles/demo-shell-frame.css';
 import '../styles/tile-preview.css';
 import Logo from '../components/Logo.astro';
 import PrefBootstrap from '../components/PrefBootstrap.astro';
+import SocialMeta from '../components/SocialMeta.astro';
 import SidebarNav from '../components/SidebarNav.astro';
 import pkg from '@busy-office/ui/package.json';
 import versions from '../../versions.json';
@@ -135,6 +136,12 @@ const siteRoot = base.replace(/\/v\/[^/]+$/, '');
 const currentSnapshot = base.match(/\/v\/([^/]+)$/)?.[1] ?? null;
 const current =
   (Astro.url.pathname.slice(base.length) || '/').replace(/\/$/, '') || '/';
+/* Written once and passed to both <title> and SocialMeta (249.17). The suffix
+   used to live only inside the <title> element; spelling it a second time in
+   the og:title attribute is exactly the copy PrefBootstrap.astro's header
+   records the cost of, and check-metadata.mjs asserts the two agree on the
+   built page, so a drift would turn the build red rather than ship quietly. */
+const documentTitle = `${title} · busy-office-ui`;
 ---
 <html lang="en" data-density="comfortable">
   <head>
@@ -147,8 +154,9 @@ const current =
          defaulting to a light/white canvas regardless of the user's theme. -->
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" type="image/svg+xml" href={base + '/favicon.svg'} />
-    <title>{title} · busy-office-ui</title>
+    <title>{documentTitle}</title>
     <meta name="description" content={description} />
+    <SocialMeta title={documentTitle} description={description} />
     <PrefBootstrap />
   </head>
   <!-- The docs site navigates with plain full-page loads, not hx-boost

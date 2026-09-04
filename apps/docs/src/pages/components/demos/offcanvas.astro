@@ -6,6 +6,12 @@
    nothing but itself, and its top layer is the frame's. */
 import '@busy-office/ui/css';
 import PrefBootstrap from '../../../components/PrefBootstrap.astro';
+import SocialMeta from '../../../components/SocialMeta.astro';
+/* Hoisted, not retyped (roadmap 249.17): <title>, <meta name="description">
+   and the og:/twitter: tags all read the SAME literal, so they cannot drift.
+   check-metadata.mjs asserts on the BUILT page that they agree. */
+const socialTitle = 'Offcanvas — drawer demo';
+const socialDescription = 'An isolated demo document for the offcanvas drawer, embedded from the component page so the dialog is shown outside the docs shell.';
 ---
 <!doctype html>
 <html lang="en">
@@ -13,8 +19,9 @@ import PrefBootstrap from '../../../components/PrefBootstrap.astro';
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <PrefBootstrap />
-    <title>Offcanvas — drawer demo</title>
-    <meta name="description" content="An isolated demo document for the offcanvas drawer, embedded from the component page so the dialog is shown outside the docs shell." />
+    <title>{socialTitle}</title>
+    <meta name="description" content={socialDescription} />
+    <SocialMeta title={socialTitle} description={socialDescription} />
     <style>
       html, body { margin: 0; block-size: 100%; }
       body {

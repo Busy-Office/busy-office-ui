@@ -1,6 +1,7 @@
 /**
  * Every SHIPPED page carries a description, and the sitemap lists exactly the
- * pages that shipped (roadmap 249.2).
+ * pages that shipped (roadmap 249.2) — and says what a shared link should show
+ * (roadmap 249.17, arm 5).
  *
  * @exact — set membership and string length on the built artifact. There is no
  *   judgement to get wrong: a page either carries the tag or it does not, and
@@ -148,6 +149,131 @@ if (robots !== null) {
     declared === null
       ? `robots.txt carries no Sitemap: line — ${JSON.stringify(robots)}`
       : `robots.txt declares ${declared}, which is not paths.mjs's SITE_URL + /sitemap-index.xml`,
+  );
+}
+
+/* ---------- 5. every built page says what a shared link should show ----------
+   Roadmap 249.17, split out of 249.15. Before this the built site carried ZERO
+   `og:` and ZERO `twitter:` tags — 0 of the 138 built `index.html` files, on a
+   full build of `3e1dac1` — so a link pasted into a chat rendered as a bare URL.
+
+   THE THREE EQUALITIES ARE THE POINT, not the presence checks. A presence
+   check passes in full on a site where every page claims to be the home page —
+   the same failure arm 2 exists for. So:
+
+     og:title       === the page's own <title>
+     og:description === the page's own <meta name="description">
+     og:url         === SITE_ORIGIN + base + the url dist-pages.mjs walked to
+
+   The first two reconcile the card against what the page already publishes
+   about itself; the third reconciles two independent derivations, Astro's
+   route table (SocialMeta.astro builds it from `Astro.url`) against a walk of
+   `dist/` — neither can see the other, which is what arm 3's header says makes
+   a reconciliation able to fail at all.
+
+   NO og:image ARM. The card image is the half of 249.15 that stays open —
+   its evidence is a rendered image a human compares — and the wake that adds
+   it adds the arm that checks the file resolves in `dist/`. An arm asserting
+   the absence of og:image would have to be deleted by that wake, so it would
+   be ceremony, not a gate. */
+const OG_REQUIRED = ['og:type', 'og:site_name', 'og:title', 'og:description', 'og:url'];
+const TWITTER_REQUIRED = ['twitter:card', 'twitter:title', 'twitter:description'];
+
+/* Both sides of every comparison go through this. The two sides are an
+   attribute value and element text, which Astro escapes by DIFFERENT rules, so
+   comparing raw would report a difference in ESCAPING as a difference in
+   CONTENT. Decoding both with one function cannot invent an agreement: two
+   different strings stay different.
+
+   MEASURED, not anticipated. The first version of this decoder handled only the
+   five named entities and the arm went red on exactly 10 of the 127 pages, all
+   of them titles containing `&`: Astro writes `&` unescaped inside <title> and
+   as the NUMERIC `&#38;` inside an attribute. So the numeric forms are not
+   defensive coding — they are the case this repo actually has, and the ten
+   pages are also this arm's unforced proof that the equality can fail.
+
+   ONE PASS over every entity form, not a chain of replaces: a chain that
+   resolves `&amp;` first would then re-read the `&#38;` it just produced and
+   decode it a second time, turning a literal "&#38;" into "&". */
+const NAMED = { lt: '<', gt: '>', quot: '"', apos: "'", amp: '&', nbsp: ' ' };
+const decode = (s) =>
+  s.replace(/&(?:#(\d+)|#[xX]([0-9a-fA-F]+)|([a-zA-Z]+));/g, (whole, dec, hex, name) => {
+    if (dec !== undefined) return String.fromCodePoint(Number(dec));
+    if (hex !== undefined) return String.fromCodePoint(parseInt(hex, 16));
+    return name in NAMED ? NAMED[name] : whole;
+  });
+
+/** every <meta> in a built page's HEAD, keyed by its name= or property=.
+ *  Scoped to the head on purpose: this is a docs site whose pages render HTML
+ *  samples, and a page that ever shows a `<meta>` in its body would otherwise
+ *  overwrite the real one in this map — a parse that reads the wrong element
+ *  and reports confidently, which is the failure this repo keeps paying for. */
+function metaMap(head) {
+  const out = new Map();
+  for (const [tag] of head.matchAll(/<meta\b[^>]*>/g)) {
+    const key = tag.match(/\b(?:property|name)="([^"]*)"/)?.[1];
+    const content = tag.match(/\bcontent="([^"]*)"/)?.[1];
+    if (key !== undefined && content !== undefined) out.set(key, decode(content));
+  }
+  return out;
+}
+
+for (const p of pages) {
+  const headEnd = p.html.indexOf('</head>');
+  g.check(`${p.url} has a </head>`, headEnd !== -1, 'no </head> in the built page');
+  if (headEnd === -1) continue;
+  const head = p.html.slice(0, headEnd);
+
+  const meta = metaMap(head);
+  const missing = [...OG_REQUIRED, ...TWITTER_REQUIRED].filter((k) => !meta.has(k));
+  g.check(
+    `${p.url} carries the social-card tags`,
+    missing.length === 0,
+    `absent: ${missing.join(', ')}`,
+  );
+  if (missing.length > 0) continue;
+
+  const titleText = head.match(/<title>([\s\S]*?)<\/title>/)?.[1];
+  g.check(
+    `${p.url} og:title repeats the page's own <title>`,
+    titleText !== undefined && meta.get('og:title') === decode(titleText),
+    titleText === undefined
+      ? 'the built page has no <title> at all'
+      : `<title> is ${JSON.stringify(decode(titleText))}, og:title is ${JSON.stringify(meta.get('og:title'))}`,
+  );
+
+  const description = head.match(/<meta\s+name="description"\s+content="([^"]*)"/)?.[1];
+  g.check(
+    `${p.url} og:description repeats the page's own meta description`,
+    description !== undefined && meta.get('og:description') === decode(description),
+    description === undefined
+      ? 'the built page has no meta description at all'
+      : `description is ${JSON.stringify(decode(description))}, og:description is ${JSON.stringify(meta.get('og:description'))}`,
+  );
+
+  /* The same expression arm 3 builds `expected` from, for the same reason: the
+     published URL of a built page has one definition here, not two. */
+  const canonical = `${SITE_ORIGIN}${base}${p.url}`;
+  g.check(
+    `${p.url} og:url is the page's published URL`,
+    meta.get('og:url') === canonical,
+    `og:url is ${JSON.stringify(meta.get('og:url'))}, the dist walk says ${JSON.stringify(canonical)}`,
+  );
+
+  g.check(
+    `${p.url} twitter:title and twitter:description repeat the og: pair`,
+    meta.get('twitter:title') === meta.get('og:title') &&
+      meta.get('twitter:description') === meta.get('og:description'),
+    `twitter: pair is ${JSON.stringify([meta.get('twitter:title'), meta.get('twitter:description')])}`,
+  );
+
+  /* `summary_large_image` promises a card this site cannot fill until 249.15
+     ships the image. Asserted rather than left to the author, because the
+     wrong value here degrades to a broken card rather than to an error. */
+  g.check(
+    `${p.url} twitter:card is summary while no og:image ships`,
+    meta.has('og:image') || meta.get('twitter:card') === 'summary',
+    `twitter:card is ${JSON.stringify(meta.get('twitter:card'))} and the page ships no og:image`,
   );
 }
 

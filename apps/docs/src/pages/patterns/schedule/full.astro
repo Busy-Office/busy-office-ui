@@ -10,8 +10,14 @@
    as a real screen rather than a docs illustration of one. ScheduleScreen
    is the SAME component the compact demo uses, so the two cannot drift. */
 import ScheduleScreen from '../../../components/ScheduleScreen.astro';
+import SocialMeta from '../../../components/SocialMeta.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const cssHref = base + '/assets/busy-office-ui.min.css';
+/* Hoisted, not retyped (roadmap 249.17): <title>, <meta name="description">
+   and the og:/twitter: tags all read the SAME literal, so they cannot drift.
+   check-metadata.mjs asserts on the BUILT page that they agree. */
+const socialTitle = 'Schedule — full screen';
+const socialDescription = 'The schedule calendar at full screen width, opened from the schedule pattern page so the month grid can be read without the docs chrome.';
 ---
 <!doctype html>
 <html lang="en" data-density="comfortable">
@@ -19,8 +25,9 @@ const cssHref = base + '/assets/busy-office-ui.min.css';
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
-    <title>Schedule — full screen</title>
-    <meta name="description" content="The schedule calendar at full screen width, opened from the schedule pattern page so the month grid can be read without the docs chrome." />
+    <title>{socialTitle}</title>
+    <meta name="description" content={socialDescription} />
+    <SocialMeta title={socialTitle} description={socialDescription} />
     <link rel="stylesheet" href={cssHref} />
     <style>
       body {

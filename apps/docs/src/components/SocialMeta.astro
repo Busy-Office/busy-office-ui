@@ -1,0 +1,78 @@
+---
+/**
+ * The ONE place the docs site says what a shared link should show
+ * (roadmap 249.17, split out of 249.15).
+ *
+ * Before this, the built site carried ZERO `og:` and ZERO `twitter:` tags.
+ * Measured on the BUILT artifact, not inferred from source: a full
+ * `npm run docs:build` was run at `3e1dac1` with these files stashed, and
+ * `grep -rl 'property="og:' apps/docs/dist --include='*.html'` returned **0**
+ * of **138** built `index.html` files (`name="twitter:` likewise 0). The
+ * source-only reading agreed and is the weaker of the two — `astro build` is
+ * what turns a prop into a tag, which is the same reason this gate exists at
+ * all. (A first pass grepped the looser `og:` over source and read 4 hits;
+ * every one was the substring inside `dialog:` in prose. Plain fixed string
+ * first, per CLAUDE.md.) So a link to any docs page pasted into a chat
+ * rendered as a bare URL with whatever text the platform guessed.
+ *
+ * WHY A COMPONENT AND NOT TWELVE COPIES. Twelve source files own a `<head>`
+ * here — `Gallery.astro` plus eleven pages that deliberately do not use it
+ * (the RF profile documents, the isolated component demos, the full-screen
+ * schedule, the landing page). `PrefBootstrap.astro`'s header records what
+ * happens when head logic is copied instead: its two copies disagreed on the
+ * default density, and a first-time visitor measurably got a different
+ * density on the landing page than on every docs page. Same head, same
+ * hazard, same answer.
+ *
+ * NO `og:image` YET, deliberately. The card image is the half of 249.15 that
+ * stays open: its evidence is a rendered image a human compares, which
+ * `.roundtable/ENVIRONMENT.md`'s first list says a cloud wake cannot take.
+ * `twitter:card` is therefore `summary` — the small-card form that needs no
+ * image — rather than the `summary_large_image` the image half will switch it
+ * to. Claiming the large card while shipping no image is a claim the artifact
+ * does not support.
+ *
+ * `title` is the FULL document title, passed rather than re-derived, because
+ * the twelve heads do not spell it the same way: `Gallery.astro` renders
+ * `{title} · busy-office-ui` while every self-head page writes its own
+ * complete string. The gate asserts `og:title` equals what the built page's
+ * `<title>` actually says, so a caller that passes something else fails
+ * rather than drifting quietly.
+ *
+ * `canonical` is derived here from Astro's route and asserted in
+ * `check-metadata.mjs` against the url `dist-pages.mjs` produces by WALKING
+ * `dist/`. Two independent derivations, neither able to see the other — the
+ * same reconciliation shape arm 3 (sitemap vs. dist walk) already uses, and
+ * for the same reason: a canonical URL generated from the dist walk and then
+ * checked against the dist walk would be green no matter what broke.
+ */
+const { title, description } = Astro.props;
+
+if (typeof title !== 'string' || title.trim().length === 0) {
+  throw new Error(
+    `SocialMeta on ${Astro.url.pathname}: needs the page's full document title, ` +
+      'the same string its <title> renders — check-metadata.mjs asserts the two agree.',
+  );
+}
+/* Gallery.astro already throws below 40 characters and check-metadata.mjs
+   asserts it on the built page; this is not a third opinion on the floor, only
+   a refusal to emit an og:description that is absent or empty. */
+if (typeof description !== 'string' || description.trim().length === 0) {
+  throw new Error(`SocialMeta on ${Astro.url.pathname}: needs the page's meta description.`);
+}
+
+/* dist-pages.mjs yields every url with a trailing slash, and that is the form
+   the sitemap and check-metadata.mjs compare against. Normalise here rather
+   than in the gate: a gate that trims both sides before comparing cannot see a
+   real mismatch. */
+const pathname = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+const canonical = new URL(pathname, Astro.site).href;
+---
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="busy-office-ui" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />

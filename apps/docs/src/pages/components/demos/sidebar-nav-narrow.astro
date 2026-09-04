@@ -7,6 +7,12 @@
 import '@busy-office/ui/css';
 import PrefBootstrap from '../../../components/PrefBootstrap.astro';
 import SidebarNavShellDemo from '../../../components/SidebarNavShellDemo.astro';
+import SocialMeta from '../../../components/SocialMeta.astro';
+/* Hoisted, not retyped (roadmap 249.17): <title>, <meta name="description">
+   and the og:/twitter: tags all read the SAME literal, so they cannot drift.
+   check-metadata.mjs asserts on the BUILT page that they agree. */
+const socialTitle = 'Sidebar nav — narrow shell demo';
+const socialDescription = 'An isolated demo document showing the sidebar navigation collapsed to icons in a narrow app shell, embedded from the component page.';
 ---
 <!doctype html>
 <html lang="en">
@@ -14,8 +20,9 @@ import SidebarNavShellDemo from '../../../components/SidebarNavShellDemo.astro';
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <PrefBootstrap />
-    <title>Sidebar nav — narrow shell demo</title>
-    <meta name="description" content="An isolated demo document showing the sidebar navigation collapsed to icons in a narrow app shell, embedded from the component page." />
+    <title>{socialTitle}</title>
+    <meta name="description" content={socialDescription} />
+    <SocialMeta title={socialTitle} description={socialDescription} />
     <style>
       html, body { margin: 0; block-size: 100%; }
       body { background: var(--bo-color-bg-canvas); color: var(--bo-color-text-primary); }
