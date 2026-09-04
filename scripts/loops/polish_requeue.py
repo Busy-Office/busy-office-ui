@@ -264,6 +264,8 @@ def main() -> int:
     if args.apply:
         lines = text.splitlines()
         names = {s for s, _, _ in changed}
+        marked = []
+        already = []
         for i, s, cells in rows(text):
             if s in names:
                 parts = lines[i].rstrip().rstrip("|").split("|")
@@ -273,9 +275,31 @@ def main() -> int:
                     # a later regex silently skipped — eight of twenty-eight, caught
                     # only by counting what was updated.
                     parts[-1] = parts[-1].rstrip() + " · **RE-QUEUED — source changed** "
+                    marked.append(s)
+                else:
+                    already.append(s)
                 lines[i] = "|".join(parts) + "|"
-        LEDGER.write_text("\n".join(lines) + "\n")
-        print(f"\nledger updated — {len(names)} surface(s) marked for re-score")
+        new_text = "\n".join(lines) + "\n"
+        wrote = new_text != text
+        if wrote:
+            LEDGER.write_text(new_text)
+        # Report what was WRITTEN, never the size of the argument. This line used
+        # to read "ledger updated — {len(names)} surface(s) marked for re-score",
+        # which is the re-queue set, not the rows that gained a marker. The marker
+        # is STICKY — nothing removes it but a hand edit — so a steady-state wake
+        # marks nothing at all and the old line still announced a write. Red-proved
+        # by discrimination rather than by reading: with all 19 rows already
+        # marked the file came back byte-identical, and with one marker stripped
+        # exactly one row was rewritten; BOTH runs printed the same "19 surface(s)
+        # marked". A message that cannot tell 0 written from 1 is reporting its
+        # caller, which is the failure CLAUDE.md names as reconciling against the
+        # argument instead of the source.
+        print(
+            f"\n{len(marked)} row(s) newly marked for re-score; "
+            f"{len(already)} already carried the marker; "
+            f"{len(names)} re-queued in total"
+        )
+        print(f"ledger {'updated' if wrote else 'UNCHANGED — nothing to write'}")
     else:
         print("\n(--apply writes this into the ledger; --check only reports)")
 

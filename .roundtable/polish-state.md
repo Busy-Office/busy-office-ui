@@ -99,7 +99,7 @@ a no-op recorded in one line.
 | component/inline-editing | content | **3** | 1/3 | 0 | eadd116a | round 1 landed — blind 3, "not for creating a record" (unscored in DSA) · **RE-QUEUED — source changed** |
 | component/navbar | content | **3** | 1/3 | 0 | 1e50d24a | round 1 landed — blind 2→3, "not the page's own title or actions" · **RE-QUEUED — source changed** |
 | component/pagination | content | **3** | 1/3 | 0 | 2a48579c | round 1 landed — blind 2→3, "not for stepping through a process" · **RE-QUEUED — source changed** |
-| component/progress | content | **3** | 1/3 | 0 | ab66183b | round 1 landed — blind 2→3, "not for work of unknown duration" · **RE-QUEUED — source changed** |
+| component/progress | content | **3** | 2/3 | 0 | 1154a4d7 | round 1 landed — blind 2→3, "not for work of unknown duration"; **round 2 (2026-09-04) NO-OP on the surface — six cites and all eight arms clean — and the finding is in this loop's own step 0: `polish_requeue.py --apply` announced a write over a byte-identical file. ROADMAP 267, see below** · **RE-QUEUED — source changed** |
 | component/scan | colour+interaction+fit | **3** | 2/3 | 0 | e1c34049 | round 1 (2026-08-23) fixed all three; **round 2 (2026-08-28) discovered the round-1 score was never written to `dsa-scores.json` at all** — see below · **RE-QUEUED — source changed** |
 | component/sidebar-nav | content | **3** | 2/3 | 0 | 904b544f | round 1 landed — blind 2→3, "not for navigating within one screen"; **round 2 (2026-08-30) FOUND A DEFECT — the `fit` cite's usage count was EXACT when written and decayed two days later, see below** · **RE-QUEUED — source changed** |
 | component/state-patterns | content | **3** | 2/3 | 0 | 7d3f0e38 | round 1 landed — blind 2→3 (clears skeleton AND state); **round 2 (2026-08-28) FOUND A DEFECT — `skeleton · colour` cited the removed token pairing, see below** · **RE-QUEUED — source changed** |
@@ -1480,3 +1480,103 @@ changed and no page markup changed; what changed on a rendered page is the
 established by grepping the rebuilt `dist/` and by the whole-tree `check:layout`
 and `test:axe` sweeps at both widths. Every browser-derived number quoted above
 came from a gate executing in this container.
+
+## Round 2: progress (2026-09-04, cloud wake) — NO-OP on the surface; the finding is in step 0 (ROADMAP 267)
+
+Dispatcher rule 6, reached because rules 1-5 were clear or had no input: no open
+P0, Standardize `1 / 4`, Objective `0 / 3`, rule 4's eleven open items all
+blocked (eight owner, three browser-blocked in the SCREENSHOT sense), and rule 5
+**STALE** on its trend clause — reported as *could not be evaluated*. Rule 5's
+**second** clause was evaluable and clear: `check-size.mjs` passed at *376.2 kB
+gz over 139 payload files, tightest headroom 110 bytes*.
+
+### The pick
+
+`--apply` re-queued **19** surfaces — every non-skipped row but `avatar`, which
+266 stamped. §3b's "fewest rounds" discriminated: **8** rows at `1/3` against 11
+at `2/3`; `inline-editing` and `table-toolbar` drop for 217.1's reason (no
+`dsa-scores.json` entry), leaving six. Picked on 266's falsifiable-assertion
+count, **re-derived rather than copied**, and it reproduces 266's table with
+`avatar` removed:
+
+| surface | quotes | unit literals | bare counts | absence claims | cite chars |
+|---|---|---|---|---|---|
+| **progress** | 1 | **2** | 7 | 5 | **926** |
+| navbar | 1 | 1 | 9 | 5 | 868 |
+| tree | 1 | 2 | 6 | 5 | 808 |
+| byline | 2 | 0 | 4 | 5 | 800 |
+| pagination | 1 | 0 | 5 | 4 | 689 |
+| breadcrumb | 0 | 0 | 0 | 7 | 511 |
+
+`progress` was 266's own second-ranked candidate, so the ranking pre-dates this
+round.
+
+### progress's own six cites all hold
+
+`typography` *"no font-size at all"* — **0** declarations, comment-stripped.
+`colour` — `--bo-color-accent` ×2, `--bo-color-warning-strong` ×2,
+`--bo-color-danger` ×2 across `::-webkit-progress-value` ×3 and
+`::-moz-progress-bar` ×3, and the `@media (forced-colors: active)` block does
+set `appearance: auto`. `spacing` — `10rem` ×1 and `0.5rem` ×1, with the comment
+that states why they are intrinsic. `interaction: na` — **0 of 33** behaviours
+match `/progress/i` and arm 8 confirms the page imports none. `content` — the
+quoted clause renders on the built page ×2, and the near-miss the cite records
+is there too (`93%` ×4, `freeze` ×2, `stalled` ×2). `fit` — `.bo-stepper` named
+once, in the header comment.
+
+### The eight arms
+
+| arm | reading |
+|---|---|
+| 1 wrong-choice clause | `156 assertions / 80 pages / 1 outstanding` (the skipped `date`) |
+| 2 score rendered by its page | `360 assertions / 40 scored`; `Not yet scored` in **0** dist files |
+| 3 line-number cites | **0 found** — the arm 266 emptied has not regrown |
+| 4 content quotes in built pages | **20/20** |
+| 5 css dimension literals | **82/82** |
+| 6 bare counts in any cite | **9/9** |
+| 7 absence claims | **42/42** |
+| 8 `interaction: na` pages importing a behaviour | **0 of 17** |
+
+### The finding — step 0 announced a write it did not make
+
+`--apply` printed `ledger updated — 19 surface(s) marked for re-score` while
+`git status` came back clean and the md5 was unchanged. The marker is **sticky**
+— line 277 is the only write to the status column and it only appends, `--stamp`
+writes `parts[-2]` instead, and no other script writes this ledger — so all 19
+rows already carried it and **0** were written. `len(names)` is the size of the
+re-queue set; the sentence attached it to a write.
+
+**Red-proved by discrimination, injection asserted before each run:**
+
+| run | marker rows before | printed | rows written |
+|---|---|---|---|
+| steady state | 19 | `ledger updated — 19 surface(s) marked…` | **0** (md5 identical) |
+| one marker stripped from `component/tree` | **18** | `ledger updated — 19 surface(s) marked…` | **1** |
+
+Same sentence for 0 and for 1. Fixed to report rows newly marked, rows that
+already carried the marker, and the re-queue total separately, with the
+updated/UNCHANGED verb read off whether the text actually differs. Full trace,
+the no-consumer check and the seventh gate refusal are in ROADMAP 267.
+
+### One instrument defect, caught before it became a finding
+
+Arm 8 was **reinvented rather than run**. Matching behaviour names as bare
+substrings of the built HTML flagged `stepper :: initWizard` — ApiTable prose
+(*"`initWizard()` is opt-in…"*), not a demonstration. The canonical arm above
+reads the page's own import and returns **0 of 17**. The dashboard round already
+measured and discarded four looser ownership definitions; re-deriving one by hand
+reproduced the same error in a minute. **Run the arm this ledger carries.**
+
+### Score, and what is owed
+
+No score moves and no blind re-score is owed: the cites reconciled clean and no
+published artefact about `progress` changed, so `scored` stays **2026-08-23**.
+`rounds` moves 1→2 on badge's and alerts' precedent.
+
+### Not verified, said plainly
+
+Cloud wake: no Podman, no `localhost:8081`, so the 1440/390 light-and-dark
+screenshot lane could not run. **0** files under `packages/core/src/` and **0**
+docs pages changed; the only non-markdown edit is a Python report line no built
+artefact reads. All **17** CI entry points, re-derived from `ci.yml`, ran green
+in this container.

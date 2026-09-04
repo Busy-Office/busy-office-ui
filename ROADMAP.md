@@ -315,6 +315,218 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 267 — Polish round on `progress`: every arm reproduces, and the finding is in the loop's own step 0 — `polish_requeue.py --apply` reports the size of its argument, not the rows it wrote, and says "ledger updated" over a byte-identical file (2026-09-04)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty, `HEAD` on `8962c09` with no local branch) —
+ENVIRONMENT trap 1, fixed with `git checkout -B main origin/main` before any
+work. `--unshallow` clean in one attempt (**1,865** commits, no `shallow.lock`);
+`git fetch --tags origin` brought all seven, so trap 2 did not bite. Rule 1: no
+open P0 — `list_issues` on `Busy-Office/busy-office-ui` returns
+`totalCount: 0`, and no open `N. [ ]` item is a P0. Step 1 triaged and
+committed nothing: no new input. Rule 2 **1 / 4 … ok**. Rule 3 **0 / 3 … ok**.
+**Rule 4 found nothing dispatchable**, and per `LOOPS.md` 186.2 the kind is
+named rather than lumped, each item re-read this wake rather than copied from
+the hand-off: **owner-blocked** Slice 15, `112.3`, `112.4`, `249.7`,
+`249.10`-`249.13`; **browser-blocked in the SCREENSHOT sense** (a LOCAL wake
+can take these) `249.6`, `249.9`, `249.15`; **agent-blocked** none. Rule 5:
+`dispatch_status.py` reads `1 wake-date(s) newer … STALE`, so the trend clause
+**could not be evaluated** rather than being reported clear — but the rule's
+SECOND clause (184.2's, "a size budget breached outright") **was** evaluable and
+is clear: `check-size.mjs` passed, *139 shipped payload file(s) in 11 budget
+bucket(s), 376.2 kB gz total; tightest headroom 110 bytes*
+(`css/brand-navy.min.css`). Rule 6 fired.
+
+### The pick
+
+`polish_requeue.py --apply` re-queued **19** surfaces — every non-skipped row in
+the ledger except `avatar`, which the last round stamped. §3b's "fewest rounds
+used" discriminated: **8** rows sit at `1/3` against 11 at `2/3`.
+`inline-editing` and `table-toolbar` drop for 217.1's stated reason (no
+`dsa-scores.json` entry, so no arm can disagree with them), leaving **six**.
+
+Picked on the count of falsifiable assertions each entry carries — the property
+the arms actually consume, and the discriminator Slice 266 introduced when
+216.1's source-movement reading returned the same value for all seven of its
+candidates. **Re-derived this wake rather than copied**, and it reproduces 266's
+own table with `avatar` removed:
+
+| surface | quotes | unit literals | bare counts | absence claims | cite chars |
+|---|---|---|---|---|---|
+| **progress** | 1 | **2** | 7 | 5 | **926** |
+| navbar | 1 | 1 | 9 | 5 | 868 |
+| tree | 1 | 2 | 6 | 5 | 808 |
+| byline | 2 | 0 | 4 | 5 | 800 |
+| pagination | 1 | 0 | 5 | 4 | 689 |
+| breadcrumb | 0 | 0 | 0 | 7 | 511 |
+
+`progress` was 266's own second-ranked candidate behind `avatar`, so this is a
+pre-existing measured ranking rather than a discriminator invented for the
+occasion.
+
+### `progress`'s own six cites all hold
+
+Checked at the source, comment-stripped where the claim is about declarations.
+
+- **typography** *"no font-size at all"* — **0** `font-size` declarations.
+- **colour** *"accent/warning/danger tokens across both engine
+  pseudo-elements"* — `--bo-color-accent` ×2, `--bo-color-warning-strong` ×2,
+  `--bo-color-danger` ×2, matching `::-webkit-progress-value` ×3 and
+  `::-moz-progress-bar` ×3 (three tones × two engines, plus the base pair).
+  *"forced-colors hands the element back to the platform with appearance:auto"*
+  — the `@media (forced-colors: active)` block sets exactly that.
+- **spacing** *"the 10rem x 0.5rem bar proportions state why they are intrinsic
+  (94.6b)"* — `10rem` ×1, `0.5rem` ×1, and the comment above them says why.
+- **interaction: na** *"a native `<progress>`"* — **0 of 33** behaviours match
+  `/progress/i`, and arm 8 confirms the page imports none.
+- **content** — the quoted clause *"Not for work of unknown duration"* renders
+  on the built page (×2), and the near-miss the cite records (the ApiTable's
+  advice to freeze a stalled bar at 93%) is there too — `93%` ×4, `freeze` ×2,
+  `stalled` ×2.
+- **fit** *"the source names `.bo-stepper` as the discrete-step alternative"* —
+  named once, in the header comment, exactly as claimed.
+
+### The eight standing arms all reproduce
+
+| arm | reading |
+|---|---|
+| 1 wrong-choice clause | `156 assertions / 80 pages / 1 outstanding` (the skipped `date`) |
+| 2 score rendered by its page | `360 assertions / 40 scored`; `Not yet scored` in **0** files under `dist/components/` |
+| 3 line-number cites | **0 found** — the arm 266 emptied has not regrown |
+| 4 content quotes in built pages | **20/20** |
+| 5 css dimension literals | **82/82** |
+| 6 bare counts in any cite | **9/9** |
+| 7 absence claims | **42/42** |
+| 8 `interaction: na` pages importing a behaviour | **0 of 17** |
+
+So the round is a **no-op on `progress` and on every arm**. What it is not a
+no-op on is the step that ran before them.
+
+### The finding: `--apply` reports its caller, not its write
+
+Step 0 of §3b is `polish_requeue.py --apply`. It printed:
+
+```
+ledger updated — 19 surface(s) marked for re-score
+```
+
+and `git status` came back **clean**. The file was byte-identical — same md5
+before and after — because the `RE-QUEUED — source changed` marker is
+**sticky**: line 277 is the only write to the status column and it only ever
+appends, `--stamp` writes the `src` column (`parts[-2]`) instead, and no other
+script in the repo writes this ledger. All 19 rows already carried the marker
+from earlier rounds, so **0** rows were written and the message announced 19.
+
+The number itself is right and is the one the round consumes — 19 surfaces
+whose source moved. What is wrong is the **verb**: `len(names)` is the size of
+the re-queue set, and the sentence attached it to a write.
+
+**Red-proved by discrimination, with the injection asserted before each run**
+— which is the only thing that separates this from "the number looked odd":
+
+| run | marker rows before | printed | rows actually written |
+|---|---|---|---|
+| steady state | 19 | `ledger updated — 19 surface(s) marked for re-score` | **0** (md5 identical) |
+| one marker stripped from `component/tree` | **18** | `ledger updated — 19 surface(s) marked for re-score` | **1** |
+
+Identical output for 0 rows written and for 1. A message that cannot tell those
+apart is reporting its argument rather than its effect, which is exactly the
+failure CLAUDE.md's storage doctrine names — *"reconcile against the SOURCE, not
+against the argument … a reconciliation that cannot see past its own caller is a
+detector that cannot fail"*. It had gone unnoticed because the steady state is
+the common case: every wake since the markers accumulated has read a write that
+did not happen.
+
+1. [x] **267.1 — DONE 2026-09-04. `--apply` reports the rows it wrote, not the
+       size of its argument.**
+       - **Accept:** the `--apply` output distinguishes rows newly marked from
+         rows that already carried the marker, and says outright when it wrote
+         nothing; red-proved by running it in both states with the marker count
+         asserted before each run, and the two outputs differ.
+       - **Landed** — the two readings are in the table below, taken with the
+         injection confirmed present first (19 → 18 markers) and with the tree
+         verified clean afterwards, because the apply restored the stripped row
+         exactly.
+
+### Fixed by reporting what it wrote
+
+```
+0 row(s) newly marked for re-score; 19 already carried the marker; 19 re-queued in total
+ledger UNCHANGED — nothing to write
+```
+```
+1 row(s) newly marked for re-score; 18 already carried the marker; 19 re-queued in total
+ledger updated
+```
+
+The write is now conditional on the text actually differing, so the steady-state
+wake stops rewriting a byte-identical file, and the "updated/UNCHANGED" verb is
+read off that same comparison rather than off the argument. Both readings were
+taken with the injection confirmed present first (19 → 18 markers), and the
+apply restored the stripped row exactly, leaving the tree clean.
+
+**No consumer parses the old string** — measured, not assumed:
+`grep -rn 'surface(s) marked for re-score'` over `*.py`/`*.mjs`/`*.js`/`*.yml`/
+`*.json` returns exactly **one** hit, the comment this change wrote to explain
+the old wording, and **zero** in any `*.md`. That is CLAUDE.md's removal trap
+arriving on schedule — the explanation legitimately names the thing removed — so
+the check that matters is the absence of a *parser*, not of the substring.
+
+### No gate — the seventh refusal, and the first where the predicate is not checkable at all
+
+216.2, 217.2, 220.2, 227.2, 240.2 and 266's each refused a gate for a decaying
+cite. This one is refused on a different ground: the property is *"a script's
+report line matches what it did"*, which is semantic, not structural — 94.11's
+distinction between *a comment precedes this literal* (checkable) and *a comment
+explains this literal* (not). There is also exactly **one** member of the class:
+`polish_requeue.py` is the only script that writes a `.roundtable` ledger. A
+detector over one semantic predicate is ceremony by that rule's own test, and
+101.3 independently confines Polish to the existing ratchet.
+
+### One instrument defect, caught before it became a finding
+
+Arm 8 was **reinvented rather than run**, and the reinvention produced a false
+positive: matching behaviour names as bare substrings of the built HTML flagged
+`stepper :: initWizard`. The hit is ApiTable prose — *"None to display progress.
+`initWizard()` is opt-in…"* — not a demonstration. The canonical arm the ledger
+records reads the **page's own import**, which is what the rubric scores, and it
+reads **0 of 17**. The four ownership definitions the dashboard round measured
+and discarded already say why the loose readings fail; re-deriving one of them
+by hand reproduced the same class of error within a minute. **Run the arm the
+ledger carries; do not re-derive it.**
+
+### What this does NOT cover
+
+The fix makes the report honest. It does **not** make the marker meaningful:
+once a row is marked it stays marked until a hand edit removes it, so the status
+column records *"this surface has been re-queued at some point"*, not *"this
+surface is re-queued now"*. Rule 6 reads neither — it reads `rounds` and `dry`
+(176.2) — so nothing downstream is wrong today. Recorded rather than fixed,
+because changing the marker's lifecycle is a ledger-semantics change, not
+maintenance of the existing ratchet.
+
+### Score, and what is owed
+
+**No score moves and no blind re-score is owed.** `progress`'s six cites
+reconciled clean and no published artefact about `progress` changed, so `scored`
+stays **2026-08-23** — moving it would claim the independent second opinion §3b
+step 4 requires, which this wake could not run. `rounds` moves 1→2 on `badge`'s
+and `alerts`' precedent (a round that reconciled cleanly), not 182.1's.
+
+### Not verified, said plainly
+
+**Cloud wake: no Podman and no `localhost:8081`, so the 1440/390
+light-and-dark screenshot lane could not run.** Nothing in this round rests on a
+rendered image: **0** files under `packages/core/src/` changed, **0** docs pages
+changed, and the only non-markdown edit is a Python report line in
+`scripts/loops/`, which no built artefact reads. Every browser-derived number
+quoted above came from a gate executing in this container. All **17** CI entry
+points were re-derived from `ci.yml` (`grep -oE 'npm run …'`) and run green here;
+`check:claims`'s `3 NOT VERIFIED` is ENVIRONMENT 6b's container property — this
+container reports `(hover: hover) and (pointer: fine)` false — and its live count
+read **162**, up from 158, which is prose landing rather than claims being
+skipped.
+
 ## Slice 266 — Polish round on `avatar`: 249.8's 3-line header moved every line-number pointer in the framework, and all four live ones were published or printed while pointing at the wrong line (2026-09-04)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
