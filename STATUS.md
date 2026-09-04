@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-04 07:06 UTC
+Generated at: 2026-09-04 07:57 UTC
 
 ## Open items by slice
 
@@ -24,9 +24,10 @@ Generated at: 2026-09-04 07:06 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1369 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-09-04 00:56   ok
+dispatch status — counter-triggered rules (1374 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-09-04 00:56   OVERDUE
   Objective     1 / 3 slice           since 2026-09-04 02:05   ok  [249]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      1 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-03, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-03 (2026-09-04), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -45,16 +46,16 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-04 02:49 · Meta · refusal · building the /components/ catalogue page itself — browser-blocked in the screenshot sense, left OPEN for a local wake · refused · e6631a88
-- 2026-09-04 02:49 · Meta · refusal · closing 249.9 on the strength of the measurement — the Accept's deliverable is the page, not the numbers · refused · e6631a88
-- 2026-09-04 05:04 · Continue · build · 249.17 (split from 249.15) — og:/twitter: tags on every built page + check-metadata arm 5, red-proved four ways; Slice 260 · landed · 93ad43a
-- 2026-09-04 05:04 · Meta · refusal · a placeholder og:image and twitter:card=summary_large_image — the card image needs a rendered-image check a cloud wake cannot do (249.15) · refused · 93ad43a
-- 2026-09-04 05:04 · Meta · refusal · adding <link rel=canonical> alongside og:url — the item names the social tags; og:url already carries the published URL · refused · 93ad43a
 - 2026-09-04 05:04 · Meta · refusal · retyping each self-head page's title/description into the SocialMeta call — hoisted to one const per page instead, so the two uses cannot drift · refused · 93ad43a
 - 2026-09-04 07:06 · Continue · build · 249.18 — component→patterns mapping split out of 249.9 and landed; the audit's 'no JSON key exists' refuted and one false zero (sidebar-nav) corrected · landed · 96dc182
 - 2026-09-04 07:06 · Meta · refusal · publishing the inverse into llms.txt as used-by: — the file already carries the full relation forward as uses: per pattern, so the inverse duplicates bytes for a reader that already has both halves · refused · 96dc182
 - 2026-09-04 07:06 · Meta · refusal · keying byComponent by component NAME — skeleton and state share /components/state-patterns, so a name-keyed map has to invent which of the two a link meant · refused · 96dc182
 - 2026-09-04 07:06 · Meta · refusal · checking byComponent against the groups beside it in the same JSON — one script writes both, so that comparison is self-consistent by construction and could never fail · refused · 96dc182
+- 2026-09-04 07:57 · Continue · build · 249.19 split out of 249.7 and landed — dropdown's opener and Related now route the long-list case to combobox; the finding is that the symmetry gate it suggests is refused on a 29.9% base rate · landed · 87fbc69
+- 2026-09-04 07:57 · Meta · refusal · a Related-link SYMMETRY gate — 29 of 97 pairs (29.9%) are reciprocal and hubs (data-table in-degree 16, form 15) make most asymmetry correct; it would go red on 68 mostly-right pairs · refused · 87fbc69
+- 2026-09-04 07:57 · Meta · refusal · a gate requiring the wrong-choice clause to link its alternative — 37/37 component and 39/39 pattern openers already carry a link, a predicate uniformly true (94.11) · refused · 87fbc69
+- 2026-09-04 07:57 · Meta · refusal · fixing the other 54 never-names pairs — a page-local argument exists for dropdown/combobox and for none of the rest; fixing them because a number is 29.9% is the busywork LOOPS.md refuses · refused · 87fbc69
+- 2026-09-04 07:57 · Meta · refusal · a committed report:related-graph script — the repo's not-a-gate reports each earn their place by a Standardize lane that runs them, and a fifth report with no lane rots while a fifth lane is a recurring cost for a question with no standing delta · refused · 87fbc69
 
 ## Sunset test
 
