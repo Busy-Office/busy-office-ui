@@ -1380,3 +1380,8 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-04 07:57 · Meta · refusal · a gate requiring the wrong-choice clause to link its alternative — 37/37 component and 39/39 pattern openers already carry a link, a predicate uniformly true (94.11) · refused · 87fbc69
 - 2026-09-04 07:57 · Meta · refusal · fixing the other 54 never-names pairs — a page-local argument exists for dropdown/combobox and for none of the rest; fixing them because a number is 29.9% is the busywork LOOPS.md refuses · refused · 87fbc69
 - 2026-09-04 07:57 · Meta · refusal · a committed report:related-graph script — the repo's not-a-gate reports each earn their place by a Standardize lane that runs them, and a fifth report with no lane rots while a fifth lane is a recurring cost for a question with no standing delta · refused · 87fbc69
+- 2026-09-04 09:57 · Standardize · sweep · Slice 263.1 — three HTML-entity decoders consolidated into html-entities.mjs; all five lanes clean, finding from step 1's reading habit · landed · bdb73d8f
+- 2026-09-04 09:57 · Meta · refusal · widening lane 5's function-name scan — 257.1's base rate stands and no name scan finds three differently-named copies · refused · bdb73d8f
+- 2026-09-04 09:57 · Meta · refusal · a --self-test on the new module — check-selftests walks check-* only, so nothing would run it · refused · bdb73d8f
+- 2026-09-04 09:57 · Meta · refusal · folding check-po-app.mjs's single &amp; replace into the shared module · refused · bdb73d8f
+- 2026-09-04 09:57 · Meta · refusal · consolidating the two byte-identical stripTags — opposite sides of the published-package boundary; logged instead · refused · bdb73d8f
