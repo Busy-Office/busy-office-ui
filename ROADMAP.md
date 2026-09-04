@@ -315,6 +315,197 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 269 — Polish round on `breadcrumb`: all six cites hold, and the finding is that the only two blind re-scores this ledger has ever run that MOVED a score both left the entry's `scored` stamp behind — obeying a rule nothing had written down, and disobeying the one the file's own `$comment` states (2026-09-04)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again —
+`git branch --show-current` empty, local `main` at `26447ba9` while `HEAD` sat
+on the pushed `f538a24`. ENVIRONMENT trap 1, fixed with
+`git checkout -B main origin/main` before any work. `--unshallow` clean in one
+attempt (**1,869** commits, no `shallow.lock`) and it brought all **seven** tags
+unprompted, so trap 2 did not bite. Rule 1: no open P0 — `list_issues` on
+`Busy-Office/busy-office-ui` returns `totalCount: 0`, and no open `N. [ ]` item
+is a P0. Step 1 triaged and committed nothing: no new input. Rule 2
+**1 / 4 … ok**. Rule 3 **0 / 3 … ok** (fifth consecutive wake at 0 — 161.4
+admits only `Continue`/`Standardize` rows as slice-closers and this wake's row
+is `Polish`). **Rule 4 found nothing dispatchable**; per `LOOPS.md` 186.2 the
+kind is named rather than lumped, and each item was re-read this wake rather
+than copied from the hand-off: **owner-blocked** Slice 15, `112.3`, `112.4`,
+`249.7`, `249.10`-`249.13`; **browser-blocked in the SCREENSHOT sense** (a LOCAL
+wake can take these) `249.6`, `249.9`, `249.15`; **agent-blocked** none. The
+clause-level re-read found no cloud-takeable half in any of the three: `249.6`
+is declined a third time on its own open question (*"or three of the six rows
+cut"*), `249.9`'s two derivation halves are already split out and landed
+(`249.18`, `249.20`) leaving the rendered miniatures plus Slice 15's owner
+hardware, and `249.15` is the OG image itself. Rule 5: `dispatch_status.py`
+reads `1 wake-date(s) newer … STALE`, so the trend clause **could not be
+evaluated** rather than being reported clear; the SECOND clause (184.2's, "a
+size budget breached outright") **was** evaluable and is clear —
+`check-size.mjs` passed at *139 shipped payload file(s) in 11 budget bucket(s),
+376.2 kB gz total; tightest headroom 110 bytes* (`css/brand-navy.min.css`),
+the identical reading to the last two wakes. Rule 6 fired.
+
+267.1's fix holds a second wake on: `--apply` printed
+`0 row(s) newly marked for re-score; 17 already carried the marker; 17 re-queued
+in total` / `ledger UNCHANGED — nothing to write`.
+
+### The pick, and the instrument reproduces an independent prior measurement exactly
+
+§3b's "fewest rounds used" left **6** rows at `1/3`; `inline-editing` and
+`table-toolbar` drop for 217.1's stated reason (no `dsa-scores.json` entry, so
+no arm can disagree with them), leaving **four**. Ranked on 266's
+falsifiable-assertion count, **re-derived from scratch rather than copied**:
+
+| surface | quotes | unit literals | bare counts | absence claims | cite chars |
+|---|---|---|---|---|---|
+| **breadcrumb** | 2 | 0 | 5 | 13 | **1049** |
+| tree | 1 | 2 | 5 | 5 | 813 |
+| byline | 2 | 0 | 4 | 5 | 805 |
+| pagination | 1 | 0 | 5 | 4 | 694 |
+
+**The instrument was reconciled against 268's published table before being
+used, and reproduces it 5 of 5** — run against `a783a08^` (the tree 268 ranked)
+it returns navbar **868**, tree **808**, byline **800**, pagination **689**,
+breadcrumb **511**, every figure exact. The `cite chars` column above is 5
+higher than that only because this run joins the six cites with a separator;
+the pre-268 run does not. (`bare counts` differs by one on navbar and tree, so
+that column's definition is an approximation of 266's and is not load-bearing —
+the ORDER is what the pick uses, and it is unchanged.)
+
+**breadcrumb went 511 → 1049 characters, and it is the only one of the five
+that moved.** That is entirely Slice 268 rewriting its `interaction` cite. Which
+is the reason to pick it: **that new text is the largest single block of
+unverified assertion in the rubric, and no arm has ever read it.** It is the
+ledger's standing shape stated as a pick rather than as a postscript — the
+claim a round spends its red-proof on is the one that holds; the claims shipped
+BESIDE it go out on credibility having earned none (192.1).
+
+### `breadcrumb`'s six cites all hold, including the five new assertions
+
+The `interaction` cite written by 268 makes five separately checkable claims.
+All five hold, checked at the source rather than read:
+
+| claim | reading |
+|---|---|
+| the component paints `.bo-breadcrumb a:hover` | present, `breadcrumb.css:32` |
+| current crumb is non-link text under `[aria-current="page"]` | the demo and canonical markup both render `<li aria-current="page">PO-88213</li>` — no anchor |
+| the API table's JS row states `"None — CSS-only."` | `ApiTable.astro:12`'s default, and `breadcrumb.astro` passes no `js` prop |
+| `check-js-serves` holds | `apps/docs/scripts/check-js-serves.mjs`, script `check:js-serves`, both exist |
+| against `behaviors.json`'s **empty** `byComponent` entry | the key is **present** and its value is `[]` — not absent; 22 of 40 entries are present-but-empty |
+
+The other five reconcile clean, comment-stripped where the claim is about
+declarations: **typography** — exactly one `font-size` declaration and it is
+`var(--bo-font-size-sm)`; **colour** — **zero** hex/`rgb(`/`hsl(`, and
+`[aria-current="page"]` sets `color` **and** `font-weight`, so "not colour
+alone" is two-channel as claimed; **spacing** — **zero** unit literals, 2
+`--bo-space-` references; **content** — `content: "/" / "";` verbatim;
+**fit** — the ERP suite carries `bo-breadcrumb` in exactly **one** source file
+(`examples/erp-suite/_shell.mjs`, `crumbs()` at line 125, called at line 199)
+and `packages/create-ui/template/screen.html` ships **1**.
+
+**One instrument trap avoided and worth recording**: `grep -rc bo-breadcrumb
+examples/erp-suite` returns **28 files**, which reads as hand-written markup on
+27 screens and would refute the cite's "never hand-written markup". Twenty-seven
+of them are `examples/erp-suite/dist/**`, i.e. the helper's own generated
+output. The cite is right; the naive count is the wrong instrument.
+
+### Arm 11 — NEW: a dimension re-scored LATER than its entry's `scored` stamp
+
+Reads **17 / 19**. The two that disagree:
+
+```
+breadcrumb · interaction :: cite re-scored 2026-09-04, entry stamped 2026-08-21
+dashboard  · interaction :: cite re-scored 2026-09-02, entry stamped 2026-08-23
+```
+
+**Those two are exactly the only blind re-scores this ledger has ever run that
+MOVED a score.** The other 17 hits are the 2026-08-23 round-1 batch, whose
+re-score date equals their stamp — so the arm discriminates rather than firing
+on a uniform predicate (94.11's test).
+
+**The red-proof caught a defect in the detector, which is the base rate holding
+rather than an anecdote.** Three injections, each confirmed present in the
+PARSED JSON before its result was believed:
+
+1. **stamp-side** — breadcrumb's `scored` → `2026-09-04`: row drops, `18/19`. ✓
+2. **cite-side** — `tree · content` gains ` Blind re-scored 2026-09-30.`:
+   **came back GREEN.** Per CLAUDE.md that is a defect in the injection until
+   proven otherwise — and this time it was the DETECTOR. `RE.exec` returns the
+   FIRST match, and `tree · content` already carries a re-score date
+   (`2026-08-23`), so the arm judged it on the earlier one and never saw the
+   injection. Fixed to read **all** dates in re-score sentences and compare the
+   latest; the injection then fires, `16/19`. ✓
+3. **discrimination** — `tree · content` gains an EARLIER date (`2026-08-01`):
+   correctly does **not** fire, `17/19`, so the arm compares rather than merely
+   matching a date. ✓
+
+Injection 3's result was meaningless until injection 2 was fixed — a
+non-firing check cannot be evidence of discrimination while a bug that
+suppresses firing is live. It was re-run after the fix, not before.
+
+1. [x] **269.1 — DONE 2026-09-04. The `$comment`'s stated rule was the wrong
+       one, and it was correctly disobeyed 2 of 2 times.** `dsa-scores.json`'s
+       own contract read: *"Re-take a score when a component's design changes,
+       and **update `scored` to that date**."* Both instances above refused
+       that, and both were right to: `scored` is one date for six dimensions,
+       so moving it for a single-dimension re-score would assert that the other
+       **five** were re-taken that day — manufacturing exactly the independent
+       second opinion §3b step 4 requires and nobody gave. The ledger has
+       refused that five times running in the opposite direction ("moving it
+       would claim the independent second opinion … which this wake could not
+       run"); what nothing recorded is the case where a re-score DID happen and
+       the stamp still must not move.
+
+       **So the fix is to the contract, not to the two entries.** The
+       `$comment` now states the rule the shipped artefact already follows:
+       `scored` is the date of the entry's last FULL pass over all six
+       dimensions; a single dimension re-scored later carries its date in its
+       own cite and does not move the stamp; and a page publishing
+       `Alignment scored <full-pass date>` beside a cite naming a later
+       re-score is therefore correct rather than self-contradictory. Both cites
+       already carry their date, so no entry changed.
+
+       **Nothing on any page changed** — the `$comment` renders on **0** of the
+       built files (`grep -rl 'SOURCE OF TRUTH for what renders' apps/docs/dist`),
+       which is also why this was takeable by a cloud wake. Verified the
+       amendment does not trip its own detector: the new text names
+       `2026-09-04`, and arm 11 still reads **17/19** rather than gaining a row
+       — CLAUDE.md's "assertion tripped by its own explanation" trap checked,
+       not assumed.
+
+       - **Accept:** the contract in `$comment` agrees with what the two shipped
+         instances do, with the reasoning for why the stamp must not move; arm
+         11's disagreement count is unchanged by the amendment; no built page
+         changes. **(All three met.)**
+
+2. [x] **269.2 — A gate is REFUSED, for the ninth time, and on 268's ground
+       rather than 101.3's.** 101.3's stop rule forbidding Polish to add gates
+       applies as always, but there is a stronger reason here and it is
+       specific: **arm 11 is now RED on a correct tree.** Its two rows are
+       correct under the amended contract, so a gate over this predicate would
+       fail the build on two right answers — the same shape 268 recorded for
+       arm 9 (`stepper :: initWizard`) and the ground 243 used. Making it green
+       would require the arm to encode which re-scores were single-dimension,
+       which is the rubric change 220.2 and 227.2 already refused twice.
+
+       **Base rate recorded for whoever may decide anyway:** the predicate is
+       true of **2 of 40** entries and **2 of 19** re-score cites — it
+       discriminates, unlike 94.11's 155/155. That is the measurement, not a
+       recommendation.
+
+**Considered and deliberately NOT filed:** relabelling `Maturity.astro`'s
+`Alignment scored` to say "last full pass". It would remove the last trace of
+ambiguity for a reader, but it is page markup — a rendered change this cloud
+wake cannot verify at 1440/390 in both themes — and the amended `$comment`
+already makes the published pairing correct rather than wrong. Recorded here so
+a later wake sees it was weighed rather than missed.
+
+**Not verified, named rather than implied:** cloud wake, so the 1440/390
+light-and-dark screenshot lane could not run. **0** files under
+`packages/core/src/` changed and **0** docs page markup changed; the only
+non-markdown edit is one `$comment` string in `dsa-scores.json` which renders on
+zero built pages. All **17** CI entry points were re-derived from `ci.yml` and
+run green here.
+
 ## Slice 268 — Polish round on `navbar`: navbar's six cites hold, and a new arm reading the rubric's own `na` boundary finds `breadcrumb · interaction` scored `na` seven hours before the clause that forbids it existed (2026-09-04)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again

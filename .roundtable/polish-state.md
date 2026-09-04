@@ -89,7 +89,7 @@ a no-op recorded in one line.
 | component/alerts | content | **3** | 2/3 | 0 | 4ee5ad51 | round 1 landed — blind re-score 2→3, off the gate's TODO; **round 2 (2026-08-31) NO-OP — reconciliation clean on all four arms; the sweep around it filed ROADMAP 231.2, see below** · **RE-QUEUED — source changed** |
 | component/avatar | content | **3** | 2/3 | 0 | 3147e6c1 | round 1 landed — blind 2→3, "not the only way to name someone"; **round 2 (2026-09-04) FOUND A DEFECT, and it is arm 3's WHOLE class at once — 249.8's 3-line header moved every line-number pointer in the framework; all four live ones were published or printed. ROADMAP 266, see below** |
 | component/badge | content | **3** | 2/3 | 0 | 1f69e677 | round 1 landed — blind 2→3, "not for anything actionable"; **round 2 (2026-08-28) NO-OP — reconciliation clean on all four arms, see below** · **RE-QUEUED — source changed** |
-| component/breadcrumb | content | **3** | 1/3 | 0 | dcbde565 | **round 1 (2026-08-30) FOUND A DEFECT — `fit` counted "2 of 19 pattern screens" against 39; re-entry from 217.2's filing, see below** · **`interaction` corrected `na`→3 by navbar's round 2 (2026-09-04) — a blind re-score, NOT a round on this surface: `rounds` stays 1/3** · **RE-QUEUED — source changed** |
+| component/breadcrumb | content | **3** | 2/3 | 0 | 8e11bfe5 | **round 1 (2026-08-30) FOUND A DEFECT — `fit` counted "2 of 19 pattern screens" against 39; re-entry from 217.2's filing, see below** · **`interaction` corrected `na`→3 by navbar's round 2 (2026-09-04) — a blind re-score, NOT a round on this surface: `rounds` stayed 1/3 for it** · **round 2 (2026-09-04) NO-OP on the surface — all six cites hold, including the five NEW assertions 268 wrote into the `interaction` cite that no arm had ever read — and a new arm 11 FOUND A DEFECT in the file's own contract: `dsa-scores.json`'s `$comment` mandated moving `scored` on a re-score, which the only two score-moving blind re-scores ever run both correctly refused. ROADMAP 269, see below** |
 | component/byline | content | **3** | 1/3 | 0 | 29ededaf | round 1 landed — blind 2→3; scorer caught the boundary, redrawn · **RE-QUEUED — source changed** |
 | component/calendar | content | **3** | 2/3 | 0 | 6b36b863 | round 1 landed — blind 2→3, "not for a plain date field"; **round 2 (2026-09-02) six arms clean on calendar itself, and a NEW arm 7 FOUND A DEFECT elsewhere — `form · colour` claimed "zero raw hex" against two painted ones; cite corrected, CSS left open as 240.1, see below** · **RE-QUEUED — source changed** |
 | component/dashboard | content | **3** | 2/3 | 0 | 3780542a | round 1 landed — blind 2→3, "not a wrapper round every section"; **round 2 (2026-09-02) FOUND TWO DEFECTS, and the first is the only one in this ledger where the SCORE was wrong rather than the cite — `interaction: na` on a component that ships `initCollapsibleCards`; blind re-scored to 3 by a second agent, the first blind re-score this ledger has actually run. See below** · **RE-QUEUED — source changed** |
@@ -1827,3 +1827,130 @@ cite in `dsa-scores.json`, read back off the BUILT page rather than inferred.
 All **17** CI entry points were re-derived from `ci.yml` and run green here;
 `check:claims`'s `3 NOT VERIFIED` is ENVIRONMENT 6b's container property and its
 live count read **162**, unchanged.
+
+## Round 2: breadcrumb (2026-09-04, cloud wake) — NO-OP on the surface; the finding is the file's own contract (ROADMAP 269)
+
+Dispatcher rule 6, reached because rules 1-5 were all clear or unevaluable: no
+P0, Standardize `1 / 4`, Objective `0 / 3`, rule 4's eleven open items all
+blocked (eight owner, three browser-blocked in the screenshot sense), and rule
+5's trend clause **STALE** so reported *could not be evaluated* rather than
+clear, with its size-budget clause clear at *376.2 kB gz, tightest headroom 110
+bytes*. `polish_requeue.py --apply` re-queued **17**, printing 267.1's
+steady-state pair over an unchanged ledger for the second wake running.
+
+### The pick needed no invented discriminator — fourth wake running
+
+§3b's "fewest rounds" left **6** rows at `1/3`; `inline-editing` and
+`table-toolbar` drop for 217.1's stated reason (no `dsa-scores.json` entry),
+leaving four. 266's falsifiable-assertion ranking, re-derived from scratch:
+
+| surface | quotes | unit literals | bare counts | absence claims | cite chars |
+|---|---|---|---|---|---|
+| **breadcrumb** | 2 | 0 | 5 | 13 | **1049** |
+| tree | 1 | 2 | 5 | 5 | 813 |
+| byline | 2 | 0 | 4 | 5 | 805 |
+| pagination | 1 | 0 | 5 | 4 | 694 |
+
+**The instrument was reconciled against 268's published table before it was
+used, and reproduces it 5 of 5** — run against `a783a08^`, the tree 268 ranked,
+it returns navbar 868 / tree 808 / byline 800 / pagination 689 / breadcrumb
+**511**, every figure exact. (`cite chars` above runs 5 higher only because this
+run joins the six cites with a separator.)
+
+**breadcrumb is the only one of the five that moved: 511 → 1049.** That is
+entirely 268 rewriting its `interaction` cite, and it is the reason to pick it —
+the largest single block of assertion in the rubric that **no arm has ever
+read**. 192.1's shape used as a pick rather than as a postscript.
+
+### All six cites hold, including the five new assertions
+
+`.bo-breadcrumb a:hover` present (`breadcrumb.css:32`); the current crumb is
+`<li aria-current="page">PO-88213</li>`, no anchor; the API table's JS row is
+`ApiTable.astro:12`'s default `None — CSS-only.` and the page passes no `js`
+prop; `check-js-serves.mjs` / `check:js-serves` both exist; and
+`behaviors.json`'s `byComponent.breadcrumb` is **present with value `[]`** —
+"empty" is exact, not "absent" (22 of 40 entries are present-but-empty).
+
+The other five: one `font-size`, and it is the `var()`; **zero** raw colour, with
+`[aria-current="page"]` setting `color` **and** `font-weight`; **zero** unit
+literals against 2 `--bo-space-` refs; `content: "/" / "";` verbatim; and `fit`'s
+two properties — the ERP suite carries `bo-breadcrumb` in exactly **one** source
+file (`_shell.mjs`, `crumbs()` at 125, called at 199) and create-ui's
+`template/screen.html` ships 1.
+
+**One instrument trap avoided:** `grep -rc bo-breadcrumb examples/erp-suite`
+returns **28 files** and reads as hand-written markup on 27 screens, refuting the
+cite. Twenty-seven are `dist/**` — the helper's own output. The naive count is
+the wrong instrument, not a finding.
+
+### Arm 11 — a dimension re-scored LATER than its entry's `scored` stamp: 17/19
+
+```
+breadcrumb · interaction :: cite re-scored 2026-09-04, entry stamped 2026-08-21
+dashboard  · interaction :: cite re-scored 2026-09-02, entry stamped 2026-08-23
+```
+
+Those two are **exactly the only blind re-scores this ledger has ever run that
+MOVED a score**; the other 17 are the 2026-08-23 round-1 batch, whose re-score
+date equals their stamp. So the arm discriminates rather than firing on a
+uniform predicate.
+
+**The red-proof caught a defect in the DETECTOR — the base rate holding, not an
+anecdote.** Three injections, each confirmed present in the parsed JSON first:
+the stamp-side one dropped breadcrumb (`18/19`) ✓; the cite-side one **came back
+GREEN**, and per CLAUDE.md that is a defect until proven otherwise — it was,
+here in the detector: `RE.exec` returns the FIRST match and `tree · content`
+already carries a 2026-08-23 re-score date, so the arm judged the earlier date
+and never saw the injection. Fixed to read **all** dates in re-score sentences
+and compare the latest; the injection then fires (`16/19`) ✓. The third
+injection (an EARLIER date, must NOT fire) was re-run only after that fix —
+a non-firing check proves nothing about discrimination while a firing-suppression
+bug is live.
+
+### The finding, and why the fix is to the contract rather than the entries
+
+`dsa-scores.json`'s own `$comment` read *"Re-take a score when a component's
+design changes, and **update `scored` to that date**."* Both instances refused
+it, and both were right to: `scored` is one date for six dimensions, so moving it
+for a single-dimension re-score asserts that the other **five** were re-taken
+that day — manufacturing the independent second opinion §3b step 4 requires and
+nobody gave. This ledger has refused that five times in the opposite direction;
+what nothing recorded is the case where a re-score DID happen and the stamp still
+must not move.
+
+So the `$comment` now states the rule the artefact already follows, and no entry
+changed. **Nothing on any page changed** — the `$comment` renders on **0** built
+files. Arm 11 still reads **17/19** after the amendment, which names `2026-09-04`
+in its own text: the "assertion tripped by its own explanation" trap checked
+rather than assumed.
+
+### No blind re-score is owed, and `rounds` moves 1→2
+
+No score moved, so `scored` stays **2026-08-21** and `dry` stays **0** — there
+was no re-score to fail. `rounds` moves 1→2 on 182.1's precedent: the round
+produced a measured change to a shipped artefact.
+
+### A gate is refused for the NINTH time, on 268's ground rather than 101.3's
+
+101.3's stop rule applies as always, but the specific reason is stronger:
+**arm 11 is RED on a correct tree.** Both its rows are correct under the amended
+contract, so a gate would fail the build on two right answers — 268's arm 9
+shape, 243's ground. Making it green would require encoding which re-scores were
+single-dimension, the rubric change 220.2 and 227.2 already refused twice.
+**Base rate recorded anyway: 2 of 40 entries, 2 of 19 re-score cites** — it
+discriminates, unlike 94.11's 155/155. A measurement, not a recommendation.
+
+### Considered and NOT filed
+
+Relabelling `Maturity.astro`'s `Alignment scored` to "last full pass". It is page
+markup — a rendered change this wake cannot verify at 1440/390 in both themes —
+and the amended `$comment` already makes the published pairing correct. Weighed,
+not missed.
+
+### Not verified, said plainly
+
+Cloud wake: no Podman, no `localhost:8081`, so the 1440/390 light-and-dark
+screenshot lane could not run. **0** files under `packages/core/src/` changed and
+**0** docs page markup changed; the only non-markdown edit is one `$comment`
+string that renders on zero built pages. All **17** CI entry points were
+re-derived from `ci.yml` and run green here.
