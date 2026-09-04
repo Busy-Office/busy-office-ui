@@ -11,6 +11,9 @@ import { readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
+/* The default-label rule is shared with new-component.mjs, which compares its
+   own result against this one to decide whether to stamp an @label at all. */
+import { defaultLabel } from './component-label.mjs';
 
 const pkgRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const srcCss = join(pkgRoot, 'src/css');
@@ -209,12 +212,6 @@ async function readDirectives(files) {
   }
   return found;
 }
-
-/** Title-case the dir name the way the sidebar labels already read. */
-const defaultLabel = (dir) => {
-  const words = dir.replace(/-/g, ' ');
-  return words.charAt(0).toUpperCase() + words.slice(1);
-};
 
 const metaErrors = [];
 

@@ -315,6 +315,222 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 257 — Standardize sweep: all five lanes clean, and the finding came from none of them — the default-label rule was hand-copied into the scaffolder by the wake that introduced it, kept in sync by a comment, after it had already drifted once (2026-09-04)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** — `git branch
+--show-current` empty, local `main` stale at `26447ba` while `HEAD` sat on
+`0b65b53` (= `origin/main`), ENVIRONMENT trap 1 in the shape that bites at
+`git push` rather than at Step 0. Fixed with `git checkout -B main origin/main`
+before any commit. `--unshallow` clean in one attempt (**1,845** commits, no
+`shallow.lock`), and `git fetch --tags origin` run after it because
+`--unshallow` does not bring tags (trap 2). Rule 1: no open P0 — `list_issues`
+on `Busy-Office/busy-office-ui` returns `totalCount: 0`; Step 1 triaged and
+committed nothing. **Rule 2 fired**: `dispatch_status.py` read
+`Standardize 4 / 4 Continue rounds  OVERDUE`, exactly as the previous
+hand-off predicted. Rules 3-8 not reached (`Objective 2 / 3 [249, 256]`).
+
+*Read before quoting rule 5:* `dispatch_status.py` reports Optimize **`ok`**
+this wake (not STALE) — `0 wake-date(s) newer`, newest pair `bundle-gz-kb`,
+**128** samples. So rule 5 *could* be evaluated and finds nothing: no tracked
+metric regressed on two consecutive runs, no size budget breached. No new
+sample recorded, deliberately — this sweep changes **0** files under
+`packages/core/src/css/`, so a fresh `bundle-gz-kb` reading could only
+reproduce the existing value, and a repeated identical value is a data point
+about the instrument, not the bundle.
+
+1. [x] **257.1 — DONE 2026-09-04. The default-label rule existed twice, and the
+       two copies are COMPARED AGAINST EACH OTHER at runtime. Consolidated into
+       `packages/core/scripts/component-label.mjs`; both callers now read one
+       function.**
+
+       *Accept was*, written as properties rather than predictions:
+       (a) exactly one definition of the rule exists in the repo, counted by a
+       grep for the rule's BODY rather than its name — the two copies had
+       different names, so a name search cannot answer this;
+       (b) both callers are shown to READ the shared module by an INJECTION
+       that changes each one's output, never by reading the import lines;
+       (c) the scaffolder's stamped header discriminates — same command, same
+       flags, injected module vs restored module produce different headers;
+       (d) the consolidation is output-neutral, or the difference is explained.
+       All four are executed below.
+
+       **The finding.** `extract-api.mjs` derived a component's default sidebar
+       label from its CSS directory name; `new-component.mjs` carried the same
+       derivation inline, guarded by a comment instructing the next editor to
+       spell it *"the SAME way extract-api.mjs's `defaultLabel()` spells it"*.
+
+       ```
+       grep -rn "charAt(0).toUpperCase()" --include=*.mjs --include=*.astro \
+         --include=*.js --include=*.ts . | grep -v node_modules | grep -v "/dist/"
+       # before: extract-api.mjs:216, new-component.mjs:99      -> 2
+       # after:  component-label.mjs:40                          -> 1
+       ```
+
+       **Why this one is worth a module when two copies usually are not.**
+       `bcd-compat.mjs` (252.3, the previous sweep) asks that question of itself
+       and answers it from the cost its own gate paid. The answer here is a
+       different and stronger one: these two copies are not merely alike, they
+       **meet in an equality test**. `new-component.mjs` stamps an `@label` into
+       a new CSS header only when the requested label differs from the derived
+       default — `label === derivedLabel ? '' : ...` — so any disagreement
+       between the two spellings is silently written into a shipped file.
+
+       **That is not hypothetical: it happened, inside the wake that created the
+       second copy.** 249.8's own comment records it — `pascal` derived
+       "Probe Widget" where the extractor derives "Probe widget", so a probe run
+       on 2026-09-03 stamped a redundant `@label` saying exactly what the
+       default already said. 249.8 fixed the symptom by hand-copying the
+       extractor's derivation into the scaffolder, which is the state this item
+       found. Removing a duplication (249.8 deleted the hand-maintained sidebar
+       map from `Gallery.astro`) and adding one in the same change is the drift
+       lane 1 exists to catch.
+
+       **Red-proved two-sided, with the injection confirmed before either
+       verdict was believed** (`grep -cF INJECTED` = 1 on the module), using
+       `cp` backups rather than `git checkout` (249.8's recorded trap):
+
+       - **Consumer A, `extract-api.mjs`.** With `'INJECTED' + …` in the shared
+         module, `dist/api.json` carries **54** `"label": "INJECTED…"` entries
+         (`"label": "INJECTEDAmount"`, `"INJECTEDAvatar"`, …); restored, **0**.
+       - **Consumer B, `new-component.mjs`.** The same scaffolder command and
+         flags (`probe-widget --group="Display" --label="Probe widget"`) stamped
+         `@label Probe widget` into the new header under the injected module —
+         because `defaultLabel` returned `"INJECTEDProbe widget"`, so the
+         equality failed — and stamped **no `@label` at all** under the restored
+         module. Only the shared module differed between the two runs. The probe
+         files and `index.css` were restored from `cp` backups; `git status` is
+         clean of them.
+       - **Output-neutral, proved rather than asserted.** HEAD's extractor was
+         extracted to a sibling probe path, run, and its `api.json` diffed
+         against the consolidated one: **byte-identical**, whole file. The probe
+         was deleted.
+
+       **Lane readings — `n of 5`, since four consecutive sweeps ran three and
+       206's own text said "all three standing lanes".**
+
+       ```
+       npm run scan:dead-style -w docs                 # lane 1 of 4
+       npm run report:css-repeats -w @busy-office/ui   # lane 2 of 4
+       npm run report:prose -w docs                    # lane 3 of 4
+       python3 scripts/loops/report_loop_prose.py      # lane 4 of 4
+       grep -rhoE '^(async )?function\*? [a-zA-Z0-9_]+' \
+         packages/core/scripts apps/docs/scripts scripts/loops \
+         --include=*.mjs --include=*.py | sed 's/^async //' \
+         | sort | uniq -c | sort -rn                    # lane 5 (252.3's scan)
+       ```
+
+       - **Lane 1 — `scan:dead-style`: 0 dead on 0 pages, 1,433 live inline
+         declarations**, screen + print, 0 dead on screen but live in print.
+         Identical to 255.1, 252.1, 244.1 and 237.1. `CHROME_PATH` exported in
+         the same command (ENVIRONMENT 1c).
+       - **Lane 2 — `report:css-repeats`: zero delta, compared member for member
+         rather than by count.** 74 source files · **242** rules with 3+
+         declarations · **230** distinct bodies · **8** repeated — the same three
+         totals as 255.1 and 252.1, and the same eight groups: x4 joined-control
+         radius (money ×2, quantity ×2), x3 list reset (timeline / sidebar-nav
+         `ul` / tree), x3 visually-hidden (sidebar-nav label+heading / stepper
+         label / the primitive) and five x2 pairs. The x4 group is still **two**
+         components, so its reopen trigger — a THIRD component — is unmet.
+       - **Lane 3 — `report:prose`: zero unverdicted pages, by SET DIFFERENCE.**
+         118 documentation pages of 127 built · median **781** · mean 937 ·
+         total **110,537** words. Ten over 2x the corpus median and five more
+         over a family median; the union is **15** distinct pages and
+         `comm -23 flagged verdicted` is **empty** against the **16**-page
+         verdicted set (158.1's twelve, extracted from its own numbered list in
+         the archive, plus 161.1's three and 178.3's `/concepts/scale/`).
+         `/patterns/output-form/` is verdicted and no longer flagged, which is
+         the only asymmetry.
+
+         *The corpus total moved 110,518 → 110,537 (+19 words) since 255.1.* The
+         only commit between the two sweeps that touches a docs source is
+         **249.8** (`4dbec5b`, 49 files, including `src/pages/index.astro` and
+         `src/data/component-nav.mjs`), so the attribution is at commit level
+         and is measured. **Which page carries the +19 was NOT measured** — that
+         would need a rebuild at the parent commit, and nothing here rests on
+         it. No page crossed a threshold it had not already crossed.
+       - **Lane 4 — `report_loop_prose.py`: no file changed accumulate class,
+         `ratchet` block read first, never the delta.** `CLAUDE.md` **32 up,
+         never cut** (31 at 255.1, 30 at 252.1, 29 at 244.1) and `DESIGN.md`
+         **22 up, never cut** are 167.1's standing verdicts, and `CLAUDE.md`'s
+         watch was executed and **retired** by 193.1, so neither is re-raised.
+         Every file the loop reads every wake has a cut behind it except those
+         two: `LOOPS.md` `6 up, last cut 9198e43f`; `RESUME.md` `0 up, last cut
+         0b65b53d`; `ENVIRONMENT.md` `3 up, last cut 1005d1db`; `ROADMAP.md`
+         `13 up, last cut 25e24745`.
+
+         **The regrowth signal is NOT actionable this wake.** `roadmap_scope.py`
+         reads closed-history share **943 / 3,404 = 27.7%**, well under the
+         **55.1%** at which 252.1 dispatched the tenth archive sweep. Of the six
+         eligible targets `[256, 255, 254, 253, 252, 237]`, two (253, 237) are
+         named by the still-open Slice 249 and stay per 236.2. No sweep.
+       - **Lane 5 — the divergence scan step 1 names: no hand-copied logic, and
+         one sentence of 255.1's reading is corrected.** The only two-count
+         pairs are `function exists` and `function build`, both standing false
+         positives adjudicated by arity in 252.3 and 255.1.
+
+         255.1 also stated *"`compatOf` no longer appears; it lives in
+         `bcd-compat.mjs` since 252.3"*. The second clause is true; **the first
+         is not** — the name appears twice, as
+         `const compatOf = (path) => bcdCompatOf(path, 'derive-floor')` and the
+         same line for `'check-rf-floor'`. Those are deliberate bound aliases
+         that supply each caller's own name to the shared function, so the
+         *conclusion* (no hand-copied logic) is unaffected and 252.3's
+         consolidation is intact. What is wrong is the form of the claim: it
+         asserted an ABSENCE in the repo from an instrument that structurally
+         cannot see the construct, which is the shape CLAUDE.md's
+         context-window-regex bullet already records.
+
+       **The instrument's blind spot, measured — and why widening it is
+       REFUSED.** Lane 5's pattern is anchored `^(async )?function`, so it sees
+       neither a top-level arrow function nor an `export function`:
+
+       ```
+       grep -rhoE '^(async )?function\*? [a-zA-Z0-9_]+' … | wc -l          # 69  seen
+       grep -rhoE '^const [a-zA-Z0-9_]+ = (async )?\([^)]*\) =>' … | wc -l # 48  blind
+       grep -rhoE '^export (async )?function\*? [a-zA-Z0-9_]+' … | wc -l   # 41  blind
+       ```
+
+       **69 of 158 definitions — 44%.** That looks like a gate waiting to be
+       widened, and the base rate says otherwise: the only duplicate name in the
+       blind spot is `compatOf`, adjudicated above as correct by design, so
+       widening lane 5 would add exactly **one** group and it is a false
+       positive — 1 of 1.
+
+       **And it would not have caught this wake's drift either**, which is the
+       part worth carrying: the two copies had **different names**
+       (`defaultLabel` in the extractor, `derivedLabel` in the scaffolder, the
+       latter inside an IIFE). No name-collision scan at any width finds two
+       differently-named spellings of one rule. What found it was step 1's own
+       lane-1 instruction — *"duplicated token values or logic (e.g. the same
+       lookup table hand-copied into multiple scripts)"* — applied by reading
+       the newest large change (249.8, 49 files) rather than by running
+       anything. Recorded as a reading habit, not converted into a detector,
+       because the checkable shape here is semantic.
+
+       **Two of this wake's own probes were wrong on first output, both caught
+       before use** (CLAUDE.md's base rate, landing twice in one item):
+       - A duplicate-name probe written as `^const NAME = (` matched plain
+         assignments — `= (await readdir(…))`, `= (process.env…)` — and
+         reported `files` and `base` as duplicated "functions". Neither is a
+         function. The corrected pattern requires `) =>`.
+       - The lane-3 flagged-set extraction grepped `/[a-z-]+/[a-z-]+/` over the
+         report and returned a sixteenth "page": **`/script/style/`**, out of
+         the report's own explanatory header (*"with pre/script/style/svg/
+         template removed"*). The assertion tripped on its own explanation,
+         which is the trap CLAUDE.md's removal-verification section names.
+
+       **Not verified, said plainly.** This is a cloud wake: no Podman, no
+       `localhost:8081`, so the 1440/390 light-and-dark screenshot lane could
+       not run. Nothing here rests on a rendered image — the diff is three build
+       scripts and markdown; **0** files under `packages/core/src/css/`, no docs
+       page markup, the built page count is unchanged at **138**, and
+       `api.json` is byte-identical before and after, so there is nothing a
+       screenshot could have shown. All **17** CI entry points, re-derived from
+       `ci.yml` this wake rather than read off the snapshot, ran green here.
+       `check:claims` reports `162 verified live · 3 NOT VERIFIED` — ENVIRONMENT
+       6b's container property (`pointer: fine` false), not a regression; the
+       live count rose 158 → 162 as the corpus grew.
+
 ## Slice 256 — Objective grill of Slices 249 (.2/.3/.4), 254, 255: 57 of 60 assertions reproduce, both that do not are counts of the WRONG SET — a label group read as a browser floor and a width that is a platform scrollbar — and writing the report tripped a gate whose own comment exempts the file it fired on (2026-09-03)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** and
