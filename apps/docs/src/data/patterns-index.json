@@ -192,6 +192,7 @@
     ],
     "richtext": [],
     "scan": [
+      "/patterns/goods-receipt",
       "/patterns/rf-count",
       "/patterns/rf-pick",
       "/patterns/rf-putaway"
@@ -1249,6 +1250,10 @@
           "openerShort": "Who uses it: a warehouse floor worker, one-handed and often gloved, holding a scanner instead of a mouse.…",
           "complexity": 3,
           "components": [
+            {
+              "href": "/components/scan",
+              "label": "Scan feedback"
+            },
             {
               "href": "/components/quantity",
               "label": "Quantity"

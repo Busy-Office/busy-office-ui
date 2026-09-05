@@ -109,11 +109,11 @@ a no-op recorded in one line.
 | component/navbar | content | **3** | 2/3 | 0 | 35528cb6 | round 1 landed — blind 2→3, "not the page's own title or actions"; **round 2 (2026-09-04) NO-OP on the surface — all six cites hold, including the `interaction: na` no arm covered — and two NEW arms found a defect elsewhere: `breadcrumb · interaction` scored `na` 7h14m before the rubric clause that forbids it existed. ROADMAP 268, see below** |
 | component/pagination | content | **3** | 2/3 | 0 | 89c4d10d | round 1 landed — blind 2→3, "not for stepping through a process"; **round 2 (2026-09-05) NOT a no-op, and the defect is ON this surface — six cites hold, but a new arm 15 read the page's claims against `load-more.ts` and found `data-load-more-auto` published as a runtime promise in five places, asserted in none, all five naming a trigger the shipped module does not have. ROADMAP 277, see below** · **RE-QUEUED — source changed** |
 | component/progress | content | **3** | 2/3 | 0 | 1154a4d7 | round 1 landed — blind 2→3, "not for work of unknown duration"; **round 2 (2026-09-04) NO-OP on the surface — six cites and all eight arms clean — and the finding is in this loop's own step 0: `polish_requeue.py --apply` announced a write over a byte-identical file. ROADMAP 267, see below** · **RE-QUEUED — source changed** |
-| component/scan | colour+interaction+fit | **3** | 2/3 | 0 | e1c34049 | round 1 (2026-08-23) fixed all three; **round 2 (2026-08-28) discovered the round-1 score was never written to `dsa-scores.json` at all** — see below · **RE-QUEUED — source changed** |
+| component/scan | colour+interaction+fit | **3** | 3/3 | 0 | 005a87af | round 1 (2026-08-23) fixed all three; **round 2 (2026-08-28) discovered the round-1 score was never written to `dsa-scores.json` at all** — see below; **round 3 (2026-09-05) NOT a no-op — the pair arm and five of six cites hold, and the sixth (`fit`) published the page's own OUTBOUND `Related` list as an inbound fact, which led to `/patterns/goods-receipt` running `scan` live and listing nothing for it, 1 of 4. ROADMAP 279, see below** |
 | component/sidebar-nav | content | **3** | 2/3 | 0 | 904b544f | round 1 landed — blind 2→3, "not for navigating within one screen"; **round 2 (2026-08-30) FOUND A DEFECT — the `fit` cite's usage count was EXACT when written and decayed two days later, see below** · **RE-QUEUED — source changed** |
 | component/state-patterns | content | **3** | 2/3 | 0 | 7d3f0e38 | round 1 landed — blind 2→3 (clears skeleton AND state); **round 2 (2026-08-28) FOUND A DEFECT — `skeleton · colour` cited the removed token pairing, see below** · **RE-QUEUED — source changed** |
 | component/stepper | content | **3** | 2/3 | 0 | efba2799 | round 1 landed — blind 2→3, "not for independent sections"; **round 2 (2026-09-01) NO-OP — reconciliation clean on five arms; arm 4 re-measured 20/20 and a new arm 5 reads 81/81, see below** · **RE-QUEUED — source changed** |
-| component/table-toolbar | content | **3** | 2/3 | 0 | f7950a7f | round 1 landed — blind 3, "do not add to a read-mostly list" (unscored in DSA); **round 2 (2026-09-05) NOT a no-op, and the defect is ON this surface — the two behaviors this page documents as a pair make the grid keyboard-unreachable when they meet: hiding the column the cell cursor is parked in strands the grid's ONE tab stop on a `[hidden]` cell and Tab then skips the grid entirely. Fixed in `data-grid.ts`, red-proved by four injections confirmed in `dist/js/behaviors/data-grid.js`. ROADMAP 278, see below** |
+| component/table-toolbar | content | **3** | 2/3 | 0 | f7950a7f | round 1 landed — blind 3, "do not add to a read-mostly list" (unscored in DSA); **round 2 (2026-09-05) NOT a no-op, and the defect is ON this surface — the two behaviors this page documents as a pair make the grid keyboard-unreachable when they meet: hiding the column the cell cursor is parked in strands the grid's ONE tab stop on a `[hidden]` cell and Tab then skips the grid entirely. Fixed in `data-grid.ts`, red-proved by four injections confirmed in `dist/js/behaviors/data-grid.js`. ROADMAP 278, see below** · **RE-QUEUED — source changed** |
 | component/tree | content | **3** | 2/3 | 0 | f77bea6d | round 1 landed — blind 2→3, pair-coherent with tree-table; **round 2 (2026-09-04) NO-OP on the surface — all six cites hold, including the `1.25em`/`1em` pair no arm had read — and a new arm 12 FOUND A DEFECT in `check:slice-refs` itself: its file filter omits `.ts` and `.json`, so 11 slice references are cited from nowhere the gate looks. ROADMAP 270, see below** |
 | component/tree-table | content | **3** | 2/3 | 0 | 298374cc | round 1 landed — blind 2→3, pair-coherent with tree; **round 2 (2026-09-01) NO-OP — reconciliation clean on six arms; a new arm 6 reads 8/8 and corrects this ledger's own base rate for the class, see below** · **RE-QUEUED — source changed** |
 
@@ -2439,3 +2439,117 @@ namespaced form — `grep -n 'after:swap' apps/docs/node_modules/htmx.org/dist/h
 tell: it wrote *"htmx is not installed here (`ls node_modules | grep -i htmx` →
 empty)"*, and `ENVIRONMENT.md` records that htmx is **never hoisted** in this
 repo. An agent's first output is not evidence either.
+
+## Round 3: scan (2026-09-05, cloud wake) — NOT a no-op; the surface is clean and the defect is one page down, in the screen its own page points at (ROADMAP 279)
+
+**First round 3 in this ledger.** Every non-skipped row ties at `content: 3`,
+`2/3 rounds`, `dry 0`, so the pick came from §3b step 1's tie-break —
+least-recently-rounded, a three-way tie of `badge`, `scan` and `state-patterns`
+all last run 2026-08-28 — and within that tie `scan` was chosen as the only one
+with a behavior module, so the arm that produced 277 and 278 (read the page's
+runtime claims against the shipped module) is askable there and not on the other
+two. Stated as a judgement, because that is what it is.
+
+**The pair arm, run first and CLEAN.** The question that found three shipped
+defects in three wakes — *does the behavior this page documents actually run on
+this page?* — was asked of `/components/scan` and answered yes. Driven with real
+input on the built page (`page.click` + `page.type` + `page.keyboard.press`,
+never `el.click()` or a synthetic `keydown`, per `ENVIRONMENT.md`'s dispatch-path
+trap): typing `4006381333931` and pressing Enter clears the field
+(`value: ""`), keeps focus (`stillFocused: true`), announces
+`"Scanned 4006381333931"` into `#scan-demo-status`, stamps
+`body[data-scan-result="ok"]` and paints the documented `6px solid` frame; the
+stamp is gone 900 ms later; `REJECT-1` then stamps `error`, announces
+`"Rejected: REJECT-1"` and paints `18px double`. Zero console errors, zero page
+errors. So this surface is not where the finding is.
+
+**The six cites, reconciled against the shipped artefact:**
+
+| cite | reading |
+|---|---|
+| `typography` | `grep -c font-size scan.css` → **0** — holds |
+| `colour` | raw hex/rgb/hsl in `scan.css` → **0**; `Highlight` appears twice, once in prose and once inside `@media (forced-colors: active)` — holds |
+| `spacing` | the `6px`/`18px` frames, `600ms` explicit over the `300ms` token, and the `z-index: calc(...)` naming the toast layer all present with their reasons in place — holds |
+| `interaction` | four `<tr>` in the platform-vs-behavior table plus the no-JS paragraph — holds |
+| `content` | the wrong-choice clause *"Not for form validation on an ordinary screen"* links the alternative — holds |
+| `fit` | **DOES NOT HOLD** — see below |
+
+**A near-miss worth recording so it is not re-raised: 600 ms and 700 ms are both
+correct.** The opener says a *"~600ms viewport wash"*, the `ApiTable` says the
+stamp lives *"~700ms"*, and `scan-input.ts` sets `setTimeout(..., 700)` while
+`scan.css` animates `600ms`. These are two different quantities — the animation
+duration and the stamp's lifetime — and the 100 ms gap is what lets the
+reduced-motion static wash (which has no animation) still end. Not a defect.
+
+**The `fit` cite failed, and the shape is a familiar one.** It read *"linked
+from `/patterns/goods-receipt` and `/patterns/rf-landing`"*. At `4c3d635`, the
+tip this wake dispatched from, `grep -c -F 'components/scan'` over the five RF
+pattern sources reads **goods-receipt 0, rf-landing 0, rf-count 3, rf-pick 3,
+rf-putaway 3** — the two the cite names have none, and the three that do (badge,
+`Related` entry, and a prose link each) are unnamed. The two names in the cite are
+exactly `scan.astro`'s own `Related` list — the component page's OUTBOUND links
+read as an INBOUND fact. `icon` (round 2) and `sidebar-nav` (round 2) failed on
+`fit` the same way: a set counted from the wrong side.
+
+**Chasing that produced the real defect, one page down.**
+`/patterns/goods-receipt` — whose opener says the screen is *"composed from
+`data-scan-input`"* and whose embedded screen renders one — listed nothing for
+`scan` under *Components used*, while its three sibling RF screens all did.
+**1 of 4.** Fixed on the page, and the gate that should have caught it gained
+the converse arm it never had (ROADMAP 279.2); the blanket form of that arm is
+refused on a measured base rate of **357 misses across 39 of 39** pages.
+
+**The first instrument was wrong, and inverted rather than merely noisy.**
+Splitting built HTML on `<pre>` blocks to tell live markup from copyable samples
+reported `goods-receipt` live 1 and the other three live 0 — backwards. An
+inline `<code>data-scan-input</code>` in prose is not a `<pre>`, and the RF
+screens render inside a same-origin `<iframe>` the outer HTML does not contain.
+Counting DOM elements across `page.frames()` reads 1, 1, 1, 1.
+
+**Round outcome: no score moves** — `fit` stays 3, because the component IS
+prescribed where the field matrix puts it; what was wrong is the evidence the
+cite counted, not the verdict. Under §3b step 5 read literally ("did the score
+move? No → `dry++`") this is a dry round, and `dry` is left at 0 for the same
+reason the nine before it were: **273.2 is the open OWNER CALL on exactly that
+rule**, and incrementing here would start the retirement 176.3 refused.
+
+**It does NOT move 273.2's tally, and the distinction is worth keeping
+straight.** That figure counts headings this ledger marks NO-OP — rounds whose
+whole surface reconciled clean — and this round did not: `fit`'s cite is a
+defect ON the surface and was corrected here. Measured after writing this
+section: `grep -cE '^## Round .*NO-OP' .roundtable/polish-state.md` → **9**,
+unchanged, and `grep -cE '^## Round .*NOT a no-op'` → **5**, this round
+included. Re-run both rather than quoting them; a heading is all either one
+reads.
+
+**Blind re-score (§3b step 4), and the bias is stated because it has to be.**
+A second agent scored `scan · fit` from the shipped artefacts, told the surface
+and the dimension and nothing about what changed or what the old score was — and
+told, per 268.2, that the built page RENDERS a prior verdict, that it is not
+evidence, and to reach its own reading first. It returned **3**, agreeing with
+the published value. **Agreement is the weak direction**: a leaked prior can
+only pull a scorer toward it, so this confirms nothing that a contradiction
+would have. What is worth more than the number is that it derived the set
+independently and reconciled it against `patterns-index.json`'s `byComponent`
+(an artefact it did not use to derive it), landing on the same 4 — with
+`byComponent.date` reading `[]`, so its instrument demonstrably reaches the
+rubric's known 0 case.
+
+Two things it brought back that this round did not have:
+
+- **The naive instrument is wrong by seven pages, not one.**
+  `grep -c data-scan-input` over the 138 built pages reports **11 pages / 20
+  occurrences** against **4** real ones; `patterns/goods-receipt/index.html`
+  alone holds 3 string occurrences and 0 DOM elements. It also hit the
+  green-red-proof trap head-on: its first injection matched
+  `/components/scan/` **with a trailing slash** and changed nothing, and its
+  second removed a *sidebar-nav* `<li>` instead — `rf-count` carries five
+  `/components/scan` anchors (2 sidebar, Anatomy, Components used, Related),
+  so "two copies is common" is 5x here.
+- **A wording gap in the rubric itself, recorded and NOT acted on.** `fit`'s
+  definition scores a component against *"the field matrix"*, and the matrix on
+  `/concepts/design-language` has exactly four rows — Date, Number/rate/%,
+  Money, Quantity — with no `scan` row, so it cannot literally assign this
+  component a context. `LOOPS.md` §3b's stop rule (101.3) forbids Polish
+  touching rubric definitions, so it is filed here as an observation for a
+  grill or the owner, not fixed from inside a round.

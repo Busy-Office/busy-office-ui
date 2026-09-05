@@ -2793,6 +2793,10 @@
           "complexity": 3,
           "components": [
             {
+              "href": "/components/scan",
+              "label": "Scan feedback"
+            },
+            {
               "href": "/components/quantity",
               "label": "Quantity"
             },

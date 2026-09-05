@@ -1184,7 +1184,7 @@
         },
         "fit": {
           "score": 3,
-          "cite": "prescribed where the field matrix puts it and nowhere else: linked from /patterns/goods-receipt and /patterns/rf-landing, adopted by po-app's own receive screen (data-scan-input + data-scan-flash), and counted inside rf-essentials' 40 kB RF budget gate"
+          "cite": "prescribed where the field matrix puts it and nowhere else: 4 of 39 pattern screens run a live [data-scan-input] — goods-receipt, rf-count, rf-pick, rf-putaway — and every one of the four now links it from its own Components-used badges; adopted by po-app's own receive screen (data-scan-input + data-scan-flash), and counted inside rf-essentials' 40 kB RF budget gate (RF_BUDGET_KB = 40). Corrected 2026-09-05 (roadmap 279.1): this read \"linked from /patterns/goods-receipt and /patterns/rf-landing\", which is the component page's own OUTBOUND Related list published as an inbound fact — neither of those two linked it, and all three that did went unnamed. Count ELEMENTS in the DOM across frames; grepping the built HTML counts an inline <code>data-scan-input</code> in prose as a use."
         }
       }
     }

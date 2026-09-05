@@ -315,6 +315,173 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 279 — Polish round on `scan`: the demo runs, and the finding is that the ONE pattern screen the component's own page points at is the one that never links it back — plus the `fit` cite that published an outbound Related list as an inbound fact (2026-09-05)
+
+**Dispatcher trace, cloud wake.** Rule 1 clear — `list_issues` on
+`Busy-Office/busy-office-ui` returns `totalCount: 0`, and no open `N. [ ]`
+item is a P0. Step 1 triaged and committed nothing: no new input. Rule 2
+`3 / 4 Continue rounds … ok`; rule 3 `2 / 3 slices … ok [274, 278]`.
+**Rule 4 found nothing takeable, and its sweep clause was evaluated and
+refused** — see 279.3. Rule 5 reads **STALE** (`2 wake-date(s) newer`), so per
+`LOOPS.md` it **could not be evaluated** and is not reported clear. **Rule 6
+matched**: `polish_requeue.py --apply` re-queued 14 surfaces, all 20
+non-skipped rows tie at `content: 3`, `2/3 rounds`, `dry 0`. Tie broken by
+least-recently-rounded — `badge`, `scan` and `state-patterns` all last ran
+2026-08-28 — and within that three-way tie `scan` was picked as the only one
+with a behavior module, so the arm that found 277 and 278 (read the page's
+runtime claims against the shipped module) is askable there and not on the
+other two. Rules 7-8 not reached.
+
+**The round is NOT a no-op.** The surface's own arms reproduce — the finding is
+one page down, in the pattern screen this component's page sends the reader to.
+
+1. [x] **279.1 — DONE 2026-09-05. `goods-receipt` runs `scan` live and listed
+       nothing for it; and the `fit` cite named the two pattern pages that do
+       NOT link it while missing all three that do.**
+
+       **Defect A — the omission.** `/patterns/goods-receipt` opens with *"A GR
+       screen driven by a handheld RF scanner … Composed from
+       `data-scan-input`"*, its embedded screen renders one, and its
+       *Components used* badges named `Quantity`, `Data table` and
+       `Density (spacious)` — nothing for `scan`. Its three sibling RF screens
+       (`rf-count`, `rf-pick`, `rf-putaway`) each carry the `Scan feedback`
+       badge **and** a `Related` entry, so the omission was **1 of 4** and
+       invisible to every gate. Fixed: badge + `Related` entry, matching the
+       sibling convention exactly.
+
+       **Defect B — the cite.** `scan · fit` read *"linked from
+       `/patterns/goods-receipt` and `/patterns/rf-landing`"*. Measured at
+       `4c3d635`, the tip this wake dispatched from —
+       `git show 4c3d635:apps/docs/src/pages/patterns/<p>.astro | grep -c -F
+       'components/scan'` over the five RF sources reads **goods-receipt 0,
+       rf-landing 0, rf-count 3, rf-pick 3, rf-putaway 3**. The two the cite
+       names carry none (`rf-landing` renders no scan input at all); the three
+       that do went unnamed. The two names it does carry are exactly
+       `scan.astro`'s own `Related` list — the component page's **outbound**
+       links published as an **inbound** fact. Same class as `icon`'s and
+       `sidebar-nav`'s round-2 findings: a `fit` cite counting the wrong set.
+       Corrected in place; `scored` unmoved, per `dsa-scores.json`'s own
+       contract for a single-dimension correction (269.1).
+
+       **The instrument that was wrong first, banked because it is the
+       reusable half.** Splitting the built HTML on `<pre>` blocks to separate
+       live markup from copyable samples reported `goods-receipt` live 1 and
+       `rf-count`/`rf-pick`/`rf-putaway` live **0** — the exact inverse of the
+       truth. Two errors compounding: an inline `<code>data-scan-input</code>`
+       **in prose** is not a `<pre>`, so it counted as a use; and the RF
+       screens render inside a same-origin `<iframe>`, so the outer page's text
+       contains none of their markup. Counting ELEMENTS across
+       `page.frames()` reads **1, 1, 1, 1**. The gate's own header already
+       records the frame half (131.1); the `<code>`-in-prose half is new.
+
+       - **Accept:** every pattern screen that renders a live `[data-scan-input]`
+         names `scan` in its *Components used* list, asserted on the BUILT tree
+         by counting DOM elements across frames rather than by matching the
+         built HTML; the `fit` cite states the property with the command that
+         produces it, and disagreeing with the cite is a satisfying outcome.
+
+2. [x] **279.2 — DONE 2026-09-05. `check-components-used.mjs` only ever asked
+       one direction; the converse arm is added, narrowed to attribute-only
+       components, and the blanket form is refused on its base rate.**
+
+       The gate fails a page that **lists** what it does not render. It has
+       never failed a page that **renders** what it does not list, which is why
+       defect A above shipped: the list simply had no entry to check.
+
+       **The blanket converse is refused, measured before proposing it**
+       (94.11's base-rate rule). *"Does the list name every component the
+       screen renders"* reports **357 misses across 39 of 39 pattern pages** —
+       a predicate uniformly true, so the arm could never fail. The badge list
+       is a curated handful beside a `complexity N of 4` badge, not an
+       inventory.
+
+       **What ships is the attribute-only case**, and its justification is a
+       reason rather than a threshold: such a component ships no block, so its
+       entire presence on a screen is one opt-in `data-*` hook a reader cannot
+       see in the markup they copy — the *Components used* list is the only
+       place the screen admits the dependency. The universe is read from
+       `api.json` (`dataAttrs` and no `blocks`), so it grows on its own; today
+       it is exactly one component, `scan`, judged on **4** screens.
+
+       **Red-proved by injection into the BUILT page, with the injection
+       confirmed before the red was believed:** the one `<li>` linking
+       `/components/scan` was removed from `goods-receipt`'s
+       *Components used* section — asserted **exactly 1** match inside that
+       section first, and asserted the section no longer contains the link
+       after. The gate turned red on **exactly 1** page, naming
+       `/patterns/goods-receipt/` and `scan`; the other three RF screens stayed
+       green, so it is not the too-broad mode. Restoring the file returned it
+       to green, so the red is attributable to the injection and to nothing
+       else. `--self-test` gains three cases on the new predicate, including
+       the prefix trap that would make it fire everywhere
+       (`data-scan-input` must not match `data-scan-inputs`), and a second
+       `assertScanned` gives the arm its own denominator so a universe that
+       empties fails loudly instead of passing silently.
+
+       **101.3 was checked before this shipped, and it does not bind here.**
+       §3b's stop rule forbids a Polish round adding *rubric* dimensions,
+       definitions or gates. This is an arm inside an existing, unrelated gate
+       that has nothing to do with the DSA rubric — the same lane 270.1 used to
+       fix `check:slice-refs`' file filter and 276.1 used to widen
+       `polish_requeue.py`'s source map, both from inside a round. The rubric
+       itself is untouched; the one rubric observation this round produced is
+       recorded and deliberately not acted on (below).
+
+       - **Accept:** the arm goes red on the real omission and green when it is
+         restored, with the injection asserted in the built artefact both
+         times; the blanket form's base rate is recorded beside the refusal;
+         `check:selftests` still classifies this gate as heuristic-with-a-
+         self-test and the self-test exercises the new predicate.
+
+       **Blind re-score (§3b step 4): `fit` = 3, agreeing — which is the WEAK
+       direction, per 268.2.** A second agent scored the dimension from the
+       shipped artefacts, told that the built page publishes a prior verdict,
+       that it is not evidence, and to reach its own reading first. A leaked
+       prior can only pull a scorer toward the published value, so an agreement
+       confirms less than a contradiction would have; it is recorded that way
+       rather than as corroboration. It did derive the 4-screen set
+       independently and reconcile it against `patterns-index.json`'s
+       `byComponent` — an artefact it did not use to derive it — whose
+       `byComponent.date` reads `[]`, so the instrument reaches the rubric's
+       known 0 case. It also measured the naive instrument's error as **11
+       pages / 20 occurrences against 4 real ones**, seven pages wide rather
+       than the one this round had found.
+
+       **One observation it returned is filed, not fixed:** `fit`'s rubric
+       definition scores against *"the field matrix"*, and that matrix on
+       `/concepts/design-language` has exactly four rows (Date, Number/rate/%,
+       Money, Quantity) with no `scan` row — so the definition cannot literally
+       assign this component a context. 101.3 forbids a Polish round editing a
+       rubric definition, so it goes to a grill or the owner. It is a wording
+       gap, not a defect in the component: what IS checkable — the pattern
+       context set and the explicit wrong-choice boundary — both hold.
+
+3. [x] **279.3 — REFUSED 2026-09-05: rule 4's sweep clause was evaluated and a
+       twelfth archive sweep declined, on the trigger the last two sweeps
+       actually used.**
+
+       Read at `4c3d635`, the tip this wake dispatched from — named because
+       this commit moves it, and a figure with no revision beside it is read as
+       current (`ENVIRONMENT.md`'s rule, and 273.1/274.1's cost). There,
+       `roadmap_scope.py` reported closed-history share **2,146 / 5,283 =
+       40.6%** (208.1's definition) with 10 eligible targets, on a file that
+       grew 3,689 → 5,283 lines in the ten hours since the eleventh sweep
+       landed (`d33c1efe`, 02:45:32Z). Regrowth is real, and it is still
+       **below every measured trigger**: 252.1's lane 4 dispatched the tenth
+       sweep at **55.1%** and 272.1 the eleventh at **56.7%**.
+
+       Sweeping at 40.6% would be lowering the threshold by a wake's own
+       initiative, and **249.12 — the archival-trigger question — is the open
+       `OWNER OR ARCHITECTURE CALL` about setting one.** Pre-empting it with a
+       de-facto answer is the thing that item exists to prevent. 272.1's
+       observation also still holds and bounds the gain: all four
+       236.2-flagged targets are pinned by the single still-open Slice 249, so
+       **673** of those lines cannot move at any threshold.
+
+       Recorded rather than left silent so the next wake starts from the
+       number instead of re-deriving it. Re-run `roadmap_scope.py`; these are
+       snapshots, and this commit moves them.
+
 ## Slice 278 — Polish round on `table-toolbar`, the surface every prior round dropped: the two behaviors this page documents as a pair make the grid keyboard-unreachable when they meet — hiding the column the cell cursor sits in strands the grid's ONE tab stop on a `[hidden]` cell (2026-09-05)
 
 **Dispatcher trace, cloud wake.** Rule 1 clear — `list_issues` on
