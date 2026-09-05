@@ -668,7 +668,7 @@ a new script.
        never updated at all and now updates one task later. Added under
        **Fixed**.
 
-5. [ ] **278.5 — the Columns demo never calls `initDropdowns()`, so the menu
+5. [x] **278.5 — the Columns demo never calls `initDropdowns()`, so the menu
        the page calls "the same multi-select dropdown pattern as elsewhere" is
        neither positioned nor labelled.** `table-toolbar.astro` calls
        `initDataTables(); initTableToolbar(); initDataGrid()` and nothing else;
@@ -687,6 +687,100 @@ a new script.
          trigger label carries the count, measured as geometry against the
          invoker rather than against fixed pixels; or the page says why this
          demo deliberately omits the dropdown behavior.
+
+       **CLOSED 2026-09-05 (cloud wake), by the first branch, and the half a
+       cloud wake cannot verify is named rather than implied.** Dispatcher:
+       rule 1 clear (`list_issues` → `totalCount: 0`, no open `N. [ ]` item is
+       a P0), rules 2 and 3 under threshold at `2 / 4` and `2 / 3 [274, 278]`,
+       so **rule 4**. All **13** open items were re-classified from their own
+       text per `LOOPS.md` 186.2 — **9 owner-blocked** (Slice 15, `112.3`,
+       `112.4`, `249.7`, `249.10`-`249.13`, `273.2`), **3 browser-blocked in
+       the SCREENSHOT sense** (`249.6`, `249.9`, `249.15`, each declined in
+       its own text by a prior cloud wake), and this one, whose Accept is
+       written as **geometry against the invoker** — `ENVIRONMENT.md`'s SECOND
+       list, which a cloud wake can take in full. Rule 5 read **STALE** and
+       was not reached; rules 6-8 unreached.
+
+       **The reported measurement was re-taken before building, per CLAUDE.md's
+       premise rule, and it reproduces exactly.** On the built page at 1440,
+       driven with `page.click` (never `el.click()`, per `ENVIRONMENT.md`'s
+       trusted-dispatch bullet):
+
+       | | before | after |
+       |---|---|---|
+       | menu box | `top 0, left 0`, 192x121 | `top 409, left 265` |
+       | invoker box | `left 265, top 369, bottom 405`, w 95 | unchanged |
+       | menu top − invoker bottom | **−404** | **4** |
+       | menu left − invoker left | **−265** | **0** |
+       | trigger, 2 of 3 boxes checked | `"Columns"` | `"Columns (2)"` |
+
+       So both halves of the reported measurement held: the menu opened at the
+       viewport's corner, over the site header, 404px above and 265px left of
+       the button that opened it, and the count never reached the trigger. What
+       already worked — and still does — is the toolbar behavior's own half:
+       unchecking `vendor` hides its 4 cells either way. The two behaviors are
+       genuinely separate, exactly as `table-toolbar.ts`'s header says.
+
+       **The fix is the missing call, not new code:** `initDropdowns()` joins
+       the page's `initDataTables(); initTableToolbar(); initDataGrid();`.
+       `grep -rl initDropdowns apps/docs/src/pages/` read **9** before and
+       **10** after. The caption also gains a clause naming the split, because
+       a reader copying this demo hit the same corner-positioned menu the item
+       reports — the page claimed the pattern without saying what wiring it
+       takes.
+
+       **Now executable.** A `check:claims` case asserts the geometry and the
+       label; `claims` reports **167** live, up from **166** last wake, the one
+       case added. It carries **no pixel literal**: *"the same multi-select
+       dropdown pattern as elsewhere"* is taken literally, so the reference is
+       `/components/dropdown`'s own plain multi-select (`#demo-cc`, no `--end`
+       modifier) measured live in the same browser, and this menu must
+       reproduce its offset from its own invoker within 1px. A gap constant
+       lifted out of `popover-position.ts` would have been a substring
+       assertion on source; a hard-coded `4` would be a gate fitted to one
+       theme at one density. **The reference carries its own absolute control**
+       — it must open below its invoker and on screen — or "both at (0,0)"
+       would agree with itself and pass.
+
+       **Red-proved twice, each injection confirmed in the artifact before the
+       red was believed, and the second one is the interesting record.**
+
+       - **Positioning.** `r();` → `void 0;` in the chunk the page's own entry
+         script names (`_astro/table-toolbar.astro_astro_type_script_index_0_lang.*.js`),
+         **exactly 1 match replaced**, the call confirmed absent afterwards and
+         the module still parsing. → **1 of 167** red, this case.
+       - **The label.** The checked-count expression forced to `0` in
+         `_astro/dropdown.*.js`, again exactly 1 match. → **2 of 167** red:
+         this case and *"filter panel: … counts in text"*. **That second red is
+         a true positive, not the too-broad failure mode** — the injection hit
+         shared behavior and both cases genuinely assert the count. The failure
+         mode `ENVIRONMENT.md` warns about is a module that stops PARSING and
+         drags unrelated cases down with it; here the other three
+         `table-toolbar` cases stayed green, which is the discriminator. Its
+         value is proving the label half is not dead weight: positioning was
+         untouched and the case still went red.
+
+       Both injections were reverted and the gate re-run green before commit.
+
+       **NOT verified visually, and named as unverified rather than implied.**
+       **0** CSS files changed and the menu now uses the same shipped
+       `positionPopover` path as nine other docs pages, but the caption gains
+       prose, so the page reflows — and a cloud wake has no 1440/390
+       light-and-dark lane (`ENVIRONMENT.md`'s FIRST list). Whether the menu
+       *looks* right against the toolbar in dark theme is the half a LOCAL wake
+       still owns; this item's own text asked the taker to name which. What
+       *is* verified: `check:layout` (127 pages, 390 and 150% zoom),
+       `check:scroll` (914 containers x 2 widths) and `test:axe` (127 pages x 2
+       widths, zero violations).
+
+       **The other claims this change carries, with the instrument for each**,
+       per CLAUDE.md's rule that the defect lands beside the red-proved number:
+       the before/after geometry and label — an ad-hoc puppeteer probe against
+       the built `dist/`, run twice, and the after-values are independently
+       re-asserted by the gate; **9 → 10** pages calling `initDropdowns` —
+       `grep -rl … | wc -l`, run before and after; **167** live claims — the
+       gate's own report; **1** and **2** red cases — the gate's own report
+       under each injection; **0** CSS files changed — `git diff --numstat`.
 
 6. [x] **278.6 — the opener's cost argument names a mechanism the module does
        not ship.** It says grid navigation costs *"per-cell Tab stops"* that

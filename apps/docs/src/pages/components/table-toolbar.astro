@@ -80,7 +80,11 @@ const gridMarkup = `<table class="bo-data-table" data-grid-nav>
       </table>
     </div>
     <p class="bo-u-text-muted"><strong>Columns</strong> is the same multi-select
-    dropdown pattern as elsewhere (<code>data-multiselect</code>, real checkboxes)
+    dropdown pattern as elsewhere (<code>data-multiselect</code>, real checkboxes),
+    so it needs <code>initDropdowns()</code> alongside
+    <code>initTableToolbar()</code> — the toolbar behavior owns show/hide and the
+    export intent, the dropdown behavior owns the menu (anchoring it to its
+    button, staying open across selections, and the count on the trigger label)
     — checking/unchecking a <code>data-col-toggle</code> box shows/hides every
     <code>&lt;th&gt;</code>/<code>&lt;td&gt;</code> with the matching
     <code>data-col</code>, scoped to this table only. If you put column toggles
@@ -137,8 +141,12 @@ const gridMarkup = `<table class="bo-data-table" data-grid-nav>
   </section>
 
   <script>
-    import { initDataTables, initTableToolbar, initDataGrid } from '@busy-office/ui/js';
+    import { initDataTables, initTableToolbar, initDataGrid, initDropdowns } from '@busy-office/ui/js';
     initDataTables(); initTableToolbar(); initDataGrid();
+    // initTableToolbar owns show/hide and the export intent only; the menu
+    // itself (anchoring to its invoker, stays-open, trigger-label count) is
+    // the dropdown behavior, exactly as table-toolbar.ts's header says.
+    initDropdowns();
   </script>
 
   <Related links={[

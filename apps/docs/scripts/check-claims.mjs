@@ -4292,6 +4292,96 @@ check(
 
 await visit('/components/table-toolbar/', { width: DESKTOP_WIDTH });
 
+/* 278.5 — the caption calls Columns "the same multi-select dropdown pattern as
+   elsewhere", and until this case the page shipped that pattern's markup
+   without the behavior that makes it one: it called initDataTables /
+   initTableToolbar / initDataGrid and not initDropdowns. Measured on the built
+   page before the fix — the menu opened at the viewport's top-left, 404px above
+   and 265px left of its invoker (menu 0,0; invoker 265, 369-405), and the
+   trigger read "Columns" with two of three boxes checked.
+
+   "The same pattern as elsewhere" is taken LITERALLY, which is what keeps this
+   free of pixel literals: the reference is /components/dropdown's own plain
+   multi-select (#demo-cc — same shape, no --end modifier), measured live in the
+   same browser, and this page's menu must reproduce its offset from its own
+   invoker. A gap constant read out of popover-position.ts would be a substring
+   assertion on source; a hard-coded 4 would be a gate fitted to one rendering
+   of one theme at one density. The relation is what the claim is about.
+
+   The reference needs its OWN absolute control, or "both at (0,0)" would agree
+   with itself and pass: it must open below its invoker and on screen. */
+const dropdownRef = await (async () => {
+  await visit('/components/dropdown/', { width: DESKTOP_WIDTH });
+  await page.click('[popovertarget="demo-cc"]');
+  await new Promise((r) => setTimeout(r, 300)); // position() runs in a rAF after `toggle`
+  return page.evaluate(() => {
+    const menu = document.querySelector('#demo-cc');
+    const inv = document.querySelector('[popovertarget="demo-cc"]');
+    const m = menu.getBoundingClientRect();
+    const i = inv.getBoundingClientRect();
+    return {
+      open: menu.matches(':popover-open'),
+      sized: m.width > 0 && m.height > 0,
+      dTop: m.top - i.bottom,   // hangs off the invoker's BOTTOM edge
+      dLeft: m.left - i.left,   // and shares its LEFT edge
+      below: m.top > i.bottom,
+      onScreen: m.top >= 0 && m.left >= 0 && m.right <= innerWidth,
+    };
+  });
+})();
+
+await visit('/components/table-toolbar/', { width: DESKTOP_WIDTH });
+await page.click('[popovertarget="cols-menu-demo"]');
+await new Promise((r) => setTimeout(r, 300));
+
+const menuBox = await page.evaluate(() => {
+  const menu = document.querySelector('#cols-menu-demo');
+  const inv = document.querySelector('[popovertarget="cols-menu-demo"]');
+  const m = menu.getBoundingClientRect();
+  const i = inv.getBoundingClientRect();
+  return {
+    open: menu.matches(':popover-open'),
+    sized: m.width > 0 && m.height > 0,   // control: an unopened popover has a zero box
+    dTop: m.top - i.bottom,
+    dLeft: m.left - i.left,
+    onScreen: m.top >= 0 && m.left >= 0 && m.right <= innerWidth,
+    atLeastAsWide: m.width >= i.width,    // positionPopover's Math.max(menu, invoker)
+  };
+});
+
+/* The label half. Two of the three boxes stay checked, so the trigger must read
+   "Columns (2)" — a string no markup on the page carries, which is what makes
+   this an assertion about the behavior rather than about the HTML. */
+await page.click('[data-col-toggle="vendor"]');
+await new Promise((r) => setTimeout(r, 200));
+const triggerLabel = await page.evaluate(() => {
+  const inv = document.querySelector('[popovertarget="cols-menu-demo"]');
+  const menu = document.querySelector('#cols-menu-demo');
+  return {
+    text: inv.textContent.trim(),
+    base: inv.getAttribute('data-multiselect-label'),
+    checked: menu.querySelectorAll('input[type="checkbox"]:checked').length,
+    stillOpen: menu.matches(':popover-open'), // multi-select does not close on select
+  };
+});
+
+check(
+  'table-toolbar: the Columns menu anchors to its invoker with the same offset as /components/dropdown, and its trigger carries the checked count — the multi-select dropdown pattern the caption claims',
+  dropdownRef.open && dropdownRef.sized &&               // the reference is real …
+    dropdownRef.below && dropdownRef.onScreen &&         // … and itself correctly placed
+    menuBox.open && menuBox.sized &&
+    Math.abs(menuBox.dTop - dropdownRef.dTop) <= 1 &&    // same offset below its own invoker
+    Math.abs(menuBox.dLeft - dropdownRef.dLeft) <= 1 &&  // same alignment to its own left edge
+    menuBox.onScreen &&
+    menuBox.atLeastAsWide &&
+    triggerLabel.checked === 2 &&                        // control: the toggle really unchecked one
+    triggerLabel.stillOpen &&
+    triggerLabel.text === `${triggerLabel.base} (2)`,
+  JSON.stringify({ dropdownRef, menuBox, triggerLabel }),
+);
+
+await visit('/components/table-toolbar/', { width: DESKTOP_WIDTH });
+
 /* 278.3 — the page's COMPOSITION sentence: put column toggles on a
    data-grid-nav table and a hidden column leaves the grid model too — the
    cursor skips it, and hiding the column the cursor is parked in hands the
