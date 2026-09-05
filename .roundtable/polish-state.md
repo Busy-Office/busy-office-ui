@@ -102,9 +102,22 @@ by construction — `--restamp … --at REV` and `--backfill SHA`, which compute
 digest at a named tree — and omitted by `--stamp`, which digests the WORKING
 TREE at the end of a round, before that round's commit exists. Measured over
 this table: every stamp that reproduces anywhere reproduces at the commit that
-*carries* it, **18 of 18**, and at that commit's parent — HEAD as `--stamp` saw
-it — **0 of 18**. A revision written by `--stamp` would be the one revision the
-measurement rules out.
+*carries* it, **18 of 18**.
+
+**The second half of that measurement was wrong and is corrected here**
+(roadmap 285.1, 2026-09-05). It read *"and at that commit's parent — HEAD as
+`--stamp` saw it — **0 of 18**"*. Re-measured on the same ledger at
+`fc79ea85`: **16 of those 18 reproduce at the parent too**, because 16 of the
+carrier commits never touched the surface's own source — a NO-OP round commits
+the ledger and the roadmap, not the CSS. Only `byline` and `icon`, the two
+rounds that edited their surface in the same commit, differ there. So a
+mandatory `@HEAD` would have been right on 16 of 18, not wrong on all 18.
+
+The omission stands anyway, on the ground that survives the correction:
+`--stamp` cannot know whether the round will still commit a source change, so
+it cannot write a revision it can guarantee — and a wrong suffix is worse than
+none, because a suffixed stamp is checked by one equality at the named revision
+instead of being searched for.
 
 The suffix is what made the migration below possible at all. A re-stamped row
 is introduced by the migration commit, where its own digest is not the tree's,

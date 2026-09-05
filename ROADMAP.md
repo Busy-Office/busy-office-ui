@@ -315,6 +315,197 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 285 — Objective grill of Slices 281, 283, 284: 31 of 33 assertions reproduce, and the one that matters is the measurement a design decision was BUILT on — "0 of 18 stamps reproduce at the parent" is **16 of 18**, and it had spread into the shipped script's own docstring (2026-09-05)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty) — ENVIRONMENT trap 1, fixed with
+`git checkout -B main origin/main` before any commit; `origin/main` again
+arrived as a **forced update** (`26447ba...26a5561`). `--unshallow` clean in one
+attempt (**1,914** commits, no `shallow.lock`) and it again brought the tags —
+**sixth** consecutive container, `git tag | wc -l` → **7**, which is why
+`ENVIRONMENT.md` §2 states the count as the check rather than a value. Working
+tree clean; `RESUME.md` "In flight: nothing".
+
+Step 1: no new input — `list_issues` on `Busy-Office/busy-office-ui` returns
+`totalCount: 0`, and `grep -nE '^\s*[0-9]+\. \[ \]' ROADMAP.md | grep -i p0`
+returns nothing (rc=1). Nothing triaged, nothing committed for it. Step 0b:
+rule 2 `0 / 4 … ok` (spent by Slice 284), **rule 3 `3 / 3 slices … OVERDUE
+[281, 283, 284]` — matched**, so rules 4-6 were not reached. Rule 5 reports
+**STALE** (`2 wake-date(s) newer`) and is therefore **reported as
+could-not-be-evaluated, never clear**.
+
+**The arming set needed no narrowing.** The last grill was Slice 280, covering
+276-279; none of 281, 283 or 284 has been grilled before
+(`grep -hoE '^## Slice [0-9]+ — Objective grill of Slices [0-9, -]+'` over both
+roadmap files). **Slice 282 is closed and is NOT in the armed set** — it was
+closed by a `Roadmap · sweep` row, and `Roadmap` is excluded from
+`CLOSES_A_SLICE`. Recorded as an observation, not filed: it is the same shape
+279.4 fixed for `Polish`, but n = 1 and a rule fitted to one row is the
+ceremony this loop already has on its carried-forward list.
+
+**Scope: 33 assertions checked across the three slices, 31 reproduce.** The two
+that do not are both in what shipped BESIDE a slice's headline finding, which
+is 192.1's rule landing again — neither slice's actual finding is disturbed.
+
+1. [x] **285.1 — DONE 2026-09-05. 283.2's "0 of 18 stamps reproduce at the
+       carrier's parent" is **16 of 18**, and it is the stated justification
+       for a format decision now shipped in `polish_requeue.py`.**
+
+       283.2 published: *"every stamp that reproduces anywhere reproduces at
+       the commit that **carries** it — 18 of 18 — and at that commit's parent,
+       which is HEAD as `--stamp` saw it, **0 of 18**. A `@rev` written by
+       `--stamp` would therefore record the one revision the measurement rules
+       out, on every row."*
+
+       **The first half reproduces exactly. The second is wrong, and wrong in
+       the direction that justified the decision.** Re-derived independently
+       over the same 21-row ledger at `fc79ea85` (283.1's commit, the
+       pre-migration ledger), trying both the current and pre-276.1 path sets:
+
+       | | rows |
+       |---|---|
+       | rows with a stamp | 21 |
+       | reproduce at the commit that CARRIES the stamp | **18** ✓ as published |
+       | of those 18, also reproduce at that commit's **parent** | **16** — published as 0 |
+
+       **Why, mechanically.** 16 of the 18 carrier commits never touched the
+       surface's own source. A Polish round that is a NO-OP on its surface —
+       which most of this ledger is — commits `polish-state.md` and
+       `ROADMAP.md` and nothing else, so HEAD's source at `--stamp` time is
+       byte-identical to the commit's. `component/progress` is the plain case:
+
+       ```
+       git diff-tree --no-commit-id --name-only -r a940c8f3
+       # .roundtable/polish-state.md  ROADMAP.md  scripts/loops/polish_requeue.py
+       # digest at a940c8f3  = 1154a4d7   (the stamp)
+       # digest at a940c8f3^ = 1154a4d7   (identical — nothing in its source moved)
+       ```
+
+       Only `byline` and `icon` differ at the parent, and they are exactly the
+       two rounds that edited their own surface in the same commit. **So a
+       mandatory `@HEAD` would have been RIGHT on 16 of 18 rows, not wrong on
+       all 18.**
+
+       - **Accept (property, not forecast):** every live publication of the
+         parent figure agrees with a re-measurement over the same ledger, and
+         the decision it supports is either re-justified on a ground that
+         survives the correction or reversed. **Met** — corrected in the four
+         live places it had spread to (`ROADMAP.md` 283.2, `polish-state.md`,
+         and **twice** in `scripts/loops/polish_requeue.py` — the module
+         docstring and the `--stamp` branch comment — plus `parse_stamp`'s
+         docstring, which is where the argument actually lives). The
+         `loop-log.md` and `STATUS.md` rows are **not** backfilled:
+         `record_iteration.py`'s standing rule forbids it, and a log row is a
+         record of what a wake believed at the time.
+
+       **THE DECISION SURVIVES; ITS EVIDENCE DID NOT.** The suffix stays
+       optional, on the ground that is true by construction rather than by base
+       rate: `--stamp` cannot know, at the moment it runs, whether the round
+       will still commit a source change, so it cannot write a revision it can
+       **guarantee**. And a wrong suffix is worse than an absent one —
+       `--audit-stamps` verifies a suffixed stamp by ONE equality at the named
+       revision and skips the search, so the 2 bad rows would read as confident
+       and stay unrecoverable, where a bare stamp is merely searched for. That
+       is a 2-of-18 failure rate for a silent, unrecoverable wrong answer,
+       which is a fair reason to refuse it; "wrong on every row" was not.
+
+       **Red-proved by reconciliation, not by re-running the same code.** The
+       independent predicate — *did the carrier commit touch this surface's
+       source?* — agrees with *does the stamp reproduce at the parent?* on
+       **18 of 18** rows. The detector discriminates before any injection: it
+       returns three distinct verdicts on real input (18 reproduce at the
+       carrier, 16 at the parent, and `data-table` / `date` / `pagination`
+       reproduce at neither).
+
+       **My own first two instruments here were wrong, per this repo's base
+       rate, and both were caught before they produced a finding.** The first
+       read the ledger's `status` column instead of `src` (the `src` cell is
+       not last), returning 0 of 21 — a plain zero, which CLAUDE.md says is a
+       defect until proven otherwise. The second walked the ledger's revisions
+       newest-first and returned the revision AFTER the introducing one for
+       every row, and `NONE` for the six rows whose stamp the migration
+       replaced; that version reported 12 of 15 at the parent and would have
+       overstated this finding. Commands and both dead versions are in
+       `.roundtable/grill-objective-281-283-284-2026-09-05.md`.
+
+2. [x] **285.2 — DONE 2026-09-05. 284.2's `CLAUDE.md` ratchet reads `32 up`
+       where its own commit makes it `33` — the third instance of a trap
+       `ENVIRONMENT.md` gained a bullet for two wakes earlier.**
+
+       284.2 asserts the lane-4 signature *"holds for `CLAUDE.md` (**32 up / 0
+       down, never cut**)"* in the same sentence as *"284.1 left `CLAUDE.md` 20
+       words longer"*. Measured by replaying `ups_since_last_cut` at three
+       revisions:
+
+       ```
+       6c18a11 (parent)  CLAUDE.md 32 up, never cut   5,860 words
+       6eab896 (carries 284.2)      33 up, never cut   5,880 words
+       26a5561 (HEAD)               33 up, never cut   5,880 words
+       ```
+
+       `DESIGN.md`'s **22** is right at both revisions, so exactly one of the
+       two figures moved — which is what makes this a misreading rather than a
+       stale snapshot. **Corrected to 33 in the item; the `32 up` inside the
+       lane-4 block is deliberately NOT corrected**, because that block is a
+       verbatim transcript of `report_loop_prose.py` as read at dispatch, which
+       is what produced the finding.
+
+       **This is the trap `ENVIRONMENT.md` names in its own words** — *"when
+       your own commit changes the file, `HEAD` is the pre-change state and is
+       exactly as wrong as the tree, in the opposite direction"* — a bullet
+       275.3 added on 2026-09-05 after 273.1 and 274.1 hit it on consecutive
+       wakes. This is the third occurrence and **the first after the bullet
+       existed**, so the bullet is not yet changing behaviour. **No gate is
+       added**: the checkable shape ("a figure in a commit message or item
+       matches the same figure recomputed at that commit") needs to know which
+       numbers in prose are instrument readings, which is semantic — 94.11's
+       lesson, and the same reason 281 refused a gate over its density cite.
+
+**Everything else reproduced.** Named so a later wake does not re-derive them:
+
+- **Slice 284** — `CLAUDE.md` 16 headings at `e3844c49` and 17 at `6c18a11`,
+  back to **16** after the fold; section-word denominators **4,570 / 5,658 /
+  5,687** and file words **4,759 / 5,860 / 5,880** all exact; on-subject
+  numerators **1,893 / 2,385 / 2,414** all exact, reconstructed from the seven
+  detector-can-fail sections without the (uncommitted) original classifier.
+  **All ten worked examples and both corollaries survive the fold** — checked
+  with 17 independently-chosen markers, all present. Dispatch region **6,112**;
+  `LOOPS.md` last cut `8848ed55`.
+- **Slice 283** — `--check` **10** re-queues with 0 uninformative,
+  `--verify-stamps` **0**, `--audit-stamps` **0** dead, **7** suffixed rows and
+  **14** bare; the four migrated formula-orphans all still re-queue and the two
+  mid-round rows have stopped; the behavior-module split is **9 / 12** with all
+  **7** affected rows in the first group and none in the second; Slice 15's
+  *AT runtime evidence* has **never** been ticked across **919** revisions of
+  `ROADMAP.md`.
+- **Slice 281** — **138** built pages and **115** carrying a
+  `.bo-data-table-container`, both exact; **3** raw hex in `data-table.css`,
+  all **3** inside its single `@media print` block; the decay is exact to the
+  hour (`79f7fec9` 2026-08-21 10:50 +0800 with a bare `<table
+  class="bo-data-table">` at line 122 → `69a53364` 2026-08-22 14:48 +0800
+  adding `data-density="compact"`, **27h58m**, published as 28 hours); the
+  `spacing` detector reads **0** on `data-table.css`.
+
+  **281's `115` is the reason this grill did not file a third finding, and it
+  is worth recording how close it came.** A static
+  `grep -rl 'bo-data-table-container' apps/docs/dist --include=index.html`
+  reads **110**, and the reasoning that a static grep must be an OVER-count of
+  a DOM walk (code samples are escaped text, and `data-table.ts` only *queries*
+  the class, never creates it) made 115 look like a five-page overstatement.
+  The DOM walk 281 actually used returns **115**. The wrong instrument was
+  mine; 281 is right. *Reconcile against the instrument the claim was made
+  with, before calling the claim wrong.*
+
+- **Not re-derived, and said rather than implied:** 281's `spacing` base rate —
+  *"fires on 15 of 44 component stylesheets (20 literals)"* — ships with **no
+  command beside it**. The **44** reproduces exactly (44 `.css` files under
+  `components/`), and a reconstructed detector reads **14 / 19**; whether the
+  one-file difference is 281's definition or mine is not decidable from what
+  was published. The load-bearing half — that it reads **0** on
+  `data-table.css` and therefore discriminates — reproduces. Recorded as a
+  reminder that CLAUDE.md's *"write the command next to the claim"* applies to
+  a base rate offered as evidence, not filed as an item.
+
 ## Slice 284 — Standardize sweep, 4 of 4 lanes: lanes 1-3 clean, and lane 4's finding is that 167.1's stated reopen condition for `CLAUDE.md` was MET — an eighth section on "can this detector fail" was added without folding, and the fold is this slice (2026-09-05)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0 — `list_issues` on
@@ -461,9 +652,24 @@ HEAD the same classifier read **8 of 17 · 2,385 of 5,658 words · 42.2%**.
 
 2. [ ] **284.2 — `CLAUDE.md` accumulates and has never been cut; the fold did
        not change that.** Lane 4's signature — a file the loop reads every wake,
-       accumulating with no cut behind it — holds for `CLAUDE.md` (**32 up / 0
+       accumulating with no cut behind it — holds for `CLAUDE.md` (**33 up / 0
        down, never cut**) and `DESIGN.md` (**22 up / 0 down, never cut**), and
-       284.1 left `CLAUDE.md` 20 words longer. 167.1 verdicted its growth
+       284.1 left `CLAUDE.md` 20 words longer.
+
+       > **`32` corrected to `33` on 2026-09-05 by Slice 285.2.** 32 is the
+       > ratchet at `6c18a11`, the PARENT of the commit that carries this item;
+       > 284.1's own step takes it to 33, and the sentence around the figure
+       > describes the post-fold file. `DESIGN.md`'s 22 is right at both, so
+       > only one of the two moved. The `32 up` in the lane-4 block above is
+       > NOT corrected — that is a verbatim transcript of the report as read at
+       > dispatch, which is what made the finding, and re-writing a transcript
+       > would hide when the reading was taken. `ENVIRONMENT.md` names this
+       > exact trap — *"when your own commit changes the file, `HEAD` is the
+       > pre-change state and is exactly as wrong as the tree"* — a bullet
+       > 275.3 added after 273.1 and 274.1 did it on consecutive wakes. This is
+       > the third instance, and the first to occur AFTER the bullet existed.
+
+       167.1 verdicted its growth
        HONEST at 10 up / 0 down; the file has since taken 22 more upward steps
        and grown from 4,759 to 5,880 words, so that verdict is being quoted well
        past the measurement behind it.
@@ -692,7 +898,23 @@ icon           stamped 2026-08-30  4 commits        +72/-4
        reproduces at the commit that **carries** it — **18 of 18** — and at that
        commit's parent, which is HEAD as `--stamp` saw it, **0 of 18**. A `@rev`
        written by `--stamp` would record the one revision the measurement rules
-       out, on every row. So the suffix is written only where the revision is
+       out, on every row.
+
+       > **CORRECTED 2026-09-05 by Slice 285.1 (Objective grill of 281/283/284).
+       > The parent half of that measurement is wrong: it is 16 of 18, not 0 of
+       > 18.** The `18 of 18` stands. What does not is `0 of 18` and the "on
+       > every row" it carries — 16 of the 18 carrier commits never touched
+       > their surface's own source (a NO-OP round commits the ledger and the
+       > roadmap, not the CSS), so the digest at the parent is identical and a
+       > mandatory `@HEAD` would have been RIGHT on those 16. Only `byline` and
+       > `icon` — the two rounds that edited their surface in the same commit —
+       > differ at the parent. **The decision to keep the suffix optional
+       > survives on a different ground**, now recorded in `parse_stamp`:
+       > `--stamp` cannot know whether the round will still commit a source
+       > change, so it cannot write a revision it can *guarantee*, and a wrong
+       > suffix is worse than an absent one because it is trusted by one
+       > equality instead of searched for. See Slice 285 for the commands and
+       > the reconciliation. So the suffix is written only where the revision is
        known by construction (`--restamp --at`, `--backfill`) and omitted
        otherwise. **Seven rows carry it, fourteen do not.**
 

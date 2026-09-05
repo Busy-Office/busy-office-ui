@@ -97,8 +97,10 @@ USAGE
 THE `src` CELL IS `<digest>` OR `<digest>@<revision>` (roadmap 283.2). See
 `parse_stamp` for why the revision is an OPTIONAL suffix rather than always
 present: `--stamp` runs before its own round's commit, so the revision its
-digest describes does not exist yet, and 18 of 18 stamps reproduce at the
-commit that CARRIES them and 0 at that commit's parent.
+digest describes does not exist yet and cannot be guaranteed. 18 of 18 stamps
+reproduce at the commit that CARRIES them; the claim that 0 reproduce at that
+commit's parent was WRONG -- it is 16 of 18 (roadmap 285.1). The decision
+stands on construction, not on that base rate; see `parse_stamp`.
 """
 from __future__ import annotations
 
@@ -313,11 +315,34 @@ def parse_stamp(cell: str) -> tuple[str, str | None]:
     (roadmap 283.2, 2026-09-05). The item proposed that every stamp carry the
     revision it was taken against. It cannot: `--stamp` runs at the END of a
     Polish round, which is BEFORE that round's commit, so the revision the
-    digest describes does not exist yet. Measured over the 21-row ledger --
-    every stamp that reproduces anywhere reproduces at the commit that CARRIES
-    it, 18 of 18, and at that commit's parent (i.e. HEAD as `--stamp` saw it)
-    **0 of 18**. A `@rev` written by `--stamp` would therefore record the one
-    revision the measurement rules out, on every row.
+    digest describes does not exist yet.
+
+    THE ARGUMENT IS BY CONSTRUCTION, NOT BY BASE RATE, AND THE FIGURE THAT USED
+    TO STAND HERE WAS WRONG (roadmap 285.1, the Objective grill of 281/283/284,
+    2026-09-05). This docstring said that at the carrier's parent -- HEAD as
+    `--stamp` saw it -- **0 of 18** stamps reproduce, and concluded that a
+    `@rev` from `--stamp` "would record the one revision the measurement rules
+    out, on every row". Re-measured over the same 21-row ledger at `fc79ea85`:
+    18 of 18 reproduce at the commit that CARRIES them (that half stands), and
+    **16 of those 18 also reproduce at that commit's parent** -- because 16 of
+    the carrier commits never touched the surface's own source. A round that is
+    a NO-OP on its surface commits only the ledger and the roadmap, so HEAD's
+    source is the tree `--stamp` digested. `component/progress` is the plain
+    case: `a940c8f3` changed `polish-state.md`, `ROADMAP.md` and this script,
+    and its digest is identical at the parent.
+
+    So a mandatory `@HEAD` would have been RIGHT on 16 of 18 rows and wrong on
+    2 (`byline`, `icon` -- the rounds that edited their own surface in the same
+    commit). It is still refused, on the ground that survives measurement:
+    `--stamp` cannot know, at the moment it runs, whether the round will go on
+    to commit a source change, so it cannot write a revision it can guarantee.
+    A WRONG suffix is worse than an absent one, because a suffixed stamp is
+    verified by ONE equality at the named revision and skips the search that
+    would otherwise recover the right commit -- so the 2 bad rows would read as
+    confident and be unrecoverable, where a bare stamp is merely searched for.
+    The reconciliation that settles it: reproduces-at-parent holds for exactly
+    those rows whose carrier did not touch the surface source, 18 of 18 in
+    agreement. Commands in `.roundtable/grill-objective-281-283-284-2026-09-05.md`.
 
     So the suffix is written exactly where the revision is known BY
     CONSTRUCTION -- `--restamp --at REV` and `--backfill SHA`, both of which
@@ -728,8 +753,12 @@ def main() -> int:
             return 2
         # NO REVISION SUFFIX HERE, DELIBERATELY -- see `parse_stamp`. This
         # digest is of the WORKING TREE, which becomes the round's next commit;
-        # that commit does not exist yet, and HEAD is measurably the wrong
-        # answer (0 of 18 stamps reproduce at it).
+        # that commit does not exist yet, and HEAD is an answer this call cannot
+        # GUARANTEE -- right whenever the round is a no-op on its own surface
+        # (16 of 18 measured), wrong exactly when it is not, and unrecoverable
+        # when wrong because a suffix is trusted instead of searched for.
+        # (The "0 of 18 reproduce at HEAD" that used to justify this line was
+        # wrong; roadmap 285.1 re-measured it at 16 of 18.)
         new = digest(args.stamp)
         lines = text.splitlines()
         for i, s, cells in rows(text):
