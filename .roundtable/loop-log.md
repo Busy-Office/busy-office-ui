@@ -1443,3 +1443,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-05 15:51 · Polish · round · Slice 279 — Polish round 3 on scan: goods-receipt ran the component live and listed nothing for it; fit cite corrected; check-components-used gains its converse arm · landed · 5abdce3c
 - 2026-09-05 15:51 · Meta · refusal · a twelfth archive sweep at 40.6% closed-history share, below both measured triggers (55.1%, 56.7%) — 249.12 is the open owner call on the threshold · refused · 5abdce3c
 - 2026-09-05 15:51 · Meta · refusal · the BLANKET converse arm in check-components-used: 357 misses across 39 of 39 pages, a predicate uniformly true · refused · 5abdce3c
+- 2026-09-05 15:57 · Meta · dispatcher · 279.4 — Polish added to CLOSES_A_SLICE: rule 3 was blind to 12 closed slices for the whole Polish-dispatched era · landed · 632bfc46
+- 2026-09-05 15:57 · Meta · refusal · adding Meta to CLOSES_A_SLICE — its 3 rows record machinery about the loop, which is the Roadmap exclusion's reason · refused · 632bfc46
