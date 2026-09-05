@@ -315,12 +315,14 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
-## Slice 279 — Polish round on `scan`: the demo runs, and the finding is that the ONE pattern screen the component's own page points at is the one that never links it back — plus the `fit` cite that published an outbound Related list as an inbound fact (2026-09-05)
+## Slice 279 — Polish round on `scan`: the demo runs, and the finding is that the ONE pattern screen the component's own page points at is the one that never links it back; then reading the counter right after recording found rule 3 has been blind to 12 closed slices for the whole Polish-dispatched era (2026-09-05)
 
 **Dispatcher trace, cloud wake.** Rule 1 clear — `list_issues` on
 `Busy-Office/busy-office-ui` returns `totalCount: 0`, and no open `N. [ ]`
 item is a P0. Step 1 triaged and committed nothing: no new input. Rule 2
-`3 / 4 Continue rounds … ok`; rule 3 `2 / 3 slices … ok [274, 278]`.
+`3 / 4 Continue rounds … ok`; rule 3 `2 / 3 slices … ok [274, 278]` — **and
+that reading is itself the wake's second finding: it was wrong, and 279.4
+below corrects it to `5 / 3 … OVERDUE`.**
 **Rule 4 found nothing takeable, and its sweep clause was evaluated and
 refused** — see 279.3. Rule 5 reads **STALE** (`2 wake-date(s) newer`), so per
 `LOOPS.md` it **could not be evaluated** and is not reported clear. **Rule 6
@@ -481,6 +483,76 @@ one page down, in the pattern screen this component's page sends the reader to.
        Recorded rather than left silent so the next wake starts from the
        number instead of re-deriving it. Re-run `roadmap_scope.py`; these are
        snapshots, and this commit moves them.
+
+4. [x] **279.4 — DONE 2026-09-05. Rule 3 has been under-arming for the whole
+       Polish-dispatched era: `Polish` was excluded from `CLOSES_A_SLICE` on a
+       fact that has since died, and the counter could not see 12 closed
+       slices.**
+
+       Found by the comparison `LOOPS.md` rule 3 prescribes and this wake ran —
+       read the counter immediately after `record_iteration.py`, and it was
+       **unmoved by the slice this wake had just closed by hand.**
+
+       161.4's whole stated ground for the exclusion was *"Meta/Polish/Optimize
+       · 0 rows ever named a slice. Nothing to decide."* True on 2026-08-28.
+       Re-measured over 1,437 rows with the script's own `slice_of` parser:
+       **Polish names a slice on 18 rows / 17 slices, and 12 of those 17 are
+       named by NO Continue/Standardize row at all** — 182, 217, 220, 242, 266,
+       267, 268, 269, 270, 276, 277, 279. Meta is also no longer zero (3 rows /
+       3 slices) and is left excluded deliberately, on the Roadmap reason, so
+       the next reader can see it was asked rather than overlooked.
+
+       **The whole-log replay is the misleading number, and it is quoted anyway
+       because 161.4's method is the replay.** Crossings of 3 over the whole
+       log go **51 → 52**: one. The flat average is an artefact of averaging
+       across an era change — Polish only began closing slices in bulk once
+       rule 4's cloud lane ran dry, which is where the loop now is. In the
+       **current window** the counter read `2 / 3 [274, 278]` while five slices
+       had closed since the last grill: **274, 276, 277, 278, 279**, three of
+       them Polish. After the amendment it reads `5 / 3 … OVERDUE`.
+
+       **The replay was reconciled against the live instrument before being
+       quoted**, per CLAUDE.md: replaying `Continue + Standardize` over the
+       current window returns `['274', '278']`, which is exactly what
+       `report()` prints. Two independent readings agreeing is what makes the
+       `+ Polish` figure beside it worth anything.
+
+       **Circularity was checked, because that is what disqualified
+       `Objective`:** a Polish round is dispatched by rule 6, and an Objective
+       row resets this counter, so Polish arming rule 3 does not arm Polish.
+       And `LOOPS.md`'s own asymmetry settles the residual doubt — rule 3 sits
+       ABOVE rule 4 so it cannot starve, so over-arming costs a paragraph of
+       scope-setting and under-arming costs a starved loop.
+
+       **Same effect as this rule's five recorded recurrences, different
+       mechanism — and no regex could have found it.** All five were the parser
+       missing a log convention. Here the rows parse perfectly and are then
+       discarded by loop name. That is `LOOPS.md`'s own stated lesson ("the
+       fix is no longer widen the regex") arriving with the case that proves
+       it.
+
+       **Not re-dispatched this wake, deliberately.** Step 2 was evaluated at
+       dispatch, when the counter read `ok`; the correction is a finding OF the
+       dispatched round, not a re-entry into Step 2. The next wake reads
+       `OVERDUE` and dispatches Objective — flagged in `RESUME.md`.
+
+       **The cost is named rather than left for lane 4 to find.** This adds
+       ~25 lines to `LOOPS.md`'s **dispatch region** — the every-wake half
+       274.1 measured growing +300% against the file's +220%, and the half a
+       cut elsewhere does not answer. It is spent knowingly: the alternative is
+       amending `CLOSES_A_SLICE` while the playbook a dispatcher actually reads
+       still names the old set, which is precisely the failure this file
+       records twice (`check:resume-charter` hardened and demoted 44 minutes
+       apart; rule 5 keeping only its dead half for six days). The bulk of the
+       measurement lives in `dispatch_status.py`'s header, where it is
+       re-runnable; what is here is the decision and its reason.
+
+       - **Accept:** `dispatch_status.py --self-test` still classifies every
+         case, the live counter's slice list agrees with an independent replay
+         of the same window, `LOOPS.md` rule 3 and `dispatch_status.py`'s
+         `CLOSES_A_SLICE` header state the same set (the two-documents-
+         disagreeing failure this file records twice), and the per-loop table
+         is re-measured rather than carried over.
 
 ## Slice 278 — Polish round on `table-toolbar`, the surface every prior round dropped: the two behaviors this page documents as a pair make the grid keyboard-unreachable when they meet — hiding the column the cell cursor sits in strands the grid's ONE tab stop on a `[hidden]` cell (2026-09-05)
 

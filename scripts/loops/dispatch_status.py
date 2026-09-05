@@ -175,7 +175,22 @@ SLICE_TOP = re.compile(r"^([1-9]\d{0,2})(?::|\s+[—–-])\s")
 #                            plan; the build that follows is a Continue row.
 #   Objective    ·   2 rows (1 slice)  — EXCLUDED, and it is also circular: an
 #                            Objective row resets this very counter.
-#   Meta/Polish/Optimize · 0 rows ever named a slice. Nothing to decide.
+#   Polish       ·  18 rows (17 slices) — ADDED 2026-09-05 (roadmap 279.4). The
+#                            line here used to read "Meta/Polish/Optimize · 0
+#                            rows ever named a slice. Nothing to decide." That
+#                            was true when written and is now false: Polish
+#                            names a slice on 18 rows / 17 slices, and 12 of
+#                            those 17 are named by NO Continue/Standardize row
+#                            at all, so rule 3 cannot see them. Its sole stated
+#                            ground for the exclusion died; the exclusion went
+#                            with it.
+#   Meta         ·   3 rows (3 slices)  — EXCLUDED. Also no longer zero, and
+#                            also no longer decidable by "nothing to decide" —
+#                            but a Meta row records machinery about the loop
+#                            itself, which is the Roadmap reason, not a slice
+#                            of product work closing. Left out deliberately, so
+#                            the next reader sees it was asked.
+#   Optimize     ·   0 rows — still genuinely zero.
 #
 # (The separators above are not decoration. check:slice-refs reads the word
 # "roadmap" followed by whitespace and a number as a citation, so an aligned
@@ -197,12 +212,39 @@ SLICE_TOP = re.compile(r"^([1-9]\d{0,2})(?::|\s+[—–-])\s")
 #   + Standardize, both forms       23      <- decided
 #   + Explore + Objective           23
 #
+# REPLAYED AGAIN 2026-09-05 (roadmap 279.4) over 1,437 rows, same method:
+#
+#   Continue + Standardize          51
+#   + Polish                        52      <- decided
+#
+# ONE crossing over the whole log — and the whole-log figure is the misleading
+# one here, which is why the current window is quoted beside it. At the moment
+# this landed the counter read `2 / 3 [274, 278]` while FIVE slices had closed
+# since the last grill: 274, 276, 277, 278, 279. Three of the five (276, 277,
+# 279) are Polish rounds that filed and closed their own slices, and rule 3
+# could see none of them. The whole-log average is flat because Polish only
+# started closing slices in bulk once rule 4's cloud lane ran dry; the effect is
+# concentrated in exactly the era the loop is now in, so an average over the
+# whole log is the wrong instrument for it.
+#
+# The replay above was reconciled against this script's own live output before
+# being quoted — replaying `Continue + Standardize` for the current window
+# returns ['274', '278'], which is what `report()` prints. An instrument's first
+# output is not evidence; this one agreed with a second, independent reading.
+#
+# Circularity was checked, since that is what disqualified Objective: a Polish
+# round is dispatched by rule 6 and an Objective row resets this counter, so
+# Polish arming rule 3 does not arm Polish. And LOOPS.md's own asymmetry decides
+# the residual doubt — rule 3 sits ABOVE rule 4 so it cannot starve, so
+# over-arming costs one paragraph of scope-setting and under-arming costs a
+# starved loop.
+#
 # And of the 45 Objective rounds that actually ran, the number where the counter
 # was ALREADY past 3 goes 6 -> 15: the corrected counter shows the rule was
 # firing LATE more often than anyone knew. It is not trigger-happy either — 23
 # crossings against 45 real Objective rounds means it still signals about half as
 # often as the loop actually ran, which is the direction LOOPS.md worries about.
-CLOSES_A_SLICE = ("Continue", "Standardize")
+CLOSES_A_SLICE = ("Continue", "Standardize", "Polish")
 
 # name -> (threshold, what one unit is, how the rule counts)
 RULES = {

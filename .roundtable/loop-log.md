@@ -1440,3 +1440,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-05 14:25 · Meta · refusal · a new public event from data-table.ts to publish selection changes — widens the contract to fix a sync data-grid.ts can do on its own · refused · aa7d433d
 - 2026-09-05 14:25 · Meta · refusal · queueMicrotask as the deferral mechanism — measured wrong under a trusted click; setTimeout(...,0) instead · refused · aa7d433d
 - 2026-09-05 14:54 · Continue · build · 278.5 — Columns demo shipped multi-select markup without initDropdowns; menu opened at viewport corner, 404px above its invoker. Fixed, gated in check:claims, red-proved twice · landed · a098cf85
+- 2026-09-05 15:51 · Polish · round · Slice 279 — Polish round 3 on scan: goods-receipt ran the component live and listed nothing for it; fit cite corrected; check-components-used gains its converse arm · landed · 5abdce3c
+- 2026-09-05 15:51 · Meta · refusal · a twelfth archive sweep at 40.6% closed-history share, below both measured triggers (55.1%, 56.7%) — 249.12 is the open owner call on the threshold · refused · 5abdce3c
+- 2026-09-05 15:51 · Meta · refusal · the BLANKET converse arm in check-components-used: 357 misses across 39 of 39 pages, a predicate uniformly true · refused · 5abdce3c

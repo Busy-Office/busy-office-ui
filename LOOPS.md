@@ -285,13 +285,39 @@ match to its full playbook below:
    a pattern rather than restate one slice, and the last useful grill covered
    two. The number is a judgement and is written down so it can be argued with.
 
-   **Which loops close a slice — decided 2026-08-28 (roadmap 161.4).**
-   `Continue` **and `Standardize`**. Excluded: `Roadmap` (a triage row plans a
-   slice, it does not close one — Slice 162 is the live illustration, Roadmap-only
-   and open), `Explore` (a spike graduates INTO the plan; the build that follows
-   is a Continue row), `Objective` (circular — an Objective row resets this
-   counter), and `Meta`/`Polish`/`Optimize`, which have never named a slice at
-   all. Standardize was added because 12 slices — 47, 49, 50, 55, 60, 63, 65, 69,
+   **Which loops close a slice — decided 2026-08-28 (roadmap 161.4), amended
+   2026-09-05 (roadmap 279.4).** `Continue`, `Standardize` **and `Polish`**.
+   Excluded: `Roadmap` (a triage row plans a slice, it does not close one —
+   Slice 162 is the live illustration, Roadmap-only and open), `Explore` (a
+   spike graduates INTO the plan; the build that follows is a Continue row),
+   `Objective` (circular — an Objective row resets this counter), `Meta` (its
+   rows record machinery about the loop itself, which is the Roadmap reason),
+   and `Optimize`, which has never named a slice at all.
+
+   **`Polish` was excluded on a fact that has since died, and this is what that
+   cost.** 161.4's whole ground was *"Meta/Polish/Optimize · 0 rows ever named a
+   slice. Nothing to decide."* True then; re-measured over 1,437 rows it is
+   **18 Polish rows naming 17 slices, 12 of which no Continue/Standardize row
+   names at all** — invisible to this counter. At the moment the amendment
+   landed the counter read `2 / 3 [274, 278]` while **five** slices had closed
+   since the last grill (274, 276, 277, 278, 279), three of them Polish rounds
+   that filed and closed their own slice. **The whole-log replay — 161.4's own
+   method — moves crossings only 51 → 52**, and that flat average is the
+   misleading number: Polish only began closing slices in bulk once rule 4's
+   cloud lane ran dry, so the effect is concentrated in the era the loop is now
+   in. The figures are in `dispatch_status.py` beside `CLOSES_A_SLICE`; re-run
+   them, they are snapshots.
+
+   **Same effect as the five recurrences below, different mechanism — and that
+   is the point.** All five were the parser: a log convention the regex did not
+   match. This one is the loop SET, and **no widening of any regex could have
+   found it**, because the rows parse perfectly and are then discarded by name.
+   That is the paragraph below's own lesson arriving with a case that proves it:
+   the fix is no longer "widen the regex", it is that this counter is only ever
+   caught by a number disagreeing with something a human just wrote down. Found
+   exactly that way — reading the counter immediately after recording an
+   iteration, and seeing it unmoved by a slice that had just been closed by
+   hand. Standardize was added because 12 slices — 47, 49, 50, 55, 60, 63, 65, 69,
    103, 111, 155, 161 — have a Standardize row and **no Continue row**; Slice 49's
    own heading is "Standardize sweep". Explore and Objective were measured before
    being refused rather than waved off, since being obviously-not is how the

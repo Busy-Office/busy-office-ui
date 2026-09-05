@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-05 14:54 UTC
+Generated at: 2026-09-05 15:51 UTC
 
 ## Open items by slice
 
@@ -26,7 +26,7 @@ Generated at: 2026-09-05 14:54 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1434 iterations logged)
+dispatch status — counter-triggered rules (1437 iterations logged)
   Standardize   3 / 4 Continue rounds since 2026-09-05 06:54   ok
   Objective     2 / 3 slices          since 2026-09-05 07:40   ok  [274, 278]
   Optimize      2 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
@@ -48,9 +48,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-05 11:04 · Meta · refusal · a check:claims case for the auto path — needs the demo button to carry the attribute, changing what the demo DOES, which needs the screenshot lane a cloud wake cannot run · refused · e4d7493c
-- 2026-09-05 11:04 · Meta · refusal · a gate for 'a documented runtime claim with no executable assertion' — the predicate needs a reading of what a sentence promises (94.11 shape-vs-content), and 101.3 forbids Polish adding gates · refused · e4d7493c
-- 2026-09-05 11:55 · Polish · round · 278.1 — table-toolbar round 2: hiding a column strands initDataGrid's only tab stop on a [hidden] cell, so Tab skips the grid; fixed and red-proved by four injections · landed · 7f4792e7
 - 2026-09-05 11:55 · Meta · refusal · a check:claims case for the hidden-column composition — it needs the grid demo to gain a toggle control, changing what the demo DOES, which needs the screenshot lane a cloud wake cannot run · refused · 7f4792e7
 - 2026-09-05 12:10 · Polish · round · 278.3-278.6 — the independent pass on table-toolbar: four more findings filed, one of them in prose 278.1 shipped the same wake (fixed here); the htmx:after:swap finding refuted against the installed htmx 4.0.0 · logged · 0272ed30
 - 2026-09-05 12:10 · Meta · refusal · the agent's htmx:after:swap finding — htmx 4.0.0 emits exactly that namespaced form; the reading came from the root node_modules, which this repo documents as never hoisted · refused · 0272ed30
@@ -58,6 +55,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-05 14:25 · Meta · refusal · a new public event from data-table.ts to publish selection changes — widens the contract to fix a sync data-grid.ts can do on its own · refused · aa7d433d
 - 2026-09-05 14:25 · Meta · refusal · queueMicrotask as the deferral mechanism — measured wrong under a trusted click; setTimeout(...,0) instead · refused · aa7d433d
 - 2026-09-05 14:54 · Continue · build · 278.5 — Columns demo shipped multi-select markup without initDropdowns; menu opened at viewport corner, 404px above its invoker. Fixed, gated in check:claims, red-proved twice · landed · a098cf85
+- 2026-09-05 15:51 · Polish · round · Slice 279 — Polish round 3 on scan: goods-receipt ran the component live and listed nothing for it; fit cite corrected; check-components-used gains its converse arm · landed · 5abdce3c
+- 2026-09-05 15:51 · Meta · refusal · a twelfth archive sweep at 40.6% closed-history share, below both measured triggers (55.1%, 56.7%) — 249.12 is the open owner call on the threshold · refused · 5abdce3c
+- 2026-09-05 15:51 · Meta · refusal · the BLANKET converse arm in check-components-used: 357 misses across 39 of 39 pages, a predicate uniformly true · refused · 5abdce3c
 
 ## Sunset test
 
