@@ -252,7 +252,8 @@ function evict(tbody: HTMLTableSectionElement, table: HTMLTableElement, observer
  * @event bo:table-load-more
  * @target the `[data-table-load-more]` button (bubbles), or a windowed
  *   list's evicted spacer `<tbody>` when no such button exists
- * @when the button is clicked or scrolls into view (IntersectionObserver);
+ * @when the button is clicked, or is in view (IntersectionObserver —
+ *   including immediately at initLoadMore() if it is already in view);
  *   or a windowed table's evicted chunk scrolls back near the viewport
  * @detail offset {number} the chunk's start row, 0-based — present only
  *   when fired by windowed-list.ts re-requesting an evicted chunk

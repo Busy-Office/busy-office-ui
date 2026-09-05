@@ -107,7 +107,7 @@ a no-op recorded in one line.
 | component/icon | content | **3** | 2/3 | 0 | f0d9f50b | round 1 landed — blind 2→3; scorer caught the demo contradiction, clause narrowed; **round 2 (2026-08-30) FOUND A DEFECT — `fit` cited "12 ERP glyphs" against 26 shipped, and the same 12 was hard-coded as the DIVISOR of the page's published size projection, see below** · **RE-QUEUED — source changed** |
 | component/inline-editing | content | **3** | 2/3 | 0 | 644dde35 | round 1 landed — blind 3, "not for creating a record" (unscored in DSA); **round 2 (2026-09-05) NO-OP on the surface — all five arms reproduce, including the row-edit cites no arm had ever read — and a new arm 14 FOUND A DEFECT in this loop's own step 0: the surface source set was blind to every behavior module, 31 commits across 7 surfaces. ROADMAP 276, see below** |
 | component/navbar | content | **3** | 2/3 | 0 | 35528cb6 | round 1 landed — blind 2→3, "not the page's own title or actions"; **round 2 (2026-09-04) NO-OP on the surface — all six cites hold, including the `interaction: na` no arm covered — and two NEW arms found a defect elsewhere: `breadcrumb · interaction` scored `na` 7h14m before the rubric clause that forbids it existed. ROADMAP 268, see below** |
-| component/pagination | content | **3** | 1/3 | 0 | 2a48579c | round 1 landed — blind 2→3, "not for stepping through a process" · **RE-QUEUED — source changed** |
+| component/pagination | content | **3** | 2/3 | 0 | 89c4d10d | round 1 landed — blind 2→3, "not for stepping through a process"; **round 2 (2026-09-05) NOT a no-op, and the defect is ON this surface — six cites hold, but a new arm 15 read the page's claims against `load-more.ts` and found `data-load-more-auto` published as a runtime promise in five places, asserted in none, all five naming a trigger the shipped module does not have. ROADMAP 277, see below** |
 | component/progress | content | **3** | 2/3 | 0 | 1154a4d7 | round 1 landed — blind 2→3, "not for work of unknown duration"; **round 2 (2026-09-04) NO-OP on the surface — six cites and all eight arms clean — and the finding is in this loop's own step 0: `polish_requeue.py --apply` announced a write over a byte-identical file. ROADMAP 267, see below** · **RE-QUEUED — source changed** |
 | component/scan | colour+interaction+fit | **3** | 2/3 | 0 | e1c34049 | round 1 (2026-08-23) fixed all three; **round 2 (2026-08-28) discovered the round-1 score was never written to `dsa-scores.json` at all** — see below · **RE-QUEUED — source changed** |
 | component/sidebar-nav | content | **3** | 2/3 | 0 | 904b544f | round 1 landed — blind 2→3, "not for navigating within one screen"; **round 2 (2026-08-30) FOUND A DEFECT — the `fit` cite's usage count was EXACT when written and decayed two days later, see below** · **RE-QUEUED — source changed** |
@@ -2195,3 +2195,127 @@ screenshot lane could not run. **0** files under `packages/core/src/` changed
 and **0** docs page markup changed — the round's diff is `polish_requeue.py`,
 this ledger, `ROADMAP.md` and the hand-off, so nothing in it renders. Every
 number above came from a gate or a probe executing in this container.
+
+## Round 2: pagination (2026-09-05, cloud wake) — NOT a no-op; a runtime promise published five times and asserted nowhere (ROADMAP 277)
+
+Dispatcher rule 6, reached because rules 1-5 did not match: no P0, Standardize
+`1 / 4`, Objective `1 / 3 [274]`, rule 4's **12** open items all blocked (9
+owner, 3 browser-blocked in the screenshot sense), and rule 5 **STALE** — the
+`dispatch_status.py` line read `2 wake-date(s) newer`, so it is reported as
+*could not be evaluated*, never clear. `polish_requeue.py --apply` re-queued
+**14**; `0 rows newly marked`, ledger unchanged.
+
+**The tiebreak was measured, not alphabetical, and that is the difference from
+276.1.** Every non-skipped surface reads `content: 3`, so "lowest score"
+selects all of them; "fewest rounds used" left exactly two at `1/3` —
+`pagination` and `table-toolbar`. 217.1's stated reason breaks that without
+inventing a discriminator: `table-toolbar` is **ABSENT** from
+`dsa-scores.json`, so no reconciliation arm can disagree with it. Checked
+rather than recalled:
+
+```
+node -e "const d=require('./apps/docs/src/data/dsa-scores.json').components;
+for (const n of ['pagination','table-toolbar']) console.log(n, n in d)"
+# pagination true · table-toolbar false
+```
+
+### The arms on the surface — clean, including a class no arm had read
+
+Arms 1-4 as recorded by earlier rounds (clause present; entry rendered by its
+page; line-number cites still `badge · spacing` alone; the `content` cite's
+quoted clause verbatim on the built page). Then:
+
+**The three NEGATIVE cites, which arms 4-6 structurally cannot see.** Arms 4,
+5 and 6 all ask *is this quoted thing PRESENT*; `pagination`'s `typography`
+("no raw font-size"), `colour` ("zero raw hex") and `spacing` ("zero raw
+dimension literals — all tokens") are absence claims, falsified by the source
+GAINING something. All three hold — `font-size` occurs twice, both `var()`;
+hex 0; unit-bearing literals 0.
+
+**Checked by listing every declaration, never by a negative lookahead.** The
+stepper round recorded `grep -nP 'font-size\s*(?!var\()'` reading 2 on a clean
+file and 2 on one with `font-size: 13px` injected — `\s*` backtracks to zero
+width and the lookahead succeeds one space before `var(`. The honest form is
+to print all matches and read them.
+
+`interaction` reproduces at `pagination.css:5-6`, and `[aria-current="page"]`
+sets `font-weight` as well as colour, so the two-channel rule holds.
+
+### Arm 15 — the page's claims against the shipped BEHAVIOR
+
+276.1's arm applied to the surface its own table names as the **third**
+blindest (`3 / 4` commits touching `load-more.ts` never touched the page).
+
+`initLoadMore`'s `data-load-more-auto` path is documented in five places and
+asserted in none. The only test naming the attribute asserts it *does not
+throw where IntersectionObserver is unavailable (jsdom)* — an assertion about
+an environment in which the feature cannot exist. `check:claims` covers the
+click path only; `check-po-app.mjs` never names load-more, though po-app ships
+the attribute at `server.mjs:993`.
+
+Not "untestable here": `windowed-list.test.ts` already ships a controllable
+`FakeIO` in the same directory. The sibling behaviour has the harness.
+
+**The premise was measured in a real browser first** — `ENVIRONMENT.md`'s
+SECOND list. A probe served the shipped `dist/js/behaviors/load-more.js` over
+http to headless Chrome (`file://` is refused — module imports from
+`origin 'null'` are CORS-blocked, and `page.on('console')` is what said so
+rather than a bare timeout): out of view at init **0** fires, scrolled in
+**1**, away **1**, back **2** — and **already in view at `initLoadMore()`
+fires 1, with no scroll and no click**. So the shipped behaviour is right and
+all five wordings are wrong. Red-proved by qualifying the observe selector to
+`[data-load-more-NOPE]`, injection confirmed at line 62 of the served file
+first: `0/0/0/0`, restored `0/1/1/2`.
+
+**Six `FakeIO` cases landed, and all six were red-proved — four injections,
+because three of them left one case green.** An assertion never watched fail
+is what CLAUDE.md refuses; each injection was confirmed in the BUILT `dist/`
+before the result was believed, and the source restored byte-identical after
+each (`git diff --stat` empty).
+
+### The fifth site was found by the BUILT page, not the diff
+
+The first pass corrected four sites and declared the wording gone. Grepping
+`dist/` returned `components/pagination/index.html` anyway: the survivor was
+the comment inside the page's **copy-paste code sample**, the block a reader
+actually takes. That is CLAUDE.md's bulk-edit rule collecting on exactly the
+file shape it names — live markup mixed with a template-literal sample.
+
+**And the first attempt to locate it reported nothing**, because
+`grep -o ".\{140\}scrolls into view.\{80\}"` is a position filter: the match
+sits at a line start after Shiki's markup, so 140 preceding characters do not
+exist. `grep -c` found it instantly. Two documented traps inside one
+verification step.
+
+Final reading, plain fixed strings on the built tree: `scrolls into view` and
+`scroll-into-view` both **0 files across all of `apps/docs/dist`**.
+
+### Score, and what was refused
+
+**The score does not move and no blind re-score is owed.** No dimension covers
+"is the documented trigger condition accurate"; the wrong-choice clause
+`content: 3` was earned on is untouched. `scored` stays **2026-08-23** —
+moving it would claim the independent second opinion §3b step 4 requires,
+which this round did not run and did not need. Same reading as `sidebar-nav`,
+`breadcrumb` and `icon`. `rounds` moves 1→2 on 182.1's precedent. Per **273.2**,
+an open owner call, `dry` is **not** incremented.
+
+**Not a no-op, and the distinction from the last five rounds matters**: the
+defect is ON this surface — pagination's own page published the inaccurate
+claim — rather than found elsewhere while the surface reconciled clean. 273.2's
+NO-OP tally stays at **9**.
+
+**Refused: a `check:claims` case for the auto path.** It needs the demo button
+to carry `data-load-more-auto`, which changes what the demo DOES and needs the
+1440/390 light-and-dark lane a cloud wake cannot run. **Refused: a gate for
+"a documented runtime claim with no executable assertion"** — the predicate
+needs a reading of what a sentence PROMISES, which 94.11 says a gate can shape
+but not judge, and 101.3 forbids Polish adding gates outright.
+
+**Not verified, said plainly.** Cloud wake: no Podman, no `localhost:8081`.
+**0** CSS files changed; the pagination page changed in prose, one `ApiTable`
+`js` string and one code-sample comment, so it reflows by a few lines and
+**that reflow is UNVERIFIED VISUALLY**. What is verified: `check:layout` and
+`check:scroll` sweep every page at 1440 and 390, `test:axe` found zero
+violations, and every other number above came from a gate or probe executing
+in this container.

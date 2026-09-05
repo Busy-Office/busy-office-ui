@@ -76,8 +76,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     your code fetches the next batch and appends the rows (fetch, <code>hx-get</code>),
     this behavior only tracks intent, same split as <code>bo:table-export</code>.
     Add <code>data-load-more-auto</code> and an <code>IntersectionObserver</code>
-    fires the same event when the button scrolls into view — once per approach, so a
-    consumer that fails to append doesn't loop. Disable the button while a fetch is
+    fires the same event whenever the button <em>is</em> in view — once per approach, so a
+    consumer that fails to append doesn't loop. Note the boundary: an auto button
+    that is already in the viewport when <code>initLoadMore()</code> runs fires
+    straight away, with no scroll and no click, so a short first page fetches its
+    second page on load. Disable the button while a fetch is
     in flight; remove it when there's nothing left. Try it: the demo appends two
     stub rows per click.</p>
     <pre><code>{`<div class="bo-data-table__footer">
@@ -86,7 +89,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 </div>
 <script type="module">
   import { initLoadMore } from "@busy-office/ui/js";
-  initLoadMore(); // once — click + auto-fire when the button scrolls into view
+  initLoadMore(); // once — click + auto-fire while the button is in view
   document.addEventListener("bo:table-load-more", async (e) => {
     e.target.disabled = true;           // in flight
     const rows = await fetchNextPage(); // YOUR code
@@ -121,7 +124,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   </script>
   <ClassRef component="pagination" />
   <ApiTable component="pagination"
-    js="Optional: initLoadMore() — dispatches bo:table-load-more on a [data-table-load-more] button (click, or scroll-into-view with data-load-more-auto). Fetching/appending is your code."
+    js="Optional: initLoadMore() — dispatches bo:table-load-more on a [data-table-load-more] button (click, or while in view with data-load-more-auto, including immediately if it is already in view at init). Fetching/appending is your code."
     notes={['Current page carries <code>aria-current="page"</code>; navigation itself is your links/HTMX.',
             'The table footer (<code>.bo-data-table__footer</code>) is owned by data-table — import that file too when going à la carte.',
             'Load more vs page numbers: load-more suits feeds and mobile lists; page numbers suit "jump to page 13" reference tables. Both compose with the same footer.']} />

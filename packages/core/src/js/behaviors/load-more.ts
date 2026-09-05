@@ -16,13 +16,24 @@
  *
  * Clicking the button dispatches bo:table-load-more (bubbling) on it.
  * With `data-load-more-auto` also present, an IntersectionObserver fires
- * the same event when the button scrolls INTO view — once per entry, so
+ * the same event whenever the button IS in view — once per entry, so
  * a consumer that appends rows (pushing the button back out of view)
  * gets the next fire on the next approach, while a consumer that fails
  * to append doesn't get an infinite loop. Disable the button while a
  * fetch is in flight; a disabled button neither clicks nor auto-fires.
  * When there's nothing more to load, remove the button (or set
  * `disabled` permanently).
+ *
+ * `is in view`, not `scrolls into view`, and the difference is a fetch a
+ * consumer does not expect: an IntersectionObserver delivers an initial
+ * entry for every element it observes, so an auto button that is ALREADY
+ * in the viewport when initLoadMore() runs fires immediately, with no
+ * scroll and no click. Measured in headless Chrome against this module as
+ * shipped (roadmap 277.1) — out of view at init 0 fires, scrolled in 1,
+ * away and back 2; already in view at init 1. That is the intended
+ * "fill the viewport" behaviour and it does not loop, because the
+ * observer reports transitions; it was simply documented, in five places,
+ * as something a scroll had to trigger.
  *
  * bo:table-load-more's full contract (including the optional chunk-offset
  * detail a windowed list re-request carries) is documented once, in

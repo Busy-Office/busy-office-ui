@@ -315,6 +315,220 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 277 — Polish round on `pagination`: six cites hold, and the finding is a runtime claim published in four places, asserted in none — `data-load-more-auto`'s only test says it *does not throw* in an environment where the feature cannot exist (2026-09-05)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** for the
+eleventh wake running (`git branch --show-current` empty, `HEAD` at `14fb2ad`)
+— ENVIRONMENT trap 1, fixed with `git checkout -B main origin/main` before any
+work; `origin/main` arrived as a **forced update** (`26447ba...14fb2ad`), which
+is Step 0c's collision mechanic visible. `--unshallow` clean in one attempt
+(**1,889** commits, no `shallow.lock`); `git fetch --tags origin` returned all
+**seven**. Working tree clean, `RESUME.md` "In flight: nothing". Step 1: no new
+input — `list_issues` on `Busy-Office/busy-office-ui` returns `totalCount: 0`,
+and no open `N. [ ]` item is a P0; nothing triaged, nothing committed for it.
+Step 0b: rule 2 `1 / 4`, rule 3 `1 / 3 [274]`, rule 5 **STALE** (`2
+wake-date(s) newer`).
+
+**Rules 1-5 did not match and rule 6 fired.** Rule 4's open set is **12**, and
+every line was re-classified from the item's own text per 186.2 rather than
+carried from the last hand-off: **owner-blocked 9** (Slice 15, `112.3`,
+`112.4`, `249.7`, `249.10`-`249.13`, `273.2`), **browser-blocked in the
+SCREENSHOT sense 3** (`249.6`, `249.9`, `249.15` — each says so in its own
+text), agent-blocked 0, not-blocked 0. Rule 5 is reported as **could not be
+evaluated**, never clear.
+
+**The tiebreak was measured this time, and that is the difference from 276.1.**
+Every non-skipped surface reads `content: 3`, so "lowest score" selects all;
+"fewest rounds used" narrows to the two at `1/3` — `pagination` and
+`table-toolbar` — and 217.1's stated reason breaks it without inventing a
+discriminator: `table-toolbar` is **ABSENT** from `dsa-scores.json`, so no
+reconciliation arm can disagree with it. 276.1 took its three-way tie
+alphabetically and said so; this one did not have to.
+
+### The arms on the surface — all clean
+
+1. **Wrong-choice clause present** — `<strong>Not for stepping through a
+   process</strong>`, and the page is off `check:wrong-choice`'s TODO.
+2. **`dsa-scores.json` entry rendered by its page** — `check:dsa-scores`
+   passes per name.
+3. **Line-number citations** — none in this entry; the class is still
+   `badge · spacing` alone.
+4. **The `content` cite's quoted clause** is on the built page verbatim.
+5. **The three NEGATIVE cites, which arms 4-6 structurally cannot read.**
+   `typography` "no raw font-size", `colour` "zero raw hex", `spacing` "zero
+   raw dimension literals — all tokens". Checked by **listing every
+   declaration** rather than by a negative lookahead — the stepper round
+   recorded `grep -nP 'font-size\s*(?!var\()'` backtracking to zero width and
+   discriminating nothing, so the honest form is to print all matches and read
+   them: `font-size` occurs twice in `pagination.css`, both `var()`; hex 0;
+   unit-bearing literals 0.
+6. **`interaction`** — "native `<nav>` + buttons/links; current page carries
+   `aria-current='page'` per its own contract comment" reproduces at
+   `pagination.css:5-6`, and `[aria-current="page"]` sets `font-weight` as
+   well as colour, so the two-channel rule holds under forced-colors.
+
+### The finding — arm 7, the page's cites against the shipped BEHAVIOR
+
+276.1's new arm read a page's claims against its serving module, and its own
+table names `pagination` as the **third** blindest surface (`3 / 4` commits
+touching `load-more.ts` never touched the page). This is that arm collected.
+
+**`initLoadMore`'s auto-fire path is documented in five places and asserted in
+none.** The only test naming the attribute is
+`load-more.test.ts`'s *"`data-load-more-auto` does not throw where
+IntersectionObserver is unavailable (jsdom)"* — an assertion about an
+environment in which the feature **definitionally cannot run**. `check:claims`
+covers the click path only; `check-po-app.mjs` never names load-more, though
+po-app ships `data-load-more-auto` at `server.mjs:993`.
+
+That is not "IntersectionObserver is untestable here": `windowed-list.test.ts`
+already ships a controllable `FakeIO` for exactly this, in the same directory.
+The sibling behaviour has the harness and this one did not use it.
+
+**It is also the maximally-silent class this gate's own comment names.**
+`check-claims.mjs` says of load-more that "its failure is maximally silent —
+the button still depresses, no rows were ever going to appear from the
+framework". The auto path is quieter still: with no click there is not even a
+depress.
+
+**The coverage reconciliation that found the click path could not have found
+this one.** Its recorded method was reconciling *the 21 init behaviours*
+against hand-verified selectors — a check at BEHAVIOR granularity. A behaviour
+with one covered path and one uncovered path reads as covered.
+
+### The premise was verified in a real browser before anything was written
+
+`ENVIRONMENT.md`'s SECOND list — a DOM/event assertion, which a cloud wake can
+take. A throwaway probe served the **shipped** `dist/js/behaviors/load-more.js`
+over http to headless Chrome (`file://` is refused: module imports from
+`origin 'null'` are blocked by CORS, and the `page.on('console')` listener is
+what said so rather than a timeout):
+
+| scenario | fires |
+|---|---|
+| out of view at init | **0** |
+| scrolled into view | **1** |
+| scrolled away | **1** |
+| scrolled back — second approach | **2** |
+| **already in view at `initLoadMore()`** | **1**, no scroll, no click |
+
+**Red-proved, injection confirmed in the served file first**: qualifying the
+observe selector to `[data-load-more-NOPE]` (grep confirmed at line 62) took
+the run to `0/0/0/0`, and restoring returned `0/1/1/2`.
+
+**So the shipped behaviour is right and the documentation is wrong.** The last
+row is the finding: an IntersectionObserver delivers an initial entry for every
+element it observes, so an auto button already in the viewport fires
+immediately. **Five** sites said a scroll had to trigger it — `load-more.ts`'s
+header, `windowed-list.ts:255`'s canonical `@when` (the event contract every
+consumer is pointed at), the pagination page's prose, its `ApiTable` `js=`
+string, and the inline comment inside the page's **copy-paste code sample**. A
+sixth site, `/concepts/scale`, names the attribute without stating a trigger
+and is accurate; it was left alone. The consequence is concrete: a short first
+page fetches its second page on load.
+
+**It was four until the built page was read, and that is CLAUDE.md's bulk-edit
+rule collecting.** The first pass edited the four sites visible as prose and
+declared the wording gone; grepping `dist/` for the old string returned
+`components/pagination/index.html` anyway, and the survivor was the comment in
+the copyable `<pre>` — the one a reader actually takes. The page mixes live
+markup with a template-literal sample, which is precisely the file shape that
+rule says to edit by hand and verify against what it RENDERS.
+
+**And the first attempt to locate it reported nothing**, because
+`grep -o ".\{140\}scrolls into view.\{80\}"` is a position filter, not a
+context window: the match sits at a line start after Shiki's markup, so 140
+preceding characters do not exist. `grep -c` found it instantly. Both traps are
+written in CLAUDE.md and both were walked into inside one verification step.
+
+**It does not loop**, checked rather than assumed — the observer reports
+transitions, so a button that stays in view after the append does not re-fire.
+The "once per approach" half of the claim holds.
+
+### What landed
+
+- **`packages/core/tests/load-more-auto.test.ts`** — six cases on the
+  `FakeIO` precedent. A separate file because `initLoadMore` latches
+  `installed` and builds its observer once, so a file that has already called
+  it under jsdom can never acquire one afterwards; vitest isolates module
+  graphs per file, and `load-more.test.ts` keeps its no-IntersectionObserver
+  case rather than losing it.
+- **All five wordings corrected** to "is in view"; the four prose sites name
+  the init boundary explicitly, and the code sample's one-line comment states
+  the condition (`while the button is in view`) without it.
+
+**Every one of the six cases was red-proved, each injection confirmed in the
+BUILT `dist/` before the result was believed** — four injections, because
+three of them left one case green and an assertion never watched fail is the
+thing CLAUDE.md refuses:
+
+| injection | confirmed in dist | cases red |
+|---|---|---|
+| observe selector → `[data-load-more-NOPE]` | present ×1 | observes; late-arriving |
+| `disabled` guard deleted | `disabled)` → 0 | disabled auto button |
+| `if (entry.isIntersecting)` dropped | `isIntersecting` → 0 | out of view; once per entry |
+| observe selector widened to `[data-table-load-more]` | auto-qualified form → 0 | never-observed |
+
+Source restored byte-identical after each (`git diff --stat` empty).
+
+1. [x] **277.1 — DONE 2026-09-05 (cloud wake). `data-load-more-auto` is
+       published as a runtime promise in five places and asserted in none, and
+       all five state a trigger the shipped module does not have.** The only
+       test naming the attribute asserts it does not throw where the feature
+       cannot exist. Fixed by six red-proved `FakeIO` cases and by correcting
+       the five wordings to what a real browser was measured doing.
+       - **Accept:** the auto-fire path has at least one assertion that goes
+         red when it breaks, red-proved with the injection confirmed in the
+         built artifact first; and every documentation site that STATES the
+         trigger agrees with what the shipped module does — asserted by
+         grepping the BUILT `dist/` for the old wording with a plain fixed
+         string, not by reading the diff. Finding a site already accurate
+         is a satisfying outcome, not an off-plan one — `/concepts/scale` was
+         one and was left unchanged.
+
+### The score does not move, and no blind re-score is owed
+
+No dimension covers "is the documented trigger condition accurate" — the
+inaccurate sentence is not what `content` scores, and the wrong-choice clause
+it was earned on is untouched. `scored` stays **2026-08-23**: moving it would
+claim the independent second opinion §3b step 4 requires, which this round did
+not run and did not need. Same reading as `sidebar-nav`, `breadcrumb` and
+`icon`. `rounds` moves 1→2 on 182.1's precedent — the round changed the
+published artefact. Per **273.2**, still an open owner call, `dry` is **not**
+incremented.
+
+**Not a no-op**, and the distinction from the last five rounds is worth
+stating: this defect is ON the surface — pagination's own page published the
+inaccurate claim — rather than found elsewhere while the surface reconciled
+clean. Against 273.2's tally that leaves the NO-OP count at **9**, unchanged.
+
+### Refused inside this item, both measured
+
+- **Adding a `check:claims` case for the auto path.** It would need the page's
+  own demo button to carry `data-load-more-auto`, which changes what the demo
+  DOES — rows appending on scroll — and that is a design change needing the
+  1440/390 light-and-dark lane this wake cannot run, not maintenance. 101.3
+  confines Polish to the existing ratchet. Left to a local wake if wanted; the
+  vitest cases carry the ratchet meanwhile.
+- **A gate for the class "a documented runtime claim with no executable
+  assertion".** The predicate is not measurable in the form the other
+  cite-checkers take — it needs a reading of what a sentence PROMISES, which
+  94.11 says a gate can enforce the shape of but not the content of. And
+  101.3 forbids Polish adding gates outright. Recorded, not gated.
+
+### What this round could NOT verify
+
+Cloud wake: no Podman, no `localhost:8081`, so the 1440/390 light-and-dark
+screenshot lane could not run. **0** CSS files changed. The pagination docs
+page DID change — two prose edits inside an existing `<p class="bo-u-text-muted">`,
+one `ApiTable` `js` string and one comment inside a code sample — so it reflows
+by a few lines and
+**that reflow is UNVERIFIED VISUALLY**, stated as unverified rather than
+implied to be fine. What is verified: `check:layout` and `check:scroll` sweep
+every page at 1440 and 390 and assert nothing overflows and every scroll region
+is reachable, and `test:axe` found no violation. Every other number above came
+from a gate or a probe executing in this container.
+
 ## Slice 276 — Polish round on `inline-editing`: every arm on the surface reproduces, and the finding is in step 0's own source map — a surface's source set stopped at CSS, so 31 commits changed a behavior module with nothing to notice (2026-09-05)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** for the tenth
