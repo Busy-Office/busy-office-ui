@@ -315,6 +315,180 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 284 — Standardize sweep, 4 of 4 lanes: lanes 1-3 clean, and lane 4's finding is that 167.1's stated reopen condition for `CLAUDE.md` was MET — an eighth section on "can this detector fail" was added without folding, and the fold is this slice (2026-09-05)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0 — `list_issues` on
+`Busy-Office/busy-office-ui` returns `totalCount: 0`, and
+`grep -nE '^\s*[0-9]+\. \[ \]' ROADMAP.md | grep -i p0` returns **nothing**
+(rc=1). Step 1 triaged and committed nothing: no new input. **Rule 2 matched** —
+`dispatch_status.py` read `Standardize 4 / 4 Continue rounds … OVERDUE`, the
+counter the previous hand-off predicted would fire, and rule 2 sits above the
+queued build item deliberately. Rule 3 `2 / 3 slices … ok [281, 283]` did not
+match. Rule 5 reports **STALE** (2 wake-dates newer than the newest comparable
+pair), so per `LOOPS.md` it **could not be evaluated** and is not reported clear.
+Rules 4 and 6 were not reached. Step 0c's re-fetch before the first commit is
+recorded with the commit.
+
+**All four lanes ran; saying `n of 4` per the playbook. This is 4 of 4.**
+
+| lane | command | result |
+|---|---|---|
+| 1 dead-style | `npm run scan:dead-style -w docs` | **0 dead** of **1,433** live inline declarations — identical to Slice 214's 1,433 |
+| 2 css-repeats | `npm run report:css-repeats -w @busy-office/ui` | **8 repeated bodies**, `LOOPS.md`'s table exactly; 74 files · 242 rules · 230 distinct — all three unmoved from Slice 214 |
+| 3 report:prose | `npm run report:prose -w docs` | **0 unverdicted** — 15 distinct flagged pages, every one carrying a verdict |
+| **4 loop-prose** | `python3 scripts/loops/report_loop_prose.py` | **the finding, below** |
+
+**Lane 2's delta is zero and that is the whole reading.** All eight groups match
+the table in `LOOPS.md`, membership included — the visually-hidden group is still
+the same three files, and the joined-control `x4` group is still **two**
+components (money, quantity), so its stated reopen trigger (a THIRD component) is
+unmet. Slice 214 read 242 rules / 230 distinct / 8 repeats and so does this
+sweep, so the +5/+5 it recorded has not been followed by another.
+
+**Lane 3: 15 flagged pages, checked against the SOURCE rather than assumed.** 10
+over the corpus median (1,584), 11 over a family median, **15 distinct**. Every
+one carries a verdict: 14 are named inside 158.1's own section body — verified by
+extracting the page paths from it (`awk 'NR>=17549 && NR<=17800' ROADMAP-archive.md
+| grep -oE '/(components|concepts|patterns|base)/[a-z-]+' | sort -u`) rather than
+by counting mentions, which is a presence probe and not a fidelity probe — and
+`/concepts/scale/` carries **178.3**'s. The set moved by one since Slice 214's 14
+(corpus 9→10, family 12→11); `/patterns/output-form/` is verdicted but no longer
+flagged. **No page entered the flagged set unverdicted**, which is the lane's
+actual question.
+
+### Lane 4 — the finding, and it is a condition an earlier wake wrote down in advance
+
+`report_loop_prose.py`'s ratchet block, read first per the playbook:
+
+```
+CLAUDE.md   32 up   never cut          ← read every wake — the doctrine
+DESIGN.md   22 up   never cut
+```
+
+`CLAUDE.md` is the only file in the report that is **read every wake AND has
+never once been cut**, which is exactly the shape `LOOPS.md` names as this lane's
+finding.
+
+**`LOOPS.md` was checked against that shape too and is NOT this sweep's finding,
+which took a measurement rather than a reading of the row.** Its `by region`
+block reports the dispatch region growing faster than the file (+300.8% against
++225.8%), and the playbook's own rule is that *a cut which does not touch the
+dispatch region does not answer this finding* — so the question is whether
+today's cut (`8848ed55`, 274.2) touched it. It did:
+
+```
+8848ed55^   dispatch 6,100 words      8848ed55   dispatch 5,658      (−442)
+```
+
+So a real dispatch-region cut sits behind the file, one day old, and the
+every-wake-with-no-cut shape does not apply to it. **Recorded as a measurement
+and not filed as an item: the region has already regrown to 6,112 — +454 in the
+same day, more than the cut removed** — from 279.4's rule-3 amendment and 283.2's
+third step-0 advisory check, both of which are rule text a dispatcher reads.
+One day is not a trend, and a second item fitted to it would be the "rule fitted
+to one row" this loop already has on its carried-forward list. It is also the file 167.1 verdicted **HONEST** on 2026-08-28 with an
+explicit, checkable reopen condition: *"7 of its 16 `##` sections — 1,893 of
+4,600 section words, 41% — are all on one subject, whether a detector can fail …
+a wake reading one gets no pointer to the other six. **Reopen if an eighth is
+added without folding.**"*
+
+**Measured, not inferred — the condition is met.** Exactly one `##` section has
+been added to `CLAUDE.md` since 167.1's commit, and it is on that subject:
+
+```
+git show e3844c49:CLAUDE.md | grep -P '^## (?!#)'   # 16 headings
+grep -P '^## (?!#)' CLAUDE.md                       # 17 headings
+# the one addition: "A green red-proof is a defect in the INJECTION until proven otherwise"
+```
+
+It was inserted **directly beneath** the rule it restates ("Red-proving a gate:
+verify the INJECTION, not just the red result"), and its own text says why it was
+written separately — *"So state it as an observation rather than an intention"*.
+That is the "without folding" case precisely.
+
+**The classifier was reconciled against 167.1's published figures before its
+delta was believed** — run over that commit it returns **7 of 16 on-subject and
+1,893 section words, matching 167.1's numerator exactly**; the denominator reads
+4,570 against its stated 4,600, a 30-word difference in what each counts as a
+section body, which does not touch the numerator the condition rests on. On
+HEAD the same classifier read **8 of 17 · 2,385 of 5,658 words · 42.2%**.
+
+1. [x] **284.1 — DONE 2026-09-05. The eighth section is folded into the seventh,
+       and the merged section leads with the observation grammar.**
+       *Accept was*: the two sections on injection validity become one, with
+       every worked example and both corollaries still present, and the
+       on-subject section count reported by the same classifier that reconciled
+       against 167.1.
+
+       They are the same trap stated twice, which is what distinguishes this
+       from the other seven — 167.1 recorded those as *"not duplicates …
+       seven distinct traps"*, and that reading survives re-reading. The two
+       folded sections instead closed with near-identical instructions
+       (*"Confirm the injection took effect … before believing a passing gate"*
+       / *"Confirm the injection changed the thing the gate reads"*), and the
+       eighth's entire opening paragraph existed to point at the section
+       immediately above it — a job that disappears when they are one section.
+
+       The merged section leads with the observation form, because that is the
+       form the eighth section argued for and the form this file's other rules
+       take. **All ten worked examples survive** (five 2026-08-17/18 injection
+       traps, five 2026-08-28 violations-of-the-written-rule), as do the
+       "measure the box that carries the constraint" corollary and the
+       self-test one-level-up note; verified by asserting 13 distinguishing
+       markers, not by reading the diff.
+
+       ```
+       # same classifier, both revisions
+       HEAD    8 of 17 on-subject · 2,385 of 5,658 words = 42.2% · file 5,860
+       folded  7 of 16 on-subject · 2,414 of 5,687 words = 42.4% · file 5,880
+       ```
+
+       **It is +20 words, NOT a cut, and that is stated rather than dressed
+       up.** The remedy 167.1 named is *folding*, and folding is what discharges
+       its condition — one rule, one place, the strongest framing first. The
+       word count is incidental to that, and trimming doctrine prose to make the
+       number fall would be optimising the instrument, which 274.1 refused for
+       the same reason. So `CLAUDE.md`'s **accumulation** half of the lane-4
+       finding is untouched and is filed as 284.2 rather than claimed closed.
+
+       The heading keeps both prior search terms ("Red-proving a gate", "green
+       red-proof … INJECTION") because five files cite one phrase or the other,
+       `scripts/loops/roadmap_scope.py` among them — checked before renaming,
+       and that one is a prose comment citing the rule by content, not a
+       structural dependency.
+
+       **All 17 CI entry points green in this container** after the fold.
+
+2. [ ] **284.2 — `CLAUDE.md` accumulates and has never been cut; the fold did
+       not change that.** Lane 4's signature — a file the loop reads every wake,
+       accumulating with no cut behind it — holds for `CLAUDE.md` (**32 up / 0
+       down, never cut**) and `DESIGN.md` (**22 up / 0 down, never cut**), and
+       284.1 left `CLAUDE.md` 20 words longer. 167.1 verdicted its growth
+       HONEST at 10 up / 0 down; the file has since taken 22 more upward steps
+       and grown from 4,759 to 5,880 words, so that verdict is being quoted well
+       past the measurement behind it.
+
+       *Accept*: a recorded verdict for `CLAUDE.md`'s accumulation using the
+       158.1 three-way split — **honest**, **instrument**, or **removable** —
+       reached by reading what its sections now carry, **or** a recorded reason
+       the file should not be cut at all. **Concluding that nothing should be
+       removed is a satisfying outcome**, not an off-plan one; what is not
+       satisfying is quoting 167.1's verdict without re-measuring. Re-run both
+       instruments first — the ratchet block and the section classifier — since
+       every figure above is a snapshot:
+
+       ```
+       python3 scripts/loops/report_loop_prose.py        # ratchet block, not the delta
+       grep -P '^## (?!#)' CLAUDE.md                     # section inventory
+       ```
+
+       Deliberately **not** given a gate. "This section earns its words" is
+       semantic, and 94.11 already paid for that lesson: the shape is checkable,
+       the meaning is not. `DESIGN.md` is named here as the second instance of
+       the same signature, not as a second item — it is read only when the
+       product's architecture is in play, so the every-wake half of the
+       signature does not apply to it.
+
 ## Slice 283 — Polish round 3 on `table-toolbar`: the re-queue signal this loop's step 0 runs every wake is a CONSTANT for 7 of the 13 surfaces it reports, and 5 of those 7 were broken by 276.1 — the round whose whole subject was this script's blindness (2026-09-05)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0 — `list_issues` on

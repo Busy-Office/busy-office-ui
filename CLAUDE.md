@@ -210,13 +210,35 @@ responses, so the documented 409 pattern did nothing at all. Drive real
 key/mouse events in those checks — a synthetic `keydown` on `document`
 matches no delegated handler and reports a false failure.
 
-## Red-proving a gate: verify the INJECTION, not just the red result
+## Red-proving a gate: a green red-proof is a defect in the INJECTION until proven otherwise
 
-A gate is only trustworthy if you have watched it fail. Every trap below
-produced a green "red test" — a detector that can never fail — and each
-cost real time before it was caught. Confirm the injection took effect
-(grep the BUILT output, or assert the computed style) before believing a
-passing gate.
+A gate is only trustworthy if you have watched it fail — and the thing that
+actually fails is almost never the detector:
+
+**A red-proof that comes back green is a defect in the injection until proven
+otherwise** — the same grammar as *a 0%, a 100%, or an identical value across
+many inputs is a defect until proven otherwise*.
+
+That observation grammar is deliberate, and it is the form this file's other
+rules take because it is the form that gets acted on. The intention form —
+*verify the injection, not just the red result* — was what this section said
+first; it was written, worked through the five 2026-08-17/18 examples below, and
+then violated **five times in two slices** by an agent that had read it
+(Objective grill, 2026-08-28). Every one failed the same way: the detector was
+fine, the injection never landed, and the gate correctly reported "nothing is
+broken" about a change that had not been made.
+
+Confirm the injection changed the thing the gate reads, before believing a
+passing gate: grep the BUILT output, assert the DOM, assert the computed style,
+count the matches before replacing (two copies is common), and prefer an
+assertion that fails loudly over a replace that silently matches nothing. When
+the red-proof is of a self-test, the same applies one level up — the first
+attempt at one here removed comment-stripping, which could not possibly affect
+the case it targeted.
+
+**Ten worked examples, each of which cost real time before it was caught.** Five
+where the injection produced a green "red test" — a detector that can never
+fail:
 
 - An injected rule whose selector the page never uses (2026-08-17).
 - `max-inline-size` on a table cell — table layout ignores it, so
@@ -233,44 +255,23 @@ passing gate.
   `print-color-adjust: exact` is emitted without the space, so the check
   found nothing while the gate was correctly red (2026-08-18).
 
+And five from the two slices in which this rule was already written down:
+
+- Three in a row on one gate: a directory prefix whose leading `.` is a regex
+  wildcard; flattened workspace script maps, so the root's `build` overrode the
+  docs one; a bare `npm run X` resolved against the root instead of the
+  workspace it sits in (2026-08-28).
+- One where **two copies of the rule existed** and the injection hit the demo
+  rather than the copyable block (2026-08-28).
+- One where the assertion tripped on **its own explanation** — the sample's
+  comment named the value the assertion was searching for (2026-08-28).
+
 The same discipline applies to measurement, not just injection: **measure
 the box that carries the constraint.** A sidebar label that shrink-wraps
 its text has `scrollWidth === clientWidth` always, so its own overflow can
 never be non-zero — three consecutive measurements reported "not clipped"
 while the label was spilling 15.7px past the rail. Only its right edge
 against the RAIL's client edge showed it (2026-08-18).
-
-## A green red-proof is a defect in the INJECTION until proven otherwise
-
-The rule above it — *verify the injection, not just the red result* — is
-written, worked through five examples, and was violated **five times in two
-slices** by an agent that had read it (Objective grill, 2026-08-28). Every one
-failed the same way: the detector was fine, the injection never landed, and the
-gate correctly reported "nothing is broken" about a change that had not been
-made.
-
-- Three in a row on one gate: a directory prefix whose leading `.` is a regex
-  wildcard; flattened workspace script maps, so the root's `build` overrode the
-  docs one; a bare `npm run X` resolved against the root instead of the
-  workspace it sits in.
-- One where **two copies of the rule existed** and the injection hit the demo
-  rather than the copyable block.
-- One where the assertion tripped on **its own explanation** — the sample's
-  comment named the value the assertion was searching for.
-
-So state it as an observation rather than an intention, which is the form this
-file's other rules take and the form that actually gets acted on:
-
-**A red-proof that comes back green is a defect in the injection until proven
-otherwise** — the same grammar as *a 0%, a 100%, or an identical value across
-many inputs is a defect until proven otherwise*.
-
-Confirm the injection changed the thing the gate reads: grep the BUILT output,
-assert the DOM, count the matches before replacing (two copies is common), and
-prefer an assertion that fails loudly over a replace that silently matches
-nothing. When the red-proof is of a self-test, the same applies one level up —
-the first attempt at one here removed comment-stripping, which could not
-possibly affect the case it targeted.
 
 ## An instrument's first output is not evidence
 
