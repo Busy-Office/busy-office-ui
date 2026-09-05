@@ -34,19 +34,24 @@ node apps/docs/scripts/check-resume-slice-ids.mjs # names any stale closed ids
 python3 scripts/loops/roadmap_scope.py            # OPEN set + sweep scope
 ```
 
-## ⚠ NEXT WAKE: rule 2 has RESET; expect rule 3 or rule 4
+## ⚠ NEXT WAKE: rule 3 (Objective) is OVERDUE and pre-empts
 
-`dispatch_status.py` read `Standardize 4 / 4 … OVERDUE` at dispatch, which is
-what dispatched this sweep. Re-read it after recording rather than trusting that
-— a `Standardize` row resets rule 2's counter, and this sweep's row also **closes
-a slice** (284), which advances rule 3.
+**Measured after recording, not forecast.** `dispatch_status.py` read
+`Standardize 4 / 4 … OVERDUE` at dispatch (what dispatched this sweep) and,
+immediately after this wake's row landed:
 
-**Rule 3 was `2 / 3 … ok [281, 283]` at dispatch.** Slice 284 is a new slice
-closed by a `Standardize` row, and `Standardize` is in `CLOSES_A_SLICE`, so the
-arming set should reach three and **rule 3 (Objective) is the likely dispatch**.
-That is a forecast, not a measurement — the previous hand-off's prediction about
-rule 3 was wrong for exactly this reason (it predicted on a slice the arming set
-already held). **Re-run `dispatch_status.py` and read its own output.**
+```
+Standardize   0 / 4 Continue rounds   ok        ← reset by this sweep's own row
+Objective     3 / 3 slices            OVERDUE   [281, 283, 284]
+```
+
+So **the next wake dispatches Objective** — a grill of Slices 281, 283 and 284 —
+not another sweep and not rule 4. Slice 284 armed the third because a
+`Standardize` row closes a slice (`CLOSES_A_SLICE`, amended by 279.4).
+
+This is the reading, but re-run it anyway: the previous two hand-offs each made a
+rule-3 prediction and one was wrong, which is the carried-forward finding that a
+hand-off's claim about a dispatcher rule is a forecast, not a measurement.
 
 Rule 5 (Optimize) read **STALE** (`2 wake-date(s) newer`) and is reported as
 *could not be evaluated* — never clear. `259.1`'s finding is unchanged and was
