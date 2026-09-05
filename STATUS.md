@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-05 09:49 UTC
+Generated at: 2026-09-05 11:04 UTC
 
 ## Open items by slice
 
@@ -26,7 +26,7 @@ Generated at: 2026-09-05 09:49 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1423 iterations logged)
+dispatch status — counter-triggered rules (1426 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-09-05 06:54   ok
   Objective     1 / 3 slice           since 2026-09-05 07:40   ok  [274]
   Optimize      2 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
@@ -48,9 +48,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-05 06:54 · Meta · refusal · archiving the three Settled: sections — lane 2 of this very sweep read one of them to adjudicate the repeat set · refused · aa550d2c
-- 2026-09-05 06:54 · Meta · refusal · cutting the dispatch region itself unattended — filed OPEN as 274.2 instead, since a wrong cut to the file that governs every wake is silent · refused · aa550d2c
-- 2026-09-05 07:40 · Objective · grill · Objective grill of Slices 271-274: three defects, all one shape — a figure the wake's own commit moved, read from HEAD and published as the commit's state; ENVIRONMENT's figure bullet now names HEAD · landed · 60ea801d
 - 2026-09-05 07:40 · Meta · refusal · executing 274.2 (cutting LOOPS.md's dispatch region) unattended in a cloud wake — the criterion was amended, not run · refused · 60ea801d
 - 2026-09-05 08:47 · Continue · build · 274.2 answered: the dispatch region's remaining slab is in Step 0c, not Step 2 — moved the collision forensics and the three refused alternatives to LOOPS-archive.md verbatim (873w section), keeping every executed sentence inline; dispatch region 6,100 -> 5,658 words (-442, -7.2%), Step 2 unchanged at 3,211, 0 words added above ## Playbooks, block re-run at 8848ed55 rather than the working tree; ratchet resets LOOPS.md to 0 up · landed · 8848ed55
 - 2026-09-05 08:47 · Meta · refusal · cutting any of Step 2's eight rules — measured: largest contiguous pure-narrative block is ~106 words against the 749w (167.2) and 414w (191.3) slabs the precedents moved, so ~10 fragments would net ~400w for ten pointer-follows per wake · refused · 8848ed55
@@ -58,6 +55,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-05 09:49 · Polish · round · 276.1 — Polish round 2 on component/inline-editing: NO-OP on the surface; the source set was blind to every behavior module (31 blind commits, 7 surfaces), fixed from behaviors.json byComponent · landed · 29a9062b
 - 2026-09-05 09:49 · Meta · refusal · deriving behavior modules from each docs page's own imports — over-broad on button/richtext, under-reports stepper · refused · 29a9062b
 - 2026-09-05 09:49 · Meta · refusal · extending the behavior-module source set to patterns — a pattern composes many components, so the predicate would be near uniformly true · refused · 29a9062b
+- 2026-09-05 11:04 · Polish · round · 277.1 pagination round 2 — data-load-more-auto promised in 5 places, asserted in none; 6 red-proved FakeIO cases + all 5 wordings corrected · landed · e4d7493c
+- 2026-09-05 11:04 · Meta · refusal · a check:claims case for the auto path — needs the demo button to carry the attribute, changing what the demo DOES, which needs the screenshot lane a cloud wake cannot run · refused · e4d7493c
+- 2026-09-05 11:04 · Meta · refusal · a gate for 'a documented runtime claim with no executable assertion' — the predicate needs a reading of what a sentence promises (94.11 shape-vs-content), and 101.3 forbids Polish adding gates · refused · e4d7493c
 
 ## Sunset test
 
