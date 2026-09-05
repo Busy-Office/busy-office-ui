@@ -80,10 +80,12 @@ const gridMarkup = `<table class="bo-data-table" data-grid-nav>
     dropdown pattern as elsewhere (<code>data-multiselect</code>, real checkboxes)
     — checking/unchecking a <code>data-col-toggle</code> box shows/hides every
     <code>&lt;th&gt;</code>/<code>&lt;td&gt;</code> with the matching
-    <code>data-col</code>, scoped to this table only. A hidden column is also
-    dropped from the grid model below: the cell cursor skips it, and hiding the
-    column the cursor is parked in hands the grid's single tab stop to a visible
-    cell rather than stranding it somewhere Tab cannot reach.
+    <code>data-col</code>, scoped to this table only. If you put column toggles
+    on a <code>data-grid-nav</code> table — these two demos are separate tables,
+    so you cannot try it here — a hidden column is dropped from the grid model
+    too: the cell cursor skips it, and hiding the column the cursor is parked in
+    hands the grid's single tab stop to a visible cell rather than stranding it
+    somewhere Tab cannot reach.
     <strong>Export</strong>
     dispatches <code>bo:table-export</code> with a <code>format</code> — this
     behavior only tracks the intent, generating and downloading the actual file

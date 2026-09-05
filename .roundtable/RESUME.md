@@ -49,7 +49,39 @@ that had moved here would have been the finding.
 - **Rules 7-8 were NOT EVALUATED**, because rule 6 matched. A rule below a
   match is unreached, not clear.
 
-## The open set is 12, and NONE of it is cloud-dispatchable
+## ⚠ THE CLOUD LANE IS NO LONGER EMPTY — rule 4 has work for the first time in four wakes
+
+**Read this before the block below, which describes the set as it stood at
+dispatch.** The independent pass at the END of this wake filed **four new open
+items** (`278.3`-`278.6`), so the open set went **12 → 16** and three of the
+four are cloud-takeable. Next wake, rule 4 matches and **Polish does not get
+dispatched**.
+
+```
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md      # 16
+python3 scripts/loops/roadmap_scope.py        # OPEN: [15, 112, 249, 273, 278]
+```
+
+Rule 4 takes **the OLDEST still-open item**, not the newest, so the four new
+ones do NOT jump the queue — Slice 15, `112.3`/`112.4` and the `249.x` set are
+all older and all still blocked. **The oldest item rule 4 can actually take is
+`278.4`**, and it is the one worth taking:
+
+- **`278.4`** (select-all leaves `aria-selected="false"` on every row) — a
+  shipped accessibility defect, same class as `278.1` and found by the same
+  question. Cloud-takeable in full: DOM and accessibility-tree assertions.
+  **Its item text already names the listener-ordering trap** that will
+  otherwise be rediscovered the hard way — read it before writing code.
+- **`278.3`** (the composition is asserted only in jsdom) — cloud-takeable; the
+  prose half already landed this wake.
+- **`278.6`** (the opener's cost argument names a mechanism the module does not
+  ship) — prose, cloud-takeable, but it needs a judgement about the component,
+  not a find-and-replace.
+- **`278.5`** (the Columns demo never calls `initDropdowns()`) — the geometry is
+  cloud-measurable, but the fix **moves a menu on screen**, so say which of
+  `ENVIRONMENT.md`'s two lists it needs when taking it.
+
+## The open set was 12 at dispatch, and NONE of it was cloud-dispatchable
 
 Re-read from `ROADMAP.md` after this wake's commit, and **every line was
 re-classified from the item's own text rather than carried over from the last
@@ -68,9 +100,10 @@ hand-off**, per `LOOPS.md` 186.2:
 - **agent-blocked:** none.
 - **NOT BLOCKED:** none.
 
-**So a cloud wake again falls through rule 4 to rule 5 (STALE — cannot be
-evaluated) and then to rule 6, which fires.** Fourth consecutive wake with no
-queued build item to take. Run `polish_requeue.py --apply` first — it needs
+**That was the state AT DISPATCH, and it is why rule 6 fired this wake** — the
+fall-through went rule 4 (nothing) → rule 5 (STALE, cannot be evaluated) →
+rule 6. It is **no longer current**: see the block above, which this wake's own
+findings changed. Run `polish_requeue.py --apply` first — it needs
 `behaviors.json` as well as `api.json`, so `npm run build -w @busy-office/ui`
 comes first or it exits naming the command.
 
@@ -185,13 +218,14 @@ the signal:**
    count stays at **9 NO-OP rounds, 7 of which filed a real defect found
    elsewhere**. Executing the rule as written would retire surfaces and empty a
    lane **176.3 already refused to narrow**.
-2. **The cloud lane still has no dispatchable build work**, fourth wake
-   running. All 12 open items are owner-blocked (9) or need a LOCAL wake's
-   screenshots (3). Rule 6 keeps finding real defects — the last four Polish
-   rounds each filed one, and this one filed a **keyboard-accessibility bug in
-   shipped code**, not a documentation drift — but no *queued build item* will
-   move until the owner answers something or a local wake takes
-   `249.6`/`249.9`/`249.15`.
+2. **The cloud lane's four-wake drought ENDED inside this wake, and it ended
+   because the loop generated its own work.** All 12 items open at dispatch
+   were owner- or screenshot-blocked; the round then filed four more
+   (`278.3`-`278.6`), three of them cloud-takeable, including a **shipped
+   accessibility defect** (`278.4`). So the standing report — *"nothing
+   dispatchable"* — is no longer true, and rule 6 will not fire next wake.
+   The owner-blocked nine are unchanged and still want answers; what has
+   changed is that a cloud wake is no longer idle while waiting for them.
 
 ## `bundle-gz-kb` still cannot be sampled — twenty-first wake
 

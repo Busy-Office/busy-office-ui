@@ -458,6 +458,127 @@ cloud wake has no 1440/390 light-and-dark lane. What *is* verified: the
 whole-tree browser gates sweep every page at both widths, and `test:axe`
 reports zero violations.
 
+### The independent pass found four more, and refuted one — including one defect in what this wake shipped
+
+§3b step 4's principle rather than its letter: the surface has no
+`dsa-scores.json` entry, so there is no dimension to re-score. A second agent
+was given the page and the two modules, told nothing about what changed, and
+warned per **268.2** that a page may publish a prior verdict. It came back
+with findings on the surface itself, which is the point of not marking your own
+homework — **278.3 is a defect in prose 278.1 shipped an hour earlier.**
+
+**One of its findings is REFUTED, and the refutation is recorded because the
+finding was the most alarming of the set.** It reported `htmx:after:swap` as
+"not an htmx event name" — htmx 1 and 2 emit `htmx:afterSwap` — and called it a
+repo-wide defect across 20 occurrences that would stop `refreshDataGrid` ever
+running after a swap. **The installed htmx is 4.0.0, which renamed its events
+to exactly that namespaced form**, and the repo is correct:
+
+```
+node -e "console.log(require('./apps/docs/node_modules/htmx.org/package.json').version)"   # 4.0.0
+grep -c 'afterSwap\|after-swap' apps/docs/node_modules/htmx.org/dist/htmx.js               # 0
+grep -n 'after:swap'            apps/docs/node_modules/htmx.org/dist/htmx.js               # 1300: "htmx:after:swap"
+```
+
+Its own caveat is the tell — it wrote *"htmx is not installed here
+(`ls node_modules | grep -i htmx` → empty)"* and reasoned from the name
+instead. `ENVIRONMENT.md`'s `check:po-app` entry records that htmx is **never
+hoisted** in this repo: it lives in `apps/docs/node_modules` and
+`examples/po-app/node_modules`. A root-only `ls` is a dead instrument here, and
+223's htmx-4 migration is the history the reading missed. **An agent's first
+output is not evidence either**, which is the same base rate CLAUDE.md sets for
+a new script.
+
+3. [ ] **278.3 — the composition sentence 278.1 shipped describes something no
+       demo on the page can exercise.** The two demos are separate tables in
+       separate containers: the toolbar table has no `data-grid-nav`, the grid
+       table has no `data-col`. So *"A hidden column is also dropped from the
+       grid model below"* read, in the caption of the Columns demo, as a claim
+       about what the reader could try there. **Corrected in the same wake it
+       landed** — the sentence now says outright that these two demos are
+       separate tables and the reader cannot try it here.
+
+       Kept open for the half that is not prose: the composition is asserted
+       only in jsdom (`data-grid-columns.test.ts`), and
+       `grep -c -F data-col-toggle apps/docs/scripts/check-claims.mjs` reads
+       **0**. 278.1 refused a claims case because wiring the demos together
+       changes what the demo DOES; that refusal stands, so what is open is the
+       narrower question of whether a claims case can assert the composition on
+       markup the gate builds itself rather than on the page.
+       - **Accept:** every runtime sentence on this page either names a demo a
+         reader can exercise, or says in the sentence that it cannot be tried
+         there; whichever is chosen, the page and the shipped module agree.
+
+4. [ ] **278.4 — `select all` leaves every row reporting
+       `aria-selected="false"` on a `role="grid"` that also says
+       `aria-multiselectable="true"`.** The same class as 278.1 and found by
+       the same question: two behaviors that do not talk. Confirmed at source
+       rather than taken from the agent's reading —
+       `data-table.ts`'s handler sets `box.checked = on` on each row box and
+       **dispatches no `change`**, while `data-grid.ts`'s `syncSelected` runs
+       only on a `change` whose target matches `.bo-data-table__row-select`.
+       The page's own line 102 claims *"`aria-selected` synced from the row
+       checkboxes"*.
+
+       Assistive tech therefore reads every row as unselected while all of them
+       are checked, until an unrelated single-row click happens to repair it.
+       `grep -c -F "select-all" packages/core/tests/data-grid.test.ts` → **1**,
+       and it is markup, not an assertion.
+
+       **The obvious fix has the ordering trap 278.1 already paid for**, so it
+       is named here rather than left for the next wake to rediscover:
+       `data-table.ts` binds its `change` listener on the **container** and
+       `data-grid.ts` binds on the **table**, so the table's listener fires
+       FIRST — before the row boxes are set — and a naive "also match
+       select-all" sync would read the old state. A `MutationObserver` does not
+       help either: `checked` is a property, not an attribute. Deciding between
+       deferring the sync and having `data-table.ts` publish an event is this
+       item's work.
+       - **Accept:** after a select-all through any documented route (mouse,
+         and the `Enter`-then-`Space` keyboard route the grid documents), every
+         row's `aria-selected` agrees with its checkbox, asserted by a case
+         that drives the real control rather than setting `checked` directly;
+         the assertion is red-proved by an injection confirmed in
+         `dist/js/behaviors/`, and the listener-ordering premise above is
+         re-measured rather than trusted.
+
+5. [ ] **278.5 — the Columns demo never calls `initDropdowns()`, so the menu
+       the page calls "the same multi-select dropdown pattern as elsewhere" is
+       neither positioned nor labelled.** `table-toolbar.astro` calls
+       `initDataTables(); initTableToolbar(); initDataGrid()` and nothing else;
+       `table-toolbar.ts`'s own header says *"call initDropdowns() too for the
+       menu itself (positioning, stays-open, trigger-label count)"*.
+
+       Reported measurement, to be re-taken before building: the menu renders
+       at the viewport's top-left rather than under its invoker, and
+       `data-multiselect-label`'s count never appears on the trigger. Nine
+       docs pages call `initDropdowns`; this is not one of them.
+
+       **This changes what the demo LOOKS like** — the menu moves from the
+       corner to under its button — so a cloud wake can measure the geometry
+       but cannot judge the result. Name which list it needs when taking it.
+       - **Accept:** the Columns menu's box sits under its invoker and the
+         trigger label carries the count, measured as geometry against the
+         invoker rather than against fixed pixels; or the page says why this
+         demo deliberately omits the dropdown behavior.
+
+6. [ ] **278.6 — the opener's cost argument names a mechanism the module does
+       not ship.** It says grid navigation costs *"per-cell Tab stops"* that
+       turn a browsable table into a widget; the module ships **one** roving
+       tab stop for the whole grid, which the same page states two paragraphs
+       later (*"Tab enters the grid at ONE cell"*). The conclusion — earn grid
+       nav with a real need — is sound and is not in question; the reason given
+       for it contradicts the page's own description.
+
+       Filed rather than fixed in place because the honest rewrite has to say
+       what the real cost IS (cells become a single widget the user must
+       operate, and every interactive descendant leaves the Tab sequence — a
+       trade the page never states), and that is a judgement about the
+       component, not a typo.
+       - **Accept:** the opener's stated cost of grid navigation matches what
+         the module does, and names the descendant-tabindex trade the reader
+         is actually accepting.
+
 **Refused inside this item:** a `check:claims` case for the hidden-column
 composition itself. It needs the grid demo to gain a column-toggle control,
 which changes what the demo DOES and lands new interactive markup on the page

@@ -2418,3 +2418,24 @@ gained two prose passages, so it **reflows by a few lines and that reflow is
 UNVERIFIED VISUALLY**. What is verified: all 17 cloud entry points green,
 `check:layout` and `check:scroll` sweep every page at 1440 and 390, and
 `test:axe` reports zero violations across 127 pages x 2 widths.
+
+### The independent pass, run after the round — four more findings, one refuted
+
+§3b step 4's principle rather than its letter (no `dsa-scores.json` entry, so
+no dimension to re-score). A second agent got the page and the two modules,
+nothing about what changed, and 268.2's warning that a page may publish a prior
+verdict. Filed as `278.3`-`278.6`.
+
+**It found a defect in prose THIS ROUND shipped an hour earlier** (`278.3`):
+the composition sentence read, in the Columns caption, as a claim the reader
+could try there — and the two demos are separate tables in separate containers.
+Corrected in the same wake. That is the step working as intended.
+
+**And one of its findings is REFUTED**, recorded because it was the most
+alarming: `htmx:after:swap` reported as "not an htmx event name", repo-wide
+across 20 occurrences. The installed htmx is **4.0.0**, which uses exactly that
+namespaced form — `grep -n 'after:swap' apps/docs/node_modules/htmx.org/dist/htmx.js`
+→ line 1300, and `afterSwap`/`after-swap` read **0**. Its own caveat was the
+tell: it wrote *"htmx is not installed here (`ls node_modules | grep -i htmx` →
+empty)"*, and `ENVIRONMENT.md` records that htmx is **never hoisted** in this
+repo. An agent's first output is not evidence either.
