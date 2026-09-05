@@ -23,7 +23,7 @@ survives none.
 ## In flight: nothing
 
 Last updated 2026-09-05 (**cloud** wake, scheduled routine). Working tree clean
-at hand-off. Two commits this wake, both pushed: `274.2` and this hand-off.
+at hand-off. Two commits this wake, both pushed: `276.1` and this hand-off.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -36,112 +36,113 @@ python3 scripts/loops/roadmap_scope.py            # OPEN set + sweep scope
 ## The counters, read right after this wake's recording
 
 Read immediately after `record_iteration.py`, so it is a snapshot — and this is
-the comparison `LOOPS.md` rule 3 asks for. Both moved exactly as the recording
-predicts, which is the agreement that has caught two of that rule's five parser
-bugs:
+the comparison `LOOPS.md` rule 3 asks for. **Both rules read UNCHANGED, and that
+is the agreement, not a stall**: this wake's row is a `Polish` row, and 161.4's
+list says only `Continue` and `Standardize` close a slice. A counter that had
+moved here would have been the finding.
 
-- **Rule 2 (Standardize)** `0 / 4 … ok` at dispatch → **`1 / 4 … ok`**.
-- **Rule 3 (Objective)** `0 / 3 … ok` at dispatch → **`1 / 3 … ok [274]`** —
-  this wake's Continue row closed Slice 274.
+- **Rule 2 (Standardize)** `1 / 4 … ok` at dispatch → **`1 / 4 … ok`**. A Polish
+  round is not a Continue round.
+- **Rule 3 (Objective)** `1 / 3 … ok [274]` at dispatch → **`1 / 3 … ok [274]`**.
+  Slice 276 was closed by Polish, which 161.4 excludes.
 - **Rule 5 (Optimize)** read **STALE** (`2 wake-date(s) newer`, unchanged) at
-  Step 0b. Report it *could not be evaluated*, never clear.
-- **Rules 6-8 were NOT EVALUATED**, because rule 4 matched. A rule below a
+  Step 0b and again after recording. Report it *could not be evaluated*, never
+  clear.
+- **Rules 7-8 were NOT EVALUATED**, because rule 6 matched. A rule below a
   match is unreached, not clear.
 
 ## The open set is 12, and NONE of it is cloud-dispatchable
 
-Re-read from `ROADMAP.md` after this wake's commit, classified per `LOOPS.md`
-186.2. **`274.2` closed this wake, and it was the one unblocked item** — so the
-next wake is the first in a while that reaches **rule 4 with nothing to take**:
+Re-read from `ROADMAP.md` after this wake's commit, and **every line was
+re-classified from the item's own text rather than carried over from the last
+hand-off**, per `LOOPS.md` 186.2:
 
-- **owner-blocked (9):** Slice 15, `112.3`, `112.4`, `249.7`, `249.10`-`249.13`,
-  and `273.2`.
+- **owner-blocked (9):** Slice 15 (AT runtime evidence, owner hardware),
+  `112.3` (owner briefs) and `112.4` (blocked on 112.3's verdict), `249.7`
+  (its own text holds the cost question for the owner's `249.10`), `249.10`,
+  `249.11`, `249.12`, `249.13` (each says **OWNER CALL** in its own line), and
+  `273.2`.
 - **browser-blocked in the SCREENSHOT sense** (`ENVIRONMENT.md`'s FIRST list —
-  a LOCAL wake can take these, a cloud wake cannot): `249.6`, `249.9`, `249.15`.
-  `249.15` says so in its own text.
+  a LOCAL wake can take these, a cloud wake cannot): `249.6`, `249.9`,
+  `249.15`. Each says so in its own text; `249.6` has now been declined at the
+  **clause** level twice, and re-reading it produced no separable cloud half.
 - **agent-blocked:** none.
 - **NOT BLOCKED:** none.
 
-**So a cloud wake falls through rule 4 to rule 5 (STALE — cannot be evaluated)
-and then to rule 6, which fires**: per `LOOPS.md`'s own measurement, rule 6's
-predicate is true of every non-skipped surface, so the next cloud wake dispatches
-**Polish**, not rule 8's halt. Run `polish_requeue.py --apply` first, and note
-§3b step 4's warning that withholding `dsa-scores.json` does NOT make a re-score
-blind — the page publishes its prior verdict.
+**So a cloud wake again falls through rule 4 to rule 5 (STALE — cannot be
+evaluated) and then to rule 6, which fires.** That is the second consecutive
+wake with no queued build item to take, exactly as the previous hand-off
+predicted. Run `polish_requeue.py --apply` first — and note it now needs
+`behaviors.json` as well as `api.json`, so `npm run build -w @busy-office/ui`
+comes first or it exits naming the command.
 
-`roadmap_scope.py` reads **1,295 / 4,414 = 29.3%** closed history. No sweep is
+**Rule 6's tiebreak is not in the rule, and the next wake will hit it too.**
+Every non-skipped surface reads `content: 3`, so "lowest score" selects all of
+them, and "fewest rounds used" now leaves **two** at `1/3` — `pagination` and
+`table-toolbar`. This wake took the third (`inline-editing`) alphabetically and
+said so. Do the same, or say what you did instead; do not present the tiebreak
+as the rule deciding.
+
+`roadmap_scope.py` reads **1,411 / 4,531 = 31.1%** closed history. No sweep is
 due (272's eleventh sweep dispatched at 56.7%); re-run the script rather than
-trusting this. Its `30 closed` and the slice-id check's `32 closed` differ by
-exactly the **2 items under a non-slice heading** it reports separately — that
-is agreement, not a discrepancy.
+trusting this.
 
 ## What landed this wake
 
-**Dispatched by rule 4 (Continue, build).** Rule 1 clear — `list_issues` on
+**Dispatched by rule 6 (Polish).** Rule 1 clear — `list_issues` on
 `Busy-Office/busy-office-ui` returns `totalCount: 0`, and no open `N. [ ]` item
-is a P0. Step 1 triaged and committed nothing: no new input. Rules 2 and 3 both
-read `ok` at Step 0b, so rule 4 was reached for the first time in three wakes,
-exactly as the previous hand-off predicted.
+is a P0. Step 1 triaged and committed nothing: no new input.
 
-**Step 0 hit trap 1 for the ninth wake running** (detached HEAD at `bf2e7c2`,
-`git branch --show-current` empty). Trap 2 clean in one `--unshallow` (**1,885**
-commits); it brought the tags, and `git fetch --tags origin` was run explicitly
-anyway and returned all seven.
+**Step 0 hit trap 1 for the tenth wake running** (detached HEAD at `e914399`,
+`git branch --show-current` empty). Trap 2 clean in one `--unshallow`
+(**1,887** commits, no `shallow.lock`); `git fetch --tags origin` returned all
+seven. The Step 0c `git fetch origin main` before the first commit reported
+`0 0` — no second dispatcher moved anything this wake.
 
-### `274.2` — the remaining slab is in Step 0c, not Step 2
+### `276.1` — the source set was blind to every behavior module
 
-Both branches of the Accept are exercised: Step 0c loses a region of history,
-and all eight Step 2 rules record why they keep theirs (in `ROADMAP.md` under
-the item, never in the rule — that is 275.4's amendment).
+The Polish round on `component/inline-editing` is a **NO-OP on the surface**
+(five arms, all reproducing) and the finding is in the loop's own step 0.
+`polish_requeue.py` hashed a surface's docs page and CSS directories and
+stopped, so a behavior module could be rewritten with nothing to notice —
+**31 blind commits across 7 surfaces**, and `inline-editing`, whose whole
+subject is `row-edit.ts`, had a source set of the docs page alone.
 
-**The one thing worth carrying: after 167.2, Step 2 has no archivable slab
-left, and that is a measurement, not a judgement call.** The two precedents
-moved slabs — 167.2 took **749** contiguous words out of rule 3, 191.3 took
-**414** out of rule 4, and both survive as single archive sections. Step 2's
-largest *paragraph* is **206** words, its median ~70, and the largest contiguous
-*pure-narrative* block inside any of them is **~106**. Recovering the ~10
-scattered fragments nets ~400 words for **ten pointer-follows per wake** — a
-worse trade than either precedent, and the one 167.2's own losing argument
-(*a pointer is read less than a paragraph*) warns against. Paragraph totals are
-mechanical; the executed-versus-narrative split inside a paragraph is a **hand
-classification and is named as one**, per CLAUDE.md on properties that depend on
-what prose MEANS.
+Fixed by reading `behaviors.json`'s `byComponent` (Slice 264's `@serves`), with
+the two page-only surfaces named in a `PAGE_ONLY_BEHAVIORS` map that is
+re-checked against each page's own import on every run. Both arms red-proved
+with the injection confirmed first.
 
-**Measured:** dispatch region **6,100 → 5,658 words (−442, −7.2%)**, Step 0c
-**1,391 → 949**, Step 2 **3,211 unchanged**, **0** words added above
-`## Playbooks`. The `by region` block reads `HEAD`, so it was **re-run at
-`8848ed55`** — the commit carrying the figure — rather than off the working
-tree; that is 275.3's bullet being executed rather than restated. The ratchet
-now reads `LOOPS.md 0 up, last cut 8848ed55`, against 18 up / 0 cuts since
-167.2's split.
+**The one number worth carrying forward, because it is what keeps the finding
+honest: after the fix, `--apply` reported `0 rows newly marked`.** Every
+affected surface was already re-queued for some other reason, so the 31 is
+**structural blindness, not 31 demonstrated missed re-queues** — and the next
+wake should not quote it as the latter. The cost is latent and lands on
+`interaction`.
 
-**Premise re-checked before dispatching, per CLAUDE.md.** Step 2 reproduces
-exactly (3,211 = 3,188 + a 23-word preamble; rule 4 980, rule 3 672, rule 6
-631). Step 0c reads **1,391** to this wake's parser against the item's **1,378**
-— the difference is exactly the section's **13-word heading**, so that is
-agreement, not a disagreement.
+**Two refusals recorded inside the item**, both measured rather than waved off:
+deriving the modules from each docs page's own imports (over-broad on `button`
+and `richtext`, under-reports `stepper`), and extending the behavior source set
+to patterns (near-uniformly-true predicate, the dead-detector shape 94.11
+refuses).
 
-**What stayed inline** is everything a wake executes or decides by: the
-decision, the named cost, the correction that no guaranteed conflict catches a
-collision, the `git fetch origin main` rule that actually does, the
-keep-BOTH-row-sets conflict recipe, a one-line reason for each of the three
-refusals, and the reopen condition. No other file cites the moved text (checked
-with plain fixed strings); the single hit is a historical `loop-log.md` row.
-
-**Nothing in this slice renders** — `LOOPS.md`, `LOOPS-archive.md`,
-`ROADMAP.md`. No CSS, no docs page, no script, no built surface, so the
-1440/390 light-and-dark screenshot lane a cloud wake cannot run has nothing to
-say about this diff; that is an absence of subject, not an unverified claim.
-**All 17 cloud-toolchain entry points ran green.** `check:claims`' *"3 NOT
-VERIFIED"* is `ENVIRONMENT.md` 6b — this container reports
-`(hover: hover) and (pointer: fine)` false — not a regression; its live count
-rose **158 → 162** as the corpus grew.
+**Nothing in this slice renders** — `scripts/loops/polish_requeue.py`,
+`.roundtable/polish-state.md`, `ROADMAP.md`. **0** files under
+`packages/core/src/` and **0** docs page markup changed, so the 1440/390
+light-and-dark screenshot lane a cloud wake cannot run has nothing to say about
+this diff; that is an absence of subject, not an unverified claim.
+**All 17 cloud-toolchain entry points ran green**, and the entry-point list was
+re-derived from `ci.yml` rather than trusted — it still matches
+`ENVIRONMENT.md`'s in the two documented, opposite-direction ways.
+`check:claims`' *"3 NOT VERIFIED"* is `ENVIRONMENT.md` 6b — this container
+reports `(hover: hover) and (pointer: fine)` false — not a regression; its live
+count reads **162**, unchanged from the previous wake.
 
 **`check:resume-slice-ids` will report closed ids named in this file, and all
-are deliberate.** `274.2`, `274.1`, `275.3`, `275.4` and `167.2`/`191.3` are
-named as history — what was decided and why — not as queued work. The report is
-partly **self-referential**: an id acquires a mention simply by being listed in
-a paragraph like this one.
+are deliberate.** `276.1`, `274.2`, `273.2`, `264` and the `249.x` ids are named
+as history or as classification evidence — what was decided and why — not as
+queued work. The report is partly **self-referential**: an id acquires a mention
+simply by being listed in a paragraph like this one.
 
 ## Direction
 
@@ -150,22 +151,25 @@ Nothing new from the owner this wake; GitHub intake is empty (`list_issues` →
 evidence (owner hardware), `112.3`/`112.4` (owner briefs, then 112.3's verdict),
 and `249.7`, `249.10`-`249.13`.
 
-**Two things now want the owner's attention, and the second is new this wake:**
+**Two things want the owner's attention, and both are carried over unchanged —
+which is itself the signal:**
 
-1. **`273.2` is still the owner call worth their attention**, untouched again.
-   `LOOPS.md` §3b step 5 mandates `dry++` on a Polish round whose score does not
-   move; no round has ever done it. Of the 8 rounds recorded NO-OP, **6 filed a
-   real defect found elsewhere and 2 found nothing**, so "the score did not move"
-   and "the round was busywork" have come apart 6 times out of 8. Executing the
-   rule as written would retire surfaces and empty a lane **176.3 already refused
-   to narrow**; leaving it is a rule nothing runs.
-2. **The cloud lane has run out of dispatchable build work.** With `274.2`
-   closed, all 12 open items are owner-blocked (9) or need a LOCAL wake's
-   screenshots (3). A cloud wake will keep finding Polish under rule 6, which is
-   working as designed — but no *queued build item* will move until the owner
-   answers something or a local wake takes `249.6`/`249.9`/`249.15`.
+1. **`273.2` is still the owner call worth their attention**, untouched for a
+   third wake. `LOOPS.md` §3b step 5 mandates `dry++` on a Polish round whose
+   score does not move; no round has ever done it, **this one included** — it
+   was deliberately not incremented, because 273.2 is open. This wake makes the
+   tally **9 NO-OP rounds, 7 of which filed a real defect found elsewhere**, so
+   "the score did not move" and "the round was busywork" have now come apart 7
+   times out of 9. Executing the rule as written would retire surfaces and empty
+   a lane **176.3 already refused to narrow**.
+2. **The cloud lane still has no dispatchable build work**, second wake running.
+   All 12 open items are owner-blocked (9) or need a LOCAL wake's screenshots
+   (3). A cloud wake will keep finding Polish under rule 6, which is working as
+   designed — the last two Polish rounds each found a real defect — but no
+   *queued build item* will move until the owner answers something or a local
+   wake takes `249.6`/`249.9`/`249.15`.
 
-## `bundle-gz-kb` still cannot be sampled — eighteenth wake
+## `bundle-gz-kb` still cannot be sampled — nineteenth wake
 
 259.1's rule-5 finding, re-verified this wake rather than re-derived:
 
