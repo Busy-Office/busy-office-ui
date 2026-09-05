@@ -436,6 +436,31 @@ watch RETIRES"** — so the question is whether anything has changed under it, a
            outgrowing the file — and sits BELOW `## Playbooks`, so writing it did
            not grow the region it governs.
 
+2. [ ] **274.2 — the finding is now REPORTED and not yet ANSWERED: the dispatch
+       region is 6,100 words and nothing has cut it.** 274.1 fixed the
+       instrument; the burden it measures is unchanged, and the two candidate
+       cuts below were both refused for landing outside the region. What is
+       inside it is Step 2 — **3,211 words for eight rules**, of which rule 4 is
+       **980**, rule 3 **672** and rule 6 **631** — plus Step 0c's 1,378. 167.2
+       is the precedent and the method: it moved rule 3's recurrence narratives
+       to `LOOPS-archive.md` and left the instruction behind as a paragraph, on
+       the stated ground that *a pointer is read less than a paragraph*, so what
+       may move is history a wake needs when it ARGUES about a rule, never the
+       sentence it EXECUTES.
+
+       **Deliberately not taken by this cloud wake.** Cutting the file that
+       governs every wake, unattended, is the one edit where being wrong is
+       silent and compounds — and 167.2's argument has lost once and won once,
+       so the boundary is a judgement, not a rule.
+
+       - **Accept** — properties, and finding nothing cuttable satisfies it:
+         each rule in Step 2 either loses a region of history to
+         `LOOPS-archive.md`, **or** carries a one-line recorded reason its
+         history is load-bearing where it stands. Whichever happens, the
+         `by region` block agrees with what the commit did — the criterion is
+         **agreement with what the block reports, not a particular figure**, and
+         a cut that leaves the dispatch region unmoved does not satisfy it.
+
 **Refused, and the region block is what makes the refusal legible: archiving
 the 1,421-word Ideas backlog.** It is the obvious cut — **1,066 words, 75.0%,
 are struck-through graduated spike entries**, each already carrying a full
