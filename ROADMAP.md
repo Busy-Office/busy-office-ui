@@ -315,6 +315,144 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 281 — Polish round 3 on `data-table`: the `spacing` cite's worked example stopped being reachable by the rule it explains ONE DAY after it was measured, and all three live copies had also dropped the sentence separating the two effects it describes (2026-09-05)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** for the
+seventeenth wake running (`git branch --show-current` empty) — ENVIRONMENT trap
+1, fixed with `git checkout -B main origin/main` before any commit;
+`origin/main` again arrived as a **forced update** (`26447ba...a24ed45`).
+`--unshallow` clean in one attempt (**1,904** commits, no `shallow.lock`) and it
+again brought the tags — **fourth** wake running that `ENVIRONMENT.md` §2's
+"does NOT bring the tags" did not hold, so keep verifying with `git tag | wc -l`
+(**7**). Working tree clean, `RESUME.md` "In flight: nothing".
+
+Step 1: no new input — `list_issues` on `Busy-Office/busy-office-ui` returns
+`totalCount: 0`, and `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0**.
+Nothing triaged, nothing committed for it. Step 0b: rule 2 `3 / 4 … ok`, rule 3
+`0 / 3 … ok` (spent by Slice 280), rule 5 **STALE** (`2 wake-date(s) newer`) and
+therefore **reported as could-not-be-evaluated, never clear**. Rule 4: the open
+set is **12** and every item is owner-blocked (9) or browser-blocked in the
+SCREENSHOT sense (3: `249.6`, `249.9`, `249.15`), each re-classified from its
+own text rather than carried over — so **no cloud-takeable item**, fourth wake
+running. Fell through to **rule 6, Polish**, exactly as the last hand-off
+predicted.
+
+**Surface pick, and the tie-break is measured.** `polish_requeue.py --apply`
+re-queued **13**; the ledger was already current, so it wrote nothing. Rule 6's
+predicate holds for 20 of 21 rows (`scan` is 3/3, `date` is SKIPPED) and §3b
+step 1's ranking is degenerate here — every eligible surface is `content: 3` at
+`2/3 rounds, dry 0`, which is 171.1's finding that no DSA dimension can rank.
+Broken by asking which surface's SOURCE has moved furthest from the tree its
+score was taken against, which is the thing re-queueing exists to notice:
+`component/data-table` at **23** commits since the seed, against 9 for the next
+(`icon`) and 2-7 for the rest. Command in the write-up below.
+
+**Six cites, all six reconcile — and a new arm 16 found the defect.** Standing
+reconciliation: `typography` (`__col--code` consumes
+`--bo-font-size-mono-inline` at `data-table.css:353`; the `0.03em`
+letter-spacing is intrinsic, on the uppercase sticky header at `:196`),
+`colour` (**3** raw hex, **3** of them inside the file's single `@media print`
+block, **0** outside), `spacing` (**0** height-family declarations carrying a
+unit literal; the one height reads `var(--bo-density-row-height)`), `interaction`
+(`:has()` selection at `:269`, `[popover]` menus on the docs page, `row-edit.ts`
+restores focus and `data-table.ts` listens on `htmx:after:swap`), `content`
+(the wrong-choice clause at `data-table.astro:73`), `fit` (conditional tone at
+`:630`, hover ring `73.2` at `:250`, and Slice 88's split-column rule live as
+the `UoM | Qty | Unit price | Currency` matrix columns and `__col--code`
+qualifier columns on money/quantity).
+
+The `spacing` cite's height claim was **base-rated before being believed**: the
+detector reads 0 on `data-table.css` and fires on **15 of 44** component
+stylesheets (**20** literals), so it discriminates rather than being uniformly
+true.
+
+1. [x] **281.1 — DONE. The one claim in the `spacing` cite that no arm had ever
+       read back is a LIVE measurement, and re-taking it is `ENVIRONMENT.md`'s
+       SECOND list, so a cloud wake can.** The cite, and the CSS comments it
+       is drawn from, publish:
+
+       > *"Raising cell-padding-x to compact's `--bo-space-2` at 390px grows a
+       > real row on `/patterns/detail-form` from 68px to 87px — the wider
+       > cells force their content to wrap — while simple tables go 28px to
+       > 30px."*
+
+       Re-measured at 390px against the built site on `a24ed45`, driving
+       `browser-harness.mjs` + `serve-dist.mjs`, with the injection confirmed
+       **at the cell** (`padding-inline` 4px → 8px) and not merely at the
+       token — CLAUDE.md's rule that a green red-proof is a defect in the
+       injection until proven otherwise.
+
+       **The physics reproduce. The example page does not.**
+
+       | | reaches | rows move | `68 -> 87` | `28 -> 30` |
+       |---|---|---|---|---|
+       | cell-padding-x only | 101 containers | 25 | **2** | **0** |
+       | full auto → compact | 101 containers | 65 | **2** | **67** |
+
+       On `/patterns/detail-form` — the page the sentence names — **0 of its 4
+       containers move, under either mutation.** Three declare
+       `data-density="compact"`, so the auto-compaction selector's
+       `:not([data-density])` cannot reach them; the fourth is reached
+       (injection confirmed) and its rows read **87px → 87px**. The two pages
+       that still produce a 68px → 87px row are `/components/dialog` and
+       `/components/state-patterns`.
+
+       **Why it decayed, to the day.** 94.3 published the measurement in
+       `79f7fec9` (2026-08-21 10:50 +0800). At that commit
+       `detail-form.astro:122` read `<table class="bo-data-table">` with no
+       density — it qualified. `69a53364` (109.19, 2026-08-22 14:48 +0800),
+       **28 hours later**, added `data-density="compact"` to it. The cite, two
+       CSS comments and a docs-visible score have described an unreachable
+       example ever since. Same class as `sidebar-nav`'s round 2 (a `fit`
+       count exact when written, decayed two days later) and this surface's
+       OWN round 2 (a `spacing` cite naming a literal 94.3 had removed).
+
+       **A second, independent defect in the same sentence — and 94.3 did not
+       make it, its copies did.** `28 -> 30` is the row-height floor
+       (`--bo-density-auto-row-height: 1.75rem; /* 28px, 2px under compact */`
+       against compact's `1.875rem`), not a consequence of padding: padding
+       alone produces that step **0 of 101** times. The archived 94.3 text is
+       clean — its very next sentence calls it *"the 2px row-height
+       difference"* — and **all three live copies dropped that sentence**, so
+       each reads as though one mutation produced both figures. A conflation
+       introduced by copying, not by the original reasoning, which is why it
+       survived: every downstream reader saw a self-consistent claim.
+
+       - **Accept (property, not forecast):** each of the three live
+         publications agrees with what a re-measurement at 390px against the
+         built site reports — both effects named apart, and the worked example
+         identified by the property that makes it work (a table the rule can
+         reach) rather than by a page name that can stop qualifying. **Met:**
+         corrected in `tokens/density.css`, `data-table.css` and
+         `dsa-scores.json`'s `data-table · spacing`; the archived 94.3 entry
+         keeps its verbatim text and gains a `RE-MEASURED` block per 236.2 /
+         199.1. Figures carry the revision they were read at (`a24ed45`), per
+         `ENVIRONMENT.md`.
+
+       **REFUSED: a gate over this.** The checkable shape — *"the page a
+       density comment cites is reachable by the rule"* — would fail on the
+       tree as it stood this morning, so it discriminates; it is still
+       refused, because it gates ONE sentence in ONE comment and its failure
+       mode is a prose edit away from silent. CLAUDE.md's own answer applies:
+       where the property depends on what prose MEANS, enforce the shape or
+       keep it in a rubric a human scores. The rubric already scores it — arm
+       16 is that scoring, and it now exists as a recorded reconciliation arm
+       rather than as a gate nobody would red-prove again.
+
+**Commands, so the next wake re-runs rather than re-derives.** Tie-break:
+`git log --oneline --since=2026-08-23 -- <surface source paths>` over
+`polish_requeue.source_paths()`. Claim: the four probes are recorded in the
+round's write-up in `.roundtable/polish-state.md`; each walks all **138** built
+pages, **115** of which carry a `.bo-data-table-container`. Decay:
+`git show 79f7fec9:apps/docs/src/pages/patterns/detail-form.astro | grep -n 'data-density\|<table class="bo-data-table'`.
+
+**Not verified in this wake, and named rather than implied:** no screenshot was
+taken at 1440px or 390px in either theme — a cloud wake has no Podman and no
+`:8081`. The change is three prose comments and one JSON cite string; `git diff
+--numstat` shows **0** changed selectors and **0** changed declarations, so
+there is no rendered result to compare. That is an absence of subject, not a
+skipped check — and it is asserted below rather than asserted here.
+
 ## Slice 280 — Objective grill of Slices 276, 277, 278, 279: 52 of 54 assertions reproduce, and the two that do not are one sentence apart in a table that measured the tree BEFORE its own fix while describing the tree after it — the two rows it dropped are the two surfaces that same item added (2026-09-05)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** for the

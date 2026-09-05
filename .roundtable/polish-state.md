@@ -105,7 +105,7 @@ a no-op recorded in one line.
 | component/byline | content | **3** | 2/3 | 0 | b73f01d9 | round 1 landed — blind 2→3; scorer caught the boundary, redrawn; **round 2 (2026-09-05) FOUND TWO DEFECTS — all six cites hold and arms 3/8/9/10 reproduce, but the blind re-score found `--compact`'s rationale (docs heading AND the shipped CSS comment) recommending "table cells", the context the opener's own clause forbids and which 0 of 21 uses exercise; and a new arm 13 reports 17/17. ROADMAP 273, see below** · **RE-QUEUED — source changed** |
 | component/calendar | content | **3** | 2/3 | 0 | 6b36b863 | round 1 landed — blind 2→3, "not for a plain date field"; **round 2 (2026-09-02) six arms clean on calendar itself, and a NEW arm 7 FOUND A DEFECT elsewhere — `form · colour` claimed "zero raw hex" against two painted ones; cite corrected, CSS left open as 240.1, see below** · **RE-QUEUED — source changed** |
 | component/dashboard | content | **3** | 2/3 | 0 | 3780542a | round 1 landed — blind 2→3, "not a wrapper round every section"; **round 2 (2026-09-02) FOUND TWO DEFECTS, and the first is the only one in this ledger where the SCORE was wrong rather than the cite — `interaction: na` on a component that ships `initCollapsibleCards`; blind re-scored to 3 by a second agent, the first blind re-score this ledger has actually run. See below** · **RE-QUEUED — source changed** |
-| component/data-table | content | **3** | 2/3 | 0 | 36c4bbe3 | round 1 landed — blind 2→3, "not for laying out a page"; **round 2 (2026-08-30) FOUND A DEFECT — the `spacing` cite named a literal 94.3 had removed two days before the score was taken, see below** · **RE-QUEUED — source changed** |
+| component/data-table | content | **3** | 3/3 | 0 | 3c4c91e9 | round 1 landed — blind 2→3, "not for laying out a page"; **round 2 (2026-08-30) FOUND A DEFECT — the `spacing` cite named a literal 94.3 had removed two days before the score was taken, see below**; **round 3 (2026-09-05) NOT a no-op, and the defect is ON this surface again — a new arm 16 re-took the live measurement the `spacing` cite publishes and found its worked example unreachable by the rule it explains: 0 of 4 containers on `/patterns/detail-form` move under either mutation, because `69a53364` added `data-density="compact"` 28 hours after `79f7fec9` measured it. A second defect in the same sentence — `28 -> 30` is the row-height floor, produced by padding 0 of 101 times — was introduced by COPYING: archived 94.3 names it separately and all three live copies dropped that sentence. ROADMAP 281, see below** |
 | component/date | content | 2 | — | — | 399709aa | **SKIPPED** — deprecated, see note below |
 | component/icon | content | **3** | 2/3 | 0 | f0d9f50b | round 1 landed — blind 2→3; scorer caught the demo contradiction, clause narrowed; **round 2 (2026-08-30) FOUND A DEFECT — `fit` cited "12 ERP glyphs" against 26 shipped, and the same 12 was hard-coded as the DIVISOR of the page's published size projection, see below** · **RE-QUEUED — source changed** |
 | component/inline-editing | content | **3** | 2/3 | 0 | 644dde35 | round 1 landed — blind 3, "not for creating a record" (unscored in DSA); **round 2 (2026-09-05) NO-OP on the surface — all five arms reproduce, including the row-edit cites no arm had ever read — and a new arm 14 FOUND A DEFECT in this loop's own step 0: the surface source set was blind to every behavior module, 31 commits across 7 surfaces. ROADMAP 276, see below** |
@@ -2565,3 +2565,128 @@ Two things it brought back that this round did not have:
   component a context. `LOOPS.md` §3b's stop rule (101.3) forbids Polish
   touching rubric definitions, so it is filed here as an observation for a
   grill or the owner, not fixed from inside a round.
+
+## Round 3: data-table (2026-09-05, cloud wake) — NOT a no-op; the worked example in the `spacing` cite stopped being reachable by the rule it explains 28 hours after it was measured (ROADMAP 281)
+
+**Pick, and the tie-break is measured rather than felt.** Rule 6's predicate
+holds for 20 of the 21 rows here (`scan` is budget-spent at 3/3, `date` is
+SKIPPED), and §3b step 1's ranking is degenerate: every eligible surface is
+`content: 3` at `2/3 rounds, dry 0`. That is 171.1's finding — no DSA dimension
+can rank — reaching the pick step, so the tie was broken on the thing
+re-queueing exists to notice, **how far a surface's SOURCE has moved from the
+tree its score was taken against**:
+
+```
+python3 - <<'PY'   # over polish_requeue.source_paths(surface)
+git log --oneline --since=2026-08-23 -- <paths>
+PY
+# data-table 23 · icon 9 · table-toolbar 7 · alerts 6 · state-patterns 6
+# · sidebar-nav 5 · stepper 5 · byline/calendar/pagination/tree-table 4 · rest 2-3
+```
+
+`data-table` at **23** is nearly triple the next surface. `polish_requeue.py
+--apply` re-queued 13 and wrote nothing — the ledger was already current.
+
+**The six cites all reconcile.** `typography` — `__col--code` consumes
+`--bo-font-size-mono-inline` (`data-table.css:353`) and the `0.03em`
+letter-spacing is intrinsic, on the uppercase sticky header (`:196`).
+`colour` — **3** raw hex, **3** inside the file's single `@media print` block,
+**0** outside, counted by brace-depth rather than by eye. `spacing` — **0**
+height-family declarations carrying a unit literal; the one height reads
+`var(--bo-density-row-height)`. `interaction` — `:has()` selection (`:269`),
+`[popover]` column menus on the docs page (`:416/:422/:476`), `row-edit.ts`
+restores focus, `data-table.ts` listens on `htmx:after:swap`. `content` — the
+wrong-choice clause at `data-table.astro:73`. `fit` — conditional tone
+(`:630`), hover ring 73.2 (`:250`), and Slice 88's split-column rule live as
+the matrix's `UoM | Qty | Unit price | Currency` columns plus the `__col--code`
+qualifier columns on money/quantity.
+
+**The `spacing` height claim was base-rated before being believed** — the
+detector reads 0 here and fires on **15 of 44** component stylesheets (**20**
+literals), so it discriminates. A 0 from a detector that reads 0 everywhere
+would have been the defect.
+
+### Arm 16 (new) — re-take the live measurement a cite publishes
+
+The `spacing` cite carries the only claim on this surface that asserts *runtime
+layout* rather than file content, and no arm had ever read it back:
+
+> *"raising cell-padding-x at 390px grows a real detail-form row 68px to 87px
+> while simple tables go 28px to 30px"*
+
+That is `ENVIRONMENT.md`'s SECOND list — layout geometry, red-provable by
+injection — so a cloud wake can take it. Four probes, driving
+`browser-harness.mjs` + `serve-dist.mjs` over all **138** built pages (**115**
+carry a `.bo-data-table-container`), at 390px on `a24ed45`.
+
+| mutation | containers reached | rows moved | `68 -> 87` | `28 -> 30` |
+|---|---|---|---|---|
+| cell-padding-x only (what the sentence names) | 101 | 25 | **2** | **0** |
+| full auto → compact (all six aliases) | 101 | 65 | **2** | **67** |
+
+**Injection confirmed at the CELL, not at the token** — `padding-inline`
+4px → 8px on the affected `td`, asserted before any red was believed. The first
+version of this probe checked only the custom property on the table and would
+have reported the same numbers for the wrong reason.
+
+**Two defects, and neither is in the physics.**
+
+1. **The example page.** On `/patterns/detail-form` — the page the sentence
+   names — **0 of its 4 containers move, under either mutation.** Three declare
+   `data-density="compact"`, so the auto-compaction selector's
+   `:not([data-density])` cannot reach them; the fourth IS reached (injection
+   confirmed) and its rows read **87px → 87px**. The pages that still produce a
+   68px → 87px row are `/components/dialog` and `/components/state-patterns`.
+
+   Dated exactly: 94.3 published it in `79f7fec9` (2026-08-21 10:50 +0800),
+   when `detail-form.astro:122` read `<table class="bo-data-table">` with no
+   density — it qualified. `69a53364` (109.19, 2026-08-22 14:48 +0800), **28
+   hours later**, added `data-density="compact"` to it. Same class as this
+   surface's own round 2 and `sidebar-nav`'s: a citation exact when written,
+   decayed within days, with nothing reading it again until now.
+
+2. **The conflation — introduced by copying, not by the original.** `28 -> 30`
+   is the row-height floor (`--bo-density-auto-row-height: 1.75rem`, whose own
+   comment says *"28px, 2px under compact"*, against compact's `1.875rem`), not
+   a consequence of padding: padding alone produces that step **0 of 101**
+   times. The archived 94.3 text is clean — its next sentence calls it *"the
+   2px row-height difference"* — and **all three live copies dropped that
+   sentence**, so each reads as one mutation producing both figures. That is
+   why it survived review for two weeks: every copy was self-consistent.
+
+**Fixed in all three live publications** — `tokens/density.css`,
+`data-table.css`, and `dsa-scores.json`'s `data-table · spacing` — each now
+naming the two effects apart and identifying the worked example by the
+*property* that makes it one (a table the rule can reach) rather than by a page
+name that can stop qualifying. The archived 94.3 entry keeps its verbatim text
+and gains a `RE-MEASURED` block, per 236.2 / 199.1. Every figure carries the
+revision it was read at, per `ENVIRONMENT.md`.
+
+**Comment-only, asserted rather than assumed:** with comments stripped and
+whitespace collapsed, both CSS files are byte-identical before and after
+(987 → 987 and 9,907 → 9,907 characters).
+
+### What this round did NOT do, and why
+
+- **No `dry++`, deliberately.** §3b step 5 would increment it — the score did
+  not move. `LOOPS.md` rule 6 says outright not to start incrementing while
+  **273.2** is an open OWNER CALL, because it would retire surfaces and narrow
+  the lane 176.3 refused to narrow. `rounds` goes 2/3 → 3/3; `dry` stays 0.
+- **No blind re-score (§3b step 4).** `spacing` stays 3 and the round did not
+  ask it to move: what the correction replaced is the cite's *evidence*, while
+  both things the score rests on — no height literal in the file, and a
+  measured reason behind the tier's tightness — were re-verified and hold. The
+  ledger's precedent for a cite-correction round is the same (data-table round
+  2, icon round 2, sidebar-nav round 2). Recorded here rather than skipped
+  silently.
+- **No screenshot at 1440/390 in either theme.** A cloud wake has no Podman and
+  no `:8081`. There is no rendered result to compare — the diff is three prose
+  comments and one JSON string, and the byte-identity check above is the
+  evidence for that, not an assurance.
+- **REFUSED: a gate over this.** *"The page a density comment cites is
+  reachable by the rule"* is checkable and would have been red this morning, so
+  it discriminates — and it is still refused: it gates one sentence in one
+  comment, and a prose edit puts it back to silent. CLAUDE.md's own answer
+  applies — where the property depends on what prose MEANS, enforce a shape or
+  keep it in a rubric a human scores. Arm 16 IS that scoring, now recorded as a
+  reusable arm: **re-take any cite that asserts runtime layout.**

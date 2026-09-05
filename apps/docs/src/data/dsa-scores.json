@@ -123,7 +123,7 @@
         },
         "spacing": {
           "score": 3,
-          "cite": "94.3 moved the two auto-compaction heights OUT of this file — row and control height are set from --bo-density-auto-* in tokens/density.css, beside the tiers they relate to — so data-table.css carries no height literal at all. What it carries is the reason (94.2): raising cell-padding-x at 390px grows a real detail-form row 68px to 87px while simple tables go 28px to 30px, so the tighter padding buys horizontal room, the scarce resource at phone width."
+          "cite": "94.3 moved the two auto-compaction heights OUT of this file — row and control height are set from --bo-density-auto-* in tokens/density.css, beside the tiers they relate to — so data-table.css carries no height literal at all (re-verified 2026-09-05: 0 height-family declarations carrying a unit literal, against 15 of 44 component stylesheets that carry one). What it carries is the reason (94.2), corrected by roadmap 281.1 after re-measuring it live: raising cell-padding-x to compact's --bo-space-2 at 390px grows a row whose cells WRAP by ~19-20px (68px to 87px on /components/dialog and /components/state-patterns, `a24ed45`), while a row that does not wrap is held at the row-height floor and goes 28px to 30px on the auto-vs-compact row height alone — padding plays no part in that half, and 94.3's single sentence read as though it did. So the tighter padding buys horizontal room, the scarce resource at phone width. 94.3's cited example page, /patterns/detail-form, stopped being reachable by the rule one day after the measurement (`69a53364`, 109.19); the example is now named by property, not by page."
         },
         "interaction": {
           "score": 3,

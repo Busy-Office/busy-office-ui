@@ -12711,6 +12711,22 @@ comment-injection trap, hit by a scoring pass rather than a gate. Rate:
        the comment says keeping them adjacent is the point: a retune of one is
        now visibly a decision about the other.
 
+       **RE-MEASURED 2026-09-05 (roadmap 281.1) — the reasoning above holds and
+       two of its downstream copies did not.** Kept verbatim; this block is the
+       236.2/199.1 amendment shape, not a rewrite. Both effects still
+       reproduce at 390px on `a24ed45`: a wrapping row goes 68px -> 87px
+       (2 occurrences site-wide) and a non-wrapping row goes 28px -> 30px
+       (67). What decayed is the **example page** — `69a53364` (109.19,
+       2026-08-22, one day after this slice) added `data-density="compact"`
+       to `/patterns/detail-form`'s one undeclared table, so the
+       auto-compaction rule's `:not([data-density])` no longer reaches
+       anything on that page and **0 of its 4 containers move** under either
+       mutation. Separately, this slice's own next sentence correctly calls
+       28 -> 30 "the 2px row-height difference"; the three live copies
+       (`data-table.css`, `tokens/density.css`, `data-table · spacing`) each
+       dropped it and read as though padding produced that step. Padding
+       alone produces it **0 of 101** times. All three corrected in 281.1.
+
        **Proved a no-op, not assumed.** Measured the same four pages before and
        after at 390px — 1.75rem / .25rem / 1.75rem, rows 77/28/68/28,
        identical. Verified live in both themes; at 1280 the container is

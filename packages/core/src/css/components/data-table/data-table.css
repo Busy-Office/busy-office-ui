@@ -721,11 +721,20 @@
 
      It is deliberately TIGHTER than data-density="compact", and as of 94.3
      that is a decision with a measurement behind it rather than an accident
-     of the initial commit. Raising cell-padding-x to compact's --bo-space-2
-     at 390px grows a real row on /patterns/detail-form from 68px to 87px —
-     the wider cells force their content to wrap — while simple tables go
-     28px to 30px. Horizontal room is the scarce resource at phone width, so
-     the tighter padding buys the thing there is least of.
+     of the initial commit. Two effects, not one — 94.3 wrote them as a
+     single sentence and roadmap 281.1 re-measured them apart:
+     raising cell-padding-x to compact's --bo-space-2 at 390px grows a row
+     whose cells WRAP by ~19-20px (68px -> 87px, measured on `a24ed45` at
+     /components/dialog and /components/state-patterns), while a row that
+     does NOT wrap is held at the row-height floor and goes 28px -> 30px on
+     the auto-vs-compact row height alone, with padding playing no part.
+     Horizontal room is the scarce resource at phone width, so the tighter
+     padding buys the thing there is least of.
+
+     The worked example is named by PROPERTY, not by page: it must be a page
+     carrying a table this rule can REACH — no data-density declared on the
+     table or its container. /patterns/detail-form, which 94.3 cited,
+     qualified when written and stopped the next day (`69a53364`, 109.19).
 
      The two heights now come from --bo-density-auto-* in tokens/density.css,
      beside the tiers they relate to, instead of being literals hiding in a

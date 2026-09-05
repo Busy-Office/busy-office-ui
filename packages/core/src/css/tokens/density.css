@@ -28,12 +28,32 @@
      named and nobody could find from here (roadmap 94.3).
 
      It is deliberately tighter than `compact`, and the difference was
-     measured rather than assumed. Taking cell-padding-x up to compact's
-     --bo-space-2 at 390px grows a real row on /patterns/detail-form from
-     68px to 87px, because the wider cells force their content to wrap; on
-     simple tables the row goes 28px to 30px. At phone width horizontal room
-     is the scarce resource, so the tighter padding buys the thing there is
-     least of. That is why this is its own tier and not a drifted copy.
+     measured rather than assumed. Two separate effects, and 94.3 wrote them
+     as one sentence — corrected by roadmap 281.1 after re-measuring both:
+
+       - A row whose cells WRAP grows by ~19-20px when cell-padding-x goes up
+         to compact's --bo-space-2, because the wider cells force the wrap.
+         Measured at 390px on `a24ed45`: 68px -> 87px on /components/dialog
+         and /components/state-patterns, and 25 of 101 reachable containers
+         move at all.
+       - A row whose cells do NOT wrap is held at the row-height floor, so it
+         goes 28px -> 30px — that is --bo-density-auto-row-height against
+         compact's, the two literals below, and it happens whether or not
+         padding moves. 67 rows do this on the same build.
+
+     Padding alone therefore never produces the 28 -> 30 step (0 of 101), and
+     the wrap effect is what the tighter tier is actually buying. At phone
+     width horizontal room is the scarce resource, so the tighter padding
+     buys the thing there is least of. That is why this is its own tier and
+     not a drifted copy.
+
+     The page name is the part that decayed, so it is stated as a property:
+     the worked example must be a page with a table the auto-compaction rule
+     can REACH — no declared `data-density` on the table or its container.
+     94.3 cited /patterns/detail-form, which qualified when written and
+     stopped qualifying the next day (`69a53364`, 109.19, added
+     data-density="compact" to its one undeclared table). Re-derive the page
+     rather than trusting this one; the commands are in roadmap 281.1.
 
      Only the two heights need naming here — every other alias the container
      query sets is already a shared token. control-height matches compact's
