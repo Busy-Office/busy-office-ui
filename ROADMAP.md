@@ -315,6 +315,198 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 283 — Polish round 3 on `table-toolbar`: the re-queue signal this loop's step 0 runs every wake is a CONSTANT for 7 of the 13 surfaces it reports, and 5 of those 7 were broken by 276.1 — the round whose whole subject was this script's blindness (2026-09-05)
+
+**Dispatcher trace, cloud wake.** Rule 1: no open P0 — `list_issues` on
+`Busy-Office/busy-office-ui` returns `totalCount: 0`, and
+`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` reads **0**. Step 1 triaged and
+committed nothing: no new input. Rule 2 `3 / 4 Continue rounds … ok`; rule 3
+`1 / 3 slice … ok [281]`. **Rule 4 found nothing this wake can take**: all 12
+open items were re-read from `ROADMAP.md` and each re-classified from its own
+text per `LOOPS.md` 186.2 — owner-blocked (`112.3`, `112.4`, `249.7`,
+`249.10`-`249.13`, `273.2`, Slice 15) or browser-blocked in the SCREENSHOT
+sense (`249.6`, `249.9`, `249.15`; a LOCAL wake can take those three).
+**Rule 4's sweep clause did not fire either** — `roadmap_scope.py` reads
+**218 / 3,398 = 6.4%** closed-history share with Slice 282 the only eligible
+target. *(The previous hand-off predicted `0.0%` and 117 lines; the difference
+is Slice 282's own text, which that prediction was made before writing. Read
+the number, not the forecast.)* Rule 5 reports **STALE** — 2 wake-dates of
+loop activity newer than the newest comparable pair — so per `LOOPS.md` it
+**could not be evaluated** and is not reported clear. **Rule 6 matched.**
+
+**The pick was re-derived, not inherited.** §3b step 1's ranking is degenerate
+— every eligible surface is `content: 3` at `2/3 rounds, dry 0` (171.1 reaching
+the pick step) — so the tiebreak is the one the last wake used: which surface's
+SOURCE has moved furthest from the tree its score was taken against. Re-run
+this wake rather than reusing the ordering, over each surface's own paths since
+the commit that recorded its stamp:
+
+```
+table-toolbar  stamped 2026-08-25  7 commits since  churn +122/-17   ← picked
+alerts         stamped 2026-08-31  5 commits        +46/-7
+icon           stamped 2026-08-30  4 commits        +72/-4
+```
+
+`data-table` is out at `3/3`. `table-toolbar` leads on all three readings.
+
+1. [x] **283.1 — DONE 2026-09-05. `polish_requeue.py` reports 13 surfaces as
+       "SOURCE moved"; for 7 of them that sentence is a constant that no source
+       change can set and no source change can clear. Five are 276.1's own
+       doing, and every affected row is a behavior-serving surface: 7 of 9
+       against 0 of 12.**
+
+       **The round on `table-toolbar` is a NO-OP on the surface** — four arms,
+       all clean, listed at the end. The defect is in this loop's step 0, which
+       is where the last four rounds' findings have also landed (267.1, 276.1,
+       278, 279); it was found by asking the arm nobody had asked, which is
+       whether the ledger's own `src` column means anything.
+
+       **What a re-queue claims, and when it stops being true.** A row says
+       "source moved since the last round" by comparing a recorded digest
+       against today's. That comparison is only meaningful while both were
+       computed the same way. **276.1 widened the path set to include behavior
+       modules and did not re-stamp the rows computed without them.** A digest
+       over strictly more blobs can never equal one over fewer, so for those
+       rows the two sides can never agree again — the re-queue is `True`
+       unconditionally, and `--apply` has been reporting it as a measurement
+       ever since.
+
+       **Measured, with the command, over the 21-row ledger at `7079c94`:**
+
+       ```
+       python3 scripts/loops/polish_requeue.py --audit-stamps
+       ```
+
+       | verdict | rows | what it means |
+       |---|---|---|
+       | equals today's digest | 7 | not re-queued at all |
+       | reproducible, current path set | 7 | the re-queue means what it says |
+       | reproducible ONLY under the pre-276.1 set | **5** | stamped before the widening — permanently re-queued |
+       | reproducible at no revision of its own paths | **2** | `data-table`, `pagination` |
+
+       The five are `alerts`, `dashboard`, `stepper`, `table-toolbar`,
+       `tree-table`, each reproducing **exactly** under the narrow set at the
+       commit that recorded it (`alerts` → `4ee5ad51` is the narrow digest at
+       `4beb4b86`, where the wide digest is `577cb919`).
+
+       **The attribution is not inferred from dates — it is a clean split.**
+       Nine ledger surfaces have behavior modules in their source set; twelve do
+       not. **All 7 affected rows are in the first group and none is in the
+       second** (the two behavior surfaces not affected, `inline-editing` and
+       `scan`, both equal today's digest, i.e. were stamped after the widening).
+
+       **The two `data-table`/`pagination` rows are a DIFFERENT fault, and it is
+       stated as an inference.** Both closed their rounds after 276.1, so the
+       widening cannot explain them, and 322 and 60 revisions of their own paths
+       respectively reproduce their stamp under neither path set. Both stamps
+       were written by a commit that ALSO edited the surface's source, and match
+       neither that commit's tree nor its parent's — so the digest was taken
+       from an on-disk state between the two. `digest()` hashes the **working
+       tree** by design (145.3, its own comment), so running `--stamp` before
+       the round's last edit produces exactly this. **The contrast is what makes
+       it more than a guess:** `byline`'s round edited both its source files in
+       the same commit and its stamp is the digest of that commit's tree, not
+       its parent's. Same-commit stamping is fine; stamping before the last edit
+       is not. §3b step 5 and this script's own USAGE both already say "at the
+       END of a round" — nothing new is being asked for, so no rule is added.
+
+       - **Accept:** the report says, for every surface it re-queues, whether
+         the recorded stamp is reproducible from a commit, and the verdict is
+         red-proved by injection with the injection confirmed to have landed
+         **(DONE — below)**; the number of rows the audit calls unreproducible
+         agrees with an independent walk of the same question **(DONE — two
+         implementations, 7 and 7, agreeing row for row)**.
+
+       **Red-proof, and what each injection proves.** The detector returns all
+       four of its verdicts on real input — `reproducible` on 6 rows, `narrow`
+       on 5, `orphan` on 2 — so it demonstrably discriminates before any
+       injection. Then:
+
+       - **A stamp no commit records.** `badge`'s `1f69e677` → `deadbe01`,
+         asserted to be exactly 1 occurrence before replacing and confirmed at 1
+         occurrence after. The row flipped from silent to
+         `⚠ stamp unknown: no commit in the ledger's history records this
+         digest`. Restored and re-verified at 1 occurrence.
+       - **The condition is CLEARABLE by the documented mechanism, not just by
+         a hand edit.** `--stamp component/alerts` wrote `ccdfb154` and the
+         report went 13 → **12** surfaces with 7 → **6** warnings: the row left
+         the re-queue set entirely, because a correct stamp equals today's
+         digest. Restored.
+       - **The `narrow` verdict is a path-set fact, not "the digests differ".**
+         Computed outside the new code: `alerts` at `4beb4b86` is `577cb919`
+         over 3 paths and `4ee5ad51` over 2, and the ledger holds the second.
+
+       **What the cheap check does NOT cover, said outright.** `--check` runs at
+       step 0 every wake, so it tests two revisions — the commit that recorded
+       the stamp, and its parent. Its `orphan` verdict therefore means "not the
+       digest at the commit that recorded it", which is a **superset** of "no
+       revision reproduces it": a stamp seeded from a historical tree reads
+       `orphan` and is fine. **`component/date` is the live case** — `orphan`
+       to the cheap test, and reproducible at `3909b80a`, a day before the row
+       was written, to the exhaustive one. It is excluded from the re-queue set
+       (SKIPPED, deprecated) so no output claims otherwise, and this is why
+       `--audit-stamps` exists rather than the cheap verdict being trusted.
+       The two instruments were reconciled row for row on all 21 rows, not
+       compared as totals.
+
+       **Every figure above is read at `7079c94`, the tree this round opened
+       against, and closing the round moved two of them.** §3b step 5's
+       `--stamp component/table-toolbar` wrote `99f7ac9f`, and the report went
+       **13 → 12** surfaces with **7 → 6** warnings — the picked surface leaving
+       the re-queue set is the same clearance the `alerts` red-proof
+       demonstrated, arriving as the round's ordinary last step rather than as
+       an injection. So the committed tree reads 12 and 6; the 13 and 7 describe
+       the state in which the defect was found.
+
+       **Nothing was re-stamped, and that is a refusal with a measured reason.**
+       Migrating the five to their wide-equivalent digest at the same commit is
+       exact and preserves the row's meaning — and it **breaks its own
+       detector**: `stamp_provenance` finds the commit that INTRODUCED a digest,
+       so a migrated stamp would be introduced by the migration commit, where
+       the source has since moved, and all five would re-read `orphan`. A fix
+       whose own verification turns worse is not a fix. The durable form is
+       283.2.
+
+       **The four arms on `table-toolbar` itself, all clean.** (1) The ledger
+       says "unscored in DSA" and `dsa-scores.json` carries no `table-toolbar`
+       entry — consistent, and the page renders no stale *"Not yet scored"*
+       block, which is 176.1's defect re-checked rather than assumed. (2) The
+       wrong-choice clause is present and load-bearing: *"Do not add either to
+       a read-mostly list"*, with the cost named (the table collapses to one Tab
+       stop). (3) `PAGE_ONLY_BEHAVIORS` reconciles — the script's own assertion
+       that the page imports `initTableToolbar` and `initDataGrid` passes, and
+       the documented exclusion of `initDataTables` still holds. (4) The page's
+       runtime claims are covered by `check:claims`, green in the gate run
+       below. **No blind re-score was run, and that is deliberate**: §3b step 4
+       exists so a round cannot mark its own homework, and this round changed
+       nothing on the surface, so there is no score to mark. Recorded as a call,
+       not an omission.
+
+2. [ ] **283.2 — the ledger records a digest with no revision beside it, so a
+       stamp cannot be audited or migrated without guessing which commit it
+       describes.** Every fault in 283.1 reduces to this: the `src` cell says
+       *what* the source hashed to and never *when* or *over which path set*,
+       so a formula change silently orphans every existing row and the only way
+       back is a search over history that can be wrong (`component/date`).
+       A stamp that carried its revision would make `--audit-stamps` a lookup,
+       make migration after a path-set change mechanical, and make the two
+       `orphan` rows self-explaining.
+       - **Accept:** a stamp records the revision it was taken against as well
+         as the digest; `--audit-stamps` reads that revision instead of
+         searching for it, and its verdict for every row agrees with the
+         current searching implementation on the tree as it stands **or the
+         disagreement is recorded with which one is right**; the five
+         pre-276.1 rows are migrated to the current path set at their own
+         recorded revision and stop re-queueing unconditionally, verified by
+         `--check` reporting them only when their source has actually moved;
+         and a red-proof shows the new form catching a path-set change — widen
+         the set in a throwaway edit and confirm the audit says so rather than
+         reporting every row moved. **Finding that a migration is not worth the
+         format change is a satisfying outcome**: record which of the five
+         would still re-queue on their genuine source movement (all five have
+         moved since their stamp, so the practical cost today may be only the
+         false confidence, not a missed round).
+
 ## Slice 282 — the twelfth archive sweep, taken 3.5 hours after another wake REFUSED it: 13 slices moved, and the finding is that the five recorded sweep decisions lie on no threshold in either unit — the tenth ran at 3,790 lines / 55.1% and today's refusal came at 5,450 lines / 40.6%, a longer file refused for being a smaller fraction closed (2026-09-05)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0 — `list_issues` on

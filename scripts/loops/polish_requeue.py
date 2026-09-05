@@ -249,7 +249,16 @@ def source_paths(surface: str) -> list[str]:
 
 def digest(surface: str, tree: str | None = None) -> str:
     """Short digest of the blob SHAs defining a surface. '-' if it has none."""
-    paths = source_paths(surface)
+    return digest_paths(source_paths(surface), tree)
+
+
+def digest_paths(paths: list[str], tree: str | None = None) -> str:
+    """The digest, over an EXPLICIT path list.
+
+    Split out of `digest()` so `stamp_provenance` below can ask the same
+    question of the path set as it was BEFORE 276.1 widened it. Nothing else
+    changed.
+    """
     if tree:
         lines = [
             ln for p in paths
@@ -276,6 +285,135 @@ def digest(surface: str, tree: str | None = None) -> str:
         ["git", "hash-object", "--stdin"], cwd=ROOT, input="\n".join(blobs),
         capture_output=True, text=True, check=True,
     ).stdout.strip()[:8]
+
+
+def _parent(rev: str) -> str:
+    """The short sha of `rev`'s first parent, or "" for a root commit.
+
+    `git()` runs with check=True, and `rev-parse <root>^` exits 128 — which is
+    a normal answer here, not a failure, and it aborted the first --audit-stamps
+    run on the repo's own root commit.
+    """
+    done = subprocess.run(
+        ["git", "rev-parse", "--verify", "--short", f"{rev}^"],
+        cwd=ROOT, capture_output=True, text=True,
+    )
+    return done.stdout.strip() if done.returncode == 0 else ""
+
+
+def stamp_provenance(surface: str, stamp: str) -> tuple[str, str]:
+    """Can a re-queued surface's stamp be REPRODUCED from a commit?
+
+    @exact -- every verdict here is an equality between two digests. There is
+    no recognising, so there is nothing to fool.
+
+    WHY THIS EXISTS (roadmap 283.1, measured 2026-09-05). A re-queue means
+    "this surface's source moved since it was last polished", and that reading
+    is only true while the recorded stamp and today's digest were computed the
+    same way. 276.1 widened the path set to include behavior modules and did
+    NOT re-stamp the rows that had been computed without them -- so for those
+    rows the two digests can never agree again, whatever the source does. The
+    re-queue became a constant, and a constant reported as a measurement is the
+    dead-detector shape CLAUDE.md refuses. It landed in the round whose whole
+    subject was this script's blindness, which is why it went unnoticed.
+
+    Measured over the 21-row polish ledger at `7079c94`: 7 rows current, 7
+    genuinely moved, and **7 whose stamp no revision of their own paths
+    reproduces** -- so the predicate discriminates at a third of the file and
+    is not the always-true kind 94.11 refuses. Of the 7: five (`alerts`,
+    `dashboard`, `stepper`, `table-toolbar`, `tree-table`) reproduce EXACTLY
+    under the pre-276.1 narrow set at the commit that recorded them, and two
+    (`data-table`, `pagination`) reproduce under neither.
+
+    Two instruments agree on that split, which is why it is stated: an
+    exhaustive walk of every commit touching each surface's paths (183 revs for
+    `data-table`), and the cheap two-revision test this function performs.
+    Both return the same seven. The cheap one is what ships, because this runs
+    at Polish step 0 every wake.
+
+    The verdicts, and what each does NOT say:
+
+    - ``reproducible`` -- the stamp is the digest at the commit that recorded
+      it (or its parent, since a round records the row and the source edit in
+      one commit). The re-queue means what it says.
+    - ``narrow`` -- the stamp reproduces only WITHOUT the behavior modules.
+      Certain: it was taken under the pre-276.1 formula, and this surface will
+      re-queue on every run until something re-stamps it.
+    - ``orphan`` -- reproduces under neither set **at the commit that recorded
+      it or that commit's parent**. Say it that narrowly: this test looks at
+      exactly two revisions, and a stamp may legitimately describe an OLDER
+      tree than the commit carrying it -- `--backfill` seeds every row from a
+      historical tree and does precisely that. `component/date` is the live
+      example and it is why this wording is not "reproducible nowhere": its
+      stamp reads `orphan` here and `--audit-stamps` finds it exactly at
+      `3909b80a`, a day before the row was written. For `data-table` and
+      `pagination` the exhaustive walk agrees with the cheap verdict (183 and
+      33 revisions tested, no match); for `date` it refutes it. So the cheap
+      test's `orphan` is a SUPERSET of the real thing, deliberately: it is what
+      can be afforded at step 0 every wake, and `--audit-stamps` settles any
+      row it names.
+    - ``unknown`` -- the digest appears in no commit of the ledger, so there is
+      nothing to compare against. A shallow clone reaches this; so does a
+      hand-edited row.
+
+    Both `narrow` and `orphan` mean the same thing operationally: the re-queue
+    carries no information about source movement. Neither is suppressed --
+    a surface may have moved as well, and a wake that stops polishing a surface
+    because this line printed would be trading a false signal for a false
+    silence.
+    """
+    intro = git(
+        "log", "--reverse", "--format=%h", "-S", stamp, "--", str(LEDGER)
+    ).split()
+    if not intro:
+        return "unknown", "no commit in the ledger's history records this digest"
+    rev = intro[0]
+    parent = _parent(rev)
+    revs = [r for r in (rev, parent) if r]
+
+    wide = source_paths(surface)
+    for r in revs:
+        if digest_paths(wide, r) == stamp:
+            return "reproducible", f"the digest at {r}"
+
+    narrow = [p for p in wide if "/js/behaviors/" not in p]
+    if narrow != wide:
+        for r in revs:
+            if digest_paths(narrow, r) == stamp:
+                return (
+                    "narrow",
+                    f"the PRE-276.1 digest at {r} — behavior modules excluded",
+                )
+    return "orphan", f"not the digest at {rev} or its parent — run --audit-stamps"
+
+
+def audit_stamps(surface: str, stamp: str) -> tuple[bool, str]:
+    """The exhaustive form of `stamp_provenance`: is this digest reproducible
+    at ANY revision that touched the surface's own paths?
+
+    @exact, and slow on purpose -- `data-table` has 95 touching commits and the
+    walk tests 183 revisions. It is not run at step 0; it is what settles a row
+    the cheap two-revision test names, and what the strong claim in roadmap 283
+    was measured with, so that claim is re-runnable rather than re-derived.
+    """
+    wide = source_paths(surface)
+    narrow = [p for p in wide if "/js/behaviors/" not in p]
+    sets = [(wide, "current")]
+    if narrow != wide:
+        sets.append((narrow, "PRE-276.1"))
+    tested = 0
+    for paths, label in sets:
+        touched = git("log", "--format=%h", "--", *paths).split()
+        revs = set(touched)
+        for t in touched:
+            parent = _parent(t)
+            if parent:
+                revs.add(parent)
+        tested += len(revs)
+        for r in sorted(revs):
+            if digest_paths(paths, r) == stamp:
+                return True, f"reproducible under the {label} path set at {r}"
+    return False, f"no revision of its own paths reproduces it ({tested} tested)"
 
 
 ROW = re.compile(r"^\|\s*(component|pattern|screen)/([a-z0-9-]+(?:/[a-z0-9-]+)?)\s*\|(.*)\|\s*$")
@@ -324,6 +462,12 @@ def main() -> int:
     ap.add_argument("--stamp", metavar="SURFACE")
     ap.add_argument("--backfill", metavar="SHA")
     ap.add_argument(
+        "--audit-stamps", action="store_true",
+        help="exhaustive: for every row, is its stamp reproducible at ANY "
+             "revision of its own paths? Slow; settles what --check's cheap "
+             "two-revision test can only suspect.",
+    )
+    ap.add_argument(
         "--ledger", choices=sorted(LEDGERS), default="polish",
         help="which ledger to operate on; both share the shape and the src digest",
     )
@@ -347,6 +491,28 @@ def main() -> int:
         return 2
 
     recorded = {s: c[-2] for _, s, c in rows(text)}
+
+    if args.audit_stamps:
+        bad = []
+        for _, s, _ in rows(text):
+            was = recorded[s]
+            if was == "-" or not re.fullmatch(r"[0-9a-f]{8}", was):
+                print(f"  {s:34s} {was!r:12s} no digest to audit")
+                continue
+            if digest(s) == was:
+                print(f"  {s:34s} {was} CURRENT — equals today's digest")
+                continue
+            ok, why = audit_stamps(s, was)
+            if not ok:
+                bad.append(s)
+            print(f"  {s:34s} {was} {'OK  ' if ok else 'DEAD'} {why}")
+        print(
+            f"\n{len(bad)} of {len(recorded)} stamp(s) name a source state no "
+            "revision of their own paths carries."
+        )
+        for s in bad:
+            print(f"    {s}")
+        return 1 if bad else 0
 
     if args.stamp:
         if args.stamp not in recorded:
@@ -394,12 +560,34 @@ def main() -> int:
         return 0
 
     print(f"{args.ledger} re-entry: {len(changed)} surface(s) whose SOURCE moved since their last round")
+    uninformative = []
     for s, was, now in changed:
-        print(f"  {s:34s} {was} -> {now}")
+        kind, why = stamp_provenance(s, was)
+        if kind == "reproducible":
+            note = ""
+        else:
+            uninformative.append((s, kind))
+            note = f"   ⚠ stamp {kind}: {why}"
+        print(f"  {s:34s} {was} -> {now}{note}")
         for p in source_paths(s):
             print(f"      {p}")
 
     report_excluded()
+
+    if uninformative:
+        # Say what the number does NOT cover: these surfaces may have moved too.
+        # The claim is only that their re-queue cannot show it.
+        print(
+            f"\n⚠ {len(uninformative)} of {len(changed)} re-queue(s) carry NO information "
+            "about source movement: the recorded stamp is not the digest at the\n"
+            "  commit that recorded it, so it may never equal today's digest and the "
+            "surface then re-queues on every run. They may have moved as\n"
+            "  well; this cannot tell. `--audit-stamps` settles any row named here — "
+            "a stamp seeded from an older tree reads this way and is fine.\n"
+            "  Clearing one means a round that ends in `--stamp`, not a hand edit."
+        )
+        for s, kind in uninformative:
+            print(f"    {s:34s} {kind}")
 
     if args.apply:
         lines = text.splitlines()
