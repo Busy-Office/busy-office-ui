@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-05 11:04 UTC
+Generated at: 2026-09-05 11:55 UTC
 
 ## Open items by slice
 
@@ -26,7 +26,7 @@ Generated at: 2026-09-05 11:04 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1426 iterations logged)
+dispatch status — counter-triggered rules (1428 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-09-05 06:54   ok
   Objective     1 / 3 slice           since 2026-09-05 07:40   ok  [274]
   Optimize      2 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
@@ -48,8 +48,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-05 07:40 · Meta · refusal · executing 274.2 (cutting LOOPS.md's dispatch region) unattended in a cloud wake — the criterion was amended, not run · refused · 60ea801d
-- 2026-09-05 08:47 · Continue · build · 274.2 answered: the dispatch region's remaining slab is in Step 0c, not Step 2 — moved the collision forensics and the three refused alternatives to LOOPS-archive.md verbatim (873w section), keeping every executed sentence inline; dispatch region 6,100 -> 5,658 words (-442, -7.2%), Step 2 unchanged at 3,211, 0 words added above ## Playbooks, block re-run at 8848ed55 rather than the working tree; ratchet resets LOOPS.md to 0 up · landed · 8848ed55
 - 2026-09-05 08:47 · Meta · refusal · cutting any of Step 2's eight rules — measured: largest contiguous pure-narrative block is ~106 words against the 749w (167.2) and 414w (191.3) slabs the precedents moved, so ~10 fragments would net ~400w for ten pointer-follows per wake · refused · 8848ed55
 - 2026-09-05 08:47 · Meta · refusal · moving Step 0c's blame-vs-sha and naive-timestamp blocks — decision content with its own recorded refusals, which the archive's charter keeps inline · refused · 8848ed55
 - 2026-09-05 09:49 · Polish · round · 276.1 — Polish round 2 on component/inline-editing: NO-OP on the surface; the source set was blind to every behavior module (31 blind commits, 7 surfaces), fixed from behaviors.json byComponent · landed · 29a9062b
@@ -58,6 +56,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-05 11:04 · Polish · round · 277.1 pagination round 2 — data-load-more-auto promised in 5 places, asserted in none; 6 red-proved FakeIO cases + all 5 wordings corrected · landed · e4d7493c
 - 2026-09-05 11:04 · Meta · refusal · a check:claims case for the auto path — needs the demo button to carry the attribute, changing what the demo DOES, which needs the screenshot lane a cloud wake cannot run · refused · e4d7493c
 - 2026-09-05 11:04 · Meta · refusal · a gate for 'a documented runtime claim with no executable assertion' — the predicate needs a reading of what a sentence promises (94.11 shape-vs-content), and 101.3 forbids Polish adding gates · refused · e4d7493c
+- 2026-09-05 11:55 · Polish · round · 278.1 — table-toolbar round 2: hiding a column strands initDataGrid's only tab stop on a [hidden] cell, so Tab skips the grid; fixed and red-proved by four injections · landed · 7f4792e7
+- 2026-09-05 11:55 · Meta · refusal · a check:claims case for the hidden-column composition — it needs the grid demo to gain a toggle control, changing what the demo DOES, which needs the screenshot lane a cloud wake cannot run · refused · 7f4792e7
 
 ## Sunset test
 
