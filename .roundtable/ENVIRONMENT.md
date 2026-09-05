@@ -422,7 +422,7 @@ broadly wrong. When declining an item, say which of the two lists it needs.
 - **A parser change that reports MORE is not self-evidently a fix.** 166.5's
   first draft would have read `4-tick sweep` as slice 4 across 18 rows.
 - **A figure describing a commit is read from THAT COMMIT, never from the
-  working tree or the prose beside it.** Size `git show <sha>:<file> | wc -l`;
+  working tree, `HEAD`, or the prose beside it.** Size `git show <sha>:<file> | wc -l`;
   delta `git show --numstat --format='' <sha> -- <file>`; for a figure going
   into the message of a commit that does not exist yet, the index —
   `git show :<file> | wc -l`, which tracks what is staged, not the tree
@@ -437,6 +437,23 @@ broadly wrong. When declining an item, say which of the two lists it needs.
   review. A commit's own numbers always reconcile: 3,197 − 1,476 = **1,721** at
   `e29c7c18` too, against 214.1's stated `3,197 → 1,650` (roadmap 208, 228.1,
   229.5).
+
+  **`HEAD` was added to that first line by 275.3 (2026-09-05), because naming
+  only the working tree read as clearance for the other pre-commit state.** Two
+  consecutive wakes broke this from that side, and neither touched the tree:
+  273.1 read the polish ledger at `HEAD` and published **16** where its own
+  commit makes it **17**; 274.1 ran a script that reads `HEAD` by construction
+  and published a verdict that is already the opposite one at the commit
+  carrying it. **When your own commit changes the file, `HEAD` is the pre-change
+  state and is exactly as wrong as the tree, in the opposite direction.** Both
+  were harmless in their conclusions and wrong in the audit trail a later wake
+  re-runs, which is the expensive half.
+
+  **And when a SCRIPT produces the figure, `git show :<file>` is not available**
+  — the script walks revisions and the index is not one. Two things work: name
+  the revision the reading describes (274.1 did exactly this for its region
+  table and not for its Accept, in one commit), or re-run after committing and
+  correct the number. A figure with no revision beside it is read as current.
 - **A presence probe is not a fidelity probe.** Asking whether a heading still
   appears in 53 revisions answers whether it was deleted, not whether what sits
   under it decayed. 169.3's first pass read "zero shrinks" off a subset of

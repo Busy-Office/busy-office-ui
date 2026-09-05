@@ -315,6 +315,176 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 275 — Objective grill of Slices 271, 272, 273, 274: 271 and 272 reproduce whole, and all three defects are one shape — a figure the wake's OWN commit moved, read from `HEAD` and published as the commit's state (2026-09-05)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** for the eighth
+wake running (`git branch --show-current` empty, `HEAD` at `e322501` =
+`origin/main`) — ENVIRONMENT trap 1, fixed with `git checkout -B main
+origin/main` before any work. `--unshallow` clean in one attempt (**1,883**
+commits, no `shallow.lock`); it brought the tags, and `git fetch --tags origin`
+was run explicitly anyway and returned all **seven**. Rule 1: no open P0 —
+`list_issues` on `Busy-Office/busy-office-ui` returns `totalCount: 0`, and none
+of the 13 open `N. [ ]` items is a P0. Step 1 triaged and committed nothing: no
+new input. Rule 2 **0 / 4 … ok** — discharged by 274's own Standardize row, so
+**rule 3 fired at 4 / 3 … OVERDUE [271, 272, 273, 274]**, exactly as the
+previous hand-off predicted. Rules 4-8 **NOT EVALUATED**: a rule below a match is
+unreached, not clear. Rule 5 read **STALE** (`2 wake-date(s) newer`) in any case.
+
+**Scope: nothing dropped, and that is measured.** §6 step 0 exists because the
+armed set can re-name a slice an earlier grill covered; it does not here. The
+most recent grill is **Slice 265 (263, 264)**, and no grill in `ROADMAP.md` or
+the archive names 271, 272, 273 or 274. `.roundtable/INDEX.md` reports **4**
+repeated subjects, none of them this set. All four grilled in full.
+
+Full report: `.roundtable/grill-objective-271-272-273-274-2026-09-05.md`.
+
+**What reproduced — the controls, stated first, because an audit that only
+reports defects has not shown its instrument can agree.** Slice 274's Step 2
+split reproduces member for member against an independently written parser
+(**3,211** words = rule 4 **980** + rule 3 **672** + rule 6 **631** + rule 5
+**361** + rule 7 **226** + rule 8 **190** + rule 2 **119** + rule 1 **9** =
+3,188, plus a 23-word preamble the slice's total implies and does not spell
+out); `--self-test` passes at **12** cases; the `## Playbooks` anchor is in
+**87 of 87** revisions of `LOOPS.md`. Slice 273's `bo-byline--compact` count is
+**21** markup uses with the same 8/5/4/2/1/1 breakdown, and 273.3 reproduces to
+the cell — a jsdom parse of **138** built pages finds `.bo-byline` on **10** and
+inside a real `td`/`th` on exactly **2** (avatar 2, settings-admin 3) = **5**
+cells, with the old headline in **0** files under a fresh `dist` and the new one
+in **1**. Slice 272's sweep is **17/17** pointer stubs live and **17/17**
+sections archived, **0** open checkboxes stranded in the archive. Slice 271's
+noun fix holds — the gate reads *799 assertion(s) … (299 cited across 698
+scanned file(s), 2 known-dangling baseline) and 256 slice number(s)*.
+
+1. [x] **275.1 — DONE 2026-09-05. 274.1's Accept enumerates four window
+       verdicts and one of them is false in the commit that wrote it.** Run at
+       `aa550d2c` — Slice 274's own commit, in a detached `git worktree`, so the
+       reading describes the state the claim is published in — `--since
+       2026-09-04` prints **SLOWER**, where the Accept records it among the
+       windows that *"all print FASTER"*. The cause is the commit itself: 274's
+       own `LOOPS.md` edit added **130** words to `playbooks + reference`
+       (7,932 → 8,062) and **0** to the dispatch region, which in the 09-04
+       window lifts playbooks from +0.6% to +2.2% against a dispatch +1.7% and
+       flips the comparison. The four-window sweep was run against `c32491a`,
+       the pre-edit tip, and written into the post-edit commit.
+
+       **The criterion's PROPERTY half is intact and is not in question** — the
+       verdict line still prints both branches on real data (09-01 and 09-04
+       SLOWER; 08-28, 08-29 and the default FASTER), so the
+       detector-that-cannot-fail it was defending against is genuinely absent.
+       What is wrong is that the Accept names values at all, which is CLAUDE.md's
+       criterion rule — and **the same slice states that rule correctly one item
+       later**: 274.2's Accept says *"the criterion is agreement with what the
+       block reports, not a particular figure"*. One item apart, in one commit,
+       the rule is obeyed and broken. 274.1's region TABLE is correctly
+       attributed (*"Figures read at `c32491a` … before its own commit"*), so the
+       wake had the distinction and applied it to the table and not to the
+       Accept.
+       - **Accept (met):** the flip is demonstrated at the commit that carries
+         the claim rather than at HEAD; the property half is separately shown
+         still to hold; and 274.1's Accept carries a dated correction naming the
+         revision each verdict describes, rather than the claim being edited
+         away.
+
+2. [x] **275.2 — DONE 2026-09-05. 273.1's "16 of the 20 non-skipped rows carry a
+       second round" is 17 in the commit that wrote it.** Same shape, one wake
+       earlier. Parsed across the ledger's revisions: `d8c9b5d1^` reads
+       **16**, `d8c9b5d1` — Slice 273's own commit — reads **17**, HEAD reads
+       **17**; `dry > 0` and `budget_spent` read **0** in all three. The
+       seventeenth row is **`component/byline`**, the surface that wake was
+       polishing, whose `2/3` its own commit wrote. The figure was read from
+       `HEAD` as it stood at dispatch and published as the state of the commit
+       that moved it.
+
+       **273.1's conclusion is unaffected and stands** — *"the counter is zero
+       because no round has ever incremented it, not because no round could"*
+       survives on 17 exactly as on 16. Only the count is wrong.
+       - **Accept (met):** the count is re-derived at three revisions rather
+         than at one, the conclusion is separately shown to be independent of
+         it, and 273.1 carries a dated correction in place.
+
+3. [x] **275.3 — DONE 2026-09-05. The transferable finding, and the one edit
+       that is mechanical rather than another restatement: ENVIRONMENT's figure
+       bullet does not name `HEAD`.** 275.1 and 275.2 are one shape, and it is
+       already written down — *"a figure describing a commit is read from THAT
+       COMMIT, never from the working tree or the prose beside it … for a figure
+       going into the message of a commit that does not exist yet, the index"*.
+       That bullet already records being broken twice (229.5, and the commit
+       that added it breaking it in its own subject); these are the **third and
+       fourth**, in consecutive wakes, in the two newest slices of the arming
+       set.
+
+       **What is new is the source both wakes actually used, which the bullet
+       does not name.** Neither read the working tree: 273 read `HEAD` (the
+       ledger as it stood at dispatch) and 274 ran a script that reads `HEAD` by
+       construction. When your own commit changes the file, `HEAD` is the
+       pre-change state and is exactly as wrong as the tree, in the opposite
+       direction — and the bullet's warning, naming only the tree, reads as
+       clearance for it.
+
+       **And for a figure a SCRIPT produces, "read the index" is not
+       available** — the script walks revisions and the index is not one. The
+       available discipline is the one 274 applied to its table and withheld
+       from its Accept: name the revision the reading describes, or re-run after
+       committing and correct the number.
+       - **Accept (met):** the bullet names `HEAD` alongside the working tree
+         and carries the script case; the addition lands in `ENVIRONMENT.md`, a
+         durable file, and adds **0 words above `## Playbooks` in `LOOPS.md`** —
+         `LOOPS.md` is not in this commit's diff at all, and the `by region`
+         block re-run on the staged tree reports the dispatch region unmoved at
+         **6,100**. `ENVIRONMENT.md`'s own delta is **+18 / −1**, read from the
+         index (`git diff --cached --numstat`) and not from the working tree —
+         a first draft of this bullet said "8 lines" from memory, which is
+         275.3's own finding arriving inside 275.3.
+
+4. [x] **275.4 — DONE 2026-09-05. 274.2's no-cut branch grows the region the
+       item exists to shrink, so its Accept is amended.** Prospective, not
+       historical: 274.2 is open and this is the criterion a later wake will
+       execute. It offers *"each rule in Step 2 either loses a region of history
+       to `LOOPS-archive.md`, **or** carries a one-line recorded reason its
+       history is load-bearing where it stands"*, and blesses the second branch
+       as satisfying.
+
+       Step 2 holds **eight** rules. Measured on Step 2's own prose — **284
+       non-blank lines, mean 11.3 words per line, median 12** — eight one-line
+       reasons written into Step 2 come to **+96 words**. The dispatch region
+       grew **6,000 → 6,100, +100 words**, between 2026-09-01 and now. **So the
+       branch the item blesses as a satisfying no-op costs 96% of everything the
+       region has grown in four days, inside the region the item exists to
+       shrink**, and the words land above `## Playbooks` — precisely the test
+       274.1 built the block to apply, and precisely the ground on which 274
+       refused the Ideas backlog. The same error pointing the other way: a
+       *write* that moves the region while being recorded as changing nothing.
+       It also sits against the criterion's own last clause, *"a cut that leaves
+       the dispatch region unmoved does not satisfy it"*, which reads as refusing
+       the branch it opens with.
+
+       **Amended, not deleted:** the reason is recorded where the decision is
+       already recorded — `ROADMAP.md`, which is diffed and reviewed — instead of
+       inside the rule. Rule 4's own precedent decides it: what may leave the
+       region is history a wake needs when it **argues** about a rule, never the
+       sentence it **executes**, and a reason a rule's history is load-bearing is
+       an argument about the rule.
+       - **Accept (met):** 274.2's Accept states where the reason is recorded and
+         no longer admits a branch that adds words above the anchor; the amended
+         wording is checkable by measurement (the block agrees with what the
+         commit did) rather than by a figure; and the amendment itself adds **0
+         words above `## Playbooks`**.
+
+**274.2 stays OPEN, and is still not taken by a cloud wake.** Its own text says
+cutting the file that governs every wake, unattended, is the one edit where being
+wrong is silent and compounds. This grill amended the criterion; it did not
+execute it.
+
+**Not verified, named rather than implied.** Cloud wake: no Podman, no
+`localhost:8081`, so the 1440/390 light-and-dark screenshot lane could not run.
+**Nothing in this slice renders**, measured rather than asserted — the diff is
+`ROADMAP.md`, `.roundtable/ENVIRONMENT.md` and one new `.roundtable/` report:
+**0** files under `packages/core/src/`, **0** docs pages, **0** CSS, **0**
+scripts, and the docs site builds none of the three into a page. That is an
+absence of subject, not an unverified claim. The full cloud toolchain was run
+green regardless; `check:claims`' *"3 NOT VERIFIED"* is ENVIRONMENT 6b, this
+container reporting `(hover: hover) and (pointer: fine)` false, not a regression.
+
 ## Slice 274 — Standardize sweep, 4 of 4 lanes: three clean, and lane 4's finding is that its own instrument measures the wrong box — `LOOPS.md`'s every-wake DISPATCH region grew +300% where the file grew +220%, so the row a sweep reads understates the burden it exists to catch (2026-09-05)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** for the seventh
@@ -420,6 +590,19 @@ watch RETIRES"** — so the question is whether anything has changed under it, a
            window and `--since` 08-28, 08-29 and 09-04 all print FASTER. A line
            that can only ever say one thing is the detector-that-cannot-fail this
            repo keeps paying for; this one discriminates.
+
+           **CORRECTED by 275.1 (2026-09-05). The four verdicts above were read
+           at `c32491a`, this sweep's pre-edit tip, and one of them is already
+           false at `aa550d2c`, the commit that carries them:** `--since
+           2026-09-04` prints **SLOWER** there, because this slice's own
+           `LOOPS.md` edit added 130 words to `playbooks + reference` and none to
+           the dispatch region. The criterion's PROPERTY — that the line prints
+           both branches on real data — holds and is what this bullet is for
+           (09-01 and 09-04 SLOWER; 08-28, 08-29 and the default FASTER at
+           `aa550d2c`). Enumerating the verdicts at all is the defect, and it is
+           CLAUDE.md's criterion rule; 274.2's Accept, one item below, states
+           that rule correctly. A verdict quoted without the revision it
+           describes is read as current.
          - **`--self-test` gains four discriminating pairs plus the missing-anchor
            case and passes at 12 cases** (was 7). Each pair is a near-twin that
            must land on the *other* side of the anchor — same words with the
@@ -455,11 +638,29 @@ watch RETIRES"** — so the question is whether anything has changed under it, a
 
        - **Accept** — properties, and finding nothing cuttable satisfies it:
          each rule in Step 2 either loses a region of history to
-         `LOOPS-archive.md`, **or** carries a one-line recorded reason its
-         history is load-bearing where it stands. Whichever happens, the
-         `by region` block agrees with what the commit did — the criterion is
-         **agreement with what the block reports, not a particular figure**, and
-         a cut that leaves the dispatch region unmoved does not satisfy it.
+         `LOOPS-archive.md`, **or** its reason for keeping that history is
+         recorded **in `ROADMAP.md`, under this item** — one line per rule,
+         written where the decision is already diffed and reviewed, **never
+         added to the rule itself**. Whichever happens, the `by region` block
+         agrees with what the commit did — the criterion is **agreement with
+         what the block reports, not a particular figure** — and the commit adds
+         **0 words above `## Playbooks`**, asserted by re-running the block
+         rather than by reading the diff. A cut that leaves the dispatch region
+         unmoved does not satisfy the *cut* branch; the no-cut branch is
+         satisfied by the reasons being recorded, with the region unmoved.
+
+         **AMENDED by 275.4 (2026-09-05), and the amendment is measured.** The
+         original wording had each rule *"carry"* its reason, which puts the
+         words inside Step 2: **eight** rules at Step 2's own median of **12
+         words per line** is **+96 words** above the anchor, against a dispatch
+         region that grew **+100 words** in total between 2026-09-01 and this
+         wake. The branch this item blesses as a satisfying no-op would have
+         spent 96% of four days' growth on the region it exists to shrink —
+         the same error 274.1's block was built to catch, pointing the other
+         way. Rule 4's own precedent decides where the words go: what may leave
+         the dispatch region is history a wake needs when it **argues** about a
+         rule, never the sentence it **executes**, and a reason a rule's history
+         is load-bearing is an argument about the rule.
 
 **Refused, and the region block is what makes the refusal legible: archiving
 the 1,421-word Ideas backlog.** It is the obvious cut — **1,066 words, 75.0%,
@@ -607,7 +808,14 @@ nothing today is 94.11's refused gate, so arm 13 is reported, not shipped.
        surface landed its clause in one round, so nothing ever got a second
        round to be dry in"* — written in `eb7fd36c` (2026-08-28 16:41:03Z), a
        revision whose own ledger already carried `component/scan` at `2/3`.
-       Today **16 of the 20 non-skipped rows carry a second round**, **8** of
+       Today **16 of the 20 non-skipped rows carry a second round** — **CORRECTED
+       by 275.2 (2026-09-05): 16 is the reading at `d8c9b5d1^`, and this slice's
+       own commit `d8c9b5d1` makes it 17**, the seventeenth row being
+       `component/byline`, the surface this very round was polishing. The figure
+       was read from `HEAD` at dispatch and published as the state of the commit
+       that moved it. The conclusion below is unaffected: `dry > 0` and
+       `budget_spent` read 0 at all three revisions, so it survives on 17 exactly
+       as on 16 — **8** of
        them recorded `NO-OP` on the surface, and `dry` reads **0** on all
        sixteen. So the counter is zero because **no round has ever incremented
        it**, not because no round could — and the two are not the same fact:
