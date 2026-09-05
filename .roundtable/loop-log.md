@@ -1439,3 +1439,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-05 14:25 · Continue · build · 278.3/278.4/278.6 — gate-built composition case, select-all aria-selected fix, corrected cost claim on /components/table-toolbar · landed · aa7d433d
 - 2026-09-05 14:25 · Meta · refusal · a new public event from data-table.ts to publish selection changes — widens the contract to fix a sync data-grid.ts can do on its own · refused · aa7d433d
 - 2026-09-05 14:25 · Meta · refusal · queueMicrotask as the deferral mechanism — measured wrong under a trusted click; setTimeout(...,0) instead · refused · aa7d433d
+- 2026-09-05 14:54 · Continue · build · 278.5 — Columns demo shipped multi-select markup without initDropdowns; menu opened at viewport corner, 404px above its invoker. Fixed, gated in check:claims, red-proved twice · landed · a098cf85

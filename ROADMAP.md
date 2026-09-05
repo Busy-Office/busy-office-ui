@@ -1784,6 +1784,21 @@ nothing today is 94.11's refused gate, so arm 13 is reported, not shipped.
          found nothing at all. So "the score did not move" and "the round was
          busywork" have come apart 6 times out of 8, and `dry` as written
          cannot tell them apart.
+
+         **RE-MEASURED 2026-09-05 (cloud wake): it is now 9 and 7, and the
+         figure above was already one short when this hand-off quoted it.**
+         `inline-editing`'s round (2026-09-05) filed **276**. The count and
+         its instrument, so the next reader re-runs it rather than
+         re-deriving:
+         `grep -cE '^## Round .*NO-OP' .roundtable/polish-state.md` → **9**,
+         reconciled against the ledger's own table rows (same nine surfaces:
+         alerts, badge, breadcrumb, inline-editing, navbar, progress, stepper,
+         tree, tree-table). The two that found nothing are unchanged —
+         `badge` and `stepper`. **This corrects the number, not the
+         argument**: the ratio moved 6/8 → 7/9 and the conclusion is the same
+         one, which is why it is amended in place rather than reopened. The
+         figure goes stale on every Polish round, so **re-run the command
+         before quoting it to the owner.**
        - **Accept:** the owner picks one of — execute step 5 as written;
          redefine dry as "no score movement **and** no finding filed"; or
          delete the dry exit and say Polish runs until the owner stops it.
