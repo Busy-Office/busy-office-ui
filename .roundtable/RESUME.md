@@ -23,7 +23,8 @@ survives none.
 ## In flight: nothing
 
 Last updated 2026-09-05 (**cloud** wake, scheduled routine). Working tree clean
-at hand-off. Two commits this wake, both pushed: `278.1` and this hand-off.
+at hand-off. Two commits this wake, both pushed: the `278.3`/`278.4`/`278.6`
+slice and this hand-off.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -33,201 +34,174 @@ node apps/docs/scripts/check-resume-slice-ids.mjs # names any stale closed ids
 python3 scripts/loops/roadmap_scope.py            # OPEN set + sweep scope
 ```
 
+## ⚠ THE LAST HAND-OFF NAMED THE WRONG OLDEST ITEM — check rule 4's ordering yourself
+
+The previous hand-off said *"the oldest item rule 4 can actually take is
+`278.4`"*. It is not: **`278.3` precedes it** in `ROADMAP.md`, was filed in the
+same commit, and was cloud-takeable — the hand-off had picked the one it judged
+most worth taking, which is not what rule 4 says. This wake dispatched `278.3`
+on file order and stated that as its discriminator. **Rule 4's ordering is a
+property of the file, not a judgement**; when two items are filed in one commit,
+their order in `ROADMAP.md` is the tiebreak.
+
+That correction is not academic — `278.3`'s Accept is what pulled in the other
+two items this wake closed.
+
 ## The counters, read right after this wake's recording
 
 Read immediately after `record_iteration.py`, so it is a snapshot — and this is
-the comparison `LOOPS.md` rule 3 asks for. **Both rules read UNCHANGED, and
-that is the agreement, not a stall**: this wake's row is a `Polish` row, and
-161.4's list says only `Continue` and `Standardize` close a slice. A counter
-that had moved here would have been the finding.
+the comparison `LOOPS.md` rule 3 asks for.
 
-- **Rule 2 (Standardize)** `1 / 4 … ok` at dispatch → **`1 / 4 … ok`**.
-- **Rule 3 (Objective)** `1 / 3 … ok [274]` at dispatch → **`1 / 3 … ok [274]`**.
-- **Rule 5 (Optimize)** read **STALE** (`2 wake-date(s) newer`, unchanged) at
-  Step 0b and again after recording. Report it *could not be evaluated*, never
-  clear.
-- **Rules 7-8 were NOT EVALUATED**, because rule 6 matched. A rule below a
-  match is unreached, not clear.
+**Both counters MOVED, and that is the agreement, not drift**: this wake's row
+is a `Continue` row, and 161.4's list says `Continue` closes a slice. A counter
+that had stayed put here would have been the finding.
 
-## ⚠ THE CLOUD LANE IS NO LONGER EMPTY — rule 4 has work for the first time in four wakes
+- **Rule 2 (Standardize)** `1 / 4 … ok` at dispatch → **`2 / 4 … ok`**. Two more
+  Continue rounds and Standardize preempts the queued build item.
+- **Rule 3 (Objective)** `1 / 3 … ok [274]` at dispatch → **`2 / 3 … ok
+  [274, 278]`**. One more closed slice and rule 3 fires — so the wake after next
+  is likely an Objective grill, not a build.
+- **Rule 5 (Optimize)** read **STALE** (`2 wake-date(s) newer`) at Step 0b.
+  Report it *could not be evaluated*, never clear.
+- **Rules 6-8 were NOT EVALUATED**, because rule 4 matched. A rule below a match
+  is unreached, not clear. Polish did NOT run this wake.
 
-**Read this before the block below, which describes the set as it stood at
-dispatch.** The independent pass at the END of this wake filed **four new open
-items** (`278.3`-`278.6`), so the open set went **12 → 16** and three of the
-four are cloud-takeable. Next wake, rule 4 matches and **Polish does not get
-dispatched**.
+## The open set is 13, and ONE of it is cloud-takeable-with-a-caveat
+
+Re-read from `ROADMAP.md` after this wake's commit, and **every line
+re-classified from the item's own text** rather than carried over, per
+`LOOPS.md` 186.2:
 
 ```
-grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md      # 16
+grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md      # 13  (was 16 at dispatch)
 python3 scripts/loops/roadmap_scope.py        # OPEN: [15, 112, 249, 273, 278]
 ```
 
-Rule 4 takes **the OLDEST still-open item**, not the newest, so the four new
-ones do NOT jump the queue — Slice 15, `112.3`/`112.4` and the `249.x` set are
-all older and all still blocked. **The oldest item rule 4 can actually take is
-`278.4`**, and it is the one worth taking:
-
-- **`278.4`** (select-all leaves `aria-selected="false"` on every row) — a
-  shipped accessibility defect, same class as `278.1` and found by the same
-  question. Cloud-takeable in full: DOM and accessibility-tree assertions.
-  **Its item text already names the listener-ordering trap** that will
-  otherwise be rediscovered the hard way — read it before writing code.
-- **`278.3`** (the composition is asserted only in jsdom) — cloud-takeable; the
-  prose half already landed this wake.
-- **`278.6`** (the opener's cost argument names a mechanism the module does not
-  ship) — prose, cloud-takeable, but it needs a judgement about the component,
-  not a find-and-replace.
-- **`278.5`** (the Columns demo never calls `initDropdowns()`) — the geometry is
-  cloud-measurable, but the fix **moves a menu on screen**, so say which of
-  `ENVIRONMENT.md`'s two lists it needs when taking it.
-
-## The open set was 12 at dispatch, and NONE of it was cloud-dispatchable
-
-Re-read from `ROADMAP.md` after this wake's commit, and **every line was
-re-classified from the item's own text rather than carried over from the last
-hand-off**, per `LOOPS.md` 186.2:
-
-- **owner-blocked (9):** Slice 15 (AT runtime evidence, owner hardware),
-  `112.3` (owner briefs) and `112.4` (blocked on 112.3's verdict), `249.7`
-  (its own text holds the cost question until the owner answers `249.10`),
-  `249.10`, `249.11`, `249.12`, `249.13` (each says **OWNER CALL** in its own
-  line), and `273.2`.
-- **browser-blocked in the SCREENSHOT sense** (`ENVIRONMENT.md`'s FIRST list —
-  a LOCAL wake can take these, a cloud wake cannot): `249.6`, `249.9`,
-  `249.15`. Each says so in its own text. `249.6` has been declined at the
-  **clause** level twice; `249.15`'s remaining half is the OG *image* itself,
-  and its tag half already shipped as `249.17`.
+- **owner-blocked (9):** Slice 15 (AT runtime evidence, owner hardware), `112.3`
+  (owner briefs) and `112.4` (blocked on 112.3's verdict), `249.7` (its own text
+  holds the cost question until the owner answers `249.10`), `249.10`, `249.11`,
+  `249.12`, `249.13` (each says **OWNER CALL** in its own line), and `273.2`.
+- **browser-blocked in the SCREENSHOT sense** (`ENVIRONMENT.md`'s FIRST list — a
+  LOCAL wake can take these, a cloud wake cannot): `249.6`, `249.9`, `249.15`.
 - **agent-blocked:** none.
-- **NOT BLOCKED:** none.
+- **partly takeable (1):** **`278.5`** — the Columns demo never calls
+  `initDropdowns()`, so the menu renders at the viewport corner instead of under
+  its invoker. The *geometry* is `ENVIRONMENT.md`'s SECOND list and a cloud wake
+  can measure it; the *fix moves a menu on screen*, which is the first list. Its
+  own item text says so. A local wake should take it; a cloud wake taking it must
+  say which half it verified.
 
-**That was the state AT DISPATCH, and it is why rule 6 fired this wake** — the
-fall-through went rule 4 (nothing) → rule 5 (STALE, cannot be evaluated) →
-rule 6. It is **no longer current**: see the block above, which this wake's own
-findings changed. Run `polish_requeue.py --apply` first — it needs
-`behaviors.json` as well as `api.json`, so `npm run build -w @busy-office/ui`
-comes first or it exits naming the command.
-
-## ⚠ The rule-6 tiebreak is AMBIGUOUS again, and it was not last wake
-
-`table-toolbar` moved to `2/3` this wake, so the ledger's one uniquely-lowest
-row is gone. **Every non-skipped surface now sits at `2/3` with `dry 0`**, which
-is the state §3b step 1 has no discriminator for — the situation 176.2 measured
-(`budget_spent = 0` and `marked_dry = 0` in every revision) and 217.1 used to
-break by naming a reason.
-
-Checked, not recalled:
-
-```
-grep -oE '\| [0-9]/3 \|' .roundtable/polish-state.md | sort | uniq -c
-```
-
-So the next wake must **state its discriminator in writing** rather than
-picking alphabetically. The two rounds before this one both took an *unscored*
-surface (`inline-editing` 276.1, `table-toolbar` 278.1) and both found a real
-defect via the behaviour arm — reading a page's runtime claims against the
-modules `behaviors.json`'s `byComponent` maps to it. That arm is 3-for-3 now
-(277.1 on `pagination` too) and is the best available reason to pick a surface
-that has serving modules.
-
-`roadmap_scope.py` reads **1,772 / 4,894 = 36.2%** closed history. No sweep is
-due (272's eleventh sweep dispatched at 56.7%); re-run the script rather than
-trusting this.
+So the next cloud wake most likely falls through rule 4 to rule 5 (STALE, cannot
+be evaluated) and then rule 6 (Polish). Run `polish_requeue.py --apply` first —
+it needs `behaviors.json` as well as `api.json`, so
+`npm run build -w @busy-office/ui` comes first or it exits naming the command.
 
 ## What landed this wake
 
-**Dispatched by rule 6 (Polish).** Rule 1 clear — `list_issues` on
+**Dispatched by rule 4 (Continue, build mode).** Rule 1 clear — `list_issues` on
 `Busy-Office/busy-office-ui` returns `totalCount: 0`, and no open `N. [ ]` item
 is a P0. Step 1 triaged and committed nothing: no new input.
 
-**Step 0 hit trap 1 for the twelfth wake running** (detached HEAD at `06c0eb8`,
-`git branch --show-current` empty), and local `main` was stale at `26447ba`
-while `origin/main` had moved — the exact shape that bites at `git push`, not
-at Step 0. Fixed with `git checkout -B main origin/main` before any commit.
-Trap 2 clean in one `--unshallow` (**1,891** commits, no `shallow.lock`); the
-same fetch brought `v0.1.1` and `v0.2.0`. The Step 0c `git fetch origin main`
-before the first commit reported `0 0` — no second dispatcher moved anything.
+**Step 0 hit trap 1 for the thirteenth wake running** (detached HEAD at
+`16a95a0`, `git branch --show-current` empty), fixed with
+`git checkout -B main origin/main` before any commit; `origin/main` arrived as a
+**forced update** (`26447ba...16a95a0`), Step 0c's collision mechanic visible.
+Trap 2 clean in one `--unshallow` (**1,895** commits, no `shallow.lock`);
+`git fetch --tags origin` brought all seven. The Step 0c re-fetch before the
+first commit reported no movement — no second dispatcher.
 
-### `278.1` — two behaviors documented as a pair, never asserted together
+**Three items closed on one surface: `278.3`, `278.4`, `278.6`.** They are one
+item's worth of work because `278.3`'s Accept is written over *every runtime
+sentence on the page*, and two of those sentences disagreed with the shipped
+module. The Accept was satisfied rather than narrowed; the scope trap is
+recorded in the item.
 
-The Polish round on `component/table-toolbar` is **NOT a no-op**, and the
-defect is ON the surface. The page calls `initTableToolbar` and `initDataGrid`
-*"the two opt-in behaviors that sit on top of a data table"*; each reproduces
-individually and nothing had ever asserted them together.
+- **`278.3`** — a `check:claims` case CAN assert the hidden-column/grid
+  composition without wiring the demos together: the gate composes the markup
+  itself on the page's own already-initialised modules (tags `#grid-nav-demo`'s
+  cells with `data-col`, prepends a `[data-col-toggle]` box to its container).
+  278.1's refusal stands; nothing the reader sees changed.
+- **`278.4`** — a shipped **accessibility defect**, fixed: a select-all left
+  every row reporting `aria-selected="false"` while all were checked, on a grid
+  the same module marks `aria-multiselectable="true"`. Reproduced on both
+  documented routes first, then fixed in `data-grid.ts`.
+- **`278.6`** — the opener's cost argument was the OPPOSITE of what ships
+  (measured: 12 cells → **1** tab stop; 4 interactive descendants → **0** in the
+  Tab sequence). Rewritten to state the real trade, and now executable.
 
-Measured in headless Chrome against the BUILT page (`ENVIRONMENT.md`'s SECOND
-list), driving both real modules with real events: park the cell cursor in a
-column, hide that column with a real `change` on `[data-col-toggle]`, and the
-grid's **single tab stop is left on a `[hidden]` cell** — Tab then skips the
-grid entirely and a keyboard user has no way back in. Fixed in `data-grid.ts`;
-hidden cells are excluded from cursor movement and can never hold the tab stop,
-re-seeded from a `MutationObserver` rather than a `change` listener **because
-the toolbar hides on a document-level listener that runs after any
-container-level one** — that ordering was measured, not assumed.
+**⚠ THE FIRST FIX FOR `278.4` WAS WRONG AND ITS PROBE SAID IT WAS RIGHT.**
+`queueMicrotask` was used to defer past the container listener, and a probe
+reported it running last. The probe drove the control with `el.click()`. Under a
+**trusted** click the browser drives dispatch from native code, the JS stack
+empties *between* listeners, and the microtask runs mid-dispatch on the stale
+state; under `el.click()` the whole dispatch is one JS frame and it genuinely
+runs last. The mechanism was built, shipped into `dist`, and only caught because
+the gate uses `page.click`. Fixed with `setTimeout(…, 0)`. **The general form is
+now a durable bullet in `ENVIRONMENT.md`** — it will bite again.
 
-`278.2`: the page listed four of the six keys the module implements.
-`Home`/`End` and their Ctrl variants ship in `keymap.json` and render on
-`/concepts/js-behaviors`, asserted nowhere (`grep -c Home` on
-`data-grid.test.ts` → **0**). Here the behaviour is CORRECT and the omission is
-the defect — the opposite of 277.1 the wake before.
+**Four injections red-proved, each confirmed absent from the artifact after the
+write, each replacing exactly one match.** The artifact is the chunk the page's
+own entry script names (`apps/docs/dist/_astro/table-toolbar.*.js`), never
+`dist/js/index.js` — the re-export barrel 278.1 caught being a dead instrument.
+**One injection was itself defective and is recorded**: it deleted the whole
+false branch of a minified ternary, the module stopped parsing, and **four**
+cases went red instead of one. A red-proof that goes red too broadly certifies
+nothing, the same as one that stays green.
 
-**Four injections red-proved, each confirmed in the artifact first. Three dead
-instruments are recorded rather than dropped**, and all three "passed" by not
-erroring:
-
-- importing the library from the page's own `<script type="module">` sources —
-  those are Astro entry scripts, so `initDataGrid` never ran;
-- `document.querySelector('[data-col-toggle]')`, which matched the **first
-  demo's** Vendor box and hid a column in a different table;
-- grepping `dist/js/index.js`, a **re-export barrel** where `.hidden` reads
-  zero on the FIXED build too, so it would have reported "removed" for any
-  injection whatsoever. The artifact is `dist/js/behaviors/data-grid.js`.
+**Two of this wake's own cited numbers were wrong before commit and are
+corrected in place**: `grep -c -F data-col-toggle` reads **1**, not 2 (`-c`
+counts lines), and the opener's growth is **6 insertions / 3 deletions**, not
+"4 lines to 7". Both were caught by re-running the command instead of quoting
+the estimate.
 
 **All 17 cloud-toolchain entry points ran green**, with the list re-derived from
 `ci.yml` rather than trusted — it still matches `ENVIRONMENT.md`'s in the two
-documented, opposite-direction ways. `check:claims`' *"3 NOT VERIFIED"* is
-`ENVIRONMENT.md` 6b, not a regression; its live count reads **163**, up from 162,
-which is exactly the one case this wake added.
+documented, opposite-direction ways (`check:ci-ignores` is a sub-check of
+`check:repo`; `npm run test -w @busy-office/ui` is CI's
+`npx vitest run --root packages/core`). `check:claims` reports **166** live, up
+from the 163 the last hand-off recorded — the three cases this wake added,
+observed one at a time (165 after two, 166 after the third). Its *"3 NOT
+VERIFIED"* is `ENVIRONMENT.md` 6b, not a regression.
 
-**One thing in this diff DOES render, and it is named as unverified.** **0** CSS
-files changed, but `table-toolbar.astro` gained two prose passages, so the page
-**reflows by a few lines and that reflow is UNVERIFIED VISUALLY** — a cloud wake
-has no 1440/390 light-and-dark lane. What is verified: `check:layout` and
+**One thing in this diff renders, and it is named as UNVERIFIED.** **0** CSS
+files changed, but `table-toolbar.astro`'s opener gains three lines of prose, so
+the page reflows and **that reflow was NOT checked visually** — a cloud wake has
+no 1440/390 light-and-dark lane. What *is* verified: `check:layout` and
 `check:scroll` sweep every page at both widths, and `test:axe` reports zero
-violations across 127 pages × 2 widths.
+violations.
 
 **`check:resume-slice-ids` will report closed ids named in this file, and all
-are deliberate.** `278.1`, `278.2`, `277.1`, `276.1`, `273.2`, `249.17` and the other
-`249.x` ids are named as history or as classification evidence — what was
-decided and why — not as queued work. The report is partly **self-referential**:
-an id acquires a mention simply by being listed in a paragraph like this one.
+are deliberate.** `278.1`, `278.3`, `278.4`, `278.6`, `249.17` and the other
+`249.x` ids are named as history or as classification evidence, not as queued
+work. The report is partly **self-referential**: an id acquires a mention simply
+by being listed in a paragraph like this one.
 
 ## Direction
 
 Nothing new from the owner this wake; GitHub intake is empty (`list_issues` →
-`totalCount: 0`). The standing owner blocks are unchanged: Slice 15's AT
-runtime evidence (owner hardware), `112.3`/`112.4` (owner briefs, then 112.3's
-verdict), and `249.7`, `249.10`-`249.13`.
+`totalCount: 0`). The standing owner blocks are unchanged: Slice 15's AT runtime
+evidence (owner hardware), `112.3`/`112.4` (owner briefs, then 112.3's verdict),
+and `249.7`, `249.10`-`249.13`.
 
-**Two things want the owner's attention, both carried over — which is itself
-the signal:**
+**One thing wants the owner's attention, and it is the same one as the last five
+wakes — which is itself the signal:**
 
 1. **`273.2` is still the owner call worth their attention**, untouched for a
-   fifth wake. `LOOPS.md` §3b step 5 mandates `dry++` on a Polish round whose
+   sixth wake. `LOOPS.md` §3b step 5 mandates `dry++` on a Polish round whose
    score does not move; no round has ever done it. **This wake does not change
-   the tally** — 278.1 is not a no-op, so step 5's first half applies and the
-   count stays at **9 NO-OP rounds, 7 of which filed a real defect found
-   elsewhere**. Executing the rule as written would retire surfaces and empty a
-   lane **176.3 already refused to narrow**.
-2. **The cloud lane's four-wake drought ENDED inside this wake, and it ended
-   because the loop generated its own work.** All 12 items open at dispatch
-   were owner- or screenshot-blocked; the round then filed four more
-   (`278.3`-`278.6`), three of them cloud-takeable, including a **shipped
-   accessibility defect** (`278.4`). So the standing report — *"nothing
-   dispatchable"* — is no longer true, and rule 6 will not fire next wake.
-   The owner-blocked nine are unchanged and still want answers; what has
-   changed is that a cloud wake is no longer idle while waiting for them.
+   the tally** — Polish did not run at all (rule 4 matched), so the count stays
+   at **9 NO-OP rounds, 7 of which filed a real defect found elsewhere**.
+   Executing the rule as written would retire surfaces and empty a lane
+   **176.3 already refused to narrow**.
 
-## `bundle-gz-kb` still cannot be sampled — twenty-first wake
+2. **Not a blocker, but worth the owner knowing: the loop is now generating its
+   own cloud-takeable work, and it is finding real shipped defects.** `278.4` is
+   the second shipped accessibility defect in two wakes (`278.1` was the first),
+   both on the same surface, both found by the same question — *do two behaviors
+   documented as a pair actually talk?* Neither was reachable by any gate that
+   existed. That question is worth pointing at other documented pairs.
+
+## `bundle-gz-kb` still cannot be sampled — twenty-second wake
 
 259.1's rule-5 finding, re-verified this wake rather than re-derived:
 
