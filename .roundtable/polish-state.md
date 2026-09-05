@@ -9,7 +9,16 @@ Two consecutive rounds that fail to move the blind re-score mark a surface
 `dry` and forfeit the rest of its budget.
 
 **A surface re-enters the queue only when its SOURCE changes** (its CSS,
-its docs page, or its rubric definition) — never on a timer.
+**the behavior modules that drive it**, its docs page, or its rubric
+definition) — never on a timer.
+
+The behavior clause was added 2026-09-05 (ROADMAP 276.1). It was not a
+widening of intent — it is what this sentence always meant — but
+`polish_requeue.py` hashed only CSS and the docs page, so **31** commits
+across 7 surfaces changed a serving module with nothing to notice
+(`data-table` 19/30, `scan` 5/6, `pagination` 3/4, `stepper` 2/3,
+`tree-table` 1/3, `alerts` 1/4, `dashboard` 0/2). The map is read from
+`behaviors.json`'s `byComponent`, never guessed.
 
 Seeded 2026-08-23 from `check:wrong-choice`'s TODO set — the 19
 component pages with no wrong-choice clause, which is the executable form
@@ -90,13 +99,13 @@ a no-op recorded in one line.
 | component/avatar | content | **3** | 2/3 | 0 | 3147e6c1 | round 1 landed — blind 2→3, "not the only way to name someone"; **round 2 (2026-09-04) FOUND A DEFECT, and it is arm 3's WHOLE class at once — 249.8's 3-line header moved every line-number pointer in the framework; all four live ones were published or printed. ROADMAP 266, see below** |
 | component/badge | content | **3** | 2/3 | 0 | 1f69e677 | round 1 landed — blind 2→3, "not for anything actionable"; **round 2 (2026-08-28) NO-OP — reconciliation clean on all four arms, see below** · **RE-QUEUED — source changed** |
 | component/breadcrumb | content | **3** | 2/3 | 0 | 8e11bfe5 | **round 1 (2026-08-30) FOUND A DEFECT — `fit` counted "2 of 19 pattern screens" against 39; re-entry from 217.2's filing, see below** · **`interaction` corrected `na`→3 by navbar's round 2 (2026-09-04) — a blind re-score, NOT a round on this surface: `rounds` stayed 1/3 for it** · **round 2 (2026-09-04) NO-OP on the surface — all six cites hold, including the five NEW assertions 268 wrote into the `interaction` cite that no arm had ever read — and a new arm 11 FOUND A DEFECT in the file's own contract: `dsa-scores.json`'s `$comment` mandated moving `scored` on a re-score, which the only two score-moving blind re-scores ever run both correctly refused. ROADMAP 269, see below** |
-| component/byline | content | **3** | 2/3 | 0 | b73f01d9 | round 1 landed — blind 2→3; scorer caught the boundary, redrawn; **round 2 (2026-09-05) FOUND TWO DEFECTS — all six cites hold and arms 3/8/9/10 reproduce, but the blind re-score found `--compact`'s rationale (docs heading AND the shipped CSS comment) recommending "table cells", the context the opener's own clause forbids and which 0 of 21 uses exercise; and a new arm 13 reports 17/17. ROADMAP 273, see below** |
+| component/byline | content | **3** | 2/3 | 0 | b73f01d9 | round 1 landed — blind 2→3; scorer caught the boundary, redrawn; **round 2 (2026-09-05) FOUND TWO DEFECTS — all six cites hold and arms 3/8/9/10 reproduce, but the blind re-score found `--compact`'s rationale (docs heading AND the shipped CSS comment) recommending "table cells", the context the opener's own clause forbids and which 0 of 21 uses exercise; and a new arm 13 reports 17/17. ROADMAP 273, see below** · **RE-QUEUED — source changed** |
 | component/calendar | content | **3** | 2/3 | 0 | 6b36b863 | round 1 landed — blind 2→3, "not for a plain date field"; **round 2 (2026-09-02) six arms clean on calendar itself, and a NEW arm 7 FOUND A DEFECT elsewhere — `form · colour` claimed "zero raw hex" against two painted ones; cite corrected, CSS left open as 240.1, see below** · **RE-QUEUED — source changed** |
 | component/dashboard | content | **3** | 2/3 | 0 | 3780542a | round 1 landed — blind 2→3, "not a wrapper round every section"; **round 2 (2026-09-02) FOUND TWO DEFECTS, and the first is the only one in this ledger where the SCORE was wrong rather than the cite — `interaction: na` on a component that ships `initCollapsibleCards`; blind re-scored to 3 by a second agent, the first blind re-score this ledger has actually run. See below** · **RE-QUEUED — source changed** |
 | component/data-table | content | **3** | 2/3 | 0 | 36c4bbe3 | round 1 landed — blind 2→3, "not for laying out a page"; **round 2 (2026-08-30) FOUND A DEFECT — the `spacing` cite named a literal 94.3 had removed two days before the score was taken, see below** · **RE-QUEUED — source changed** |
 | component/date | content | 2 | — | — | 399709aa | **SKIPPED** — deprecated, see note below |
 | component/icon | content | **3** | 2/3 | 0 | f0d9f50b | round 1 landed — blind 2→3; scorer caught the demo contradiction, clause narrowed; **round 2 (2026-08-30) FOUND A DEFECT — `fit` cited "12 ERP glyphs" against 26 shipped, and the same 12 was hard-coded as the DIVISOR of the page's published size projection, see below** · **RE-QUEUED — source changed** |
-| component/inline-editing | content | **3** | 1/3 | 0 | eadd116a | round 1 landed — blind 3, "not for creating a record" (unscored in DSA) · **RE-QUEUED — source changed** |
+| component/inline-editing | content | **3** | 2/3 | 0 | 644dde35 | round 1 landed — blind 3, "not for creating a record" (unscored in DSA); **round 2 (2026-09-05) NO-OP on the surface — all five arms reproduce, including the row-edit cites no arm had ever read — and a new arm 14 FOUND A DEFECT in this loop's own step 0: the surface source set was blind to every behavior module, 31 commits across 7 surfaces. ROADMAP 276, see below** |
 | component/navbar | content | **3** | 2/3 | 0 | 35528cb6 | round 1 landed — blind 2→3, "not the page's own title or actions"; **round 2 (2026-09-04) NO-OP on the surface — all six cites hold, including the `interaction: na` no arm covered — and two NEW arms found a defect elsewhere: `breadcrumb · interaction` scored `na` 7h14m before the rubric clause that forbids it existed. ROADMAP 268, see below** |
 | component/pagination | content | **3** | 1/3 | 0 | 2a48579c | round 1 landed — blind 2→3, "not for stepping through a process" · **RE-QUEUED — source changed** |
 | component/progress | content | **3** | 2/3 | 0 | 1154a4d7 | round 1 landed — blind 2→3, "not for work of unknown duration"; **round 2 (2026-09-04) NO-OP on the surface — six cites and all eight arms clean — and the finding is in this loop's own step 0: `polish_requeue.py --apply` announced a write over a byte-identical file. ROADMAP 267, see below** · **RE-QUEUED — source changed** |
@@ -2051,3 +2060,138 @@ screenshot lane could not run. **0** files under `packages/core/src/` changed
 and **0** docs page markup changed — the round's entire diff is this ledger,
 `ROADMAP.md` and the hand-off, so nothing in it rests on a rendered image. Every
 number quoted above came from a gate or a probe executing in this container.
+
+## Round 2: inline-editing (2026-09-05, cloud wake) — NO-OP on the surface; the finding is in step 0's own source map (ROADMAP 276)
+
+**Picked by rule 6 with the tiebreak stated, because the rule alone does not
+resolve it.** Every non-skipped surface reads `content: 3`, so "lowest score"
+selects all of them; "fewest rounds used" narrows to the three at `1/3` —
+`inline-editing`, `pagination`, `table-toolbar` — and leaves a three-way tie the
+rule has no third clause for. Taken alphabetically, and named as a tiebreak
+rather than dressed up as the rule deciding.
+
+### The five reconciliation arms, all clean on the surface
+
+1. **The ledger's own record vs `dsa-scores.json`.** The row says
+   *"(unscored in DSA)"*; `inline-editing` is **ABSENT** from the 40 scored
+   components. Agreement, and it is structural — the file is keyed by
+   `api.json` component, and this page documents a behavior, not a component.
+2. **The 176.1 mis-render cannot occur here.** That defect was `/components/scan`
+   publishing *"Not yet scored"* for five days. This page imports no
+   `DsaScore` at all (`grep -n DsaScore` → 0), so there is no published verdict
+   to disagree with the ledger. Checked rather than assumed, because "absent
+   from the JSON" and "renders nothing" are different questions.
+3. **The wrong-choice clause the round-1 score was earned on still stands.**
+   `<strong>Not for creating a record</strong>` at line 37, and the page is off
+   `check:wrong-choice`'s TODO.
+4. **The page's cites against the shipped CSS.** *"an amber tint and a 3px
+   inset leading edge … under `forced-colors` the tint disappears and the edge
+   becomes a real border"* reproduces exactly in `data-table.css`:
+   `--bo-cell-bg: var(--bo-color-warning-subtle)`, then
+   `box-shadow: inset 3px 0 0 var(--bo-color-warning)`, then under
+   `@media (forced-colors: active)` `box-shadow: none;
+   border-inline-start: 3px solid CanvasText`.
+5. **NEW — the page's cites against the shipped BEHAVIOR, which no arm on any
+   surface had read.** Every claim resolves in `row-edit.ts`: the two save
+   models (`data-row-edit` batch, `data-row-edit="live"`), Save/Cancel revealed
+   only on the dirty row (`save.hidden = !dirty`), `[data-row-edit-dirty]` still
+   supported, and the programmatic-channel sentence almost verbatim in the
+   module header — *"the PROGRAMMATIC channel is the Save button's accessible
+   name — it exists only while the row is dirty"*.
+
+Nothing on the surface moved, so the round is a **NO-OP** by §3b step 5's
+first half. Per ROADMAP 273.2 the `dry` counter is **not** incremented: that
+rule is an open owner call. Against 273.2's count of **8** NO-OP rounds, of
+which **6** filed a real defect found elsewhere and 2 found nothing, this is the
+**ninth** NO-OP and the **seventh** to file one.
+
+### Arm 14 — the source map is blind to behavior modules
+
+Arm 5 is what surfaced it. This page's entire subject is `row-edit.ts`, and
+`polish_requeue.py`'s source set for the surface was **the docs page alone** —
+so the module could be rewritten and the surface would never re-queue.
+Measured over the whole history, `10 of 11` commits touching `row-edit.ts`
+never touched `inline-editing.astro`.
+
+Generalised across every ledger surface with a serving module — a commit counts
+as blind when it touched a serving module and none of the surface's own paths:
+
+| surface | blind / total | modules |
+|---|---|---|
+| data-table | **19 / 30** | data-grid, data-table, row-edit, sticky-cols, table-sum, table-toolbar, windowed-list |
+| scan | **5 / 6** | scan-input |
+| pagination | **3 / 4** | load-more |
+| stepper | **2 / 3** | wizard |
+| tree-table | **1 / 3** | tree-table |
+| alerts | **1 / 4** | alert |
+| dashboard | **0 / 2** | collapsible-card |
+
+**31 blind commits in total.** `scan`'s row was re-derived by hand against
+`git log` and reproduces exactly (5 of 6; the one that is not blind is
+`36b637a3`, which touched both). The other fourteen ledger surfaces have no
+serving module and are unaffected.
+
+**Stated as structural blindness, not as 31 missed re-queues.** A blind commit
+is only a *missed* re-queue if the surface was stamped clean at the time, and
+that is not reconstructible from the ledger — 15 of 21 rows carry the RE-QUEUED
+marker right now for other reasons. The live proof of that: after the fix,
+`--apply` reported **0 rows newly marked**, because every affected surface was
+already queued. The cost is latent, and the dimension it lands on is
+`interaction` — `dashboard`'s round 2 found `interaction: na` on a component
+that ships `initCollapsibleCards`, which is exactly a behavior-side decay.
+
+### The fix, and why the mapping is read rather than guessed
+
+`behaviors.json`'s `byComponent` — Slice 264's `@serves` declaration, which
+`check-js-serves` re-derives from the BUILT pages and fails on disagreement —
+gives component → export names, and `behaviors[<export>].module` gives the file.
+Same rule the docstring already applied to `pageSlug`: never guess this.
+
+The two page-only surfaces cannot be reached that way, because `row-edit.ts`
+declares `@serves data-table`, not `inline-editing`. They are named in a
+`PAGE_ONLY_BEHAVIORS` map with a reason each, on the `COMPONENT_NAV_EXTRAS`
+precedent — and **the map agrees with a note written into this ledger on
+2026-08-23 by a different route**, which recorded these two as documenting
+"`initRowEdit`; `initTableToolbar`/`initDataGrid`". That is the independent
+reconciliation, not a second opinion from the same reading.
+
+Each entry is re-checked against the page's own import on every run and the
+script exits non-zero if the page has moved out from under it. Both entries are
+taken from that note verbatim rather than re-read off the pages, so
+`table-toolbar` carries `initTableToolbar` **and** `initDataGrid`. The page also
+imports `initDataTables`, which the note does not name; it stands the demo table
+up rather than being the subject, and excluding it is the one judgement in this
+map — named as one rather than folded into the derivation.
+
+**Deriving all of it from page imports was measured and refused.** The import
+list is over-broad on `button` (imports `initDropdowns` for one demo) and
+`richtext` (`initDialogs`), and under-reports `stepper`, which `byComponent`
+serves with `initWizard` and whose page imports nothing.
+
+**Patterns are unchanged, deliberately.** A pattern screen composes many
+components, so nearly every behavior would qualify and the predicate would be
+close to uniformly true — the dead-detector shape CLAUDE.md 94.11 refuses.
+
+### Both arms red-proved, with the injection confirmed first
+
+1. `--stamp component/scan` → `--check` reports scan **0** times. Append a
+   comment to `scan-input.ts`, assert the blob sha moved
+   (`d76699bc → 6be8650a`), re-run: `component/scan 005a87af -> f3491df2`,
+   with `packages/core/src/js/behaviors/scan-input.ts` named in the report.
+   Nothing but the module changed. Reverted; ledger restored from a copy taken
+   before the stamp.
+2. Rewrite `initRowEdit` → `initSomethingElse` in `inline-editing.astro`,
+   assert the occurrence count went **4 → 0**, re-run: the script exits **1**
+   naming the map, the surface and the page.
+
+An instrument error is recorded rather than hidden: the first read of proof 1
+used `grep -A2` and appeared to show the report omitting the module file. The
+report was correct; the context window was two lines short.
+
+### What this round could NOT verify
+
+Cloud wake: no Podman, no `localhost:8081`, so the 1440/390 light-and-dark
+screenshot lane could not run. **0** files under `packages/core/src/` changed
+and **0** docs page markup changed — the round's diff is `polish_requeue.py`,
+this ledger, `ROADMAP.md` and the hand-off, so nothing in it renders. Every
+number above came from a gate or a probe executing in this container.

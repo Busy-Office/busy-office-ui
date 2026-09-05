@@ -315,6 +315,123 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 276 — Polish round on `inline-editing`: every arm on the surface reproduces, and the finding is in step 0's own source map — a surface's source set stopped at CSS, so 31 commits changed a behavior module with nothing to notice (2026-09-05)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** for the tenth
+wake running (`git branch --show-current` empty, `HEAD` at `e914399` =
+`origin/main`) — ENVIRONMENT trap 1, fixed with `git checkout -B main
+origin/main` before any work. `--unshallow` clean in one attempt (**1,887**
+commits, no `shallow.lock`); `git fetch --tags origin` returned all **seven**.
+Working tree clean, `RESUME.md` "In flight: nothing". Step 1: no new input —
+`list_issues` on `Busy-Office/busy-office-ui` returns `totalCount: 0`, so
+nothing was triaged and nothing committed there. Step 0b: rule 2 `1 / 4`,
+rule 3 `1 / 3` (both `ok`), rule 5 **STALE** by 2 wake-dates and therefore
+reported as *could not be evaluated*, per `LOOPS.md` rule 5. Rule 1 clear — no
+open `N. [ ]` item is a P0.
+
+**Rule 4 found nothing this wake can take, and every classification was
+re-derived rather than read off the hand-off.** All **12** open items:
+**owner-blocked (9)** — Slice 15 (AT runtime evidence, owner hardware), `112.3`
+(owner briefs) and `112.4` (blocked on 112.3's verdict), `249.7` (a cost
+question its own text holds for the owner's `249.10`), `249.10`-`249.13` (each
+says **OWNER CALL** in its own line), and `273.2`; **browser-blocked in the
+SCREENSHOT sense (3)** — `249.6`, `249.9`, `249.15`, each of which says so in
+its own text, `249.6` having been declined at the clause level twice. So rule 5
+(STALE, not evaluable) and then **rule 6, Polish**, exactly as the previous
+hand-off predicted.
+
+**Step 0's re-queue could not run until core was built** — `polish_requeue.py`
+exits naming `api.json` and the command that makes it, which is 249-era
+guidance working; `npm run build -w @busy-office/ui`, then `--apply`: 1 row
+newly marked, 14 already carrying the marker, 15 re-queued.
+
+### The round is a NO-OP on the surface, and the arms are in `polish-state.md`
+
+Five arms, all clean: the ledger's *"(unscored in DSA)"* against the surface's
+**absence** from `dsa-scores.json`'s 40; no `DsaScore` on the page, so 176.1's
+"Not yet scored" mis-render cannot occur here; the round-1 wrong-choice clause
+still present and off `check:wrong-choice`'s TODO; the page's `forced-colors`
+dirty-row cites reproducing exactly in `data-table.css`; and a fifth arm no
+round on any surface had run — the page's claims against the shipped
+**behavior**, all of which resolve in `row-edit.ts`.
+
+Per **273.2** the `dry` counter is not incremented: that rule is an open owner
+call. Against 273.2's count of 8 NO-OP rounds — 6 filing a real defect, 2 finding
+nothing — this is the ninth NO-OP and the seventh to file one.
+
+### 276.1 — the source set was blind to every behavior module
+
+1. [x] **276.1 — DONE 2026-09-05 (cloud wake). A component surface's source
+       set now includes the behavior modules that drive it, read from
+       `behaviors.json`'s `byComponent`.**
+
+       `.roundtable/polish-state.md` has always said a surface re-enters the
+       queue when *its SOURCE* changes. `polish_requeue.py` hashed its docs
+       page and its CSS directories and stopped there — so a behavior module
+       could be rewritten and the surface documenting it would never re-queue.
+       `inline-editing` is the sharpest case: its entire subject is
+       `row-edit.ts`, its source set was the docs page alone, and **10 of 11**
+       commits touching `row-edit.ts` never touched `inline-editing.astro`.
+
+       Generalised over the whole history — a commit is blind when it touched a
+       serving module and none of the surface's own paths — **31 blind commits
+       across 7 surfaces**: `data-table` 19/30, `scan` 5/6, `pagination` 3/4,
+       `stepper` 2/3, `tree-table` 1/3, `alerts` 1/4, `dashboard` 0/2. The
+       other fourteen ledger surfaces have no serving module. `scan`'s row was
+       re-derived by hand against `git log` and reproduces exactly.
+
+       **Said as structural blindness, not as 31 missed re-queues**, because a
+       blind commit is only a *missed* one if the surface was stamped clean at
+       the time and the ledger does not record that. The live proof: after the
+       fix, `--apply` reported **0 rows newly marked** — every affected surface
+       was already queued for another reason. The cost is latent, and it lands
+       on `interaction`, the dimension `dashboard`'s round 2 found scored `na`
+       on a component that ships `initCollapsibleCards`.
+
+       - **Accept:** the map is READ from a generated artefact rather than
+         guessed, on the same rule the docstring already applies to `pageSlug`;
+         a surface the generated map cannot reach is named with a reason and
+         **reconciled against the page it describes on every run**, failing
+         loudly rather than skipping; and the new arm is red-proved with the
+         injection confirmed before the red is believed.
+       - **Met.** `byComponent` (Slice 264's `@serves`, which `check-js-serves`
+         re-derives from the BUILT pages) gives component → exports, and
+         `behaviors[<export>].module` gives the file. The two page-only
+         surfaces cannot be reached that way — `row-edit.ts` declares
+         `@serves data-table`, not `inline-editing` — so they sit in a
+         `PAGE_ONLY_BEHAVIORS` map on the `COMPONENT_NAV_EXTRAS` precedent,
+         **and both entries are taken verbatim from a note written into the
+         ledger on 2026-08-23 by a different route**, which settled what these
+         two pages document: `initRowEdit`; `initTableToolbar`/`initDataGrid`.
+         The one judgement is excluding `initDataTables`, which
+         `table-toolbar.astro` imports and that note does not name — demo
+         scaffolding, not the subject — and it is named as a judgement rather
+         than folded into the derivation. Each entry is re-checked against the
+         page's own import every run.
+       - **Red-proof, injection confirmed first, both arms.** (1) Stamp `scan`
+         clean → `--check` names it **0** times; append a comment to
+         `scan-input.ts` and assert the blob moved `d76699bc → 6be8650a`;
+         re-run → `component/scan 005a87af -> f3491df2`, with the module named
+         in the report. (2) Rewrite `initRowEdit` → `initSomethingElse` in
+         `inline-editing.astro`, assert the occurrence count went **4 → 0**;
+         the script exits **1** naming the map, the surface and the page.
+       - **Refused, measured:** deriving the modules from each page's own
+         `@busy-office/ui/js` imports. It is over-broad on `button`
+         (`initDropdowns`, for one demo) and `richtext` (`initDialogs`), and
+         under-reports `stepper`, which `byComponent` serves with `initWizard`
+         and whose page imports nothing.
+       - **Refused, measured:** extending this to patterns. A pattern screen
+         composes many components, so nearly every behavior would qualify and
+         the predicate would be close to uniformly true — the dead-detector
+         shape 94.11 refuses.
+
+**Not verified, and named rather than implied:** cloud wake, no Podman and no
+`localhost:8081`, so the 1440/390 light-and-dark screenshot lane could not run.
+Nothing in this slice renders — the diff is `scripts/loops/polish_requeue.py`,
+`.roundtable/polish-state.md`, `ROADMAP.md` and the hand-off; **0** files under
+`packages/core/src/` and **0** docs page markup changed — so that is an absence
+of subject, not an unverified claim.
+
 ## Slice 275 — Objective grill of Slices 271, 272, 273, 274: 271 and 272 reproduce whole, and all three defects are one shape — a figure the wake's OWN commit moved, read from `HEAD` and published as the commit's state (2026-09-05)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** for the eighth

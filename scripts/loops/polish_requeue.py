@@ -16,9 +16,49 @@ No timestamps (clock skew, rebases), no diffing prose, no guessing.
 DERIVING THE SOURCE SET. Page slugs are NOT component directory names --
 `alerts` documents `alert/`, and `state-patterns` documents BOTH `skeleton/` and
 `state/`. Guessing that mapping is the documented way to get this wrong, so it
-is read from `api.json`'s generated `pageSlug` map, reversed. A surface with no
-CSS directory at all (`inline-editing`, `table-toolbar` document behaviors on
-data-table) is legitimate and scores on its docs page alone.
+is read from `api.json`'s generated `pageSlug` map, reversed.
+
+THE SET USED TO STOP AT CSS, AND THAT MADE IT BLIND TO EVERY BEHAVIOR CHANGE
+(roadmap 276.1, 2026-09-05). A component's source is its CSS *and* the behavior
+modules that drive it, and until now only the first was hashed -- so a module
+could be rewritten and the surface documenting it never re-queued. Measured
+over the whole history, per ledger surface, counting commits that touched a
+serving module and none of the surface's own paths:
+
+    data-table 19/30 · scan 5/6 · pagination 3/4 · stepper 2/3 ·
+    tree-table 1/3 · alerts 1/4 · dashboard 0/2      -- 31 blind in total
+
+`scan` is the hand-checked row: 5 of the 6 commits to `scan-input.ts` touched
+neither `scan.astro` nor `css/components/scan/`. This is structural blindness,
+not 31 demonstrated missed re-queues -- most rows carry the RE-QUEUED marker
+for some other reason at any given moment, and that is stated rather than
+rounded up. The DSA `interaction` dimension is the one this costs most
+directly: `dashboard`'s round 2 found `interaction: na` on a component that
+ships `initCollapsibleCards`, which is exactly a behavior-side decay.
+
+The mapping is read, never guessed, on the same rule as `pageSlug` above:
+`behaviors.json`'s `byComponent` (Slice 264's `@serves` declaration, which
+`check-js-serves` re-derives from the BUILT pages and fails on disagreement)
+gives component -> export names, and `behaviors.behaviors[<export>].module`
+gives the module file.
+
+A surface with no CSS directory at all documents a behavior that ships on
+ANOTHER component, so `byComponent` -- keyed by component -- cannot reach it:
+`row-edit.ts` declares `@serves data-table`, not `inline-editing`. Those two
+surfaces are named in PAGE_ONLY_BEHAVIORS below, each with its reason, on the
+`COMPONENT_NAV_EXTRAS` precedent, and each entry is RECONCILED against the
+page's own `@busy-office/ui/js` import rather than trusted -- a hand map that
+cannot notice the page moved out from under it is the thing this script exists
+to replace.
+
+Deriving these two from page imports INSTEAD of the hand map was measured and
+refused: the import list is over-broad on `button` (imports `initDropdowns` for
+one demo) and `richtext` (`initDialogs`), and under-reports `stepper`, which
+`byComponent` serves with `initWizard` and whose page imports nothing.
+
+Patterns are deliberately unchanged: a pattern screen composes many components,
+so every behavior in the framework would qualify and the predicate would be
+uniformly true -- the dead-detector shape CLAUDE.md 94.11 refuses.
 
 USAGE
   polish_requeue.py --check    report surfaces whose source moved; exit 1 if any
@@ -48,9 +88,29 @@ LEDGERS = {
 }
 LEDGER = LEDGERS["polish"]  # rebound from --ledger in main()
 API = ROOT / "packages" / "core" / "dist" / "api.json"
+BEHAVIORS = ROOT / "packages" / "core" / "dist" / "behaviors.json"
 
 DOCS_PAGES = ROOT / "apps" / "docs" / "src" / "pages"
 CSS_COMPONENTS = ROOT / "packages" / "core" / "src" / "css" / "components"
+JS_BEHAVIORS = ROOT / "packages" / "core" / "src" / "js"
+
+# Surfaces with no CSS directory of their own: the page documents a behavior
+# that ships on ANOTHER component, so `byComponent` cannot reach it. Named
+# here with the reason, and reconciled against the page's own import below --
+# never trusted on its own.
+PAGE_ONLY_BEHAVIORS = {
+    # `row-edit.ts` declares `@serves data-table`; this page is the one that
+    # documents it, and its own <script> imports exactly this export.
+    "component/inline-editing": ["initRowEdit"],
+    # `table-toolbar.ts` and `data-grid.ts`. Both are taken from this ledger's
+    # own 2026-08-23 note, which settled what these two pages document —
+    # "`initRowEdit`; `initTableToolbar`/`initDataGrid`" — rather than from a
+    # fresh reading of the page. The page ALSO imports `initDataTables`, which
+    # that note does not name; it stands the demo table up rather than being
+    # the subject, so it is excluded. That exclusion is the one judgement in
+    # this map, and it is named as one.
+    "component/table-toolbar": ["initTableToolbar", "initDataGrid"],
+}
 
 
 def git(*args: str, tree: str | None = None) -> str:
@@ -86,13 +146,79 @@ def slug_to_css_dirs() -> dict[str, list[str]]:
 SUITE = ROOT / "examples" / "erp-suite"
 
 
+def _behaviors() -> dict:
+    """behaviors.json, or the same actionable refusal api.json gets."""
+    if not BEHAVIORS.exists():
+        sys.exit(
+            f"polish_requeue: {BEHAVIORS.relative_to(ROOT)} is missing, so the "
+            "component -> behavior-module map cannot be read (it is generated "
+            "from each module's @serves, never guessed).\n  Run "
+            "`npm run build -w @busy-office/ui` first, then re-run this command."
+        )
+    return json.loads(BEHAVIORS.read_text())
+
+
+def _module_file(export: str, beh: dict) -> str:
+    """Repo-relative .ts path for a behavior export. Fails loudly, never skips.
+
+    A map that quietly drops an export it cannot resolve is the derived
+    artefact that decides for itself what it failed to see -- so an unknown
+    export or a module file that is not on disk stops the run instead.
+    """
+    rec = beh["behaviors"].get(export)
+    if rec is None:
+        sys.exit(
+            f"polish_requeue: behaviors.json names no export {export!r}. The "
+            "map is generated from @serves; regenerate it or fix the caller."
+        )
+    path = JS_BEHAVIORS / f"{rec['module']}.ts"
+    if not path.is_file():
+        sys.exit(
+            f"polish_requeue: behaviors.json points {export!r} at "
+            f"{path.relative_to(ROOT)}, which is not on disk."
+        )
+    return str(path.relative_to(ROOT))
+
+
+def behavior_paths(surface: str, css_dirs: list[str]) -> list[str]:
+    """Behavior-module files that drive a component surface.
+
+    Read from `byComponent` for a surface that owns CSS; from the reconciled
+    PAGE_ONLY_BEHAVIORS map for the two that do not. See the module docstring
+    for why the page's own import list is not the input for either.
+    """
+    beh = _behaviors()
+    if css_dirs:
+        exports = sorted({
+            e for d in css_dirs for e in beh.get("byComponent", {}).get(d, [])
+        })
+    else:
+        exports = PAGE_ONLY_BEHAVIORS.get(surface, [])
+        # Reconcile the hand map against the page it describes, every run: an
+        # entry naming an export the page no longer imports is stale, and the
+        # whole point of naming it here was that nothing else can see it.
+        if exports:
+            page = DOCS_PAGES / "components" / f"{surface.split('/', 1)[1]}.astro"
+            src = page.read_text() if page.is_file() else ""
+            imported = set(re.findall(r"\binit[A-Za-z]+\b", src))
+            missing = [e for e in exports if e not in imported]
+            if missing:
+                sys.exit(
+                    f"polish_requeue: PAGE_ONLY_BEHAVIORS names {missing} for "
+                    f"{surface}, but {page.relative_to(ROOT)} does not import "
+                    "it. Update the map (with a reason) or the page."
+                )
+    return [_module_file(e, beh) for e in exports]
+
+
 def source_paths(surface: str) -> list[str]:
     """Repo-relative paths that DEFINE a surface.
 
     An ERP-suite screen is `screen/<module>/<name>` and its whole definition is
     one `.screen.mjs` file — the suite carries no CSS of its own by gate, so
     there is nothing else to hash. Components and patterns are their docs page
-    plus, for a component, the CSS directories that page documents.
+    plus, for a component, the CSS directories that page documents and the
+    behavior modules that drive it.
     """
     kind, slug = surface.split("/", 1)
     if kind == "screen":
@@ -100,10 +226,12 @@ def source_paths(surface: str) -> list[str]:
     folder = "components" if kind == "component" else "patterns"
     paths = [str((DOCS_PAGES / folder / f"{slug}.astro").relative_to(ROOT))]
     if kind == "component":
-        for d in slug_to_css_dirs().get(slug, []):
-            p = CSS_COMPONENTS / d
-            if p.is_dir():
-                paths.append(str(p.relative_to(ROOT)))
+        css_dirs = [
+            d for d in slug_to_css_dirs().get(slug, [])
+            if (CSS_COMPONENTS / d).is_dir()
+        ]
+        paths += [str((CSS_COMPONENTS / d).relative_to(ROOT)) for d in css_dirs]
+        paths += behavior_paths(surface, css_dirs)
     return paths
 
 
