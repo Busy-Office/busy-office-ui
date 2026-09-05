@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-05 15:57 UTC
+Generated at: 2026-09-05 17:40 UTC
 
 ## Open items by slice
 
@@ -26,10 +26,9 @@ Generated at: 2026-09-05 15:57 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1439 iterations logged)
+dispatch status — counter-triggered rules (1441 iterations logged)
   Standardize   3 / 4 Continue rounds since 2026-09-05 06:54   ok
-  Objective     5 / 3 slices          since 2026-09-05 07:40   OVERDUE  [274, 276, 277, 278, 279]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-09-05 17:40   ok
   Optimize      2 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 2 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-03, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-03 (2026-09-04, 2026-09-05), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -49,8 +48,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-05 12:10 · Meta · refusal · the agent's htmx:after:swap finding — htmx 4.0.0 emits exactly that namespaced form; the reading came from the root node_modules, which this repo documents as never hoisted · refused · 0272ed30
-- 2026-09-05 14:25 · Continue · build · 278.3/278.4/278.6 — gate-built composition case, select-all aria-selected fix, corrected cost claim on /components/table-toolbar · landed · aa7d433d
 - 2026-09-05 14:25 · Meta · refusal · a new public event from data-table.ts to publish selection changes — widens the contract to fix a sync data-grid.ts can do on its own · refused · aa7d433d
 - 2026-09-05 14:25 · Meta · refusal · queueMicrotask as the deferral mechanism — measured wrong under a trusted click; setTimeout(...,0) instead · refused · aa7d433d
 - 2026-09-05 14:54 · Continue · build · 278.5 — Columns demo shipped multi-select markup without initDropdowns; menu opened at viewport corner, 404px above its invoker. Fixed, gated in check:claims, red-proved twice · landed · a098cf85
@@ -59,6 +56,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-05 15:51 · Meta · refusal · the BLANKET converse arm in check-components-used: 357 misses across 39 of 39 pages, a predicate uniformly true · refused · 5abdce3c
 - 2026-09-05 15:57 · Meta · dispatcher · 279.4 — Polish added to CLOSES_A_SLICE: rule 3 was blind to 12 closed slices for the whole Polish-dispatched era · landed · 632bfc46
 - 2026-09-05 15:57 · Meta · refusal · adding Meta to CLOSES_A_SLICE — its 3 rows record machinery about the loop, which is the Roadmap exclusion's reason · refused · 632bfc46
+- 2026-09-05 17:40 · Objective · grill · Slice 280 — Objective grill of Slices 276, 277, 278, 279: 52 of 54 assertions reproduce; 276.1's blind-commit table measured the tree BEFORE its own fix — 31 across 7 is 51 across 9, and the two dropped rows are the two PAGE_ONLY_BEHAVIORS surfaces that same item added, one of them the 10/11 its own opening paragraph quotes; corrected in 3 of the 4 places it spread · landed · 71b44721
+- 2026-09-05 17:40 · Meta · refusal · gating the blind-commit walk — the predicate holds for 51 of 73 qualifying commits at 29a9062b, so a gate over it would be red on a correct tree (94.11 base rate) · refused · 71b44721
 
 ## Sunset test
 

@@ -15,7 +15,7 @@ Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_
 - [`surface-baseline.md`](surface-baseline.md) — the scored-surface baseline
 - [`surface-review-rubric.md`](surface-review-rubric.md) — how a surface is scored
 
-## Findings — 176 snapshots, newest first
+## Findings — 177 snapshots, newest first
 
 A **·** marks a file nothing outside `.roundtable/` links to. That is not a defect: a grill can settle a question without anything needing to cite it afterwards. It is here so the uncited set stays visible instead of growing unnoticed.
 
@@ -27,6 +27,7 @@ A **·** marks a file nothing outside `.roundtable/` links to. That is not a def
 | — | [0.3.0 release brief — read in under a minute (2026-08-22)](release-0.3.0-brief.md) | ✓ |
 | — | [Suite score — the screen ledger](suite-score.md) | ✓ |
 | 2026-09-05 | [Objective grill — Slices 271, 272, 273, 274 (2026-09-05, cloud wake)](grill-objective-271-272-273-274-2026-09-05.md) | ✓ |
+| 2026-09-05 | [Objective grill — Slices 276, 277, 278, 279 (2026-09-05, cloud wake)](grill-objective-276-277-278-279-2026-09-05.md) | · |
 | 2026-09-04 | [Objective grill — Slices 256, 257 (2026-09-04, cloud wake)](grill-objective-256-257-2026-09-04.md) | ✓ |
 | 2026-09-04 | [Objective grill — Slices 263, 264 (2026-09-04, cloud wake)](grill-objective-263-264-2026-09-04.md) | · |
 | 2026-09-03 | [Triage — docs adoption surface proposal (2026-09-03)](grill-adoption-proposal-2026-09-03.md) | ✓ |
@@ -209,4 +210,4 @@ The signature of a directory that has outgrown retrieval is the same subject inv
 
 Two files on one subject is usually a deliberate follow-up (a grill and its sign-off). Three is worth a look.
 
-— 184 files, 132 cited from outside, 53 uncited snapshots, 4 repeated subject(s).
+— 185 files, 132 cited from outside, 54 uncited snapshots, 4 repeated subject(s).
