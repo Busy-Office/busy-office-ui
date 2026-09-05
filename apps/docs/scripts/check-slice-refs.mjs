@@ -51,6 +51,38 @@
  * reaction to the outage above — "stop scanning the notes directory". It would
  * drop those 16 and re-open exactly the silent rot this gate exists to catch.
  *
+ * WHICH FILES ARE SCANNED IS A DENYLIST, AND IT USED TO BE AN ALLOWLIST OF SIX
+ * EXTENSIONS (roadmap 270.1). `.ts` and `.json` were not among them, so the
+ * shipped behaviour sources, the core tests and `dsa-scores.json` — the files
+ * this framework's JavaScript layer and its evidence record actually live in —
+ * were invisible to the gate that exists to keep citations resolvable. Eleven
+ * distinct refs were cited from nowhere the gate looked (base rate 11 of 293 =
+ * 3.8%; neither 0 nor 100%, so the predicate discriminated). Nothing was broken
+ * — all eleven resolved — so the defect was REACH, which is what this gate is
+ * for: trim the archive and those eleven rot with nothing to catch them.
+ *
+ * The fix is a denylist rather than two more extensions, because an allowlist
+ * that omits a type nobody remembered IS the defect, and adding `ts` and `json`
+ * to it leaves the same failure mode alive for the next type. Measured before
+ * choosing, over the tracked tree: the allowlist plus `ts,json` reads 848 files
+ * / 7.4 MB and finds 295 distinct refs; this denylist reads 698 files / 6.6 MB
+ * and finds the SAME 295, in 164 ms against the old filter's 159 ms. Cheaper
+ * and more general, at equal reach. Figures are snapshots — the gate prints its
+ * own counts on every run, and that is what to read.
+ *
+ * TWO EXCLUSIONS, EACH FOR A MEASURED REASON:
+ *
+ *  - `apps/docs/versions/**` — FROZEN docs snapshots. A citation there cannot
+ *    be repaired: the snapshot is a historical artefact of what shipped, so a
+ *    trimmed archive would leave this gate permanently red with no remedy but
+ *    the baseline below. It costs nothing to skip them — every ref they carry
+ *    is also cited from a live file, so excluding them changes the distinct-ref
+ *    set by ZERO. Note this is a small REDUCTION in reach as well as a
+ *    widening: the old allowlist was already scanning the frozen `.css`/`.js`
+ *    inside those snapshots, and that obligation is the one being dropped.
+ *  - Binary payloads, which have no prose to cite from and are read as UTF-8
+ *    garbage if included.
+ *
  * AND IF YOU ARE WRITING ABOUT THIS GATE, DO NOT SPELL ITS FAILURE LINE. Prose
  * quoting `FAIL roadmap <n>` verbatim puts a citation-shaped string pointing
  * nowhere into a scanned file, and this gate correctly fails on it — an
@@ -196,9 +228,20 @@ try {
   console.log('  citations could not be enumerated and were NOT verified here.');
   process.exit(0);
 }
+/** Frozen docs snapshots: a dangling citation in one is unrepairable, and they
+ *  carry no ref a live file does not. */
+const FROZEN = /^apps\/docs\/versions\//;
+/** No prose to cite from; read as UTF-8 these are garbage. */
+const BINARY = /\.(png|jpe?g|gif|webp|avif|ico|woff2?|ttf|otf|eot|pdf|zip|gz|tgz|db|sqlite3?)$/i;
+
 const files = listing
   .split('\n')
-  .filter((f) => /\.(css|mjs|js|astro|md|py)$/.test(f) && !f.startsWith('ROADMAP'));
+  .filter((f) => f && !f.startsWith('ROADMAP') && !FROZEN.test(f) && !BINARY.test(f));
+assertScanned(
+  files.length,
+  'source file(s) to scan',
+  'the denylist matched everything, or `git ls-files` returned nothing?',
+);
 
 const cites = new Map();
 for (const f of files) {
@@ -215,7 +258,13 @@ const resolves = (ref) =>
     ? new RegExp(`\\b${ref.replace('.', '\\.')}\\b`).test(corpus)
     : new RegExp(`^## Slice ${ref}\\b`, 'm').test(corpus);
 
-const g = gate('slice-refs check', 'slice citation(s)');
+/* The noun is `assertion(s)`, not `slice citation(s)`, and the difference is not
+   cosmetic — it was measured while reconciling this gate's run line against an
+   independent enumeration (roadmap 270.1). Most of the count is the uniqueness
+   loop, not citations: at the time of writing, 481 heading checks (252 live +
+   229 archived) against 293 resolve checks. The old noun invited reading the
+   first number as "citations checked", which is the third number on the line. */
+const g = gate('slice-refs check', 'assertion(s)');
 
 /* Uniqueness first: every check below asks a citation to resolve, and a number
    heading two sections makes "resolves" the wrong question. */
@@ -255,6 +304,7 @@ for (const [ref, where] of cites) {
   );
 }
 g.report(
-  `checked (${cites.size} cited, ${KNOWN_DANGLING.size} known-dangling baseline) ` +
+  `checked (${cites.size} cited across ${files.length} scanned file(s), ` +
+    `${KNOWN_DANGLING.size} known-dangling baseline) ` +
     `and ${seen.size} slice number(s) each heading one section`,
 );

@@ -315,6 +315,125 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 271 — `check:slice-refs` reaches the whole tracked tree: the fix for 270.1 is a DENYLIST, because an allowlist that omits a type nobody remembered *is* the defect — and reconciling the run line against an independent count found the gate's headline number counting the wrong noun (2026-09-05)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again — trap 1
+for the third consecutive wake. `git branch --show-current` empty, local `main`
+stale at `26447ba` against a pushed `ceca258`; fixed with
+`git checkout -B main origin/main` before any work. `--unshallow` clean in one
+attempt (**1,873** commits, no `shallow.lock`); it did **not** bring the tags
+(`git tag` read **0**), so ENVIRONMENT trap 2's second half bit exactly as
+written and `git fetch --tags origin` returned all seven. Rule 1: no open P0 —
+`list_issues` on `Busy-Office/busy-office-ui` returns `totalCount: 0`, and no
+open `N. [ ]` item is a P0. Step 1 triaged and committed nothing: no new input.
+Rule 2 **1 / 4 … ok**. Rule 3 **0 / 3 … ok**. **Rule 4 MATCHED for the first
+time in seven wakes** — `270.1` is neither owner- nor browser-blocked (a file
+filter plus a red-proof, no rendered image anywhere in its Accept), and it is
+the oldest open item of which that is true: everything older is owner-blocked
+(Slice 15, `112.3`, `112.4`, `249.7`, `249.10`-`249.13`) or browser-blocked in
+the SCREENSHOT sense (`249.6`, `249.9`, `249.15`). **Rules 5 and 6 were
+therefore not evaluated** — Step 2 dispatches the FIRST match — and this is
+worth one line because six consecutive hand-offs have reported rule 5's clauses
+out of habit; the rule below a match is not answered, it is unreached.
+
+### What changed, and why it is not the two extensions the item asked for
+
+`270.1` asked for the filter to admit `.ts` and `.json`. It now admits
+everything tracked, minus two named exclusions, and the reason is the item's own
+diagnosis turned one notch: **an allowlist of six extensions that silently
+omitted the language the shipped behaviours are written in is a failure mode,
+not a typo.** Adding two entries leaves it alive for the seventh type.
+
+Measured over the tracked tree before choosing, not after:
+
+| filter | files read | MB | distinct refs | ms |
+|---|---|---|---|---|
+| old allowlist (6 extensions) | 761 | 6.4 | 284 | 159 |
+| allowlist + `ts`,`json` | 848 | 7.4 | **295** | 179 |
+| **denylist (shipped)** | **698** | **6.6** | **295** | **164** |
+| denylist without the frozen exclusion | 1,183 | 31.2 | 295 | 368 |
+
+The denylist reads **fewer files than the allowlist it replaces** and finds the
+same 295 distinct refs. The two set-differences were computed rather than
+assumed, in both directions: refs the denylist finds that `+ts,json` does not,
+**none**; refs `+ts,json` finds that it does not, **none**.
+
+**Two exclusions, each with a measured reason.** Binary payloads, which have no
+prose to cite from. And `apps/docs/versions/**` — the frozen docs snapshots —
+because a dangling citation inside one **cannot be repaired**: the snapshot is a
+record of what shipped, so a future archive trim would leave this gate
+permanently red with the baseline as the only remedy. That exclusion is a small
+REDUCTION in reach as well as a widening, and it is stated rather than buried:
+the old filter was already scanning the frozen `.css`/`.js` inside those
+snapshots. It costs **zero** distinct refs — every ref the frozen tree carries
+is also cited from a live file (the table's last row is that measurement).
+
+### The reconciliation found a second defect, in the number the gate reports
+
+Accept asked that the reported count agree with an independent enumeration
+*asserted rather than assumed*, so a probe re-derived the file set from
+`git ls-files` and re-counted, importing only the gate's `citationsIn` (a probe
+with its own extractor is worthless — the gate's header carries that lesson).
+Two of three rows agreed at once; the third disagreed, **and the instrument was
+what was wrong**, per this repo's base rate for a new probe's first output.
+
+The gate's headline read *"774 slice citation(s) checked"* while 295 refs are
+cited. Decomposed: **481 heading-uniqueness checks (252 live + 229 archived) +
+293 resolve checks (295 cited − 2 known-dangling) = 774**. The first number was
+never citations; the noun was. Fixed to `assertion(s)`, which is what the gate
+counts, and the run line now names its own reach: refs cited, files scanned,
+baseline size. All three now reconcile exactly — gate 295 / 698 / 774 against
+probe 295 / 698 / 774.
+
+### Red-proved two-sidedly, and once per newly-reached file type
+
+The injection was confirmed present in the file before any result was believed,
+and the *same* injection was confirmed invisible beforehand — the criterion's
+second half, which is what separates "the gate did not fire" from "the gate
+cannot see this file type". ENVIRONMENT's rule against `git stash` for an A/B
+was followed: the previous gate was extracted with `git show HEAD:<path>` into a
+sibling probe file and run against the identical dirty tree, then deleted.
+
+- Old gate, injected tree → **exit 0**, at a byte-identical `763 … (284 cited)`.
+- New gate, `.ts` injection alone → **exit 1**, detail naming
+  `packages/core/src/js/behaviors/anchor-nav.ts`.
+- New gate, `.json` injection alone → **exit 1**, detail naming
+  `apps/docs/src/data/dsa-scores.json`.
+- New gate, reverted tree → **exit 0**. `git status` clean, marker in no file.
+
+Each type was proved **separately** on purpose: injected together they collapse
+into one failing assertion (same ref, two citers), which would have proved one
+of the two file types and not said which.
+
+**The injected number is named by its property, not written down**, and that is
+deliberate rather than coy: this file is half the corpus the gate resolves
+against, so spelling the number here would make it *resolve* and quietly disarm
+the next wake's re-proof. Pick one the same way — `grep -o '\b<n>\b' ROADMAP.md
+ROADMAP-archive.md | wc -l` must read 0 before injecting.
+
+**Newly-scanned files turned up no dangling citations**, so the known-dangling
+baseline is unchanged at two: the 99 citations in the previously-unscanned set
+all resolve, which is what `270.1` predicted and what made it a reach defect
+rather than a content one.
+
+### Verification, and what a cloud wake could not do
+
+All **17** CI entry points re-derived from `ci.yml` this wake and run green,
+including the browser sweeps (`test:axe` 127 pages x 2 widths zero violations,
+`check:layout` 127 pages, `check:scroll` 912 containers, `suite` 28 screens).
+`check:claims` reads *162 live · 3 NOT VERIFIED* — ENVIRONMENT 6b's container
+property, and the live count is up from 158, which is prose landing.
+
+**Not verified, named rather than implied:** cloud wake, so the 1440/390
+light-and-dark screenshot lane could not run. It is not needed here and that is
+measurable rather than asserted — the diff touches `apps/docs/scripts/` and
+markdown only: **0** files under `packages/core/src/`, **0** docs pages, **0**
+CSS. Nothing in this wake's diff renders.
+
+1. [x] **271.1 — DONE.** Filter widened to a denylist; counts reconciled against
+       an independent enumeration; red-proved per file type; the run line's noun
+       corrected. Closes `270.1`.
+
 ## Slice 270 — Polish round on `tree`: all six cites hold, and the finding is that `check:slice-refs` cannot see the file extensions the shipped BEHAVIOURS are authored in — 11 slice references are cited from nowhere the gate looks (2026-09-04)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again —
@@ -451,7 +570,10 @@ the `.css` half is what discharges that — the detector can fail, on this exact
 string, and does not only because of the extension list. Both files were
 reverted; `git status` is clean and `redproof` appears in neither.
 
-1. [ ] **270.1 — `check:slice-refs` cannot see `.ts` or `.json`.** Widen the
+1. [x] **270.1 — DONE, Slice 271**, and fixed one notch wider than filed: the
+       extension allowlist became a denylist, because an allowlist that omits a
+       type nobody remembered is the failure mode rather than the typo. Original
+       text kept below. Widen the
        file filter so the shipped behaviour sources, the core tests and
        `dsa-scores.json` are scanned. **Not fixed in this round**: 101.3's stop
        rule confines Polish to maintenance of the existing ratchet and no DSA
