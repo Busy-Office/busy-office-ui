@@ -512,13 +512,21 @@ match to its full playbook below:
 
    **This predicate is not a queue test, and reading it as one is what made
    176.2 look like a contradiction** (measured 2026-08-28, roadmap 176.2).
-   Parsed across **all 11 revisions** of `.roundtable/polish-state.md`,
-   `budget_spent = 0` and `marked_dry = 0` in **11 of 11** — every row, every
-   revision. So the predicate is true of **19 of 19** non-skipped surfaces and
-   always has been. That 100% is structural rather than an instrument bug:
-   the dry exit needs **two consecutive** rounds that fail to move a blind
-   re-score, and every seeded surface landed its clause in **one** round, so
-   nothing ever got a second round to be dry in.
+   Parsed across every revision of `.roundtable/polish-state.md`,
+   `budget_spent = 0` and `marked_dry = 0` in all of them — every row, every
+   revision — so the predicate is true of every non-skipped surface and always
+   has been. **The REASON recorded here for that was false in the commit that
+   wrote it** (re-measured 2026-09-05, roadmap 273.1). It read *"every seeded
+   surface landed its clause in one round, so nothing ever got a second round
+   to be dry in"*; `component/scan` was already at `2/3` in `eb7fd36c`, that
+   same commit, and **16 of 21 rows now carry a second round, 8 of them
+   recorded NO-OP on the surface, with `dry` reading 0 on all sixteen**. The
+   counter reads zero because no round has ever incremented it, not because
+   no round could. §3b step 5 says a round whose score does not move is
+   `dry++`; the practice has never done it, and resolving that either way is
+   **273.2, an owner call** — do NOT simply start incrementing, which would
+   retire surfaces and narrow this rule exactly as the refusal below forbids.
+   Re-run the parse; these are snapshots.
 
    Two consequences, both measured rather than argued:
 
@@ -927,12 +935,16 @@ see. **A dead trigger on another loop is not that trigger** (see Optimize).
 **Exit:** every surface dry or budget-spent → hands to Research (rule 7).
 **⚠ This has never been true. CLOSED as no-change by the owner, 2026-08-29 —
 roadmap 176.3; accepted, not a defect. Do not re-raise.** Measured
-across all 11 revisions of `.roundtable/polish-state.md`: `budget_spent = 0`
-and `marked_dry = 0` in **11 of 11**, so both halves of the disjunction have
+across every revision of `.roundtable/polish-state.md`: `budget_spent = 0`
+and `marked_dry = 0` in all of them, so both halves of the disjunction have
 always been false and Polish has no exit. The log agrees — **0** `Research`
-rows in 1065, so rule 7 has never been dispatched and rule 8, which sits below
-it, is equally unreachable. Structural, not a bug: a surface that lands its fix
-in one round never gets the second round the dry exit needs.
+rows, so rule 7 has never been dispatched and rule 8, which sits below
+it, is equally unreachable. **The explanation this carried until 2026-09-05
+was wrong** (roadmap 273.1): it said a surface that lands its fix in one round
+never gets the second round the dry exit needs, and second rounds are in fact
+the common case — 16 of 21 rows have one. `dry` stays 0 because no round
+increments it, not because none could. The exit's unreachability is unchanged
+and still accepted; only its stated reason was false.
 **Re-entry:** a surface's budget resets when its SOURCE changes — its CSS,
 its docs page, or its rubric definition. Never on a timer: work re-enters
 the queue because the thing actually changed.

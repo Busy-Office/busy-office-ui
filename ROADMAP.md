@@ -315,6 +315,219 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 273 — Polish round on `byline`: six cites hold and five arms reproduce, and two findings — the reason `LOOPS.md` records for `dry = 0` was false in the commit that wrote it, and the blind re-score found the page recommending the context its own wrong-choice clause forbids (2026-09-05)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty; `HEAD` at `14947d1` with no local `main`) —
+ENVIRONMENT trap 1, fixed with `git checkout -B main origin/main` before any
+work. `--unshallow` clean in one attempt (**1,877** commits, no `shallow.lock`)
+and `git fetch --tags origin` brought all **seven**, so trap 2 did not bite —
+the hand-off's instruction to fetch tags explicitly rather than expect either
+outcome is what made that a check instead of an assumption. Rule 1: no open P0
+— `list_issues` on `Busy-Office/busy-office-ui` returns `totalCount: 0`, and no
+open `N. [ ]` item is a P0. Step 1 triaged and committed nothing: no new input.
+Rule 2 **3 / 4 … ok**; rule 3 **2 / 3 … ok [271, 272]**.
+
+**Rule 4 found nothing dispatchable**, and per `LOOPS.md` 186.2 the kind is
+named rather than lumped, each item re-read from `ROADMAP.md` this wake rather
+than copied from the hand-off: **owner-blocked** Slice 15, `112.3`, `112.4`,
+`249.7` (its own text holds its seed for 249.10), `249.10`-`249.13`;
+**browser-blocked in the SCREENSHOT sense** (a LOCAL wake can take these)
+`249.6`, `249.9`, `249.15`; **agent-blocked** none; **not blocked** none.
+Rule 4's own sweep clause did not fire either: `roadmap_scope.py` reads
+**837 / 3,689 = 22.7%** closed history, of which **673 lines are the four
+targets 236.2 pins to open Slice 249**, leaving Slice 272 alone — one slice,
+moved one wake ago — as the whole eligible scope.
+
+Rule 5: `dispatch_status.py` reads `2 wake-date(s) newer … STALE`, so the trend
+clause **could not be evaluated** rather than being reported clear. The rule's
+SECOND clause (184.2's, "a size budget breached outright") **was** evaluable and
+is clear — `check-size.mjs` passed at *139 shipped payload file(s) in 11 budget
+bucket(s), 376.2 kB gz total; tightest headroom 110 bytes*
+(`css/brand-navy.min.css`), the same reading 268 recorded. Rule 6 fired.
+
+### The pick
+
+§3b step 1: every non-skipped row scores 3, so "lowest score" does not
+discriminate and "fewest rounds used" does — **4 rows at `1/3`** against 16 at
+`2/3`. 268's rule drops `inline-editing` and `table-toolbar` (no
+`dsa-scores.json` entry, so no arm can disagree with them), leaving `byline` and
+`pagination`. `byline` taken.
+
+### `byline`'s own six cites all hold
+
+Checked at the source, comment-stripped where the claim is about declarations.
+
+- **typography** *"sizes from `--bo-font-size-sm/xs`; no raw font-size"* — both
+  tokens present, **0** raw `font-size` values.
+- **colour** *"zero raw colour; name is emphasis ink, remainder secondary"* —
+  **0** hex/`rgb(`/`hsl(`; `--bo-color-text-secondary` on the base and
+  `--bo-color-text-primary` on `strong, b`, exactly as claimed.
+- **spacing** *"zero raw dimension literals — the whole file is tokens"* — holds
+  on the unit-bearing reading arm 5 uses. `min-inline-size: 0` is the one bare
+  number, and it is **not** a byline literal: the same idiom appears in **16**
+  component files. Recorded because it was the round's most promising-looking
+  defect and the base rate is what refuted it.
+- **interaction: `na`** *"plain markup, no behavior"* — holds on both readings
+  the ledger now has: `behaviors.json`'s `byComponent.byline` is `[]` (arm 9)
+  and `byline.css` paints **zero** interaction-state selectors (arm 10).
+- **content** — the quoted clause renders on the built page (arm 4), and
+  `check:wrong-choice` passes at *156 assertions / 80 pages / 1 outstanding*.
+- **fit** *"record headers, comments, feed items, audit notes; composes
+  `.bo-avatar` rather than owning a disc"* — the opener names all four contexts;
+  `byline.css` paints no disc and says so in place.
+
+`byline.css`'s comment also asserts a fact about **another file** — *"Breaking
+(listed in the CHANGELOG)"*. It holds: `CHANGELOG.md:1265-1271` carries the
+`.bo-avatar` promotion as a **Breaking** entry in those words. It is the only
+such cross-file claim in the shipped CSS (`grep 'in the CHANGELOG'` → 1).
+
+### The arms
+
+| arm | reading |
+|---|---|
+| 1 wrong-choice clause | `156 assertions / 80 pages / 1 outstanding` (the skipped `date`) |
+| 2 score rendered by its page | `360 assertions / 40 scored`; `Not yet scored` in **0** dist files |
+| 3 line-number cites | **0 of 40** — 266's fix has not regrown |
+| 8 `interaction: na` pages importing a behaviour | **0 of 16** |
+| 9 `interaction` vs declared `@serves` relation | `na`&served **1** (`stepper::initWizard`); 3&served 17; 3&none 7; `na`&none 15 |
+| 10 `interaction: na` painting its own state | **1 of 16** — stepper, 3 × `[aria-current` |
+| 13 **NEW** — cites naming another component's class | **17/17** resolve against `api.json` |
+
+Arm 9 **reproduces 268's table with breadcrumb's fix applied and nothing else
+moved** — `3/none` 6 → 7 and `na/none` 16 → 15, the two cells 269's `na`→`3`
+had to touch, with `3/served` unchanged at 17. That is the independent
+reconciliation, not the arm's own say-so.
+
+**Arm 9's first implementation returned `served = 0` for all 40**, because it
+looked `byComponent` up by CSS class where the file is keyed by component name.
+Caught by this repo's own rule — an identical value across many inputs is a
+defect in the instrument until proven otherwise — before any verdict rested on
+it, and the corrected arm is what the table reports.
+
+### Arm 13, and why its 17/17 is not offered as a gate
+
+Red-proved by injection, the injection confirmed before the red was believed:
+renaming `byline · fit`'s `.bo-avatar` to `.bo-avatarr` (asserted absent from
+`api.json`) takes the arm 17/17 → **16/17** naming that exact cite. So it can
+fail. But resolution is not truth, and the arm's value is in the second
+reading, which is a human one: of the three cross-component claims spot-checked,
+`progress · fit`'s *"the source names `.bo-stepper`"* holds at
+`progress.css:8`, `byline · fit`'s composition holds, and `sidebar-nav · fit`'s
+*"composes inside `.bo-offcanvas`"* holds as real DOM nesting on **117 of 165**
+built pages — not as file co-occurrence, which is the weaker reading this
+repo has been caught by before. A 100% existence check that distinguishes
+nothing today is 94.11's refused gate, so arm 13 is reported, not shipped.
+
+1. [x] **273.1 — the finding: `LOOPS.md`'s reason for `dry = 0` was false in
+       the commit that wrote it.** Parsed over **all 30 revisions** of
+       `.roundtable/polish-state.md`: `budget_spent = 0` and `dry > 0` count
+       **0 in 30 of 30**, so the numeric claim still holds on a denominator
+       that has grown from 11. The **reason** does not. It read *"every seeded
+       surface landed its clause in one round, so nothing ever got a second
+       round to be dry in"* — written in `eb7fd36c` (2026-08-28 16:41:03Z), a
+       revision whose own ledger already carried `component/scan` at `2/3`.
+       Today **16 of the 20 non-skipped rows carry a second round**, **8** of
+       them recorded `NO-OP` on the surface, and `dry` reads **0** on all
+       sixteen. So the counter is zero because **no round has ever incremented
+       it**, not because no round could — and the two are not the same fact:
+       one is structural and needs nothing, the other is bookkeeping that is
+       not happening. Stated in both places `LOOPS.md` carried it (rule 6, and
+       §3b's Exit), corrected in place rather than appended, because lane 4's
+       ratchet reads `LOOPS.md` as accumulating with no cut behind it.
+       - **Accept:** the parse is red-proved by injection **(done — a copy of
+         the ledger with `byline` set `dry 1` and `pagination` set `3/3`, the
+         injection confirmed present in the file, moves the reading from
+         `dry>0=0, spent=0` to `dry>0=1, spent=1`)**; and `LOOPS.md`'s wording
+         states the property to re-measure, not the value it will have.
+
+**Sent to the owner rather than resolved here:**
+
+2. [ ] **273.2 — §3b step 5 mandates `dry++` on a round whose score does not
+       move, and no round has ever done it. OWNER CALL.** The conflict is real
+       in both directions and neither side is safe to take unilaterally:
+       - **Start incrementing** and the 8 NO-OP rows go to `dry 1`; the next
+         no-op on any of them marks it DRY, forfeits its budget, and
+         `polish_requeue.py` stops re-queueing it. Within a few wakes that
+         empties the Polish lane — which is **exactly what 176.3 refused**,
+         on the measured ground that the redundant-looking second rounds are
+         the lane that finds the real defects.
+       - **Leave it** and §3b step 5 is a written rule that nothing executes,
+         which is the shape this repo keeps paying for (`check:resume-charter`
+         hardened and demoted 44 minutes apart; rule 5 keeping only its dead
+         half for six days).
+       - The empirical input the owner should have: of the **8** rounds
+         recorded NO-OP on their surface, **6** filed a real defect found
+         elsewhere in the same round (231.2, 267.1, 268.1, 269.1, 270.1, and
+         tree-table's base-rate correction); **2** — `badge` and `stepper` —
+         found nothing at all. So "the score did not move" and "the round was
+         busywork" have come apart 6 times out of 8, and `dry` as written
+         cannot tell them apart.
+       - **Accept:** the owner picks one of — execute step 5 as written;
+         redefine dry as "no score movement **and** no finding filed"; or
+         delete the dry exit and say Polish runs until the owner stops it.
+         Whichever is picked, `LOOPS.md` §3b step 5 and rule 6 agree with the
+         ledger's own columns afterwards, asserted by re-running the parse in
+         273.1 rather than by reading the prose.
+
+### §3b step 4 ran, and it is what found the surface's own defect
+
+A second agent was given the surface, the dimension and the rubric text, and —
+per 268.2, which is the first round to apply that correction rather than record
+it — was told **outright that the built page publishes a prior verdict, that
+the published value is not evidence, and to reach its own reading from the page
+source and the shipped CSS first**. It returned **3**, quoting the same clause
+and naming the same `data-table` alternative.
+
+**The direction of the bias is stated, per 268.2: this re-score AGREES with the
+published value, so it is weak evidence for the score itself.** What it is not
+weak evidence for is what it found unprompted, which no arm in this ledger
+looks at: **the page recommends the context its own wrong-choice clause
+forbids.**
+
+3. [ ] **273.3 — byline's wrong-choice clause forbids a POSITION while its
+       reasoning forbids a PRACTICE, and the framework's own screens sit in
+       the gap.** Three artefacts disagree, each measured this wake:
+       - The opener says *"**Not inside the cells of a sortable grid**"* and
+         draws its boundary at *"whether the reader scans DOWN a column"*.
+       - `--compact`'s rationale said *"for dense feeds and table cells"* — in
+         the docs heading **and in the shipped CSS comment the docs derive
+         from**, which is the half that made it more than a typo. **FIXED this
+         wake**, on a base rate rather than an opinion: of the **21** markup
+         uses of `bo-byline--compact` in the repo (8 kanban, 5 notification,
+         4 po-app, 2 report, 1 role-home, 1 its own page), **0** are in a
+         `<td>` or `<th>`. The modifier's stated purpose named a context
+         nothing used and the opener forbids.
+       - **Still open:** `.bo-byline` appears inside a table cell on **2** built
+         pages — `/patterns/settings-admin` and `/components/avatar`, whose demo
+         is headed *"In context — assignee column"*. Both are a **name + avatar
+         only**, so neither commits the packing the opener's reasoning actually
+         objects to (*"actor and timestamp into one cell buries the value that
+         differs inside two that repeat"*) — but both are squarely inside the
+         position its headline forbids, and a reader following the clause would
+         conclude the avatar page's own exemplar is wrong.
+       - **Accept:** each of the two either changes, or the opener records in
+         one line why a single-value name cell is not what the clause rules out
+         — written so that finding the clause CORRECT as it stands is a
+         satisfying outcome, not an off-plan one (149.1's shape). Whichever is
+         chosen, `check:wrong-choice` still passes and the clause and the two
+         screens no longer contradict each other, asserted by re-running the
+         `<td>`-containing-`bo-byline` count over `dist` rather than by reading
+         the prose.
+
+**This round is therefore NOT a NO-OP on its surface**, which matters for
+273.2's tally: it belongs with the rounds that found a defect *on* the thing
+they were scoring, not with the 8 recorded NO-OP, and it leaves those figures
+unchanged.
+
+**Not verified, and named rather than implied:** cloud wake, so the 1440/390
+light-and-dark screenshot lane could not run. The change to a rendered surface
+is **two lines of text** — one `<h2>` on `/components/byline` and one CSS
+comment, which postcss strips, so no `.min.css` byte moves. Overflow at both
+widths is covered by `check:layout` (390px and 150% zoom) and `check:scroll`,
+both run below; **whether the shortened heading looks right at 390px was not
+seen by anyone**, and that is the residue a LOCAL wake would close.
+
 ## Slice 272 — the eleventh archive sweep, dispatched from inside rule 4 with rule 4 finding nothing else: 17 slices moved, and reading the four 236.2 refuses found that NONE of them is named by an amend clause — all four are provenance citations, and they stay put anyway (2026-09-05)
 
 **Dispatcher trace, cloud wake.** Rule 1: no open P0 — `list_issues` on

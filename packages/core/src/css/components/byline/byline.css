@@ -17,7 +17,10 @@
     font-weight: var(--bo-font-weight-medium);
   }
 
-  /* --compact: xs, for dense feeds and table cells. */
+  /* --compact: xs, for dense feeds, notification lists and card sub-lines.
+     NOT "table cells", which this comment used to say: the docs opener's
+     wrong-choice clause rules those out, and 0 of the 21 uses of this
+     modifier in the repo is in one (roadmap 273.3). */
   .bo-byline--compact {
     font-size: var(--bo-font-size-xs);
   }
