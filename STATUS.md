@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-05 01:45 UTC
+Generated at: 2026-09-05 02:45 UTC
 
 ## Open items by slice
 
@@ -24,9 +24,9 @@ Generated at: 2026-09-05 01:45 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1403 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-09-04 09:57   ok
-  Objective     1 / 3 slice           since 2026-09-04 13:02   ok  [271]
+dispatch status — counter-triggered rules (1405 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-09-04 09:57   ok
+  Objective     2 / 3 slices          since 2026-09-04 13:02   ok  [271, 272]
   Optimize      2 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 2 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-03, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-03 (2026-09-04, 2026-09-05), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -45,8 +45,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-04 17:58 · Polish · round · Slice 268 — Polish round 2 on component/navbar: six cites hold; two new arms find breadcrumb · interaction scored na 7h14m before the rubric clause that forbids it · landed · a783a089
-- 2026-09-04 17:58 · Meta · refusal · a gate over arms 9/10 — the arm is red on a correct tree (stepper) even after the fix, 243's ground for refusing arm 8's · refused · a783a089
 - 2026-09-04 21:47 · Polish · round · Slice 269 — Polish round 2 on component/breadcrumb: all six cites hold incl. 268's five new interaction assertions; new arm 11 finds the only two score-moving blind re-scores both left `scored` behind, and dsa-scores.json's $comment mandated the update they correctly refused · landed · 5980f5d2
 - 2026-09-04 21:47 · Meta · refusal · a gate for arm 11's predicate — ninth refusal, and on 268's ground rather than 101.3's: the arm is RED on a correct tree, so a gate would fail the build on two right answers (base rate 2 of 40 entries recorded anyway) · refused · 5980f5d2
 - 2026-09-04 21:47 · Meta · refusal · relabelling Maturity.astro's 'Alignment scored' to 'last full pass' — page markup, a rendered change this cloud wake cannot verify, and the amended $comment already makes the published pairing correct · refused · 5980f5d2
@@ -55,6 +53,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-04 22:43 · Meta · refusal · a rubric arm asserting the 56 slice numbers inside dsa-scores.json cites resolve — all 56 do, and widening the gate makes such an arm redundant by construction · refused · 2b443fb6
 - 2026-09-05 01:45 · Continue · build · Slice 271 / 270.1 — check:slice-refs file filter widened from a six-extension allowlist to a denylist (698 files, 295 refs), run-line noun corrected to assertion(s), red-proved per newly-reached type · landed · 51244205
 - 2026-09-05 01:45 · Meta · refusal · adding .yml to the scan: measured, it rescues 0 zero-coverage refs today — subsumed by the denylist rather than declined · refused · 51244205
+- 2026-09-05 02:45 · Continue · build · Slice 272 — eleventh archive sweep: 17 closed slices moved verbatim, share 56.7% -> 19.1% · landed · d33c1efe
+- 2026-09-05 02:45 · Meta · refusal · moving the four targets 236.2 flags (253, 262, 260, 237) — none carries an amend clause, but a sweep is the wrong place to re-litigate a caution rule · refused · d33c1efe
 
 ## Sunset test
 

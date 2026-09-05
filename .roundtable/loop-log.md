@@ -1409,3 +1409,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-04 22:43 · Meta · refusal · a rubric arm asserting the 56 slice numbers inside dsa-scores.json cites resolve — all 56 do, and widening the gate makes such an arm redundant by construction · refused · 2b443fb6
 - 2026-09-05 01:45 · Continue · build · Slice 271 / 270.1 — check:slice-refs file filter widened from a six-extension allowlist to a denylist (698 files, 295 refs), run-line noun corrected to assertion(s), red-proved per newly-reached type · landed · 51244205
 - 2026-09-05 01:45 · Meta · refusal · adding .yml to the scan: measured, it rescues 0 zero-coverage refs today — subsumed by the denylist rather than declined · refused · 51244205
+- 2026-09-05 02:45 · Continue · build · Slice 272 — eleventh archive sweep: 17 closed slices moved verbatim, share 56.7% -> 19.1% · landed · d33c1efe
+- 2026-09-05 02:45 · Meta · refusal · moving the four targets 236.2 flags (253, 262, 260, 237) — none carries an amend clause, but a sweep is the wrong place to re-litigate a caution rule · refused · d33c1efe
