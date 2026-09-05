@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-05 02:45 UTC
+Generated at: 2026-09-05 03:52 UTC
 
 ## Open items by slice
 
@@ -18,13 +18,16 @@ Generated at: 2026-09-05 02:45 UTC
   - 249.12 — Archival trigger for `ROADMAP.md`.
   - 249.13 — Reconsider demo-first/spec-last (the proposal's B1), explicitly, not as a ratification.
   - 249.15 — The one static OG image 249.2 named and did not build.
+- **Slice 273** (2 open)
+  - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
+  - 273.3 — byline's wrong-choice clause forbids a POSITION while its reasoning forbids a PRACTICE, and the framework's own screens sit in the gap.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1405 iterations logged)
+dispatch status — counter-triggered rules (1408 iterations logged)
   Standardize   3 / 4 Continue rounds since 2026-09-04 09:57   ok
   Objective     2 / 3 slices          since 2026-09-04 13:02   ok  [271, 272]
   Optimize      2 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
@@ -36,6 +39,7 @@ dispatch status — counter-triggered rules (1405 iterations logged)
 
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
+- 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
 - 249.10 — SAP/Fiori terminology column for 249.7.
 - 249.11 — "Migrate an existing admin UI" path.
 - 249.13 — Reconsider demo-first/spec-last (the proposal's B1), explicitly, not as a ratification.
@@ -45,9 +49,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-04 21:47 · Polish · round · Slice 269 — Polish round 2 on component/breadcrumb: all six cites hold incl. 268's five new interaction assertions; new arm 11 finds the only two score-moving blind re-scores both left `scored` behind, and dsa-scores.json's $comment mandated the update they correctly refused · landed · 5980f5d2
-- 2026-09-04 21:47 · Meta · refusal · a gate for arm 11's predicate — ninth refusal, and on 268's ground rather than 101.3's: the arm is RED on a correct tree, so a gate would fail the build on two right answers (base rate 2 of 40 entries recorded anyway) · refused · 5980f5d2
-- 2026-09-04 21:47 · Meta · refusal · relabelling Maturity.astro's 'Alignment scored' to 'last full pass' — page markup, a rendered change this cloud wake cannot verify, and the amended $comment already makes the published pairing correct · refused · 5980f5d2
 - 2026-09-04 22:43 · Polish · round · Slice 270 — Polish round 2 on component/tree: all six cites hold incl. the 1.25em/1em pair no arm had read; new arm 12 finds check:slice-refs cannot see .ts or .json, so 11 slice refs are cited from nowhere the gate looks (base rate 11 of 293), red-proved two-sidedly and filed as 270.1 · landed · 2b443fb6
 - 2026-09-04 22:43 · Meta · refusal · a gate for the citation class — refused a tenth time on 101.3; the fix belongs upstream in the gate's own file filter, not in a rubric arm · refused · 2b443fb6
 - 2026-09-04 22:43 · Meta · refusal · a rubric arm asserting the 56 slice numbers inside dsa-scores.json cites resolve — all 56 do, and widening the gate makes such an arm redundant by construction · refused · 2b443fb6
@@ -55,6 +56,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-05 01:45 · Meta · refusal · adding .yml to the scan: measured, it rescues 0 zero-coverage refs today — subsumed by the denylist rather than declined · refused · 51244205
 - 2026-09-05 02:45 · Continue · build · Slice 272 — eleventh archive sweep: 17 closed slices moved verbatim, share 56.7% -> 19.1% · landed · d33c1efe
 - 2026-09-05 02:45 · Meta · refusal · moving the four targets 236.2 flags (253, 262, 260, 237) — none carries an amend clause, but a sweep is the wrong place to re-litigate a caution rule · refused · d33c1efe
+- 2026-09-05 03:52 · Polish · reconcile · Slice 273 — Polish round on byline: LOOPS.md's reason for dry=0 was false in the commit that wrote it (16 of 20 rows have a second round, dry never incremented); blind re-score found --compact's rationale recommending the context the opener forbids · landed · d8c9b5d1
+- 2026-09-05 03:52 · Meta · refusal · retroactively incrementing dry on the 8 NO-OP rows — it would retire surfaces and empty the Polish lane, which 176.3 refused on measured grounds; filed as 273.2, an owner call, instead · refused · d8c9b5d1
+- 2026-09-05 03:52 · Meta · refusal · shipping arm 13 as a gate — 17/17 on the clean tree, so the existence check distinguishes nothing today (94.11's refused shape), though it red-proves by injection · refused · d8c9b5d1
 
 ## Sunset test
 
