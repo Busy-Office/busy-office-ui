@@ -4202,6 +4202,190 @@ check(
   JSON.stringify({ gridShape, gridKeys }),
 );
 
+/* 278.6 — the opener's COST argument, which until this wake said grid
+   navigation costs "per-cell Tab stops". It costs the opposite: the module
+   collapses the whole grid to ONE stop and pulls every interactive descendant
+   OUT of the Tab sequence (reindex sets `w.tabIndex = -1` on each), so the row
+   checkboxes are reachable only by arrowing to the cell and pressing Enter.
+   That is the trade the reader is accepting, so it is the sentence the page
+   now makes — and a claim about the Tab sequence is executable.
+
+   The control is the plain table in the first demo: it is NOT a grid, which is
+   what makes "the grid did this" distinguishable from "the page has no tabbable
+   controls anywhere". */
+const gridCost = await page.evaluate(() => {
+  const t = document.querySelector('#grid-nav-demo');
+  const cells = [...t.querySelectorAll('td, th')];
+  const widgets = [...t.querySelectorAll('input, button, select, textarea, a[href]')];
+  return {
+    cells: cells.length,
+    cellStops: cells.filter((c) => c.tabIndex === 0).length,
+    widgets: widgets.length,
+    widgetStops: widgets.filter((w) => w.tabIndex === 0).length,
+    role: t.getAttribute('role'),
+    plainTableRole: document.querySelector('.bo-data-table:not([data-grid-nav])')
+      ?.getAttribute('role') ?? null,
+  };
+});
+check(
+  'table-toolbar: grid nav costs ONE tab stop for the whole table and removes every control inside it from the Tab sequence, as the opener now says',
+  gridCost.role === 'grid' &&
+    gridCost.plainTableRole === null &&   // the control: the other demo is not a grid
+    gridCost.cells > 1 &&                 // a 1-cell grid makes "one stop" vacuous
+    gridCost.cellStops === 1 &&
+    gridCost.widgets > 0 &&               // ditto a grid with no widgets to remove
+    gridCost.widgetStops === 0,
+  JSON.stringify(gridCost),
+);
+
+/* 278.4 — "aria-selected synced from the row checkboxes", on a grid this same
+   module marks aria-multiselectable="true". It needs BOTH behaviors, which is
+   why it is here and not only in the unit test: initDataTables owns select-all
+   and sets each row box's `checked` PROPERTY from a listener on the CONTAINER,
+   while initDataGrid listens on the TABLE and so ran first, against the old
+   state. Every row reported aria-selected="false" while all of them were
+   checked, until an unrelated single-row click happened to repair it.
+
+   Both routes the page documents are driven: a real mouse click on the header
+   box, and the keyboard route the grid's own key list describes (Enter into
+   the cell's widget, then Space). */
+const selectAllRoutes = {};
+const readSelection = () =>
+  page.evaluate(() => {
+    const rows = [...document.querySelectorAll('#grid-nav-demo tbody tr')];
+    return {
+      checked: rows.map((r) => r.querySelector('.bo-data-table__row-select').checked),
+      aria: rows.map((r) => r.getAttribute('aria-selected')),
+    };
+  });
+selectAllRoutes.before = await readSelection();
+await page.click('#grid-nav-demo .bo-data-table__select-all');
+await new Promise((r) => setTimeout(r, 100));
+selectAllRoutes.mouse = await readSelection();
+
+await visit('/components/table-toolbar/', { width: DESKTOP_WIDTH });
+await page.evaluate(() => {
+  const t = document.querySelector('#grid-nav-demo');
+  const cell = t.querySelectorAll('tr')[0].children[0];   // the select-all's cell
+  t.querySelectorAll('td[tabindex], th[tabindex]').forEach((x) => { x.tabIndex = -1; });
+  cell.tabIndex = 0;
+  cell.focus();
+});
+await page.keyboard.press('Enter');   // hands focus to the cell's one widget
+selectAllRoutes.reachedWidget = await page.evaluate(() =>
+  document.activeElement?.classList.contains('bo-data-table__select-all') ?? false,
+);
+await page.keyboard.press('Space');
+await new Promise((r) => setTimeout(r, 100));
+selectAllRoutes.keyboard = await readSelection();
+check(
+  'table-toolbar: select-all really does sync aria-selected on every row — by mouse and by the Enter-then-Space route the grid documents',
+  selectAllRoutes.before.aria.length === 3 &&                      // a 0-row grid proves nothing
+    selectAllRoutes.before.aria.every((a) => a === 'false') &&
+    selectAllRoutes.mouse.checked.every(Boolean) &&                // control: it really checked them
+    selectAllRoutes.mouse.aria.every((a) => a === 'true') &&
+    selectAllRoutes.reachedWidget &&                               // control: Enter reached the box
+    selectAllRoutes.keyboard.checked.every(Boolean) &&
+    selectAllRoutes.keyboard.aria.every((a) => a === 'true'),
+  JSON.stringify(selectAllRoutes),
+);
+
+await visit('/components/table-toolbar/', { width: DESKTOP_WIDTH });
+
+/* 278.3 — the page's COMPOSITION sentence: put column toggles on a
+   data-grid-nav table and a hidden column leaves the grid model too — the
+   cursor skips it, and hiding the column the cursor is parked in hands the
+   grid's single tab stop to a visible cell instead of stranding it where Tab
+   cannot reach.
+
+   The page's two demos are deliberately separate tables (the toolbar table has
+   no data-grid-nav, the grid table has no data-col) and the sentence says so
+   outright, because 278.1 refused to wire them together: that would change what
+   the demo teaches and land new interactive markup a cloud wake cannot check
+   visually. So the GATE builds the composition instead — it tags the grid
+   demo's own cells with data-col and drops a [data-col-toggle] box into that
+   table's container, which is the whole of initTableToolbar's markup contract.
+   Both modules are the page's own already-initialised instances: the toolbar's
+   change listener is document-level and scopes by .bo-data-table-container, and
+   the grid's MutationObserver is already watching this table. Until this case
+   the composition was asserted only in jsdom (data-grid-columns.test.ts).
+
+   Kept LAST in this file on purpose — it mutates the page's DOM, so any case
+   added after it must re-visit first. */
+const composed = await page.evaluate(() => {
+  const table = document.querySelector('#grid-nav-demo');
+  const cols = ['sel', 'no', 'amt'];
+  [...table.querySelectorAll('tr')].forEach((tr) =>
+    [...tr.children].forEach((cell, i) => { cell.dataset.col = cols[i]; }),
+  );
+  const box = document.createElement('input');
+  box.type = 'checkbox';
+  box.id = 'gate-col-toggle';
+  box.dataset.colToggle = 'no';
+  box.checked = true;
+  table.closest('.bo-data-table-container').prepend(box);
+  return { tagged: table.querySelectorAll('[data-col]').length, cols: cols.length };
+});
+
+/* Control 1: before anything is hidden, the cursor moves from column 0 to
+   column 1 — so "it landed on column 2" below is the hidden column being
+   skipped, not the arrow key failing. */
+await gridCursorAfter([1, 0], 'ArrowRight');
+const beforeHide = await page.evaluate(() => {
+  const t = document.querySelector('#grid-nav-demo');
+  const a = document.activeElement;
+  const stop = t.querySelector('td[tabindex="0"], th[tabindex="0"]');
+  return { landedOn: a?.dataset?.col ?? null, stopCol: stop?.dataset.col ?? null };
+});
+/* Control 2: park the cursor IN the column about to be hidden. Without this
+   the "tab stop moved" assertion below is satisfied by a stop that never had
+   to move. Every other stop is cleared first, because a grid with two tabbable
+   cells is not a state the roving model can be in. */
+await page.evaluate(() => {
+  const t = document.querySelector('#grid-nav-demo');
+  const cell = t.querySelectorAll('tbody tr')[0].children[1];
+  t.querySelectorAll('td[tabindex], th[tabindex]').forEach((x) => { x.tabIndex = -1; });
+  cell.tabIndex = 0;
+  cell.focus();
+});
+const parked = await page.evaluate(() =>
+  document.querySelector('#grid-nav-demo td[tabindex="0"], #grid-nav-demo th[tabindex="0"]')
+    ?.dataset.col ?? null,
+);
+
+await page.click('#gate-col-toggle');       // a REAL click: the module listens for `change`
+await new Promise((r) => setTimeout(r, 250)); // the grid re-seeds from a MutationObserver
+
+const afterHide = await page.evaluate(() => {
+  const t = document.querySelector('#grid-nav-demo');
+  const cells = [...t.querySelectorAll('td, th')];
+  const stops = cells.filter((c) => c.tabIndex === 0);
+  return {
+    hiddenCells: cells.filter((c) => c.hidden).length,
+    hiddenCols: [...new Set(cells.filter((c) => c.hidden).map((c) => c.dataset.col))],
+    stopCount: stops.length,
+    stopCol: stops[0]?.dataset.col ?? null,
+    stopHidden: stops[0]?.hidden ?? null,
+  };
+});
+await gridCursorAfter([1, 0], 'ArrowRight');
+const skipped = await page.evaluate(() => document.activeElement?.dataset?.col ?? null);
+
+check(
+  'table-toolbar: hiding a column on a data-grid-nav table drops it from the grid model — the cursor skips it and the single tab stop leaves it, as the page says',
+  composed.tagged === 12 &&                       // 4 rows x 3 cols actually tagged
+    beforeHide.landedOn === 'no' &&               // control 1: the arrow key works
+    beforeHide.stopCol !== null &&
+    parked === 'no' &&                            // control 2: the stop was ON the doomed column
+    afterHide.hiddenCells === 4 &&
+    JSON.stringify(afterHide.hiddenCols) === '["no"]' &&
+    afterHide.stopCount === 1 &&                  // still exactly one stop for the grid
+    afterHide.stopHidden === false &&
+    afterHide.stopCol !== 'no' &&                 // and it left the hidden column
+    skipped === 'amt',                            // the cursor skipped straight past it
+  JSON.stringify({ composed, beforeHide, parked, afterHide, skipped }),
+);
+
 await browser.close();
 server.close();
 

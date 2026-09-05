@@ -136,8 +136,45 @@ function bindGrid(table: HTMLTableElement): void {
   reindex(table);
   syncSelected(table);
 
+  // Selection changes through the row checkbox OR the header select-all, and
+  // until roadmap 278.4 only the first was matched here — so a select-all left
+  // every row reporting aria-selected="false" while all of them were checked,
+  // on a grid this same function marks aria-multiselectable="true". AT read the
+  // opposite of the truth until an unrelated single-row click happened to
+  // repair it.
+  //
+  // Matching select-all is not enough on its own: initDataTables owns it, sets
+  // each row box's `checked` PROPERTY (never a `change` of its own, and a
+  // property no MutationObserver can see), and does so from a listener on the
+  // CONTAINER — while this one is bound to the TABLE, so this listener runs
+  // FIRST and reads the boxes before they are set (re-measured in headless
+  // Chrome: table `false,false,false`, then container `true,true,true`).
+  // Deferring drops the ordering assumption rather than inverting it: the
+  // callback runs after the whole dispatch, whichever order the two behaviors
+  // were initialised in. Refused: a new public event from data-table.ts, which
+  // widens the contract to fix a sync this module can do on its own.
+  //
+  // setTimeout, NOT queueMicrotask, and the difference is not style. A
+  // microtask checkpoint runs whenever the JS stack empties, and for a TRUSTED
+  // event the browser drives the dispatch from native code — so the stack IS
+  // empty between two JS listeners and the microtask runs BEFORE the container
+  // listener, reading exactly the stale state it was meant to avoid. Under a
+  // script-initiated `el.click()` the whole dispatch sits in one JS frame and
+  // the microtask correctly runs last. So the two paths disagree, and a probe
+  // written with `el.click()` reports the mechanism working while a real mouse
+  // click leaves every row unsynced — measured both ways, roadmap 278.4.
+  //
+  // ONLY the select-all path defers. A row checkbox already carries its own new
+  // state when its `change` fires, so that path stays synchronous — deferring
+  // it too would make a working, observable behavior asynchronous to fix a
+  // different one.
   table.addEventListener('change', (e) => {
-    if ((e.target as Element).matches('.bo-data-table__row-select')) syncSelected(table);
+    const target = e.target as Element;
+    if (target.matches('.bo-data-table__row-select')) {
+      syncSelected(table);
+    } else if (target.matches('.bo-data-table__select-all')) {
+      setTimeout(() => syncSelected(table), 0);
+    }
   });
   table
     .closest('.bo-data-table-container')

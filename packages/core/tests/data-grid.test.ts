@@ -101,4 +101,49 @@ describe('initDataGrid', () => {
     box.dispatchEvent(new Event('change', { bubbles: true }));
     expect(row.getAttribute('aria-selected')).toBe('true');
   });
+
+  /* roadmap 278.4 — the page claims "aria-selected synced from the row
+     checkboxes" on a grid this module also marks aria-multiselectable, and a
+     select-all used to leave every row reporting false while all of them were
+     checked. It needs BOTH behaviors: initDataTables owns select-all and sets
+     each row box's `checked` property from a listener on the container, so
+     driving the row boxes directly here would assert nothing about the bug. */
+  it('select-all through the real control syncs aria-selected on every row', async () => {
+    html`
+      <div class="bo-data-table-container">
+        <table class="bo-data-table" data-grid-nav>
+          <thead><tr>
+            <th scope="col"><input type="checkbox" class="bo-checkbox bo-data-table__select-all" aria-label="Select all" /></th>
+            <th scope="col">Invoice</th>
+          </tr></thead>
+          <tbody>
+            <tr><td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label="r1" /></td><td>INV-1</td></tr>
+            <tr><td><input type="checkbox" class="bo-checkbox bo-data-table__row-select" aria-label="r2" /></td><td>INV-2</td></tr>
+          </tbody>
+        </table>
+      </div>
+    `;
+    ui.initDataTables();
+    ui.initDataGrid();
+    const g = document.querySelector('.bo-data-table') as HTMLTableElement;
+    const rows = [...g.querySelectorAll('tbody tr')];
+    expect(rows.length).toBe(2);
+    expect(rows.map((r) => r.getAttribute('aria-selected'))).toEqual(['false', 'false']);
+
+    // A real click on the header box: it sets `checked` and fires `change`
+    // itself, which is the route both behaviors are listening for.
+    (g.querySelector('.bo-data-table__select-all') as HTMLInputElement).click();
+    // Control — without this, "aria-selected is true" could be true of a
+    // select-all that never checked anything.
+    expect(rows.map((r) => (r.querySelector('input') as HTMLInputElement).checked))
+      .toEqual([true, true]);
+
+    // Deferred by a TASK, not a microtask — under a trusted click the browser
+    // runs a microtask checkpoint between listeners, so a microtask would fire
+    // before the container listener has set the boxes. `await Promise.resolve()`
+    // here would therefore pass in jsdom and prove nothing about a real click;
+    // check-claims.mjs drives the real one.
+    await new Promise((r) => setTimeout(r, 0));
+    expect(rows.map((r) => r.getAttribute('aria-selected'))).toEqual(['true', 'true']);
+  });
 });

@@ -489,7 +489,7 @@ hoisted** in this repo: it lives in `apps/docs/node_modules` and
 output is not evidence either**, which is the same base rate CLAUDE.md sets for
 a new script.
 
-3. [ ] **278.3 — the composition sentence 278.1 shipped describes something no
+3. [x] **278.3 — the composition sentence 278.1 shipped describes something no
        demo on the page can exercise.** The two demos are separate tables in
        separate containers: the toolbar table has no `data-grid-nav`, the grid
        table has no `data-col`. So *"A hidden column is also dropped from the
@@ -509,7 +509,62 @@ a new script.
          reader can exercise, or says in the sentence that it cannot be tried
          there; whichever is chosen, the page and the shipped module agree.
 
-4. [ ] **278.4 — `select all` leaves every row reporting
+       **CLOSED 2026-09-05 (cloud wake), and the Accept is what made this item
+       cost three fixes instead of one.** Read literally it is a property of
+       EVERY runtime sentence on the page, not of the composition sentence the
+       item is about — so satisfying it meant auditing all of them, and two did
+       not agree with the shipped module: the opener's cost argument (`278.6`)
+       and *"aria-selected synced from the row checkboxes"* (`278.4`, a shipped
+       accessibility defect). Both are closed below rather than the Accept being
+       narrowed to fit. **Recorded as a finding, not a complaint:** an Accept
+       whose subject is "every sentence on the page" silently scopes in every
+       other open item filed against that page, and the two it caught here were
+       worth catching — but that was luck, not design. The narrower form
+       (*"the composition sentence names a demo a reader can exercise or says it
+       cannot be tried there, and agrees with the shipped module"*) is what the
+       item meant.
+
+       **The open half — can a claims case assert the composition without
+       wiring the demos together? — is answered YES, by a third shape neither
+       the item nor 278.1 weighed.** The gate composes the markup ITSELF, on the
+       page's own already-initialised modules: it tags `#grid-nav-demo`'s twelve
+       cells with `data-col` and prepends a `[data-col-toggle]` box to that
+       table's container, which is the whole of `initTableToolbar`'s markup
+       contract. Nothing the reader sees changes, so 278.1's refusal (wiring the
+       demos changes what the demo DOES, and lands interactive markup a cloud
+       wake cannot check visually) still stands — the composition is now
+       asserted live as well as in jsdom. `grep -c -F data-col-toggle
+       apps/docs/scripts/check-claims.mjs` **0 → 1** — `-c` counts matching
+       LINES, which is what the item's own reading of 0 was, so the two are
+       comparable.
+
+       Measured in headless Chrome against the built page, with the two controls
+       the assertion needs (without them "it landed on column 2" is satisfied by
+       an arrow key that did nothing, and "the tab stop moved" by a stop that
+       never had to move):
+
+       | step | reading |
+       |---|---|
+       | tagged cells | 12 (4 rows x 3 cols) |
+       | control 1 — ArrowRight from column 0, nothing hidden | lands on `no` |
+       | control 2 — cursor parked in the column about to be hidden | tab stop on `no` |
+       | after a real click on the toggle | 4 cells hidden, all `no` |
+       | tab stop after | count **1**, on `sel`, `hidden: false` |
+       | ArrowRight from column 0 after | lands on `amt` — straight past `no` |
+
+       **Red-proved by two injections into the chunk the page actually loads**
+       (`apps/docs/dist/_astro/table-toolbar.*.js`, named by the page's own
+       entry script — not `dist/js/index.js`, the re-export barrel 278.1 caught
+       being a dead instrument). Each replaced exactly one match, aborting
+       otherwise, and each was confirmed absent from the artifact after the
+       write:
+
+       | injection | bytes | goes red |
+       |---|---|---|
+       | `reindex` stops clearing a hidden cell's tabindex | 3172 → 3116 | the composition case |
+       | `visibleMatrix` stops filtering hidden cells | 3172 → 3119 | the composition case |
+
+4. [x] **278.4 — `select all` leaves every row reporting
        `aria-selected="false"` on a `role="grid"` that also says
        `aria-multiselectable="true"`.** The same class as 278.1 and found by
        the same question: two behaviors that do not talk. Confirmed at source
@@ -542,6 +597,77 @@ a new script.
          `dist/js/behaviors/`, and the listener-ordering premise above is
          re-measured rather than trusted.
 
+       **CLOSED 2026-09-05 (cloud wake).** Taken because `278.3`'s Accept spans
+       every runtime sentence on the page and this is one of them.
+
+       **The defect reproduced on BOTH documented routes** before anything was
+       changed, against the built page in headless Chrome:
+
+       | route | row checkboxes | `aria-selected` |
+       |---|---|---|
+       | initial | `false,false,false` | `false,false,false` |
+       | real mouse click on select-all | `true,true,true` | **`false,false,false`** |
+       | control — one real row click after | `true,false,true` | `true,false,true` |
+       | fresh load, `Enter` then `Space` on the header cell | `true,true,true` | **`false,false,false`** |
+
+       The control row is what makes it a sync bug rather than a dead
+       `syncSelected`: a single-row click repairs every row, because that path
+       re-reads all the boxes.
+
+       **The listener-ordering premise was re-measured and holds:** on a real
+       click the TABLE listener sees `false,false,false` and the CONTAINER
+       listener then sees `true,true,true`.
+
+       **Fixed in `data-grid.ts`: match the select-all too, and defer that path
+       only.** The row-select path stays synchronous — a row checkbox already
+       carries its new state when its own `change` fires, and deferring it would
+       make a working, observable behavior asynchronous to fix a different one.
+       **Refused:** a new public event from `data-table.ts`, which widens the
+       contract to fix a sync this module can do on its own.
+
+       **⚠ `queueMicrotask` DOES NOT WORK HERE, AND THE PROBE THAT SAID IT DID
+       WAS MEASURING THE WRONG DISPATCH PATH.** The first fix deferred with a
+       microtask and a probe reported it running last — `table`, `container`,
+       then `microtask-from-table`, all reading `true,true,true`. The probe drove
+       the control with `el.click()`. A microtask checkpoint runs whenever the JS
+       stack empties; under a **script-initiated** click the whole dispatch sits
+       in one JS frame, so the microtask genuinely runs last, but under a
+       **trusted** click the browser drives the dispatch from native code and the
+       stack IS empty between listeners — so the microtask runs BEFORE the
+       container listener, on exactly the stale state it was meant to avoid.
+       Shipped, built and gated, the microtask version left `aria-selected`
+       `false,false,false` under `page.click`, which is how it was caught. The
+       fix is `setTimeout(…, 0)`: a task cannot run until the dispatch completes,
+       on either path. This is CLAUDE.md's base rate landing on a browser
+       primitive rather than a script — **the instrument agreed with the
+       hypothesis because it exercised the one path where the hypothesis is
+       true**, and the general form is now in `ENVIRONMENT.md`.
+
+       **Two assertions, one red-proof each, both confirmed in the artifact
+       before the red was believed.** The unit test
+       (`data-grid.test.ts`, driving `initDataTables` + `initDataGrid` together —
+       driving the row boxes directly would assert nothing about this bug) went
+       red at `['false','false']` with the select-all branch removed from
+       `packages/core/dist/js/behaviors/data-grid.js`, and green restored. The
+       live case went red with the same branch reverted to `void 0` in the
+       chunk the page loads (3172 → 3115 bytes, artifact confirmed reading
+       `?l(t):void 0`), **red on exactly that one case**.
+
+       **The first attempt at that live injection was itself defective**, and it
+       is recorded because it failed in the direction people do not check for: it
+       deleted the whole false branch of a ternary, left `cond?l(t)` behind, and
+       the module stopped parsing — **four** cases went red instead of one. A
+       red-proof that goes red for the wrong reason certifies nothing, the same
+       as one that stays green. The injector now aborts unless it replaces
+       exactly one match and re-reads the artifact afterwards.
+
+       **Compatibility: NOT breaking**, stated against what changed rather than
+       predicted. No export changed and no markup contract moved; the row-select
+       path is byte-for-byte the same behaviour and the same timing. The one
+       observable difference is on a select-all, where `aria-selected` previously
+       never updated at all and now updates one task later. Added under
+       **Fixed**.
+
 5. [ ] **278.5 — the Columns demo never calls `initDropdowns()`, so the menu
        the page calls "the same multi-select dropdown pattern as elsewhere" is
        neither positioned nor labelled.** `table-toolbar.astro` calls
@@ -562,7 +688,7 @@ a new script.
          invoker rather than against fixed pixels; or the page says why this
          demo deliberately omits the dropdown behavior.
 
-6. [ ] **278.6 — the opener's cost argument names a mechanism the module does
+6. [x] **278.6 — the opener's cost argument names a mechanism the module does
        not ship.** It says grid navigation costs *"per-cell Tab stops"* that
        turn a browsable table into a widget; the module ships **one** roving
        tab stop for the whole grid, which the same page states two paragraphs
@@ -578,6 +704,39 @@ a new script.
        - **Accept:** the opener's stated cost of grid navigation matches what
          the module does, and names the descendant-tabindex trade the reader
          is actually accepting.
+
+       **CLOSED 2026-09-05 (cloud wake).** Taken because `278.3`'s Accept spans
+       every runtime sentence on the page and this is one of them.
+
+       **The premise was re-measured rather than trusted**, on the built page's
+       own `#grid-nav-demo`: **12** cells, **1** of them tabbable; **4**
+       interactive descendants (the select-all and three row checkboxes),
+       **0** of them in the Tab sequence, every one at `tabIndex -1`. So the old
+       sentence was not merely imprecise — "per-cell Tab stops" is the opposite
+       of what ships, by an order of magnitude in one direction and by
+       everything in the other.
+
+       The opener now states the real trade: the whole table collapses to one
+       Tab stop, **and** every control inside it leaves the Tab sequence,
+       reachable only by arrowing to its cell and pressing `Enter`. The
+       conclusion the paragraph was always driving at — earn grid nav with a
+       real need — is unchanged; only the reason is now true.
+
+       **Now executable**, which the old sentence never was: a `check:claims`
+       case asserts all four numbers against the shipped module, with the first
+       demo's plain (non-grid) table as the control — without it, "no tabbable
+       controls" would also be satisfied by a page that has none anywhere.
+       Red-proved by stopping `reindex` from pulling descendants out of the Tab
+       sequence in the chunk the page loads (3172 → 3146 bytes, confirmed absent
+       from the artifact), which turns exactly this case red.
+
+       **NOT verified visually, and named as unverified rather than implied.**
+       `0` CSS files changed, but the opener paragraph gains 3 lines of prose
+       (`git diff --numstat` on the page: **6 insertions, 3 deletions**), so the
+       page reflows — and a cloud wake has no 1440/390 light-and-dark lane. That
+       figure describes the working tree; re-read it from the commit. What *is*
+       verified: `check:layout` and `check:scroll` sweep every page at both
+       widths and `test:axe` reports zero violations.
 
 **Refused inside this item:** a `check:claims` case for the hidden-column
 composition itself. It needs the grid demo to gain a column-toggle control,

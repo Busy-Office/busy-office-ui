@@ -42,6 +42,25 @@ pin.
 
 ### Fixed
 
+- **`initDataGrid` now syncs `aria-selected` after a select-all, not only after
+  a single-row click.** On a grid this same module marks
+  `aria-multiselectable="true"`, checking the header select-all left every row
+  reporting `aria-selected="false"` while all of them were checked — assistive
+  tech read the opposite of the truth until an unrelated single-row click
+  happened to repair it. `initDataTables` owns select-all and sets each row
+  box's `checked` *property* (no `change` of its own, and a property no
+  `MutationObserver` can see) from a listener on the container, while
+  `initDataGrid` listens on the table and so ran first, against the old state.
+  The select-all path is now matched and deferred by one task, which removes
+  the ordering assumption rather than inverting it. `setTimeout`, not
+  `queueMicrotask`: under a *trusted* click the browser runs a microtask
+  checkpoint between listeners, so a microtask fires before the row boxes are
+  set — while a script-initiated `el.click()` makes the same microtask run
+  last, which is how the wrong mechanism passes a probe. Not breaking: no
+  export changed, no markup contract moved, and the single-row path keeps its
+  existing synchronous timing; the only observable difference is on a
+  select-all, where `aria-selected` previously never updated at all.
+
 - **`initDataGrid` no longer strands its tab stop on a hidden cell, so a grid
   survives `initTableToolbar`'s column visibility.** The two behaviors are
   documented as a pair and had never been asserted together: hiding the column

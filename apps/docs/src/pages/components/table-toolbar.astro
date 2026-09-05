@@ -31,9 +31,12 @@ const gridMarkup = `<table class="bo-data-table" data-grid-nav>
     <strong>Do not add either to a read-mostly list</strong> — a reference
     table someone scans a few times a day gains nothing from column
     toggles (its columns were chosen server-side for a reason), and
-    keyboard grid navigation actively costs: per-cell Tab stops turn a
-    table a screen-reader user could browse natively into a widget they
-    must operate. The plain
+    keyboard grid navigation actively costs: the whole table collapses to
+    <em>one</em> Tab stop, and every control inside it — here the select-all
+    and each row checkbox — is pulled out of the Tab sequence, reachable only
+    by arrowing to its cell and pressing <kbd>Enter</kbd>. A table a
+    screen-reader user could browse natively becomes a single widget they
+    must learn to operate. The plain
     <a href={base + '/components/data-table'}>data table</a> already ships
     selection, sort and filter free; earn these two with a real need —
     many optional columns, or genuinely cell-level work.

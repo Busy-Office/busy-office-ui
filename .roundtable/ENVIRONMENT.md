@@ -454,6 +454,29 @@ broadly wrong. When declining an item, say which of the two lists it needs.
   the revision the reading describes (274.1 did exactly this for its region
   table and not for its Accept, in one commit), or re-run after committing and
   correct the number. A figure with no revision beside it is read as current.
+- **A probe that drives a control with `el.click()` is measuring the UNTRUSTED
+  dispatch path, and for anything timing-sensitive that path behaves
+  differently from a real click.** A microtask checkpoint runs whenever the JS
+  stack empties. Under `el.click()` the whole event dispatch sits inside one JS
+  frame, so a `queueMicrotask` queued by a listener runs after ALL listeners;
+  under a real (trusted) click the browser drives the dispatch from native code,
+  the stack is empty *between* listeners, and the same microtask runs in the
+  middle of it. Measured both ways on one build, roadmap 278.4: a probe using
+  `el.click()` reported `table` → `container` → `microtask`, and the shipped
+  code built on that reading left every row unsynced under `page.click`. The
+  instrument agreed with the hypothesis because it exercised the one path where
+  the hypothesis is true. **Drive the real thing — `page.click` /
+  `page.keyboard` — whenever the answer depends on listener or task ordering**,
+  and prefer `setTimeout(…, 0)` over `queueMicrotask` when the point is to run
+  after another listener: a task cannot run until the dispatch completes, on
+  either path.
+- **A red-proof that goes red TOO BROADLY certifies nothing either.** The same
+  slice's first live injection deleted the whole false branch of a minified
+  ternary, left `cond?l(t)` behind, and the module stopped parsing — four gate
+  cases went red instead of the one under test, which reads exactly like a
+  working red-proof if you only check that the gate failed. Replace with
+  something well-formed (`void 0` for a dropped branch), assert the replacement
+  count is exactly 1, and re-read the artifact afterwards.
 - **A presence probe is not a fidelity probe.** Asking whether a heading still
   appears in 53 revisions answers whether it was deleted, not whether what sits
   under it decayed. 169.3's first pass read "zero shrinks" off a subset of
