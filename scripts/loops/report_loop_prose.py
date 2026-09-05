@@ -153,6 +153,27 @@ MD_IN_PROSE = re.compile(r"[`(]([A-Za-z0-9_./-]+\.md)")
 REGION_START = re.compile(r"^## Dispatcher\b")
 REGION_END = re.compile(r"^5\. \*\*")
 
+# LOOPS.md IS MEASURED WHOLE ABOVE, AND THE WHOLE FILE IS NOT WHAT A WAKE READS
+# TO DECIDE (roadmap 274.1). Every other row here is a file a wake opens end to
+# end; LOOPS.md is not. A dispatcher reads the front matter, the loop table and
+# Steps 0-2 — everything ABOVE `## Playbooks` — to choose a loop, and only then
+# the one playbook it dispatched. So the whole-file number answers a question
+# nobody asks, exactly as summing ROADMAP.md with its archive did (see the
+# header): both measure a quantity no wake reads.
+#
+# Measured 2026-09-05 at `c32491a`, the tip the sweep dispatched from — which is
+# why this exists rather than being asserted: over 158.2's window the file went
+# +220.4% and the dispatch region went **+300.0%** (1,525 -> 6,100), its share of
+# the file rising 34.8% -> 43.5%. The whole-file row UNDERSTATES the burden the
+# lane-4 sweep exists to catch. Re-run it; these are snapshots, and the commit
+# that added this block moved them.
+#
+# `## Playbooks` is the anchor, and it is a LOWER BOUND on the every-wake read,
+# stated rather than dressed up: `## Operating rules (every loop obeys)` sits
+# below it, as does the playbook the wake then runs. A bound that is honest in a
+# known direction beats a boundary that pretends to be exact.
+REGION_SPLIT = re.compile(r"^## Playbooks\b")
+
 
 def dispatcher_md_paths(loops_text):
     """The .md files LOOPS.md's dispatcher region tells a wake to read.
@@ -175,6 +196,26 @@ def dispatcher_md_paths(loops_text):
             continue
         found.add(ALIAS.get(raw, raw))
     return found, None
+
+
+def loops_regions(text):
+    """(dispatch_words, rest_words), or (None, why-it-could-not-be-split).
+
+    Never a pair of zeros standing in for a failed split, for the same reason
+    dispatcher_md_paths never returns an empty set: a missing anchor is reported,
+    not silently absorbed into a number that reads like a real count.
+    """
+    lines = text.split("\n")
+    at = next((i for i, l in enumerate(lines) if REGION_SPLIT.match(l)), None)
+    if at is None:
+        return None, "no `## Playbooks` heading — the region anchor moved"
+    return (sum(len(l.split()) for l in lines[:at]),
+            sum(len(l.split()) for l in lines[at:])), None
+
+
+def text_at(rev, path):
+    r = git("show", f"{rev}:{path}")
+    return None if r.returncode else r.stdout
 
 
 def git(*args):
@@ -271,6 +312,21 @@ SELF_TEST = [
      set()),
 ]
 
+# The region SPLIT gets its own discriminating pairs. A split that always
+# returned "everything is dispatch" would pass a test made only of files whose
+# text happens to sit above the anchor — so each case below is paired with a
+# near-twin that must land on the other side of it.
+SPLIT_SELF_TEST = [
+    # (text, expected (dispatch, rest))
+    ("one two three\n## Playbooks\nfour five six seven\n", (3, 6)),
+    # near-twin: the SAME words with the anchor moved must split differently
+    ("one two three four five six\n## Playbooks\nseven\n", (6, 3)),
+    # an anchor that is not a heading (a mention in prose) must NOT split there
+    ("see ## Playbooks below\n## Playbooks\nx\n", (4, 3)),
+    # a deeper heading of the same name is not the anchor
+    ("a b\n### Playbooks stuff\nc\n## Playbooks\nd\n", (6, 3)),
+]
+
 
 def self_test():
     bad = []
@@ -283,11 +339,22 @@ def self_test():
     got, why = dispatcher_md_paths("no anchors here at all\n")
     if got is not None or not why:
         bad.append("    a missing `## Dispatcher` anchor returned a set instead of a reason")
+
+    for text, expected in SPLIT_SELF_TEST:
+        got, why = loops_regions(text)
+        if why or got != expected:
+            bad.append(f"    split {text.splitlines()[0]!r}\n      expected {expected}, "
+                       f"got {got if got is not None else why}")
+    got, why = loops_regions("no anchor here at all\n")
+    if got is not None or not why:
+        bad.append("    a missing `## Playbooks` anchor returned a pair instead of a reason")
+
     if bad:
         print("report_loop_prose --self-test FAILED:", file=sys.stderr)
         print("\n".join(bad), file=sys.stderr)
         return 1
-    print(f"report_loop_prose --self-test: {len(SELF_TEST) + 1} cases classified correctly")
+    print(f"report_loop_prose --self-test: "
+          f"{len(SELF_TEST) + len(SPLIT_SELF_TEST) + 2} cases classified correctly")
     return 0
 
 
@@ -356,6 +423,40 @@ def main():
     for path, ups, sha, day in ratchet:
         where = f"last cut {sha[:8]} ({day})" if sha else "never cut"
         print(f"    {path:26}{ups:4} up   {where}")
+
+    # LOOPS.md BY REGION — see REGION_SPLIT. The row above measures the file; a
+    # wake reads the first region to DECIDE, so the two answer different
+    # questions and the difference between them is the finding.
+    reg = {}
+    for rev, label in (("HEAD", "now"), (base, "base")):
+        t = text_at(rev, "LOOPS.md")
+        reg[label] = loops_regions(t) if t is not None else (None, f"LOOPS.md absent at {label}")
+    (now_r, now_why), (was_r, was_why) = reg["now"], reg["base"]
+    print("\n  LOOPS.md by region — the row above measures the FILE; a wake reads only the\n"
+          "  first region to DECIDE, so `## Playbooks` splits it (roadmap 274.1):")
+    if now_why or was_why:
+        # A gate that cannot run must fail loudly, never skip quietly.
+        fatal.append(f"LOOPS.md region split unavailable — {now_why or was_why}")
+        print(f"    NOT SPLIT — {now_why or was_why}")
+    else:
+        rows = [("dispatch (start .. ## Playbooks)", was_r[0], now_r[0]),
+                ("playbooks + reference", was_r[1], now_r[1]),
+                ("whole file", sum(was_r), sum(now_r))]
+        for name, w, n in rows:
+            d = f"{(n - w) / w * 100:+.1f}%" if w else "n/a"
+            share = f"   {n / sum(now_r) * 100:.1f}% of the file" if name != "whole file" else ""
+            print(f"    {name:34}{w:7,} ->{n:7,}{d:>10}{share}")
+        # Print which way it actually went, never a predicted direction —
+        # CLAIM the property, measure the value (CLAUDE.md's criterion rule).
+        dg = (now_r[0] - was_r[0]) / was_r[0] if was_r[0] else 0
+        wg = (sum(now_r) - sum(was_r)) / sum(was_r) if sum(was_r) else 0
+        verdict = ("FASTER than the file, so the whole-file row UNDERSTATES it"
+                   if dg > wg else
+                   "SLOWER than the file, so the whole-file row OVERSTATES it"
+                   if dg < wg else "at the same rate as the file")
+        print(f"    -> the dispatch region grew {verdict}.")
+        print("    `## Operating rules` and the dispatched playbook sit BELOW the anchor,\n"
+              "    so the dispatch figure is a LOWER bound on what a wake reads.")
 
     # THE OTHER DIRECTION (179.1): a file the dispatcher is told to read that
     # this list does not measure. See the header for why this is the half that

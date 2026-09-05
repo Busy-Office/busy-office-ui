@@ -804,6 +804,18 @@ surfaced more:
    manufacture a cut. CLAUDE.md's criterion rule ("name the property, never the
    value it will have") landing in an instruction — the second time this
    playbook has paid for it; the prose-page names above are the first.
+
+   **For `LOOPS.md`, read the `by region` block and not the file row** (roadmap
+   274.1). Every other row in that report is a file a wake opens end to end;
+   this one is not — a dispatcher reads everything above `## Playbooks` to
+   DECIDE, and only then the one playbook it dispatched. The block prints both
+   regions and says which grew faster, so the finding here is **the dispatch
+   region outgrowing the file**, never the file's own delta. **A cut that does
+   not touch the dispatch region does not answer this finding**, and the block
+   is what makes that visible: 274.1 refused archiving the 1,421-word Ideas
+   backlog for exactly that reason — it would have moved the file's number
+   while leaving what a wake reads untouched, which is optimising the
+   instrument.
 2. For a wide sweep, `Workflow` fan-out — one agent per component, report drift.
 3. Consolidate to the shared pattern; never widen public API to do it.
 4. **Round check** — gates must stay green (stylelint naming is the enforcer);

@@ -315,6 +315,161 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 274 — Standardize sweep, 4 of 4 lanes: three clean, and lane 4's finding is that its own instrument measures the wrong box — `LOOPS.md`'s every-wake DISPATCH region grew +300% where the file grew +220%, so the row a sweep reads understates the burden it exists to catch (2026-09-05)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** for the seventh
+wake running (`git branch --show-current` empty, `HEAD` at `c32491a` = `origin/main`)
+— ENVIRONMENT trap 1, fixed with `git checkout -B main origin/main` before any
+work. `--unshallow` clean in one attempt (**1,881** commits, no `shallow.lock`);
+it brought the tags this time, and `git fetch --tags origin` was still run
+explicitly and returned all **seven** (`v0.1.1`…`v0.7.0`) — checked, not assumed.
+Rule 1: no open P0 — `list_issues` on `Busy-Office/busy-office-ui` returns
+`totalCount: 0`, and none of the 12 open `N. [ ]` items is a P0. Step 1 triaged
+and committed nothing: no new input.
+
+**Rule 2 fired.** `dispatch_status.py` read rule 2 **4 / 4 … OVERDUE** and rule 3
+**3 / 3 … OVERDUE [271, 272, 273]**; rule 2 sits above rule 3, so **Standardize**
+dispatched and rules 4-8 were **NOT EVALUATED** — a rule below a match is
+unreached, not clear. Rule 5 read **STALE** (2 wake-dates newer) in any case.
+Both counters were exactly as the previous hand-off predicted, which is the
+comparison `LOOPS.md` asks for right after recording.
+
+**Lane 1 of 4 — `scan:dead-style`: clean.** **0** dead declarations on **0**
+pages against **1,433** live inline declarations, screen and print both
+measured, `0` dead-on-screen-but-live-in-print.
+
+**Lane 2 of 4 — `report:css-repeats`: clean, and the delta is what was read.**
+74 source files · **242** rules with 3+ declarations · **230** distinct bodies ·
+**8** repeating — identical on all three totals to Slice 237's sweep, and the
+repeat set matches `LOOPS.md`'s table **member for member and multiplicity for
+multiplicity** (4, 3, 3, 2, 2, 2, 2, 2). The x4 joined-control group is still
+**two components** (money ×2, quantity ×2), so its stated reopen trigger — a
+THIRD component — is unmet.
+
+**Lane 3 of 4 — `report:prose`: clean, checked by SET MEMBERSHIP.** 118
+documentation pages of 127 built · median **792** · mean 941 · **111,018** words
+(105,705 at Slice 237, +5.0%). Ten pages over 2x the corpus median and eleven
+over a family median; the union is **fifteen distinct pages**, up from fourteen,
+and every one resolves against the **sixteen verdicted** — 158.1's twelve,
+161.1's three and 178.3's `/concepts/scale/`. Nothing is flagged outside them;
+`/patterns/output-form/` is the one verdicted page not flagged today. Membership
+is what was checked, per 228.1's record that grepping each page path out of
+`ROADMAP.md` + the archive returns hits whatever the truth is.
+
+**Lane 4 of 4 — `report_loop_prose.py`: carries the finding.** The `ratchet`
+block read first, per the playbook. Two files read `never cut`: `DESIGN.md`
+(22 up) and **`CLAUDE.md` (32 up)**, and `CLAUDE.md` is the one the loop reads
+every wake. Its growth carries a live verdict — **193.1, "fold nothing, and the
+watch RETIRES"** — so the question is whether anything has changed under it, and
+193.1's own command answers that it has not:
+
+```
+# split CLAUDE.md on ^## at a revision; body words by Python str.split()
+#   a7c65f7c (193.1's tip)  17 sections · 5,248 body words
+#   HEAD                    17 sections · 5,658 body words
+# per-section delta since a7c65f7c: +318 "How to document a component (the
+#   recipe)", +92 "Quality bar"; no section added, none removed
+```
+
+**Zero new `##`**, and neither grown section is in the eight-on-one-subject set
+193.1 adjudicated. The retired watch stays retired — measured, not assumed.
+
+1. [x] **274.1 — DONE 2026-09-05. The lane-4 instrument measured the FILE where
+       the burden is a REGION, and the two disagree by 80 percentage points.**
+       `LOOPS.md` reads **8 up, last cut `9198e43f` (2026-08-29)** — the shape
+       lane 4 names, *a file the loop reads every wake accumulating with no cut
+       behind it*. But every other row in that report is a file a wake opens end
+       to end, and `LOOPS.md` is not: a dispatcher reads the front matter, the
+       loop table and Steps 0-2 — everything above `## Playbooks` — to DECIDE,
+       and only then the one playbook it dispatched. Split there, over 158.2's
+       window:
+
+       Figures read at `c32491a` — the tip this sweep dispatched from, before
+       its own commit, since a figure describing a state is read from that state:
+
+       | region | base 2026-08-20 | `c32491a` | delta |
+       |---|---|---|---|
+       | dispatch (start .. `## Playbooks`) | 1,525 | **6,100** | **+300.0%** |
+       | playbooks + reference | 2,855 | 7,932 | +177.8% |
+       | whole file | 4,380 | 14,032 | +220.4% |
+
+       The dispatch region's share of the file went **34.8% → 43.5%**, and since
+       167.2's split (`3006da0a`, 2026-08-28) it went **3,398 → 6,100, +79.5% in
+       eight days** — 167.2 cut narratives OUT of this region and the region
+       rebounded past where it started. Step 2 alone is **3,211** words for eight
+       rules (rule 4 **980**, rule 3 672, rule 6 631, rule 5 361, rule 7 226,
+       rule 8 190, rule 2 119, rule 1 9). So the whole-file row **understates**
+       the thing the lane exists to catch, the same error shape the script's own
+       header records for summing `ROADMAP.md` with its archive: both measure a
+       quantity no wake reads. This is CLAUDE.md's *"measure the box that carries
+       the constraint"* landing on the loop's own instrument.
+
+       **The fix is a `by region` block in `report_loop_prose.py`**, printing
+       both regions, each share, and **which grew faster** — the direction is
+       computed and printed, never predicted, so the block states a property
+       rather than the value it will have.
+
+       - **Accept (all met, each by measurement):**
+         - **The block's figures reconcile against an independent parse of the
+           same two revisions** — a throwaway parser produced 1,525 / 2,855 and
+           6,100 / 7,932 *before* the script printed them, and the script
+           reproduces both pairs exactly. Two instruments, not one.
+         - **The verdict line is shown to print BOTH branches on real data, not
+           only on synthetic input.** `--since 2026-09-01` prints *"grew SLOWER
+           than the file, so the whole-file row OVERSTATES it"*; the default
+           window and `--since` 08-28, 08-29 and 09-04 all print FASTER. A line
+           that can only ever say one thing is the detector-that-cannot-fail this
+           repo keeps paying for; this one discriminates.
+         - **`--self-test` gains four discriminating pairs plus the missing-anchor
+           case and passes at 12 cases** (was 7). Each pair is a near-twin that
+           must land on the *other* side of the anchor — same words with the
+           anchor moved, a `## Playbooks` mention inside prose that must not
+           split, a `###` heading of the same name that is not the anchor.
+         - **The guard's provability is stated rather than claimed.** The
+           `## Playbooks` anchor is present in **86 of 86** revisions of
+           `LOOPS.md`, so the "cannot split" branch has **no real input that
+           exercises it** and is proved by the synthetic case only. Saying so is
+           the point: a base rate of 86/86 is exactly the condition under which a
+           guard looks green while never having run.
+         - **`LOOPS.md`'s lane-4 instruction names the property** — read the
+           `by region` block for this file, the finding is the dispatch region
+           outgrowing the file — and sits BELOW `## Playbooks`, so writing it did
+           not grow the region it governs.
+
+**Refused, and the region block is what makes the refusal legible: archiving
+the 1,421-word Ideas backlog.** It is the obvious cut — **1,066 words, 75.0%,
+are struck-through graduated spike entries**, each already carrying a full
+report in `.roundtable/explore-*.md`, in the exact incident-narrative shape
+167.2 moved to `LOOPS-archive.md`. (Counted, not eyeballed: the first estimate
+written here was "~89%", and the parse — words inside entries opening `- ~~`,
+against the section's own total — returned 75.0%, with 339 words in live
+entries and 16 of preamble.) It is refused because it sits **below**
+`## Playbooks`: moving the whole section takes the file 14,032 → **12,611**
+words, moving only the struck entries 14,032 → **12,966**, and the dispatch
+region stays **6,100 in both cases**. That is improving the instrument's
+number without touching the burden it stands for, and the block now prints
+both figures side by side so the next wake can see it instead of re-deriving
+it. Two further reasons, both measured: the backlog is not dormant — the most
+recent of **57** `Explore` rows in 1,411 (2026-08-29) *filed into it*, and the
+open "Known Limits" idea is still queued for a spike — and three entries carry
+forward-looking *"do NOT re-spike the naive version"* instructions to a future
+Explore, which is precisely the content 167.2's losing argument ("a pointer is
+read less than a paragraph") protects.
+
+**Refused: archiving the three `Settled:` sections** (1,314 words —
+visually-hidden 209, 0fr/1fr 236, "the count is a command" 521, BCD paths
+348). Refused on first-hand evidence from this very sweep rather than on
+principle: **lane 2 above read the visually-hidden section's table of eight to
+adjudicate the repeat set**, which is what the Standardize playbook sends a
+wake there to do every 4th Continue round. A section a standing lane reads is
+not archaeology, whatever it looks like.
+
+**Not verified, and named rather than implied:** nothing in this slice renders.
+The diff is one Python instrument and two markdown files, with no CSS, no docs
+page and no built surface, so the 1440/390 light-and-dark screenshot lane a cloud
+wake cannot run has **nothing to say about it** — this is an absence of subject,
+not an unverified claim. The full cloud toolchain was run green regardless.
+
 ## Slice 273 — Polish round on `byline`: six cites hold and five arms reproduce, and two findings — the reason `LOOPS.md` records for `dry = 0` was false in the commit that wrote it, and the blind re-score found the page recommending the context its own wrong-choice clause forbids (2026-09-05)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
