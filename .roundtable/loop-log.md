@@ -1454,3 +1454,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-05 20:54 · Polish · round · Slice 283 — Polish round 3 on table-toolbar: NO-OP on the surface (4 arms clean); arm 17 found 7 of 13 polish_requeue re-queues are constants, 5 orphaned by 276.1's own path-set widening; report arm added and red-proved, --audit-stamps added · landed · fc79ea85
 - 2026-09-05 20:54 · Meta · refusal · re-stamping the 5 pre-276.1 rows: exact, but a migrated stamp is introduced by the migration commit and would re-read orphan — the fix breaks its own detector; filed as 283.2 instead · refused · fc79ea85
 - 2026-09-05 20:54 · Meta · refusal · incrementing dry on this no-op round — 273.2 is the open owner call and §3b's practice has never done it · refused · fc79ea85
+- 2026-09-05 21:55 · Continue · build · 283.2 — stamp revision as an optional suffix; 7 rows migrated; --verify-stamps advisory post-commit · landed · 9c1bacbe
+- 2026-09-05 21:55 · Meta · refusal · a MANDATORY revision on every stamp — --stamp runs before its own commit, and 0 of 18 stamps reproduce at the HEAD it would record · refused · 9c1bacbe
+- 2026-09-05 21:55 · Meta · refusal · re-stamping the two mid-round orphans at TODAY's tree — it would say their source never moved; they are stamped at their own round's commit instead · refused · 9c1bacbe

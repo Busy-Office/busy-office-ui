@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-05 20:54 UTC
+Generated at: 2026-09-05 21:55 UTC
 
 ## Open items by slice
 
@@ -21,16 +21,17 @@ Generated at: 2026-09-05 20:54 UTC
 - **Slice 273** (1 open)
   - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
 - **Slice 283** (1 open)
-  - 283.2 — the ledger records a digest with no revision beside it, so a stamp cannot be audited or migrated without guessing which commit it describes.
+  - 283.3 — `--stamp` cannot verify its own output, and the fix for that is ordering plus an advisory check. Is that enough?
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1448 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-09-05 06:54   ok
+dispatch status — counter-triggered rules (1451 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-09-05 06:54   OVERDUE
   Objective     2 / 3 slices          since 2026-09-05 17:40   ok  [281, 283]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      2 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 2 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-03, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-03 (2026-09-04, 2026-09-05), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -50,9 +51,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-05 15:57 · Meta · refusal · adding Meta to CLOSES_A_SLICE — its 3 rows record machinery about the loop, which is the Roadmap exclusion's reason · refused · 632bfc46
-- 2026-09-05 17:40 · Objective · grill · Slice 280 — Objective grill of Slices 276, 277, 278, 279: 52 of 54 assertions reproduce; 276.1's blind-commit table measured the tree BEFORE its own fix — 31 across 7 is 51 across 9, and the two dropped rows are the two PAGE_ONLY_BEHAVIORS surfaces that same item added, one of them the 10/11 its own opening paragraph quotes; corrected in 3 of the 4 places it spread · landed · 71b44721
-- 2026-09-05 17:40 · Meta · refusal · gating the blind-commit walk — the predicate holds for 51 of 73 qualifying commits at 29a9062b, so a gate over it would be red on a correct tree (94.11 base rate) · refused · 71b44721
 - 2026-09-05 19:11 · Polish · round · Slice 281 — data-table round 3: arm 16 re-took the spacing cite's live layout measurement; its worked example became unreachable by the rule 28h after it was measured, and all three live copies had dropped the sentence separating the two effects · landed · 6cb26268
 - 2026-09-05 19:11 · Meta · refusal · a gate asserting the page a density comment cites is reachable by the rule — it discriminates today but gates one sentence in one comment and a prose edit returns it to silent · refused · 6cb26268
 - 2026-09-05 19:48 · Roadmap · sweep · Slice 282 — twelfth archive sweep: 13 closed slices moved verbatim, ROADMAP.md 5,870 -> 3,179 at the move (share 46.5% -> 0.0%), identity red-proved 13/13 then 12/13 under injection; taken 3.5h after 5abdce3c refused the same sweep at 40.6%, and 282.2 records the five decisions lying on no threshold in either unit · landed · ed32eefd
@@ -60,6 +58,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-05 20:54 · Polish · round · Slice 283 — Polish round 3 on table-toolbar: NO-OP on the surface (4 arms clean); arm 17 found 7 of 13 polish_requeue re-queues are constants, 5 orphaned by 276.1's own path-set widening; report arm added and red-proved, --audit-stamps added · landed · fc79ea85
 - 2026-09-05 20:54 · Meta · refusal · re-stamping the 5 pre-276.1 rows: exact, but a migrated stamp is introduced by the migration commit and would re-read orphan — the fix breaks its own detector; filed as 283.2 instead · refused · fc79ea85
 - 2026-09-05 20:54 · Meta · refusal · incrementing dry on this no-op round — 273.2 is the open owner call and §3b's practice has never done it · refused · fc79ea85
+- 2026-09-05 21:55 · Continue · build · 283.2 — stamp revision as an optional suffix; 7 rows migrated; --verify-stamps advisory post-commit · landed · 9c1bacbe
+- 2026-09-05 21:55 · Meta · refusal · a MANDATORY revision on every stamp — --stamp runs before its own commit, and 0 of 18 stamps reproduce at the HEAD it would record · refused · 9c1bacbe
+- 2026-09-05 21:55 · Meta · refusal · re-stamping the two mid-round orphans at TODAY's tree — it would say their source never moved; they are stamped at their own round's commit instead · refused · 9c1bacbe
 
 ## Sunset test
 
