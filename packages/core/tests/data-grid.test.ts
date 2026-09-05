@@ -74,6 +74,24 @@ describe('initDataGrid', () => {
     expect(document.activeElement).toBe(cell);
   });
 
+  // The @keymap block publishes these four into keymap.json and from there
+  // onto /concepts/js-behaviors. Nothing asserted them until roadmap 278.1.
+  it('Home/End jump to the row edges; with Ctrl they jump to the grid edges', () => {
+    const g = grid();
+    const rows = g.querySelectorAll('tr');
+    const mid = rows[1].children[0] as HTMLElement;
+    mid.tabIndex = 0;
+    mid.focus();
+    key(mid, 'End');
+    expect(document.activeElement).toBe(rows[1].children[1]);
+    key(rows[1].children[1], 'Home');
+    expect(document.activeElement).toBe(rows[1].children[0]);
+    key(rows[1].children[0], 'End', { ctrlKey: true });
+    expect(document.activeElement).toBe(rows[2].children[1]);
+    key(rows[2].children[1], 'Home', { ctrlKey: true });
+    expect(document.activeElement).toBe(rows[0].children[0]);
+  });
+
   it('checking a row checkbox sets aria-selected on its row', () => {
     const g = grid();
     const row = g.querySelectorAll('tr')[1];

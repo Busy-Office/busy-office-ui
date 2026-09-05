@@ -42,6 +42,20 @@ pin.
 
 ### Fixed
 
+- **`initDataGrid` no longer strands its tab stop on a hidden cell, so a grid
+  survives `initTableToolbar`'s column visibility.** The two behaviors are
+  documented as a pair and had never been asserted together: hiding the column
+  the cell cursor is parked in left the grid's single tabbable cell `[hidden]`,
+  and Tab then skipped the whole grid — a keyboard user had no way back in.
+  Hidden cells are now excluded from cursor movement (arrows, `Home`/`End`) and
+  can never hold the tab stop; a cell hidden while the cursor is in it hands
+  the stop to the first visible cell, re-seeded from a `MutationObserver` on
+  `hidden` rather than a `change` listener, because the toolbar applies its
+  hide on a document-level listener that runs after any container-level one.
+  Not breaking: `aria-rowindex`/`aria-colindex` still number every cell,
+  including hidden ones, no export changed, and the behaviour differs only on
+  markup that was previously broken.
+
 - `.bo-input` (and `.bo-quantity__input`) now truncates an overflowing value
   or placeholder with an ellipsis instead of a raw clip at the control's
   edge — `text-overflow: ellipsis`, added alongside the `overflow`/

@@ -4140,6 +4140,68 @@ check(
   JSON.stringify(elevatedMotion),
 );
 
+/* 278.1 — /components/table-toolbar enumerates the grid's keys, and until this
+   wake it listed four of the six the shipped module implements: Home/End and
+   their Ctrl variants were published in `keymap.json` (and from there onto
+   /concepts/js-behaviors) with nothing anywhere asserting them. The page now
+   names them, so the claim becomes executable here.
+
+   Driven as real key events on the page's own #grid-nav-demo — a synthetic
+   keydown on `document` matches no delegated handler, and this module's
+   listener is bound to the table. The demo is 4 rows x 3 columns; the cursor
+   is parked by the same roving mechanism a user drives, never by setting
+   tabindex by hand, because a hand-set second tab stop is not a state the
+   grid can be in. */
+await visit('/components/table-toolbar/', { width: DESKTOP_WIDTH });
+
+async function gridCursorAfter(startRC, key, ctrl = false) {
+  await page.evaluate(([r, c]) => {
+    const t = document.querySelector('#grid-nav-demo');
+    const m = Array.from(t.querySelectorAll('tr')).map((tr) => Array.from(tr.children));
+    t.querySelectorAll('td[tabindex], th[tabindex]').forEach((x) => (x.tabIndex = -1));
+    m[r][c].tabIndex = 0;
+    m[r][c].focus();
+  }, startRC);
+  if (ctrl) await page.keyboard.down('Control');
+  await page.keyboard.press(key);
+  if (ctrl) await page.keyboard.up('Control');
+  return page.evaluate(() => {
+    const t = document.querySelector('#grid-nav-demo');
+    const m = Array.from(t.querySelectorAll('tr')).map((tr) => Array.from(tr.children));
+    const a = document.activeElement;
+    for (let r = 0; r < m.length; r++) {
+      const c = m[r].indexOf(a);
+      if (c !== -1) return [r, c];
+    }
+    return null;
+  });
+}
+
+const gridShape = await page.evaluate(() => {
+  const t = document.querySelector('#grid-nav-demo');
+  return t
+    ? { rows: t.querySelectorAll('tr').length, cols: t.querySelector('tr').children.length }
+    : null;
+});
+const gridKeys = {
+  end: await gridCursorAfter([1, 1], 'End'),
+  home: await gridCursorAfter([1, 1], 'Home'),
+  ctrlEnd: await gridCursorAfter([1, 1], 'End', true),
+  ctrlHome: await gridCursorAfter([1, 1], 'Home', true),
+};
+check(
+  'table-toolbar: Home/End reach the row edges and Ctrl+Home/Ctrl+End the grid edges, as the page and keymap.json both say',
+  // The shape is asserted too: on a 1x1 grid every one of these is [0,0] and
+  // the four comparisons below would pass while distinguishing nothing.
+  gridShape?.rows === 4 &&
+    gridShape?.cols === 3 &&
+    JSON.stringify(gridKeys.end) === '[1,2]' &&
+    JSON.stringify(gridKeys.home) === '[1,0]' &&
+    JSON.stringify(gridKeys.ctrlEnd) === '[3,2]' &&
+    JSON.stringify(gridKeys.ctrlHome) === '[0,0]',
+  JSON.stringify({ gridShape, gridKeys }),
+);
+
 await browser.close();
 server.close();
 

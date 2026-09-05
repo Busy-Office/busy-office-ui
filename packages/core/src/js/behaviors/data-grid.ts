@@ -26,6 +26,13 @@
  * descendant, if any; Escape (from inside that descendant) returns focus to
  * the cell.
  *
+ * Hidden cells are excluded from all of that. A `[hidden]` cell cannot take
+ * focus, so it is skipped by the cursor and can never hold the grid's single
+ * tab stop; a cell hidden while the cursor is parked in it hands the stop to
+ * the first visible cell. This is what makes the behavior compose with
+ * initTableToolbar's column visibility, which hides cells on a document-level
+ * listener this module observes rather than subscribes to.
+ *
  * @serves data-table
  */
 const boundGrids = new WeakSet<Element>();
@@ -41,6 +48,17 @@ function cellMatrix(table: HTMLTableElement): HTMLElement[][] {
   return Array.from(table.querySelectorAll('tr')).map((tr) =>
     Array.from(tr.children) as HTMLElement[],
   );
+}
+
+// A hidden cell cannot take focus, so it is not part of the navigable grid.
+// initTableToolbar's column visibility sets `cell.hidden` on every [data-col]
+// cell it hides, and the two behaviors compose on one .bo-data-table-container
+// — so this is the shipped mechanism, not a hypothetical. `hidden` only, never
+// offsetParent: the property must read the same in jsdom as in a browser.
+function visibleMatrix(table: HTMLTableElement): HTMLElement[][] {
+  return cellMatrix(table)
+    .map((row) => row.filter((cell) => !cell.hidden))
+    .filter((row) => row.length > 0);
 }
 
 function cellPosition(
@@ -75,9 +93,20 @@ function reindex(table: HTMLTableElement): void {
         .forEach((w) => (w.tabIndex = -1));
     });
   });
-  // Exactly one tab stop for the whole grid.
+  // A hidden cell must never hold the tab stop. Hiding the column the cursor
+  // is parked in left the grid's ONE tabbable cell unrenderable, so Tab
+  // skipped the whole grid and no keyboard user could get back into it
+  // (measured in headless Chrome, roadmap 278.1). Same class as the
+  // :not(:disabled) guard on FOCUSABLE above: focus() on such a cell returns
+  // silently and the roving model is left pointing at nothing.
+  matrix.forEach((row) =>
+    row.forEach((cell) => {
+      if (cell.hidden) cell.tabIndex = -1;
+    }),
+  );
+  // Exactly one tab stop for the whole grid, on a cell that can accept it.
   if (!table.querySelector('td[tabindex="0"], th[tabindex="0"]')) {
-    const first = matrix[0]?.[0];
+    const first = visibleMatrix(table)[0]?.[0];
     if (first) first.tabIndex = 0;
   }
 }
@@ -114,6 +143,20 @@ function bindGrid(table: HTMLTableElement): void {
     .closest('.bo-data-table-container')
     ?.addEventListener('htmx:after:swap', () => refreshDataGrid(table));
 
+  // Re-seed the tab stop whenever a cell is hidden or shown by anyone —
+  // initTableToolbar's column visibility is the shipped case, but consumer
+  // code hiding a cell directly has the same effect. An observer rather than a
+  // change listener on purpose: the toolbar applies its hide on a DOCUMENT
+  // listener, so a container-level `change` handler runs BEFORE the cells are
+  // hidden and reads the old state (measured, roadmap 278.1).
+  if (typeof MutationObserver !== 'undefined') {
+    new MutationObserver(() => refreshDataGrid(table)).observe(table, {
+      attributes: true,
+      attributeFilter: ['hidden'],
+      subtree: true,
+    });
+  }
+
   table.addEventListener('keydown', (e) => {
     const cell = (e.target as Element | null)?.closest<HTMLElement>('td, th');
     if (!cell || !table.contains(cell)) return;
@@ -138,7 +181,9 @@ function bindGrid(table: HTMLTableElement): void {
     // keys, e.g. a select or a text cursor).
     if (cell !== e.target) return;
 
-    const matrix = cellMatrix(table);
+    // Hidden cells are not navigable — arrowing onto one focuses nothing and
+    // strands the roving tab stop there (roadmap 278.1).
+    const matrix = visibleMatrix(table);
     const pos = cellPosition(matrix, cell);
     if (!pos) return;
     const [r, c] = pos;

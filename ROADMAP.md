@@ -315,6 +315,155 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 278 — Polish round on `table-toolbar`, the surface every prior round dropped: the two behaviors this page documents as a pair make the grid keyboard-unreachable when they meet — hiding the column the cell cursor sits in strands the grid's ONE tab stop on a `[hidden]` cell (2026-09-05)
+
+**Dispatcher trace, cloud wake.** Rule 1 clear — `list_issues` on
+`Busy-Office/busy-office-ui` returns `totalCount: 0`, no open `N. [ ]` item is
+a P0, so Step 1 triaged and committed nothing. Rules 2 and 3 read `1 / 4` and
+`1 / 3` — under threshold. Rule 4 found nothing dispatchable: all **12** open
+items re-classified from their own text per `LOOPS.md` 186.2 — **9
+owner-blocked** (Slice 15, `112.3`, `112.4`, `249.7`, `249.10`-`249.13`,
+`273.2`; each says so in its own line) and **3 browser-blocked in the
+SCREENSHOT sense** (`249.6`, `249.9`, `249.15`), none agent-blocked, none
+unblocked. Rule 5 read **STALE** (`2 wake-date(s) newer`) and is therefore
+**reported as could-not-be-evaluated, not clear**. Rule 6 fired.
+
+**The tiebreak resolved itself for the first time in this ledger's history.**
+After `pagination` moved to `2/3` last wake, `component/table-toolbar` is the
+only surface at `1/3`, so §3b step 1's "fewest rounds used" picked it with no
+invented discriminator — and it picked the surface **217.1's reason dropped
+from every previous round**: `table-toolbar` is ABSENT from `dsa-scores.json`
+(a behaviour-documentation page with no CSS component under it), so its page
+makes no `DsaScore` call and arms 1-6 have nothing to disagree with. Taken
+rather than skipped, per the standing hand-off note: an unscored page is short
+of DSA arms, not short of subject.
+
+1. [x] **278.1 — `initDataGrid` roves its single tab stop onto cells
+       `initTableToolbar` has hidden, and Tab then skips the grid entirely.**
+       The surface's own opener calls these *"the two opt-in behaviors that sit
+       on top of a data table"*; nothing had ever asserted what happens when
+       they meet.
+
+       **Measured in headless Chrome against the BUILT page before anything was
+       written** (`ENVIRONMENT.md`'s SECOND list — DOM, focus and geometry, not
+       a rendered image). Two independent reproductions, the second driving
+       both real modules with real events on `/components/table-toolbar/`'s own
+       `#grid-nav-demo`:
+
+       | step | tab stops in grid | the stop's cell | Tab from the toolbar |
+       |---|---|---|---|
+       | baseline | 1 | visible | lands **inside** the grid (`TH`) |
+       | cursor roved onto the Amount column | 1 | visible | — |
+       | column hidden by a real `change` on `[data-col-toggle]` | 1 | `hidden: true`, `offsetParent: null` | lands on the **next `<pre>`** — the grid is skipped |
+
+       So the grid keeps exactly one tab stop and it is unreachable: a keyboard
+       user who hides a column while the cursor is in it cannot get back into
+       the grid at all. `focusCell()` sets `tabIndex = 0` on the target and
+       clears every other cell, then `cell.focus()` returns silently — the same
+       class of failure `data-grid.ts`'s own `FOCUSABLE` comment records for
+       disabled widgets (*"Enter focused a disabled control and silently went
+       nowhere"*), in the roving path rather than the Enter path.
+
+       **The first attempt at the second reproduction proved nothing and is
+       recorded rather than quietly dropped**, because it is CLAUDE.md's
+       injection rule collecting twice in one round. Attempt one imported the
+       library from the page's own `<script type="module">` sources and got
+       *"no module exporting both"* — the built page ships Astro entry scripts,
+       not the library, so `initDataGrid` never ran and the ArrowRight moved
+       nothing. Attempt two bound nothing (the page already calls all three
+       inits) but addressed its checkbox with `document.querySelector(
+       '[data-col-toggle]')`, which matches the **first demo's** Vendor box
+       — it hid a column in a different table and reported `hidden cells now:
+       0`. Only the container-scoped selector reproduced. Both attempts
+       "passed" in the sense of not erroring.
+
+       **No shipped page combines the two**, checked rather than assumed:
+       `data-grid-nav` and `data-col-toggle` co-occur in `data-table.astro`
+       but on different tables, and `grep` finds no container holding both. So
+       this is a defect in a documented composition with no live instance —
+       which is why it is filed and fixed rather than flagged P0.
+
+       **Fixed in `data-grid.ts`, three parts, each red-proved separately by
+       injection with the removal confirmed in
+       `dist/js/behaviors/data-grid.js` before the red was believed:**
+
+       | injection | dist confirmation | goes red |
+       |---|---|---|
+       | drop the `MutationObserver` re-seed | `observer=false` | *hiding the column the cursor is parked in…* |
+       | keydown navigates the unfiltered matrix | `visibleMatrix` refs **3 → 2**, line 174 reverts to `cellMatrix` | *cursor skips a hidden column*, *End goes to the last VISIBLE cell* |
+       | `reindex` stops clearing a hidden cell's tabindex | `clearHidden=false` | *hiding the column the cursor is parked in…* |
+       | drop `Home`/`End` handling | `homeEnd=false` | *Home/End jump to the row edges…* |
+
+       **The first dist instrument was dead and is named here**: it grepped
+       `packages/core/dist/js/index.js`, which is a re-export barrel — `.hidden`
+       appears in it **zero** times on the fixed build too, so it would have
+       reported "removed" for any injection whatsoever. The artifact is
+       `dist/js/behaviors/data-grid.js`. A second flag (`filter=true`) survived
+       injection 2 legitimately, because `visibleMatrix` is still called from
+       `reindex`; the call-site count is what discriminates there, and it is
+       the reading quoted above rather than the boolean.
+
+       An observer rather than a `change` listener, measured not assumed: the
+       toolbar applies its hide on a **document-level** listener, so a
+       container-level `change` handler runs first, on the pre-hide state. The
+       observer also covers consumer code hiding a cell directly, which a
+       toolbar-specific hook would not.
+
+       **Compatibility: NOT breaking**, stated against what changed rather than
+       predicted. `aria-colindex`/`aria-rowindex` still number every cell
+       including hidden ones (`reindex` keeps the unfiltered matrix), no export
+       changed, and the only behavioural difference is on markup that was
+       previously broken. Added under **Fixed**.
+       - **Accept:** with `initTableToolbar` and `initDataGrid` on one
+         container, the grid's tab-stop count and the hidden-ness of the cell
+         holding it agree with what `/components/table-toolbar` says, asserted
+         by cases driving the real toolbar `change` event rather than setting
+         `cell.hidden`; each new assertion is red-proved by an injection whose
+         landing is confirmed in `dist/js/behaviors/data-grid.js`, not in the
+         source.
+
+2. [x] **278.2 — the page listed four of the six keys the shipped module
+       implements, and the two it omitted were published everywhere else.**
+       `data-grid.ts`'s `@keymap` block declares `Home / End` (and their
+       Ctrl/Cmd variants), `extract-keymap.mjs` lifts it into
+       `keymap.json`, and `/concepts/js-behaviors` renders it — while
+       `/components/table-toolbar`'s own key sentence stopped at *"arrow keys
+       move the cursor … Enter … Esc"*.
+
+       **The behaviour is correct and the omission is the defect**, which is
+       the opposite of 277.1 the wake before, where five wordings were wrong
+       and the module was right. Measured against the shipped module in
+       headless Chrome from `[1,1]` on the 4x3 demo: `End` → `[1,2]`, `Home` →
+       `[1,0]`, `Ctrl+End` → `[3,2]`, `Ctrl+Home` → `[0,0]` — exactly what the
+       keymap says.
+
+       Assertion count before this slice, plain fixed strings:
+       `grep -c Home packages/core/tests/data-grid.test.ts` → **0**;
+       `grep -c Home apps/docs/scripts/check-claims.mjs` → 0 for this grid.
+       Now one unit case and one `check:claims` case, the latter driving real
+       key events on the page's own `#grid-nav-demo` (a synthetic `keydown` on
+       `document` matches no delegated handler). **The claim case asserts the
+       demo's SHAPE first** — `4` rows x `3` cols — because on a 1x1 grid all
+       four expectations collapse to `[0,0]` and the case would pass while
+       distinguishing nothing.
+       - **Accept:** the page's key list and `keymap.json`'s entry for
+         `initDataGrid` name the same keys, and every key either page names is
+         asserted somewhere executable; the claim case's own discriminating
+         power is asserted rather than assumed.
+
+**Not verified, and named as unverified rather than implied.** `0` CSS files
+changed, but `table-toolbar.astro` gained two prose passages, so the page
+**reflows by a few lines and that reflow has NOT been checked visually** — a
+cloud wake has no 1440/390 light-and-dark lane. What *is* verified: the
+whole-tree browser gates sweep every page at both widths, and `test:axe`
+reports zero violations.
+
+**Refused inside this item:** a `check:claims` case for the hidden-column
+composition itself. It needs the grid demo to gain a column-toggle control,
+which changes what the demo DOES and lands new interactive markup on the page
+— the screenshot lane a cloud wake cannot run. The composition is asserted at
+the unit level instead, where the same events are drivable.
+
 ## Slice 277 — Polish round on `pagination`: six cites hold, and the finding is a runtime claim published in four places, asserted in none — `data-load-more-auto`'s only test says it *does not throw* in an environment where the feature cannot exist (2026-09-05)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** for the

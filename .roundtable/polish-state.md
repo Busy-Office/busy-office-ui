@@ -107,13 +107,13 @@ a no-op recorded in one line.
 | component/icon | content | **3** | 2/3 | 0 | f0d9f50b | round 1 landed — blind 2→3; scorer caught the demo contradiction, clause narrowed; **round 2 (2026-08-30) FOUND A DEFECT — `fit` cited "12 ERP glyphs" against 26 shipped, and the same 12 was hard-coded as the DIVISOR of the page's published size projection, see below** · **RE-QUEUED — source changed** |
 | component/inline-editing | content | **3** | 2/3 | 0 | 644dde35 | round 1 landed — blind 3, "not for creating a record" (unscored in DSA); **round 2 (2026-09-05) NO-OP on the surface — all five arms reproduce, including the row-edit cites no arm had ever read — and a new arm 14 FOUND A DEFECT in this loop's own step 0: the surface source set was blind to every behavior module, 31 commits across 7 surfaces. ROADMAP 276, see below** |
 | component/navbar | content | **3** | 2/3 | 0 | 35528cb6 | round 1 landed — blind 2→3, "not the page's own title or actions"; **round 2 (2026-09-04) NO-OP on the surface — all six cites hold, including the `interaction: na` no arm covered — and two NEW arms found a defect elsewhere: `breadcrumb · interaction` scored `na` 7h14m before the rubric clause that forbids it existed. ROADMAP 268, see below** |
-| component/pagination | content | **3** | 2/3 | 0 | 89c4d10d | round 1 landed — blind 2→3, "not for stepping through a process"; **round 2 (2026-09-05) NOT a no-op, and the defect is ON this surface — six cites hold, but a new arm 15 read the page's claims against `load-more.ts` and found `data-load-more-auto` published as a runtime promise in five places, asserted in none, all five naming a trigger the shipped module does not have. ROADMAP 277, see below** |
+| component/pagination | content | **3** | 2/3 | 0 | 89c4d10d | round 1 landed — blind 2→3, "not for stepping through a process"; **round 2 (2026-09-05) NOT a no-op, and the defect is ON this surface — six cites hold, but a new arm 15 read the page's claims against `load-more.ts` and found `data-load-more-auto` published as a runtime promise in five places, asserted in none, all five naming a trigger the shipped module does not have. ROADMAP 277, see below** · **RE-QUEUED — source changed** |
 | component/progress | content | **3** | 2/3 | 0 | 1154a4d7 | round 1 landed — blind 2→3, "not for work of unknown duration"; **round 2 (2026-09-04) NO-OP on the surface — six cites and all eight arms clean — and the finding is in this loop's own step 0: `polish_requeue.py --apply` announced a write over a byte-identical file. ROADMAP 267, see below** · **RE-QUEUED — source changed** |
 | component/scan | colour+interaction+fit | **3** | 2/3 | 0 | e1c34049 | round 1 (2026-08-23) fixed all three; **round 2 (2026-08-28) discovered the round-1 score was never written to `dsa-scores.json` at all** — see below · **RE-QUEUED — source changed** |
 | component/sidebar-nav | content | **3** | 2/3 | 0 | 904b544f | round 1 landed — blind 2→3, "not for navigating within one screen"; **round 2 (2026-08-30) FOUND A DEFECT — the `fit` cite's usage count was EXACT when written and decayed two days later, see below** · **RE-QUEUED — source changed** |
 | component/state-patterns | content | **3** | 2/3 | 0 | 7d3f0e38 | round 1 landed — blind 2→3 (clears skeleton AND state); **round 2 (2026-08-28) FOUND A DEFECT — `skeleton · colour` cited the removed token pairing, see below** · **RE-QUEUED — source changed** |
 | component/stepper | content | **3** | 2/3 | 0 | efba2799 | round 1 landed — blind 2→3, "not for independent sections"; **round 2 (2026-09-01) NO-OP — reconciliation clean on five arms; arm 4 re-measured 20/20 and a new arm 5 reads 81/81, see below** · **RE-QUEUED — source changed** |
-| component/table-toolbar | content | **3** | 1/3 | 0 | f7950a7f | round 1 landed — blind 3, "do not add to a read-mostly list" (unscored in DSA) · **RE-QUEUED — source changed** |
+| component/table-toolbar | content | **3** | 2/3 | 0 | f7950a7f | round 1 landed — blind 3, "do not add to a read-mostly list" (unscored in DSA); **round 2 (2026-09-05) NOT a no-op, and the defect is ON this surface — the two behaviors this page documents as a pair make the grid keyboard-unreachable when they meet: hiding the column the cell cursor is parked in strands the grid's ONE tab stop on a `[hidden]` cell and Tab then skips the grid entirely. Fixed in `data-grid.ts`, red-proved by four injections confirmed in `dist/js/behaviors/data-grid.js`. ROADMAP 278, see below** |
 | component/tree | content | **3** | 2/3 | 0 | f77bea6d | round 1 landed — blind 2→3, pair-coherent with tree-table; **round 2 (2026-09-04) NO-OP on the surface — all six cites hold, including the `1.25em`/`1em` pair no arm had read — and a new arm 12 FOUND A DEFECT in `check:slice-refs` itself: its file filter omits `.ts` and `.json`, so 11 slice references are cited from nowhere the gate looks. ROADMAP 270, see below** |
 | component/tree-table | content | **3** | 2/3 | 0 | 298374cc | round 1 landed — blind 2→3, pair-coherent with tree; **round 2 (2026-09-01) NO-OP — reconciliation clean on six arms; a new arm 6 reads 8/8 and corrects this ledger's own base rate for the class, see below** · **RE-QUEUED — source changed** |
 
@@ -2319,3 +2319,102 @@ but not judge, and 101.3 forbids Polish adding gates outright.
 `check:scroll` sweep every page at 1440 and 390, `test:axe` found zero
 violations, and every other number above came from a gate or probe executing
 in this container.
+
+## Round 2: table-toolbar (2026-09-05, cloud wake) — NOT a no-op; the two behaviors this page documents as a pair make the grid keyboard-unreachable when they meet (ROADMAP 278)
+
+### The pick — the tiebreak resolved itself, for the first time in this ledger
+
+After `pagination` moved to `2/3` last wake, exactly **one** surface sat at
+`1/3`, so §3b step 1's "fewest rounds used" picked `table-toolbar` with no
+invented discriminator. It is the surface **217.1's reason dropped from every
+previous round**: it is ABSENT from `dsa-scores.json` (a behaviour-documentation
+page with no CSS component under it), so its page makes no `DsaScore` call and
+arms 1-6 have nothing to disagree with.
+
+```
+node -e "const d=require('./apps/docs/src/data/dsa-scores.json').components;
+console.log('table-toolbar' in d)"      # false
+```
+
+Taken rather than skipped. An unscored page is short of DSA arms, not short of
+subject: it serves `initTableToolbar` **and** `initDataGrid` per
+`PAGE_ONLY_BEHAVIORS`, so the behaviour arm had two modules to read — and that
+is where the defect was.
+
+### Arm 15 (277's arm, applied to two modules) — the page's claims against the shipped behaviour
+
+Every runtime claim on the page reproduces against `table-toolbar.ts` and
+`data-grid.ts` **individually**. What nothing had ever asserted is the two
+together, which the page's own opener presents as a pair: *"the two opt-in
+behaviors that sit on top of a data table"*.
+
+Measured in headless Chrome against the BUILT page, driving both real modules
+with real events on `/components/table-toolbar/`'s own `#grid-nav-demo`:
+
+| step | tab stops | the stop's cell | Tab from the toolbar |
+|---|---|---|---|
+| baseline | 1 | visible | lands **inside** the grid (`TH`) |
+| cursor roved onto the Amount column | 1 | visible | — |
+| that column hidden by a real `change` | 1 | `hidden: true`, `offsetParent: null` | lands on the next `<pre>` — grid skipped |
+
+A keyboard user who hides a column while the cursor is in it cannot get back
+into the grid. Fixed in `data-grid.ts` — hidden cells are excluded from cursor
+movement and can never hold the tab stop, re-seeded from a `MutationObserver`
+on `hidden` because the toolbar hides on a **document-level** listener that
+runs after any container-level one.
+
+### Two dead injections, and one dead instrument, all recorded
+
+- The first reproduction attempt imported the library from the page's own
+  `<script type="module">` sources: *"no module exporting both"* — those are
+  Astro entry scripts, so `initDataGrid` never ran and ArrowRight moved
+  nothing.
+- The second addressed its checkbox with `document.querySelector(
+  '[data-col-toggle]')`, which matches the **first demo's** Vendor box. It hid
+  a column in a different table and reported `hidden cells now: 0`.
+- The first dist instrument grepped `packages/core/dist/js/index.js`, a
+  re-export barrel where `.hidden` appears **zero** times on the FIXED build
+  too — it would have reported "removed" for any injection whatsoever. The
+  artifact is `dist/js/behaviors/data-grid.js`.
+
+All three "passed" in the sense of not erroring. Four injections were then
+red-proved with their landing confirmed in the real artifact first.
+
+### Arm 16 — the page's key list against the published keymap
+
+`data-grid.ts`'s `@keymap` declares `Home / End` and their Ctrl/Cmd variants,
+`extract-keymap.mjs` lifts them into `keymap.json`, `/concepts/js-behaviors`
+renders them — and the component page's own key sentence stopped at *"arrow
+keys … Enter … Esc"*. Assertions before this round, plain fixed strings:
+`grep -c Home packages/core/tests/data-grid.test.ts` → **0**.
+
+The behaviour is CORRECT and the omission is the defect, which is the opposite
+of 277.1 the wake before. Now one unit case and one `check:claims` case;
+`check:claims` reads **163** live, up from 162, which is the +1.
+
+### Score, and what was refused
+
+**The score does not move and no blind re-score against the rubric is owed** —
+the surface has no `dsa-scores.json` entry, so there is no dimension to
+re-score. An independent second agent was still run on §3b step 4's principle
+(don't mark your own homework), told the surface and the modules, told nothing
+about what changed, and warned per **268.2** that a page may publish a prior
+verdict. `rounds` moves 1→2. Per **273.2**, an open owner call, `dry` is
+**not** incremented.
+
+**Not a no-op**: the defect is ON this surface. 273.2's NO-OP tally stays at
+**9**.
+
+**Refused: a `check:claims` case for the hidden-column composition itself.** It
+needs the grid demo to gain a column-toggle control, which changes what the
+demo DOES and lands new interactive markup — the screenshot lane a cloud wake
+cannot run. Asserted at the unit level instead, where the same events are
+drivable.
+
+### Not verified, said plainly
+
+Cloud wake: no Podman, no `localhost:8081`. **0** CSS files changed; the page
+gained two prose passages, so it **reflows by a few lines and that reflow is
+UNVERIFIED VISUALLY**. What is verified: all 17 cloud entry points green,
+`check:layout` and `check:scroll` sweep every page at 1440 and 390, and
+`test:axe` reports zero violations across 127 pages x 2 widths.

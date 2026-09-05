@@ -80,7 +80,11 @@ const gridMarkup = `<table class="bo-data-table" data-grid-nav>
     dropdown pattern as elsewhere (<code>data-multiselect</code>, real checkboxes)
     — checking/unchecking a <code>data-col-toggle</code> box shows/hides every
     <code>&lt;th&gt;</code>/<code>&lt;td&gt;</code> with the matching
-    <code>data-col</code>, scoped to this table only. <strong>Export</strong>
+    <code>data-col</code>, scoped to this table only. A hidden column is also
+    dropped from the grid model below: the cell cursor skips it, and hiding the
+    column the cursor is parked in hands the grid's single tab stop to a visible
+    cell rather than stranding it somewhere Tab cannot reach.
+    <strong>Export</strong>
     dispatches <code>bo:table-export</code> with a <code>format</code> — this
     behavior only tracks the intent, generating and downloading the actual file
     is your code (fetch a server export endpoint, or build a client-side CSV/PDF)
@@ -96,7 +100,9 @@ const gridMarkup = `<table class="bo-data-table" data-grid-nav>
       <code>gridcell</code>/<code>columnheader</code> roles implicitly — no per-cell
       markup needed), <code>aria-selected</code> synced from the row checkboxes, and
       two-axis roving tabindex — Tab enters the grid at ONE cell, arrow keys move the
-      cursor (clamped, no wrap), <kbd>Enter</kbd> focuses a cell's single widget (the
+      cursor (clamped, no wrap), <kbd>Home</kbd>/<kbd>End</kbd> jump to the row's
+      first/last cell and <kbd>Ctrl</kbd>+<kbd>Home</kbd>/<kbd>Ctrl</kbd>+<kbd>End</kbd>
+      to the grid's, <kbd>Enter</kbd> focuses a cell's single widget (the
       checkbox), <kbd>Esc</kbd> hands focus back to the cell. Reach for this when a
       screen is genuinely spreadsheet-like (dense data entry, heavy keyboard use) —
       the Simple tier above is enough for most tables, including ones with sort and
