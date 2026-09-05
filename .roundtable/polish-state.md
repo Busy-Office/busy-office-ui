@@ -2690,3 +2690,88 @@ whitespace collapsed, both CSS files are byte-identical before and after
   applies — where the property depends on what prose MEANS, enforce a shape or
   keep it in a rubric a human scores. Arm 16 IS that scoring, now recorded as a
   reusable arm: **re-take any cite that asserts runtime layout.**
+
+## Round 3: table-toolbar (2026-09-05, cloud wake) — NO-OP on the surface; the finding is step 0's own re-queue signal (ROADMAP 283)
+
+Dispatcher rule 6, reached because rules 1-5 were clear or had no input: no open
+P0 (`list_issues` → `totalCount: 0`), Standardize `3 / 4`, Objective `1 / 3`,
+rule 4's twelve open items all blocked (nine owner, three browser-blocked in the
+SCREENSHOT sense) and its sweep clause not firing (`roadmap_scope.py` reads
+`218 / 3,398 = 6.4%`), and rule 5 **STALE** — reported as *could not be
+evaluated*, never clear.
+
+### The pick
+
+§3b step 1 is degenerate here — every eligible surface is `content: 3` at
+`2/3 rounds, dry 0`, which is 171.1 reaching the pick step. The tiebreak is the
+previous wake's method, **re-run rather than reused**: how far each surface's
+source has moved from the tree its stamp was taken against, counted over its own
+paths since the commit that recorded that stamp.
+
+| surface | stamped | commits since | churn |
+|---|---|---|---|
+| **table-toolbar** | 2026-08-25 | **7** | +122 / −17 |
+| alerts | 2026-08-31 | 5 | +46 / −7 |
+| icon | 2026-08-30 | 4 | +72 / −4 |
+| tree-table, stepper, dashboard | 2026-09-01/02 | 3 | ≤ +7 / −1 |
+
+`data-table` is out at `3/3`. `table-toolbar` leads on all three readings, and
+it has the oldest stamp in the ledger.
+
+### The four arms on the surface, all clean
+
+1. The ledger says *"unscored in DSA"* and `dsa-scores.json` carries no
+   `table-toolbar` entry — consistent. The built page renders no stale
+   *"Not yet scored"* block, which is 176.1's defect re-checked rather than
+   assumed.
+2. The wrong-choice clause is present and load-bearing: *"Do not add either to
+   a read-mostly list"*, with the cost named — the table collapses to one Tab
+   stop and every control inside leaves the Tab sequence.
+3. `PAGE_ONLY_BEHAVIORS` reconciles: the script's own assertion that the page
+   imports `initTableToolbar` and `initDataGrid` passes, and the documented
+   exclusion of `initDataTables` (it stands the demo table up rather than being
+   the subject) still holds.
+4. The page's runtime claims are covered by `check:claims`, green — 167 live.
+
+### Arm 17: the ledger's own `src` column stops meaning anything after a formula change
+
+The new arm asks what no round had asked: does a re-queue's recorded stamp
+correspond to any state this repository was ever in? Over the 21 rows at
+`7079c94`, via `polish_requeue.py --audit-stamps`:
+
+| verdict | rows |
+|---|---|
+| equals today's digest — not re-queued | 7 |
+| reproducible under the current path set | 7 |
+| reproducible ONLY under the pre-276.1 set | **5** |
+| reproducible at no revision of its own paths | **2** |
+
+The five are `alerts`, `dashboard`, `stepper`, **`table-toolbar`** and
+`tree-table` — **276.1 widened the path set to include behavior modules and did
+not re-stamp the rows computed without them**, so a digest over strictly more
+blobs is compared against one over fewer and can never match. Their re-queue is
+`True` unconditionally. The attribution is a clean split, not a date inference:
+all seven affected rows are among the nine behavior-serving surfaces and none is
+among the other twelve.
+
+`data-table` and `pagination` are a different fault and it is recorded as an
+inference: both closed after 276.1, both stamps were written by a commit that
+also edited the surface's source, and neither that commit's tree nor its
+parent's reproduces them — so the digest came from an on-disk state between the
+two, which is what `digest()`'s working-tree hashing produces when `--stamp`
+runs before the round's last edit. `byline` is the contrast: same shape of
+commit, stamp equal to that commit's tree exactly.
+
+`--check` and `--apply` now say this per surface and summarise it. Red-proved by
+injection with the injection confirmed to have landed, and proved clearable by
+the documented mechanism — see ROADMAP 283.1 for both, and for why re-stamping
+the five was refused.
+
+### Closing the round
+
+`--stamp component/table-toolbar` wrote `99f7ac9f`; the report went **13 → 12**
+surfaces and **7 → 6** warnings, the picked surface leaving the re-queue set as
+the round's ordinary last step. `dry` stays **0**: 273.2 is the open owner call
+on whether a no-op round increments it, and this round does not pre-empt it.
+No blind re-score was run — §3b step 4 exists so a round cannot mark its own
+homework, and nothing on the surface changed, so there is no score to mark.

@@ -326,9 +326,9 @@ open items were re-read from `ROADMAP.md` and each re-classified from its own
 text per `LOOPS.md` 186.2 — owner-blocked (`112.3`, `112.4`, `249.7`,
 `249.10`-`249.13`, `273.2`, Slice 15) or browser-blocked in the SCREENSHOT
 sense (`249.6`, `249.9`, `249.15`; a LOCAL wake can take those three).
-**Rule 4's sweep clause did not fire either** — `roadmap_scope.py` reads
-**218 / 3,398 = 6.4%** closed-history share with Slice 282 the only eligible
-target. *(The previous hand-off predicted `0.0%` and 117 lines; the difference
+**Rule 4's sweep clause did not fire either** — `roadmap_scope.py` read
+**218 / 3,398 = 6.4%** closed-history share at dispatch (`7079c94`), with Slice
+282 the only eligible target. *(The previous hand-off predicted `0.0%` and 117 lines; the difference
 is Slice 282's own text, which that prediction was made before writing. Read
 the number, not the forecast.)* Rule 5 reports **STALE** — 2 wake-dates of
 loop activity newer than the newest comparable pair — so per `LOOPS.md` it
@@ -928,6 +928,17 @@ nothing today is 94.11's refused gate, so arm 13 is reported, not shipped.
          one, which is why it is amended in place rather than reopened. The
          figure goes stale on every Polish round, so **re-run the command
          before quoting it to the owner.**
+
+         **It went stale on the very next round: 283 makes it 10 and 8.**
+         `table-toolbar`'s round 3 (2026-09-05) is a tenth NO-OP on the
+         surface and filed a real defect (283.1), so the same command now
+         reads **10** and the ratio is **8/10**. Amended in place for the same
+         reason as the line above — the number moved, the argument did not,
+         and the two that found nothing are still `badge` and `stepper`.
+         Two consecutive rounds now carry an in-place correction of this
+         tally, which is itself input to the owner call: a figure that needs
+         re-measuring every round is a poor thing to have hard-coded in the
+         item that asks the owner to decide on it.
        - **Accept:** the owner picks one of — execute step 5 as written;
          redefine dry as "no score movement **and** no finding filed"; or
          delete the dry exit and say Polish runs until the owner stops it.
