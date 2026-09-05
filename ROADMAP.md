@@ -619,8 +619,10 @@ watch RETIRES"** — so the question is whether anything has changed under it, a
            outgrowing the file — and sits BELOW `## Playbooks`, so writing it did
            not grow the region it governs.
 
-2. [ ] **274.2 — the finding is now REPORTED and not yet ANSWERED: the dispatch
-       region is 6,100 words and nothing has cut it.** 274.1 fixed the
+2. [x] **274.2 — ANSWERED 2026-09-05 (cloud wake). The cut is in Step 0c, not
+       in Step 2: Step 2 has no archivable slab left, and that is measured
+       rather than asserted. The dispatch region is 6,100 words and nothing has
+       cut it.** 274.1 fixed the
        instrument; the burden it measures is unchanged, and the two candidate
        cuts below were both refused for landing outside the region. What is
        inside it is Step 2 — **3,211 words for eight rules**, of which rule 4 is
@@ -661,6 +663,83 @@ watch RETIRES"** — so the question is whether anything has changed under it, a
          the dispatch region is history a wake needs when it **argues** about a
          rule, never the sentence it **executes**, and a reason a rule's history
          is load-bearing is an argument about the rule.
+
+       **DONE 2026-09-05 (cloud wake). What the commit did, and why the cut is
+       not in Step 2.** Both branches of the Accept are exercised: Step 0c
+       loses a region of history, and every one of Step 2's eight rules records
+       its reason for keeping one, below. The `by region` block is re-run
+       after committing and its figure is named with the revision it describes,
+       per `ENVIRONMENT.md`'s 275.3 bullet — the block reads `HEAD`, so a
+       working-tree reading of it would be exactly the defect 275 filed.
+
+       - **Moved to `LOOPS-archive.md`** (new `## Step 0c` section, verbatim,
+         873 words including an 87-word header): the forensics of the two
+         collisions, the refuted *"safe by construction"* argument with its
+         5-of-5 measurement, and the measurements behind the three refused
+         alternatives. **Kept inline**, because they are what a wake executes
+         or decides by: the decision itself, the named cost, the correction
+         that no guaranteed conflict catches a collision, the
+         `git fetch origin main` rule that does, the keep-BOTH-row-sets
+         conflict recipe, the one-line reason for each of the three refusals,
+         and the reopen condition.
+       - **Measured:** dispatch region **6,100 → 5,658 words (−442, −7.2%)**;
+         Step 0c **1,391 → 949**; Step 2 **3,211, unchanged**; words added
+         above `## Playbooks`: **0**. (Step 0c reads 1,391 here against the
+         1,378 above because this parser counts the section's 13-word heading
+         and 274.1's did not — agreement, not a discrepancy.)
+
+       **Why no rule in Step 2 loses history — the measurement that decides
+       it.** The two precedents moved *slabs*: 167.2 took **749** contiguous
+       words out of rule 3, 191.3 took **414** out of rule 4, and both survive
+       as single sections in `LOOPS-archive.md`. Step 2 has nothing of that
+       shape left. Its largest **paragraph** is 206 words and its median is
+       ~70 (script: paragraph split over the eight rules, `LOOPS.md` at
+       `bf2e7c21`), and the largest contiguous *pure-narrative* block inside
+       any of them is **~106 words**. Recovering the ~10 scattered fragments
+       would net roughly 400 words — 6.6% of the region — in exchange for ten
+       pointer-follows per wake, which is a worse trade than either precedent
+       made and is the one 167.2's own losing argument (*a pointer is read
+       less than a paragraph*) warns against. **The paragraph totals are
+       mechanical; the executed-versus-narrative split inside a paragraph is a
+       hand classification, and is named as one** — per CLAUDE.md, a property
+       that depends on what prose MEANS is a rubric a human scores, not a gate.
+
+       One line per rule, as the Accept requires:
+
+       1. **Rule 1 (9w)** — one sentence, no history at all. Nothing to keep.
+       2. **Rule 2 (119w)** — its single 98-word paragraph is why the rule sits
+          above rule 4; the archive's own charter keeps *"why it sits where it
+          does"* inline. Pure-narrative block: **0**.
+       3. **Rule 3 (672w)** — the slab is already gone (167.2's 749). What is
+          left is three measurement fragments (~55w, ~70w, ~35w) embedded in
+          decision paragraphs, each needing a 20-40w pointer to stay
+          resolvable; net recovery ≈ 75 words.
+       4. **Rule 4 (980w)** — 191.3 already took 414. Of what remains, the
+          308-word blocked-kind taxonomy is executed by every cloud wake and
+          the 201-word 236.2 amend rule by every sweep. Narrative: ~70w of
+          stale-numbers archaeology and the ~95w 2026-08-19 LIFO incident.
+       5. **Rule 5 (361w)** — holds Step 2's largest pure-narrative block, the
+          106-word *"missing here for six days"* restatement. Kept: it is the
+          only record that this rule's text changed and why, and the rule was
+          dead for six days precisely because a fix landed in the playbook and
+          never reached it. The 138w `dispatch_status.py` instruction is
+          executed; the 87w *"Two, not one"* is the threshold.
+       6. **Rule 6 (631w)** — the 123w and 128w paragraphs are executed
+          negative instructions (do not re-raise 176.3, do not narrow the rule;
+          run `polish_requeue.py --apply` first). Narrative ≈ 90w inside the
+          206-word predicate paragraph.
+       7. **Rule 7 (226w)** — the 125w is the evidence that this rule has never
+          fired, which is the whole content of the rule; the 67w is executed
+          (*do not fix either by rewording this rule*).
+       8. **Rule 8 (190w)** — the 71-word idle-spiral incident is its only
+          narrative and is the rule's entire justification: it is what stops a
+          wake idling instead of halting. Kept deliberately.
+
+       **Not verified, and named rather than implied:** nothing in this change
+       renders. The diff is `LOOPS.md`, `LOOPS-archive.md` and `ROADMAP.md` —
+       no CSS, no docs page, no script, no built surface — so the 1440/390
+       light-and-dark screenshot lane a cloud wake cannot run has nothing to
+       say about it. That is an absence of subject, not an unverified claim.
 
 **Refused, and the region block is what makes the refusal legible: archiving
 the 1,421-word Ideas backlog.** It is the obvious cut — **1,066 words, 75.0%,

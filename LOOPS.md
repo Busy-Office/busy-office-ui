@@ -138,50 +138,28 @@ queue and nothing claims an item.
 (Slice 162). Nothing was corrupted, because `git push` rejected the loser rather
 than merging it.
 
-**⚠ THE "SAFE BY CONSTRUCTION" ARGUMENT BELOW IS FALSE, AND THE SECOND
-COLLISION IS WHAT SHOWED IT** (Objective grill of 169/170/172, 2026-08-28;
-roadmap 175.4, which leaves the *decision* open). On 2026-08-28 the cloud
-routine and a local session both took the same rule-3 dispatch, and **the
-loser's rebase resolved with no conflict at all**. Stated exactly, because the
-reopen condition below is worded more narrowly than what happened: it anticipated
-an overlap on `loop-log.md`'s append point ALONE, and this collision overlapped
-on `ROADMAP.md` and `LOOPS.md` and merged clean anyway, with `loop-log.md` not in
-the loser's diff at all. The same failure through a wider door. Both guaranteed
-collision points failed:
+**⚠ THE COLLISION IS NOT CAUGHT BY A GUARANTEED CONFLICT. That argument was
+made here, and the second collision refuted it** (Objective grill of
+169/170/172, 2026-08-28; roadmap 175.4, which leaves the *decision* open). Two
+dispatchers have taken the same item twice, and the second time the loser's
+rebase resolved with **no conflict at all** — it overlapped on `ROADMAP.md` and
+`LOOPS.md` and merged clean, with `loop-log.md` not in its diff.
 
-- **`loop-log.md` was not in the loser's diff.** `record_iteration.py` runs
-  *after* the commit, once per wake, so for nearly all of a wake the append
-  point is untouched. The guarantee holds only for a wake that has already
-  recorded when the other pushes, which is the minority of the wake.
-- **`ROADMAP.md` was in both diffs and merged cleanly.** Two wakes ticking boxes
-  in *different* slices produce disjoint hunks — 170.3 against a heading
-  renumber and a new slice ~400 lines away.
+**What actually caught it was the `git fetch origin main` before the first
+commit, mandated below.** That is the working half, and it is a process rule
+with nothing mechanical behind it: a wake that skips it gets no second signal.
 
-What actually caught it was the `git fetch origin main` before the first commit,
-mandated below. That is the working half, and it is a process rule with nothing
-mechanical behind it: a wake that skips it gets no second signal.
+**A conflict does arrive once a wake has RECORDED, which is the last thing it
+does.** `record_iteration.py` runs *after* the commit, once per wake, so for
+nearly all of a wake the `loop-log.md` append point is untouched; the same wake
+that merged clean conflicted on its second rebase, after its rows existed.
+Resolving such a conflict: **keep BOTH row sets**, then regenerate the mirrors
+(`rebuild_from_log.py`, `generate_status.py`, `generate_roundtable_index.py`)
+rather than hand-merging them, and check the parser against a raw
+`grep -c "^- "` before committing.
 
-**The window is the tail of a wake, not the wake — and the same wake proved it
-both ways.** After the other dispatcher pushed a second time, the loser rebased
-again, this time *after* `record_iteration.py` had appended its rows: that rebase
-**conflicted**, on `loop-log.md` and `STATUS.md`, exactly as promised. One
-variable differs between the two — whether the log row existed yet. So read the
-paragraph below as an argument that holds only once a wake has recorded, which
-is the last thing it does. Resolving such a conflict: **keep BOTH row sets**,
-then regenerate the mirrors (`rebuild_from_log.py`, `generate_status.py`,
-`generate_roundtable_index.py`) rather than hand-merging them, and check the
-parser against a raw `grep -c "^- "` before committing.
-
-**Why that was believed safe by construction and not by luck.** Every wake ends with
-`record_iteration.py`, which appends to `.roundtable/loop-log.md`, and every
-dispatched item ticks a box in `ROADMAP.md`. Two concurrent wakes therefore
-collide in those two files even when their code changes are disjoint: the
-loser's rebase conflicts, so it cannot land silently on top of work it never
-read. Measured over the whole cloud era — every commit since the routine's first
-one, `c073c36`, 2026-08-27 17:57:55Z — **5 of 5 same-clock commit runs touched
-both files**. n is five, and the 100% is expected by construction rather than
-surprising: at COMMIT level only **705 of 1,464 (48%)** touch the log, because a
-wake commits several times and records once. The claim is about wakes.
+The forensics of both collisions, and the refuted "safe by construction"
+argument with its 5-of-5 measurement, are in **`LOOPS-archive.md`**.
 
 **The one thing that changes, and it costs no push:** `git fetch origin main` at
 Step 0 **and again immediately before the wake's first commit**. If
@@ -224,31 +202,15 @@ standing rule forbids. Fixed instead, being smaller than explaining: `STATUS.md`
 **backwards** 13:15 → 05:31 on this wake, and now says UTC. Every command and
 figure is in ROADMAP 164.2.
 
-**Three options refused, each for a measured reason:**
-
-- **A claim marker committed before working (a lock in git).** To be visible it
-  must be *pushed*, and `pages.yml` triggers on every push to `main` with **no
-  `paths-ignore`** — so it doubles the Pages deploys per wake and reopens the CDN
-  skew window that the "one push per wake" operating rule exists to close
-  (owner-reported unstyled first paint, 2026-08-16). It still races: two wakes
-  that both read before either pushed both claim, and the loser learns at push
-  rejection — the same moment it learns today. And a wake that dies mid-flight
-  (`RESUME.md` carries one killed by an unset `CHROME_PATH`) leaves a claim that
-  nothing releases, with nobody watching. Trading a self-healing failure for a
-  silent one is the wrong direction.
-- **Partition by loop type** (cloud takes Continue, local takes grills). It
-  partitions the *loops* but not the *counters*: rules 2 and 3 count Continue
-  rounds and closed slices out of one shared log, so whichever dispatcher is
-  allowed to run Continue would drive a Standardize counter only the other one
-  may discharge. Step 0b already records that three rules starved exactly that
-  way and each was found by hand; a scheme that makes starvation a design
-  property is worse than the collision it prevents.
-- **The local session stops dispatching once a routine exists.** Slice 162's own
-  postscript is the counter-evidence: the cloud wake found a real defect the
-  local session had shipped — 157.2's surviving RTL twin for
-  `td[data-tone="success"]` — precisely by re-deriving the same claim
-  independently. Redundant coverage is the mechanism that caught it. Rule 1 also
-  has to run wherever owner input lands, which is the local session.
+**Three options were refused, each for a measured reason; the measurements are
+in `LOOPS-archive.md`.** A **claim marker committed before working** (a lock in
+git) — it must be pushed to be visible, `pages.yml` has no `paths-ignore`, so it
+doubles the Pages deploys per wake, and it still races. **Partition by loop
+type** — it partitions the loops but not the shared counters, which makes
+starvation a design property. **The local session stops dispatching** — Slice
+162's own postscript refutes it: the redundant cloud wake found a real defect
+the local session had shipped, and rule 1 has to run wherever owner input
+lands.
 
 **What would reopen this:** a collision that LANDS rather than being rejected —
 two wakes whose only overlap was the append point of `loop-log.md` and whose
