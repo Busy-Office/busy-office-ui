@@ -196,7 +196,7 @@ has no 1440/390 light-and-dark lane. What is verified: `check:layout` and
 violations across 127 pages × 2 widths.
 
 **`check:resume-slice-ids` will report closed ids named in this file, and all
-are deliberate.** `278.1`, `277.1`, `276.1`, `273.2`, `249.17` and the other
+are deliberate.** `278.1`, `278.2`, `277.1`, `276.1`, `273.2`, `249.17` and the other
 `249.x` ids are named as history or as classification evidence — what was
 decided and why — not as queued work. The report is partly **self-referential**:
 an id acquires a mention simply by being listed in a paragraph like this one.

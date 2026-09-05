@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-05 11:55 UTC
+Generated at: 2026-09-05 12:10 UTC
 
 ## Open items by slice
 
@@ -20,13 +20,18 @@ Generated at: 2026-09-05 11:55 UTC
   - 249.15 — The one static OG image 249.2 named and did not build.
 - **Slice 273** (1 open)
   - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
+- **Slice 278** (4 open)
+  - 278.3 — the composition sentence 278.1 shipped describes something no demo on the page can exercise.
+  - 278.4 — `select all` leaves every row reporting `aria-selected="false"` on a `role="grid"` that also says `aria-multiselectable="true"`.
+  - 278.5 — the Columns demo never calls `initDropdowns()`, so the menu the page calls "the same multi-select dropdown pattern as elsewhere" is neither positioned nor labelled.
+  - 278.6 — the opener's cost argument names a mechanism the module does not ship.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1428 iterations logged)
+dispatch status — counter-triggered rules (1430 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-09-05 06:54   ok
   Objective     1 / 3 slice           since 2026-09-05 07:40   ok  [274]
   Optimize      2 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
@@ -48,8 +53,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-05 08:47 · Meta · refusal · cutting any of Step 2's eight rules — measured: largest contiguous pure-narrative block is ~106 words against the 749w (167.2) and 414w (191.3) slabs the precedents moved, so ~10 fragments would net ~400w for ten pointer-follows per wake · refused · 8848ed55
-- 2026-09-05 08:47 · Meta · refusal · moving Step 0c's blame-vs-sha and naive-timestamp blocks — decision content with its own recorded refusals, which the archive's charter keeps inline · refused · 8848ed55
 - 2026-09-05 09:49 · Polish · round · 276.1 — Polish round 2 on component/inline-editing: NO-OP on the surface; the source set was blind to every behavior module (31 blind commits, 7 surfaces), fixed from behaviors.json byComponent · landed · 29a9062b
 - 2026-09-05 09:49 · Meta · refusal · deriving behavior modules from each docs page's own imports — over-broad on button/richtext, under-reports stepper · refused · 29a9062b
 - 2026-09-05 09:49 · Meta · refusal · extending the behavior-module source set to patterns — a pattern composes many components, so the predicate would be near uniformly true · refused · 29a9062b
@@ -58,6 +61,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-05 11:04 · Meta · refusal · a gate for 'a documented runtime claim with no executable assertion' — the predicate needs a reading of what a sentence promises (94.11 shape-vs-content), and 101.3 forbids Polish adding gates · refused · e4d7493c
 - 2026-09-05 11:55 · Polish · round · 278.1 — table-toolbar round 2: hiding a column strands initDataGrid's only tab stop on a [hidden] cell, so Tab skips the grid; fixed and red-proved by four injections · landed · 7f4792e7
 - 2026-09-05 11:55 · Meta · refusal · a check:claims case for the hidden-column composition — it needs the grid demo to gain a toggle control, changing what the demo DOES, which needs the screenshot lane a cloud wake cannot run · refused · 7f4792e7
+- 2026-09-05 12:10 · Polish · round · 278.3-278.6 — the independent pass on table-toolbar: four more findings filed, one of them in prose 278.1 shipped the same wake (fixed here); the htmx:after:swap finding refuted against the installed htmx 4.0.0 · logged · 0272ed30
+- 2026-09-05 12:10 · Meta · refusal · the agent's htmx:after:swap finding — htmx 4.0.0 emits exactly that namespaced form; the reading came from the root node_modules, which this repo documents as never hoisted · refused · 0272ed30
 
 ## Sunset test
 
