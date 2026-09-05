@@ -1421,3 +1421,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-05 06:54 · Meta · refusal · archiving the 1,421-word Ideas backlog — it sits below the anchor, so it moves the file 14,032 -> 12,611 and leaves the dispatch region at 6,100 · refused · aa550d2c
 - 2026-09-05 06:54 · Meta · refusal · archiving the three Settled: sections — lane 2 of this very sweep read one of them to adjudicate the repeat set · refused · aa550d2c
 - 2026-09-05 06:54 · Meta · refusal · cutting the dispatch region itself unattended — filed OPEN as 274.2 instead, since a wrong cut to the file that governs every wake is silent · refused · aa550d2c
+- 2026-09-05 07:40 · Objective · grill · Objective grill of Slices 271-274: three defects, all one shape — a figure the wake's own commit moved, read from HEAD and published as the commit's state; ENVIRONMENT's figure bullet now names HEAD · landed · 60ea801d
+- 2026-09-05 07:40 · Meta · refusal · executing 274.2 (cutting LOOPS.md's dispatch region) unattended in a cloud wake — the criterion was amended, not run · refused · 60ea801d
