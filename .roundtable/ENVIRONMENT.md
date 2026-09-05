@@ -103,12 +103,30 @@ printing wrong figures; that guard was red-proved against a real
 `git clone --depth 1`. Nothing else refuses, so any wake whose finding is a
 history measurement must unshallow first.
 
-**`--unshallow` does NOT bring the tags, and `git tag` then answers EMPTY rather
-than erroring** (measured 2026-09-03, Slice 256). A fresh container returns
-nothing at all for `git tag --sort=v:refname`, so a claim of the form "the tag
-list starts at vX" reads as an absence instead of a disagreement — the silent
-kind of wrong this file exists for. `git fetch --tags origin` first; it took
-under a second here and returned all seven.
+**WHETHER `--unshallow` BRINGS THE TAGS VARIES BY CONTAINER, SO MEASURE IT —
+never assume either way.** The durable fact is the failure mode, not the
+behaviour: `git tag` answers **EMPTY rather than erroring** when they are
+absent, so a claim of the form "the tag list starts at vX" reads as an absence
+instead of a disagreement — the silent kind of wrong this file exists for.
+
+```
+git fetch --unshallow origin
+git tag | wc -l                 # THE check — 7 here; 0 means fetch them
+git fetch --tags origin         # idempotent, under a second, safe to always run
+```
+
+This bullet used to assert flatly that `--unshallow` does **not** bring them
+(measured 2026-09-03, Slice 256, and true in that container). **It has now been
+contradicted on five consecutive wakes** — the four hand-offs at `e914399`,
+`77e475c`, `a24ed45` and `4567bed`, each recording that the unshallow again
+arrived with the tags, and this wake, where `git fetch --unshallow origin`
+printed `* [new tag] v0.5.0 / v0.6.0 / v0.7.0` and the follow-up
+`git fetch --tags origin` then added **nothing**, `git tag | wc -l` reading
+**7**. Four hand-offs said "keep verifying rather than trusting either reading"
+and the durable file went on stating the value; correcting it here is the split
+this file exists for (169.3), and it is written as the property — *run the
+count* — rather than as the new value, per CLAUDE.md's criterion rule. A sixth
+container reading `0` is not a new bug; it is the reason the count is the check.
 
 ## 2b. A TIMED-OUT UNSHALLOW LEAVES `.git/shallow.lock`, AND EVERY LATER FETCH THEN FAILS QUIETLY
 

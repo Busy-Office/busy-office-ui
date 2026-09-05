@@ -23,8 +23,8 @@ survives none.
 ## In flight: nothing
 
 Last updated 2026-09-05 (**cloud** wake, scheduled routine). Working tree clean
-at hand-off. Two commits this wake, both pushed: Slice 281 (the Polish round)
-and this hand-off. One iteration recorded — `Polish · round`, with one
+at hand-off. Two commits this wake, both pushed: Slice 282 (the twelfth archive
+sweep) and this hand-off. One iteration recorded — `Roadmap · sweep`, with one
 `--also-refused`.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
@@ -35,47 +35,75 @@ node apps/docs/scripts/check-resume-slice-ids.mjs # names any stale closed ids
 python3 scripts/loops/roadmap_scope.py            # OPEN set + sweep scope
 ```
 
+## ⚠ THIS WAKE TOOK A CALL ANOTHER WAKE REFUSED 3.5 HOURS EARLIER
+
+Read this before dispatching, because it is the one thing here a next wake
+might reasonably reverse. Log row `5abdce3c` (15:51) refused a twelfth archive
+sweep at **40.6%** closed-history share; this wake ran it at **46.5%**. The
+gap is 420 lines and 5.9 points, and the honest difference is the **criterion**
+— that wake weighed share, this one weighed lines, and rule 4's clause is
+written in lines. Slice 282's first paragraph says so in full rather than
+burying it.
+
+**The finding that came out of it is 282.2's table**, and it is the input
+`249.12` (the open **OWNER OR ARCHITECTURE CALL** on a sweep trigger) has been
+missing. Five recorded decisions, each read from the commit it names:
+
+| when | commit | live lines | share | decision |
+|---|---|---|---|---|
+| 2026-09-04 00:56 | `49d2c901` | 3,620 | 32.0% | refused |
+| 2026-09-05 02:45 | `d33c1ef~1` | 6,468 | 56.7% | dispatched (11th) |
+| 2026-09-05 15:51 | `5abdce3c` | 5,450 | 40.6% | refused |
+| 2026-09-05 19:13 | `4567bed` | 5,870 | 46.5% | dispatched (12th) |
+| *(tenth, per 252.1)* | — | 3,790 | 55.1% | dispatched |
+
+No single share separates them and no single line count does either, and the
+two units disagree in direction: the tenth ran at 3,790 lines / 55.1% while
+today's refusal came at 5,450 lines / 40.6% — a file **1,660 lines longer**,
+refused for being a smaller fraction closed. **`249.12`'s own "low urgency" no
+longer holds** and that is this wake's one thing for the owner.
+
 ## The counters, read right after this wake's recording
 
-This is the comparison `LOOPS.md` rule 3 asks for, and **this wake it earned
-its keep** — it is the first direct observation of `279.4`'s correction
-working, rather than a re-derivation of it.
-
-- **Rule 2 (Standardize)** `3 / 4 … ok` at dispatch → **unchanged**. Correct: a
-  `Polish` row is not a `Continue` round. Still one Continue round short, so a
-  wake that runs one dispatches Standardize next.
-- **Rule 3 (Objective)** `0 / 3 … ok` at dispatch → **`1 / 3 … ok [281]`** after
-  recording. **This is the amendment landing:** before `279.4`, a Polish row
-  closing its own slice was invisible to this counter, and Slice 281 is exactly
-  that shape — filed and closed inside its own slice by a Polish round, with no
-  `Continue` row anywhere. Two more and rule 3 preempts.
-- **Rule 5 (Optimize)** read **STALE** (`2 wake-date(s) newer`) at Step 0b, and
+- **Rule 2 (Standardize)** `3 / 4 … ok` at dispatch → **unchanged** after
+  recording. Correct: a `Roadmap` row is not a `Continue` round. Still one
+  Continue round short, so a wake that runs one dispatches Standardize next.
+- **Rule 3 (Objective)** `1 / 3 … ok [281]` at dispatch → **unchanged** after
+  recording, and **that is the blind spot `282.3` records**: this wake closed
+  Slice 282 by hand and the counter did not move, because `Roadmap` is outside
+  `CLOSES_A_SLICE`. **Refused, on base rate** — `grep -c ' · Roadmap · sweep · '`
+  reads **1** of 1,445 rows, and it is this wake's own; 279.4's Polish
+  amendment had 18 rows over 17 slices behind it. Reopen condition is in the
+  item. Two more counted slices and rule 3 preempts.
+- **Rule 5 (Optimize)** read **STALE** (`2 wake-date(s) newer`) at Step 0b and
   is reported as *could not be evaluated*, never clear.
-- **Rules 6, 7, 8**: rule 6 matched and dispatched, so 7 and 8 were **NOT
+- **Rules 6, 7, 8**: rule 4 matched on its sweep clause, so 6-8 were **NOT
   EVALUATED**. A rule below a match is unreached, not clear.
 
-## ⚠ NEXT WAKE: expect rule 4 → rule 6 (Polish) again
+## ⚠ NEXT WAKE: rule 4 has nothing again, so expect rule 6 (Polish)
 
-Rule 4's open set is unchanged at **12** and still none of it is
-cloud-takeable, so a cloud wake falls through to **rule 6** again. Run
-`polish_requeue.py --apply` first per §3b step 0, and note it needs
+The sweep clause will **not** fire again — `roadmap_scope.py` now reads
+**0.0%** share with Slice 282 itself the only eligible target (117 lines, under
+no threshold worth spending a wake on). The open set is unchanged at **12** and
+still none of it is cloud-takeable, so a cloud wake falls through to rule 6.
+
+Run `polish_requeue.py --apply` first per §3b step 0, and note it needs
 `npm run build -w @busy-office/ui` before it can read `api.json`.
 
 **The pick is a live question, not a lookup.** §3b step 1's ranking is
 degenerate — every eligible surface is `content: 3` at `2/3 rounds, dry 0`,
-which is `171.1` reaching the pick step. This wake broke the tie by asking
+which is `171.1` reaching the pick step. The last wake broke the tie by asking
 which surface's SOURCE had moved furthest from the tree its score was taken
-against (`data-table`, **23** commits since the seed, against 9 for the next).
-**That is a method, not a queue**: re-run it, do not reuse this ordering.
-`data-table` is now **3/3** and out; `icon` at 9 and `table-toolbar` at 7 were
-next on that measure.
+against. **That is a method, not a queue**: re-run it, do not reuse the
+ordering. `data-table` is now `3/3` and out; `icon` and `table-toolbar` were
+next on that measure when it was last run.
 
 ## The open set is 12, and none of it is cloud-takeable
 
-Unchanged — Slice 281 filed and closed its one item inside its own slice, so
-the open count did not move. Re-read from `ROADMAP.md` after this wake's
-commit, **each line re-classified from the item's own text** per `LOOPS.md`
-186.2 rather than carried over:
+Unchanged — Slice 282 filed and closed all three of its items inside its own
+slice, so the open count did not move (**12 at dispatch, 12 after**). Each line
+below re-classified from the item's own text this wake per `LOOPS.md` 186.2,
+not carried over:
 
 ```
 grep -cE '^\s*[0-9]+\. \[ \]' ROADMAP.md      # 12  (12 at dispatch too)
@@ -99,75 +127,98 @@ in its own item text.
 
 ## What landed this wake
 
-**Dispatched by rule 6 (Polish), round 3 on `component/data-table`.** Rule 1
-clear: `list_issues` on `Busy-Office/busy-office-ui` returns `totalCount: 0`,
-and `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` reads **0**. Step 1 triaged
-and committed nothing: no new input.
+**Dispatched by rule 4 on its own sweep clause**, all 12 open items being
+owner- or browser-blocked. Rule 1 clear: `list_issues` on
+`Busy-Office/busy-office-ui` returns `totalCount: 0`, and
+`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` reads **0**. Step 1 triaged and
+committed nothing: no new input.
 
-**All six cites reconcile; a new arm 16 found the defect.** The arm re-takes
-the one claim on this surface that asserts **runtime layout** rather than file
-content — which is `ENVIRONMENT.md`'s SECOND list, so a cloud wake can take it.
-Measured at 390px against the built site on `a24ed45`, over all **138** built
-pages (**115** carry a `.bo-data-table-container`):
+**Slice 282 — the twelfth archive sweep.** 13 closed slices moved verbatim
+(281, 280, 279, 278, 277, 276, 275, 274, 272, 262, 260, 253, 237 — 2,730 body
+lines), each leaving heading + one pointer line. `ROADMAP.md` 5,870 → **3,179
+at the move** and 5,870 → **3,398** at the commit, because writing the slice
+back is the rest; `ROADMAP-archive.md` 37,459 → **40,201**. The **+2,742**
+reconciles as 2,730 body + 13 headings **− 1**, that one being the old file's
+trailing blank line, which the append consumed as the separator before Slice
+281's heading. Live loss at the move **−2,691** = 2,730 removed + 13 × 3 stub
+lines added. Every figure read from `HEAD` and the index, never the working
+tree, per `ENVIRONMENT.md`'s bullet.
 
-| mutation | reached | rows moved | `68 -> 87` | `28 -> 30` |
-|---|---|---|---|---|
-| cell-padding-x only | 101 | 25 | 2 | **0** |
-| full auto → compact | 101 | 65 | 2 | **67** |
+**The move's identity was red-proved, not asserted.** 13/13 headings+bodies
+byte-identical against `HEAD:ROADMAP.md` with no line-count difference on any
+slice — then one body line of the archived Slice 260 was mutated in memory and
+the same checker read **12/13**, with the injection printing the line it
+changed before the re-run. All four 236.2 pins (253, 262, 237, 260) were read
+one at a time; **none carries an amend clause**, all four are provenance
+citations, re-derived rather than carried over from the eleventh sweep.
 
-**Two defects, neither in the physics.** (1) On `/patterns/detail-form` — the
-page the cite names — **0 of 4 containers move under either mutation**; three
-declare `data-density="compact"` and the fourth's rows read 87px → 87px.
-`79f7fec9` measured it 2026-08-21 10:50 +0800; `69a53364` (109.19) added the
-density **28 hours later**. (2) `28 -> 30` is the row-height floor, produced by
-padding **0 of 101** times — archived 94.3 names it separately and **all three
-live copies dropped that sentence**, so each read as one mutation producing
-both figures. Corrected in all three; the archive keeps its verbatim text and
-gains a `RE-MEASURED` block per 236.2 / 199.1.
+**282.2's second half — the stub floor, and what it does NOT explain.** 208.1's
+share puts prior sweeps' pointer stubs in the denominator where they can never
+enter the numerator: **246 stubs = 985 lines**, byte-identical at both ends of
+this regrowth window, 26% of the file right after a sweep and 16% now, growing
+4 lines per slice archived forever — so shares from different eras are not
+comparable. **It is explicitly not this window's cause**: identical at both
+revisions, so what moved the 10.2 points is the numerator (3,668 closed body
+lines then, 2,730 now) against an open set whose text is larger — Slice 249
+alone carries **1,218** lines, the four open slices **1,748** of 5,870.
 
-**Instrument discipline, both ways round.** The probe's first version checked
-only the custom property on the table and would have reported these numbers for
-the wrong reason — the injection is now confirmed **at the cell**
-(`padding-inline` 4px → 8px). And the `spacing` height claim was base-rated
-before being believed: the detector reads 0 here and fires on **15 of 44**
-component stylesheets, so it discriminates. Two earlier instrument errors this
-wake, both recorded rather than quietly fixed: `pr.rows()` needs its `text`
-argument, and `serveDist` returns `{server, port, base}` and no `.origin`.
+**One number was measured and deliberately NOT published**, which is the part
+worth carrying forward. 282.3's case would have been much stronger with a
+whole-log replay, and a probe written for it returned **80** crossings for the
+current `Continue + Standardize + Polish` set where `dispatch_status.py`'s own
+header records **52** for that same set over 1,437 rows. A 28-crossing
+disagreement means the probe is wrong until reconciled against `report()`'s
+live output the way 279.4 reconciled its own — so the replay is absent from the
+item and the refusal rests on the exact counts instead.
 
-**The CSS edits are comment-only, asserted rather than assumed:** comments
-stripped and whitespace collapsed, both files are byte-identical before and
-after (987 → 987 and 9,907 → 9,907 characters). **That is why nothing in this
-diff renders**, and it is an absence of subject rather than an unverified
-claim — the 1440/390 light-and-dark screenshot lane a cloud wake cannot run has
-nothing to look at.
+**`ENVIRONMENT.md` §2 corrected, on this wake's own measurement.** The bullet
+asserted flatly that `--unshallow` does **not** bring the tags; it has now been
+contradicted on **five consecutive wakes** — the hand-offs at `e914399`,
+`77e475c`, `a24ed45` and `4567bed`, plus this one, where
+`git fetch --unshallow origin` printed `* [new tag] v0.5.0 / v0.6.0 / v0.7.0`
+and the follow-up `git fetch --tags origin` added **nothing**,
+`git tag | wc -l` reading **7**. Rewritten as the property — *run the count* —
+rather than as the new value, per CLAUDE.md's criterion rule. Four hand-offs
+had said "keep verifying" while the durable file went on stating the value;
+that is exactly the 169.3 split, so the correction belongs there and not here.
 
-**Step 0 hit trap 1 for the seventeenth wake running** (detached HEAD, `git
-branch --show-current` empty), fixed with `git checkout -B main origin/main`
-before any commit; `origin/main` again arrived as a **forced update**
-(`26447ba...a24ed45`). Trap 2 clean in one `--unshallow` (**1,904** commits, no
-`shallow.lock`), and **it again brought the tags** — **fourth** wake running
-that `ENVIRONMENT.md` §2's *"does NOT bring the tags"* did not hold, so keep
-verifying with `git tag | wc -l` (**7**) rather than trusting either reading.
-The Step 0c re-fetch before the first commit reported **no movement** — no
-second dispatcher.
+**Step 0 hit trap 1 again** (detached HEAD, `git branch --show-current` empty),
+fixed with `git checkout -B main origin/main` before any commit; `origin/main`
+again arrived as a **forced update** (`26447ba...4567bed`). Trap 2 clean in one
+`--unshallow` (**1,906** commits, no `shallow.lock`). The Step 0c re-fetch
+before the first commit reported **no movement** — no second dispatcher.
 
-**Gates, all green in this container:** `build -w @busy-office/ui`,
-`test -w @busy-office/ui` (29 files, 165 tests), `lint:css`, `docs:build`,
-`check:repo` (**re-run after every source edit**, twice), `check:formatting`,
-`check:claims` (**167** live; its *3 NOT VERIFIED* is `ENVIRONMENT.md` 6b, not
-a regression), `test:axe` (127 pages x 2 widths, zero violations),
-`check:layout` (127 pages), `check:scroll` (914 containers x 2 widths),
-`check:forced-colors`, `check:target-size`, `check:search`, `check:pseudo`,
-`check:quickstart`, `check:po-app`, `check -w @busy-office/create-ui`, `suite`
-(28 screens x 2 widths). **The browser gates were re-run after a late
-correction**, because the rewritten cite renders on the page and is much
-longer than the one it replaced.
+*The running-ordinal this paragraph used to carry ("the seventeenth wake
+running") is dropped rather than incremented.* It was inherited across
+hand-offs with nothing re-deriving it, which is the shape 169.1's wrong
+sentence had. What is measurable is the base rate, and it is high enough to
+make the point without a serial number: **26 of the last 40 `RESUME.md`
+revisions** mention trap 1 or a detached HEAD
+(`for sha in $(git log --format=%H -40 -- .roundtable/RESUME.md); do …`).
+
+**Gates, all 17 CI entry points green in this container** (re-derived from
+`ci.yml` rather than trusted; the derivation returned the same 17):
+`build`/`test` (29 files, 165 tests)/`lint:css -w @busy-office/ui`,
+`docs:build` (**138** built pages), `check:repo` (**re-run after every source
+edit**, three times), `check:claims` (**167** live; its *3 NOT VERIFIED* is
+`ENVIRONMENT.md` 6b, not a regression), `check:formatting`, `check:scroll`
+(914 containers x 2 widths), `check:layout` (127 pages), `check:forced-colors`,
+`test:axe` (127 pages x 2 widths, zero violations), `check:target-size`,
+`check:search`, `check:pseudo`, `check:quickstart`, `check:po-app`,
+`check -w @busy-office/create-ui`, `suite` (28 screens x 2 widths).
+`check:slice-refs`: **835** assertions, 314 cited across 702 files, 264 slice
+numbers each heading one section.
+
+**NOT VERIFIED, said plainly:** this wake's diff is markdown only and renders
+nothing, so the 1440/390 light-and-dark screenshot lane a cloud wake cannot run
+had **no subject**. That is an absence of subject, not a skipped check, and it
+is written the same way in the commit message.
 
 **`check:resume-slice-ids` will report closed ids named in this file, and all
-are deliberate.** `281.1`, `279.4`, `273.2`, `249.17`, `171.1` and the rest are
-named as history, as counter evidence, or as classification evidence — never as
-queued work. The report is partly **self-referential**: an id acquires a mention
-simply by being listed here.
+are deliberate.** `282.3`, `279.4`, `273.2`, `249.17`, `171.1`, `252.1` and the
+rest are named as history, as counter evidence, or as classification evidence —
+never as queued work. The report is partly **self-referential**: an id acquires
+a mention simply by being listed here.
 
 ## Direction
 
@@ -175,32 +226,43 @@ Nothing new from the owner this wake; GitHub intake is empty (`list_issues` →
 `totalCount: 0`). The standing owner blocks are unchanged: Slice 15's AT runtime
 evidence (owner hardware), `112.3`/`112.4`, and `249.7`, `249.10`-`249.13`.
 
-**Two things want the owner's attention.**
+**Two things want the owner's attention, and the first one is new.**
 
-1. **The cloud lane is dry, fourth wake running.** No cloud-takeable open item
-   exists. The loop is not stuck — it keeps finding real defects — but **every
-   shipped defect of the last six wakes came from items the loop filed for
-   itself**, not from the queue. Unblocking any one of `249.10`-`249.13` would
-   refill it; `249.12` says *"OWNER OR ARCHITECTURE CALL"*, so it may not need
-   the owner at all.
+1. **`249.12` is no longer low urgency, and 282.2's table is the evidence.**
+   Two wakes reached opposite conclusions on the same instrument **3.5 hours
+   apart** on one day, and across five recorded decisions no threshold exists
+   in either unit — a file 1,660 lines longer was refused for being a smaller
+   fraction closed. `249.12` is marked **OWNER OR ARCHITECTURE CALL**, so it
+   may not need the owner at all; either way it now has the input it lacked.
 
-2. **`273.2` is still the owner call worth their attention**, a tenth wake
-   untouched. Its tally is **unchanged** by this wake, and that is meaningful
-   rather than incidental: 273.2's ratio is about rounds recorded NO-OP, and
-   this round was NOT a no-op, so it adds to the other column. Measured after
-   writing: `grep -cE '^## Round .*NO-OP' .roundtable/polish-state.md` → **9**
-   (unchanged), `grep -cE '^## Round .*NOT a no-op'` → **6** (was 5).
+2. **The cloud lane is dry, and has been for several consecutive wakes.** No
+   cloud-takeable open item exists. The loop is not stuck — it keeps finding
+   real defects — but they come from items the loop files for itself, not from
+   the queue. Unblocking any one of `249.10`-`249.13` would refill it.
 
-**One finding is carried forward rather than acted on**, same as last wake's
-third item and for the same reason (`274.1` has the loop's prose growth open):
+   *The running counts this item used to carry ("fifth wake running", "the
+   last seven wakes") are dropped rather than incremented, for the same reason
+   as trap 1's ordinal above: nothing re-derived them.* The claim that matters
+   needs no serial number — it is re-checkable in one command, and it is the
+   classification block above, which was re-read from each item's own text this
+   wake.
+
+`273.2` remains the other owner call, an eleventh wake untouched. Its tally is
+**unchanged** by this wake and that is correct rather than incidental: 273.2's
+ratio counts Polish rounds recorded NO-OP, and this wake ran no Polish round.
+Measured, not assumed: `grep -cE '^## Round .*NO-OP' .roundtable/polish-state.md`
+→ **9**, `grep -cE '^## Round .*NOT a no-op'` → **6**, both unchanged.
+
+**Two findings are carried forward rather than acted on**, same as the last two
+wakes and for the same reason (`274.1` has the loop's prose growth open):
 *a measurement taken to justify a change must be taken under the change, or say
-which side of it it is on.* This wake added a sibling worth naming beside it —
-**a citation should name its example by the PROPERTY that makes it an example,
-not by the page that currently has that property.** 281.1 is the worked case:
-the page stopped qualifying 28 hours later and three documents went on citing
-it for two weeks. Both are one-line rules; neither has a home yet.
+which side of it it is on*, and *a citation should name its example by the
+PROPERTY that makes it an example, not by the page that currently has that
+property*. This wake adds a third, from 282.3: **a rule fitted to one row is
+ceremony, and the wake that wrote the row is the worst-placed to judge it.**
+All three are one-line rules; none has a home yet.
 
-## `bundle-gz-kb` still cannot be sampled — twenty-sixth wake
+## `bundle-gz-kb` still cannot be sampled
 
 `259.1`'s rule-5 finding, re-verified this wake rather than re-derived:
 

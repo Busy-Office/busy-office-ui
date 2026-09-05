@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-05 19:11 UTC
+Generated at: 2026-09-05 19:48 UTC
 
 ## Open items by slice
 
@@ -26,7 +26,7 @@ Generated at: 2026-09-05 19:11 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1443 iterations logged)
+dispatch status — counter-triggered rules (1445 iterations logged)
   Standardize   3 / 4 Continue rounds since 2026-09-05 06:54   ok
   Objective     1 / 3 slice           since 2026-09-05 17:40   ok  [281]
   Optimize      2 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
@@ -48,8 +48,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-05 14:54 · Continue · build · 278.5 — Columns demo shipped multi-select markup without initDropdowns; menu opened at viewport corner, 404px above its invoker. Fixed, gated in check:claims, red-proved twice · landed · a098cf85
-- 2026-09-05 15:51 · Polish · round · Slice 279 — Polish round 3 on scan: goods-receipt ran the component live and listed nothing for it; fit cite corrected; check-components-used gains its converse arm · landed · 5abdce3c
 - 2026-09-05 15:51 · Meta · refusal · a twelfth archive sweep at 40.6% closed-history share, below both measured triggers (55.1%, 56.7%) — 249.12 is the open owner call on the threshold · refused · 5abdce3c
 - 2026-09-05 15:51 · Meta · refusal · the BLANKET converse arm in check-components-used: 357 misses across 39 of 39 pages, a predicate uniformly true · refused · 5abdce3c
 - 2026-09-05 15:57 · Meta · dispatcher · 279.4 — Polish added to CLOSES_A_SLICE: rule 3 was blind to 12 closed slices for the whole Polish-dispatched era · landed · 632bfc46
@@ -58,6 +56,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-05 17:40 · Meta · refusal · gating the blind-commit walk — the predicate holds for 51 of 73 qualifying commits at 29a9062b, so a gate over it would be red on a correct tree (94.11 base rate) · refused · 71b44721
 - 2026-09-05 19:11 · Polish · round · Slice 281 — data-table round 3: arm 16 re-took the spacing cite's live layout measurement; its worked example became unreachable by the rule 28h after it was measured, and all three live copies had dropped the sentence separating the two effects · landed · 6cb26268
 - 2026-09-05 19:11 · Meta · refusal · a gate asserting the page a density comment cites is reachable by the rule — it discriminates today but gates one sentence in one comment and a prose edit returns it to silent · refused · 6cb26268
+- 2026-09-05 19:48 · Roadmap · sweep · Slice 282 — twelfth archive sweep: 13 closed slices moved verbatim, ROADMAP.md 5,870 -> 3,179 at the move (share 46.5% -> 0.0%), identity red-proved 13/13 then 12/13 under injection; taken 3.5h after 5abdce3c refused the same sweep at 40.6%, and 282.2 records the five decisions lying on no threshold in either unit · landed · ed32eefd
+- 2026-09-05 19:48 · Meta · refusal · inventing a sweep threshold in roadmap_scope.py from inside a dispatch — 249.12 is the open OWNER OR ARCHITECTURE call, and this wake is the one whose judgement is in dispute · refused · ed32eefd
 
 ## Sunset test
 
