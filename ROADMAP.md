@@ -315,6 +315,182 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 280 — Objective grill of Slices 276, 277, 278, 279: 52 of 54 assertions reproduce, and the two that do not are one sentence apart in a table that measured the tree BEFORE its own fix while describing the tree after it — the two rows it dropped are the two surfaces that same item added (2026-09-05)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** for the
+sixteenth wake running (`git branch --show-current` empty) — ENVIRONMENT trap
+1, fixed with `git checkout -B main origin/main` before any commit;
+`origin/main` again arrived as a **forced update** (`26447ba...77e475c`), Step
+0c's collision mechanic visible. `--unshallow` clean in one attempt (**1,902**
+commits, no `shallow.lock`) and it again brought the tags — **third** wake
+running that `ENVIRONMENT.md` §2's "does NOT bring the tags" did not hold, so
+keep verifying with `git tag | wc -l` (**7**) rather than trusting either
+reading. Working tree clean, `RESUME.md` "In flight: nothing".
+
+Step 1: no new input — `list_issues` on `Busy-Office/busy-office-ui` returns
+`totalCount: 0`, and no open `N. [ ]` item is a P0 (`grep -cE '^\s*[0-9]+\. \[ \].*P0'`
+→ **0**). Nothing triaged, nothing committed for it. Step 0b: rule 2 `3 / 4 …
+ok`, rule 3 **`5 / 3 … OVERDUE [274, 276, 277, 278, 279]`**, rule 5 **STALE**
+(`2 wake-date(s) newer`) and therefore **reported as could-not-be-evaluated,
+never clear**. **Rule 3 matched** — the first dispatch under `279.4`'s
+correction, exactly as the hand-off predicted. Rules 4-8 unreached, and that is
+stated rather than reported clear.
+
+**§6 step 0 — the arming set was narrowed, and one of the five drops out.**
+Slice **275** is the last grill and it covered `271, 272, 273, 274` in full, so
+`274` is a re-arm of the kind step 0 exists to catch (the counter names slices
+touched since the last *Objective row*, so a slice with rounds either side of a
+grill re-arms). Honest scope: **276, 277, 278, 279**. `.roundtable/INDEX.md`
+reports **4 repeated subject(s)** across 184 files; none of the four here is
+among them.
+
+```
+grep -hoE '^## Slice [0-9]+ — Objective grill of Slices [0-9, -]+' \
+    ROADMAP.md ROADMAP-archive.md     # newest: Slice 275 — 271, 272, 273, 274
+```
+
+### The score: 52 of 54 reproduce, and both failures are 276.1's one table
+
+Every checkable assertion in the four slices was re-derived rather than read.
+The split, so the total is auditable rather than asserted: **276 · 15 checked,
+13 hold**; **277 · 13, all hold**; **278 · 11, all hold**; **279 · 15, all
+hold**. Both failures are in 276.1 and are two sentences of one table (280.1
+below). Highlights of what **held**, because a grill that only lists defects
+hides how much of the record is sound:
+
+- **279.4's whole replay reproduces to the character.** At its own commit
+  `632bfc4`, the log parses **1,437 rows against 1,437 raw `^- ` bullets**;
+  `Polish` names a slice on **18 rows / 17 slices**, `Meta` **3 / 3**,
+  `Optimize` **0** (its "never named a slice at all" holds); and the twelve
+  slices named by no Continue/Standardize row come back as the identical list
+  — `182, 217, 220, 242, 266, 267, 268, 269, 270, 276, 277, 279`. Whole-log
+  crossings **51 → 52**, exactly as published — *after* a first replay here
+  returned **76 → 80** by resetting the distinct-slice set every time it
+  reached 3. The counter resets **only at an Objective row** (`since_last`), so
+  a window crosses at most once; modelled that way — windows reaching 3, and
+  first-crossing-per-window, which agree — it is 51 → 52. The published figure
+  was right and this grill's first instrument was not, which is the base rate
+  landing on the grill rather than on the slice.
+- **279.1 and 279.2.** `grep -c -F 'components/scan'` over the five RF sources
+  reads `0/0/3/3/3` at `4c3d635` and `2/0/3/3/3` now; the new gate arm reports
+  *"39 pattern(s) … and 4 screen(s) rendering an attribute-only component
+  (scan) all name it"* — an independent reconciliation of the corrected `fit`
+  cite's own numbers. `--self-test` passes **11 cases** including the
+  `data-scan-inputs` prefix trap; `dispatch_status.py --self-test` **14**.
+- **278's figures survive the trap that killed three of Slice 275's.**
+  `grep -c -F data-col-toggle apps/docs/scripts/check-claims.mjs` reads **2**
+  today but **1** at `aa7d433d`, the commit that published "0 → 1" — the second
+  line arrived with `a098cf85` (278.5) an hour later. Read at the commit, as
+  `ENVIRONMENT.md` requires, the figure is right. Likewise `Home` in
+  `data-grid.test.ts` 0 → 3, `initDropdowns` pages 9 → **10**, and
+  `data-grid.ts` deferring with `setTimeout(…, 0)` and **not** `queueMicrotask`
+  at line 176. `check:claims` reports **167** live — 278.5's published figure,
+  unchanged — with its *"3 NOT VERIFIED"* being `ENVIRONMENT.md` 6b (this
+  container reports `(hover: hover) and (pointer: fine)` false), not a
+  regression.
+- **277's six cites.** `pagination.css` has `font-size` **twice, both `var()`**,
+  **0** hex, **0** unit-bearing literals; the `aria-current="page"` contract
+  comment is at **lines 5-6**; `[aria-current="page"]` sets `font-weight` as
+  well as colour. `load-more-auto.test.ts` carries **6** cases,
+  `load-more.test.ts` keeps its no-IntersectionObserver case, and the corrected
+  wording sits on all five sites (`windowed-list.ts:255`, `load-more.ts`, and
+  three in `pagination.astro`). The two surviving `scrolls into view` hits are
+  both the *explanation of the removal*, which is CLAUDE.md's own
+  "assert on structure, never on raw text" rule working as designed.
+
+1. [x] **280.1 — DONE 2026-09-05 (cloud wake). 276.1's blind-commit table
+       measured the tree its own fix had not yet reached: it names "31 blind
+       commits across 7 surfaces" and "the other fourteen ledger surfaces have
+       no serving module", and the true figures under the map that same item
+       shipped are 51 across 9, with twelve unserved.**
+
+       The two dropped rows are **`inline-editing` 10/11** and
+       **`table-toolbar` 10/10** — precisely the two `PAGE_ONLY_BEHAVIORS`
+       entries 276.1 added. So the item denies its own Accept in its own prose:
+       the Accept requires the two page-only surfaces be "named with a reason
+       and reconciled against the page it describes on every run", and forty
+       lines later the summary sentence says fourteen surfaces have no serving
+       module — a count that is only true if those two do not.
+
+       **It is self-contradictory within the item, which is what makes it a
+       defect rather than a scoping choice.** 276.1's opening paragraph calls
+       `inline-editing` *"the sharpest case: … **10 of 11** commits touching
+       `row-edit.ts` never touched `inline-editing.astro`"* — and then the
+       generalisation two paragraphs down omits that exact row from its own
+       total. One number in the item contradicts another number in the item.
+
+       **Instrument, and it was wrong first.** A probe written against
+       `polish_requeue.py`'s own functions reported **0 surfaces with a serving
+       module** — a plain zero across every input, which CLAUDE.md says is a
+       defect until proven otherwise, and was: `pr.rows()` yields
+       `(line_no, surface, rest)`, not `(kind, name, rest)`, so every surface
+       string came out as `97/component/alerts` and every lookup missed.
+       Corrected, it reproduces **all seven published rows exactly** and the
+       item's separately-stated `inline-editing` 10/11 — two independent
+       reconciliations against figures the instrument was not fitted to.
+
+       Then **hand-checked**, not left to the probe:
+
+       ```
+       git log --format=%h 29a9062b -- packages/core/src/js/behaviors/row-edit.ts | wc -l     # 11, 1 touched the page (9d1ecbe2)
+       git log --format=%h 29a9062b -- .../table-toolbar.ts .../data-grid.ts | wc -l          # 10, 0 touched the page
+       ```
+
+       **The published probe was itself run before publishing.** A second,
+       independently-written compression of the same walk (now beside the
+       corrected table in 276.1) returns `total blind: 51` and the same nine
+       rows.
+
+       **The general shape, which is the reusable half:** *a measurement taken
+       to justify a change must be taken under the change, or say which side of
+       it it is on.* 276.1 measured "how blind is the source map" with the OLD
+       source map and published it as the property of the tree — the same
+       family as Slice 275's three defects (a figure the wake's own commit
+       moved, read from `HEAD`), one level up: not a figure the commit moved,
+       but a *set* the commit widened.
+
+       **It propagated to four places and is corrected in three.**
+       `ROADMAP.md` 276.1, `.roundtable/polish-state.md` (the charter paragraph
+       **and** the detail table), and `scripts/loops/polish_requeue.py`'s
+       docstring — where it was worst, because that header states the seven-row
+       table forty lines above the paragraph explaining that the two page-only
+       surfaces are reachable, so the file contradicted itself. The fourth is
+       `.roundtable/loop-log.md`'s row for 276.1, which is **left alone**:
+       `record_iteration.py`'s standing rule forbids backfilling log rows, and
+       a log row is a record of what was said at the time.
+
+       This is the same class Slice 265's grill filed — *a gate header still
+       encoding the declaration its own slice corrected* — recurring in a
+       script header three weeks later, which is why the correction goes into
+       the header rather than only into the roadmap.
+
+       - **Accept:** the corrected table agrees with a probe re-derived from
+         `polish_requeue.py`'s own source map rather than from a convention,
+         with the two added rows hand-checked against `git log` independently;
+         every amendable place carrying the old figure states the corrected
+         one, and any place deliberately left carrying it says why; and the
+         command that produces the table is written beside it, so the next
+         wake re-runs rather than re-derives.
+       - **Met.** Figures read at `29a9062b`, the commit that measured them, so
+         the correction is comparable to what it corrects rather than to a
+         moved tree.
+
+**Refused inside this item, measured:** turning the blind-commit walk into a
+gate or a `--report` flag on `polish_requeue.py`. The predicate *"a commit
+touched a serving module and none of the surface's own paths"* is **51 of 73
+qualifying commits at `29a9062b`** — it is the normal state of the repository,
+not a defect signal, so a gate over it would be red on a correct tree, which is
+94.11's base-rate refusal exactly. The number is a one-off justification for a
+shipped change; what it needed was its command written beside it, and that is
+what landed.
+
+**Nothing in this diff renders.** `git diff --numstat` covers `ROADMAP.md`,
+`.roundtable/polish-state.md` and `scripts/loops/polish_requeue.py` — **0**
+files under `packages/core/src/`, **0** docs pages, **0** CSS. So the
+1440/390 light-and-dark lane a cloud wake cannot run has **no subject here**,
+which is an absence of subject rather than an unverified claim; it is stated
+because saying nothing would leave the reader to assume one or the other.
+
 ## Slice 279 — Polish round on `scan`: the demo runs, and the finding is that the ONE pattern screen the component's own page points at is the one that never links it back; then reading the counter right after recording found rule 3 has been blind to 12 closed slices for the whole Polish-dispatched era (2026-09-05)
 
 **Dispatcher trace, cloud wake.** Rule 1 clear — `list_issues` on
@@ -1350,13 +1526,47 @@ nothing — this is the ninth NO-OP and the seventh to file one.
        commits touching `row-edit.ts` never touched `inline-editing.astro`.
 
        Generalised over the whole history — a commit is blind when it touched a
-       serving module and none of the surface's own paths — **31 blind commits
-       across 7 surfaces**: `data-table` 19/30, `scan` 5/6, `pagination` 3/4,
-       `stepper` 2/3, `tree-table` 1/3, `alerts` 1/4, `dashboard` 0/2. The
-       other fourteen ledger surfaces have no serving module. `scan`'s row was
-       re-derived by hand against `git log` and reproduces exactly.
+       serving module and none of the surface's own paths — **~~31 blind commits
+       across 7 surfaces~~ 51 blind commits across 9 surfaces** (CORRECTED
+       2026-09-05 by roadmap **280.1**; every figure below is read at this
+       item's own commit `29a9062b`): `data-table` 19/30, `inline-editing`
+       10/11, `table-toolbar` 10/10, `scan` 5/6, `pagination` 3/4, `stepper`
+       2/3, `tree-table` 1/3, `alerts` 1/4, `dashboard` 0/2. The other
+       ~~fourteen~~ **twelve** ledger surfaces have no serving module. `scan`'s
+       row was re-derived by hand against `git log` and reproduces exactly.
 
-       **Said as structural blindness, not as 31 missed re-queues**, because a
+       **What the original table dropped, and why it is a correction rather
+       than a restatement:** the two omitted rows are exactly the two
+       `PAGE_ONLY_BEHAVIORS` surfaces *this item shipped* — so the sentence
+       *"the other fourteen have no serving module"* denies the map in its own
+       Accept, and the dropped `inline-editing` row is the **10 of 11** this
+       item's own opening paragraph quotes two paragraphs earlier. The command
+       is written beside the claim now, which is what was missing (CLAUDE.md):
+
+       ```
+       python3 - <<'PY'   # re-run; pass a revision, these are snapshots
+       import subprocess, sys; sys.path.insert(0, "scripts/loops")
+       import polish_requeue as pr
+       SHA = "29a9062b"
+       g = lambda *a: subprocess.run(["git", *a], capture_output=True,
+                                     text=True, check=True).stdout
+       css, tot = pr.slug_to_css_dirs(), 0
+       for _, s, _ in pr.rows(pr.LEDGER.read_text()):
+           name = s.split("/", 1)[1]
+           dirs = [d for d in css.get(name, []) if (pr.CSS_COMPONENTS / d).is_dir()]
+           mods = pr.behavior_paths(s, dirs)
+           if not mods: continue
+           own = [p for p in pr.source_paths(s) if p not in mods]
+           shas = g("log", "--format=%H", SHA, "--", *mods).split()
+           blind = sum(not any(f == p or f.startswith(p.rstrip("/") + "/")
+                               for f in g("show", "--name-only", "--format=", h).split()
+                               for p in own) for h in shas)
+           tot += blind; print(f"  {name:14s} {blind}/{len(shas)}")
+       print("total blind:", tot)
+       PY
+       ```
+
+       **Said as structural blindness, not as ~~31~~ 51 missed re-queues**, because a
        blind commit is only a *missed* one if the surface was stamped clean at
        the time and the ledger does not record that. The live proof: after the
        fix, `--apply` reported **0 rows newly marked** — every affected surface

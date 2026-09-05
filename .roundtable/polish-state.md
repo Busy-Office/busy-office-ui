@@ -14,10 +14,13 @@ definition) — never on a timer.
 
 The behavior clause was added 2026-09-05 (ROADMAP 276.1). It was not a
 widening of intent — it is what this sentence always meant — but
-`polish_requeue.py` hashed only CSS and the docs page, so **31** commits
-across 7 surfaces changed a serving module with nothing to notice
-(`data-table` 19/30, `scan` 5/6, `pagination` 3/4, `stepper` 2/3,
-`tree-table` 1/3, `alerts` 1/4, `dashboard` 0/2). The map is read from
+`polish_requeue.py` hashed only CSS and the docs page, so **51** commits
+across 9 surfaces changed a serving module with nothing to notice
+(`data-table` 19/30, `inline-editing` 10/11, `table-toolbar` 10/10, `scan`
+5/6, `pagination` 3/4, `stepper` 2/3, `tree-table` 1/3, `alerts` 1/4,
+`dashboard` 0/2 — read at `29a9062b`; **corrected from "31 across 7" by
+roadmap 280.1**, which found the two dropped rows were the two
+`PAGE_ONLY_BEHAVIORS` surfaces 276.1 itself added). The map is read from
 `behaviors.json`'s `byComponent`, never guessed.
 
 Seeded 2026-08-23 from `check:wrong-choice`'s TODO set — the 19
@@ -2119,6 +2122,8 @@ as blind when it touched a serving module and none of the surface's own paths:
 | surface | blind / total | modules |
 |---|---|---|
 | data-table | **19 / 30** | data-grid, data-table, row-edit, sticky-cols, table-sum, table-toolbar, windowed-list |
+| inline-editing | **10 / 11** | row-edit |
+| table-toolbar | **10 / 10** | table-toolbar, data-grid |
 | scan | **5 / 6** | scan-input |
 | pagination | **3 / 4** | load-more |
 | stepper | **2 / 3** | wizard |
@@ -2126,12 +2131,19 @@ as blind when it touched a serving module and none of the surface's own paths:
 | alerts | **1 / 4** | alert |
 | dashboard | **0 / 2** | collapsible-card |
 
-**31 blind commits in total.** `scan`'s row was re-derived by hand against
-`git log` and reproduces exactly (5 of 6; the one that is not blind is
-`36b637a3`, which touched both). The other fourteen ledger surfaces have no
-serving module and are unaffected.
+**51 blind commits in total** (**corrected from 31 by roadmap 280.1**,
+2026-09-05: the two rows added above are the two `PAGE_ONLY_BEHAVIORS`
+surfaces this same change made reachable, so the original table measured the
+tree *before* its own fix while describing the tree after it). `scan`'s row
+was re-derived by hand against `git log` and reproduces exactly (5 of 6; the
+one that is not blind is `36b637a3`, which touched both); the two new rows
+were hand-checked the same way — 11 commits touch `row-edit.ts` and one
+(`9d1ecbe2`) also touched `inline-editing.astro`; 10 touch
+`table-toolbar.ts`/`data-grid.ts` and none touched `table-toolbar.astro`. The
+other ~~fourteen~~ **twelve** ledger surfaces have no serving module and are
+unaffected. All figures read at `29a9062b`; the probe is in ROADMAP 276.1.
 
-**Stated as structural blindness, not as 31 missed re-queues.** A blind commit
+**Stated as structural blindness, not as 51 missed re-queues.** A blind commit
 is only a *missed* re-queue if the surface was stamped clean at the time, and
 that is not reconstructible from the ledger — 15 of 21 rows carry the RE-QUEUED
 marker right now for other reasons. The live proof of that: after the fix,

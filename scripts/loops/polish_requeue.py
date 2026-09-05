@@ -25,12 +25,24 @@ could be rewritten and the surface documenting it never re-queued. Measured
 over the whole history, per ledger surface, counting commits that touched a
 serving module and none of the surface's own paths:
 
-    data-table 19/30 · scan 5/6 · pagination 3/4 · stepper 2/3 ·
-    tree-table 1/3 · alerts 1/4 · dashboard 0/2      -- 31 blind in total
+    data-table 19/30 · inline-editing 10/11 · table-toolbar 10/10 ·
+    scan 5/6 · pagination 3/4 · stepper 2/3 · tree-table 1/3 ·
+    alerts 1/4 · dashboard 0/2                       -- 51 blind in total
+
+CORRECTED 2026-09-05 (roadmap 280.1). This block read "31 blind in total"
+across SEVEN rows, and the two it dropped are `inline-editing` and
+`table-toolbar` -- the two PAGE_ONLY_BEHAVIORS surfaces named forty lines
+below, i.e. the ones this very change made reachable. So the header
+contradicted its own docstring, and the sentence in the ledger that went with
+it ("the other fourteen ledger surfaces have no serving module") is twelve.
+The figures are read at `29a9062b`, the commit that measured them; the
+re-runnable probe is in ROADMAP 276.1 beside the corrected table.
 
 `scan` is the hand-checked row: 5 of the 6 commits to `scan-input.ts` touched
-neither `scan.astro` nor `css/components/scan/`. This is structural blindness,
-not 31 demonstrated missed re-queues -- most rows carry the RE-QUEUED marker
+neither `scan.astro` nor `css/components/scan/`; `inline-editing`'s 10/11 and
+`table-toolbar`'s 10/10 were hand-checked the same way when the correction
+landed. This is structural blindness, not 51 demonstrated missed re-queues --
+most rows carry the RE-QUEUED marker
 for some other reason at any given moment, and that is stated rather than
 rounded up. The DSA `interaction` dimension is the one this costs most
 directly: `dashboard`'s round 2 found `interaction: na` on a component that
