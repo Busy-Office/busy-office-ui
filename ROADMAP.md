@@ -485,7 +485,7 @@ weak evidence for is what it found unprompted, which no arm in this ledger
 looks at: **the page recommends the context its own wrong-choice clause
 forbids.**
 
-3. [ ] **273.3 — byline's wrong-choice clause forbids a POSITION while its
+3. [x] **273.3 — byline's wrong-choice clause forbids a POSITION while its
        reasoning forbids a PRACTICE, and the framework's own screens sit in
        the gap.** Three artefacts disagree, each measured this wake:
        - The opener says *"**Not inside the cells of a sortable grid**"* and
@@ -514,6 +514,51 @@ forbids.**
          screens no longer contradict each other, asserted by re-running the
          `<td>`-containing-`bo-byline` count over `dist` rather than by reading
          the prose.
+       - **RESOLVED 2026-09-05 (cloud wake): the CLAUSE changed, not the two
+         screens.** The premise was re-measured before it was acted on, per
+         CLAUDE.md's premise rule, and it reproduces exactly: a jsdom parse of
+         all **137** built pages finds `.bo-byline` on **10** of them and inside
+         a real `td`/`th` on exactly **2** — `/components/avatar` (2 cells) and
+         `/patterns/settings-admin` (3 cells), **5** cell-borne bylines in all,
+         every one of them a name plus `__avatar` and nothing else. The probe
+         is **red-proved by discrimination, before any real count was read**:
+         the same selector returns 1 on a byline inside a `<td>`, 0 on one
+         beside a table, and **0 on an escaped `<pre>` sample** — which is why
+         it is a DOM parse and not a grep, since the copy-paste blocks on both
+         pages carry `&lt;td&gt;` as text and a grep would have counted them.
+       - **Why the clause and not the screens.** The two cells are the
+         framework's own prescribed composition: `.bo-byline__avatar` exists to
+         put a disc beside a name, `/components/avatar`'s opener names
+         *"assignee columns"* as a use, and its `inTable` sample is the worked
+         example. Changing the screens would mean either dropping that
+         composition or inventing a second way to spell it — more API to say the
+         same thing, which the Objective refuses. The headline was the artefact
+         that over-reached: its own reasoning objects to *packing* three values
+         into one cell, and a single-value name cell packs nothing. So the
+         headline now names the practice — **"Not for packing actor, role and
+         timestamp into a grid cell"** — and one added sentence names the
+         exception and links it to `avatar`.
+       - **Asserted against the BUILT artefact, not the diff.** After a clean
+         rebuild: the old headline appears in **0** files under `dist` (it was
+         also quoted in `dsa-scores.json`'s `content` cite, which is why 0 and
+         not 1 — the cite was updated in the same commit rather than left
+         quoting a string the page no longer carries), the new headline in
+         exactly **1**, the exception sentence in exactly **1**. The
+         `<td>`-borne count re-run after the change is **unchanged at 2 pages /
+         5 cells**, which is the point: nothing moved on those screens, the
+         clause stopped contradicting them. `check:wrong-choice` passes
+         (**156** assertions, 37 components carry / 1 outstanding / 3 exempt)
+         and `check:dsa-scores` passes (**360** assertions), so the
+         `content = 3` cross-check still agrees with the reworded clause.
+       - **Not verified, and named rather than implied:** cloud wake, so the
+         1440/390 light-and-dark screenshot lane could not run. The rendered
+         change is one bolded clause and one added sentence inside a single
+         `<p class="demo-note">` on `/components/byline`, plus the `content`
+         cite `DsaScore.astro` renders on that same page. `check:layout` (390px
+         and 150% zoom), `check:scroll` and `test:axe` all pass over it, so
+         nothing overflows and nothing is unreachable — but **whether the longer
+         opener reads well at 390px was seen by nobody.** That is the residue a
+         LOCAL wake would close.
 
 **This round is therefore NOT a NO-OP on its surface**, which matters for
 273.2's tally: it belongs with the rounds that found a defect *on* the thing
