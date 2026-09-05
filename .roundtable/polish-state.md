@@ -96,29 +96,81 @@ this file either.
 ledger's record of it (176.1's job), and if that finds nothing, the round is
 a no-op recorded in one line.
 
+**The `src` cell is `<digest>` or `<digest>@<revision>`** (ROADMAP 283.2,
+2026-09-05). The revision is an OPTIONAL suffix, written only where it is known
+by construction — `--restamp … --at REV` and `--backfill SHA`, which compute the
+digest at a named tree — and omitted by `--stamp`, which digests the WORKING
+TREE at the end of a round, before that round's commit exists. Measured over
+this table: every stamp that reproduces anywhere reproduces at the commit that
+*carries* it, **18 of 18**, and at that commit's parent — HEAD as `--stamp` saw
+it — **0 of 18**. A revision written by `--stamp` would be the one revision the
+measurement rules out.
+
+The suffix is what made the migration below possible at all. A re-stamped row
+is introduced by the migration commit, where its own digest is not the tree's,
+so the history search reads it `orphan` forever; 283.1 refused the migration for
+exactly that reason. With the revision recorded, the audit is one equality at a
+named tree instead of a search. **Seven rows carry it and fourteen do not, and
+under an injected path-set widening the seven report `path-set` — naming the
+cause — while the fourteen report an undiagnosed `orphan`,** which is precisely
+what 276.1's widening produced silently.
+
 | surface | dimension | score | rounds | dry | src | status |
 |---|---|---|---|---|---|---|
-| component/alerts | content | **3** | 2/3 | 0 | 4ee5ad51 | round 1 landed — blind re-score 2→3, off the gate's TODO; **round 2 (2026-08-31) NO-OP — reconciliation clean on all four arms; the sweep around it filed ROADMAP 231.2, see below** · **RE-QUEUED — source changed** |
+| component/alerts | content | **3** | 2/3 | 0 | 577cb919@4beb4b86 | round 1 landed — blind re-score 2→3, off the gate's TODO; **round 2 (2026-08-31) NO-OP — reconciliation clean on all four arms; the sweep around it filed ROADMAP 231.2, see below** · **RE-QUEUED — source changed** |
 | component/avatar | content | **3** | 2/3 | 0 | 3147e6c1 | round 1 landed — blind 2→3, "not the only way to name someone"; **round 2 (2026-09-04) FOUND A DEFECT, and it is arm 3's WHOLE class at once — 249.8's 3-line header moved every line-number pointer in the framework; all four live ones were published or printed. ROADMAP 266, see below** |
 | component/badge | content | **3** | 2/3 | 0 | 1f69e677 | round 1 landed — blind 2→3, "not for anything actionable"; **round 2 (2026-08-28) NO-OP — reconciliation clean on all four arms, see below** · **RE-QUEUED — source changed** |
 | component/breadcrumb | content | **3** | 2/3 | 0 | 8e11bfe5 | **round 1 (2026-08-30) FOUND A DEFECT — `fit` counted "2 of 19 pattern screens" against 39; re-entry from 217.2's filing, see below** · **`interaction` corrected `na`→3 by navbar's round 2 (2026-09-04) — a blind re-score, NOT a round on this surface: `rounds` stayed 1/3 for it** · **round 2 (2026-09-04) NO-OP on the surface — all six cites hold, including the five NEW assertions 268 wrote into the `interaction` cite that no arm had ever read — and a new arm 11 FOUND A DEFECT in the file's own contract: `dsa-scores.json`'s `$comment` mandated moving `scored` on a re-score, which the only two score-moving blind re-scores ever run both correctly refused. ROADMAP 269, see below** |
 | component/byline | content | **3** | 2/3 | 0 | b73f01d9 | round 1 landed — blind 2→3; scorer caught the boundary, redrawn; **round 2 (2026-09-05) FOUND TWO DEFECTS — all six cites hold and arms 3/8/9/10 reproduce, but the blind re-score found `--compact`'s rationale (docs heading AND the shipped CSS comment) recommending "table cells", the context the opener's own clause forbids and which 0 of 21 uses exercise; and a new arm 13 reports 17/17. ROADMAP 273, see below** · **RE-QUEUED — source changed** |
 | component/calendar | content | **3** | 2/3 | 0 | 6b36b863 | round 1 landed — blind 2→3, "not for a plain date field"; **round 2 (2026-09-02) six arms clean on calendar itself, and a NEW arm 7 FOUND A DEFECT elsewhere — `form · colour` claimed "zero raw hex" against two painted ones; cite corrected, CSS left open as 240.1, see below** · **RE-QUEUED — source changed** |
-| component/dashboard | content | **3** | 2/3 | 0 | 3780542a | round 1 landed — blind 2→3, "not a wrapper round every section"; **round 2 (2026-09-02) FOUND TWO DEFECTS, and the first is the only one in this ledger where the SCORE was wrong rather than the cite — `interaction: na` on a component that ships `initCollapsibleCards`; blind re-scored to 3 by a second agent, the first blind re-score this ledger has actually run. See below** · **RE-QUEUED — source changed** |
-| component/data-table | content | **3** | 3/3 | 0 | 3c4c91e9 | round 1 landed — blind 2→3, "not for laying out a page"; **round 2 (2026-08-30) FOUND A DEFECT — the `spacing` cite named a literal 94.3 had removed two days before the score was taken, see below**; **round 3 (2026-09-05) NOT a no-op, and the defect is ON this surface again — a new arm 16 re-took the live measurement the `spacing` cite publishes and found its worked example unreachable by the rule it explains: 0 of 4 containers on `/patterns/detail-form` move under either mutation, because `69a53364` added `data-density="compact"` 28 hours after `79f7fec9` measured it. A second defect in the same sentence — `28 -> 30` is the row-height floor, produced by padding 0 of 101 times — was introduced by COPYING: archived 94.3 names it separately and all three live copies dropped that sentence. ROADMAP 281, see below** · **RE-QUEUED — source changed** |
-| component/date | content | 2 | — | — | 399709aa | **SKIPPED** — deprecated, see note below |
+| component/dashboard | content | **3** | 2/3 | 0 | 71d34737@e60338c8 | round 1 landed — blind 2→3, "not a wrapper round every section"; **round 2 (2026-09-02) FOUND TWO DEFECTS, and the first is the only one in this ledger where the SCORE was wrong rather than the cite — `interaction: na` on a component that ships `initCollapsibleCards`; blind re-scored to 3 by a second agent, the first blind re-score this ledger has actually run. See below** · **RE-QUEUED — source changed** |
+| component/data-table | content | **3** | 3/3 | 0 | 71b996e2@6cb26268 | round 1 landed — blind 2→3, "not for laying out a page"; **round 2 (2026-08-30) FOUND A DEFECT — the `spacing` cite named a literal 94.3 had removed two days before the score was taken, see below**; **round 3 (2026-09-05) NOT a no-op, and the defect is ON this surface again — a new arm 16 re-took the live measurement the `spacing` cite publishes and found its worked example unreachable by the rule it explains: 0 of 4 containers on `/patterns/detail-form` move under either mutation, because `69a53364` added `data-density="compact"` 28 hours after `79f7fec9` measured it. A second defect in the same sentence — `28 -> 30` is the row-height floor, produced by padding 0 of 101 times — was introduced by COPYING: archived 94.3 names it separately and all three live copies dropped that sentence. ROADMAP 281, see below** · **RE-QUEUED — source changed** |
+| component/date | content | 2 | — | — | 399709aa@3909b80a | **SKIPPED** — deprecated, see note below |
 | component/icon | content | **3** | 2/3 | 0 | f0d9f50b | round 1 landed — blind 2→3; scorer caught the demo contradiction, clause narrowed; **round 2 (2026-08-30) FOUND A DEFECT — `fit` cited "12 ERP glyphs" against 26 shipped, and the same 12 was hard-coded as the DIVISOR of the page's published size projection, see below** · **RE-QUEUED — source changed** |
 | component/inline-editing | content | **3** | 2/3 | 0 | 644dde35 | round 1 landed — blind 3, "not for creating a record" (unscored in DSA); **round 2 (2026-09-05) NO-OP on the surface — all five arms reproduce, including the row-edit cites no arm had ever read — and a new arm 14 FOUND A DEFECT in this loop's own step 0: the surface source set was blind to every behavior module, 31 commits across 7 surfaces. ROADMAP 276, see below** |
 | component/navbar | content | **3** | 2/3 | 0 | 35528cb6 | round 1 landed — blind 2→3, "not the page's own title or actions"; **round 2 (2026-09-04) NO-OP on the surface — all six cites hold, including the `interaction: na` no arm covered — and two NEW arms found a defect elsewhere: `breadcrumb · interaction` scored `na` 7h14m before the rubric clause that forbids it existed. ROADMAP 268, see below** |
-| component/pagination | content | **3** | 2/3 | 0 | 89c4d10d | round 1 landed — blind 2→3, "not for stepping through a process"; **round 2 (2026-09-05) NOT a no-op, and the defect is ON this surface — six cites hold, but a new arm 15 read the page's claims against `load-more.ts` and found `data-load-more-auto` published as a runtime promise in five places, asserted in none, all five naming a trigger the shipped module does not have. ROADMAP 277, see below** · **RE-QUEUED — source changed** |
+| component/pagination | content | **3** | 2/3 | 0 | 514138cd@e4d7493c | round 1 landed — blind 2→3, "not for stepping through a process"; **round 2 (2026-09-05) NOT a no-op, and the defect is ON this surface — six cites hold, but a new arm 15 read the page's claims against `load-more.ts` and found `data-load-more-auto` published as a runtime promise in five places, asserted in none, all five naming a trigger the shipped module does not have. ROADMAP 277, see below** · **RE-QUEUED — source changed** |
 | component/progress | content | **3** | 2/3 | 0 | 1154a4d7 | round 1 landed — blind 2→3, "not for work of unknown duration"; **round 2 (2026-09-04) NO-OP on the surface — six cites and all eight arms clean — and the finding is in this loop's own step 0: `polish_requeue.py --apply` announced a write over a byte-identical file. ROADMAP 267, see below** · **RE-QUEUED — source changed** |
 | component/scan | colour+interaction+fit | **3** | 3/3 | 0 | 005a87af | round 1 (2026-08-23) fixed all three; **round 2 (2026-08-28) discovered the round-1 score was never written to `dsa-scores.json` at all** — see below; **round 3 (2026-09-05) NOT a no-op — the pair arm and five of six cites hold, and the sixth (`fit`) published the page's own OUTBOUND `Related` list as an inbound fact, which led to `/patterns/goods-receipt` running `scan` live and listing nothing for it, 1 of 4. ROADMAP 279, see below** |
 | component/sidebar-nav | content | **3** | 2/3 | 0 | 904b544f | round 1 landed — blind 2→3, "not for navigating within one screen"; **round 2 (2026-08-30) FOUND A DEFECT — the `fit` cite's usage count was EXACT when written and decayed two days later, see below** · **RE-QUEUED — source changed** |
 | component/state-patterns | content | **3** | 2/3 | 0 | 7d3f0e38 | round 1 landed — blind 2→3 (clears skeleton AND state); **round 2 (2026-08-28) FOUND A DEFECT — `skeleton · colour` cited the removed token pairing, see below** · **RE-QUEUED — source changed** |
-| component/stepper | content | **3** | 2/3 | 0 | efba2799 | round 1 landed — blind 2→3, "not for independent sections"; **round 2 (2026-09-01) NO-OP — reconciliation clean on five arms; arm 4 re-measured 20/20 and a new arm 5 reads 81/81, see below** · **RE-QUEUED — source changed** |
+| component/stepper | content | **3** | 2/3 | 0 | 0e2c17c8@e784bbfd | round 1 landed — blind 2→3, "not for independent sections"; **round 2 (2026-09-01) NO-OP — reconciliation clean on five arms; arm 4 re-measured 20/20 and a new arm 5 reads 81/81, see below** · **RE-QUEUED — source changed** |
 | component/table-toolbar | content | **3** | 3/3 | 0 | 99f7ac9f | round 1 landed — blind 3, "do not add to a read-mostly list" (unscored in DSA); **round 2 (2026-09-05) NOT a no-op, and the defect is ON this surface — the two behaviors this page documents as a pair make the grid keyboard-unreachable when they meet: hiding the column the cell cursor is parked in strands the grid's ONE tab stop on a `[hidden]` cell and Tab then skips the grid entirely. Fixed in `data-grid.ts`, red-proved by four injections confirmed in `dist/js/behaviors/data-grid.js`. ROADMAP 278, see below** · **RE-QUEUED — source changed** · **round 3 (2026-09-05) NO-OP on the surface — all four arms clean (unscored in DSA and the page renders no stale "Not yet scored" block; the wrong-choice clause is present and names its cost; PAGE_ONLY_BEHAVIORS reconciles against the page's own imports; check:claims green) — and a new arm 17 FOUND A DEFECT in this loop's own step 0: 7 of the 13 re-queues this script reports are constants no source change can set or clear, 5 of them orphaned by 276.1's own widening. ROADMAP 283, see below** |
 | component/tree | content | **3** | 2/3 | 0 | f77bea6d | round 1 landed — blind 2→3, pair-coherent with tree-table; **round 2 (2026-09-04) NO-OP on the surface — all six cites hold, including the `1.25em`/`1em` pair no arm had read — and a new arm 12 FOUND A DEFECT in `check:slice-refs` itself: its file filter omits `.ts` and `.json`, so 11 slice references are cited from nowhere the gate looks. ROADMAP 270, see below** |
-| component/tree-table | content | **3** | 2/3 | 0 | 298374cc | round 1 landed — blind 2→3, pair-coherent with tree; **round 2 (2026-09-01) NO-OP — reconciliation clean on six arms; a new arm 6 reads 8/8 and corrects this ledger's own base rate for the class, see below** · **RE-QUEUED — source changed** |
+| component/tree-table | content | **3** | 2/3 | 0 | 36db22d4@cb7c80da | round 1 landed — blind 2→3, pair-coherent with tree; **round 2 (2026-09-01) NO-OP — reconciliation clean on six arms; a new arm 6 reads 8/8 and corrects this ledger's own base rate for the class, see below** · **RE-QUEUED — source changed** |
+
+## Stamp migration, 2026-09-05 (ROADMAP 283.2) — seven rows re-stamped
+
+Every uninformative re-queue this ledger carried is cleared, and the two causes
+were **different**, which is the finding:
+
+- **Four rows orphaned by a FORMULA change** (`alerts`, `dashboard`, `stepper`,
+  `tree-table`) — 276.1 widened the path set to include behavior modules and did
+  not re-stamp. Migrated to the current path set at their own recorded revision.
+  **All four still re-queue**, because their source genuinely moved since that
+  revision. So 276.1's orphaning cost *false confidence*, not a missed round —
+  the hypothesis 283.2 wrote down, now measured rather than assumed.
+- **Two rows orphaned MID-ROUND** (`data-table` at `6cb26268`, `pagination` at
+  `e4d7493c`) — and these are not formula casualties at all. `--stamp` ran, the
+  round then edited the surface's source again, and the stamp was left
+  describing a working tree no commit carries. Proved exhaustively rather than
+  inferred: every committed blob combination was enumerated — **2** candidate
+  trees for `data-table`, **4** for `pagination` — and none reproduces the
+  stamp. Both re-stamped at their own round's commit; **both correctly stop
+  re-queueing**, because their source has not moved since.
+- **One row was never broken** (`date`, SKIPPED/deprecated) — `--backfill`
+  seeded it from `3909b80a`, which the search reports as `orphan` because the
+  digest is not the tree at the commit that recorded it. Recording the revision
+  makes it a lookup and the false `orphan` disappears. This is the *superset*
+  problem 283.1 named, fixed at its source.
+
+**The five became four before any of this ran.** 283.1 measured five
+formula-orphaned rows; `table-toolbar` cleared itself through the documented
+mechanism — a round ending in `--stamp` — between that measurement and this one.
+Re-derived, not carried over.
+
+`--check` went **12 re-queues with 6 uninformative → 10 with 0**.
+`--verify-stamps` went **7 → 0**; `--audit-stamps` **2 DEAD → 0**.
 
 ## Re-entry: scan (2026-08-23) — the queue's first source-change entry
 

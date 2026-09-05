@@ -83,6 +83,22 @@ USAGE
                                one-off: seed digests from a historical tree, so
                                existing rows do not all read "changed" merely
                                because the column is new
+  polish_requeue.py --restamp component/alerts --at 4beb4b86
+                               migrate one row after a PATH-SET change: recompute
+                               its digest over the current set at that revision,
+                               and record the revision beside it
+  polish_requeue.py --verify-stamps
+                               does every stamp describe a real tree? Run AFTER
+                               the round's commit -- advisory, from
+                               record_iteration.py
+  polish_requeue.py --audit-stamps
+                               exhaustive form of the same question
+
+THE `src` CELL IS `<digest>` OR `<digest>@<revision>` (roadmap 283.2). See
+`parse_stamp` for why the revision is an OPTIONAL suffix rather than always
+present: `--stamp` runs before its own round's commit, so the revision its
+digest describes does not exist yet, and 18 of 18 stamps reproduce at the
+commit that CARRIES them and 0 at that commit's parent.
 """
 from __future__ import annotations
 
@@ -287,6 +303,39 @@ def digest_paths(paths: list[str], tree: str | None = None) -> str:
     ).stdout.strip()[:8]
 
 
+STAMP_RE = re.compile(r"^([0-9a-f]{8})(?:@([0-9a-f]{7,40}))?$")
+
+
+def parse_stamp(cell: str) -> tuple[str, str | None]:
+    """Split a ledger `src` cell into (digest, revision-or-None).
+
+    THE REVISION IS AN OPTIONAL SUFFIX, AND THAT IS THE WHOLE DESIGN
+    (roadmap 283.2, 2026-09-05). The item proposed that every stamp carry the
+    revision it was taken against. It cannot: `--stamp` runs at the END of a
+    Polish round, which is BEFORE that round's commit, so the revision the
+    digest describes does not exist yet. Measured over the 21-row ledger --
+    every stamp that reproduces anywhere reproduces at the commit that CARRIES
+    it, 18 of 18, and at that commit's parent (i.e. HEAD as `--stamp` saw it)
+    **0 of 18**. A `@rev` written by `--stamp` would therefore record the one
+    revision the measurement rules out, on every row.
+
+    So the suffix is written exactly where the revision is known BY
+    CONSTRUCTION -- `--restamp --at REV` and `--backfill SHA`, both of which
+    compute the digest at a named tree -- and omitted for a working-tree stamp,
+    whose revision is recovered by the search below (exact on 18 of 18).
+
+    That asymmetry is the point rather than a shortcut. A migrated stamp is the
+    case the search CANNOT resolve: it is introduced by the migration commit,
+    where its own digest is not the tree's, so it would read `orphan` forever.
+    283.1 refused the migration for exactly that reason. The suffix is what
+    makes the migration possible, and it is needed nowhere else.
+    """
+    m = STAMP_RE.match(cell.strip())
+    if not m:
+        return cell.strip(), None
+    return m.group(1), m.group(2)
+
+
 def _parent(rev: str) -> str:
     """The short sha of `rev`'s first parent, or "" for a root commit.
 
@@ -362,6 +411,32 @@ def stamp_provenance(surface: str, stamp: str) -> tuple[str, str]:
     because this line printed would be trading a false signal for a false
     silence.
     """
+    stamp, at = parse_stamp(stamp)
+    wide = source_paths(surface)
+
+    if at:
+        # The lookup the search cannot do. A stamp carrying its revision is
+        # verified by ONE equality at that revision -- no history walk, and no
+        # dependence on which commit happens to introduce the digest, which is
+        # what breaks for a migrated row.
+        if digest_paths(wide, at) == stamp:
+            return "reproducible", f"the digest at {at}, read from the stamp"
+        narrow_at = [p for p in wide if "/js/behaviors/" not in p]
+        if narrow_at != wide and digest_paths(narrow_at, at) == stamp:
+            return (
+                "narrow",
+                f"the PRE-276.1 digest at {at}, read from the stamp — "
+                "behavior modules excluded",
+            )
+        # An exact, immediate diagnosis of a path-set change: the stamp names
+        # its own tree, so a disagreement there cannot be "the source moved".
+        return (
+            "path-set",
+            f"the stamp names {at}, and the digest there matches under NO "
+            "current path set — the set this surface is computed over has "
+            "changed since the stamp was written",
+        )
+
     intro = git(
         "log", "--reverse", "--format=%h", "-S", stamp, "--", str(LEDGER)
     ).split()
@@ -371,7 +446,6 @@ def stamp_provenance(surface: str, stamp: str) -> tuple[str, str]:
     parent = _parent(rev)
     revs = [r for r in (rev, parent) if r]
 
-    wide = source_paths(surface)
     for r in revs:
         if digest_paths(wide, r) == stamp:
             return "reproducible", f"the digest at {r}"
@@ -384,6 +458,28 @@ def stamp_provenance(surface: str, stamp: str) -> tuple[str, str]:
                     "narrow",
                     f"the PRE-276.1 digest at {r} — behavior modules excluded",
                 )
+    # Say WHICH orphan this is. Measured 2026-09-05 (roadmap 283.2) on the two
+    # live cases: when the introducing commit touched the surface's own source,
+    # every committed blob combination was enumerated -- 2 trees for
+    # `data-table`, 4 for `pagination` -- and NONE reproduced the stamp. The
+    # only tree left is one that was never committed, i.e. `--stamp` ran and the
+    # round then edited the source again before committing. That is a different
+    # fault from a formula change and it wants a different fix (stamp last, and
+    # `--verify-stamps` after the commit), so the verdict names it.
+    #
+    # `git diff-tree`, never `git log -1 <rev> -- <paths>`: the log form walks
+    # BACK from rev and answers with the newest touching commit at or before it,
+    # so it is non-empty almost always and reads as "yes" for nearly every row.
+    # The first version of this check used it and claimed `f57570f4` touched
+    # `component/date`'s source; diff-tree shows it touched none of it, and for
+    # `6cb26268` the log form answered `a098cf85` — a different commit.
+    if git("diff-tree", "--no-commit-id", "--name-only", "-r", rev, "--", *wide).strip():
+        return "orphan", (
+            f"not the digest at {rev} or its parent, and {rev} DID touch this "
+            "surface's own source — the stamp was taken mid-round and then "
+            "invalidated by a later edit in the same commit; re-stamp it at "
+            f"`--restamp {surface} --at {rev}` (run --audit-stamps to confirm)"
+        )
     return "orphan", f"not the digest at {rev} or its parent — run --audit-stamps"
 
 
@@ -396,8 +492,25 @@ def audit_stamps(surface: str, stamp: str) -> tuple[bool, str]:
     the cheap two-revision test names, and what the strong claim in roadmap 283
     was measured with, so that claim is re-runnable rather than re-derived.
     """
+    stamp, at = parse_stamp(stamp)
     wide = source_paths(surface)
     narrow = [p for p in wide if "/js/behaviors/" not in p]
+    if at:
+        # A stamp that names its revision is settled by that revision or not at
+        # all. Falling back to the walk would let a row pass on some OTHER
+        # commit that happens to collide, which is the searching behaviour this
+        # suffix exists to remove.
+        if digest_paths(wide, at) == stamp:
+            return True, f"reproducible at {at}, read from the stamp (no search)"
+        if narrow != wide and digest_paths(narrow, at) == stamp:
+            return True, (
+                f"reproducible at {at} under the PRE-276.1 path set, read from "
+                "the stamp (no search)"
+            )
+        return False, (
+            f"the stamp names {at} and does not reproduce there under any "
+            "current path set — the path set has changed since it was written"
+        )
     sets = [(wide, "current")]
     if narrow != wide:
         sets.append((narrow, "PRE-276.1"))
@@ -462,6 +575,22 @@ def main() -> int:
     ap.add_argument("--stamp", metavar="SURFACE")
     ap.add_argument("--backfill", metavar="SHA")
     ap.add_argument(
+        "--restamp", metavar="SURFACE",
+        help="migrate one row: recompute its digest over the CURRENT path set "
+             "at the revision given by --at, and record that revision beside "
+             "it. This is the mechanical migration after a path-set change.",
+    )
+    ap.add_argument(
+        "--at", metavar="REV",
+        help="the revision --restamp computes the digest at; required with it",
+    )
+    ap.add_argument(
+        "--verify-stamps", action="store_true",
+        help="cheap: does every stamp describe a real tree? Run AFTER a round's "
+             "commit — a stamp taken mid-round and then invalidated by a later "
+             "edit in the same commit is only visible once that commit exists.",
+    )
+    ap.add_argument(
         "--audit-stamps", action="store_true",
         help="exhaustive: for every row, is its stamp reproducible at ANY "
              "revision of its own paths? Slow; settles what --check's cheap "
@@ -478,7 +607,16 @@ def main() -> int:
     text = LEDGER.read_text()
 
     if args.backfill:
-        seed = {s: digest(s, tree=args.backfill) for _, s, _ in rows(text)}
+        # Record the revision: a backfilled digest is computed at a named tree
+        # by construction, so it is exactly the case the search cannot resolve.
+        # `component/date` is the live proof — seeded from a historical tree, it
+        # reads `orphan` under the search and is perfectly fine.
+        at = git("rev-parse", "--short", args.backfill).strip()
+        seed = {
+            s: (f"{d}@{at}" if d != "-" else "-")
+            for _, s, _ in rows(text)
+            for d in [digest(s, tree=args.backfill)]
+        }
         if has_src_column(text):
             print("ledger already has a src column — nothing to backfill")
             return 0
@@ -492,14 +630,84 @@ def main() -> int:
 
     recorded = {s: c[-2] for _, s, c in rows(text)}
 
+    if args.restamp:
+        if not args.at:
+            print("--restamp needs --at REV (the revision to compute at)", file=sys.stderr)
+            return 2
+        if args.restamp not in recorded:
+            print(f"no such surface in the ledger: {args.restamp}", file=sys.stderr)
+            return 2
+        try:
+            at = git("rev-parse", "--short", args.at).strip()
+        except subprocess.CalledProcessError:
+            print(f"--at {args.at!r} is not a revision in this repository", file=sys.stderr)
+            return 2
+        new = digest(args.restamp, tree=at)
+        if new == "-":
+            print(
+                f"{args.restamp} has no source blobs at {at} — refusing to "
+                "record a '-' over a real stamp", file=sys.stderr,
+            )
+            return 2
+        old = recorded[args.restamp]
+        lines = text.splitlines()
+        for i, s, cells in rows(text):
+            if s == args.restamp:
+                parts = lines[i].rstrip().rstrip("|").split("|")
+                parts[-2] = f" {new}@{at} "
+                lines[i] = "|".join(parts) + "|"
+        LEDGER.write_text("\n".join(lines) + "\n")
+        today = digest(args.restamp)
+        print(f"restamped {args.restamp}: {old} -> {new}@{at}")
+        print(
+            "  this row now "
+            + ("does NOT re-queue — its source is unmoved since that revision"
+               if new == today else
+               f"STILL re-queues ({new} -> {today}) — its source genuinely "
+               "moved since that revision, which is the re-queue meaning what "
+               "it says")
+        )
+        return 0
+
+    if args.verify_stamps:
+        # Every row, not just the re-queued ones: a stamp can describe no tree
+        # at all while still differing from today's digest, which is precisely
+        # how `data-table` and `pagination` went unnoticed for a day.
+        broken = []
+        for _, s, _ in rows(text):
+            was = recorded[s]
+            d, _at = parse_stamp(was)
+            if was == "-" or not STAMP_RE.match(was):
+                continue
+            if digest(s) == d:
+                continue
+            kind, why = stamp_provenance(s, was)
+            if kind != "reproducible":
+                broken.append((s, kind, why))
+        if not broken:
+            print(
+                f"stamp verification: {len(recorded)} row(s), every stamp "
+                "describes a real tree"
+            )
+            return 0
+        print(
+            f"stamp verification: {len(broken)} of {len(recorded)} stamp(s) "
+            "describe no tree any commit carries, so their re-queue cannot "
+            "mean 'the source moved':"
+        )
+        for s, kind, why in broken:
+            print(f"  {s:34s} {kind}: {why}")
+        return 1
+
     if args.audit_stamps:
         bad = []
         for _, s, _ in rows(text):
             was = recorded[s]
-            if was == "-" or not re.fullmatch(r"[0-9a-f]{8}", was):
+            d, at = parse_stamp(was)
+            if was == "-" or not STAMP_RE.match(was):
                 print(f"  {s:34s} {was!r:12s} no digest to audit")
                 continue
-            if digest(s) == was:
+            if digest(s) == d:
                 print(f"  {s:34s} {was} CURRENT — equals today's digest")
                 continue
             ok, why = audit_stamps(s, was)
@@ -518,6 +726,10 @@ def main() -> int:
         if args.stamp not in recorded:
             print(f"no such surface in the ledger: {args.stamp}", file=sys.stderr)
             return 2
+        # NO REVISION SUFFIX HERE, DELIBERATELY -- see `parse_stamp`. This
+        # digest is of the WORKING TREE, which becomes the round's next commit;
+        # that commit does not exist yet, and HEAD is measurably the wrong
+        # answer (0 of 18 stamps reproduce at it).
         new = digest(args.stamp)
         lines = text.splitlines()
         for i, s, cells in rows(text):
@@ -527,6 +739,16 @@ def main() -> int:
                 lines[i] = "|".join(parts) + "|"
         LEDGER.write_text("\n".join(lines) + "\n")
         print(f"stamped {args.stamp} at {new}")
+        # The one failure this cannot see: an edit made AFTER this call and
+        # before the commit orphans the stamp permanently. `data-table` and
+        # `pagination` both died that way on 2026-09-05 (roadmap 283.2), so say
+        # so here rather than only in a playbook nobody re-reads mid-round.
+        print(
+            "  stamp LAST — any edit to this surface's source after this call "
+            "and before the commit orphans it.\n"
+            "  `--verify-stamps` (advisory, runs from record_iteration.py) is "
+            "what catches it once the commit exists."
+        )
         return 0
 
     # A surface the ledger has taken OUT of play does not come back because a
@@ -539,7 +761,12 @@ def main() -> int:
     excluded = []
     changed = []
     for _, s, cells in rows(text):
-        was, now = recorded[s], digest(s)
+        # Compare on the DIGEST, but carry the whole cell: `stamp_provenance`
+        # needs the revision suffix, and stripping it here made every migrated
+        # row report `unknown` — the search being handed a stamp whose whole
+        # point is that the search cannot resolve it.
+        cell = recorded[s]
+        was, now = parse_stamp(cell)[0], digest(s)
         if was == now or was == "-":
             continue
         status, dry = cells[-1], cells[-3]
@@ -548,7 +775,7 @@ def main() -> int:
         elif dry not in ("0", "—", "-", ""):
             excluded.append((s, f"marked dry ({dry})"))
         else:
-            changed.append((s, was, now))
+            changed.append((s, cell, now))
 
     def report_excluded():
         for s, why in excluded:

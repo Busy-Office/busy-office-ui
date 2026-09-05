@@ -71,7 +71,20 @@ hardened at **11:42:09Z** (`18791d5`, 172.1) and demoted at **12:26:17Z**
 (`33fb89e`, 169.4) — **44 minutes, two consecutive wakes, neither naming the
 other.**
 
-**A SECOND advisory check runs from the same place, so expect two stderr blocks**
+**THREE advisory checks now run from the same place, so expect up to three
+stderr blocks** (roadmap 186.1, 2026-08-29; the third added by 283.2,
+2026-09-05). The third is `polish_requeue.py --verify-stamps`, and it lives here
+rather than at Polish step 0 for a reason the other two do not have: **it can
+only work after the commit.** A `--stamp` taken at the end of a round digests
+the working tree; if the round then edits that surface's source again before
+committing, the stamp describes a tree no commit carries and the surface
+re-queues forever on a constant. Nothing can catch that at stamp time — the
+offending edit has not happened yet — and by the next wake's step 0 it is
+indistinguishable from an ordinary re-queue. `data-table` and `pagination` both
+died that way on 2026-09-05 and neither was noticed for a day. Its verb is
+**REPORTED**, and it is silent when it has nothing to say.
+
+**A SECOND advisory check runs from the same place**
 (roadmap 186.1, 2026-08-29). `check:resume-slice-ids` reports every slice id
 `RESUME.md` names in backticks that `ROADMAP.md` records `[x]` closed — the stale
 blocked-set rule 4 reads — and reconciles its own open/closed counts against a
@@ -865,7 +878,17 @@ remaining, per `.roundtable/polish-state.md`.
    Either way, close the round with
    `python3 scripts/loops/polish_requeue.py --stamp <surface>` — that records
    the source state the score was earned against. Skip it and the surface
-   re-queues itself forever on the change the round just made. This is what reconciles the budgets
+   re-queues itself forever on the change the round just made.
+
+   **`--stamp` is the LAST thing before the commit, and that ordering is
+   load-bearing** (roadmap 283.2, 2026-09-05). It digests the working tree, so
+   any edit to that surface's source made *after* the call and *before* the
+   commit leaves the stamp describing a tree nothing carries — permanently
+   uninformative, and it reads as an ordinary re-queue thereafter. Measured on
+   the two live cases (`data-table`, `pagination`): every committed blob
+   combination was enumerated, 2 and 4 candidate trees, and none reproduced the
+   stamp. `--verify-stamps` (advisory, from `record_iteration.py`, after the
+   commit) is what catches it; the process rule alone is not the mechanism. This is what reconciles the budgets
      with this file's standing "don't manufacture busywork" rule: a
      surface that cannot produce a measurable gain twice running is
      finished, whatever its budget says.

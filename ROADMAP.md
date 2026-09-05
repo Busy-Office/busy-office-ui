@@ -482,7 +482,128 @@ icon           stamped 2026-08-30  4 commits        +72/-4
        nothing on the surface, so there is no score to mark. Recorded as a call,
        not an omission.
 
-2. [ ] **283.2 — the ledger records a digest with no revision beside it, so a
+2. [x] **283.2 — DONE 2026-09-05 (cloud wake). The revision is recorded as an
+       OPTIONAL suffix, seven rows migrated, and the item's own premise was
+       half wrong: two of the orphans are not formula casualties at all.**
+
+       **Dispatched by rule 4**, and the hand-off said rule 4 would not reach
+       this item — *"rule 4 takes the oldest, and the nine older ones are all
+       owner-blocked"*. **That reading is refuted by measurement.** Across all
+       **917** revisions of `ROADMAP.md`, the oldest open item — Slice 15's *AT
+       runtime evidence*, permanently owner-blocked on a human listening to a
+       screen reader — has **never** been ticked `[x]`, while the loop log
+       carries **573** `Continue` rows. If a blocked oldest item stopped rule 4,
+       rule 4 could not have dispatched once in the life of this repo. It skips
+       blocked items and takes the oldest *dispatchable* one, exactly as its own
+       173.2 bullet describes.
+
+       ```
+       for sha in $(git log --format=%H -- ROADMAP.md); do \
+         git show $sha:ROADMAP.md | grep -F 'AT runtime evidence'; done | grep -c '\[x\]'   # 0
+       grep -c ' · Continue · ' .roundtable/loop-log.md                                     # 573
+       ```
+
+       **What shipped.** The `src` cell is now `<digest>` or
+       `<digest>@<revision>`; `stamp_provenance` and `--audit-stamps` verify a
+       suffixed stamp by ONE equality at that revision instead of searching;
+       `--restamp SURFACE --at REV` performs the migration mechanically; and
+       `--verify-stamps` runs advisory from `record_iteration.py`.
+       `--check`: **12 re-queues with 6 uninformative → 10 with 0**.
+       `--verify-stamps`: **7 → 0**. `--audit-stamps`: **2 DEAD → 0**.
+
+       **THE REVISION CANNOT BE MANDATORY, AND THE ITEM ASSUMED IT COULD BE.**
+       `--stamp` runs at the END of a round, which is BEFORE that round's
+       commit, so the revision its digest describes does not exist yet.
+       Measured over the 21-row ledger: every stamp that reproduces anywhere
+       reproduces at the commit that **carries** it — **18 of 18** — and at that
+       commit's parent, which is HEAD as `--stamp` saw it, **0 of 18**. A `@rev`
+       written by `--stamp` would record the one revision the measurement rules
+       out, on every row. So the suffix is written only where the revision is
+       known by construction (`--restamp --at`, `--backfill`) and omitted
+       otherwise. **Seven rows carry it, fourteen do not.**
+
+       **283.1's refusal was right, and the suffix is what dissolves it.** It
+       refused re-stamping because *"a migrated stamp is introduced by the
+       migration commit and would re-read `orphan`"* — true, and confirmed:
+       reconciling the two implementations row for row gives **6 agree, 5
+       disagree, and on every disagreement the lookup is right**, because the
+       search cannot resolve a stamp whose digest is not the tree at the commit
+       that introduced it. That is the Accept's "disagreement recorded with
+       which one is right", and it is the justification for the format rather
+       than a wrinkle in it.
+
+       **THE PREMISE WAS HALF WRONG: the two `orphan` rows are a DIFFERENT
+       BUG.** The item reads *"every fault in 283.1 reduces to this"*. It does
+       not. `data-table` and `pagination` were not orphaned by 276.1's path-set
+       widening — `--stamp` ran mid-round and the round then **edited the
+       surface's source again before committing**, leaving the stamp describing
+       a working tree no commit carries. Proved exhaustively, not inferred:
+       every committed blob combination was enumerated — **2** candidate trees
+       for `data-table` (only `data-table.css` differs between its commit and
+       the parent), **4** for `pagination` — and **none** reproduces the stamp.
+       A recorded revision would not have prevented either; what catches them is
+       `--verify-stamps` after the commit, which is why that shipped too.
+
+       **The five were four before the work started.** 283.1 measured five
+       formula-orphaned rows; `table-toolbar` cleared itself through the
+       documented mechanism (a round ending in `--stamp`) in between. Re-derived
+       per CLAUDE.md's premise rule rather than carried over.
+
+       **Which rows still re-queue, as the Accept required.** All four migrated
+       formula-orphans (`alerts`, `dashboard`, `stepper`, `tree-table`) **still
+       re-queue** — their source genuinely moved since their recorded revision.
+       So 276.1's orphaning cost *false confidence, not a missed round*, which
+       is what 283.2 itself predicted, now measured. The two mid-round rows
+       **stop** re-queueing, correctly: their source is unmoved since their own
+       round's commit. That is the whole behavioural delta, 12 → 10.
+
+       **Red-proved by injection, both directions.** Widening `source_paths`
+       with one extra file — asserted present in the path set the gate reads
+       before believing anything — takes `--verify-stamps` to 21 of 21, and the
+       verdicts **discriminate**: all **7** suffixed rows report `path-set`
+       ("the set this surface is computed over has changed since the stamp was
+       written"), all **14** bare rows report an undiagnosed `orphan`. That is
+       exactly the contrast the Accept asked for — the new form *says* a
+       path-set change happened where the old form cannot tell it from source
+       movement — and it reproduces 276.1's silent failure on demand. Injection
+       reverted and re-confirmed absent. The advisory wiring was red-proved
+       separately by discrimination: clean ledger → no stderr block; one stamp
+       corrupted (asserted at exactly 1 occurrence before replacing) → a block
+       naming exactly that row.
+
+       **One dead detector was caught and killed inside this item.** The first
+       version of the self-explaining `orphan` message asked whether the
+       introducing commit touched the surface's own source with
+       `git log -1 <rev> -- <paths>`. That form walks **back** from `rev` and
+       answers with the newest touching commit at or before it, so it is
+       non-empty almost always: it claimed `f57570f4` touched `component/date`'s
+       source (it touched none of it) and answered `a098cf85` — a different
+       commit — for `6cb26268`. Replaced with `git diff-tree --no-commit-id
+       --name-only -r <rev>`, which discriminates: the two mid-round rows get
+       the mid-round diagnosis and `date` correctly gets the plain orphan. Found
+       by the message disagreeing with a probe taken minutes earlier, which is
+       the only thing that ever catches this shape.
+
+3. [ ] **283.3 — `--stamp` cannot verify its own output, and the fix for that
+       is ordering plus an advisory check. Is that enough?** 283.2 shipped
+       `--verify-stamps` (advisory, post-commit) and a `LOOPS.md` rule that
+       `--stamp` runs last. Both were the affordable fix, and neither *prevents*
+       the fault — a round that stamps early still ships a dead stamp and learns
+       about it one command later, if whoever is reading stderr notices.
+       - **Accept:** either a mechanism that makes an early stamp impossible or
+         self-healing (e.g. `--stamp` recording the paths' blob SHAs so a later
+         edit is detectable without a commit, or the stamp being written by the
+         commit itself), **or** a recorded refusal measuring why the advisory
+         check is sufficient — including how many rounds since 283.2 stamped
+         early, which `--verify-stamps` now makes countable. **Finding the
+         advisory check sufficient is a satisfying outcome**; the base rate is 2
+         in the 21 rows this ledger has ever held, both on one day.
+
+       **283.2's ORIGINAL TEXT AND ACCEPT, kept verbatim below** on the
+       precedent of Slice 147's owner call — the premise corrections above are
+       only checkable against what the item actually said.
+
+       > **the ledger records a digest with no revision beside it, so a
        stamp cannot be audited or migrated without guessing which commit it
        describes.** Every fault in 283.1 reduces to this: the `src` cell says
        *what* the source hashed to and never *when* or *over which path set*,

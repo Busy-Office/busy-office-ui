@@ -182,6 +182,43 @@ def main():
         except Exception as exc:  # noqa: BLE001 - same reason as above
             print(f"  (warning: {name} could not run: {exc})", file=sys.stderr)
 
+    # A THIRD advisory check, and it runs from here for a reason the other two
+    # do not have: it can only work AFTER the commit (roadmap 283.2).
+    #
+    # `--stamp` digests the working tree at the end of a Polish round. If the
+    # round then edits that surface's source again before committing, the stamp
+    # describes a tree no commit carries and the surface re-queues forever on a
+    # constant. `data-table` and `pagination` both died that way on 2026-09-05
+    # and neither was noticed for a day. Nothing can catch it at stamp time --
+    # the offending edit has not happened yet -- and by the next wake's step 0
+    # it reads as an ordinary re-queue. This is the first moment the evidence
+    # exists: the commit is made, so the stamp either reproduces in it or does
+    # not. REPORTED, not FAILED, on the slice-id check's rule: it names rows
+    # worth re-stamping and cannot tell a mid-round stamp from a legitimately
+    # backfilled one on its own.
+    #
+    # Guarded on `api.json` because the slug -> css-dir map is READ, never
+    # guessed, and a wake that never built core does not have it. Without this
+    # the script's (correct, actionable) refusal exits 1 and would be rendered
+    # as a stamp report on every such wake -- a check crying wolf about its own
+    # missing input is how a real report gets trained away.
+    verify = os.path.join(os.path.dirname(__file__), "polish_requeue.py")
+    api = os.path.join(
+        os.path.dirname(__file__), "..", "..", "packages", "core", "dist", "api.json"
+    )
+    if not os.path.exists(api):
+        return
+    try:
+        r = subprocess.run(
+            [sys.executable, verify, "--verify-stamps"],
+            capture_output=True, text=True,
+        )
+        if r.returncode == 1:
+            print("  (polish stamp verification REPORTED — see below)", file=sys.stderr)
+            print((r.stdout or "") + (r.stderr or ""), file=sys.stderr)
+    except Exception as exc:  # noqa: BLE001 - same reason as above
+        print(f"  (warning: polish stamp verification could not run: {exc})", file=sys.stderr)
+
 
 if __name__ == "__main__":
     main()
