@@ -857,6 +857,34 @@ surfaced more:
    backlog for exactly that reason — it would have moved the file's number
    while leaving what a wake reads untouched, which is optimising the
    instrument.
+
+   **And a rising region number is not a REGROWTH reading until it is
+   attributed per section** (roadmap 308.1, 2026-09-07). The block prints one
+   figure for the whole region, so "the dispatch region is regrowing" reads as
+   *what was cut came back* — which is a different state from *new rules landed
+   where nothing was cut*, and the two want opposite answers. Both produce the
+   same rising number, and three consecutive sweeps described the region from
+   that number alone. Split the region on its own headings at each revision
+   since the last cut and diff the sections before concluding:
+
+   ```
+   # per-section body words of the dispatch region at one revision
+   git show <rev>:LOOPS.md | awk '/^## Playbooks/{exit} {print}'
+   #   then split on ^#{2,4} and on ^[0-9]+\. \*\* (the rules), and sum each
+   ```
+
+   - **The section that was cut regrew** → the fold did not hold, and another
+     cut is the answer.
+   - **Other sections grew** → a second cut would remove instruction rather
+     than narrative, which is what this playbook's refusals are about. Say so
+     and file the structural question; do not reach for a cut.
+
+   **Reconcile the two instruments before comparing readings.** The report's
+   row and the `awk … | wc -w` form sweeps quote both COUNT HEADING LINES; a
+   per-section body split does not. On 2026-09-07 they differed by a constant
+   **56** at all eight revisions checked, so the deltas agree exactly and the
+   totals do not — quoting one against the other invents a delta that is not
+   there.
 2. For a wide sweep, `Workflow` fan-out — one agent per component, report drift.
 3. Consolidate to the shared pattern; never widen public API to do it.
 4. **Round check** — gates must stay green (stylelint naming is the enforcer);

@@ -315,6 +315,134 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 308 — Standardize sweep, 4 of 4 lanes: lanes 1-3 clean, and lane 4's "the dispatch region is regrowing" is FALSE as stated — the section 274.2 cut has not regrown by ONE word, and the +877 is five new rules in five sections the cut never touched (2026-09-07)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty), fixed with `git checkout -B main
+origin/main` before any commit; `origin/main` again arrived as a **forced
+update** (`26447ba...ecf1c34`) — and the tip the previous hand-off named
+(`29457ba`) was no longer the tip, because the local dispatcher had landed
+Slice 307 after writing it. Trap 2 clean in one `--unshallow` (**1,969**
+commits, no `shallow.lock`), and it again brought the tags — the **twenty-second**
+consecutive container to do so; `git tag | wc -l` → **8**. Trap 1c did not bite.
+
+Rule 1: no open P0 — `grep -nE '^\s*[0-9]+\. \[ \]' ROADMAP.md | grep -i p0`
+returns nothing across the 23 open items. Step 1 read **both** intakes with
+`ENVIRONMENT.md` §8's controls in one run (`/discussions` → 200 len **0**;
+`/not-a-real-route` → **404**; `/issues?state=open` → 200 len **1**, issue #2,
+already triaged as `300.2`) and triaged nothing: no new input. **Rule 2
+matched** — `dispatch_status.py` read `Standardize 4 / 4 Continue rounds …
+OVERDUE`. Rule 3 `2 / 3 slices … ok [292, 307]` did not match. Rules 4-6 not
+reached. Rule 5 reports **STALE** (`1 wake-date(s) newer`), so per `LOOPS.md` it
+**could not be evaluated** and is not reported clear — and `306.1` is the open
+item saying why a cloud wake cannot drive that line to `ok`.
+
+**All four lanes ran; saying `n of 4` per the playbook. This is 4 of 4.**
+
+| lane | command | result |
+|---|---|---|
+| 1 dead-style | `npm run scan:dead-style -w docs` | **0 dead** of **1,433** live inline declarations, 0 pages |
+| 2 css-repeats | `npm run report:css-repeats -w @busy-office/ui` | **8 repeated bodies**; 74 files · 242 rules · 230 distinct |
+| 3 report:prose | `npm run report:prose -w docs` | **0 unverdicted** — the same 15 flagged pages Slice 290 checked |
+| 4 loop-prose | `python3 scripts/loops/report_loop_prose.py` | the finding, below |
+
+Lanes 1 and 2 read **identical to Slices 214, 284, 290 and 301** — four sweeps
+at `1,433` and at `242 / 230 / 8`. Per CLAUDE.md an identical value across many
+inputs is a defect in the instrument until proven otherwise; 290 established the
+direction by measuring the inputs, and this sweep adds the shorter check that
+lane 2's membership is unchanged (the joined-control `x4` group is still **two**
+components, so its stated reopen trigger — a THIRD — is unmet).
+
+**Lane 3's corpus DID move and the flagged set did not**, which is the reading
+that makes it a live detector rather than a frozen one: `111,622 → 111,798`
+words (+176 since Slice 301), 118 pages, median **792** unchanged. The flagged
+union is the same **15** — 10 over the corpus median (1,584), 11 over a family
+median — that Slice 290 checked page-by-page against 158.1's twelve, 161.1's
+three and 178.3's `/concepts/scale/`. **No page entered the set unverdicted**,
+which is the lane's actual question.
+
+### Lane 4 — the finding, and it CONTRADICTS how three sweeps have described this region
+
+`report_loop_prose.py`'s `by region` block reports the dispatch region at
+**+328.5%** against the file's **+268.0%** — the region outgrowing the file,
+which is the shape the playbook names. Read from that number alone the
+conclusion is *274.2's cut is being undone*, and it is wrong.
+
+Split per section at every revision since the cut, the region's history is:
+
+```
+                                aa550d2c  8848ed55  632bfc46  9c1bacbe  d257b9b8  01c2a8e4  bf55dca5  9840a252
+### Step 0c  (274.2's cut)          1378       936       936       936       936       936       936       936
+### Step 0 — the handover            563       563       563       714       714       714       714       714
+### Step 1 — triage                  300       300       300       300       300       300       487       671
+### Step 2 / rule 3                  672       672       975       975       975       975       975       975
+## the loops table                   214       214       214       214       214       266       266       266
+  (11 other sections, all flat)
+TOTAL body words                    6044      5602      5905      6056      6056      6108      6295      6479
+```
+
+**Step 0c — the ONLY section 274.2 cut — reads 936 at every revision since.
+Not one word came back.** The +877 since the cut landed in four other places,
+and every one of them is a rule a wake executes, not narrative about how a rule
+got here:
+
+- **rule 3, +303** — 279.4 correcting the loop SET the counter reads (`Polish`
+  added, on 18 rows naming 17 slices).
+- **Step 0, +151** — 283.2's third advisory check, and why it must run after
+  the commit.
+- **Step 1, +371** — 297's Issues-vs-Discussions split (+187) and 302's rule
+  that each intake produces a reading (+184).
+- **the loops table, +52** — 296's Gauntlet row.
+
+So the region is not regrowing; it is **absorbing new rules while the fold
+holds**. A second cut aimed at "regrowth" would have to come out of those five
+sections, which is removing instruction — the thing 274.1's and 167.2's
+refusals are about.
+
+**Two instruments, reconciled before either was quoted.** The report's row reads
+**6,535** at HEAD and the table above reads **6,479**; the difference is heading
+lines, and it is **exactly 56 at all eight revisions**, so the deltas agree to
+the word (`d257b9b8 → HEAD` is +423 on both) and the totals never will. Slice
+290 quoted the `awk … | wc -w` form; the report prints the other. A sweep
+comparing 290's `6,112` against a report row would read a +56 step that does not
+exist.
+
+**Step 1's un-instrumented lane was scanned** — five scripts have changed since
+290's scan (`check-claims`, `check-dsa-scores`, `check-metadata`,
+`check-markup`, and the new `gen-og-card.mjs`). `gen-og-card.mjs` is the only
+new file and holds **no hand-copied lookup table**: it reads `--bo-*` values out
+of `packages/core/dist/css/index.css` at run time and asserts the resolved
+accent. Its display-size literals are a real candidate and are **already open as
+`298.1`**, so re-filing them would be the duplicate this lane exists to avoid.
+
+1. [x] **308.1 — DONE 2026-09-07. REFUSED: no cut to `LOOPS.md`'s dispatch
+       region, and the reason is recorded in the playbook so the next sweep
+       does not re-derive "the region regrew" and reach for one.**
+       *Accept was* (lane 4's clause): the `by region` finding — the dispatch
+       region outgrowing the file — is either answered by a cut that touches
+       that region, or refused with a per-section measurement showing a cut is
+       the wrong instrument.
+
+       The measurement is the table above; the refusal rests on it and not on
+       judgement. `LOOPS.md` §3 lane 4 now carries the discrimination as a
+       **property**, per CLAUDE.md's criterion rule — *the cut section regrew*
+       (cut again) versus *other sections grew* (say so, file the structural
+       question), with the per-revision command beside it and the 56-word
+       instrument reconciliation.
+
+       **What this does NOT answer, said plainly:** whether the dispatch region
+       should have a budget at all. Five legitimate rules added 877 words in 32
+       hours to a region every wake reads end to end before it decides anything,
+       and nothing in the loop bounds that. That is the same shape as `249.12`'s
+       archival trigger — a policy about how much a wake should read, not a
+       measurement a sweep can take — and it is left to the owner rather than
+       invented here.
+
+       **NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots —
+       a cloud wake has no Podman. Nothing in this slice renders: the diff is
+       two markdown files, no CSS, no page, no script. The full gate set below
+       swept all 127 built pages anyway and was unchanged.
+
 ## Slice 307 — 296.2: the latency gate is REFUSED on the repo's own precedent, and the real defect was a published claim that cannot be reproduced by anyone else (2026-09-07)
 
 **Dispatched by rule 4**, not on the oldest open item: `249.6` is oldest and the
