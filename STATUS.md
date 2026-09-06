@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-06 16:21 UTC
+Generated at: 2026-09-06 16:35 UTC
 
 ## Open items by slice
 
@@ -25,8 +25,7 @@ Generated at: 2026-09-06 16:21 UTC
 - **Slice 294** (2 open)
   - 294.1 — `derive-floor.mjs` has no probe for `light-dark()`, `oklch()` or `scroll-state()`.
   - 294.2 — rank the six proposals against the Objective; adopt none on arrival.
-- **Slice 296** (3 open)
-  - 296.1 — Run the first gauntlet round, Class A, on the reference this repo actually has.
+- **Slice 296** (2 open)
   - 296.2 — An interaction-latency instrument, or a recorded refusal.
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - **Slice 297** (1 open)
@@ -37,13 +36,16 @@ Generated at: 2026-09-06 16:21 UTC
   - 300.2 — Issue #2: no board/kanban component, triaged, NOT built.
 - **Slice 304** (1 open)
   - 304.1 — `roadmap_scope.py`'s figures should be quotable only with a revision.
+- **Slice 305** (2 open)
+  - 305.1 — The four defects round 3 left standing.
+  - 305.2 — Run the repo's own gates on a gauntlet artifact BEFORE spending a critic round.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1535 iterations logged)
+dispatch status — counter-triggered rules (1537 iterations logged)
   Standardize   2 / 4 Continue rounds since 2026-09-06 23:20   ok
   Objective     0 / 3 slices          since 2026-09-07 00:21   ok
   Optimize      4 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
@@ -67,8 +69,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-06 23:20 · Meta · refusal · answering 249.12's archival trigger from inside the sweep — a threshold is a policy about how much history a wake should walk, not a measurement a sweep can take; this is the eleventh sweep run on judgement and the case for settling it is now stronger · refused · ed0c0650
-- 2026-09-06 15:52 · Roadmap · triage · Slice 302 — Step 1's Discussions intake was unrunnable in a cloud wake (no gh, GraphQL refused); restated as a property, REST substitute recorded in ENVIRONMENT.md §8 with 404/known-content controls. Both intakes read: issues 1 open (#2, already triaged), discussions 0 open · triaged · ea70ab50
 - 2026-09-06 15:52 · Meta · refusal · a gate asserting a wake read both intakes — the evidence is an API call, not a file, so no artefact carries the property · refused · ea70ab50
 - 2026-09-06 15:53 · Continue · build · 292.7 — the four off-scope `content` cites (amount, breadcrumb, tabs, dialog) now quote the opener's wrong-choice clause; classifier reconstructed and re-run, neither 4->0, page 33->37, red-proved by injection. Premise's second half (form/prose as non-page) refuted as a lexicon artifact; button, the third EXEMPT component, was omitted by it entirely · landed · ea70ab50
 - 2026-09-06 15:53 · Meta · refusal · rewriting money/quantity/richtext — all three already name the opener, recorded adequate per the Accept · refused · ea70ab50
@@ -77,6 +77,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-06 23:59 · Meta · refusal · trusting the page's two iframes as the check — a demo where both frames break to the same wrong result still renders two plausible frames; the gate asserts the difference · refused · 2b3ba89f
 - 2026-09-07 00:21 · Objective · grill · Slice 304 — grill of 300, 301, 303 (292 dropped, already grilled; counter re-armed it). 24 of 26 reproduce. Both failures are one defect: Slice 301's four post-sweep figures (4,676/335/7.2%/282) exist at no committed revision — measured after the move but before the write-up inserted itself, and the write-up is a closed slice so it lands in both numerator and denominator. Breaks ENVIRONMENT.md's own read-from-THAT-commit rule. Corrected in place; conclusion unchanged. Verification run by a fresh-context agent, not a fork, because all three slices are the grilling author's own · logged · 522b9f61
 - 2026-09-07 00:21 · Meta · refusal · using a fork to verify my own three slices — a fork inherits the builder's reasoning, which is the marking-your-own-homework shape the blind re-score exists to prevent · refused · 522b9f61
+- 2026-09-07 00:35 · Gauntlet · round · 296.1 / Slice 305 — the Gauntlet ran its full 3-round budget on a Class A list-report recreation and FAILED at budget; bar not moved, gap carried as 305.1. Three fresh blind critics (general-purpose, not forks, so none inherited the builder's reasoning); the named failure mode — a critic that cannot fail the builder — did not occur, and two rounds caught things the builder had no idea about. Every remaining defect is a class the framework already ships: the framework was never the gap, the recreation was · refused · 11503760
+- 2026-09-07 00:35 · Meta · refusal · fixing round 3's four defects after the budget — a fourth round is a new dispatch, not a continuation, and fixing-then-passing is the bar-moving §7 step 5 forbids · refused · 11503760
 
 ## Sunset test
 

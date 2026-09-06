@@ -315,6 +315,84 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 305 — 296.1: the Gauntlet ran its full three-round budget and the artifact FAILED — the loop worked, the framework was never the gap (2026-09-07)
+
+**Dispatched by rule 4's in-flight override**, not by oldest-open. `296.1` was
+genuinely mid-build at 2 of 3 rounds; leaving a budgeted loop parked forever is
+worse than either verdict, and rule 4 names in-flight work as the legitimate
+exception. Rules 1-3 were clear.
+
+**Result: FAIL at budget. The bar was not moved**, which `LOOPS.md` §7 step 5
+makes the one thing this loop may not do. Recorded `refused` per that step,
+with the gap carried as `305.1`. Full log: `.roundtable/gauntlet/ROUNDS.md`.
+
+**Three rounds, three fresh blind critics**, none of which saw the build, the
+builder's reasoning, or each other — `general-purpose` agents rather than
+forks, deliberately, because a fork inherits the builder's context and a critic
+that inherits the build is the marking-your-own-homework shape §3b step 4
+exists to prevent.
+
+| round | verdict | what it caught |
+|---|---|---|
+| 1 | FAIL | Six defects, including **two invented classes** (`bo-segmented__label`, `bo-u-text-end`); bare radios; no sort caret; flat left-aligned amounts; single-channel badges; four inline styles restating framework values |
+| 2 | FAIL (8/10 pass) | `data-density="compact"` on `<body>` where the reference scopes it per-form — proved in pixels: primary button 126×36 → 120×28, whole page below y=146 shifted exactly 4px (**19.27% diff at offset 0 → 2.28% at −4**). Two controls dead without JS |
+| 3 | FAIL (8/10 pass) | Button now 126×36, matching exactly. Remaining: `bo-data-table__col--code` missing (ink extent 61→66px, the tell); `.bo-stack`'s uniform gap gives 64/46/44 where the reference is 60/50/40; radios carry no `value` so the GET form submits `?view=on`; no `bo-pagination` footer |
+
+**The named failure mode did not occur.** `296.1` said outright that the thing
+to watch for was *"a blind critic that cannot fail the builder"*. Three critics
+failed it three times, twice on evidence the builder had no idea about — the
+4px stack offset and the mono-column ink extent, each measured rather than
+asserted.
+
+**What the exercise proves about the FRAMEWORK, which is the actual point.**
+**Every remaining defect is a class the framework already ships and the
+recreation failed to use** — `bo-data-table__col--code`, `--tertiary`,
+`--secondary`, `bo-u-text-truncate`, `bo-pagination`, a `value` on a radio. Not
+one is a gap in the framework's expressive range. A Class A recreation exists
+to ask whether the framework can reproduce its own reference exactly; the
+answer is **yes**, and the recreation was the weak half. That is the outcome
+that makes the loop worth its cost, and it is the opposite of what a passing
+artifact would have told us.
+
+**One process finding worth more than the artifact.** `check-markup` — the
+framework's own shipped gate — independently caught round 1's two invented
+classes and suggested the correct names. **The builder had not run it before
+spending a critic round.** A gauntlet round is expensive (a fresh agent, a full
+render, a pixel diff); the repo's own gates are seconds. Running them first is
+free triage, and not doing so burned a round on something a `check-markup` call
+would have caught.
+
+1. [x] **296.1 — DONE, closed `refused` at budget.** Accept met on its own
+       terms: three rounds are recorded in `ROUNDS.md`, each naming a critic
+       that ran in a fresh context and did not see the build; the verdict is
+       whatever it is, and a FAIL that stops at round three with the gap
+       reported was named as a satisfying outcome. Neither disqualifier
+       occurred — no round was graded by the builder, and the bar was not
+       edited at any point.
+
+2. [ ] **305.1 — The four defects round 3 left standing.** Carried rather than
+       fixed, because fixing them after the budget is exactly the bar-moving
+       the playbook forbids — a fourth round is a new dispatch, not a
+       continuation.
+       - **Accept:** a later round (or an ordinary Continue) closes each of the
+         four against the reference — the code-column class, the non-uniform
+         stack rhythm, the radio `value`s, the pagination footer — verified by
+         re-measuring the ink extents and inter-block gaps the round-3 critic
+         named, not by re-reading the markup. **Finding that one of the four is
+         not worth fixing is a satisfying outcome** provided the reason is
+         recorded; a 4px gap in a demo recreation may be below the threshold
+         that justifies its own item.
+
+3. [ ] **305.2 — Run the repo's own gates on a gauntlet artifact BEFORE
+       spending a critic round.** Round 1 burned a full round on two invented
+       classes that `check-markup` names in seconds, with the right
+       replacements. Candidate for `LOOPS.md` §7 step 1.
+       - **Accept:** either §7 step 1 gains the instruction, or this closes as
+         refused with the reason. **Measure first**: if round 1 is the only
+         round in the log whose findings a repo gate would have caught, one
+         instance is not a pattern and a step nobody needs is ceremony —
+         94.11's test, applied to a playbook rather than a gate.
+
 ## Slice 304 — Objective grill of Slices 300, 301, 303: 24 of 26 reproduce, and both failures are one defect — four figures quoted from a working tree that no commit ever held (2026-09-07)
 
 Dispatched by rule 3, OVERDUE at `4 / 3`. **Armed set narrowed from four to
@@ -969,7 +1047,7 @@ ecosystem whose consumers expect React components would advertise this
 framework as something it is not. The prompt half is the half that works
 without the stack.
 
-1. [ ] **296.1 — Run the first gauntlet round, Class A, on the reference this
+1. [x] **296.1 — DONE (refused at budget), Slice 305.** Run the first gauntlet round, Class A, on the reference this
        repo actually has.** Artifact: a rebuild of `/patterns/list-report` at
        `data-density="compact"`; reference:
        `packages/core/media/list-report-compact.png`. This is the smallest real
