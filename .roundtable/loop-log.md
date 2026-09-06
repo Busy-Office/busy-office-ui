@@ -1500,3 +1500,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-06 09:46 · Continue · build · Slice 292 — 292.3: DSA rubric scope stated explicitly (css/page per dimension), measured over all 240 cites; premise refuted, conclusion held · landed · 52f78df5
 - 2026-09-06 09:46 · Meta · refusal · repeating the scope into the six rubric definitions — two records of one fact is how they drift · refused · 52f78df5
 - 2026-09-06 09:46 · Meta · refusal · a gate asserting each cite respects its dimension's scope — the classifier mis-sorts 5 of 240, so it would be the semantic gate 94.11 refuses · refused · 52f78df5
+- 2026-09-06 10:48 · Continue · build · Slice 292.4 — /components/icon stops teaching a deprecated glyph; guard extended to the markup string and live demos, red-proved twice · landed · 901ce9af
+- 2026-09-06 10:48 · Meta · refusal · un-deprecating --settings: reverses a dated published deprecation (53.2), the shape 249.13 was sent to the owner for; its stated ground (the caption's 'cog') is refuted by the shipped mask · refused · 901ce9af
+- 2026-09-06 10:48 · Meta · refusal · a tree-wide gate in this round: it would be red on the five sites 292.9 now records, and the deprecation's own text says an existing render is not by itself a defect · refused · 901ce9af
