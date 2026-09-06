@@ -948,8 +948,131 @@ HEAD the same classifier read **8 of 17 · 2,385 of 5,658 words · 42.2%**.
 
        **All 17 CI entry points green in this container** after the fold.
 
-2. [ ] **284.2 — `CLAUDE.md` accumulates and has never been cut; the fold did
-       not change that.** Lane 4's signature — a file the loop reads every wake,
+2. [x] **284.2 — VERDICT: HONEST, and the reason not to cut is a number.
+       DONE 2026-09-06 (cloud wake).** Two red-proved instruments put the whole
+       removable surface of this file at **181 words, 3.1%** — of which 36 are
+       verbatim — against the +2,914 words the item is about. A cut there does
+       not touch accumulation; it is 94.11's ceremony with a word count
+       attached.
+
+       *Accept was*: a recorded verdict using the 158.1 three-way split
+       (**honest** / **instrument** / **removable**) reached by reading what the
+       sections now carry, **or** a recorded reason the file should not be cut at
+       all — with both named instruments re-run first, since every figure in the
+       item is a snapshot. Both were re-run and both moved nothing: the ratchet
+       still reads **33 up / 0 down, never cut**, and `grep -P '^## (?!#)'` still
+       reads **16** sections.
+
+       **The verdict rests on four measurements, not on 167.1's.** 167.1
+       verdicted this file HONEST at 10 up / 4,759 words / 16 sections; it is now
+       33 up / 5,880 / 16, so that verdict is quoted past its measurement exactly
+       as the item says. Re-derived from scratch:
+
+       - **The signature is literally true, over the file's WHOLE history, not
+         just 158.2's window.** All 34 commits that have ever touched
+         `CLAUDE.md`, consecutive-compared: **33 up / 0 down / 0 flat**, 381 → 5,880
+         words and 4 → 16 sections. There is no window in which this file has
+         ever ended a commit shorter than it started it.
+       - **Removable-because-said-elsewhere: 0.** 158.1's own instrument, aimed
+         at the four files a wake reads (`CLAUDE.md`, `LOOPS.md`, `DESIGN.md`,
+         `ENVIRONMENT.md`): **0 of 834** sentences of ≥12 words appear in more
+         than one place.
+       - **Reconciled against an independent instrument, because a plain 0 is a
+         defect until shown otherwise.** An 8-gram sweep over all **120** section
+         pairs finds **3** that overlap at all. The largest is **36 of 5,808 body
+         words (0.62%)** — §*An instrument's first output* and §*A number you
+         report is load-bearing* retelling the same 39.2 four-dead-detectors
+         example. §*A heuristic gate* tells it a third time, reworded (1 shared
+         8-gram). Total spend across the three tellings: **62 + 55 + 64 = 181
+         words**; folding two into pointers recovers at most ~93.
+       - **Every section still names the failure that produced it.** 14 of 16
+         cite a date or a slice id. **The 14 is a proxy and undercounts** — the
+         two that do not cite (§*Quality bar*, §*A gate that only runs in CI*)
+         each name their incidents in prose (the Podman stale-cache trap; the
+         `check:rtl` po-app break and the week-long axe drift), they simply carry
+         no reference. Read rather than grepped: 16 of 16.
+
+       **Why the 181 words are KEPT.** They are one worked example illustrating
+       three *different* rules, and this repo has a recorded position against
+       replacing them with pointers — `LOOPS.md`'s own *"a pointer is read less
+       than a paragraph, and this is the part that changes behaviour"*, which is
+       why 167.2's split kept the lesson as prose and moved only the narrative.
+       Cutting 3.1% would also be answering a question about accumulation with a
+       change that does not move it, which is 274.1's refused shape (optimising
+       the instrument).
+
+       **One instrument caveat, measured, and it is NOT enough to verdict
+       INSTRUMENT.** The ratchet's up/down is a word count, so the single commit
+       that has ever reduced this file's section count — 284.1's own fold,
+       `6eab896f`, **17 → 16 sections for +20 words (5,860 → 5,880**, read from
+       the commit and its parent, per `ENVIRONMENT.md`) — registers as an **up**
+       step. That is **1 of 33**: the file has genuinely never been cut by words,
+       so the signature is right and only its resolution is coarse. Recorded so
+       the next fold is not read as accumulation.
+
+       **Growth is concentrated, not diffuse** — the other half of "what the
+       sections now carry". Of the +2,882 body words since `6ffdfd3f`
+       (2026-08-20), **1,376 (47.7%) are three sections that did not exist**
+       (green-red-proof 581, Accept-criterion 528, base-rate 267), and **5 of 16
+       sections have not gained a word** in that window (`claims-executable` 80,
+       `heuristic gate` 297, `CI-only` 207, `verifying a removal` 116, `Don't` 68
+       — 768 words, 13.5% of the body). The file is not creeping everywhere; it
+       adds a section when a new trap costs real time, and leaves the settled
+       ones alone.
+
+       **Reopen condition, stated as a property because 167.1's was stated as a
+       value.** 167.1 said *"reopen if an eighth is added without folding"*;
+       284.1 satisfied that literally and it is now a consumed one-shot sitting
+       in a closed archived item. The property instead: **reopen when the 8-gram
+       sweep reports a section pair that is new, or an existing pair grown past
+       what this entry recorded** — a comparison a later wake makes by re-running,
+       not a number it has to have predicted. Deliberately still **not** a gate,
+       for the item's own stated reason.
+
+       ```
+       python3 scripts/loops/report_loop_prose.py    # ratchet block, not the delta
+       grep -P '^## (?!#)' CLAUDE.md                 # section inventory -> 16
+       python3 - <<'EOF'   # the 8-gram sweep; baseline 3 pairs, largest 36 words
+       import re,itertools,pathlib
+       t=pathlib.Path("CLAUDE.md").read_text(); out,cur,f=[],None,False
+       for ln in t.split("\n"):
+           if ln.lstrip().startswith("```"): f=not f; continue
+           if f: continue
+           if re.match(r"^## (?!#)",ln): cur=[ln[3:].strip(),[]]; out.append(cur); continue
+           if cur: cur[1].append(ln)
+       def g(s,n=8):
+           w=re.sub(r"[^a-z0-9 ]"," ",re.sub(r"\s+"," "," ".join(s).lower())).split()
+           return {" ".join(w[i:i+n]) for i in range(len(w)-n+1)}
+       G={h:g(b) for h,b in out}
+       for (a,x),(b,y) in itertools.combinations(G.items(),2):
+           if x&y: print(len(x&y), a[:38], "|", b[:38])
+       EOF
+       ```
+
+       **Both sweeps were red-proved by injection, and the first one came back
+       green** — CLAUDE.md's own case. The sentence detector's first version
+       split line-by-line; this repo hard-wraps at ~79 columns, so it could only
+       ever match a sentence short enough to fit on one line, and a duplicate
+       lifted verbatim out of `LOOPS.md` and planted in `CLAUDE.md` did **not**
+       fire it. Its 3 "hits" were all single-line code comments. Unwrapping
+       blocks before splitting fixed it, and the fixed version asserts the
+       planted sentence is **present in the corpus at both locations** before
+       reporting — the injection confirmed in the parsed artefact, not in the
+       file. The 8-gram sweep was red-proved separately on a planted overlap
+       (8 grams, must be > 0).
+
+       **NOT VERIFIED, said plainly:** no screenshots at 1440/390 in light and
+       dark were taken — a cloud wake has no Podman and no `:8081`. **None were
+       needed, and that is checkable rather than asserted:** this commit changes
+       **0** CSS files and **0** docs pages. Nothing in the diff renders.
+
+       ---
+
+       **The item as filed, kept verbatim below** — it carries the figures the
+       dispatch was made on, and a transcript is not rewritten (285.2's rule).
+
+       **284.2 as filed — `CLAUDE.md` accumulates and has never been cut; the
+       fold did not change that.** Lane 4's signature — a file the loop reads every wake,
        accumulating with no cut behind it — holds for `CLAUDE.md` (**33 up / 0
        down, never cut**) and `DESIGN.md` (**22 up / 0 down, never cut**), and
        284.1 left `CLAUDE.md` 20 words longer.
