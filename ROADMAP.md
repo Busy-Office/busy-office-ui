@@ -648,7 +648,7 @@ filed as 292.3 instead, where it can be decided rather than assumed.
        docs pages, so the property landed is page-local while the property that
        matters is tree-wide.
 
-5. [ ] **292.5 — the canonical `markup` block teaches a different mechanism
+5. [x] **292.5 — the canonical `markup` block teaches a different mechanism
        than the page it sits on, and drops a slot class its own demo uses.**
        Two divergences, both verified in `icon.astro`: (a) the block teaches
        `.my-icon--rocket { mask-image: url(…) }` and the `ApiTable` note says
@@ -671,6 +671,123 @@ filed as 292.3 instead, where it can be decided rather than assumed.
          same classes as the live demo it sits beside (asserted against the
          BUILT page, both blocks, not against the source), and the custom-glyph
          line the page teaches is the one its own header calls the mechanism.
+
+       **LANDED 2026-09-06 (cloud wake). Both premises reproduced on the BUILT
+       page before anything was edited**, read the way a reader gets them: the
+       copyable block is syntax-highlighted by `highlight-code.mjs` *after*
+       `astro build`, so the source string arrives wrapped in dozens of
+       `<span style=…>` tokens and HTML-escaped. The probe therefore took the
+       `<pre>`'s `textContent` in a real browser — the same text the site's copy
+       button hands over — and re-parsed it with `DOMParser`, rather than
+       regex-stripping the file. Before: live `[bo-icon, bo-sidebar-nav__icon]`
+       vs copied `[bo-icon]`, `mask-image` present, `--bo-icon-src` absent.
+       After: identical structural class lists, `mask-image` absent,
+       `--bo-icon-src` present, and the block's `bo-icon` span count 2 → 3,
+       which reconciles with the element the stanza gained.
+
+       **THE MECHANISM CLAIM WAS MEASURED, NOT REASONED, AND IT DISCRIMINATES.**
+       This item asserted that a consumer's `mask-image` override "wins by
+       accident of layering". In the built page, injecting the same rule three
+       ways and reading `getComputedStyle(el).maskImage`:
+
+       | consumer rule | computed |
+       |---|---|
+       | `.my-icon--rocket { mask-image: … }`, unlayered | paints |
+       | the same, inside `@layer bo-primitives` | **`none`** |
+       | `.my-icon--rocket { --bo-icon-src: … }`, unlayered | paints |
+       | the same, inside `@layer bo-primitives` | paints |
+
+       Declared order is `bo-reset, bo-tokens, bo-primitives, bo-components,
+       bo-utilities`, so a consumer who adopts layers at all and puts their
+       overrides anywhere below `bo-components` gets a glyph that silently does
+       not paint. The custom property has no competing declaration, so it is
+       position-independent. That makes this a correctness difference, not a
+       spelling preference.
+
+       **A THIRD SITE THE ITEM DID NOT NAME: `icon.css` contradicts ITSELF.**
+       The item said the page's headline section and the stylesheet's header
+       "both say `--bo-icon-src` IS the mechanism". Half true — the header's
+       property comment says exactly that, and its *opening* comment, thirty
+       lines above, taught `.my-icon { mask-image: … }`. So the split was
+       three-sited (copyable block, `ApiTable` note 3, stylesheet header), not
+       two. Fixed in all three; note 1's *"painted by `currentColor` via
+       `mask-image`"* is deliberately untouched — it describes what the
+       component IS, it does not tell a reader what to write.
+
+       **The guard is page-local and asserts two properties.** Clause 1: every
+       `.bo-sidebar-nav__link` sample in the copyable block and in the
+       in-context demo must agree on the icon span's *structural* classes — the
+       `bo-icon--*` glyph modifier is excluded, because which glyph each shows
+       is editorial and comparing it would fire on a correct page, while
+       `bo-sidebar-nav__icon` is not editorial (`sidebar-nav.css` sizes that
+       slot at `1.3em` and derives the collapsed rail's `3.25rem` from it).
+       Clause 2: the property the copyable block DECLARES must be the one
+       `icon.css` puts behind `mask-image`, derived from the shipped stylesheet
+       rather than hard-coded, reconciled as one DISTINCT name because the
+       autoprefixer emits the declaration twice.
+
+       **RED-PROVED, AND THE RED-PROOF CHANGED THE CODE — twice, both in the
+       direction CLAUDE.md predicts.** First run: one case ABORTED (the bare
+       class list occurs twice, copyable block *and* demo, so the injection
+       could have hit either — the uniqueness precondition caught it before the
+       build was believed), and one came back **GREEN**. The green one was a
+       defect in the GUARD, not the injection: swapping the taught line to
+       `background-image:` left `markup.includes('--bo-icon-src')` true, because
+       the stanza's own explanatory comment names the property one line above
+       the rule. That is the assertion-trips-on-its-own-explanation trap
+       arriving from its other side — prose beside a change is *supposed* to
+       name the thing, so a raw-text check can be **satisfied** by an
+       explanation as easily as tripped by one. Comments are now stripped and
+       the check is on the declaration.
+
+       Five injections, each asserted to land (unique target, replacement count
+       1, literal re-counted after the write) before the build's verdict was
+       read; tree restored green after each:
+
+       | injection | build | assertion that fired |
+       |---|---|---|
+       | A — slot class dropped from the copyable block | exit 1 | the cross-block comparison, as predicted |
+       | D — slot class dropped from the live demo instead | exit 1 | the *within-source* arm: "the in-context demo's 3 sidebar links disagree on slot classes" |
+       | B — copyable block teaches `mask-image` again | exit 1 | "never DECLARES `--bo-icon-src`" |
+       | C — copyable block teaches `background-image` | exit 1 | "never DECLARES `--bo-icon-src`" |
+       | E — a second rule teaching `mask-image`, property kept | exit 1 | "sets `mask-image` directly" |
+
+       **D and B are recorded as what they DID, not as what was predicted.**
+       Neither fired on the arm it was aimed at, and B is the one that matters:
+       the checks run declaration-first, so removing `--bo-icon-src` to add
+       `mask-image` trips the earlier assertion and leaves the `mask-image` arm
+       **unreached**. E exists because of that — it keeps the declaration and
+       adds a second rule, which is the only shape that reaches it. Without
+       reading the messages rather than the exit codes, that arm would have
+       shipped with no red-proof of its own behind four green ticks.
+
+       **NO TREE-WIDE GATE, and the refusal is measured — including a defect in
+       the instrument that measured it.** The generalisable predicate is "a
+       class the copyable block teaches appears somewhere else on its own page".
+       First reading: **3 of 9** pages fail (`date`, `ordered-list`,
+       `quantity`). Reconciled against an independent per-class count and the
+       instrument was wrong — it scanned only the template region, while
+       `quantity` keeps its demos in frontmatter `Demo` strings
+       (`bo-btn`: 0 template hits, 24 whole-file). Scanning the whole page
+       instead: **0 of 9**, so the predicate is uniformly true and a gate over
+       it is the ceremony 94.11 refuses. Commands are the two Python blocks in
+       this wake's transcript; re-run them, they are snapshots.
+
+       **And that predicate is NOT this item's property, which is why the
+       page-local guard is not a smaller version of it.** Containment cannot see
+       a class that is *omitted* from the sample — the actual defect here — only
+       one that is *invented*. 9 of 41 component pages carry a `const markup =`
+       block at all; the other 32 build the section differently, so even the
+       containment form has a population of nine.
+
+       **NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots —
+       a cloud wake has no Podman. A screenshot lane IS relevant and unspent:
+       the copyable block gained two lines and its longest line grew to ~88
+       characters, and the `<pre>` is a scroll container, so `check:layout`
+       (127 pages, 390px and 150% zoom), `check:scroll` (914 containers) and
+       `test:axe` (127 x 2 widths) are green across the tree — but nobody has
+       looked at `/components/icon`. The live demos and every rendered element
+       are untouched; only the text inside the code block changed.
 
 6. [ ] **292.6 — `icon.css` forbids figures in itself and carries two.** Its
        header's `NO FIGURES HERE, deliberately` block says the two figures it

@@ -108,9 +108,10 @@ if (bothLists.length)
       'Deprecating a showcased glyph means removing it from the editorial eight above.',
   );
 
-const markup = `<!-- Decorative (label carries the meaning): -->
+const markup = `<!-- Decorative (label carries the meaning). bo-sidebar-nav__icon is the rail's
+     slot — it sizes the box and the collapsed rail is derived from it: -->
 <a class="bo-sidebar-nav__link" href="/invoices">
-  <span class="bo-icon bo-icon--invoice" aria-hidden="true"></span>
+  <span class="bo-icon bo-icon--invoice bo-sidebar-nav__icon" aria-hidden="true"></span>
   <span class="bo-sidebar-nav__label">Invoices</span>
 </a>
 
@@ -119,10 +120,11 @@ const markup = `<!-- Decorative (label carries the meaning): -->
   <span class="bo-icon bo-icon--close" aria-hidden="true"></span>
 </button>
 
-<!-- Add your own glyph in one line (any single-color SVG works): -->
+<!-- Your own glyph in one line: point --bo-icon-src at any single-color SVG. -->
 <style>
-  .my-icon--rocket { mask-image: url("data:image/svg+xml,<svg …></svg>"); }
-</style>`;
+  .my-icon--rocket { --bo-icon-src: url("data:image/svg+xml,<svg …></svg>"); }
+</style>
+<span class="bo-icon my-icon--rocket" aria-hidden="true"></span>`;
 const customIcon = `<span class="bo-icon" aria-hidden="true"
   style="--bo-icon-src: url('data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;%23000&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot;><path d=&quot;M12 5v14M5 12h14&quot;/></svg>')"></span>
 <span>Add line</span>`;
@@ -192,6 +194,97 @@ if (taughtDeprecated.length)
       'The Deprecated section tells readers to stop using these, so the copyable block and the live ' +
       'demos must not hand them the same class. Point --bo-icon-src at your own SVG instead, or use a ' +
       'glyph this page still recommends.',
+  );
+
+/* Roadmap 292.5, both clauses. The guard above asks whether a class taught here
+   is DEPRECATED; these two ask whether it is the same class, and the same
+   mechanism, the page itself demonstrates one section higher.
+
+   Same structural cause in both: six of this page's seven demo sections
+   hand-write their preview and then `markup` above rewrites it, which is the
+   recipe's "never write the preview and code twice". The one section using
+   <Demo code={…} /> is the only one that cannot drift, and it was the only one
+   showing --bo-icon-src. Converting the rest is not the fix taken here — the
+   in-context demo needs a three-item rail and an aria-current the copyable
+   sample must not carry, and routing it through an interpolated generator would
+   blind the 292.4 guard above, which matches LITERAL classes on purpose. So the
+   two artefacts stay separate and the property between them is asserted. */
+
+/* Clause 1: the sidebar-link sample a reader copies must carry the same slot
+   classes as the live demo beside it. The glyph modifier is excluded — which
+   glyph each shows is editorial, and comparing it would fire on a correct page.
+   What is NOT editorial is bo-sidebar-nav__icon: sidebar-nav.css sizes that slot
+   at 1.3em and derives the collapsed rail's 3.25rem from it, so a sample without
+   it mis-aligns every label a reader builds. The copyable block omitted it while
+   the demo one section above carried it, which is the defect this catches. */
+const slotClasses = (src, label) => {
+  const links = [...src.matchAll(/<a[^>]*\bclass="[^"]*\bbo-sidebar-nav__link\b[^"]*"[^>]*>([\s\S]*?)<\/a>/g)];
+  if (!links.length) throw new Error(`icon: ${label} carries no .bo-sidebar-nav__link sample to compare.`);
+  const sets = links.map((m) => {
+    const spans = [...m[1].matchAll(/<span[^>]*\bclass="([^"]*\bbo-icon\b[^"]*)"/g)].map((s) => s[1]);
+    if (spans.length !== 1)
+      throw new Error(
+        `icon: a .bo-sidebar-nav__link in ${label} holds ${spans.length} icon span(s), expected exactly 1. ` +
+          'This guard publishes "the copyable sample matches the demo", so an ambiguous parse must fail.',
+      );
+    return spans[0].trim().split(/\s+/).filter((c) => !c.startsWith('bo-icon--')).sort().join(' ');
+  });
+  const distinct = [...new Set(sets)];
+  if (distinct.length !== 1)
+    throw new Error(`icon: ${label}'s ${links.length} sidebar links disagree on slot classes: ${distinct.join(' | ')}`);
+  return { classes: distinct[0], count: links.length };
+};
+const copiedSlot = slotClasses(markup, 'the copyable markup block');
+const liveSlot = slotClasses(template, 'the in-context demo');
+if (copiedSlot.classes !== liveSlot.classes)
+  throw new Error(
+    `icon: the sidebar-link sample a reader copies renders different classes than the live demo beside it — ` +
+      `copyable block [${copiedSlot.classes}] vs ${liveSlot.count} live link(s) [${liveSlot.classes}]. ` +
+      'A reader pastes the block and gets a rail that does not look like the one on this page.',
+  );
+
+/* Clause 2: the custom-glyph line the copyable block teaches must be the property
+   icon.css itself calls THE mechanism, not `mask-image`. DERIVED from the shipped
+   stylesheet rather than hard-coded, so renaming the property fails here instead
+   of leaving the page teaching a name nothing reads.
+
+   The two are not interchangeable, and this is measured rather than argued
+   (browser, built page, 2026-09-06): a consumer rule setting mask-image paints
+   when it is unlayered and computes to `none` from inside @layer bo-primitives,
+   because .bo-icon's own layered declaration then wins and resolves to nothing.
+   The custom property paints from either position — it has no competitor.
+
+   The Set is the reconciliation: the shipped css carries the declaration twice
+   (autoprefixed -webkit- and plain), so a count is not the assertion — one
+   DISTINCT property name is. Zero names, or two, fails rather than guessing.
+
+   ASSERTED ON THE DECLARATION, NOT ON A SUBSTRING, and the red-proof is what
+   forced that. The first version asked whether `markup` merely CONTAINED the
+   property name; swapping the taught line to `background-image:` left the guard
+   GREEN, because the stanza's own explanatory comment names --bo-icon-src one
+   line above the rule. That is CLAUDE.md's assert-on-structure rule arriving
+   from its other side: prose beside a change is supposed to name the thing, so a
+   raw-text check can be SATISFIED by an explanation exactly as easily as it can
+   be tripped by one. Comments are stripped first, and the property must appear
+   as a declaration. */
+const markupCode = markup.replace(/<!--[\s\S]*?-->/g, '');
+const maskProps = [...new Set([...iconSrcCss.matchAll(/mask-image:\s*var\((--[a-z0-9-]+)\)/g)].map((m) => m[1]))];
+if (maskProps.length !== 1)
+  throw new Error(
+    `icon: parsed ${maskProps.length} distinct custom propert(ies) behind mask-image in the shipped css ` +
+      `(${maskProps.join(', ') || 'none'}), expected exactly 1. The copyable block below is checked against ` +
+      'that name, so an unresolved parse must fail rather than skip the check.',
+  );
+if (!new RegExp(`${maskProps[0]}\\s*:`).test(markupCode))
+  throw new Error(
+    `icon: the copyable markup block never DECLARES ${maskProps[0]}, which icon.css calls THE mechanism ` +
+      '(comments stripped before this check — naming it in prose is not teaching it). ' +
+      'Teaching a different custom-glyph route here contradicts the section above it.',
+  );
+if (/mask-image\s*:/.test(markupCode))
+  throw new Error(
+    'icon: the copyable markup block sets mask-image directly. That override only paints where the ' +
+      `consumer rule outranks @layer bo-components; teach ${maskProps[0]}, which does not depend on layering.`,
   );
 ---
 <Gallery title="Icon" description="CSS-rendered icons: an inline SVG mask painted by currentColor, sized in em so they track the surrounding font size and density. No JS, no font files.">
@@ -377,7 +470,7 @@ if (taughtDeprecated.length)
     notes={[
       'Painted by <code>currentColor</code> via <code>mask-image</code> — themes, dark mode, and brand presets apply with zero icon-specific wiring; no new contrast pairs needed (an icon inherits the already-gated color of its text context).',
       'Decorative icons (next to a visible label) are <code>aria-hidden="true"</code>; icon-only controls label THEMSELVES (<code>aria-label</code> on the button/link).',
-      'Deliberately a small set, not a library — add your own with one <code>mask-image</code> line, or paste inline SVG with <code>fill="currentColor"</code>; both are first-class.',
+      'Deliberately a small set, not a library — add your own with one <code>--bo-icon-src</code> line, or paste inline SVG with <code>fill="currentColor"</code>; both are first-class. Set the custom property, not <code>mask-image</code> directly: <code>.bo-icon</code> is in <code>@layer bo-components</code>, so a <code>mask-image</code> override only paints where the consumer rule outranks that layer, while the property has no competing declaration to lose to.',
       'Forced-colors: mask icons vanish by default (the paint is a background-color, which forced colors override) — the shipped opt-out repaints them in <code>CanvasText</code>.',
     ]}
   />

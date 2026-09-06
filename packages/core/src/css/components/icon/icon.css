@@ -12,9 +12,21 @@
      an icon-only control labels ITSELF (aria-label on the button/link),
      never the icon. The set is deliberately small — enough ERP glyphs to
      prove the mechanism, never a catalogue; add your own in one line:
-       .my-icon { mask-image: url("data:image/svg+xml,…"); }
+       .my-icon { --bo-icon-src: url("data:image/svg+xml,…"); }
      or skip this component entirely and paste inline SVG with
-     fill="currentColor" — both are first-class answers. */
+     fill="currentColor" — both are first-class answers.
+
+     That line used to spell the same advice as a direct mask-image
+     declaration, contradicting the property comment thirty lines below that
+     calls --bo-icon-src THE mechanism — one file teaching two routes
+     (roadmap 292.5, which found the same split on /components/icon's
+     copyable block and in its API notes). The two are not interchangeable,
+     measured in a browser against the built page rather than reasoned: a
+     consumer rule setting mask-image paints while it is unlayered, and the
+     identical rule inside @layer bo-primitives computes to none, because
+     .bo-icon's own layered declaration then wins and resolves to nothing.
+     The custom property paints from either position — nothing competes with
+     it — so it is the route that survives a consumer adopting layers. */
   .bo-icon {
     display: inline-block;
     inline-size: 1em;

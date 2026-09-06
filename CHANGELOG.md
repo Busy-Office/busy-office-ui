@@ -42,6 +42,18 @@ pin.
 
 ### Fixed
 
+- **`icon.css`'s header now recommends `--bo-icon-src` for a custom glyph,
+  where it used to recommend a direct `mask-image` declaration.** Not a
+  contract change — no class, token or attribute moved, and a `mask-image`
+  override that works today keeps working — but the file was recommending two
+  different routes thirty lines apart, and only one of them is layer-safe.
+  Measured in a browser against the built page: a consumer rule setting
+  `mask-image` paints while it is unlayered and computes to `none` from inside
+  `@layer bo-primitives`, because `.bo-icon`'s own layered declaration then
+  wins and resolves to nothing; the custom property has no competing
+  declaration and paints from either position. `/components/icon`'s copyable
+  block and its API notes carried the same split and now teach the property
+  too.
 - **`initDataGrid` now syncs `aria-selected` after a select-all, not only after
   a single-row click.** On a grid this same module marks
   `aria-multiselectable="true"`, checking the header select-all left every row
