@@ -172,12 +172,23 @@ if (robots !== null) {
    `dist/` — neither can see the other, which is what arm 3's header says makes
    a reconciliation able to fail at all.
 
-   NO og:image ARM. The card image is the half of 249.15 that stays open —
-   its evidence is a rendered image a human compares — and the wake that adds
-   it adds the arm that checks the file resolves in `dist/`. An arm asserting
-   the absence of og:image would have to be deleted by that wake, so it would
-   be ceremony, not a gate. */
-const OG_REQUIRED = ['og:type', 'og:site_name', 'og:title', 'og:description', 'og:url'];
+   THE og:image ARM (added by 249.15, Slice 295). Two halves, because presence
+   alone is the weaker one: every page must carry `og:image`, AND the path it
+   carries must RESOLVE to a file inside `dist/`. A tag pointing at a 404 is
+   the failure this arm exists for — it unfurls as no card at all, silently,
+   which is exactly the class of defect that cannot be seen from the source.
+   The url is resolved back to a dist-relative path rather than fetched: the
+   gate has the built tree in hand, and a network fetch would make the gate
+   fail when the network does.
+
+   The old arm here asserted `og:image is absent OR twitter:card is summary`.
+   It was correct while no image shipped and is DELETED rather than kept,
+   because its left disjunct is now always true — it would pass on every tree,
+   including one where `twitter:card` had been left at `summary`. A detector
+   that cannot fail is worse than no detector, so the replacement asserts the
+   NEW invariant in the positive: the card is `summary_large_image` and the
+   image is present. */
+const OG_REQUIRED = ['og:type', 'og:site_name', 'og:title', 'og:description', 'og:url', 'og:image'];
 const TWITTER_REQUIRED = ['twitter:card', 'twitter:title', 'twitter:description'];
 
 /* Both sides of every comparison go through this. The two sides are an
@@ -216,6 +227,10 @@ function metaMap(head) {
   }
   return out;
 }
+
+/* Every distinct og:image url the built pages carry. Collected in the page
+   loop, resolved against `dist/` after it — see the loop's own comment. */
+const ogImagePaths = new Set();
 
 for (const p of pages) {
   const headEnd = p.html.indexOf('</head>');
@@ -266,13 +281,50 @@ for (const p of pages) {
     `twitter: pair is ${JSON.stringify([meta.get('twitter:title'), meta.get('twitter:description')])}`,
   );
 
-  /* `summary_large_image` promises a card this site cannot fill until 249.15
-     ships the image. Asserted rather than left to the author, because the
-     wrong value here degrades to a broken card rather than to an error. */
+  /* The card form must match the asset that ships. Asserted rather than left
+     to the author, because the wrong value here degrades to a broken card
+     rather than to an error — the page still builds, and the defect is only
+     visible when someone pastes a link. */
   g.check(
-    `${p.url} twitter:card is summary while no og:image ships`,
-    meta.has('og:image') || meta.get('twitter:card') === 'summary',
-    `twitter:card is ${JSON.stringify(meta.get('twitter:card'))} and the page ships no og:image`,
+    `${p.url} twitter:card matches the shipped 1200x630 image`,
+    meta.get('twitter:card') === 'summary_large_image',
+    `twitter:card is ${JSON.stringify(meta.get('twitter:card'))}, want "summary_large_image"`,
+  );
+
+  /* og:image RESOLVES. Presence is already covered by OG_REQUIRED; this is
+     the half that catches a tag pointing at a file that is not there. */
+  const img = meta.get('og:image') ?? '';
+  g.check(
+    `${p.url} og:image is absolute and on this site`,
+    img.startsWith(`${SITE_URL}/`) || img.startsWith(`${SITE_ORIGIN}/`),
+    `og:image is ${JSON.stringify(img)} — a platform fetches it with no document base to resolve against`,
+  );
+  ogImagePaths.add(img);
+}
+
+/* Resolved once, after the page loop: every page points at the same asset, so
+   127 identical stat() calls would measure the filesystem, not the site. The
+   SET is what makes that safe — if any page ever points somewhere else, this
+   checks that path too rather than silently only checking the first. */
+for (const img of ogImagePaths) {
+  const rel = img.startsWith(SITE_ORIGIN) ? img.slice(SITE_ORIGIN.length) : img;
+  /* base is part of the published url and not of the dist tree, so it comes
+     off before the path is joined onto DIST. */
+  const basePath = SITE_URL.slice(SITE_ORIGIN.length);
+  const inDist = rel.startsWith(basePath) ? rel.slice(basePath.length) : rel;
+  const file = join(DIST, inDist.replace(/^\//, ''));
+  let bytes = null;
+  try {
+    bytes = (await stat(file)).size;
+  } catch {
+    /* left null — the check below reports it */
+  }
+  g.check(
+    `og:image resolves in dist (${inDist})`,
+    bytes !== null && bytes > 0,
+    bytes === null
+      ? `${file} does not exist — the tag unfurls as no card at all`
+      : `${file} is empty`,
   );
 }
 

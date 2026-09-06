@@ -315,6 +315,105 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 295 — 249.15 built: the social card, generated from the framework's own stylesheet rather than drawn — and the gate arm it replaces had become undeleteable-by-design (2026-09-06)
+
+**Dispatcher trace, local session.** Rules 1-3 clear (`Standardize 0 / 4`,
+`Objective 2 / 3`). Rule 5 reads **STALE** for a third wake-date and is
+therefore reported as *not evaluable* rather than clear, per its own text.
+**Rule 4 dispatched Continue, build mode — and again not on the oldest item.**
+`249.6` is oldest, and the scheduled cloud routine is dispatching the same
+queue; it landed 102 commits between this session's last two turns. `249.15`
+is one of the two items the queue marks **browser-blocked in the screenshot
+sense**, which `LOOPS.md` rule 4 says a cloud wake must not take and a local
+wake can. Same reasoning as Slice 254, and the same outcome: no collision.
+Verified `249.15` still open on `origin/main` at commit time.
+
+**Scope, as re-scoped by Slice 260**: the tag half shipped as `249.17`. What
+was left here is the **image** — plus the `twitter:card` switch and the gate
+arm that was written to be replaced by this wake.
+
+**The card is GENERATED, not drawn, and that is the substantive call.**
+`scripts/gen-og-card.mjs` renders a fixed 1200×630 composition at
+`packages/core/dist/css/index.css` — the framework's own shipped stylesheet —
+so the card is made of `.bo-data-table`, `.bo-badge` and the `--bo-*` tokens it
+advertises. Nothing in the card's own CSS invents a colour, radius or border.
+A card mocked up in bespoke CSS would be a picture of a design idea; this is a
+picture of the artifact. It is deliberately **not** wired into `build`: the
+output is committed to `public/` beside `favicon.svg` and `robots.txt`,
+because a build that needs Chrome to emit a static asset would put a browser
+on the critical path of every `docs:build`.
+
+This is the opposite call from `249.16`'s README screenshot, which is
+hand-made and says so in its alt text — correctly, because that one
+photographs a real page and no script can judge whether the page looks right.
+Here the composition is fixed, so it can be rebuilt from the artifact instead
+of maintained by hand.
+
+**The script asserts its own inputs before writing.** A card rendered with the
+stylesheet silently missing still screenshots — it just produces unstyled
+text, which is this repo's "the injection never landed" failure in asset form.
+So it reads back `--bo-color-accent` and the rendered row count and exits
+non-zero if either is wrong. It printed `#0f766e` and `10 rows`.
+
+**The gate arm this replaces had become a detector that cannot fail.** Arm 5
+asserted `og:image is absent OR twitter:card is summary` — correct while no
+image shipped, and its author wrote it as a disjunction specifically so this
+wake would not have to delete it. But once `og:image` ships the left disjunct
+is permanently true, so it would pass on every tree including one that had
+left `twitter:card` at `summary`. **Deleted rather than kept**, and replaced
+with the invariant stated positively: the card is `summary_large_image`, and
+`og:image` resolves. Both new arms red-proved, each with the injection
+confirmed in the built HTML first:
+
+```
+og:image -> og-card-MISSING.png   (2 occurrences replaced, grep-confirmed)
+  -> FAIL og:image resolves in dist (/og-card-MISSING.png)
+twitter:card -> summary           (1 occurrence, grep-confirmed)
+  -> FAIL twitter:card is "summary", want "summary_large_image"
+```
+
+Both reverted; the gate returns to **1,150 assertions across 127 pages**, up
+from 387.
+
+**The resolve arm is a Set, not a per-page `stat()`.** All 127 pages point at
+one asset, so 127 identical filesystem calls would measure the disk rather
+than the site. Collecting the distinct urls and resolving each once keeps the
+arm able to fail if any page ever points somewhere else — which the red-proof
+demonstrated, since the injected page raised the assertion count to 1,151.
+
+**Verified against a real `DOCS_BASE=/busy-office-ui` build**, not only the
+local one, because `og:image` must be absolute and the base is what a local
+build omits:
+
+```
+og:url    https://busy-office.github.io/busy-office-ui/components/button/
+og:image  https://busy-office.github.io/busy-office-ui/og-card.png
+```
+
+Built from `Astro.site` the same way `canonical` is, so the two cannot
+disagree about the origin.
+
+**One false alarm, recorded because the check is the cheap half.** The docs
+build died with `Cannot read properties of undefined (reading 'includes')`,
+which looked like a red `main`. Re-run with this wake's changes **stashed** it
+failed identically — so it was not this work — and the real cause was a
+**stale local `packages/core/dist/api.json`** predating 249.8's
+`categories`/`nav` keys. `main` was never red. Filing a P0 on the strength of
+the first reading would have been wrong, and the stash was what showed it.
+The card was regenerated after the core rebuild, so it is rendered from
+current CSS rather than the stale copy it was first drawn from.
+
+15. [x] **249.15 — DONE.** Accept met: every built page carries `og:image`
+        (127 of 127); the path resolves to a file in `dist/` (97,379 bytes);
+        `check-metadata.mjs` gained that arm and it is red-proved by pointing
+        at a path that is not there; `twitter:card` moved to
+        `summary_large_image` in the same change; and arm 5's old assertion is
+        removed rather than left contradicting the new tag. The half that
+        needed a local wake's eyes — whether the card *looks* right — took
+        four renders: the first put every element in the top half with ~300px
+        of dead space, and the fix was to let the table bleed off the bottom
+        and right edges rather than float centred.
+
 ## Slice 294 — Triaged from an owner-supplied upstream contribution: six proposals arriving pre-sequenced, and the floor risk it names is real but already paid for (2026-09-06)
 
 **Input**: the owner supplied `busyofficeui_Design_System.zip` — an
@@ -4713,7 +4812,7 @@ box (2026-09-03, cloud wake):**
         still ships zero CSS of its own. `npm run suite` swept all 28 screens at
         both widths: zero axe violations, no sideways scroll at 390.
 
-15. [ ] **249.15 — The one static OG image 249.2 named and did not build.**
+15. [x] **249.15 — DONE, Slice 295.** The one static OG image 249.2 named and did not build.
         Everything else in 249.2 shipped; this did not, because a social preview
         card is a *rendered image a human compares* — `ENVIRONMENT.md`'s first
         list, which a cloud wake cannot take. **browser-blocked in the
