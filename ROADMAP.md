@@ -896,7 +896,7 @@ and it is still shipped at `df63f253`. That is new work, not the taken item.
        does, and the step has moved a score twice on real defects. The label
        and the trigger were the defect, and §3b now states the trigger.
 
-4. [ ] **286.4 — carried from 279's `fit` rubric observation, which 101.3 sent to
+4. [x] **286.4 — DONE 2026-09-06. Carried from 279's `fit` rubric observation, which 101.3 sent to
        a grill and which no grill has yet taken.** `/concepts/design-language`'s
        field matrix has exactly four rows (Date, Number/rate/%, Money, Quantity),
        so `fit`'s definition — which scores against *"the field matrix"* — cannot
@@ -911,6 +911,70 @@ and it is still shipped at `df63f253`. That is new work, not the taken item.
          Finding the current wording defensible is a satisfying outcome; what is
          not is a definition whose own reference set excludes components it carries
          scores for.
+
+       **Outcome: the wording was NOT defensible, and the premise re-checks as
+       stated.** Re-measured before acting, per CLAUDE.md's rule that an item
+       whose premise is an earlier wake's measurement re-checks it as part of
+       the criterion:
+
+       ```
+       # matrix shape — 4 field-type rows x 4 context columns
+       python3 - <<'PY'
+       import re
+       src=open('apps/docs/src/pages/concepts/design-language.astro').read()
+       i=src.index('The field matrix')
+       seg=src[i:src.index('Subtraction is the method',i)]
+       print(re.findall(r'<th scope="row">(.*?)</th>',seg))   # 4 rows
+       print(sorted(set(re.findall(r"/components/([a-z0-9-]+)",seg))))
+       PY
+       # who carries a fit score, and what it reads
+       python3 -c "import json;d=json.load(open('apps/docs/src/data/dsa-scores.json'));\
+       print(len([c for c in d['components'].values() if 'fit' in c['dimensions']]))"
+       ```
+
+       - **Premise holds.** 4 rows (Date, Number/rate/%, Money, Quantity);
+         **40** components carry a `fit` score; `scan` is one of them at 3.
+         Distribution is `{3: 39, 0: 1}` — `date` is the only sub-3.
+       - **The reach number, by an EXACT predicate rather than a word count.**
+         Counting occurrences of a component's name on the page is a heuristic
+         that over-counts (`form` matches the column header "Standalone form
+         (entry)"; `date` matches `type="date"`), so reach is measured as *does
+         the matrix section link `/components/<name>`*. It links five, four of
+         them scored: **amount, form, money, quantity**. So the matrix reaches
+         **4 of 40**, and **36** components carry a score its stated reference
+         set cannot assign. Whole-page control: 6 scored components are linked
+         somewhere on the page (adds `button`, `data-table`), so the gap is not
+         an artefact of scoping to the section.
+       - **The cost was not hypothetical, which is what settles it.** Six `fit`
+         cites invoke the matrix. Five name a component the page mentions;
+         `scan` appears **0** times anywhere on `/concepts/design-language`,
+         while its own published cite read *"prescribed where the field matrix
+         puts it and nowhere else"*. That cite renders on `/components/scan` via
+         `DsaScore.astro`, so a claim whose stated authority does not contain it
+         was shipping. This is the second correction to that one cite — 279.1
+         fixed it for publishing an outbound Related list as an inbound fact.
+       - **Fixed both ends in one commit:** `fit`'s definition now names the
+         property it actually scores (the docs prescribe the component's
+         contexts, including where it does NOT belong), keeps the matrix as the
+         authority *where it reaches*, and states the neighbourhood rule the 36
+         were already being scored against — which is not an invention: the
+         outside cites already read that way (`combobox` vs `dropdown`,
+         `skeleton` vs `state`, `progress` vs `stepper`, `prose` vs `richtext`).
+         `scan`'s cite drops the false clause and keeps 279.1's measured half.
+       - **Refused: widening the field matrix.** A `scan` row would make the
+         definition true by editing the artefact the definition points at. The
+         matrix covers field TYPES across editing contexts; `scan` is an input
+         mechanism, not a field type, and 92.2's two axes do not generate it.
+       - **Refused: a gate.** 94.11's base-rate test first — the checkable shape
+         ("a `fit` cite naming the matrix also links from it") is true of 5 of
+         the 6 cites that mention it and vacuously true of the 34 that do not,
+         so a gate over it fires on a healthy tree. Whether a cite's stated
+         authority *supports* it is semantic, which 94.11 says stays in a human
+         reading rather than becoming ceremony.
+       - **NOT re-verified, said plainly:** the preserved half of `scan`'s cite
+         (4 of 39 pattern screens running a live `[data-scan-input]`) is 279.1's
+         measurement, carried forward unchanged, not re-taken this wake — its
+         own method requires counting elements in the DOM across frames.
 
 ## Slice 285 — Objective grill of Slices 281, 283, 284: 31 of 33 assertions reproduce, and the one that matters is the measurement a design decision was BUILT on — "0 of 18 stamps reproduce at the parent" is **16 of 18**, and it had spread into the shipped script's own docstring (2026-09-05)
 
