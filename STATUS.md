@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-06 16:35 UTC
+Generated at: 2026-09-06 16:57 UTC
 
 ## Open items by slice
 
@@ -19,8 +19,7 @@ Generated at: 2026-09-06 16:35 UTC
   - 249.13 — Reconsider demo-first/spec-last (the proposal's B1), explicitly, not as a ratification.
 - **Slice 273** (1 open)
   - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
-- **Slice 292** (2 open)
-  - 292.8 — nothing polices style in a docs PAGE, and 292.3 is what makes that visible.
+- **Slice 292** (1 open)
   - 292.9 — 292.4's property is tree-wide and the guard it landed is page-local: four other docs pages hand a reader a deprecated glyph.
 - **Slice 294** (2 open)
   - 294.1 — `derive-floor.mjs` has no probe for `light-dark()`, `oklch()` or `scroll-state()`.
@@ -39,18 +38,20 @@ Generated at: 2026-09-06 16:35 UTC
 - **Slice 305** (2 open)
   - 305.1 — The four defects round 3 left standing.
   - 305.2 — Run the repo's own gates on a gauntlet artifact BEFORE spending a critic round.
+- **Slice 306** (1 open)
+  - 306.1 — rule 5's staleness comparison must not be able to report "stale" for a reason that is only a timezone.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1537 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-09-06 23:20   ok
-  Objective     0 / 3 slices          since 2026-09-07 00:21   ok
-  Optimize      4 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
-  -> rule 5's newest comparable pair predates 4 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-03, not this one — record a metric or say the rule could not be evaluated.
-     the unit is DISTINCT LOG DATES after 2026-09-03 (2026-09-04, 2026-09-05, 2026-09-06, 2026-09-07), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
+dispatch status — counter-triggered rules (1541 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-09-06 23:20   ok
+  Objective     1 / 3 slice           since 2026-09-07 00:21   ok  [292]
+  Optimize      1 wake-date(s) newer   since 2026-09-06 16:56   STALE   [newest pair: axe-violations; 130 sample(s), 13 of 42 name(s) sampled twice]
+  -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-06, not this one — record a metric or say the rule could not be evaluated.
+     the unit is DISTINCT LOG DATES after 2026-09-06 (2026-09-07), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
 ```
 
 ## Owner-blocked
@@ -69,16 +70,16 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-06 15:52 · Meta · refusal · a gate asserting a wake read both intakes — the evidence is an API call, not a file, so no artefact carries the property · refused · ea70ab50
-- 2026-09-06 15:53 · Continue · build · 292.7 — the four off-scope `content` cites (amount, breadcrumb, tabs, dialog) now quote the opener's wrong-choice clause; classifier reconstructed and re-run, neither 4->0, page 33->37, red-proved by injection. Premise's second half (form/prose as non-page) refuted as a lexicon artifact; button, the third EXEMPT component, was omitted by it entirely · landed · ea70ab50
-- 2026-09-06 15:53 · Meta · refusal · rewriting money/quantity/richtext — all three already name the opener, recorded adequate per the Accept · refused · ea70ab50
-- 2026-09-06 15:53 · Meta · refusal · a gate asserting each cite respects its dimension's scope — 292.3 refused it and this run is fresh evidence for the refusal (CLAUDE.md 94.11) · refused · ea70ab50
 - 2026-09-06 23:59 · Continue · build · Slice 303 — the layered-reset recipe on /getting-started/troubleshooting was documented, demoed with two live iframes, and ungated: no gate referenced app-reset or preflight and check-claims never visited the page. Added a two-arm case (control: unlayered reset strips .bo-btn; recipe: same reset in a layer declared first survives), both red-proved independently. check:claims 170 -> 172. Also answered the owner's Tailwind question by measurement: no dependency, no config, no code — 20 palette ranges of copied hex with a build-time pin assert · landed · 2b3ba89f
 - 2026-09-06 23:59 · Meta · refusal · trusting the page's two iframes as the check — a demo where both frames break to the same wrong result still renders two plausible frames; the gate asserts the difference · refused · 2b3ba89f
 - 2026-09-07 00:21 · Objective · grill · Slice 304 — grill of 300, 301, 303 (292 dropped, already grilled; counter re-armed it). 24 of 26 reproduce. Both failures are one defect: Slice 301's four post-sweep figures (4,676/335/7.2%/282) exist at no committed revision — measured after the move but before the write-up inserted itself, and the write-up is a closed slice so it lands in both numerator and denominator. Breaks ENVIRONMENT.md's own read-from-THAT-commit rule. Corrected in place; conclusion unchanged. Verification run by a fresh-context agent, not a fork, because all three slices are the grilling author's own · logged · 522b9f61
 - 2026-09-07 00:21 · Meta · refusal · using a fork to verify my own three slices — a fork inherits the builder's reasoning, which is the marking-your-own-homework shape the blind re-score exists to prevent · refused · 522b9f61
 - 2026-09-07 00:35 · Gauntlet · round · 296.1 / Slice 305 — the Gauntlet ran its full 3-round budget on a Class A list-report recreation and FAILED at budget; bar not moved, gap carried as 305.1. Three fresh blind critics (general-purpose, not forks, so none inherited the builder's reasoning); the named failure mode — a critic that cannot fail the builder — did not occur, and two rounds caught things the builder had no idea about. Every remaining defect is a class the framework already ships: the framework was never the gap, the recreation was · refused · 11503760
 - 2026-09-07 00:35 · Meta · refusal · fixing round 3's four defects after the budget — a fourth round is a new dispatch, not a continuation, and fixing-then-passing is the bar-moving §7 step 5 forbids · refused · 11503760
+- 2026-09-06 16:56 · Continue · build · 292.8 — display-sizing font-size literals in docs pages now read --bo-font-size-xl (exact 1.5rem); computed-style no-op red-proved against a dead edit by token override; no gate, on base rate + an unsound text predicate + one site with no equal token · landed · 0879c6c3
+- 2026-09-06 16:56 · Meta · refusal · a gate over raw font-size in docs pages — 41 of 41 component pages now satisfy the predicate, and 2 of the 4 tree-wide source hits carry no style attribute at all in the built page (prose, and a copyable @page print sample) · refused · 0879c6c3
+- 2026-09-06 16:56 · Meta · refusal · converting patterns/app-launch.astro's 2rem launcher icon — no token equals 2rem, so the swap would shrink the glyph, and that is a rendered-image judgement a cloud wake cannot make · refused · 0879c6c3
+- 2026-09-06 16:57 · Roadmap · triage · Slice 306 — rule 5's staleness line floors at 1 from a cloud wake: the newest metric (2026-09-06 16:56 UTC) and the newest log rows (2026-09-07 00:21/00:35, +0800) are the same moment from two clocks · triaged · 40041a74
 
 ## Sunset test
 
