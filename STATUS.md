@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-06 12:51 UTC
+Generated at: 2026-09-06 13:22 UTC
 
 ## Open items by slice
 
@@ -25,13 +25,16 @@ Generated at: 2026-09-06 12:51 UTC
   - 292.7 — four `content` cites score a page property while citing the CSS.
   - 292.8 — nothing polices style in a docs PAGE, and 292.3 is what makes that visible.
   - 292.9 — 292.4's property is tree-wide and the guard it landed is page-local: four other docs pages hand a reader a deprecated glyph.
+- **Slice 294** (2 open)
+  - 294.1 — `derive-floor.mjs` has no probe for `light-dark()`, `oklch()` or `scroll-state()`.
+  - 294.2 — rank the six proposals against the Objective; adopt none on arrival.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1502 iterations logged)
+dispatch status — counter-triggered rules (1504 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-09-06 12:51   ok
   Objective     2 / 3 slices          since 2026-09-06 07:53   ok  [292, 293]
   Optimize      3 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
@@ -43,6 +46,7 @@ dispatch status — counter-triggered rules (1502 iterations logged)
 
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
+- 294.2 — rank the six proposals against the Objective; adopt none on arrival.
 - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
 - 249.10 — SAP/Fiori terminology column for 249.7.
 - 249.11 — "Migrate an existing admin UI" path.
@@ -53,8 +57,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-06 09:46 · Meta · refusal · repeating the scope into the six rubric definitions — two records of one fact is how they drift · refused · 52f78df5
-- 2026-09-06 09:46 · Meta · refusal · a gate asserting each cite respects its dimension's scope — the classifier mis-sorts 5 of 240, so it would be the semantic gate 94.11 refuses · refused · 52f78df5
 - 2026-09-06 10:48 · Continue · build · Slice 292.4 — /components/icon stops teaching a deprecated glyph; guard extended to the markup string and live demos, red-proved twice · landed · 901ce9af
 - 2026-09-06 10:48 · Meta · refusal · un-deprecating --settings: reverses a dated published deprecation (53.2), the shape 249.13 was sent to the owner for; its stated ground (the caption's 'cog') is refuted by the shipped mask · refused · 901ce9af
 - 2026-09-06 10:48 · Meta · refusal · a tree-wide gate in this round: it would be red on the five sites 292.9 now records, and the deprecation's own text says an existing render is not by itself a defect · refused · 901ce9af
@@ -63,6 +65,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-06 11:52 · Meta · refusal · converting the page's six hand-written demo sections to <Demo code={…}/> — it would blind 292.4's literal-class guard, which matches literals on purpose · refused · 689297c8
 - 2026-09-06 12:51 · Standardize · sweep · Slice 293 — Standardize sweep 4 of 4 lanes: lanes 1-3 identical to 290 (cited, not re-derived), lane 4's dispatch region flat at 6,112 for a fourth commit; the finding came from lane 1 FAILING — ENVIRONMENT.md §1c named check-boost.mjs, deleted 7 days earlier by f1be2485, while docs:build needs no CHROME_PATH at all and unnamed scan:dead-style does · landed · f3743b3e
 - 2026-09-06 12:51 · Meta · refusal · promoting the round-2 nonexistent-file scan to a gate — base rate 1 true positive of 11, and 9 of the 10 false hits need a judgement about generated vs illustrative vs historical, the semantic half 94.11 refused to gate · refused · f3743b3e
+- 2026-09-06 21:22 · Roadmap · plan · Slice 294 — triaged the owner-supplied upstream-contribution zip (6 proposals): guide verifies clean (44 sheets, 26 behaviours, 11/11 edit targets exist, stylelint exit 0); the light-dark() floor risk is real but @supports-guarded so reach stays 80.09%; filed 294.1 (missing floor probes) and 294.2 (Objective ranking, brand mark = owner call) · triaged · e8c7b0f2
+- 2026-09-06 21:22 · Meta · refusal · two of this triage's own findings — 'raw hex outside @media print' (base rate: repo carries 139) and 'an !important' (the hit is inside a comment saying the layer needs none) · refused · e8c7b0f2
 
 ## Sunset test
 

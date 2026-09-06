@@ -315,6 +315,93 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 294 — Triaged from an owner-supplied upstream contribution: six proposals arriving pre-sequenced, and the floor risk it names is real but already paid for (2026-09-06)
+
+**Input**: the owner supplied `busyofficeui_Design_System.zip` — an
+`upstream-contribution/` folder laid out in this repo's own paths, carrying its
+own `CLAUDE.md` with a six-step integration order (brand mark → registry +
+install prompts → gauntlet docs → static reference consumer → modern CSS layer
+→ proposals), one branch per step. Nothing is merged by this triage; the
+contribution is verified and ranked, not adopted, per `references-are-floors`.
+
+**The guide verifies clean, and that is worth stating before any finding.**
+Every claim a verdict would rest on was re-run against the live tree rather
+than read:
+
+| claim | result |
+|---|---|
+| "44 component sheets" | **44** — exact (`find packages/core/src/css/components -name '*.css'`) |
+| "26 vanilla-TS behaviours" | **26** — exact |
+| the 11 files its modern-CSS step names as edit targets | **11 of 11 exist** at the stated paths |
+| the repo's own stylelint over all 6 proposed sheets | **passes, exit 0** |
+
+It also resolves one of its own open conditionals: it says to replace the
+static example's `behaviors.js` with the built package *if `examples/` has a
+build step*. `examples/po-app/package.json` carries only a `start` script, so
+the answer is the other branch — keep the transcription and say so in its
+README.
+
+**The floor question, which is the one thing worth carrying into a decision.**
+`color-oklch.css` uses `light-dark()`, and this repo's own BCD data puts it at
+**Chrome 123 / Safari 17.5 / Firefox 120** against a published floor of
+**Chrome/Edge 119**. That looks like a silent floor raise, and it is not:
+every `light-dark()` declaration sits inside
+`@supports (color: light-dark(white, black))`, so a browser below 123 skips
+the block and keeps the existing tokens. That is the **`degrades` tier**, the
+same treatment `:has()` and `scrollbar-width` already get, and a guarded
+feature does not move the published floor by `derive-floor.mjs`'s own design.
+**Reach is unchanged at 80.09%**; had it landed unguarded the cost would have
+been **1.30 points** (80.09% → 78.79%).
+
+**Two of this triage's own findings were retracted before being filed**, and
+both are recorded because retracting them is the cheap half:
+
+- *"raw hex outside `@media print`"* — three `#ffffff` inside `light-dark()`.
+  Base rate first: the repo's own `tokens/` and `components/` carry **139**
+  hex literals, and a token file is where hex belongs. Not a violation.
+- *"an `!important`"* — the single hit is inside a comment stating the layer
+  needs none. An assertion tripped by its own explanation, which is the exact
+  shape this file's removal rule already names.
+
+**And the reach instrument's first output was wrong, in the way the repo had
+already written down.** A plain `browserslist.coverage()` over
+`chrome/edge/firefox/safari` returned **27.22%** against a published 80.09% —
+a 53-point gap. `derive-floor.mjs`'s own comment names this: browserslist's
+`chrome` and `safari` are **desktop-only**, and the query needs the mobile ids
+(`and_chr`, `ios_saf`, `and_ff`, `samsung`, `op_mob`). Re-run with the
+script's own `reachQuery`, it reproduces **80.09%** exactly. The discrepancy
+was the tell, and it is why the 1.30 figure above is trustworthy.
+
+1. [ ] **294.1 — `derive-floor.mjs` has no probe for `light-dark()`,
+       `oklch()` or `scroll-state()`.** Not a defect today — nothing shipped
+       uses them — and **not** a blocker for the contribution, since all three
+       arrive `@supports`-guarded. It is a gap that only bites if a later edit
+       lands one of them *unguarded*, which is precisely the case the script
+       exists to catch ("we published a floor the framework did not meet").
+       Cheap: the script's own header says adding a probe is one line.
+       - **Accept:** the property, not a prediction — after the change,
+         `floor.json` reports a value for each of the three that agrees with
+         re-reading BCD at that path, and the published headline floor agrees
+         with what `check:floor` reports. Whether any of them *moves* the
+         headline is the measurement's to decide, not this item's: they are
+         guarded today, so finding the floor unchanged is a satisfying
+         outcome and closes this.
+
+2. [ ] **294.2 — rank the six proposals against the Objective; adopt none on
+       arrival.** The guide's own ordering is sound engineering (independently
+       revertable, taste-call first, blocked PR named as blocked) and is not
+       in dispute. What has not happened is the Objective test — simplicity /
+       less-for-more / reusability, with refusal a valid outcome — applied per
+       proposal. Two are flagged by the contribution itself as *not* upstream
+       candidates (`surface.css`, which changes shipped visuals for every
+       consumer; and `proposals/`, which is explicitly not product), so the
+       live question is the other four.
+       - **Accept:** each of the six carries a recorded verdict — adopt /
+         adopt-with-changes / refuse — with the reason, and a refusal is as
+         complete an outcome as an adoption. **OWNER CALL on the brand mark**,
+         which the contribution correctly identifies as the one decision in
+         the folder with no traceable source.
+
 ## Slice 293 — Standardize sweep, 4 of 4 lanes: all four instrumented lanes clean for the fourth consecutive sweep, and the finding came from lane 1 FAILING — `ENVIRONMENT.md` §1c named a script deleted a week ago and missed the gate that actually needed the export (2026-09-06)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
