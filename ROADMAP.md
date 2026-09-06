@@ -315,6 +315,149 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 293 — Standardize sweep, 4 of 4 lanes: all four instrumented lanes clean for the fourth consecutive sweep, and the finding came from lane 1 FAILING — `ENVIRONMENT.md` §1c named a script deleted a week ago and missed the gate that actually needed the export (2026-09-06)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty), fixed with `git checkout -B main
+origin/main` before any commit; `origin/main` again arrived as a **forced
+update** (`26447ba...aabe137`). Trap 2 clean in one `--unshallow` (**1,942**
+commits, no `shallow.lock`), and it again brought the tags — `git tag | wc -l` →
+**7**, the **seventeenth** consecutive container to do so.
+
+Rule 1: no open P0 — `list_issues` on `Busy-Office/busy-office-ui` returns
+`totalCount: 0`, and `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` reads **0**.
+Step 1 triaged and committed nothing: no new input. **Rule 2 matched** —
+`dispatch_status.py` read `Standardize 4 / 4 Continue rounds … OVERDUE`, the
+counter the previous hand-off predicted would fire. Rule 3 `1 / 3 slice … ok
+[292]` did not match. Rule 5 reports **STALE** (`3 wake-date(s) newer`), so per
+`LOOPS.md` it **could not be evaluated** and is not reported clear. Rules 4 and 6
+were not reached.
+
+**All four lanes ran; saying `n of 4` per the playbook. This is 4 of 4.**
+
+| lane | command | result |
+|---|---|---|
+| 1 dead-style | `npm run scan:dead-style -w docs` | **0 dead** of **1,433** live inline declarations, 0 pages — but only on the SECOND run; see below |
+| 2 css-repeats | `npm run report:css-repeats -w @busy-office/ui` | **8 repeated bodies**, `LOOPS.md`'s table exactly; 74 files · 242 rules · 230 distinct |
+| 3 report:prose | `npm run report:prose -w docs` | **0 unverdicted** — 15 distinct flagged pages, every one carrying a verdict |
+| 4 loop-prose | `python3 scripts/loops/report_loop_prose.py` | ratchet + region below; **no new finding**, and 290's retirement of 284's worry strengthens |
+
+**Lanes 1-3 read identically to Slice 290, which read identically to 284 and
+214.** Per CLAUDE.md an identical value across many inputs is a defect in the
+instrument until proven otherwise, and **290 already discharged that** by
+measuring the lanes' INPUTS (lane 1's source proxy flat at 390 declarations in
+79 files across three revisions; lane 2's input moved 43 CSS files / +282 lines
+over the 214 window and still read 8, which is the live-detector control).
+Re-deriving that here would be the re-derivation this playbook has paid for
+three times, so it is cited, not repeated. What is new is below.
+
+**Lane 3: the same 15 pages Slice 290 checked**, verified against the source
+rather than assumed — 10 over the corpus median (1,584), 11 over a family
+median, union 15. 14 are named inside 158.1's own section body, extracted with
+`awk 'NR>=17468 && NR<=17805' ROADMAP-archive.md | grep -oE
+'/(components|concepts|patterns|base)/[a-z-]+' | sort -u`, and `/concepts/scale/`
+carries 178.3's. **Counting mentions was tried first and refused as an
+instrument**: a raw `grep -cF` over both roadmap files returns 235 for `motion`
+and 141 for `scale`, which are ordinary-prose hits — a presence probe, not a
+fidelity probe. Corpus 118 pages · median 792 · **111,622** words (290 read
+111,555).
+
+### Lane 4 — flat for a fourth commit, so 290's retirement is not a one-reading call
+
+Ratchet block, read first per the playbook: `CLAUDE.md` **33 up, never cut** and
+`DESIGN.md` **22 up, never cut** are the two never-cut files, and both carry
+standing verdicts — 284.2 and 167.1's. Neither is re-raised.
+
+`LOOPS.md`'s dispatch region, re-measured with 290's own command rather than
+inherited from its prose:
+
+```
+for sha in $(git log --format=%H -6 -- LOOPS.md); do
+  git show $sha:LOOPS.md | awk '/^## Playbooks/{exit} {print}' | LC_ALL=C.UTF-8 wc -w; done
+
+632bfc46  2026-09-05  dispatch 5,961   file 14,023
+9c1bacbe  2026-09-05  dispatch 6,112   file 14,272   ← 284's reading
+e68ede5f  2026-09-06  dispatch 6,112   file 14,495
+d257b9b8  2026-09-06  dispatch 6,112   file 14,958
+2f3ff9a8  2026-09-06  dispatch 6,112   file 15,201
+29e3e7f7  2026-09-06  dispatch 6,112   file 15,201   ← HEAD
+```
+
+**+929 words of file, +0 of dispatch region, across the four commits since 284
+read it** — 290 saw two of those and called the worry retired; two more have
+landed the same way. The cumulative `+300.8%` against the file's `+247.1%` is a
+*window* figure carrying the old history, not a current trend.
+
+1. [x] **293.1 — DONE 2026-09-06. `ENVIRONMENT.md` §1c named `check-boost.mjs`,
+       deleted seven days earlier, and did not name the gate that actually
+       stopped this sweep. The three-name snapshot is replaced by the
+       derivation.**
+       *Accept was*: §1c states which gates need `CHROME_PATH` as a **property with
+       a command that produces the set**, not as a list of names; the entry
+       records what the two red-proofs measured, whichever way they came out;
+       and the reconciliation figure the command prints agrees with an
+       independently written closure over the same imports.
+
+       **This finding is not from any of the four lanes — it is from lane 1
+       failing.** `npm run scan:dead-style -w docs` exited 1 with *"No
+       Chrome/Chromium found. Set CHROME_PATH"*. §1c is the section that exists
+       to prevent exactly that, and it read: *"It is needed by `docs:build`
+       (`check-boost.mjs`), `check:layout` and `test:axe`."*
+
+       **Both halves of that first name were wrong, and each was red-proved in
+       the direction that could have falsified it:**
+
+       - `apps/docs/scripts/check-boost.mjs` **does not exist**. It was deleted
+         on **2026-08-30** by `f1be2485` (the htmx-4 migration). Seven days.
+       - `docs:build` **does not need the variable at all** — run as
+         `env -u CHROME_PATH npm run docs:build` after `rm -rf apps/docs/dist`,
+         it exits **0**. The obvious assumption (the named script is gone, so
+         the requirement moved elsewhere in the build) is false; the requirement
+         left with the script.
+       - `scan:dead-style`, which §1c did **not** name, genuinely needs it:
+         it failed without and passed with, in this wake, on the same tree.
+         That pair is the discrimination — one named command that does not need
+         it, one unnamed command that does — rather than a single red result.
+
+       **The set is derivable, and the derivation was reconciled against a
+       second, independently written instrument before being published.** A
+       Python transitive closure over relative imports and a separately written
+       Node closure both return the **same 12 npm-script entry points**:
+       `check:claims`, `check:forced-colors`, `check:layout`, `check:po-app`,
+       `check:pseudo`, `check:quickstart`, `check:scroll`, `check:search`,
+       `check:target-size`, `scan:dead-style`, `test:axe` (docs) and
+       `suite:audit` (root, reaching `browser-harness.mjs` from
+       `examples/erp-suite/audit.mjs`). `npm run suite` is already flagged in
+       the cloud-toolchain list below, so that one was not news.
+
+       **A one-level grep is exact TODAY, and the check for that is the reason
+       it can be used**: the closure is 15 files and **0** of them reach the
+       resolver only transitively — every consumer imports
+       `resolve-chrome.mjs` or `browser-harness.mjs` directly. So §1c now
+       carries the grep and the count it should print (14 files = the 12 entry
+       points plus `browser-harness.mjs` itself and `score.mjs`, neither an npm
+       script), with the count as the reconciliation rather than the list.
+       If a transitive-only consumer ever appears the count moves and the grep
+       under-reports — which is why the entry states the measurement rather
+       than asserting the grep is complete by construction.
+
+       **What this cost, named:** nothing but one failed command, because the
+       fix is `export CHROME_PATH=… && <gate>` and every gate names the missing
+       variable in its own error text. The reason it is worth a slice is the
+       shape, which this repo has now paid for in three separate files: a
+       durable document holding a **snapshot of names** goes stale silently and
+       is read as current. `ENVIRONMENT.md`'s own cloud-toolchain list carries
+       the same correction one section down (*"derived from `ci.yml`, not
+       curated"*), added after `check:formatting` reached CI unrun; `LOOPS.md`'s
+       lane-3 clause carries it after three re-derivations. §1c was the
+       remaining one, in the file whose entire job is to be the durable half.
+
+       **NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots
+       were taken — a cloud wake has no Podman and no `:8081`. **None is owed,
+       and that is checkable rather than asserted:** this slice's diff touches
+       `.roundtable/ENVIRONMENT.md` and `ROADMAP.md` only — **0** CSS files and
+       **0** docs pages. Nothing in it renders.
+
 ## Slice 292 — Polish round 3 on `component/icon`: the page's Markup heading had been outside every `<section>` for 18 days, and the blind re-score then found the deprecation note resting on a **census** — "no pattern screen renders this glyph" — that a pattern screen falsifies (2026-09-06)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again

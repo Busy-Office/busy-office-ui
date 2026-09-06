@@ -84,11 +84,30 @@ to run one gate leaves the NEXT command there.
 ## 1c. `CHROME_PATH` DOES NOT PERSIST EITHER
 
 ```
-export CHROME_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome && npm run docs:build
+export CHROME_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome && npm run <gate>
 ```
 
-Export it in the SAME command as the build, every time. It is needed by
-`docs:build` (`check-boost.mjs`), `check:layout` and `test:axe`.
+Export it in the SAME command as the gate, every time.
+
+**WHICH gates need it is DERIVED, never listed here** (roadmap 293.1,
+2026-09-06). This section named three — `docs:build` "(`check-boost.mjs`)",
+`check:layout`, `test:axe` — and **both halves of the first were wrong**:
+`check-boost.mjs` was deleted on 2026-08-30 by `f1be2485`, and `docs:build`
+passes with the variable **unset** (measured, exit 0). Meanwhile
+`scan:dead-style`, unnamed here, died on it at the top of that wake's
+Standardize sweep — the sweep's own lane 1, blocked by this file.
+
+Every consumer imports the resolver directly, so one grep is exact — measured,
+**0** files reach it only transitively:
+
+```
+grep -rl 'browser-harness\.mjs\|resolve-chrome\.mjs' \
+    apps/docs/scripts/*.mjs examples/erp-suite/*.mjs
+  # 14 files on 2026-09-06 = 12 npm-script entry points, plus
+  # browser-harness.mjs (the module itself) and score.mjs (not an npm script).
+```
+
+Re-run it; the count is the reconciliation, not the list.
 
 ## 2. THE CLONE IS SHALLOW — any history measurement is silently 50x wrong
 
