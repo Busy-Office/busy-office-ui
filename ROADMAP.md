@@ -315,6 +315,171 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 286 — the defect Slice 285 listed under "what reproduced": 281's decay is dated to the hour and its CAUSE is false — `69a53364` is a pure addition that never touched the table, the table is still reached by the rule, and the claim was shipped in the `data-table` spacing cite (2026-09-06)
+
+**Dispatcher trace, cloud wake — and this wake LOST TWO COLLISIONS, which is new.**
+Rule 1 clear: `list_issues` on `Busy-Office/busy-office-ui` → `totalCount: 0`, and
+no open `N. [ ]` item is a P0; Step 1 triaged and committed nothing. Rule 2
+`0 / 4 … ok`; **rule 3 read `3 / 3 … OVERDUE`** and dispatched Objective. Rule 5
+read **STALE** (`2 wake-date(s) newer`) and is therefore **reported as
+could-not-be-evaluated, never clear**.
+
+**Collision 1.** The wake dispatched Objective on `[274, 276-279]`, completed a
+full grill of 276-279, and Step 0c's mandated `git fetch origin main` *before the
+first commit* found `origin/main` **12 commits ahead** carrying `71b44721`, Slice
+280 — the same grill. Reset, re-read the counters, rule 3 OVERDUE again on
+`[281, 283, 284]`.
+
+**Collision 2.** It then grilled 281/283/284, committed, and `git push` was
+**rejected**: another dispatcher had pushed `89455547` — *Slice 285, Objective
+grill of Slices 281, 283, 284* — taking the same three slices, the same slice
+number and the same report filename. The rebase conflicted (add/add on the report,
+content on `ROADMAP.md`) and was aborted; that work was discarded per Step 0c.
+
+**⚠ This is the case Step 0c says would REOPEN the accept-collisions decision.**
+Its stated cost is *"up to one wake's work, discarded"*, measured at n = 1. This
+wake paid it **twice in one wake**, and the second time both dispatchers had
+independently done the *same grill of the same three slices* — deterministic rule
+4 was never the mechanism; it is rule 3's armed set, which is equally
+deterministic. Recorded here rather than acted on: changing the concurrency model
+is an owner call, and `LOOPS.md` already names what would reopen it.
+
+**What is NOT discarded, and why this is a slice rather than a re-run.** Slice 285
+grilled 281 and listed its decay under ***what reproduced***, verifying the two
+TIMESTAMPS (`79f7fec9` 10:50 → `69a53364` 14:48, 27h58m, published as 28 hours)
+and taking the causal half on trust. The cause is false, the claim was **shipped**,
+and it is still shipped at `df63f253`. That is new work, not the taken item.
+
+1. [x] **286.1 — DONE 2026-09-06 (cloud wake). Slice 281's heading and its dated
+       cause are both false, the item's own measurement is what refutes them, and
+       the claim was SHIPPED on `/components/data-table`.**
+
+       281's heading says the worked example *"stopped being **reachable** by the
+       rule it explains"*; 281.1's own next paragraph measures *"the fourth **is
+       reached** (injection confirmed) and its rows read 87px → 87px"*. What
+       stopped is the example producing its NUMBERS, not its reachability.
+
+       Its cause — *"`69a53364` (109.19), 28 hours later, added
+       `data-density="compact"` to it"* — is refuted three independent ways:
+
+       | reading | command | result |
+       |---|---|---|
+       | the commit never touched it | `git show 69a53364 --stat -- ...detail-form.astro` | **91 insertions, 0 deletions** — a pure addition of a *different* table |
+       | the table still has no density | `git show <rev>:...detail-form.astro \| grep '<table class="bo-data-table'` | absent at `79f7fec9:122`, `69a53364:127`, `a24ed45:127`, HEAD`:127` |
+       | neither side of the comparison moved | block extract; `git log -- tokens/density.css` | markup **5 `<th>`, 3 `<tr>`, 26 lines** identical at `79f7fec9` and HEAD; `density.css` untouched between 94.3 and `6cb26268` |
+
+       **Both readings of the sentence fail**, which is why it is a defect rather
+       than a wording slip: if *"it"* is the table the fact is false; if *"it"* is
+       the page the fact is true (a compact table WAS added, at `:195`) and
+       explains nothing, because the cited table's reachability is unaffected.
+
+       **Shipped, not merely filed.** The sentence lived in `dsa-scores.json`'s
+       `data-table · spacing` cite, which `DsaScore.astro` renders:
+       `grep -rl 'stopped being reachable by the rule' apps/docs/dist/` returned
+       `components/data-table/index.html`, **1** occurrence. The CSS comments in
+       `density.css` and `data-table.css` carry only the corrected physics and are
+       clean, so the defect was confined to the cite. Fixed there with the
+       replacement asserted at **exactly 1** occurrence and the JSON re-parsed;
+       `scored` unmoved per 269.1's contract for a single-dimension correction. The
+       archived Slice 281 gains a `CORRECTED` block per 236.2 / 199.1.
+
+       **281's CONCLUSION is preserved and is not in question**: the cite genuinely
+       was stale, naming the example by property rather than by page is right, and
+       the two-effects separation (`0 of 101` for padding alone) reproduces.
+
+       **The generalisation, which is the reusable half.** Both defects were
+       catchable by reading the slice against ITSELF — its heading contradicts its
+       own measurement one paragraph later — and two grills missed it because both
+       re-ran the slice's commands instead. **Read a slice's headline against the
+       measurement it publishes, before re-running anything.**
+       - **Accept:** no published copy of the cite asserts a cause the tree
+         contradicts, checked by re-reading the BUILT page rather than the diff,
+         and the corrected text states what was measured with the commands beside
+         it. Finding a further copy already accurate is a satisfying outcome — the
+         two CSS comments were checked and left alone.
+
+2. [x] **286.2 — DONE 2026-09-06 (cloud wake). `ENVIRONMENT.md` §6c read as a
+       1440-only WIDTH trap; the same 15px reservation is present at 390px, and
+       "heights are unaffected" does not hold for a row that WRAPS.**
+
+       Measured against the freshly built tree at 390px:
+
+       ```
+       main.bo-app-shell__main   offsetWidth 390 - clientWidth 375 = 15
+       /patterns/detail-form, 4 tables:
+         no density (reached)  width 260  first row  87px   padding-inline 4px
+         data-density=compact  width 310  first row  67px
+         data-density=compact  width 310  first row 126px
+         data-density=compact  width 310  first row  67.5px
+       ```
+
+       The reached table is **50px narrower** than its three siblings and its row
+       **already wraps at 87px before any mutation**, so it cannot show a 68 → 87
+       step in this container. §6c's closing *"Heights, row counts and overflow
+       booleans are unaffected"* was true of the fixed-height rows it probed —
+       those still reproduce — and is false for a wrap-sensitive row, whose height
+       comes from the width the 15px is taken out of. 94.3 measured on the owner's
+       machine; 281 re-measured here.
+       - **Accept:** §6c states at which viewports the reservation is present,
+         measured rather than assumed, and says which measurements it can move.
+         **Met.** That this is *the* cause of 281's decay is recorded as
+         **Hypothesis**, not Evidence — direction and magnitude fit and the
+         alternatives are excluded, but settling it needs the owner's environment.
+
+3. [ ] **286.3 — `LOOPS.md` §3b step 4 is called "the load-bearing step" and is
+       absent from 13 of 20 Polish rounds, because its stated mechanism is one
+       171.1 already measured as dead.** Across 20 Polish-round slices in
+       `ROADMAP.md` + `ROADMAP-archive.md` (deduplicated by longest body, buckets
+       asserted to partition): **7 ran an independent pass** (176, 182, 268, 269,
+       273, 278, 279), **7 explicitly declined** (216, 217, 220, 227, 242, 267,
+       277), **6 recorded none** (231, 239, 240, 266, 270, 276).
+
+       The declines are principled and say so — 277: *"no blind re-score is
+       owed"*, no dimension covers the defect it found; 283: *"this round changed
+       nothing on the surface, so there is no score to mark"*. That is the point.
+       The step is written as *re-scoring a dimension against the rubric*, and
+       **171.1 measured that no DSA dimension can rank** (2, 2 and 2 distinct
+       values across 39 components). Rounds skip a dead mechanism correctly.
+
+       Its value is a different activity. Slice 278's surface had no
+       `dsa-scores.json` entry, so that round ran the step's *principle rather than
+       its letter* — a second agent given the page and both modules, told nothing
+       about what changed — and it returned **4 of that slice's 6 items**
+       (278.3-278.6), including a shipped `aria-selected` accessibility defect and
+       a defect in prose the same wake had shipped an hour earlier. The one round
+       that ran it as written (279, re-scoring `fit`) returned agreement in the
+       weak direction and one observation it declined to act on.
+
+       **Filed for the owner, not acted on.** Rewriting §3b is a judgement about
+       how the loop works; 279.4 changed a dispatcher rule two wakes ago, and
+       274.1's finding is that `LOOPS.md`'s every-wake region carries that cost.
+       The base rate is Evidence; the yield claim rests on **n = 1** and is
+       recorded as Hypothesis.
+       - **Accept:** a recorded decision on what §3b step 4 asks a round to do —
+         re-score a dimension, review the surface independently, or both — that
+         agrees with what rounds actually do, **or** a recorded reason the current
+         wording is right and the 13 skips are intended. **Concluding that nothing
+         should change is a satisfying outcome**; what is not is leaving a step
+         called load-bearing that most rounds correctly skip. Re-run the base rate
+         first — parse `^## Slice N` across both files, dedupe by longest body, and
+         assert the buckets partition.
+
+4. [ ] **286.4 — carried from 279's `fit` rubric observation, which 101.3 sent to
+       a grill and which no grill has yet taken.** `/concepts/design-language`'s
+       field matrix has exactly four rows (Date, Number/rate/%, Money, Quantity),
+       so `fit`'s definition — which scores against *"the field matrix"* — cannot
+       literally assign `scan` a context, yet `scan` carries a `fit` score of 3.
+       279.2 filed it and correctly declined to act, because 101.3 forbids a Polish
+       round editing a rubric definition. Passed on rather than decided here: 101.3's
+       stop rule fires only for a defect the six dimensions structurally cannot see,
+       and this is a wording gap in one definition.
+       - **Accept:** `fit`'s definition names what it scores in terms that reach
+         every component it is applied to, **or** records why the field matrix is
+         the right reference and how a component outside it should be scored.
+         Finding the current wording defensible is a satisfying outcome; what is
+         not is a definition whose own reference set excludes components it carries
+         scores for.
+
 ## Slice 285 — Objective grill of Slices 281, 283, 284: 31 of 33 assertions reproduce, and the one that matters is the measurement a design decision was BUILT on — "0 of 18 stamps reproduce at the parent" is **16 of 18**, and it had spread into the shipped script's own docstring (2026-09-05)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again

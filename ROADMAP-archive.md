@@ -37595,6 +37595,40 @@ taken at 1440px or 390px in either theme — a cloud wake has no Podman and no
 there is no rendered result to compare. That is an absence of subject, not a
 skipped check — and it is asserted below rather than asserted here.
 
+**⚠ CORRECTED 2026-09-06 by roadmap 286.1, appended per 236.2 rather than
+rewritten.** The live measurement above, the physics table and the two-effects
+correction all reproduce. **The stated CAUSE does not, and neither does this
+slice's own heading.** Note that the Objective grill of 281/283/284 (Slice 285)
+listed this decay under *what reproduced* — it verified the two TIMESTAMPS
+(27h58m, published as 28 hours) and took the causal half on trust, which is why
+this survived a grill.
+
+- **"Stopped being reachable by the rule" is contradicted one paragraph later by
+  this slice itself**, which measured *"the fourth is reached (injection
+  confirmed) and its rows read 87px → 87px"*. The table is still reached. What
+  stopped is the example producing its NUMBERS, not its reachability.
+- **`69a53364` did not add `data-density="compact"` to it.** That commit is a
+  pure addition — `git show 69a53364 --stat` reads **91 insertions, 0 deletions**
+  — which added a *different*, new table (`data-row-edit data-density="compact"`).
+  The cited table carries no density attribute at any revision checked:
+  `79f7fec9:122`, `69a53364:127`, `a24ed45:127`, HEAD`:127`.
+- **The table's own markup has not moved since 94.3** — 5 `<th>`, 3 `<tr>`, 26
+  lines at both `79f7fec9` and HEAD — and `density.css` was untouched between
+  94.3 and this slice's own commit, so neither side of the comparison changed.
+
+**What did move is the BASELINE, and the likeliest cause is environmental.** At
+390px the reached table measures **260px** against its three compact siblings'
+310px, and its first row already wraps at **87px** before any mutation — so it
+cannot show a 68px → 87px step in this container. `main` reserves **15px** for a
+scrollbar at 390px too (390 − 375), which `ENVIRONMENT.md` §6c documented only at
+1440 and only for widths; a wrap-sensitive row height takes its height from the
+width, so a measurement taken on the owner's machine and re-taken here differs by
+exactly that. §6c is corrected in the same commit (286.2).
+
+The corrected conclusion is unchanged and stands: the cite should name the
+example by PROPERTY, not by page. Only the causal story and the heading were
+wrong, and the shipped `dsa-scores.json` cite carrying them is fixed in 286.1.
+
 ## Slice 280 — Objective grill of Slices 276, 277, 278, 279: 52 of 54 assertions reproduce, and the two that do not are one sentence apart in a table that measured the tree BEFORE its own fix while describing the tree after it — the two rows it dropped are the two surfaces that same item added (2026-09-05)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** for the

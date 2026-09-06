@@ -266,8 +266,27 @@ FIXED rail, `Gallery.astro:801`).
 So: a width you measure here will not match a width the owner measured, by
 exactly 15px, and the difference looks like a layout regression. Measure the box
 that carries the constraint — `main`'s own `offsetWidth − clientWidth` — before
-filing one. Heights, row counts and overflow booleans are unaffected: the same
-probe reproduced 14 rows, 384px and 9 rows fully inside exactly.
+filing one.
+
+**It is NOT a 1440-only trap, and this section read as one until 2026-09-06**
+(roadmap 286.2). The same reservation is present at **390px** — the width every
+density and wrap measurement in this repo is taken at:
+
+```
+390px viewport:  main.bo-app-shell__main  offsetWidth 390 - clientWidth 375 = 15
+```
+
+**And "heights are unaffected" holds only for rows that do not WRAP.** That
+sentence stood on a probe of rows whose height was already fixed, and those
+readings still reproduce exactly (14 rows, 384px, 9 rows fully inside). But a row
+whose cells wrap takes its height FROM the width, so the 15px feeds straight into
+it: on `/patterns/detail-form` at 390px the one auto-density table measures
+**260px** against its three `data-density="compact"` siblings' 310px, and its
+first row already wraps at **87px** before any mutation. A cross-environment
+comparison of a wrap-sensitive row height is therefore confounded by exactly the
+amount this section names — the likeliest true cause of the decay roadmap 281.1
+attributed to a commit that never touched the table (286.1). Row counts and
+overflow booleans are still unaffected.
 
 ## 7. A BARE `wc -w` UNDERCOUNTS THIS REPO BY 2.4-4.5%
 
