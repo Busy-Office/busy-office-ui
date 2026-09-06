@@ -8,6 +8,7 @@ import DsaScore from '../../components/DsaScore.astro';
 import api from '@busy-office/ui/api';
 import { createRequire } from 'node:module';
 import { readFileSync } from 'node:fs';
+import { parseDeprecatedGlyphs, readIconCss } from '../../../scripts/deprecated-glyphs.mjs';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 /* The size argument below is computed from the shipped artifact — the
@@ -87,18 +88,17 @@ const glyphs = ['doc', 'invoice', 'cart', 'check-circle', 'truck', 'box', 'chart
    this build. That is the assertion-trips-on-its-own-explanation shape CLAUDE.md
    warns about — but it fails LOUDLY with the counts in the message, which is the
    safe direction of that trap, and the alternative (matching only the structural
-   form) is what would silently under-report. Accepted deliberately. */
-const iconSrcCss = readFileSync(require.resolve('@busy-office/ui/css/components/icon'), 'utf8');
-const deprecatedGlyphs = [...iconSrcCss.matchAll(/\/\*[^*]*\*+(?:[^/*][^*]*\*+)*\/\s*\.bo-icon--([a-z0-9-]+)/g)]
-  .filter((m) => m[0].includes('DEPRECATED'))
-  .map((m) => m[1]);
-const deprecationMarkers = (iconSrcCss.match(/DEPRECATED/g) ?? []).length;
-if (deprecatedGlyphs.length !== deprecationMarkers)
-  throw new Error(
-    `icon: parsed ${deprecatedGlyphs.length} deprecated glyph(s) from the shipped css, but it carries ` +
-      `${deprecationMarkers} DEPRECATED marker(s). This page publishes that set as the answer to "which ` +
-      'glyphs should I stop using", so a partial parse must fail rather than under-report.',
-  );
+   form) is what would silently under-report. Accepted deliberately.
+
+   THE PARSE ITSELF MOVED OUT (roadmap 292.9). It reads the same, it is
+   reconciled the same way, and the reasons above are unchanged — but the
+   tree-wide `check:deprecated-icons` now asks the identical question, and two
+   copies of this regex would be two gates able to disagree about which glyphs a
+   reader should stop being handed, with nothing to say so. That is the
+   Standardize playbook's lane 2, and `scripts/deprecated-glyphs.mjs` carries the
+   decision once. */
+const iconSrcCss = readIconCss();
+const { glyphs: deprecatedGlyphs } = parseDeprecatedGlyphs(iconSrcCss);
 const undeclared = deprecatedGlyphs.filter((g) => !api.components.icon.variants.includes(`bo-icon--${g}`));
 if (undeclared.length) throw new Error(`icon: deprecated glyph(s) not shipped: ${undeclared.join(', ')}`);
 const bothLists = glyphs.filter((g) => deprecatedGlyphs.includes(g));

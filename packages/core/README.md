@@ -100,7 +100,7 @@ fail silently.
 ## How it's kept honest
 
 Every claim on this page is generated from the shipped artifact or the repo, and
-the build runs <!-- stat:gates -->53 build gates, 19 of them heuristic detectors that each ship a `--self-test`<!-- /stat -->.
+the build runs <!-- stat:gates -->54 build gates, 20 of them heuristic detectors that each ship a `--self-test`<!-- /stat -->.
 Contrast, named container queries, two-channel state signals, print behaviour and
 the browser floor are all gated rather than aspirational.
 

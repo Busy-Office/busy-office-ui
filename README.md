@@ -87,7 +87,7 @@ findings, gates, and fix outcomes are in [`.roundtable/`](.roundtable/). Two rul
 that came out of it are build-enforced: every `@container` query is named, and every
 state signal ships both a visible non-color cue and a programmatic channel.
 
-The build runs <!-- stat:gates -->53 build gates, 19 of them heuristic detectors that each ship a `--self-test`<!-- /stat -->.
+The build runs <!-- stat:gates -->54 build gates, 20 of them heuristic detectors that each ship a `--self-test`<!-- /stat -->.
 A heuristic gate is one whose verdict rests on *recognising* something, so it can
 be fooled — each of those must prove it can fail before it is trusted.
 

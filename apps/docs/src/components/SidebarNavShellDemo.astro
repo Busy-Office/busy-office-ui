@@ -13,9 +13,14 @@ interface Props {
   label: string;
 }
 const { label } = Astro.props;
+/* Reporting/--chart, not CRM/--user (roadmap 292.9). --user is one of icon.css's
+   four DEPRECATED glyphs, and this rail is rendered into two demo documents a
+   reader studies. The module was relabelled rather than re-glyphed because no
+   shipped glyph reads as "customer"; Reporting is an ERP module in its own
+   right and --chart is already the glyph the docs give analytics. */
 const links = [
   ['grid', 'Home'], ['cart', 'Order to cash'], ['truck', 'Procure to pay'],
-  ['user', 'CRM'], ['invoice', 'Finance'], ['box', 'Inventory'],
+  ['chart', 'Reporting'], ['invoice', 'Finance'], ['box', 'Inventory'],
 ];
 ---
 <div class="bo-app-shell">

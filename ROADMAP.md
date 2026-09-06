@@ -315,6 +315,76 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 310 — filed while closing 292.9: the two reference APPS hand a reader four deprecated glyphs that the docs gate deliberately does not cover, and `/base/motion` declares five copyable markup samples the page never renders (2026-09-07)
+
+Both were measured while building `check:deprecated-icons` and are outside
+292.9's Accept, which scopes the property to `apps/docs/src`. Filed rather than
+folded in, because each turns on a judgement 292.9 did not make.
+
+1. [ ] **310.1 — `examples/erp-suite` and `examples/po-app` render deprecated
+       glyphs, and whether that is a defect is undecided.** 292.9's whole
+       argument for treating a docs page differently from a consumer screen is
+       that *a reader copies from it*. These two are the reference applications
+       the docs point adopters at, which is the same argument one step over —
+       but they are also SCREENS, and the deprecation's own text says existing
+       renders keep working. Measured 2026-09-07, on the committed tree:
+
+       ```
+       grep -rn "bo-icon--\(settings\|barcode\|building\|user\)" examples/ --include='*.mjs'
+       #  examples/erp-suite/prod/production-orders.screen.mjs   bo-icon--settings
+       #  examples/erp-suite/prod/capacity.screen.mjs            bo-icon--settings
+       #  examples/erp-suite/prod/bom.screen.mjs                 bo-icon--settings
+       #  examples/po-app/server.mjs:146                         bo-icon--barcode
+       grep -rn "icon: *'" examples/erp-suite --include='*.mjs' | grep -oE "icon: *'[a-z0-9-]+'"
+       #  settings and user among the six module identities
+       ```
+
+       So: **4 literal + 2 interpolated sites.** `check:deprecated-icons`
+       cannot reach them from either phase — `examples/` is not in its source
+       walk, and `dist-pages.mjs` skips `dist/suite/` by name, which is why the
+       `/suite/` exemption written for it was removed as dead rather than left
+       to look like coverage.
+       - **Accept** — the property, not a value: each of the six sites either
+         stops naming a deprecated glyph, or the decision that a reference
+         application may keep one is recorded with its reason, in a place a
+         later wake reads. **Deciding they may all keep their glyphs is a
+         satisfying outcome** — it is the honest reading of "existing renders
+         keep working" — provided the reason is written down and
+         `check:deprecated-icons`' header stops implying the question is open.
+         If they change, the audit that proves it is `npm run suite` plus
+         `check:po-app`, both of which already run in a cloud wake.
+       - **Lane**: cloud-takeable. Glyph choice is editorial and the mask box is
+         `1em` either way, so no geometry moves; say which glyph and why.
+
+2. [ ] **310.2 — `/base/motion` declares five copyable markup samples the
+       template never renders.** Found by checking the built page for a string
+       the source clearly contains: `savingMarkup`'s `bo-icon--grid` appears in
+       `dist/base/motion/index.html` exactly once, from the inline script, and
+       the code block is simply absent. Counting references in the source, five
+       consts are declared and used nowhere:
+
+       ```
+       for c in toastMarkup menuMarkup rowMarkup savingMarkup removeMarkup; do
+         echo "$c $(grep -o "$c" apps/docs/src/pages/base/motion.astro | wc -l)"; done
+       #  each 1 — the declaration itself.  entranceMarkup reads 2 (declared + rendered)
+       ```
+
+       They are the "intent vocabulary" samples (Entrance / Attention /
+       Progress / Exit), written to sit beside the eight motion classes. Either
+       the section that renders them was dropped, or they were never wired up.
+       **This is not merely dead code**: 292.9's premise called one of them "a
+       copyable markup string — the exact shape 292.4 just fixed", and it teaches
+       nobody anything today because it ships nowhere. A page can carry a
+       maintained-looking sample that no reader can reach, and nothing says so.
+       - **Accept** — each of the five is either rendered (in the page's own
+         skeleton, with a caption) or deleted, with one line saying which and
+         why. **Deleting all five is a satisfying outcome.** Re-run the count
+         above afterwards; it must read 0 for every name that remains.
+       - **Lane**: cloud-takeable if deleted. Rendering them adds sections to a
+         built page, which the whole-tree gates sweep but nobody would have
+         LOOKED at — so that half wants a local wake, or an explicit
+         NOT VERIFIED.
+
 ## Slice 309 — Objective grill of Slices 307, 308: Slice 308 reproduces to the word, and underneath Slice 307's re-measurement is a P0 — the reference app's shared init has been swallowed by a trailing comment since 2026-08-23, so the select-all it timed did nothing (2026-09-06)
 
 **Dispatched by rule 3**, `dispatch_status.py` reading `Objective 3 / 3 slices
@@ -2369,7 +2439,7 @@ filed as 292.3 instead, where it can be decided rather than assumed.
          asserted over 2,902 elements' computed font-size, plus `check:layout`
          across 127 pages and `test:axe` at both widths.
 
-9. [ ] **292.9 — 292.4's property is tree-wide and the guard it landed is
+9. [x] **292.9 — 292.4's property is tree-wide and the guard it landed is
        page-local: four other docs pages hand a reader a deprecated glyph.**
        Measured while closing 292.4, not assumed — `for g in settings barcode
        building user; do grep -rln "bo-icon--$g" apps/docs/src --include='*.astro';
@@ -2406,6 +2476,87 @@ filed as 292.3 instead, where it can be decided rather than assumed.
          needing eyes is whether a replacement glyph reads right, and the mask box
          is `1em` either way, so no geometry moves — say which glyph you chose and
          why rather than claiming a visual check that did not happen.
+       - **CLOSED 2026-09-07 (cloud wake).** The premise reproduces to the site:
+         the same command returns the same five sites across four files, and
+         `--barcode`/`--user` still reach 0 as hand-written classes.
+         `check:deprecated-icons` ships, in the docs BUILD chain (not
+         `check:repo` — see below), reporting its own counts:
+         `SOURCE: 151 .astro file(s), 17 carrying glyphs, 88 hand-written + 5
+         interpolated · DIST: 127 built page(s), 0 unexplained deprecated
+         render(s), 8 exempt`.
+
+         **No site kept its glyph, so `KEEPS_ITS_GLYPH` is empty** — the Accept
+         allows an exception and none was true, because every one of the five is
+         a demo rail or a spinner where the glyph is editorial. Which glyph and
+         why, since no screenshot was taken:
+         - `components/offcanvas` — the drawer rail's third link, Settings/
+           `--settings` → **Shipments/`--truck`**. Relabelled rather than
+           re-glyphed: no shipped glyph reads as "settings", and the rail's other
+           two entries are already ERP nouns.
+         - `components/sidebar-nav` — the Finance section's second link,
+           Settings/`--settings` → **Statements/`--doc`**. Same reasoning; a
+           statement is a Finance screen and `--doc` is unused in that nav.
+         - `patterns/app-frame` — the Purchasing rail's Vendors/`--building` →
+           **Goods receipts/`--truck`**, which is a real screen in the module the
+           nav is labelled for.
+         - `base/motion` × 2 (the live "Saving…" swap and the `savingMarkup`
+           const) — `--settings` → **`--grid`**, and this one rests on geometry
+           rather than taste: `--grid`'s four `7x7` rects at (4,4) (13,4) (4,13)
+           (13,13) map onto themselves under a 90° rotation about the 24x24
+           viewBox centre (12,12), so it reads continuous under `bo-motion-spin`;
+           `--settings`' three offset lines do not.
+
+         **The five were not all of it, and the sixth is the finding.** The
+         source phase went green while `/components/demos/sidebar-nav-narrow`
+         and `-wide` were both still rendering `bo-icon--user`:
+         `SidebarNavShellDemo.astro` hand-writes the glyph NAME in a tuple
+         (`['user', 'CRM']`) and interpolates it into the class, so no scan for a
+         literal class can ever see it. Caught by grepping the BUILT pages after
+         the gate had already passed — CLAUDE.md's rendered-artefact rule doing
+         exactly its job. Fixed as **Reporting/`--chart`** (no shipped glyph
+         reads as "customer"; Reporting is an ERP module in its own right).
+
+         **The blind spot had been NAMED in the gate header, with a measurement
+         beside it, and the measurement was wrong** — the needle was
+         `icon: '<name>'`, an object-property spelling, and the live site is a
+         tuple. A needle that assumes one syntax reports a confident absence
+         about the other. So the gate gained a second phase that traces no values
+         at all and reads the artefact; it is why the gate moved out of
+         `check:repo` (source-only, runs pre-build) into the docs `build` chain
+         after `check:links`, rather than skipping half of itself when `dist/` is
+         absent.
+
+         **Three red-proofs, each going red on exactly the case under test:**
+         `bo-icon--settings` re-injected into `offcanvas.astro` (occurrence count
+         asserted at 1 before replacing) → `1 of 34`, that file and no other;
+         `bo-icon--{grid}` into `dropdown.astro` → `1 of 33`, the reconciliation
+         arm; and the real one — reverting `SidebarNavShellDemo` to
+         `['user', 'CRM']` and rebuilding → `2 of 35`, the two demo pages and no
+         others. `--self-test` covers 8 classification cases.
+
+         **The `icon.astro` frontmatter exemption is load-bearing, re-measured
+         after the parse it originally cited moved out**: dropping it fails
+         `1 of 34` at `2 named + 2 interpolated against 9 bare`, naming that file
+         alone. A `/suite/` entry in `MAY_RENDER` was written and **removed as
+         dead** — `dist-pages.mjs` skips `suite` by name, so it could never have
+         matched, and an exemption that cannot fire reads as coverage the gate
+         does not have.
+
+         **Also folded in:** the deprecated-set parse now lives once, in
+         `apps/docs/scripts/deprecated-glyphs.mjs`, instead of being copied
+         between `/components/icon`'s 292.4 guard and this gate — two copies of
+         that regex would be two gates able to disagree about which glyphs a
+         reader should stop being handed. `check:selftests` counted the new gate
+         on its own (53 → 54 gates, 19 → 20 heuristic) and failed the core build
+         until the READMEs were re-stamped, which is that mechanism working.
+
+         **NOT VERIFIED, said plainly:** no screenshots at 1440/390 in light and
+         dark — a cloud wake has no Podman. Five rail labels and two glyphs
+         changed on four docs pages; the whole-tree gates swept them
+         (`check:layout` 127, `test:axe` 127 x 2, `check:scroll` 914,
+         `check:pseudo` 14 x 2) and the mask box is `1em` either way, so no
+         geometry moves — but **nobody has looked at them**. A local wake's
+         glance closes that cheaply.
 
 **No gate is proposed for 292.2's class, and this is the sixth consecutive
 refusal in this ledger** (216.2, 217.2, 220.2, 227.2, 231). `LOOPS.md` 101.3

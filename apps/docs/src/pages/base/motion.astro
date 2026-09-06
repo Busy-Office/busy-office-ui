@@ -57,9 +57,21 @@ const rowMarkup = `<!-- Attention: a row the server just repriced -->
 <tr class="bo-motion-pulse-once">
   <td>MRN-2255</td><td class="bo-data-table__col--numeric">1,284.00</td>
 </tr>`;
+/* --grid, not --settings (roadmap 292.9). Two reasons, in order: --settings is
+   one of icon.css's four DEPRECATED glyphs, and this const is written as a
+   copyable sample — though measured while fixing it, this one is NOT rendered
+   anywhere on the page today (it is one of five markup consts here that the
+   template never uses; filed separately). It is still fixed, because the next
+   wake to wire it up would ship the deprecated class, and because a maintainer
+   copies from source. The live spinner below carries the same change and IS
+   rendered. And the replacement is not arbitrary — --grid's four
+   7x7 rects at (4,4) (13,4) (4,13) (13,13) map onto themselves under a 90°
+   rotation about the 24x24 viewBox centre (12,12), so it reads continuous under
+   bo-motion-spin; --settings' three offset lines do not. A geometric property of
+   the shipped path data, not a look this cloud wake could screenshot. */
 const savingMarkup = `<!-- Progress: the spinner lives INSIDE the button that is busy -->
 <button class="bo-btn" type="button" aria-busy="true">
-  <span class="bo-motion-spin bo-icon bo-icon--settings" aria-hidden="true"></span>
+  <span class="bo-motion-spin bo-icon bo-icon--grid" aria-hidden="true"></span>
   Saving…
 </button>`;
 const removeMarkup = `<!-- Exit: the line leaves before the DOM node does -->
@@ -299,7 +311,7 @@ const removeMarkup = `<!-- Exit: the line leaves before the DOM node does -->
     const label = save.textContent;
     save.setAttribute('aria-busy', 'true');
     save.innerHTML =
-      '<span class="bo-motion-spin bo-icon bo-icon--settings" aria-hidden="true"></span> Saving…';
+      '<span class="bo-motion-spin bo-icon bo-icon--grid" aria-hidden="true"></span> Saving…';
     setTimeout(() => {
       save.removeAttribute('aria-busy');
       save.textContent = label;
