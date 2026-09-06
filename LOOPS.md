@@ -859,13 +859,58 @@ remaining, per `.roundtable/polish-state.md`.
 3. **Verify**: rebuild, all docs gates, plus the browser sweeps CI runs
    that the local build does NOT (`test:axe`, `check:layout`) — the
    2026-08-23 lesson that a CI-only gate is not known to work.
-4. **Blind re-score** — *the load-bearing step*. A SECOND agent re-scores
-   the surface against the rubric, told the surface and the dimension but
-   **never what changed or what the old score was**. The agent that made
-   the change may not score it: it would be marking its own homework, and
-   this file's own doctrine already says an instrument's first output is
-   not evidence. Without this the dry-round exit can never fire and the
-   3/10 budgets become a guarantee of self-approved work.
+4. **Blind re-score — WHEN THE ROUND MOVED A SCORE, or the surface a score
+   is taken on.** A SECOND agent re-scores the surface against the rubric,
+   told the surface and the dimension but **never what changed or what the
+   old score was**. The agent that made the change may not score it: it
+   would be marking its own homework, and this file's own doctrine already
+   says an instrument's first output is not evidence. Without this the
+   dry-round exit can never fire and the 3/10 budgets become a guarantee of
+   self-approved work.
+
+   **This step was called "*the load-bearing step*" until 2026-09-06, and
+   that label was false of 17 of the 22 rounds that have run** (roadmap
+   286.3, closed by **288.1/288.2**, which carry the commands and the
+   red-proofs). The trigger clause above is what was missing; the content
+   below is unchanged, because the mechanism is not dead.
+
+   **The base rate, re-run at 22 rounds** — `^## Slice N — Polish round`
+   across `ROADMAP.md` + `ROADMAP-archive.md`, deduped by longest body,
+   buckets asserted to partition. **5 put a second agent on the surface**
+   (242, 268, 273, 278, 279); **9 declined with a stated reason** (176, 182,
+   216, 217, 220, 227, 267, 277, 283); **8 recorded nothing** (231, 239,
+   240, 266, 269, 270, 276, 281). Re-run it rather than quoting it — 286.3's
+   own version of this count was wrong in **4 of its 7** independent-pass
+   entries: 176 ran a *cited* re-score and said outright it "is not counted
+   as §3b's independent second opinion", 182 "could not run one", 269
+   audited the two that had run without running one, and **242 — bucketed as
+   a decline — is the round the ledger itself calls "the first this ledger
+   has actually run".**
+
+   **The nine declines all give the SAME reason, and it is a good one:** the
+   round changed nothing on the scored surface, so there is no score to
+   re-take. That is a cite repair or a NO-OP, not a scored weakness — step 2
+   above assumes the latter and most rounds do the former. Such a round says
+   so in its write-up and skips; it does not owe a re-score.
+
+   **"171.1 measured this mechanism dead" is a conflation — do not repeat
+   it.** 171.1 measured that no dimension can **rank surfaces**, which
+   re-verifies (2026-09-06, now 40 components: typography/colour/spacing 3 on
+   all 40; `interaction` {3:24, na:16}; `content` {2:1, 3:39}; `fit`
+   {0:1, 3:39}). Step 4 does not rank. It asks whether **one** dimension is
+   right on **one** surface, and a dimension that cannot discriminate
+   *between* surfaces can still be wrong *on* one — which is exactly what it
+   found twice: `interaction: na` on a component that ships a behaviour,
+   moved to 3 in 242 (`dashboard`) and 268 (`breadcrumb`). Slice 269's arm 11
+   names those two independently as the only score-moving re-scores this
+   ledger has run. **2 of 5 runs, both real defects, is under-run — not
+   dead.**
+
+   **A round with no dimension to re-score MAY still put a second agent on
+   the surface; it is not required to.** Slice 278 did (its surface has no
+   `dsa-scores.json` entry) and got 4 of that slice's 6 items, including a
+   shipped `aria-selected` defect. That is **n = 1 and stays Hypothesis** —
+   recorded as permitted and worth writing down, deliberately not mandated.
 
    **⚠ WITHHOLDING `dsa-scores.json` DOES NOT MAKE THE RE-SCORE BLIND**
    (roadmap 268.2, 2026-09-04, disclosed unprompted by the scorer rather

@@ -315,6 +315,145 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 288 — 286.3 asked for a decision on `LOOPS.md` §3b step 4 and required its own base rate re-run first; re-running it is what found that **4 of its 7 independent-pass entries do not hold**, and that the step it calls dead has moved a score twice on real defects — the LABEL and the TRIGGER were the defect, not the content (2026-09-06)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty) — `ENVIRONMENT.md` trap 1, fixed with
+`git checkout -B main origin/main` before any commit; `origin/main` again
+arrived as a **forced update** (`26447ba...1de9717`). Trap 2 clean in one
+`--unshallow` (**1,922** commits, no `shallow.lock`) and it again brought the
+tags — **eighth** consecutive container, `git tag | wc -l` → **7**, which is
+why §2 states the count as the check rather than a value. Working tree clean;
+`RESUME.md` "In flight: nothing".
+
+Step 1 triaged and committed nothing: no new input. `list_issues` on
+`Busy-Office/busy-office-ui` → `totalCount: 0`; no open item carries P0.
+Step 0b: rule 2 `2 / 4 … ok`, rule 3 `2 / 3 … ok [283, 284]`. **Rule 5 read
+`3 wake-date(s) newer … STALE`, so it could not be evaluated** — reported as
+such per its own text, never as clear.
+
+**Rule 4 matched.** All 15 open items re-read from `ROADMAP.md` and
+re-classified from their own text per `LOOPS.md` 186.2, oldest first:
+**owner-blocked** — Slice 15 (owner hardware), `112.3`, `112.4` (blocked on
+112.3), `249.7` (defers to 249.10), `249.10`, `249.11`, `249.12`, `249.13`
+(each says **OWNER CALL** in its own line), `273.2`; **browser-blocked in the
+SCREENSHOT sense** — `249.6`, `249.9`, `249.15` (249.15's own text names
+`ENVIRONMENT.md`'s first list and says a cloud wake should not pick it up).
+The oldest item this container can take is therefore **286.3**, and it is what
+ran. No archive sweep: `roadmap_scope.py` reads **23.2%** closed-history share
+with 4 eligible targets, and **2 of them are NAMED by still-open items**
+(Slice 283, by both `287.5` and `273.2`) — 236.2's report, read before
+deciding not to move anything.
+
+### 288.1 — the base rate re-run, as the Accept's first clause requires
+
+Its first clause is *"re-run the base rate first"*, and the population has
+moved: **22 Polish-round slices, not 20** — Slices 281 and 283 were filed
+after this item was written. Identified by heading, which is the instrument
+that survives its own red-proof:
+
+```
+# A — heading:  ^## Slice N — Polish round   over both roadmap files,
+#               deduped by longest body (a closed slice leaves a stub in
+#               ROADMAP.md and its text in the archive)  -> 22
+# B — loop log: rows containing ` · Polish · ` that name a slice  -> 21
+```
+
+**A is sound and B is not, which is why they are both here.** `A − B =
+{216, 240}` — two rounds whose log row never names its slice. `B − A =
+{179}`, and Slice 179 is an **Objective grill**: its number appears only
+inside the *prose* of Slice 216's row. B is `SLICE_TOP`'s known weakness
+(`LOOPS.md` rule 3) arriving in a second instrument. **Red-proved by
+injection**: a `## Slice 999 — Polish round on …` heading appended to
+`ROADMAP.md` moved A `22 → 23` and the parsed section count `268 → 269`
+— injection confirmed in the parser's own output, then reverted and
+`git status` re-checked clean.
+
+**The buckets partition, and four of this item's seven independent-pass
+entries do not hold.** Classified on whether the round *itself* put a
+second agent on the surface — the affirmative construct, red-proved for
+discrimination against six non-Polish slices (179, 280, 284, 285, 286,
+287), all six negative:
+
+| bucket | n | slices |
+|---|---|---|
+| **put a second agent on the surface** | **5** | 242, 268, 273, 278, 279 |
+| **declined, with a stated reason** | **9** | 176, 182, 216, 217, 220, 227, 267, 277, 283 |
+| **recorded nothing** | **8** | 231, 239, 240, 266, 269, 270, 276, 281 |
+
+`5 + 9 + 8 = 22`, asserted distinct and non-overlapping in the script.
+The four corrections, each read from the slice's own words:
+
+- **176** ran a *cited* re-score and says so outright: *"this is a cited
+  re-score, not a blind one, so it is not counted as §3b's independent
+  second opinion — the blind re-score is still owed"*. Filed above as an
+  independent pass; it is the opposite.
+- **182**: *"§3b step 4 requires a blind re-score by a second agent; this
+  wake could not run one"*. Agent-blocked, not run.
+- **269** *audited* the re-scores that had run (its arm 11) without
+  running one; its own round is a cite audit — *"all six cites hold"*.
+- **242 — filed above as a decline — is the round the ledger itself calls
+  "the first this ledger has actually run"**, and it MOVED a score. The
+  extractor that reads it as a decline trips on a sentence about a
+  *different* dimension in the same slice (`spacing`: "the score stays 3
+  and no blind re-score is owed **for it**").
+
+### 288.2 — VERDICT: the LABEL and the TRIGGER were wrong; the CONTENT stays
+
+So the skip rate is worse than filed — **17 of 22, not 13 of 20** — and
+the diagnosis is the part that inverts.
+
+- **"171.1 measured this mechanism dead" is a conflation.** 171.1 measured
+  that no dimension can **rank surfaces**, and that re-verifies at 40
+  components (`typography`/`colour`/`spacing` 3 on all 40; `interaction`
+  {3:24, na:16}; `content` {2:1, 3:39}; `fit` {0:1, 3:39}). **Step 4 does
+  not rank.** It asks whether ONE dimension is right on ONE surface, and a
+  dimension that cannot discriminate *between* surfaces can still be wrong
+  *on* one.
+- **It found exactly that, twice.** `interaction: na` on a component that
+  ships a behaviour, moved to 3 in **242** (`dashboard`, ships
+  `initCollapsibleCards`) and **268** (`breadcrumb`, scored `na` against a
+  rubric clause forbidding it). Slice 269's arm 11 names those two
+  independently as the only score-moving re-scores the ledger has run —
+  an instrument that did not know it was corroborating this. **2 of 5 runs,
+  both real defects. Under-run, not dead.**
+- **This item's "the one round that ran it as written (279) returned
+  agreement in the weak direction" is false.** Three ran it as written;
+  two of the three moved a score.
+- **What was actually missing is the TRIGGER.** All nine declines give the
+  same reason: the round changed nothing on the scored surface, so there is
+  no score to re-take. Step 2 says a round fixes "exactly ONE scored
+  weakness"; most rounds repair a stale **cite** instead. Step 4 is written
+  for the first kind and correctly skipped by the second — it just never
+  said so.
+- **278's independent review stays Hypothesis, deliberately.** It is
+  recorded in §3b as *permitted and worth writing down*, and explicitly
+  **not mandated**: n = 1, exactly as this item filed it.
+
+**Cost objection answered rather than waved off.** This item declined to
+act partly on 274.1 — that `LOOPS.md`'s every-wake region carries the cost
+of a rule change. §3b is in the **playbooks region**, which a wake reads
+only if Polish is dispatched. `report_loop_prose.py`'s by-region block,
+**read at `1de97177` — the parent of this slice's commit, because this
+slice's own edit moves the playbooks number** — reads dispatch
+`1,525 → 6,112 (+300.8%)` against playbooks `2,855 → 8,383 (+193.6%)`.
+The edit does not touch what every wake reads. **Re-run after the commit,
+which is the correction ENVIRONMENT.md asks for when a SCRIPT produces the
+figure and `git show :<file>` is not available: dispatch is UNCHANGED at
+`6,112 (+300.8%)`, playbooks moved `8,383 → 8,846 (+193.6% → +209.8%)`.**
+That was written above as a forecast and is recorded here as a measurement —
+the property held, and it is the property, not the forecast, that a later
+wake should re-run.
+
+**286.3's Accept — met.** A recorded decision on what step 4 asks a round to
+do, landed in §3b, that agrees with what rounds actually do: the trigger
+clause matches all 9 stated declines, and it does not mandate the n = 1
+activity. **NOT VERIFIED, said plainly:** no 1440/390 light-and-dark
+screenshots were taken — a cloud wake has no Podman and no `:8081`. None were
+needed, and that is checkable rather than asserted: this slice changes **0**
+CSS files and **0** docs pages; both its files are markdown, and nothing in
+the diff renders.
+
 ## Slice 287 — 283.3 asked whether an advisory check is enough, and the honest answer is that the question has an EMPTY DENOMINATOR: 0 Polish rounds have run since 283.2, so the check has never had a live opportunity to fire — closed by repairing the gap that IS measurable, the printed repair command nothing ran (2026-09-06)
 
 **Dispatcher trace, cloud wake.** Rule 1 clear: `list_issues` on
@@ -559,7 +698,13 @@ and it is still shipped at `df63f253`. That is new work, not the taken item.
          **Hypothesis**, not Evidence — direction and magnitude fit and the
          alternatives are excluded, but settling it needs the owner's environment.
 
-3. [ ] **286.3 — `LOOPS.md` §3b step 4 is called "the load-bearing step" and is
+3. [x] **286.3 — DONE 2026-09-06 (cloud wake). The label and the TRIGGER were
+       wrong; the mechanism is NOT dead, and this item's own reading that it is
+       rests on a conflation. §3b step 4 amended.** The original text is kept
+       below verbatim, with the corrections after it — four of its seven
+       independent-pass entries do not hold.
+
+       **`LOOPS.md` §3b step 4 is called "the load-bearing step" and is
        absent from 13 of 20 Polish rounds, because its stated mechanism is one
        171.1 already measured as dead.** Across 20 Polish-round slices in
        `ROADMAP.md` + `ROADMAP-archive.md` (deduplicated by longest body, buckets
@@ -596,6 +741,14 @@ and it is still shipped at `df63f253`. That is new work, not the taken item.
          called load-bearing that most rounds correctly skip. Re-run the base rate
          first — parse `^## Slice N` across both files, dedupe by longest body, and
          assert the buckets partition.
+
+       **CLOSED BY SLICE 288**, which carries the re-run base rate, the four
+       corrections to the bucket list above, the verdict and its red-proofs.
+       In one line: the population is **22, not 20**; the buckets are
+       **5 ran / 9 declined / 8 silent**; and the diagnosis inverts — 171.1
+       measured that no dimension can RANK surfaces, which is not what step 4
+       does, and the step has moved a score twice on real defects. The label
+       and the trigger were the defect, and §3b now states the trigger.
 
 4. [ ] **286.4 — carried from 279's `fit` rubric observation, which 101.3 sent to
        a grill and which no grill has yet taken.** `/concepts/design-language`'s
