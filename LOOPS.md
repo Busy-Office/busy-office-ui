@@ -933,7 +933,10 @@ remaining, per `.roundtable/polish-state.md`.
 5. **Did the score move?**
    - **Yes** → commit, `round++`, reset that surface's dry counter.
    - **No** → `dry++`. **Two dry rounds in a row mark the surface DRY and
-     forfeit its remaining budget.**
+     forfeit its remaining budget.** This is what reconciles the budgets
+     with this file's standing "don't manufacture busywork" rule: a
+     surface that cannot produce a measurable gain twice running is
+     finished, whatever its budget says.
 
    Either way, close the round with
    `python3 scripts/loops/polish_requeue.py --stamp <surface>` — that records
@@ -953,10 +956,7 @@ remaining, per `.roundtable/polish-state.md`.
    advisory report's sufficiency could not be answered at all (0 Polish rounds
    had run since 283.2, so it had never had a live opportunity to fire), and
    closed the gap it could measure instead: step 0's `--apply` now repairs the
-   mid-round kind. This is what reconciles the budgets
-     with this file's standing "don't manufacture busywork" rule: a
-     surface that cannot produce a measurable gain twice running is
-     finished, whatever its budget says.
+   mid-round kind.
 
 **What "scored" means — existing instruments only, no new ones:**
 - **Components** → the queue is `check:wrong-choice`'s `TODO` set, and **only**

@@ -880,7 +880,8 @@ paragraph, keeping the earlier bullet's 5-space indent mid-paragraph. It is a
 prose defect in a file the loop reads every wake, introduced by the commit
 that added the paragraph it now trails.
 
-4. [ ] **287.5 — re-attach the orphaned sentence in `LOOPS.md` §3b step 5.**
+4. [x] **287.5 — DONE 2026-09-06 (cloud wake). Re-attach the orphaned sentence
+       in `LOOPS.md` §3b step 5.**
        Deliberately not fixed in this slice: it is a markdown move whose
        correct target is a judgement about what 283.2 meant, and this wake's
        diff is already in that paragraph — repairing prose you are editing
@@ -898,6 +899,75 @@ that added the paragraph it now trails.
          diff**, which reads as an answer. The sentence itself is older than
          both (`3ddeb683`, the original Polish playbook), so what is in
          question is only whether `9c1bacbe` meant to leave it trailing.
+
+       **RESOLVED VIA BRANCH 1 (move it), because branch 2's premise is false:
+       no commit ever decided to leave the sentence trailing. The bullet above
+       is ANNOTATED, not rewritten (285.2's rule) — `9c1bacbe` is the third
+       sha this one item has attributed the orphaning to, and it is wrong the
+       same way `fc79ea85` was: both merely APPENDED text to a paragraph the
+       sentence had already been stranded on, so an `-S` search over that
+       paragraph's opening words finds the commit that wrote the paragraph,
+       never the commit that did the stranding.**
+
+       The orphaning commit is **`f57570f4`, 2026-08-25** — *"loops: execute
+       the Polish re-entry rule instead of hoping someone reads it"* — eleven
+       days before either sha named above. Found by replaying every revision of
+       `LOOPS.md` and asking, per revision, whether the sentence's own line
+       still carries the dry bullet, then reporting the transitions:
+
+       ```
+       python3 - <<'PY'
+       import subprocess
+       revs = subprocess.run(['git','log','--format=%H','--reverse','--','LOOPS.md'],
+                             capture_output=True,text=True).stdout.split()
+       N='This is what reconciles the budgets'; prev=None
+       for r in revs:
+           txt = subprocess.run(['git','show',f'{r}:LOOPS.md'],capture_output=True,text=True).stdout
+           if N not in txt: continue
+           line = next(l for l in txt.split('\n') if N in l)
+           att = 'forfeit its remaining budget' in line
+           if prev is not None and att != prev:
+               print('ORPHANED' if not att else 'RE-ATTACHED',
+                     subprocess.run(['git','log','-1','--format=%h %ad %s','--date=short',r],
+                                    capture_output=True,text=True).stdout.strip())
+           prev = att
+       PY
+       ```
+       → one transition only: `ORPHANED f57570f4 2026-08-25`, never re-attached.
+       **Asking the transition rather than the sha is what made this findable** —
+       every previous attempt started from a commit and asked what it touched,
+       which is how two wrong shas were published in two wakes.
+
+       **`f57570f4`'s own diff shows a paste artifact, not a judgement**, which
+       is what refutes the no-change branch outright:
+
+       ```
+       git show f57570f4 -- LOOPS.md | grep -E '^[-+].*(reconciles|forfeit|Either way)'
+       -     forfeit its remaining budget.** This is what reconciles the budgets
+       +     forfeit its remaining budget.**
+       +   Either way, close the round with
+       +   re-queues itself forever on the change the round just made. This is what reconciles the budgets
+       ```
+
+       It cut the sentence off the bullet's line and re-pasted the tail onto the
+       end of the paragraph it was inserting. The sentence's subject — a surface
+       that cannot produce a measurable gain twice running is finished — is the
+       DRY rule, not `--stamp`. At `3ddeb683` (the original Polish playbook) it
+       sat on the dry bullet, which is where it is now back.
+
+       **Verified as a PURE MOVE, structurally rather than by reading the diff**
+       (CLAUDE.md's bulk-edit and removal rules — the prose explaining a move
+       legitimately names the moved words, so a substring assertion could not
+       settle it): the sentence occurs exactly **once** before and after;
+       `attached_to_dry_bullet` goes `False → True`; and the whole file's word
+       multiset is **identical**, 15,201 words either side, so nothing was
+       reworded, added or lost. The `--stamp` paragraph now ends at
+       *"mid-round kind."*
+
+       **This does NOT decide `273.2`**, the open owner call on whether a round
+       whose score does not move should increment `dry`. It restores text that
+       has been in this file since `3ddeb683` to the bullet it was written for;
+       what that bullet MANDATES is unchanged, and 273.2 is still the owner's.
 
 ## Slice 286 — the defect Slice 285 listed under "what reproduced": 281's decay is dated to the hour and its CAUSE is false — `69a53364` is a pure addition that never touched the table, the table is still reached by the rule, and the claim was shipped in the `data-table` spacing cite (2026-09-06)
 
