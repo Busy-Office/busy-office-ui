@@ -41,6 +41,38 @@ const components = Object.entries(scores.components);
    2026-08-21. A number a gate reports is load-bearing; that rule applies to
    the gate's own output first. */
 const g = gate('dsa-scores check', 'assertion(s)');
+
+/* 0. Every dimension declares WHICH ARTIFACT it is scored on (roadmap 292.3).
+      Before that item the rubric was silent for three of the six, and a blind
+      re-score scored one surface 2 or 3 depending on which way it guessed —
+      `typography: 2` for raw font-size literals in a docs .astro, `3` for the
+      same component's stylesheet. The scope is now stated in rubric.scope, and
+      this asserts the statement stays COMPLETE and stays in step with
+      rubric.dimensions: a dimension added later with no scope, or a scope key
+      left behind by a renamed dimension, both fail here rather than being
+      resolved by the next scorer's guess.
+
+      Membership and set equality over a JSON file — no recognising, so this
+      keeps the gate @exact. What it deliberately does NOT check is whether a
+      given CITE respects its dimension's scope: that needs reading what a
+      sentence is about, and 292.3's own count found the classifier for it is a
+      keyword pass that misreads 5 of 240 in both directions. The count is in
+      rubric.scope's $comment, where a human can re-run it. */
+const SCOPES = new Set(['css', 'page']);
+const scopeKeys = Object.keys(scores.rubric.scope ?? {}).filter((k) => !k.startsWith('$'));
+const noScope = DIMENSIONS.filter((d) => !SCOPES.has(scores.rubric.scope?.[d]));
+g.check(
+  `rubric: every dimension declares a scope of ${[...SCOPES].join('/')}`,
+  noScope.length === 0,
+  `missing or invalid rubric.scope for: ${noScope.map((d) => `${d}=${JSON.stringify(scores.rubric.scope?.[d])}`).join(', ')}`,
+);
+const orphanScope = scopeKeys.filter((k) => !DIMENSIONS.includes(k));
+g.check(
+  'rubric: no scope entry names a dimension that does not exist',
+  orphanScope.length === 0,
+  `rubric.scope has ${orphanScope.join(', ')}, absent from rubric.dimensions`,
+);
+
 assertScanned(
   components.length,
   'scored components in dsa-scores.json',

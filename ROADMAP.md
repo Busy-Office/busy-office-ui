@@ -487,24 +487,79 @@ scorer itself flags as out of scope, would be the ledger recording an opinion
 as a measurement. `scored` stays **2026-08-23**. The page-scoped reading is
 filed as 292.3 instead, where it can be decided rather than assumed.
 
-3. [ ] **292.3 — is the DSA `typography` dimension page-scoped or CSS-scoped?**
-       Raised by the blind re-score above, which scored the same surface 2 or 3
-       depending on the answer and could not resolve it from the rubric text.
-       Three of the six dimensions (`content`, `fit`, `interaction`) are
-       explicitly about the docs page; `typography`, `colour` and `spacing`
-       read as being about the shipped CSS, and every cite for them names a
-       CSS file. If they are page-scoped, `icon.astro`'s four raw `1.5rem`
-       literals are a real finding at a base rate of 1 of 41 pages; if they are
-       CSS-scoped, they are outside the rubric and belong to whatever polices
-       docs-page style.
+3. [x] **292.3 — is the DSA `typography` dimension page-scoped or CSS-scoped?**
+       **ANSWERED 2026-09-06 (cloud wake, Continue/build — the lane this item
+       named): CSS-scoped, and it already was in practice. What was missing
+       was the sentence saying so.** The item's own stated evidence is
+       refuted and its conclusion survives, which is why both are recorded.
+
+       **The premise is FALSE.** 292.3 says *"every cite for them names a CSS
+       file"*. Counted rather than re-read: `\.css\b` appears in **2 of 40**
+       typography cites, **3 of 40** colour, **3 of 40** spacing. Naming a
+       filename is not the signal and never was.
+
+       **The conclusion holds, on a different instrument.** All 240 cites (40
+       components x 6 dimensions) were classified by which ARTIFACT the
+       sentence names — a stylesheet (a `.css` file, a `--bo-` custom
+       property, an at-rule, a `.bo-` selector, a length literal, a
+       declaration name) or a docs page (the opener, the page, the docs, a
+       caption, `.astro`, the wrong-choice clause). typography/colour/spacing
+       come back **120 of 120 css-side, 0 docs-page-side**. Hand-read against
+       the cite text, the five the keyword pass mis-sorted all resolve the
+       same way: `typography/scan`, `colour/offcanvas` and `colour/dialog` say
+       *"the page"* meaning the **consumer's** page, not the docs page, and
+       `spacing/richtext` (*"zero raw dimension literals"*) and
+       `spacing/dropdown` are css-side in phrasing too terse to match. So the
+       trio is 40/40/40 by hand and 38-39 by lexicon, in the same direction.
+
+       **Red-proved by injection, both directions, each asserted to land**:
+       replacing `badge`'s typography cite with a page-only sentence moves
+       typography `css 39 -> 38, page 0 -> 1`; replacing `alert`'s content
+       cite with a css-only sentence moves content `css 3 -> 4, page 31 -> 30`.
+       The classifier still discriminates on the real tree, so 120-of-120 is a
+       measurement and not a detector that has stopped being able to fail.
+
+       **Why the question could be asked at all, measured exactly.** The three
+       page-scoped dimensions each already name their subject in `definitions`
+       — `interaction` says *"the page"*, `content` says *"opener"*, `fit`
+       says *"the page"* and *"the docs"*. Of the three CSS-scoped ones,
+       `colour` names **no subject at all**, and `typography` and `spacing`
+       name one only obliquely (*"in place"*, *"this file"*). That asymmetry —
+       not a genuine ambiguity in the practice — is what left the blind
+       re-score with two defensible answers.
+
+       **Landed:** `rubric.scope` in `dsa-scores.json`, one `css`/`page` value
+       per dimension with the count above as its `$comment`, plus two
+       assertions in `check-dsa-scores.mjs` (every dimension declares a valid
+       scope; no scope entry names a dimension that does not exist). Both
+       red-proved by injection asserted to land, each failing **exactly one**
+       of 362 assertions and exiting 1, with the tree restoring to green —
+       not the too-broad red that certifies nothing.
+
+       **Refused: repeating the scope into the six `definitions`.** Two
+       records of one fact is how they drift, which is the defect assertion 4c
+       in that same gate exists to prevent between a score and `check:wrong-
+       choice`. Also refused: a gate asserting each CITE respects its
+       dimension's scope — this item's own count is what shows the classifier
+       for it is a keyword pass that mis-sorts 5 of 240 in both directions,
+       so it would be the semantic-property gate CLAUDE.md 94.11 refuses.
+
+       **Consequence for the reading that raised this**, stated because it is
+       the whole point of asking: `icon.astro`'s raw font-size literals are
+       **outside** `typography`, so the published `3` stands and the blind
+       re-score's `2` was out of scope — as the scorer itself flagged. The
+       literals are real and now belong to nothing; filed as 292.8. Note the
+       re-score's *"four times"* is right for `1.5rem` specifically and the
+       page carries **six** raw font-size declarations, three of which
+       (`1.5rem`/`2rem`/`3rem`, lines 202-204) are the size-tracking demo
+       itself and are intrinsic in the rubric's own language.
        - **Accept:** `dsa-scores.json`'s `rubric` states the scope of each
          dimension explicitly, and the statement agrees with what the 40
          existing cites actually read (asserted by counting them, not by
          reading a few); a scope that turns out to be already unambiguous is a
-         satisfying outcome and closes this with the count as its evidence.
-       - **Note:** this is a rubric DEFINITION change, which `LOOPS.md`
-         101.3's stop rule forbids Polish from making. It is filed for a
-         Continue round or the owner, deliberately not taken here.
+         satisfying outcome and closes this with the count as its evidence
+         **(done — all six declared; 120/120 counted; the already-unambiguous
+         outcome is the one that occurred)**.
 
 4. [ ] **292.4 — `/components/icon` deprecates `--settings` and then teaches it
        as canonical, twice, in the two places a reader copies.** Verified from
@@ -570,6 +625,47 @@ filed as 292.3 instead, where it can be decided rather than assumed.
          age, or states them with the revision they were taken at; deciding it
          needs no new figure is a satisfying outcome, recorded with the reading
          above as its evidence.
+
+7. [ ] **292.7 — four `content` cites score a page property while citing the
+       CSS.** Found by 292.3's classification, not by reading. `content` is
+       page-scoped by definition (*"the opener carries the wrong-choice
+       clause"*) and assertion 4c ties the score to `check:wrong-choice`'s
+       verdict on the page, so a `content: 3` is a claim about the opener.
+       **4 of 40 cites name something else entirely**: `breadcrumb` (the
+       separator's `content("/")` accessible name), `dialog` (the
+       forced-colors rule), `tabs` (the mask comment) and `amount` (sign and
+       parentheses in text). The scores are not wrong — 4c passes, so all four
+       pages do carry the clause — the CITES are, and a cite is the only thing
+       a reader can check a score against (assertion 3's stated reason). The
+       other two non-page cites, `form` and `prose`, are correct as they
+       stand: both are `check:wrong-choice` EXEMPT and their cites say so.
+       - **Accept:** every `content` cite names the page property the score is
+         taken on, or states the exemption; asserted by re-running 292.3's
+         classifier over the `content` dimension and reconciling its buckets
+         against the EXEMPT set, with the finding that a cite is already
+         adequate recorded as a satisfying outcome rather than rewritten.
+       - **Note:** rewriting a published cite is a scoring judgement, so this
+         is Continue's or the owner's, not Polish's — same lane as 292.3.
+
+8. [ ] **292.8 — nothing polices style in a docs PAGE, and 292.3 is what makes
+       that visible.** With `typography` established as CSS-scoped, a raw
+       `font-size` in an `.astro` page is outside the rubric, outside
+       `lint:css` (which lints `packages/core/src/css`), and outside every
+       build gate. Measured: `grep -lE 'font-size:\s*[0-9]'` over
+       `apps/docs/src/pages/components/*.astro` returns **1 of 41** files —
+       `icon.astro`, with six declarations. **The base rate is why this is
+       filed rather than built**: at 1 of 41 the property is nearly uniform
+       already, which is the shape CLAUDE.md 94.11 says produces ceremony, and
+       three of the six literals are the icon page's size-tracking demo, where
+       an absolute size is the DEMONSTRATION. So the honest options are to fix
+       the three display-sizing literals and leave the demo, or to decide docs
+       pages are deliberately unpoliced and say so once, somewhere a reader of
+       the recipe will find it.
+       - **Accept:** either the count of component pages carrying a raw
+         `font-size` outside a deliberate size demo reaches 0 and a one-line
+         reason records why no gate was added, or the recipe in `CLAUDE.md`
+         states that docs-page style is unpoliced and why; deciding no change
+         is needed is satisfying if it carries the re-run count.
 
 **No gate is proposed for 292.2's class, and this is the sixth consecutive
 refusal in this ledger** (216.2, 217.2, 220.2, 227.2, 231). `LOOPS.md` 101.3
