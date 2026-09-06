@@ -449,6 +449,20 @@ broadly wrong. When declining an item, say which of the two lists it needs.
   and note the sibling trap: "the last line starting with `import`" may be
   inside a template literal that ships to users (`index.astro`'s
   `pilotSnippet`), which is the third time an import has landed in one here.
+- **`import.meta.url` in Astro frontmatter is the COMPILED module, not the
+  `.astro` source — and the repo's own `../../../../../` idiom hides it.** At
+  build time the frontmatter executes as
+  `apps/docs/dist/pages/<…>/<page>.astro.mjs`, so a page reading *itself* reads
+  generated JS. The existing relative-path reads (`tokens.astro`,
+  `primitives.astro`, `ai-assistants.astro`) all resolve correctly from either
+  location only because `src/` and `dist/` sit at the **same depth** under
+  `apps/docs/` — a coincidence, not a guarantee, and one that makes the wrong
+  reading look proven. To read a source file, name its repo-relative path
+  through that same idiom rather than passing `import.meta.url` bare; a rename
+  then fails with ENOENT, which is the safe direction. Measured 2026-09-06
+  (roadmap 292.4): a self-scan parsed `15 hand-written + 4 interpolated` against
+  `24` raw occurrences and failed loudly — **the count reconciliation is the only
+  reason it was not shipped silently reading the wrong artifact**.
 - **`git stash` is not a way to A/B one file in a dirty tree.** It reverts the
   data along with the script, so two parsers get compared against two different
   logs. Extract the old version to a probe file *in the same directory*, run

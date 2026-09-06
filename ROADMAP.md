@@ -561,7 +561,7 @@ filed as 292.3 instead, where it can be decided rather than assumed.
          **(done — all six declared; 120/120 counted; the already-unambiguous
          outcome is the one that occurred)**.
 
-4. [ ] **292.4 — `/components/icon` deprecates `--settings` and then teaches it
+4. [x] **292.4 — `/components/icon` deprecates `--settings` and then teaches it
        as canonical, twice, in the two places a reader copies.** Verified from
        the page source, not the re-score's word: `--settings` is one of the
        four derived deprecated glyphs, and it is also in the `markup` string
@@ -579,7 +579,74 @@ filed as 292.3 instead, where it can be decided rather than assumed.
          and in the `markup` string or a live demo on the same page, and
          whichever resolution is chosen, the guard that would have caught it is
          extended to the markup string and red-proved by putting a deprecated
-         glyph back into it.
+         glyph back into it **(done — both clauses; the resolution taken is the
+         second one, `--settings` → `--close` at both sites)**.
+
+       **THE PREMISE HOLDS AND THE DESIGN CALL IS RESOLVED AGAINST THE
+       RESOLUTION THE ITEM LEANED TOWARD (2026-09-06, cloud wake).** Premise
+       re-checked first, per CLAUDE.md: `.bo-icon--settings` is one of the four
+       `/* DEPRECATED` blocks in `icon.css` (line 127), and the page carried
+       **exactly two** hand-written literals of it —
+       `grep -noE 'bo-icon--[a-z0-9-]+' apps/docs/src/pages/components/icon.astro`
+       → line 119 (the `markup` block's icon-only button) and line 220 (the
+       "In context" demo). The other 14 literals name non-deprecated glyphs;
+       the two showcases build their classes by interpolation and so appear in
+       no literal count.
+
+       **Un-deprecating was refused, and its stated ground is refuted.** The
+       item offered it on the strength of the demo caption's argument — *"a cog
+       for settings … conventions a reader already holds"*. There is no cog:
+       the shipped mask for `--settings` is `M4 7h16M4 12h16M4 17h16` plus
+       three filled `r='2'` circles at (9,7), (15,12), (7,17) — three rules
+       with a dot on each, the **sliders** mark. The caption describes artwork
+       this framework does not ship, and it was wrong under either resolution.
+       Independently of that, un-deprecating changes what a published package
+       recommends and reverses a dated, cited decision (53.2) — the shape
+       249.13 was sent to the owner for — whereas moving a docs teaching site
+       is maintenance and is what the deprecation's own text instructs.
+
+       Landed: both sites now use `--close`, which the opener already names as
+       a convention (*"close, search, settings"*) and which carries no
+       `DEPRECATED` block; the caption no longer claims a cog. Verified on the
+       BUILT page, not the source: `aria-label="Settings"` → **0**,
+       `aria-label="Close"` → **2** (the demo button and the shell's own
+       mobile-nav close, located individually rather than counted), and the
+       **3** surviving `bo-icon--settings` are all generated — the Deprecated
+       showcase, the `ClassRef` row and the `ApiTable` variant list — which is
+       the state the page is supposed to be in.
+
+       **The guard now asserts the property where the reader gets the class**,
+       scanning the page's own source: every hand-typed `bo-icon--*` in the
+       `markup` string or the template region must not be in the derived
+       deprecated set. The two generated showcases are exempt *for free* rather
+       than by an exception, since an interpolated class cannot match a literal
+       scan. Frontmatter is excluded deliberately — the editorial-eight comment
+       names a glyph in prose, which is CLAUDE.md's assertion-trips-on-its-own-
+       explanation trap made concrete.
+
+       **Red-proved twice, and the two proofs DISCRIMINATE.** Injecting
+       `--settings` back into the `markup` block exits 1 with *"settings (in
+       the markup block)"*; injecting it into the live demo instead exits 1
+       with *"settings (in a live demo)"* — one assertion each, not a broad red,
+       and the tree restores green. Each injection was asserted to land (unique
+       target, replacement count 1, literal re-counted after the write) before
+       the build was believed.
+
+       **The reconciliation earned its keep on its own first run, which is the
+       finding worth carrying.** The guard counts parsed + interpolated against
+       a raw count of the bare prefix and refuses to pass when they disagree.
+       That immediately failed with `15 + 4 ≠ 24` — because `import.meta.url`
+       in Astro frontmatter resolves to the **compiled** module in
+       `apps/docs/dist/pages/…/icon.astro.mjs`, so the first version scanned
+       the wrong artifact. The repo's existing `../../../../../` idiom hides
+       this: it works from either location only because `src/` and `dist/` sit
+       at equal depth. Without the count assertion the guard would have shipped
+       reading compiled JS and reported a clean page. Carried into
+       `ENVIRONMENT.md` as a durable trap.
+
+       **Not fixed here, filed as 292.9:** the same defect exists on four other
+       docs pages, so the property landed is page-local while the property that
+       matters is tree-wide.
 
 5. [ ] **292.5 — the canonical `markup` block teaches a different mechanism
        than the page it sits on, and drops a slot class its own demo uses.**
@@ -666,6 +733,44 @@ filed as 292.3 instead, where it can be decided rather than assumed.
          reason records why no gate was added, or the recipe in `CLAUDE.md`
          states that docs-page style is unpoliced and why; deciding no change
          is needed is satisfying if it carries the re-run count.
+
+9. [ ] **292.9 — 292.4's property is tree-wide and the guard it landed is
+       page-local: four other docs pages hand a reader a deprecated glyph.**
+       Measured while closing 292.4, not assumed — `for g in settings barcode
+       building user; do grep -rln "bo-icon--$g" apps/docs/src --include='*.astro';
+       done`, then each hit classified by whether its line sits before or after
+       the frontmatter fence:
+
+       - `components/offcanvas.astro:66` — `--settings`, live demo sidebar link
+       - `components/sidebar-nav.astro:82` — `--settings`, live demo sidebar link
+       - `base/motion.astro:302` — `--settings`, live demo (the spinning "Saving…")
+       - `base/motion.astro:62` — `--settings`, **inside a copyable markup
+         string** — the exact shape 292.4 just fixed, one page over
+       - `patterns/app-frame.astro:114` — `--building`, live demo sidebar link
+
+       `--barcode` and `--user` reach **0** source pages, so this is five sites
+       across four files, not a general rot. The icon page's own comment already
+       records that these renders exist; what it does not say is that one of them
+       is a **copy-paste block**, which is the difference between a screen that
+       happens to use a deprecated class and a page that teaches it.
+
+       **Why a tree-wide gate cannot simply be added today**: it would be red on
+       all five, so the sites have to be resolved first — and the deprecation's
+       own text ("existing renders keep working") means a bare render is not by
+       itself a defect. The honest question is whether a docs page differs from
+       a consumer screen here, and the argument that it does is that a reader
+       copies from it.
+       - **Accept:** every hand-written `bo-icon--*` in `apps/docs/src/pages`
+         either names a glyph with no `DEPRECATED` block or carries a one-line
+         reason it must stay, asserted by a check that reports its own count and
+         is red-proved by putting a deprecated glyph back into a page it passed;
+         **finding that some of the five should legitimately keep their glyph is
+         a satisfying outcome** and closes this with the reasons recorded, not a
+         gate forced over them.
+       - **Lane**: the code and the counts are cloud-takeable. The only judgement
+         needing eyes is whether a replacement glyph reads right, and the mask box
+         is `1em` either way, so no geometry moves — say which glyph you chose and
+         why rather than claiming a visual check that did not happen.
 
 **No gate is proposed for 292.2's class, and this is the sixth consecutive
 refusal in this ledger** (216.2, 217.2, 220.2, 227.2, 231). `LOOPS.md` 101.3

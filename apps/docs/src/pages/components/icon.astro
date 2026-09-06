@@ -115,8 +115,8 @@ const markup = `<!-- Decorative (label carries the meaning): -->
 </a>
 
 <!-- Icon-only control labels ITSELF, never the icon: -->
-<button class="bo-btn bo-btn--ghost bo-btn--icon" aria-label="Settings">
-  <span class="bo-icon bo-icon--settings" aria-hidden="true"></span>
+<button class="bo-btn bo-btn--ghost bo-btn--icon" aria-label="Close">
+  <span class="bo-icon bo-icon--close" aria-hidden="true"></span>
 </button>
 
 <!-- Add your own glyph in one line (any single-color SVG works): -->
@@ -126,6 +126,73 @@ const markup = `<!-- Decorative (label carries the meaning): -->
 const customIcon = `<span class="bo-icon" aria-hidden="true"
   style="--bo-icon-src: url('data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;%23000&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot;><path d=&quot;M12 5v14M5 12h14&quot;/></svg>')"></span>
 <span>Add line</span>`;
+
+/* `bothLists` above compares two LISTS — the editorial eight against the derived
+   deprecated four — and roadmap 292.4 is what that structurally cannot see:
+   `--settings` was deprecated in the css and simultaneously taught as canonical
+   in the two places a reader copies from, the `markup` block above and the "In
+   context" demo. Both are hand-written literals belonging to neither list, so
+   the guard was blind to the exact contradiction it exists to catch.
+
+   So assert the property where the reader actually gets the class: every
+   `bo-icon--*` a human typed on this page — in the copyable block or in a live
+   demo — must not be one this page's own Deprecated section tells them to stop
+   using. The two GENERATED showcases are exempt for free rather than by an
+   exception: they build the class through an interpolation, which a literal scan
+   cannot match, and the deprecated showcase must keep rendering the four to show
+   what they look like.
+
+   Scanned from this file's own source, TEMPLATE REGION ONLY. Frontmatter is
+   deliberately excluded because this comment and the code under it name glyph
+   classes, and an assertion that trips on its own explanation is a detector that
+   cannot pass (CLAUDE.md). That is not hypothetical here — the editorial-eight
+   comment above names a glyph in prose, and scanning the whole file would flag it.
+
+   RECONCILED, because a regex that silently stopped matching would report a clean
+   page rather than fail: each source's parsed count plus its interpolated
+   occurrences must equal a raw count of the bare prefix, and every parsed name
+   must be a variant `api.json` declares. Count the raw thing; do not trust the
+   parse.
+
+   NAMED PATH, not `import.meta.url` — measured, and the reconciliation above is
+   what caught it on the first run. At build time this frontmatter executes as
+   `apps/docs/dist/pages/components/icon.astro.mjs`, so `import.meta.url` reads
+   the COMPILED module: the first attempt parsed 15 hand-written + 4 interpolated
+   against 24 bare occurrences and failed loudly rather than scanning the wrong
+   artifact in silence. The repo's existing `../../../../../` idiom works from
+   either location only because `src/` and `dist/` sit at equal depth, which is
+   a coincidence worth naming. A rename of this file breaks the read with ENOENT,
+   which is the safe direction. */
+const selfSrc = readFileSync(
+  new URL('../../../../../apps/docs/src/pages/components/icon.astro', import.meta.url),
+  'utf8',
+);
+const template = selfSrc.slice(selfSrc.indexOf('\n---\n', 3) + 5);
+const taught = [];
+for (const [label, text] of [['the markup block', markup], ['a live demo', template]]) {
+  const named = [...text.matchAll(/bo-icon--([a-z0-9-]+)/g)].map((m) => m[1]);
+  const interpolated = (text.match(/bo-icon--\$\{/g) ?? []).length;
+  const bare = (text.match(/bo-icon--/g) ?? []).length;
+  if (named.length + interpolated !== bare)
+    throw new Error(
+      `icon: parsed ${named.length} hand-written glyph(s) + ${interpolated} interpolated from ${label}, ` +
+        `but it carries ${bare} occurrence(s) of the class prefix. This guard publishes "no deprecated ` +
+        'glyph is taught here", so a partial parse must fail rather than under-report.',
+    );
+  const unshipped = named.filter((g) => !api.components.icon.variants.includes(`bo-icon--${g}`));
+  if (unshipped.length)
+    throw new Error(`icon: ${label} names glyph(s) api.json does not declare: ${unshipped.join(', ')}`);
+  taught.push(...named.map((g) => [label, g]));
+}
+const taughtDeprecated = taught.filter(([, g]) => deprecatedGlyphs.includes(g));
+if (taughtDeprecated.length)
+  throw new Error(
+    'icon: deprecated glyph(s) taught as canonical on this page: ' +
+      `${taughtDeprecated.map(([label, g]) => `${g} (in ${label})`).join(', ')}. ` +
+      'The Deprecated section tells readers to stop using these, so the copyable block and the live ' +
+      'demos must not hand them the same class. Point --bo-icon-src at your own SVG instead, or use a ' +
+      'glyph this page still recommends.',
+  );
 ---
 <Gallery title="Icon" description="CSS-rendered icons: an inline SVG mask painted by currentColor, sized in em so they track the surrounding font size and density. No JS, no font files.">
   <p class="demo-note">
@@ -217,17 +284,18 @@ const customIcon = `<span class="bo-icon" aria-hidden="true"
       </ul>
     </nav>
     <p style="margin-block-start: var(--bo-space-3)">
-      <button class="bo-btn bo-btn--ghost bo-btn--icon" aria-label="Settings"><span class="bo-icon bo-icon--settings" aria-hidden="true"></span></button>
+      <button class="bo-btn bo-btn--ghost bo-btn--icon" aria-label="Close"><span class="bo-icon bo-icon--close" aria-hidden="true"></span></button>
       <button class="bo-btn bo-btn--ghost bo-btn--icon" aria-label="Reports"><span class="bo-icon bo-icon--chart" aria-hidden="true"></span></button>
     </p>
     <p class="bo-u-text-muted">Composes with the existing
     <code>.bo-sidebar-nav__icon</code> slot and <code>.bo-btn--icon</code> —
     decorative icons carry <code>aria-hidden</code>; an icon-only button labels
     <em>itself</em> with <code>aria-label</code>, never the icon.
-    Both buttons here pass the opener's test deliberately: a cog for
-    settings and a bar chart for reports are conventions a reader already
+    Both buttons here pass the opener's test deliberately: a cross for
+    close and a bar chart for reports are conventions a reader already
     holds. The same treatment on a domain action — "post goods issue" —
-    would not be, and that button gets its words.</p>
+    would not be, and that button gets its words. Neither glyph here is one
+    of the deprecated ones above — copy what this page still recommends.</p>
   </section>
 
   <section class="demo">
