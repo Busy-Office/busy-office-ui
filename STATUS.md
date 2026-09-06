@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-06 13:52 UTC
+Generated at: 2026-09-06 14:31 UTC
 
 ## Open items by slice
 
@@ -30,13 +30,15 @@ Generated at: 2026-09-06 13:52 UTC
   - 296.1 — Run the first gauntlet round, Class A, on the reference this repo actually has.
   - 296.2 — An interaction-latency instrument, or a recorded refusal.
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
+- **Slice 297** (1 open)
+  - 297.1 — The first real intake run is the test of this, not the config.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1514 iterations logged)
+dispatch status — counter-triggered rules (1516 iterations logged)
   Standardize   3 / 4 Continue rounds since 2026-09-06 12:51   ok
   Objective     3 / 3 slices          since 2026-09-06 07:53   OVERDUE  [292, 293, 295]
   -> a counter is at or past its threshold; the dispatcher should pick it
@@ -61,8 +63,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-06 21:31 · Continue · build · Slice 295 / 249.15 — the social card, generated from packages/core/dist/css/index.css rather than drawn; og:image on 127/127 pages, twitter:card -> summary_large_image, two new check-metadata arms both red-proved with the injection grep-confirmed first (gate 387 -> 1150 assertions); verified against a real DOCS_BASE build · landed · c6643153
-- 2026-09-06 21:31 · Meta · refusal · keeping arm 5's 'og:image absent OR twitter:card summary' disjunction — once the image ships its left side is permanently true, so it would pass on a tree that had left the card at summary · refused · c6643153
 - 2026-09-06 21:31 · Meta · refusal · wiring gen-og-card.mjs into docs:build — it would put Chrome on the critical path of every build to emit a static asset that belongs in public/ · refused · c6643153
 - 2026-09-06 21:41 · Continue · release · v0.8.0 released — @busy-office/ui 0.8.0 and @busy-office/create-ui 0.1.3 live on npm with SLSA provenance, verified via npm view rather than from the green CI run; 220 commits since 0.7.0 (2026-08-30). introduced.json refreshed against the registry per its own note · released · 2a4bb245
 - 2026-09-06 21:47 · Roadmap · plan · Slice 296 — owner direction: installed a Gauntlet loop (LOOPS.md §7, builder -> blind critic, 3-round budget) with NO counter of its own to avoid the starvation bug this file records five times; adapted BAR.md/CRITIC.md to references that exist in this tree; explored 21st.dev and read it as a reference not a template (React/Tailwind/shadcn is the refused stack; the AI-prompt distribution shape is already half-built as 294's registry.json) · triaged · 691102d3
@@ -71,6 +71,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-06 21:47 · Meta · refusal · importing the contribution's two existing gauntlet rounds as precedent — both were self-graded by the builder, which this loop's step 2 refuses · refused · 691102d3
 - 2026-09-06 13:50 · Continue · build · 292.6 — icon.css's PRICED block dates its four size endpoints (d48f361d/43ea922a) and points at the stat:size stamp · landed · c3637cb9
 - 2026-09-06 13:50 · Meta · refusal · filing an item for the 162-byte gzip level spread — GZIP_TOLERANCE_KB=0.3 (307 bytes) already absorbs it · refused · c3637cb9
+- 2026-09-06 22:31 · Roadmap · plan · Slice 297 — owner call: feedback intake stays on GitHub, not Linear (a stranger can file an issue and cannot file into a private workspace; a tracker beside ROADMAP.md is a second truth the storage doctrine refuses). Enabled Discussions, wired both intakes into LOOPS.md Step 1 with a live-tested GraphQL command, and routed questions at filing time via 3 new contact_links, all 4 URLs verified 200 · triaged · b3abc5fd
+- 2026-09-06 22:31 · Meta · refusal · Linear as a feedback or backlog tracker — external adopters cannot reach it, and it duplicates ROADMAP.md, which CLAUDE.md's storage doctrine makes the source of truth · refused · b3abc5fd
 
 ## Sunset test
 

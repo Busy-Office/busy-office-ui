@@ -315,6 +315,70 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 297 — Owner call: feedback intake stays on GitHub, and Discussions are enabled because issues were the only door (2026-09-06)
+
+**Input**: the owner asked whether feedback should come through GitHub or
+Linear, and answered it — **GitHub, not Linear**.
+
+**The decision rests on who the feedback comes from.** `@busy-office/ui@0.8.0`
+went to npm hours ago; the feedback worth having is from **strangers who found
+the package**. A stranger can file a GitHub issue. A stranger cannot file into
+a private Linear workspace, and asking one to join it is a wall in front of the
+exact signal the intake exists to collect.
+
+**Linear would also be a second truth, which this repo's storage doctrine
+already refuses.** `CLAUDE.md`: narrative and contract live in markdown, in
+git, reviewed and diffed — `ROADMAP.md` *is* the backlog. A tracker beside it
+is the `registry.ts` shape refused in Slice 294, one decision stored twice and
+drifting. **Refused, recorded so it is not re-proposed.**
+
+**What was already built, and is not being rebuilt**: issues are public,
+three templates enforce version/browser/theme/density plus a minimal repro on
+bugs and a real ERP scenario on features, and `LOOPS.md` Step 1 already made
+`gh issue list` a dispatcher step read every wake.
+
+**The gap was that issues were the ONLY door.** Measured before acting:
+`hasDiscussionsEnabled: false`, `stargazerCount: 0`. An issue template
+demanding five fields and a repro is correct for a defect and is a wall in
+front of *"how do I do X?"* and *"would you consider Y?"* — questions that
+bounce off it are not filed anywhere, they are lost, and they are the earliest
+signal an adopter produces.
+
+**Done in this slice, not proposed:**
+
+- **Discussions enabled** (`gh api -X PATCH … has_discussions=true`, verified
+  `hasDiscussionsEnabled: true`), with the six default categories.
+- **`LOOPS.md` Step 1 now reads BOTH intakes every wake**, with the working
+  GraphQL command written beside the `gh issue list` one rather than described
+  — it was run against the live repo and returns cleanly (0 open today).
+- **The split is stated where it is decided**: issues are for defects,
+  Discussions for everything not yet one. A Q&A that turns out to describe a
+  defect is triaged as one — open the issue, link it, answer the discussion
+  with the link.
+- **Triage discipline for discussions, because the failure mode is the
+  opposite of an issue's**: a discussion is triaged into `ROADMAP.md` only if
+  it names something actionable. Answering a question is not a roadmap item,
+  and recording one as such inflates the backlog with work nobody asked for.
+  An unanswered Q&A older than a wake is worth answering *in the discussion*
+  even when nothing is filed — reported in the wake rather than left silent.
+- **`.github/ISSUE_TEMPLATE/config.yml` routes at the point of filing** — three
+  contact links (Q&A, Ideas, Show and tell) beside the existing Documentation
+  one, each saying *why* it is the faster door. **All four URLs verified 200**
+  rather than assumed; a contact link to a category that does not exist is a
+  dead end that looks like help.
+
+1. [ ] **297.1 — The first real intake run is the test of this, not the
+       config.** Nothing has been filed yet (0 issues, 0 discussions), so every
+       claim above is about a door nobody has walked through. The next wake
+       that finds either intake non-empty should record what the split did:
+       whether the thing landed in the right channel, and whether the template
+       or the contact link is what routed it.
+       - **Accept** — the property, not a predicted outcome: one wake reports
+         on a real filed item, naming which intake it arrived in and whether
+         that was the right one. **Finding that the router sent it to the wrong
+         place is a satisfying outcome** — that is the measurement this item
+         exists to take, and it is more useful than a confirmation.
+
 ## Slice 296 — Owner direction: a Gauntlet loop aimed at next-generation ERP UI, and 21st.dev read as a reference rather than a template (2026-09-06)
 
 **Input**: the owner asked for (a) a **gauntlet loop** whose goal is "the new

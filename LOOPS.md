@@ -235,13 +235,36 @@ dropping one.
 
 New input = a user-reported issue, a new requirement, direction, or constraint
 surfaced since the last wake — in chat, added to `ROADMAP.md`'s backlog by
-someone else, or **filed on GitHub**: check
-`gh issue list -R Busy-Office/busy-office-ui --state open` every wake (public
-intake since 0.1.0 shipped on npm; templates enforce version/browser/theme/
-density + minimal repro on bugs, a real ERP scenario on features). An issue
-triages like any other input — P0 if it's a bug, ranked into a slice with
-Accept criteria otherwise — and gets closed with a comment linking the fixing
-commit once its item ships. If there is any:
+someone else, or **filed on GitHub**. **Two intakes, and both are read every
+wake** (public since 0.1.0 shipped on npm):
+
+```
+gh issue list -R Busy-Office/busy-office-ui --state open
+
+gh api graphql -f query='{repository(owner:"Busy-Office",name:"busy-office-ui"){
+  discussions(first:20,states:OPEN,orderBy:{field:UPDATED_AT,direction:DESC}){
+  nodes{number title category{name} isAnswered updatedAt}}}}' \
+  --jq '.data.repository.discussions.nodes[] |
+        "#\(.number) [\(.category.name)] answered=\(.isAnswered // "n/a") — \(.title)"'
+```
+
+**Issues are for DEFECTS; Discussions are for everything that is not one yet**
+(enabled 2026-09-06, roadmap 297). The split is not bureaucracy — an issue
+template demanding a version, a browser, a theme, a density and a minimal repro
+is right for a bug and is a wall in front of *"how do I do X?"* or *"would you
+consider Y?"*. Questions that bounce off that wall are not filed anywhere; they
+are simply lost, and they are the earliest signal an adopter produces. **A
+Q&A discussion that turns out to describe a defect is triaged as one** — open
+the issue, link it, and answer the discussion with the link.
+
+An issue triages like any other input — P0 if it's a bug, ranked into a slice
+with Accept criteria otherwise — and gets closed with a comment linking the
+fixing commit once its item ships. **A discussion is triaged only if it names
+something actionable**; answering a question is not a roadmap item, and
+recording one as such would inflate the backlog with work nobody asked for.
+An unanswered Q&A older than a wake is worth answering *in the discussion*
+even when nothing goes into `ROADMAP.md` — say so in the wake's report rather
+than leaving it silent. If there is any:
 
 1. Classify it: a **bug** (something that used to work / should work and
    doesn't) gets flagged **P0** and jumps the queue; a **feature/requirement**

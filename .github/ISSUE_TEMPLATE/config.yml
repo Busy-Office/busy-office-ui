@@ -3,3 +3,12 @@ contact_links:
   - name: Documentation
     url: https://busy-office.github.io/busy-office-ui/
     about: Component gallery, patterns, and guides — check here first.
+  - name: Question — how do I do X?
+    url: https://github.com/Busy-Office/busy-office-ui/discussions/categories/q-a
+    about: Ask in Discussions. An issue asks for a version, browser, theme, density and a repro, which a question does not have — you will get a faster answer here.
+  - name: Idea or feature request, still vague
+    url: https://github.com/Busy-Office/busy-office-ui/discussions/categories/ideas
+    about: Not sure it is a request yet? Start it here. A feature issue asks for a real ERP scenario; Ideas does not.
+  - name: Show what you built
+    url: https://github.com/Busy-Office/busy-office-ui/discussions/categories/show-and-tell
+    about: A screen built with the framework is the most useful feedback there is — it shows what the docs did not answer.
