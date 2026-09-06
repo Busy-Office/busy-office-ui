@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-06 07:37 UTC
+Generated at: 2026-09-06 07:53 UTC
 
 ## Open items by slice
 
@@ -26,10 +26,9 @@ Generated at: 2026-09-06 07:37 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1486 iterations logged)
+dispatch status — counter-triggered rules (1489 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-09-06 06:48   ok
-  Objective     3 / 3 slices          since 2026-09-06 03:45   OVERDUE  [286, 287, 290]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-09-06 07:53   ok
   Optimize      3 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 3 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-03, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-03 (2026-09-04, 2026-09-05, 2026-09-06), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -49,9 +48,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-06 03:45 · Meta · refusal · the archive sweep — roadmap_scope reports 2 of 5 eligible targets NAMED by still-open items (Slice 283, by 287.5 and 273.2); 236.2's report read before deciding not to move · refused · 7ad1aca6
-- 2026-09-06 05:43 · Continue · build · 286.4: fit's rubric definition scored against a 4-row field matrix reaching 4 of 40 scored components; definition rewritten to the property it scores, and scan's published cite corrected (0 occurrences on the page it claimed placed it) · landed · 04073028
-- 2026-09-06 05:43 · Meta · refusal · widening the field matrix with a scan row — that makes the definition true by editing the artefact it points at; the matrix covers field types, scan is an input mechanism · refused · 04073028
 - 2026-09-06 05:43 · Meta · refusal · a gate over 'a fit cite naming the matrix also links from it' — 94.11 base rate first: true of 5 of the 6 cites that mention it, vacuously true of the 34 that do not, so it fires on a healthy tree · refused · 04073028
 - 2026-09-06 06:48 · Standardize · sweep · 290.1 Standardize sweep 4 of 4 lanes — all clean, with the inputs measured rather than the detectors trusted; lane 4 retires 284's dispatch-region worry (flat at 6,112 across three commits, +686 file) · logged · 2f3ff9a8
 - 2026-09-06 06:48 · Meta · refusal · consolidating _common.parse_log_line and dispatch_status.ROW — they agree 1,480/1,480/1,480 but discriminate on synthetic legacy rows; the recovery path must be tolerant and the counter must not be · refused · 2f3ff9a8
@@ -59,6 +55,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-06 07:37 · Meta · refusal · the no-change branch: f57570f4's diff is a paste artifact, not a decision to leave the sentence trailing · refused · 29e3e7f7
 - 2026-09-06 07:37 · Meta · refusal · 286.4 as dispatched — collision lost to 04073028, work discarded per Step 0c rather than merged · refused · 29e3e7f7
 - 2026-09-06 07:37 · Meta · refusal · filing a finding against the winning wake's scan cite: its 'matrix puts it' hit is a quotation inside its own explanation, not a surviving false claim · refused · 29e3e7f7
+- 2026-09-06 07:53 · Objective · grill · Slice 291 — grill of 286, 287, 290: 32 of 32 published assertions reproduce; the four disagreements the pipeline produced were all this grill's own probes, each reconstructed from prose instead of run from the command beside the claim · landed · 40d4ffb6
+- 2026-09-06 07:53 · Meta · refusal · the archive sweep, begun and then stood down: 5,163 lines / 38.0% is below the trigger the losing-side hand-off named (5,450 / 40.6%), and 249.12 is an open owner call · refused · 40d4ffb6
+- 2026-09-06 07:53 · Meta · refusal · 287.5 as this wake's item — collision lost to the other dispatcher, work discarded per Step 0c · refused · 40d4ffb6
 
 ## Sunset test
 

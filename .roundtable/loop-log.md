@@ -1492,3 +1492,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-06 07:37 · Meta · refusal · the no-change branch: f57570f4's diff is a paste artifact, not a decision to leave the sentence trailing · refused · 29e3e7f7
 - 2026-09-06 07:37 · Meta · refusal · 286.4 as dispatched — collision lost to 04073028, work discarded per Step 0c rather than merged · refused · 29e3e7f7
 - 2026-09-06 07:37 · Meta · refusal · filing a finding against the winning wake's scan cite: its 'matrix puts it' hit is a quotation inside its own explanation, not a surviving false claim · refused · 29e3e7f7
+- 2026-09-06 07:53 · Objective · grill · Slice 291 — grill of 286, 287, 290: 32 of 32 published assertions reproduce; the four disagreements the pipeline produced were all this grill's own probes, each reconstructed from prose instead of run from the command beside the claim · landed · 40d4ffb6
+- 2026-09-06 07:53 · Meta · refusal · the archive sweep, begun and then stood down: 5,163 lines / 38.0% is below the trigger the losing-side hand-off named (5,450 / 40.6%), and 249.12 is an open owner call · refused · 40d4ffb6
+- 2026-09-06 07:53 · Meta · refusal · 287.5 as this wake's item — collision lost to the other dispatcher, work discarded per Step 0c · refused · 40d4ffb6
