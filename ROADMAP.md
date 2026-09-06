@@ -315,6 +315,67 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 303 — The framework's central promise was documented, demoed, and ungated: the layered-reset recipe is now executable (2026-09-06)
+
+**Input**: the owner asked whether Tailwind is used here, then pointed at *"an
+existing reset"*. Answering the first properly meant reading
+`/getting-started/troubleshooting`'s interop section, and reading it surfaced
+the gap.
+
+**Tailwind is not used, and the answer is narrower than the NOTICE implies.**
+Measured rather than repeated: not in any manifest, not in `node_modules`, no
+`tailwind.config.*`, no Tailwind code or utility classes anywhere. What exists
+is **colour values only** — 20 of 24 raw palette ranges seed from Tailwind
+v3.4's hex, chosen because every ramp value already in use here was a verbatim
+Tailwind value, and `generate-scales.mjs`'s pin assert fails the build if a
+seeded step disagrees with a live token. The other four ranges are
+OKLCH-generated here. That copied-numbers-with-attribution relationship is
+exactly why the MIT grant survives the Apache-2.0 relicense.
+
+**The gap: the page's central runtime claim was never executed.** It states
+that an unlayered reset you did not write out-ranks every framework layer and
+silently strips components, and that wrapping it in a layer declared first
+fixes it. `CLAUDE.md` requires such a claim be a `check-claims` case.
+Measured: **no gate anywhere references `app-reset` or `preflight`**, and
+`check-claims` never visited the troubleshooting page at all.
+
+**A live demo is not a gate**, which is the point worth keeping. The page ships
+two iframes running the same hostile reset — genuinely good docs — but both
+could break to the same wrong result and the page would still render two
+plausible frames. A reader cannot distinguish *"stripped"* from *"stripped in
+both"*. The gate asserts the DIFFERENCE, which is the actual claim.
+
+**Both arms are checked on purpose.** A one-sided test — "the wrapped reset
+keeps its background" — passes just as well on a tree where `@layer` stopped
+working altogether and nothing is ever stripped. The control is what makes the
+experiment able to fail, the same reasoning the print-badge case above it uses.
+
+**Two defects in the case itself, both caught before the result was believed:**
+
+- The first draft fetched the framework CSS from `/css/index.css`. It ships at
+  `/suite/bo/index.css`. A 404 would have left the button unstyled in BOTH
+  branches — control passing, layered case failing — reading as a genuine
+  cascade bug. Fixed by inlining the shipped stylesheet from
+  `packages/core/dist/css/index.css`, which removes the failure mode rather
+  than correcting the path.
+- The case then went **red**, and the red was the test disobeying the recipe.
+  The page insists the order statement is *"the FIRST rule of the entry
+  stylesheet"*; the draft emitted it after the framework. The case now uses the
+  page's own recipe line character for character. **The framework was right and
+  the test was wrong** — recorded because the opposite conclusion was one
+  commit away.
+
+**Red-proved in both directions, independently**, each injection confirmed
+before the result was read:
+
+```
+drop app-reset from the order statement  -> FAIL (layered arm)
+make the hostile reset harmless          -> FAIL (control arm)
+restored                                 -> 172 pass
+```
+
+`check:claims` goes **170 → 172** documented behaviours verified live.
+
 ## Slice 302 — Step 1 mandates two intakes and a cloud wake could execute neither command; the Discussions half had no substitute at all, so the rule was unrunnable rather than merely awkward (2026-09-06)
 
 **Triage finding, from running Step 1 rather than from reading it.** Slice 297

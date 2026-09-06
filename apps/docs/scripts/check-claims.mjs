@@ -45,7 +45,7 @@
 import { serveDist } from './serve-dist.mjs';
 import { gate } from './gate-report.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
-import { DIST } from './paths.mjs';
+import { DIST, REPO_ROOT } from './paths.mjs';
 import { WIDTHS, DESKTOP_WIDTH, NARROW_WIDTH } from './viewports.mjs';
 import { contrastRatio, composite } from '../../../packages/core/scripts/wcag.mjs';
 import { createRequire } from 'node:module';
@@ -4474,6 +4474,74 @@ check(
     afterHide.stopCol !== 'no' &&                 // and it left the hidden column
     skipped === 'amt',                            // the cursor skipped straight past it
   JSON.stringify({ composed, beforeHide, parked, afterHide, skipped }),
+);
+
+
+/* ---- /getting-started/troubleshooting: the layered-reset recipe ----
+   The page's central interop claim, and until 2026-09-06 the only runtime
+   claim on it that nothing executed: an unlayered reset you did not write
+   (Tailwind v3 preflight, normalize, Bootstrap reboot) OUT-RANKS every
+   framework layer and silently strips components; wrapping that same reset in
+   a layer declared BEFORE the framework's puts it underneath and the component
+   survives.
+
+   Why a gate and not the two iframes already on the page: the iframes are a
+   demo. Both could break to the same wrong result and the page would still
+   render two plausible-looking frames — a reader cannot tell "stripped" from
+   "stripped in both". This asserts the DIFFERENCE, which is the actual claim.
+
+   BOTH SIDES ARE CHECKED ON PURPOSE. A one-sided test ("wrapped reset keeps
+   the background") passes just as well on a tree where @layer stopped working
+   altogether and nothing is ever stripped — the control is what makes the
+   experiment able to fail. Same reasoning as the print badge case above. */
+const HOSTILE = 'button { background: transparent; border: 0; padding: 0; font: inherit; }';
+/* The SHIPPED stylesheet, read from the package rather than fetched over the
+   test server. A URL would couple this case to where copy-suite happens to put
+   the file (it is /suite/bo/index.css today, not the /css/index.css a first
+   draft assumed) — and a 404 would leave the button unstyled in BOTH branches,
+   so the control would pass, the layered case would fail, and the result would
+   read as a real cascade bug. Inlining removes that failure mode entirely. */
+const FRAMEWORK_CSS = await readFile(
+  join(REPO_ROOT, 'packages/core/dist/css/index.css'), 'utf8',
+);
+
+/* `order` is the page's recipe line verbatim when present, and '' for the
+   control. It must precede the framework CSS, exactly as the page insists:
+   "the order statement must be the FIRST rule of the entry stylesheet — a
+   layer's rank is fixed by where it first appears". A first draft put the
+   statement AFTER the framework and the case went red; that was the test
+   disobeying the recipe, not the framework breaking it, and it is recorded
+   here so the next reader does not re-derive it. */
+async function buttonBgWith(order, resetCss) {
+  await page.setContent(
+    `<!doctype html><html><head>` +
+      `<style>${order}</style>` +
+      `<style>${FRAMEWORK_CSS}</style>` +
+      `<style>${resetCss}</style></head>` +
+      `<body><button class="bo-btn" type="button">Post</button></body></html>`,
+    { waitUntil: 'load' },
+  );
+  return page.evaluate(() => {
+    const b = document.querySelector('.bo-btn');
+    return { bg: getComputedStyle(b).backgroundColor, found: !!b };
+  });
+}
+
+/* The page's own recipe line, character for character. */
+const ORDER = '@layer app-reset, bo-reset, bo-tokens, bo-primitives, bo-components, bo-utilities;';
+const resetUnlayered = await buttonBgWith('', HOSTILE);
+const resetLayered = await buttonBgWith(ORDER, `@layer app-reset { ${HOSTILE} }`);
+const TRANSPARENT = 'rgba(0, 0, 0, 0)';
+
+check(
+  'troubleshooting: an UNLAYERED reset out-ranks the framework and strips .bo-btn (the control — without this the layered case proves nothing)',
+  resetUnlayered.found && resetUnlayered.bg === TRANSPARENT,
+  JSON.stringify(resetUnlayered),
+);
+check(
+  'troubleshooting: the SAME reset wrapped in a layer declared first ranks below the framework, and .bo-btn keeps its background',
+  resetLayered.found && resetLayered.bg !== TRANSPARENT,
+  JSON.stringify(resetLayered),
 );
 
 await browser.close();
