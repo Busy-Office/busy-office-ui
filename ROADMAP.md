@@ -320,6 +320,141 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 315 — Objective grill of Slices 294, 312, 314: the gate written to catch a detector that cannot fail became one — `check:ci-ignores`'s `--self-test` has sat below an early return since 312.2 emptied `paths-ignore`, running 0 of its 18 cases while `check:selftests` reported it self-tested (2026-09-07)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty), `ENVIRONMENT.md` trap 1, fixed with
+`git checkout -B main origin/main` before any commit; `origin/main` again
+arrived as a **forced update** (`26447ba...35c1da7`). Trap 2 clean in one
+`--unshallow` (**1,983** commits, no `shallow.lock`), and it again brought the
+tags — the **twenty-eighth** consecutive container to do so; `git tag | wc -l` →
+**8**. Trap 1c did not bite.
+
+Rule 1: no open P0 — `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` reads **0**
+across the 25 open items. Step 1 read **both** intakes with `ENVIRONMENT.md` §8's
+controls in one run (`/discussions` → 200 len **0**; `/not-a-real-route` →
+**404**; `/issues?state=open` → 200 len **1**, issue #2, already triaged as
+`300.2`) and triaged nothing: no new input. **Rule 2 did not match** —
+`Standardize 0 / 4 … ok`, reset by Slice 314's row. **Rule 3 matched** —
+`Objective 4 / 3 slices … OVERDUE [292, 294, 312, 314]`, un-reached for two
+consecutive wakes. Rules 4-8 not reached. Rule 5 reports **STALE** (`1
+wake-date(s) newer`), so per `LOOPS.md` it **could not be evaluated** and is not
+reported clear.
+
+**Scope narrowed per §6 step 0: 292 is dropped, 294/312/314 are grilled.** Slice
+298 is an Objective grill of 292 in full and
+`grill-objective-292-293-295-second-pass-2026-09-06.md` is a *second* pass over
+it; a third is the over-arming that step exists to prevent. 294, 312 and 314 are
+named by no grill in either roadmap file or in `.roundtable/`. 312's items were
+built by **Slice 313**, so 313 is read as part of 312's scope.
+
+**Full report:** `.roundtable/grill-objective-294-312-314-2026-09-07.md`.
+**21 of 23 re-run assertions reproduce exactly**, including every one of 314's
+token and scope claims (`4 of 127`, `1 of 24` after 314.1, `xl` at
+`typography.css:11`, `md` at line 9, no token equal to `2rem`) and every
+structural claim in 312/313 (`paths-ignore` gone, `.roundtable` a bare `ROOTS`
+element, `check-loop-vocab` genuinely clean).
+
+1. [x] **315.1 — `check-ci-ignores.mjs`'s `--self-test` must run before the
+       script's early returns.** 312.2 emptied `paths-ignore`, so the gate
+       correctly `process.exit(0)`s at *"nothing to verify"* — at line **219**,
+       above the `--self-test` branch at line **293**. From that commit onward
+       `node check-ci-ignores.mjs --self-test` ran **0 of 18 cases** and exited
+       0. The docs-image SKIP path (`ci.yml` absent from that build context) was
+       a second route to the same silence.
+
+       **`check:selftests` kept reporting `20 heuristic (all self-tested)`, and
+       it is not lying by its own contract — that is the finding.** It asserts
+       `process.argv.includes('--self-test')` appears in the source; the branch
+       exists, and nothing reaches it. Its own header records closing the
+       previous step of this exact hole (*"The first version matched the string
+       `--self-test` and every heuristic gate passed"*). **Mention →
+       implementation was closed; implementation → reachable was not.**
+
+       - **Accept — the property:** with the tree in its shipped state (no
+         `paths-ignore`), `--self-test` reports a case count that agrees with the
+         number of fixtures in the file, and goes **red** on a fixture whose
+         expectation is deliberately wrong; and the plain run's verdict is
+         unchanged in all three contexts (no `paths-ignore`, `paths-ignore`
+         present, `ci.yml` absent).
+       - **DONE 2026-09-07 (cloud wake).** The block moved above the `ci.yml`
+         read; all five detector helpers are hoisted `function` declarations at
+         lines 94-165, so nothing else reordered, and the fixtures need neither
+         `ci.yml` nor a build context.
+
+         **Red-proved in both directions and in both dead contexts**, injection
+         confirmed present by a `ZZINJECTED` marker + `grep -c -F` before each
+         run:
+
+         | tree state | wrong fixture | before fix | after fix |
+         |---|---|---|---|
+         | no `paths-ignore` (shipped) | yes | **rc=0, 0 cases** | **rc=1, 18 cases** |
+         | no `paths-ignore` (shipped) | no | rc=0, 0 cases | rc=0, **18 cases** |
+         | `ci.yml` absent (docs image) | yes | rc=0, 0 cases | **rc=1** |
+         | `paths-ignore` restored + control | yes | rc=1, 18 cases | rc=1, 18 cases |
+
+         The restored entry was `visual-baselines/**` — in `SOURCE_SKIP_DIRS`, so
+         it cannot itself fail — the same control Slice 313 used. **The first
+         red-proof attempt was discarded**: its `grep -c` control carried nested
+         quotes and returned 0, so the run proved nothing about the injection,
+         per CLAUDE.md.
+
+2. [x] **315.2 — 294's `139` hex literals is unreproducible; the entry now
+       carries the command and the re-measured figure.** 294 retracts a finding
+       on that base rate and records **no command**. Re-measured at **294's own
+       commit** (`c6643153`, per `ENVIRONMENT.md`'s read-it-from-that-commit
+       rule), six plausible spellings return **142, 142, 123, 141, 114, 134** —
+       none is 139 — and the same regexes read 142 at `HEAD`, so it is not
+       snapshot drift.
+
+       **The verdict is unaffected and stays**: at 139 or 142, *"a token file is
+       where hex belongs"* is the same conclusion. The defect is the audit trail
+       — `ENVIRONMENT.md`'s *harmless in their conclusions and wrong in the audit
+       trail a later wake re-runs* — and CLAUDE.md's **write the command next to
+       the claim** is the rule that was skipped.
+
+       - **Accept:** 294's paragraph carries a re-runnable command and a figure
+         that command produces, or states that the original figure could not be
+         reproduced. **Amending 294 in place is the fix** (236.2: archived and
+         live text alike may be amended for a correction); no gate is added.
+       - **DONE 2026-09-07** — amended in place, with the command and both
+         readings.
+
+3. [ ] **315.3 — should `check:selftests` EXECUTE each self-test rather than
+       grep for the branch? Filed with its base rate, deliberately not built
+       inside a grill.** 315.1 fixes the one site; this is the general question
+       underneath it.
+
+       **Base rate measured first (94.11), and it took two wrong readings to
+       get** — both in ways this repo already writes down:
+
+       | reading | figure | why it was wrong |
+       |---|---|---|
+       | 1st | 8 of 20 run zero cases | taken with **no `apps/docs/dist`** — 4 gates died before their own branch |
+       | 2nd | 4 of 20 | counted `^self-test: `, the shared helper's format only |
+       | **honest** | **1 of 20 (5%)** | `check-resume-charter` (9 cases, `ok <name>`), `check-resume-slice-ids` (12, same) and `check-rf-floor` (a bespoke one-line verdict) all **do** run |
+
+       That third row is the cost estimate as well as the base rate: **there is
+       no single parseable output shape today**. Executing each self-test means
+       either standardising 20 gates onto one marker, or asserting on exit code
+       alone — which cannot distinguish *"ran 18 cases, all passed"* from *"ran
+       none"*, i.e. it would not have caught 315.1.
+
+       - **Accept:** a recorded decision — a marker contract adopted across the
+         heuristic gates, or a refusal with the reason. **Refusing is a
+         satisfying outcome**, and so is finding that the base rate has moved:
+         re-run the per-gate `--self-test` sweep **with `dist` built** and read
+         each gate's raw output rather than grepping one format. The figures
+         above are snapshots.
+       - **Lane:** cloud-takeable. No browser, no screenshot.
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. Nothing in this slice renders: the diff is one gate script's
+statement order, roadmap prose and a `.roundtable/` report.
+`292.4/292.5`'s screenshot lane on `/components/icon` remains unspent, now from
+seven wakes back, and the withdrawn-claim paragraph on `/components/data-table`
+is still unlooked-at.
+
 ## Slice 314 — Standardize sweep, 4 of 4 lanes: lanes 1-4 clean, and the finding came from the re-scan step 4 mandates — 292.8's scope was "the whole page tree", and the 24 shared components/layouts that render INTO every page were outside every count it took (2026-09-07)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
@@ -2256,8 +2391,25 @@ been **1.30 points** (80.09% → 78.79%).
 both are recorded because retracting them is the cheap half:
 
 - *"raw hex outside `@media print`"* — three `#ffffff` inside `light-dark()`.
-  Base rate first: the repo's own `tokens/` and `components/` carry **139**
+  Base rate first: the repo's own `tokens/` and `components/` carry **142**
   hex literals, and a token file is where hex belongs. Not a violation.
+
+  **Amended 2026-09-07 by 315.2 — this read `139` with no command beside it,
+  and 139 is unreproducible.** Re-measured at this slice's own commit
+  (`c6643153`), and identical at `HEAD`:
+
+  ```
+  grep -rhoE '#[0-9a-fA-F]{3,8}\b' packages/core/src/css/tokens \
+      packages/core/src/css/components | wc -l          # 142
+  ```
+
+  Five other plausible spellings return 142 (no word boundary), 123 (6-digit
+  only), 141 (3- or 6-digit), 114 (distinct values) and 134
+  (comment-stripped). **None returns 139**, and the tree has not moved between
+  the two readings, so it is not snapshot drift. The **verdict is unchanged**:
+  at 139 or 142 a token file is still where hex belongs. What was missing is
+  CLAUDE.md's *write the command next to the claim*, and the cost is exactly
+  what that rule predicts — the next wake could only re-derive it.
 - *"an `!important`"* — the single hit is inside a comment stating the layer
   needs none. An assertion tripped by its own explanation, which is the exact
   shape this file's removal rule already names.

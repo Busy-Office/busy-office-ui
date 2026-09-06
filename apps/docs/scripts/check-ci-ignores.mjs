@@ -175,6 +175,56 @@ function readsFile(source, name) {
   return patterns.some((re) => re.test(stripComments(source)));
 }
 
+/* THE SELF-TEST RUNS BEFORE ANY OF THIS SCRIPT'S EARLY RETURNS, and that
+   placement is the whole point (roadmap 315.1). It used to sit below them, so
+   from the moment 312.2 emptied `paths-ignore` the branch was unreachable:
+   `--self-test` printed "nothing to verify" and exited 0 with a deliberately
+   wrong case in the fixtures. `check:selftests` went on reporting this gate as
+   self-tested, because it asserts the argv branch EXISTS, not that anything
+   reaches it. The same hole swallowed the docs-image SKIP path below. The
+   fixtures need neither ci.yml nor a build context, so nothing is gained by
+   running them later. */
+if (process.argv.includes('--self-test')) {
+  /* The cases that killed real versions of this detector, kept as the proof it
+     can still tell them apart. Every NOT-flagged case below is a false positive
+     that actually occurred. */
+  selfTest([
+    ['a readFile of the name is a read', readsFile("await readFile(join(D,'ROADMAP.md'))", 'ROADMAP.md'), true],
+    ['a join toward the name is a read', readsFile("const p = join(ROOT, 'STATUS.md');", 'STATUS.md'), true],
+    ['a name in a // comment is NOT a read', readsFile('// ROADMAP.md is read by nothing\nconst x = 1;', 'ROADMAP.md'), false],
+    ['a name in a /* */ comment is NOT a read', readsFile('/* see ROADMAP.md */\nconst x = 1;', 'ROADMAP.md'), false],
+    ['a glob prefix opened by readFile is a read', opensPath("readFile(join(R,'.roundtable/RESUME.md'))", '.roundtable'), true],
+    ['a glob prefix inside a <code> tag is NOT a read', opensPath('const html = `<code>.roundtable/erp-suite-gaps.md</code>`;', '.roundtable'), false],
+    ['a glob prefix in a comment is NOT a read', opensPath('// writes to .roundtable/loop-log.md\nconst x = 1;', '.roundtable'), false],
+
+    /* The three routes added by 312.1. Each NOT-flagged case is a live script
+       the fs spy recorded making zero accesses under an ignored path, so every
+       one of them is a false positive this detector must keep refusing. */
+    ['a bare ROOTS-array element is a path root',
+      namesPathRoot("const ROOTS = ['README.md', '.roundtable', 'examples'];", '.roundtable'), true],
+    ['a single-file ROOTS element is a path root',
+      namesPathRoot("const ROOTS = ['README.md', 'STATUS.md'];", 'STATUS.md'), true],
+    ['a path root inside a longer literal is NOT one',
+      namesPathRoot('const html = `<code>.roundtable/erp-suite-gaps.md</code>`;', '.roundtable'), false],
+    ['a path root in a comment is NOT one',
+      namesPathRoot('/* .roundtable/ is loop machinery */\nconst x = 1;', '.roundtable'), false],
+    ['a walk seeded at REPO_ROOT enumerates the repo',
+      enumeratesRepo("import { REPO_ROOT } from './paths.mjs';\nfor await (const f of files(REPO_ROOT)) {}\nawait readdir(dir);") === 'repo walk', true],
+    ['an aliased REPO_ROOT seed counts too',
+      enumeratesRepo("import { REPO_ROOT as R } from './paths.mjs';\nawait readdir(R, { recursive: true });") === 'repo walk', true],
+    ['git ls-files enumerates the repo',
+      enumeratesRepo("execFileSync('git', ['ls-files'], { cwd: ROOT })") === 'git ls-files', true],
+    ['a walk of a SUBTREE of REPO_ROOT does not',
+      enumeratesRepo("import { REPO_ROOT } from './paths.mjs';\nconst d = join(REPO_ROOT, 'apps/docs/scripts');\nawait readdir(d);"), null],
+    ['REPO_ROOT with no walk at all does not',
+      enumeratesRepo("import { REPO_ROOT } from './paths.mjs';\nawait readFile(join(REPO_ROOT, 'LOOPS.md'));"), null],
+    ['an extension allow-list is read as one',
+      keptExtensions("const EXTS = ['.mjs', '.js', '.ts'];").has('md'), false],
+    ['a regex alternation allow-list is read as one',
+      keptExtensions('const KEEP = /\\.(astro|mjs|js|ts|md)$/;').has('md'), true],
+  ]);
+}
+
 /* The docs image copies apps/ and packages/ only, so `.github/` is legitimately
    absent there. Say so and stand down — a gate that cannot run must never
    report a clean pass it did not earn, and must never crash the build that
@@ -289,47 +339,6 @@ for (const m of ciText.matchAll(/scripts\/([\w-]+\.mjs)/g)) {
   for (const dir of SCRIPT_DIRS) ciRun.add(join(dir, m[1]));
 }
 assertScanned(ciRun.size, 'script(s) CI runs, derived from ci.yml', 'ci.yml moved, or npm run indirection changed shape?');
-
-if (process.argv.includes('--self-test')) {
-  /* The cases that killed real versions of this detector, kept as the proof it
-     can still tell them apart. Every NOT-flagged case below is a false positive
-     that actually occurred. */
-  selfTest([
-    ['a readFile of the name is a read', readsFile("await readFile(join(D,'ROADMAP.md'))", 'ROADMAP.md'), true],
-    ['a join toward the name is a read', readsFile("const p = join(ROOT, 'STATUS.md');", 'STATUS.md'), true],
-    ['a name in a // comment is NOT a read', readsFile('// ROADMAP.md is read by nothing\nconst x = 1;', 'ROADMAP.md'), false],
-    ['a name in a /* */ comment is NOT a read', readsFile('/* see ROADMAP.md */\nconst x = 1;', 'ROADMAP.md'), false],
-    ['a glob prefix opened by readFile is a read', opensPath("readFile(join(R,'.roundtable/RESUME.md'))", '.roundtable'), true],
-    ['a glob prefix inside a <code> tag is NOT a read', opensPath('const html = `<code>.roundtable/erp-suite-gaps.md</code>`;', '.roundtable'), false],
-    ['a glob prefix in a comment is NOT a read', opensPath('// writes to .roundtable/loop-log.md\nconst x = 1;', '.roundtable'), false],
-
-    /* The three routes added by 312.1. Each NOT-flagged case is a live script
-       the fs spy recorded making zero accesses under an ignored path, so every
-       one of them is a false positive this detector must keep refusing. */
-    ['a bare ROOTS-array element is a path root',
-      namesPathRoot("const ROOTS = ['README.md', '.roundtable', 'examples'];", '.roundtable'), true],
-    ['a single-file ROOTS element is a path root',
-      namesPathRoot("const ROOTS = ['README.md', 'STATUS.md'];", 'STATUS.md'), true],
-    ['a path root inside a longer literal is NOT one',
-      namesPathRoot('const html = `<code>.roundtable/erp-suite-gaps.md</code>`;', '.roundtable'), false],
-    ['a path root in a comment is NOT one',
-      namesPathRoot('/* .roundtable/ is loop machinery */\nconst x = 1;', '.roundtable'), false],
-    ['a walk seeded at REPO_ROOT enumerates the repo',
-      enumeratesRepo("import { REPO_ROOT } from './paths.mjs';\nfor await (const f of files(REPO_ROOT)) {}\nawait readdir(dir);") === 'repo walk', true],
-    ['an aliased REPO_ROOT seed counts too',
-      enumeratesRepo("import { REPO_ROOT as R } from './paths.mjs';\nawait readdir(R, { recursive: true });") === 'repo walk', true],
-    ['git ls-files enumerates the repo',
-      enumeratesRepo("execFileSync('git', ['ls-files'], { cwd: ROOT })") === 'git ls-files', true],
-    ['a walk of a SUBTREE of REPO_ROOT does not',
-      enumeratesRepo("import { REPO_ROOT } from './paths.mjs';\nconst d = join(REPO_ROOT, 'apps/docs/scripts');\nawait readdir(d);"), null],
-    ['REPO_ROOT with no walk at all does not',
-      enumeratesRepo("import { REPO_ROOT } from './paths.mjs';\nawait readFile(join(REPO_ROOT, 'LOOPS.md'));"), null],
-    ['an extension allow-list is read as one',
-      keptExtensions("const EXTS = ['.mjs', '.js', '.ts'];").has('md'), false],
-    ['a regex alternation allow-list is read as one',
-      keptExtensions('const KEEP = /\\.(astro|mjs|js|ts|md)$/;').has('md'), true],
-  ]);
-}
 
 const SELF = join(ROOT, 'apps', 'docs', 'scripts', 'check-ci-ignores.mjs');
 
