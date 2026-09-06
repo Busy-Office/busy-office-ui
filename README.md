@@ -97,4 +97,6 @@ be fooled — each of those must prove it can fail before it is trusted.
 the living slice backlog · [CHANGELOG.md](CHANGELOG.md) — including pre-1.0
 breaking changes.
 
-MIT
+Apache-2.0 — see [LICENSE](LICENSE). Third-party notices, including the
+Tailwind palette the colour scales seed from, are in
+[`packages/core/NOTICE`](packages/core/NOTICE).

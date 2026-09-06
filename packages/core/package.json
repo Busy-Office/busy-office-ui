@@ -13,7 +13,7 @@
     "container-queries",
     "htmx"
   ],
-  "license": "MIT",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Busy-Office/busy-office-ui.git",
@@ -30,7 +30,8 @@
     "dist",
     "scripts/check-markup.mjs",
     "NOTICE",
-    "media"
+    "media",
+    "LICENSE"
   ],
   "exports": {
     "./package.json": "./package.json",

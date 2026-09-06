@@ -1,8 +1,15 @@
 @busy-office/ui — third-party notices
 =====================================
 
-The package is MIT licensed. It additionally contains third-party material
-listed here, redistributed under its own terms.
+@busy-office/ui
+Copyright 2026 Busy-Office
+
+This product is licensed under the Apache License, Version 2.0 (see
+the LICENSE file distributed with this package). It additionally
+contains third-party material listed below, redistributed under its
+OWN terms — relicensing this project did not and could not relicense
+that material, and its notice is reproduced here as its licence
+requires.
 
 --------------------------------------------------------------------------
 Tailwind CSS (https://tailwindcss.com)

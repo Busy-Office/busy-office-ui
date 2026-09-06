@@ -9,6 +9,31 @@ pin.
 
 ## Unreleased
 
+### Changed
+
+- **Licence: MIT → Apache-2.0.** Both packages now declare `Apache-2.0` and
+  ship the full licence text, which neither did before — the repo had **no
+  `LICENSE` file at all**, only a `license` field and a bare "MIT" line in the
+  READMEs.
+
+  **Versions already published stay MIT, permanently.** A licence is granted at
+  the moment of distribution and cannot be withdrawn retroactively: anyone who
+  installed **0.8.0 or earlier keeps MIT rights to those versions forever**, and
+  the registry still reports `MIT` for them. This applies from the next release
+  onward.
+
+  **What changes for you.** Apache-2.0 is still permissive — use, modify,
+  redistribute, commercially, no copyleft. Two additions: an **express patent
+  grant** (§3), which is the reason to prefer it for enterprise adoption and the
+  main motivation here; and an attribution requirement (§4) — keep the `LICENSE`
+  and `NOTICE`, and mark files you modify. Copying `dist/` into an asset
+  pipeline is unaffected in practice beyond carrying those two files.
+
+  **The Tailwind palette stays MIT.** Twenty raw palette ranges the colour
+  scales seed from are third-party, and relicensing this project did not and
+  could not relicense them. Their MIT grant is reproduced verbatim in `NOTICE`,
+  which is exactly what Apache-2.0's NOTICE mechanism is for.
+
 ### Fixed
 
 - **`check-markup` no longer crashes on a path that does not exist** — it

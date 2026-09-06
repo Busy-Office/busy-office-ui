@@ -43,4 +43,4 @@ one that is checked continuously rather than one nobody looks at.
 - [`@busy-office/ui` on npm](https://www.npmjs.com/package/@busy-office/ui)
 - [Source](https://github.com/Busy-Office/busy-office-ui)
 
-MIT
+Apache-2.0 — see the LICENSE file in this package.

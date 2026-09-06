@@ -110,4 +110,5 @@ the browser floor are all gated rather than aspirational.
 - [Changelog](https://github.com/Busy-Office/busy-office-ui/blob/main/CHANGELOG.md)
 - [Report an issue](https://github.com/Busy-Office/busy-office-ui/issues/new/choose)
 
-MIT
+Apache-2.0 — see the LICENSE file in this package. Third-party notices,
+including the Tailwind palette the colour scales seed from, are in NOTICE.
