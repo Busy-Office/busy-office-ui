@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-06 22:53 UTC
+Generated at: 2026-09-06 23:47 UTC
 
 ## Open items by slice
 
@@ -45,16 +45,17 @@ Generated at: 2026-09-06 22:53 UTC
   - 310.2 — `/base/motion` declares five copyable markup samples the template never renders.
 - **Slice 314** (1 open)
   - 314.2 — the same scope gap exists for SPACING and `font-weight` literals, and it is a different property with no verdict — filed, not built.
+- **Slice 315** (1 open)
+  - 315.3 — should `check:selftests` EXECUTE each self-test rather than grep for the branch? Filed with its base rate, deliberately not built inside a grill.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1558 iterations logged)
+dispatch status — counter-triggered rules (1560 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-09-06 22:53   ok
-  Objective     4 / 3 slices          since 2026-09-06 18:56   OVERDUE  [292, 294, 312, 314]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-09-06 23:47   ok
   Optimize      1 wake-date(s) newer   since 2026-09-06 16:56   STALE   [newest pair: axe-violations; 132 sample(s), 13 of 44 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-06, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-06 (2026-09-07), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -76,8 +77,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-06 20:48 · Continue · build · 294.1 — light-dark()/oklch()/scroll-state() probes in derive-floor.mjs; floor unchanged, and the third probe opened the first version_added:false hole (Slice 311) · landed · e0da2fc4
-- 2026-09-06 20:48 · Meta · refusal · failing derive-floor on a polish-tier feature a browser will never support — it would forbid any progressive enhancement one engine lacks · refused · e0da2fc4
 - 2026-09-06 20:48 · Meta · refusal · @supports parsing in derive-floor — tier is where a guard is recorded; a second instrument would disagree with the tier field · refused · e0da2fc4
 - 2026-09-06 21:11 · Continue · bug · main red on check:floor — a hand-typed floor label in RESUME.md, written after the gate had already run; ENVIRONMENT.md gains §3b (re-run docs:build after writing the hand-off) · landed · e4d0459f
 - 2026-09-06 21:11 · Roadmap · triage · Slice 312 filed P0 — check:ci-ignores asserts nothing CI runs reads .roundtable/**, and check:floor + check:vendor-names both do; red-proved by injection · triaged · e4d0459f
@@ -86,6 +85,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-06 21:54 · Meta · refusal · making the three gates stop reading .roundtable/** and STATUS.md — that reverses 256.2, the standing product-name instruction, and check:slice-refs' reason for existing · refused · 024445f5
 - 2026-09-06 22:53 · Standardize · sweep · Slice 314 — Standardize sweep 4 of 4 lanes clean; step 4's re-scan found 292.8's scope excluded the 24 shared components/layouts, and 314.1 tokenises the two font-size literals there · landed · f5c6ecd1
 - 2026-09-06 22:53 · Meta · refusal · 314.2 — widening the sweep to spacing/font-weight inline literals: a different property with no verdict; base rates measured (8.6% pages / 21.9% shared), filed not built, and no gate added · refused · f5c6ecd1
+- 2026-09-06 23:47 · Objective · grill · Slice 315 — grill of 294/312/314: check:ci-ignores' --self-test unreachable since 312.2 (0 of 18 cases), fixed; 294's 139-hex base rate unreproducible, amended · landed · 066d9878
+- 2026-09-06 23:47 · Meta · refusal · executing each self-test inside check:selftests — base rate 1 of 20 and no single parseable output shape across the heuristic gates; filed as 315.3 instead · refused · 066d9878
 
 ## Sunset test
 
