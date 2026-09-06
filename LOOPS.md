@@ -1435,6 +1435,32 @@ key they read. The `path` column throws on divergence; nothing else here does.
 The two helpers are still separate — consolidation was in scope as an option and
 was refused for the reason above, the tables not being the same table.
 
+### Also settled: the two parsers that both read `loop-log.md`
+
+Raised by the Standardize sweep of 2026-09-06 (roadmap 290.1) under step 1's
+un-instrumented lane — *the same logic hand-copied into multiple scripts* — and
+refused, recorded here so the next sweep does not re-raise it.
+
+`_common.parse_log_line` splits a row on ` · ` and takes the fixed fields from
+the ends; `dispatch_status.ROW` is a regex requiring four fields with `[\w-]`
+loop and mode. Same file, and **not the same decision**: `parse_log_line` is the
+RECOVERY path, deliberately tolerant of the pre-mode/commit forms so
+`rebuild_from_log.py` can rebuild the mirror from whatever the file holds; `ROW`
+is the COUNTER, and rules 2 and 3 read the mode column it insists on.
+
+**The live file cannot separate them** — replaying both against a raw `- `
+bullet count reads **1,480 / 1,480 / 1,480**, 0 rows seen by only one — so the
+refusal rests on discrimination against synthetic input: a legacy
+`ts · loop · item · outcome` row parses under `parse_log_line` with
+**`mode=None`** and does **not match** `ROW`. Pointing the counters at the
+tolerant parser would hand rule 2 rows it cannot classify, silently, which is
+the failure mode that counter already has five recorded instances of. The
+strictness is the feature.
+
+**Reopen if** a third reader of this file appears, or if that replay ever
+returns a non-zero disagreement — that is one of them having drifted, rather
+than the two differing by design.
+
 ## Operating rules (every loop obeys)
 
 - **Every wake leaves the thing it touched BETTER than the item required**

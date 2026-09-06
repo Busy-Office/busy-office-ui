@@ -315,6 +315,172 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 290 — Standardize sweep, 4 of 4 lanes clean, and the reading that makes that honest rather than dead: the inputs three lanes measure did not move since Slice 284. Lane 4's carried worry — `LOOPS.md`'s dispatch region regrowing — did NOT continue, and step 1's one live candidate is refused by discrimination (2026-09-06)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty), fixed with `git checkout -B main
+origin/main` before any commit; `origin/main` again arrived as a **forced
+update** (`26447ba...1023579`). Trap 2 clean in one `--unshallow` (**1,928**
+commits, no `shallow.lock`), and it again brought the tags — `git tag | wc -l` →
+**7**, the **eleventh** consecutive container to do so.
+
+Rule 1: no open P0 — `list_issues` on `Busy-Office/busy-office-ui` returns
+`totalCount: 0`, and `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` reads **0**.
+Step 1 triaged and committed nothing: no new input. **Rule 2 matched** —
+`dispatch_status.py` read `Standardize 4 / 4 Continue rounds … OVERDUE`, the
+counter the previous hand-off predicted would fire. Rule 3 `1 / 3 slices … ok
+[286]` did not match. Rule 5 reports **STALE** (`3 wake-date(s) newer`), so per
+`LOOPS.md` it **could not be evaluated** and is not reported clear. Rules 4 and 6
+were not reached.
+
+**All four lanes ran; saying `n of 4` per the playbook. This is 4 of 4.**
+
+| lane | command | result |
+|---|---|---|
+| 1 dead-style | `npm run scan:dead-style -w docs` | **0 dead** of **1,433** live inline declarations, 0 pages |
+| 2 css-repeats | `npm run report:css-repeats -w @busy-office/ui` | **8 repeated bodies**, `LOOPS.md`'s table exactly; 74 files · 242 rules · 230 distinct |
+| 3 report:prose | `npm run report:prose -w docs` | **0 unverdicted** — 15 distinct flagged pages, every one carrying a verdict |
+| 4 loop-prose | `python3 scripts/loops/report_loop_prose.py` | ratchet + region below; **no new finding**, and 284's is retired |
+
+### The lanes are clean for a MEASURED reason, which is the reading worth having
+
+Three sweeps in a row (214, 284, this one) have read lane 1 at **1,433** and
+lane 2 at **242 / 230 / 8**. Per CLAUDE.md an identical value across many inputs
+is a defect in the instrument until proven otherwise, so the inputs were
+measured rather than the detectors trusted:
+
+```
+# lane 1's source surface — inline style= declarations under apps/docs/src
+git grep -oh 'style="[^"]*"' <rev> -- apps/docs/src | tr ';' '\n' | grep -c ':'
+  702a6408 (Slice 214, 2026-08-30)  390 declarations in 79 files
+  1de97177 (Slice 284, 2026-09-06)  390 declarations in 79 files
+  1023579f (HEAD)                   390 declarations in 79 files
+
+git diff --stat 1de97177 HEAD -- packages/core/src/css     # EMPTY
+git diff --stat 702a6408 HEAD -- packages/core/src/css     # 43 files, +282 / -23
+```
+
+That is a **source proxy** for lane 1's rendered figure, not the same number —
+1,433 counts every instance across the built corpus — and it is quoted as the
+proxy it is. What it establishes is the direction: lane 1's input has not moved
+in a week, so an unmoved output is the correct one.
+
+**Lane 2 is the control, and it is the half that proves the sweep is not
+measuring a frozen tree.** Its input DID move over the longer window — 43 CSS
+files, +282 lines between Slice 214 and HEAD — and it still reads 8 with the
+same membership, which is a live detector reporting no delta. Since Slice 284 the
+CSS diff is empty, so the flat reading against 284 specifically says nothing
+either way; the 214 window is where the claim has to rest.
+
+**Lane 2's delta is zero including membership.** All eight groups match the table
+in `LOOPS.md`; the visually-hidden group is still the same three files, and the
+joined-control `x4` group is still **two** components (money, quantity), so its
+stated reopen trigger (a THIRD component) is unmet.
+
+**Lane 3: 15 flagged pages, the same 15 Slice 284 checked** — 10 over the corpus
+median (1,584), 11 over a family median, union 15, every one verdicted by 158.1,
+161.1 or 178.3. No page entered the flagged set unverdicted, which is the lane's
+actual question. Corpus 118 pages · median 792 · 111,555 words.
+
+### Lane 4 — 284's carried worry is retired by measurement, not by re-reading the row
+
+The ratchet block, read first per the playbook:
+
+```
+.roundtable/RESUME.md    1 up   last cut 5b8917e5 (2026-09-06)
+.roundtable/ENVIRONMENT.md 8 up last cut 1005d1db (2026-08-30)
+LOOPS.md                 4 up   last cut 8848ed55 (2026-09-05)
+LOOPS-archive.md         2 up   never cut
+ROADMAP.md              11 up   last cut f8a93fdf (2026-09-05)
+ROADMAP-archive.md       9 up   last cut dc861a25 (2026-09-01)
+CLAUDE.md               33 up   never cut
+DESIGN.md               22 up   never cut
+```
+
+`CLAUDE.md` and `DESIGN.md` are the two never-cut files and both carry standing
+verdicts — **284.2** (HONEST, with the removable surface measured at 181 words /
+3.1%) and 167.1's (HONEST, the control). Neither is re-raised.
+
+**`LOOPS.md` is where 284 left an open worry, and it did not come true.** That
+sweep measured the dispatch region at 6,112 — *"+454 in the same day, more than
+the cut removed"* — and declined to file an item because *"one day is not a
+trend"*. Two more `LOOPS.md` commits have landed since, and the region is
+**flat**:
+
+```
+for sha in $(git log --format=%H -12 -- LOOPS.md); do
+  git show $sha:LOOPS.md | awk '/^## Playbooks/{exit} {print}' | LC_ALL=C.UTF-8 wc -w; done
+
+8848ed55  2026-09-05  dispatch 5,658   file 13,720   ← 274.2's cut
+632bfc46  2026-09-05  dispatch 5,961   file 14,023
+9c1bacbe  2026-09-05  dispatch 6,112   file 14,272   ← 284's reading
+e68ede5f  2026-09-06  dispatch 6,112   file 14,495
+d257b9b8  2026-09-06  dispatch 6,112   file 14,958
+```
+
+**+686 words of file, +0 of dispatch region, across the two commits since 284
+read it.** The regrowth 284 saw was 5,658 → 5,961 → 6,112 and then stopped; the
+last three `LOOPS.md` edits landed entirely below the `## Playbooks` anchor,
+which is where the playbook says growth is not this finding. The cumulative
+`+300.8%` against the file's `+241.5%` is unchanged and is a *window* figure
+carrying that history — reading it as a current trend is the mistake this entry
+exists to prevent. `LC_ALL=C.UTF-8` per ENVIRONMENT.md §7.
+
+1. [x] **290.1 — DONE 2026-09-06. REFUSED: the two parsers that both read
+       `loop-log.md` stay separate, and the refusal is recorded in `LOOPS.md`
+       so the next sweep does not re-raise it.**
+       *Accept was*: step 1's un-instrumented lane — *"the same lookup table or
+       logic hand-copied into multiple scripts"* — is scanned, and any candidate
+       it turns up is either consolidated or refused with a measurement, with
+       the outcome written where a future sweep reads it.
+
+       **The scan found the named shapes already gated.** `viewports.mjs`
+       (`check:viewport-forks`), `paths.mjs`, `source-files.mjs`,
+       `dist-pages.mjs`, `wrong-choice-rule.mjs` and `_common.from_disk/from_rev`
+       all have an enforcing or extracting owner. The width convention verified
+       clean: the only `1440`/`390` literals left under `apps/docs/scripts` are
+       in **comments and one self-test** (`check-claims.mjs` x5, all prose;
+       `check-viewport-forks.mjs`, its own header and `--self-test` fixtures),
+       which is what that gate blanks.
+
+       **One live candidate, and it is refused.** `_common.parse_log_line` and
+       `dispatch_status.ROW` both read `.roundtable/loop-log.md`.
+
+       - **They cannot disagree on today's file, measured:** replaying both over
+         the live log against a raw `- ` bullet count reads
+         **1,480 / 1,480 / 1,480**, with **0** rows either parser sees alone.
+       - **So the live file cannot separate them, and the refusal rests on
+         discrimination against synthetic input instead** — the honest
+         instrument for a latent difference:
+
+         | row | `parse_log_line` | `ROW` |
+         |---|---|---|
+         | canonical 6-field | row, `mode=build` | match |
+         | legacy 4-field (`ts · loop · item · outcome`) | row, **`mode=None`** | **NO MATCH** |
+         | legacy 3-field | row, **`mode=None`** | **NO MATCH** |
+         | hyphenated mode (`owner-decision`) | row, `mode=owner-decision` | match |
+
+       - **They are not the same decision.** `parse_log_line` is the RECOVERY
+         path — its docstring says it is *"tolerant of the older 4-field form …
+         so history written before the mode/commit columns existed still
+         rebuilds cleanly"*, because `rebuild_from_log.py` must reproduce the
+         mirror from whatever the file holds. `ROW` is the COUNTER, and rules 2
+         and 3 read the mode column it requires. Pointing the counters at the
+         tolerant parser would hand rule 2 rows carrying `mode=None` that it
+         cannot classify — silently, which is the exact failure mode this
+         counter has five recorded instances of.
+
+       Consolidation was in scope as an option and was refused for that reason,
+       on the same ground as the BCD `path` column above it: two readers whose
+       *jobs* differ are not one decision stored twice. Reopen if a third reader
+       of this file appears, or if the 1,480/1,480/1,480 replay ever returns a
+       non-zero disagreement — that is drift rather than design.
+
+       **NOT VERIFIED, said plainly:** this slice is a markdown-only diff plus
+       no source change at all, so nothing it touches renders. No 1440/390
+       light-and-dark screenshots were taken — a cloud wake has no Podman and no
+       `:8081` — and none is owed, because the diff changes no shipped surface.
+
 ## Slice 289 — Objective grill of the three items built since the last grill (283.3, 284.2, 288.1/288.2): 22 of 28 assertions reproduce, all six that do not sit beside no command, and the one that matters put an **empty diff** into the Accept of an item that is still open (2026-09-06)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
