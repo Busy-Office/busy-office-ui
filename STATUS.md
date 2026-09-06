@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-06 18:56 UTC
+Generated at: 2026-09-06 20:03 UTC
 
 ## Open items by slice
 
@@ -19,8 +19,6 @@ Generated at: 2026-09-06 18:56 UTC
   - 249.13 — Reconsider demo-first/spec-last (the proposal's B1), explicitly, not as a ratification.
 - **Slice 273** (1 open)
   - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
-- **Slice 292** (1 open)
-  - 292.9 — 292.4's property is tree-wide and the guard it landed is page-local: four other docs pages hand a reader a deprecated glyph.
 - **Slice 294** (2 open)
   - 294.1 — `derive-floor.mjs` has no probe for `light-dark()`, `oklch()` or `scroll-state()`.
   - 294.2 — rank the six proposals against the Objective; adopt none on arrival.
@@ -43,15 +41,18 @@ Generated at: 2026-09-06 18:56 UTC
   - 307.1 — Rule 5 starves structurally: 42 metric names, 130 samples, 13 names sampled twice.
 - **Slice 309** (1 open)
   - 309.5 — The `/stress` harness is half a harness: the rows are kept, the measurement is not.
+- **Slice 310** (2 open)
+  - 310.1 — `examples/erp-suite` and `examples/po-app` render deprecated glyphs, and whether that is a defect is undecided.
+  - 310.2 — `/base/motion` declares five copyable markup samples the template never renders.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1547 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-09-06 17:49   ok
-  Objective     0 / 3 slices          since 2026-09-06 18:56   ok
+dispatch status — counter-triggered rules (1548 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-09-06 17:49   ok
+  Objective     1 / 3 slice           since 2026-09-06 18:56   ok  [292]
   Optimize      1 wake-date(s) newer   since 2026-09-06 16:56   STALE   [newest pair: axe-violations; 132 sample(s), 13 of 44 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-06, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-06 (2026-09-07), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -73,7 +74,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-06 16:56 · Continue · build · 292.8 — display-sizing font-size literals in docs pages now read --bo-font-size-xl (exact 1.5rem); computed-style no-op red-proved against a dead edit by token override; no gate, on base rate + an unsound text predicate + one site with no equal token · landed · 0879c6c3
 - 2026-09-06 16:56 · Meta · refusal · a gate over raw font-size in docs pages — 41 of 41 component pages now satisfy the predicate, and 2 of the 4 tree-wide source hits carry no style attribute at all in the built page (prose, and a copyable @page print sample) · refused · 0879c6c3
 - 2026-09-06 16:56 · Meta · refusal · converting patterns/app-launch.astro's 2rem launcher icon — no token equals 2rem, so the swap would shrink the glyph, and that is a rendered-image judgement a cloud wake cannot make · refused · 0879c6c3
 - 2026-09-06 16:57 · Roadmap · triage · Slice 306 — rule 5's staleness line floors at 1 from a cloud wake: the newest metric (2026-09-06 16:56 UTC) and the newest log rows (2026-09-07 00:21/00:35, +0800) are the same moment from two clocks · triaged · 40041a74
@@ -83,6 +83,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-06 17:49 · Meta · refusal · no second cut to LOOPS.md's dispatch region — the section 274.2 cut has not regrown by one word, so a cut would remove instruction · refused · 4e0248ed
 - 2026-09-06 18:56 · Objective · grill · Slice 309 — Objective grill of 307/308: 308 reproduces to the word; under 307 a P0 (the reference app's shared init swallowed by a trailing comment since 2026-08-23, so the published select-all timing was a no-op), fixed + gated; roadmap_scope.py fence bug also fixed · landed · 26d464fe
 - 2026-09-06 18:56 · Meta · refusal · publishing a replacement select-all figure — today's fixed-tree readings include a style flush the published table scores as its own column, so quoting them would repeat the exact error being corrected · refused · 26d464fe
+- 2026-09-06 20:03 · Continue · build · 292.9 — tree-wide check:deprecated-icons (source + dist phases); 6 sites resolved, Slice 310 filed · landed · 8f23f658
 
 ## Sunset test
 
