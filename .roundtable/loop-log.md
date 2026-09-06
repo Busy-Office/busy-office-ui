@@ -1497,3 +1497,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-06 07:53 · Meta · refusal · 287.5 as this wake's item — collision lost to the other dispatcher, work discarded per Step 0c · refused · 40d4ffb6
 - 2026-09-06 08:59 · Polish · round · Slice 292 — icon round 3: Markup heading outside every section for 18 days (13 h2 vs 12 section.demo, 21px vs 18px), and the four deprecation blocks' census falsified by /patterns/app-frame · landed · 331ca0f9
 - 2026-09-06 08:59 · Meta · refusal · a check-page-shape arm for the orphaned-heading class — 101.3 confines Polish to the existing ratchet, though unlike the previous five refusals the base rate argues FOR it (1 of 80 pages, 18 days, past five gates) · refused · 331ca0f9
+- 2026-09-06 09:46 · Continue · build · Slice 292 — 292.3: DSA rubric scope stated explicitly (css/page per dimension), measured over all 240 cites; premise refuted, conclusion held · landed · 52f78df5
+- 2026-09-06 09:46 · Meta · refusal · repeating the scope into the six rubric definitions — two records of one fact is how they drift · refused · 52f78df5
+- 2026-09-06 09:46 · Meta · refusal · a gate asserting each cite respects its dimension's scope — the classifier mis-sorts 5 of 240, so it would be the semantic gate 94.11 refuses · refused · 52f78df5

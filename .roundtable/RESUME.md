@@ -23,8 +23,8 @@ survives none.
 ## In flight: nothing
 
 Last updated 2026-09-06 (**cloud** wake, scheduled routine). Working tree clean
-at hand-off. Two commits this wake: Slice 292 and this hand-off. One iteration
-recorded — `Polish · round`, with one refusal.
+at hand-off. Two commits this wake: Slice 292.3 and this hand-off. One iteration
+recorded — `Continue · build`, with two refusals.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -34,145 +34,143 @@ node apps/docs/scripts/check-resume-slice-ids.mjs # names any stale closed ids
 python3 scripts/loops/roadmap_scope.py            # OPEN set + sweep scope
 ```
 
-## ⚠ NEXT WAKE: the cloud lane is no longer dry — this wake filed four takeable items
+## ⚠ NEXT WAKE: rule 4 has work, and it is the same lane this wake used
 
-This is the change worth reading. The previous two hand-offs reported **0 of 12**
-open items cloud-takeable, and this wake's rule-4 pass re-derived that and agreed.
-Slice 292 then filed **292.3, 292.4, 292.5, 292.6** — all four are code or
-prose changes on `/components/icon` and `dsa-scores.json`'s rubric, verifiable
-by `docs:build` + a DOM assertion, and **none needs a screenshot**. So rule 4
-should find work next wake without falling through to Polish.
+The previous hand-off predicted rule 4 would find the four items Slice 292 filed,
+and it did — this wake walked oldest-first past Slice 15, 112, 249 and 273 (all
+still blocked, unchanged) and took **292.3**, the oldest of the four. That
+closed one and filed **two more**, so the cloud lane is now **five** deep:
+`292.4`, `292.5`, `292.6`, `292.7`, `292.8`. Expect rule 4 to reach `292.4`
+next, again after walking the blocked older set.
 
-They are NOT ordered by rule 4's oldest-first rule, which still picks Slice 15
-first and will still find it owner-blocked — the four sit at the young end of
-the backlog. Expect rule 4 to walk to them.
+**One caveat on `292.4`, read it before starting**: its own text says picking
+between its two resolutions (un-deprecate `--settings`, or move both teaching
+sites off it) *"is a design call rather than maintenance"*. The **guard
+extension** half — teaching `bothLists` to see the `markup` string, red-proved
+by putting a deprecated glyph back into it — is takeable regardless of which
+resolution is chosen. If you cannot justify the design call, land the guard and
+say so rather than declining the whole item.
 
 Counters after this wake's row, read immediately after recording: rule 2
-`1 / 4 … ok` (unchanged — a Polish row is not a Continue round), rule 3
-`1 / 3 … ok [292]`. **Re-run `dispatch_status.py` anyway** — the standing
-carried-forward finding is that a hand-off's claim about a dispatcher rule is a
-forecast, not a measurement. Rule 5 read **STALE** (`3 wake-date(s) newer`) and
-is reported as *could not be evaluated*, never clear.
+`2 / 4 … ok` (a Continue round, so it moved), rule 3 `1 / 3 … ok [292]`
+(unchanged — 292 was already crossed; closing items *inside* an already-counted
+slice adds nothing). **Both agreed with the by-hand prediction**, which is the
+comparison `LOOPS.md` mandates; the parser reconciles **1494 parsed against a
+raw `grep -c '^- '` of 1494**. Rule 5 read **STALE** (`3 wake-date(s) newer`)
+and is reported as *could not be evaluated*, never clear.
 
-**⚠ THAT COMPARISON FIRED, AND THE FAULT WAS THE ROW, NOT THE PARSER.** On the
-first read rule 3 stayed `0 / 3` against a hand prediction of `1 / 3`, with
-`dispatch_status.py` reporting *"1 Objective-closing round(s) … and none names a
-slice"* and pricing it at `p=24.2%` — i.e. explicitly NOT evidence of a parser
-bug. It was not one: this wake's `--item` began `icon round 3 —`, and all three
-slice patterns are start-anchored, so the row named no slice. The four previous
-Polish rows all begin `Slice N — `. Corrected in `loop-log.md` (the source of
-truth) before pushing and the mirrors rebuilt with `rebuild_from_log.py` /
-`generate_status.py` / `generate_roundtable_index.py`; the parser now reads
-`1 / 3 [292]` and reconciles **1491 parsed against a raw `grep -c '^- '` of
-1491**. **Write the item as `Slice N — …`**; this is the sixth instance of the
-counter being caught by a number disagreeing with something written by hand, and
-the first where the disagreement was the recorder's fault rather than the
-parser's.
+The previous hand-off's lesson held and cost nothing: the `--item` was written
+as `Slice 292 — …`, start-anchored, so all three slice patterns matched it.
 
 **Run `python3 scripts/loops/polish_requeue.py --apply` BEFORE evaluating rule
 6** — `LOOPS.md` §3b step 0. It needs `packages/core/dist/api.json`, so
 `npm run build -w @busy-office/ui` has to come first or it exits telling you so.
+It did not run this wake: rule 4 matched, so rule 6 was never reached.
 
 ## What landed this wake
 
-**Slice 292 — Polish round 3 on `component/icon`** (dispatcher rule 6; rules
-1-5 all clear or not-evaluable). **Two defects, both on the surface.**
+**Slice 292.3 — the DSA rubric now states which ARTIFACT each dimension is
+scored on** (dispatcher rule 4, Continue/build — the lane 292.3's own Note
+named, since `LOOPS.md` 101.3 forbids Polish from touching the rubric).
 
-1. **The page's Markup heading had rendered outside every `<section>` since
-   2026-08-19.** `icon.astro` lost its `<section class="demo">` opener in
-   `efd4fd02`; 7 openers against 8 closers, and the HTML parser drops the
-   unmatched closer silently. Built DOM read **13 `<h2>` against 12
-   `section.demo`**, and `.demo h2`'s `font-size` did not apply — the heading
-   rendered at **21px** among twelve siblings at **18px**. Now 18px. Corpus
-   sweep: **1 of 80** built pages before, **0 of 80** after, red-proved by an
-   injection asserted to land.
-2. **All four deprecation blocks in the SHIPPED CSS rested on a false census.**
-   Found by the blind re-score, re-derived here from the repo:
-   `/patterns/app-frame` renders `--building`, three other docs pages render
-   `--settings`, and `examples/erp-suite` gives two of its six modules `--user`
-   and `--settings` as their identity. The fix removes the census rather than
-   refreshing it — a deprecation cannot rest on a count of renders, because
-   renders can only rise after the note is written.
+**The item's premise is refuted and its conclusion survives.** 292.3 asserted
+*"every cite for them names a CSS file"*; counted, `\.css\b` appears in **2 of
+40** typography cites, **3 of 40** colour, **3 of 40** spacing. A filename was
+never the signal. Classifying all **240** cites by which artifact the sentence
+NAMES puts typography/colour/spacing at **120 of 120 css-side, 0
+docs-page-side** — so the scope was already unambiguous in practice and only
+the text was silent. Hand-read, the five the keyword pass mis-sorted resolve
+the same way (three say *"the page"* meaning the **consumer's** page; two are
+css-side in phrasing too terse to match).
 
-**§3b step 4's blind re-score RAN** (the round edited the scored surface, which
-is 288.1's trigger clause). `content` 3 agreeing; `typography` 2 contradicting,
-on a page-scoped reading the scorer itself flags as out of scope — so the score
-does **not** move and the scope question is filed as 292.3. It also exposed a
-defect in the instruction it was given: `apps/docs/src/data/dsa-rubric.json`
-**does not exist**; the rubric is a `rubric` key inside `dsa-scores.json`, which
-the blindness protocol forbids opening. Name that explicitly next time.
+Landed: `rubric.scope` in `dsa-scores.json` (one `css`/`page` value per
+dimension, the count as its `$comment`) and two assertions in
+`check-dsa-scores.mjs`. Both red-proved by injection asserted to land, each
+failing **exactly one** of 362 assertions and exiting 1, tree restoring green —
+not the too-broad red that certifies nothing.
+
+**Two refusals, both recorded in the log row**: repeating the scope into the six
+`definitions` (two records of one fact is how they drift), and a gate asserting
+each *cite* respects its scope — this item's own count is what shows the
+classifier for it mis-sorts 5 of 240 in both directions, which is the semantic
+gate 94.11 refuses.
+
+**The disputed score is resolved, not moved.** `icon.astro`'s raw font-size
+literals are **outside** `typography`, so the published `3` stands and the blind
+re-score's `2` was out of scope exactly as the scorer itself flagged. Correction
+to that re-score, measured: *"four times"* is right for `1.5rem` specifically —
+the page carries **six** raw `font-size` declarations, three of which are the
+size-tracking demo and are intrinsic in the rubric's own language.
 
 **Gates green in this container:** `build`, `test` **165**, `lint:css`,
-`docs:build` (`check:repo` incl. `slice-refs` **855** assertions),
-`check:claims` **167** live, `check:layout` **127** pages, `test:axe` **127**
-pages x 2 widths zero violations, `check:scroll` **914** containers,
-`check:formatting`. The *"3 NOT VERIFIED"* in `check:claims` is
+`docs:build` (`check:repo` incl. `slice-refs` **859** assertions, `dsa-scores`
+**362**, `page-shape`, `wrong-choice`), `check:claims` **167** live,
+`check:layout` **127** pages, `test:axe` **127** pages x 2 widths zero
+violations, `check:scroll` **914** containers, `check:formatting`,
+`check:forced-colors`, `check:target-size`, `check:search`, `check:pseudo`,
+`check:quickstart`. The *"3 NOT VERIFIED"* in `check:claims` is
 `ENVIRONMENT.md` 6b — this container reports `(pointer: fine) = false` — not a
 regression.
 
-**283.2's mid-round stamp trap was hit for real and caught by the process rule
-alone.** `--stamp component/icon` ran, then a comment reflow in `icon.css`
-followed before the commit — which is precisely the edit-after-stamp that
-orphans a row, and nothing mechanical would have caught it at that moment.
-Re-built and re-stamped (`5c5e51e4` → `ed441c58`) as the genuine last step;
-`--verify-stamps` after the commit reads **21 rows, every stamp describes a real
-tree**. The rule is load-bearing, not ceremony — this is n = 3 for that trap and
-the first time it was avoided rather than diagnosed afterwards.
-
-**A build gate caught this wake mid-edit, exactly as its own comment predicts.**
-`icon.astro`'s `deprecationMarkers` guard equates a raw count of `DEPRECATED` in
-`icon.css` with the parsed glyph count; the first draft of the correction used
-that word in prose and made it 5 against 4. Reworded to "deprecation blocks".
-`check:slice-refs` also correctly refused the build until `roadmap 292.1`
-existed.
+**NOT VERIFIED, said plainly, and this wake the honest answer is that it does
+not apply:** no 1440/390 light-and-dark screenshots were taken — a cloud wake
+has no Podman. Unlike the previous wake, **no screenshot lane is relevant
+here**, and that is measured rather than assumed: nothing under `apps/docs/src`
+reads `rubric.scope` or `rubric.definitions` (`grep -rl` → empty), and the new
+text reaches **0** built files. No rendered output changed.
 
 **Step 0 traps:** trap 1 bit again (detached HEAD, `git branch --show-current`
 empty), fixed with `git checkout -B main origin/main` before any commit;
-`origin/main` again arrived as a **forced update** (`26447ba...911233e`). Trap 2
-clean in one `--unshallow` (**1,934** commits, no `shallow.lock`) and it again
-brought the tags (`git tag | wc -l` → **7**) — the **thirteenth** consecutive
-container to do so.
+`origin/main` again arrived as a **forced update** (`26447ba...e1ffcc3`). Trap 2
+clean in one `--unshallow` (**1,936** commits, no `shallow.lock`) and it again
+brought the tags (`git tag | wc -l` → **7**) — the **fourteenth** consecutive
+container to do so. The `git rev-parse --short A B` trap was hit verbatim while
+checking for a collision (`fatal: Needed a single revision`); `git rev-parse
+HEAD origin/main` is the form that works, exactly as §1 says.
 
-**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots were
-taken — a cloud wake has no Podman and no `:8081`. This round changed rendered
-markup, so unlike the last two wakes a screenshot lane **is** relevant here, and
-it did not run. What did run is `ENVIRONMENT.md`'s second list, live against the
-built tree: `closest('section')`, computed `font-size` per heading, parent
-chains, an 80-page DOM sweep with a red-proof, and a byte-diff of the built
-pages. The residue a screenshot would add is whether the corrected Markup
-section *looks* right beside its siblings; it is now identical in class and
-computed size to twelve of them.
+**No collision.** `git fetch origin main` immediately before the first commit
+left `origin/main` at the wake's starting sha, `0 0` against local `main`.
 
-## The open set is 16 — and 4 of them are cloud-takeable
+## The open set is 17 — and 5 of them are cloud-takeable
 
 Each line classified from the item's own text per `LOOPS.md` 186.2.
 
-- **cloud-takeable: 4** — `292.3` (rubric scope; a definition change, so for a
-  Continue round or the owner, not Polish), `292.4`, `292.5`, `292.6`. All four
-  are on `/components/icon` or the rubric, and none needs a rendered image.
+- **cloud-takeable: 5** — `292.4` (with the design-call caveat above), `292.5`,
+  `292.6`, `292.7`, `292.8`. All five are code or prose on `/components/icon`,
+  `icon.css` or `dsa-scores.json`, verifiable by `docs:build` plus a DOM or
+  count assertion. None needs a rendered image.
 - **owner-blocked (9):** Slice 15 (AT runtime evidence, owner hardware),
   `112.3` and `112.4` (blocked on 112.3's verdict), `249.7` (defers to 249.10),
   `249.10`, `249.11`, `249.12`, `249.13`, `273.2`.
 - **browser-blocked in the SCREENSHOT sense** (`ENVIRONMENT.md`'s FIRST list —
   a LOCAL wake can take these, a cloud wake cannot): `249.6`, `249.9`, `249.15`.
-  **`249.6` has been declined at the clause level four times. Do not re-derive
-  it a fifth.** `249.15`'s own text says a cloud wake should not pick it up.
+  **`249.6` had been declined at the clause level four times as of the previous
+  hand-off. Do not re-derive it a fifth** — this wake did not re-examine it, it
+  carried the classification forward, so the four is that hand-off's count and
+  not a fresh one.  `249.15`'s own text says a cloud wake should not pick it up.
 
 Note the two counts are both right and have different denominators:
 `roadmap_scope.py` reads items under slice headings; `check-resume-slice-ids`
 also counts the 2 items under the non-slice `## STATE` heading. Do not quote a
 bare closed count.
 
-## No archive sweep — under the trigger both units, again
+## No archive sweep — and the two units now point OPPOSITE ways
 
-`roadmap_scope.py` read **39.4%** at the start of this wake and Slice 292 has
-added lines, so re-measure rather than quoting either figure. The standing
-trigger, honoured by the last two wakes: **a wake that finds itself past
-5,450 lines / 40.6% should simply run it.** Trend across seven readings:
-25.4% → 27.5% → 32.0% → 34.2% → 38.0% → 39.4% → (re-run). `249.12`, the
-archival trigger itself, is still an open owner call, so a wake inventing a
-threshold to justify a sweep it has already started is the exact thing that item
-exists to prevent.
+Measured at this wake's slice commit: **5,647 lines**, closed-history share
+**36.9%**. The standing trigger the last three hand-offs carried is *"past
+5,450 lines / 40.6%"* — and those two halves now **disagree**, which is new and
+is the finding worth handing on.
+
+Trend across nine readings: 25.4% → 27.5% → 32.0% → 34.2% → 38.0% → 39.4% →
+37.5% → **36.9%**. **The share is falling while the line count climbs**,
+because Slice 292 keeps adding OPEN-item lines: they grow the denominator and
+never the numerator. So a line-count trigger fires now and a percentage trigger
+recedes, on the same tree, and a wake picking whichever unit suits its intent is
+free to reach either verdict.
+
+**That is direct evidence for `249.12`** (the archival trigger, an open owner
+call) rather than a licence to sweep: inventing a threshold to justify a sweep
+already started is precisely what that item exists to prevent. No sweep run.
 
 ## Direction
 
@@ -181,38 +179,29 @@ Nothing new from the owner this wake; GitHub intake is empty (`list_issues` →
 
 **Three things want the owner's attention:**
 
-1. **The cloud lane is dry no longer, but only because a Polish round filed into
-   it.** That is worth noticing rather than celebrating: four of the last five
-   dispatchable items this loop has produced came from grilling or polishing its
-   own docs, not from the roadmap. Every item the *plan* still holds waits on
-   either the owner or a local wake.
+1. **`249.12` has stopped being low-urgency.** Its own roadmap text calls it
+   *"low urgency, the sweep keeps happening regardless"*. That held while both
+   units moved together. They no longer do — see the section above — so the
+   next two wakes can honestly reach opposite conclusions about the same tree,
+   which is the failure the previous hand-off already flagged once and can now
+   name a mechanism for.
 
-2. **`273.2` is still the owner call worth their attention**, a seventeenth wake
-   untouched — whether a Polish round whose score does not move should increment
-   `dry`. This round did not pre-empt it. Note it now has a live cost: `icon` is
-   the second surface to reach `3/3` and spend its budget while `dry` reads 0,
-   so the ceiling rather than the dry rule is what retires a surface.
+2. **The loop is still feeding itself.** All five cloud-takeable items were
+   filed by this loop grilling or polishing its own docs — three of them by
+   this wake and the last, none by the plan. Every item the *plan* holds waits
+   on the owner or on a local wake. Worth noticing rather than celebrating: the
+   work is real (this wake refuted a published premise and closed a rubric
+   ambiguity that had gone unstated since the definitions were written in
+   94.7), but it is self-sourced.
 
-3. **`249.12`, the archival trigger, stays load-bearing.** Two consecutive wakes
-   reached opposite conclusions on the sweep hours apart on the same tree, and
-   only a hand-off happening to name a number settled it. A stated trigger
-   removes that.
+3. **`273.2` is the owner call still worth their attention**, an eighteenth
+   wake untouched — whether a Polish round whose score does not move should
+   increment `dry`. Not touched this wake; rule 6 was never reached.
 
 ## `bundle-gz-kb` still cannot be sampled — the rule-5 finding is unchanged
 
-259.1's finding, re-run this wake rather than re-derived:
-
-```
-grep -rln 'bundle-gz-kb' --include='*.mjs' --include='*.py' --include='*.ts' \
-  --include='*.js' --include='*.json' . | grep -v node_modules
-```
-
-still returns exactly **one** file — `scripts/loops/record_metric.py` — and the
-hit is its **docstring example** at line 6, `--value 7.0`. Nothing derives the
-number. Do not "fix" rule 5's staleness by recording a guessed value.
-
-**A related reading this wake took, recorded so it is not mistaken for one:**
-`packages/core/dist/css/index.min.css` measures **95,172 bytes**, gzipped
-**15,458** — and an independent reading of the same tree minutes earlier gave
-**15,305**. That spread is the zlib-build variance `LOOPS.md` warns about; it is
-evidence for 292.6, not a sample for rule 5.
+259.1's finding, carried forward unchanged and **not re-run this wake** (rule 4
+matched, so nothing needed it): the only file mentioning `bundle-gz-kb` is
+`scripts/loops/record_metric.py`, and the hit is its docstring example. Nothing
+derives the number. Do not "fix" rule 5's staleness by recording a guessed
+value. The command is in the previous hand-off at `e1ffcc3`.
