@@ -74,7 +74,10 @@ uniformly true -- the dead-detector shape CLAUDE.md 94.11 refuses.
 
 USAGE
   polish_requeue.py --check    report surfaces whose source moved; exit 1 if any
-  polish_requeue.py --apply    write the re-queue into the ledger
+  polish_requeue.py --apply    write the re-queue into the ledger, and HEAL any
+                               stamp taken mid-round (roadmap 283.3): see
+                               `heal_midround` for why the repair runs here and
+                               not from the post-commit report
   polish_requeue.py --stamp component/sidebar-nav
                                record the CURRENT source state, i.e. "this
                                surface has just been polished"; call it at the
@@ -90,7 +93,8 @@ USAGE
   polish_requeue.py --verify-stamps
                                does every stamp describe a real tree? Run AFTER
                                the round's commit -- advisory, from
-                               record_iteration.py
+                               record_iteration.py. It NAMES the fault; --apply
+                               is what repairs the one kind that is mechanical
   polish_requeue.py --audit-stamps
                                exhaustive form of the same question
 
@@ -375,7 +379,7 @@ def _parent(rev: str) -> str:
     return done.stdout.strip() if done.returncode == 0 else ""
 
 
-def stamp_provenance(surface: str, stamp: str) -> tuple[str, str]:
+def stamp_provenance(surface: str, stamp: str) -> tuple[str, str, str]:
     """Can a re-queued surface's stamp be REPRODUCED from a commit?
 
     @exact -- every verdict here is an equality between two digests. There is
@@ -413,6 +417,13 @@ def stamp_provenance(surface: str, stamp: str) -> tuple[str, str]:
     - ``narrow`` -- the stamp reproduces only WITHOUT the behavior modules.
       Certain: it was taken under the pre-276.1 formula, and this surface will
       re-queue on every run until something re-stamps it.
+    - ``orphan-midround`` -- an ``orphan`` (below) whose introducing commit DID
+      touch this surface's own source. That is the mid-round-stamp signature:
+      `--stamp` digested the working tree, the round then edited the source
+      again, and the commit carries a tree the stamp never described. It is
+      split from ``orphan`` because its repair is unambiguous and mechanical --
+      the digest at that commit -- which is what `--apply` now applies (roadmap
+      283.3). Every other verdict here is reported and left alone.
     - ``orphan`` -- reproduces under neither set **at the commit that recorded
       it or that commit's parent**. Say it that narrowly: this test looks at
       exactly two revisions, and a stamp may legitimately describe an OLDER
@@ -430,8 +441,8 @@ def stamp_provenance(surface: str, stamp: str) -> tuple[str, str]:
       nothing to compare against. A shallow clone reaches this; so does a
       hand-edited row.
 
-    Both `narrow` and `orphan` mean the same thing operationally: the re-queue
-    carries no information about source movement. Neither is suppressed --
+    `narrow` and both `orphan` kinds mean the same thing operationally: the
+    re-queue carries no information about source movement. None is suppressed --
     a surface may have moved as well, and a wake that stops polishing a surface
     because this line printed would be trading a false signal for a false
     silence.
@@ -445,13 +456,14 @@ def stamp_provenance(surface: str, stamp: str) -> tuple[str, str]:
         # dependence on which commit happens to introduce the digest, which is
         # what breaks for a migrated row.
         if digest_paths(wide, at) == stamp:
-            return "reproducible", f"the digest at {at}, read from the stamp"
+            return "reproducible", f"the digest at {at}, read from the stamp", at
         narrow_at = [p for p in wide if "/js/behaviors/" not in p]
         if narrow_at != wide and digest_paths(narrow_at, at) == stamp:
             return (
                 "narrow",
                 f"the PRE-276.1 digest at {at}, read from the stamp — "
                 "behavior modules excluded",
+                at,
             )
         # An exact, immediate diagnosis of a path-set change: the stamp names
         # its own tree, so a disagreement there cannot be "the source moved".
@@ -460,20 +472,21 @@ def stamp_provenance(surface: str, stamp: str) -> tuple[str, str]:
             f"the stamp names {at}, and the digest there matches under NO "
             "current path set — the set this surface is computed over has "
             "changed since the stamp was written",
+            at,
         )
 
     intro = git(
         "log", "--reverse", "--format=%h", "-S", stamp, "--", str(LEDGER)
     ).split()
     if not intro:
-        return "unknown", "no commit in the ledger's history records this digest"
+        return "unknown", "no commit in the ledger's history records this digest", ""
     rev = intro[0]
     parent = _parent(rev)
     revs = [r for r in (rev, parent) if r]
 
     for r in revs:
         if digest_paths(wide, r) == stamp:
-            return "reproducible", f"the digest at {r}"
+            return "reproducible", f"the digest at {r}", r
 
     narrow = [p for p in wide if "/js/behaviors/" not in p]
     if narrow != wide:
@@ -482,6 +495,7 @@ def stamp_provenance(surface: str, stamp: str) -> tuple[str, str]:
                 return (
                     "narrow",
                     f"the PRE-276.1 digest at {r} — behavior modules excluded",
+                    r,
                 )
     # Say WHICH orphan this is. Measured 2026-09-05 (roadmap 283.2) on the two
     # live cases: when the introducing commit touched the surface's own source,
@@ -499,13 +513,83 @@ def stamp_provenance(surface: str, stamp: str) -> tuple[str, str]:
     # `component/date`'s source; diff-tree shows it touched none of it, and for
     # `6cb26268` the log form answered `a098cf85` — a different commit.
     if git("diff-tree", "--no-commit-id", "--name-only", "-r", rev, "--", *wide).strip():
-        return "orphan", (
+        return "orphan-midround", (
             f"not the digest at {rev} or its parent, and {rev} DID touch this "
             "surface's own source — the stamp was taken mid-round and then "
-            "invalidated by a later edit in the same commit; re-stamp it at "
-            f"`--restamp {surface} --at {rev}` (run --audit-stamps to confirm)"
-        )
-    return "orphan", f"not the digest at {rev} or its parent — run --audit-stamps"
+            "invalidated by a later edit in the same commit; the repair is the "
+            f"digest at {rev}, which `--apply` applies (or `--restamp "
+            f"{surface} --at {rev}` by hand; --audit-stamps confirms)"
+        ), rev
+    return "orphan", f"not the digest at {rev} or its parent — run --audit-stamps", rev
+
+
+def heal_midround(text: str, recorded: dict[str, str]) -> tuple[str, list]:
+    """Apply the one repair `stamp_provenance` computes unambiguously.
+
+    ROADMAP 283.3, 2026-09-06. 283.2 shipped an ordering rule (`--stamp` runs
+    last) and an advisory post-commit report, and asked whether that is enough.
+    The measurement says it cannot be answered from practice: **0 Polish rounds
+    have run since 283.2 landed**, so the advisory check has had no live
+    opportunity to fire, and a refusal calling it sufficient would rest on an
+    empty denominator. What CAN be settled is the gap itself -- the report
+    already prints the exact repair command (`--restamp <surface> --at <rev>`)
+    and nothing runs it, so the fault is permanent until a human reads one
+    stderr block among three.
+
+    So the repair runs here, at Polish step 0, and NOT from the post-commit
+    report. Two reasons, both about where the write lands:
+
+    - Step 0's `--apply` already writes this ledger, so a healed row is
+      committed by the round that is about to happen. Healing from
+      `record_iteration.py` would edit a tracked file AFTER the wake's slice
+      commit, which is a new way to leave a dirty tree at hand-off -- and a
+      dirty tree is what `LOOPS.md` Step 0 reads as "the previous wake was
+      interrupted".
+    - The evidence is equally available here. The fault is only visible once
+      the round's commit exists, and by step 0 of any later wake it does.
+
+    It is convergent rather than one-shot: the search re-runs from git history
+    every time, so a heal that is computed and then not committed is simply
+    recomputed identically on the next `--apply`.
+
+    Healed to `digest@rev`, the suffixed form -- the revision is known by
+    construction here (it is the commit the search found), which is exactly
+    the condition `parse_stamp`'s docstring sets for writing a suffix.
+
+    Only ``orphan-midround`` is healed. `narrow` wants a path-set migration,
+    `path-set` says the formula moved, `orphan` may be a legitimately older
+    tree (`component/date` is the live case, and `--audit-stamps` finds it a
+    day before its row was written), and `unknown` has nothing to compare
+    against. Rows the ledger excludes from re-queueing at all -- SKIPPED, or
+    dry -- are skipped here too, on `--apply`'s own rule: a surface taken out
+    of play does not come back because a digest moved.
+    """
+    lines = text.splitlines()
+    healed = []
+    for i, s, cells in rows(text):
+        was = recorded[s]
+        d, at = parse_stamp(was)
+        if was == "-" or not STAMP_RE.match(was) or at:
+            continue
+        if "SKIPPED" in cells[-1] or cells[-3] not in ("0", "—", "-", ""):
+            continue
+        if digest(s) == d:
+            continue
+        kind, _why, rev = stamp_provenance(s, was)
+        if kind != "orphan-midround" or not rev:
+            continue
+        new = digest(s, tree=rev)
+        if new == "-":
+            # Same refusal as --restamp: never write a '-' over a real stamp.
+            continue
+        parts = lines[i].rstrip().rstrip("|").split("|")
+        parts[-2] = f" {new}@{rev} "
+        lines[i] = "|".join(parts) + "|"
+        healed.append((s, was, f"{new}@{rev}"))
+    out = "\n".join(lines) + "\n"
+    if healed:
+        LEDGER.write_text(out)
+    return out, healed
 
 
 def audit_stamps(surface: str, stamp: str) -> tuple[bool, str]:
@@ -706,7 +790,7 @@ def main() -> int:
                 continue
             if digest(s) == d:
                 continue
-            kind, why = stamp_provenance(s, was)
+            kind, why, _rev = stamp_provenance(s, was)
             if kind != "reproducible":
                 broken.append((s, kind, why))
         if not broken:
@@ -722,6 +806,15 @@ def main() -> int:
         )
         for s, kind, why in broken:
             print(f"  {s:34s} {kind}: {why}")
+        healable = [s for s, kind, _ in broken if kind == "orphan-midround"]
+        if healable:
+            # Say what happens next, so the report is not a standing request
+            # for a human to run something (roadmap 283.3).
+            print(
+                f"  {len(healable)} of these is the mid-round kind, whose "
+                "repair is mechanical: the next `--apply` (Polish step 0) "
+                "re-stamps it at the commit that carries it."
+            )
         return 1
 
     if args.audit_stamps:
@@ -787,6 +880,23 @@ def main() -> int:
     # surfaces have likewise forfeited their budget by rule. Both are reported
     # rather than dropped silently, so the exclusion is visible in the output
     # instead of being a quiet behaviour nobody can see.
+    # HEAL BEFORE COMPUTING THE RE-QUEUE SET, not after (roadmap 283.3). A
+    # healed row's stamp may now equal today's digest, and marking it
+    # RE-QUEUED on the strength of the digest it had a moment ago would be a
+    # false re-queue produced by the repair itself.
+    healed = []
+    if args.apply:
+        text, healed = heal_midround(text, recorded)
+        if healed:
+            recorded = {s: c[-2] for _, s, c in rows(text)}
+            print(
+                f"{len(healed)} stamp(s) HEALED — taken mid-round and "
+                "invalidated by a later edit in the same commit; re-stamped at "
+                "the commit that carries them:"
+            )
+            for s, was, now in healed:
+                print(f"  {s:34s} {was} -> {now}")
+
     excluded = []
     changed = []
     for _, s, cells in rows(text):
@@ -818,7 +928,7 @@ def main() -> int:
     print(f"{args.ledger} re-entry: {len(changed)} surface(s) whose SOURCE moved since their last round")
     uninformative = []
     for s, was, now in changed:
-        kind, why = stamp_provenance(s, was)
+        kind, why, _rev = stamp_provenance(s, was)
         if kind == "reproducible":
             note = ""
         else:
@@ -840,7 +950,8 @@ def main() -> int:
             "surface then re-queues on every run. They may have moved as\n"
             "  well; this cannot tell. `--audit-stamps` settles any row named here — "
             "a stamp seeded from an older tree reads this way and is fine.\n"
-            "  Clearing one means a round that ends in `--stamp`, not a hand edit."
+            "  Clearing one means a round that ends in `--stamp`, not a hand edit"
+            " — except `orphan-midround`, which `--apply` repairs itself."
         )
         for s, kind in uninformative:
             print(f"    {s:34s} {kind}")
@@ -883,7 +994,14 @@ def main() -> int:
             f"{len(already)} already carried the marker; "
             f"{len(names)} re-queued in total"
         )
-        print(f"ledger {'updated' if wrote else 'UNCHANGED — nothing to write'}")
+        # `healed` counts too: heal_midround wrote the file itself, so
+        # "UNCHANGED" over a run that re-stamped a row would report the marker
+        # pass rather than the file — the same failure the paragraph above
+        # red-proved out of the line before it.
+        print(
+            f"ledger {'updated' if wrote or healed else 'UNCHANGED — nothing to write'}"
+            + (f" ({len(healed)} stamp(s) healed)" if healed else "")
+        )
     else:
         print("\n(--apply writes this into the ledger; --check only reports)")
 

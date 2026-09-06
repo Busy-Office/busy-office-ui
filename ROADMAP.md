@@ -315,6 +315,139 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 287 — 283.3 asked whether an advisory check is enough, and the honest answer is that the question has an EMPTY DENOMINATOR: 0 Polish rounds have run since 283.2, so the check has never had a live opportunity to fire — closed by repairing the gap that IS measurable, the printed repair command nothing ran (2026-09-06)
+
+**Dispatcher trace, cloud wake.** Rule 1 clear: `list_issues` on
+`Busy-Office/busy-office-ui` → `totalCount: 0`, and
+`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0**. Step 1 triaged and
+committed nothing: no new input. Rule 2 `0 / 4 Continue rounds … ok`; rule 3
+`0 / 3 slices … ok`. **Rule 5 read `3 wake-date(s) newer … STALE`, so it could
+not be evaluated** — reported as such, per its own text, never as clear.
+**Rule 4 matched.** All 16 open items were re-read from `ROADMAP.md` this wake
+and re-classified from their own text per `LOOPS.md` 186.2, oldest first:
+**owner-blocked** — Slice 15 (owner hardware), `112.3` (owner briefs + four
+answers), `112.4` (blocked on 112.3), `249.7` (its own text defers to 249.10,
+the owner's vocabulary column), `249.10`, `249.11`, `249.12`, `249.13`
+(each says **OWNER CALL** in its own line), `273.2`; **browser-blocked in the
+SCREENSHOT sense** — `249.6` (its own text records the clause-level decline,
+the fourth), `249.9` (its own text: "the deliverable is a catalogue page whose
+point is rendered miniatures a human compares"), `249.15` (its own text names
+`ENVIRONMENT.md`'s first list). The oldest item this container can take is
+therefore **283.3**, and it is what ran. No archive sweep: `roadmap_scope.py`
+reads **9.5%** closed-history share, the lowest recorded.
+
+### 287.1 — the measurement that decides 283.3, and it is a denominator, not a rate
+
+283.3's Accept offers two branches and asks for one number either way: *how
+many rounds since 283.2 stamped early*. The number is not a rate — **no rounds
+have run at all.**
+
+```
+git show -s --format=%cI fc79ea85                     # 283.2 landed 2026-09-05T20:54:30+00:00
+awk -F' · ' '/ · Polish · /{print $1}' .roundtable/loop-log.md | sed 's/^- //' \
+  | awk '$0 > "2026-09-05 20:54"' | wc -l             # 0
+grep -c ' · Polish · ' .roundtable/loop-log.md        # 34 ever
+python3 scripts/loops/polish_requeue.py --verify-stamps
+  # stamp verification: 21 row(s), every stamp describes a real tree
+```
+
+Four iterations have been recorded since 283.2 (`Continue · build`,
+`Standardize · sweep`, and two `Objective · grill`) and **none is a Polish
+round**, so `--verify-stamps` has never had an opportunity to fire on a live
+round. Its 21-of-21 green is therefore not evidence of sufficiency; it is
+evidence that the two known-bad rows were repaired by hand and nothing has
+been able to break since.
+
+**So the refusal branch is not takeable as written.** "The advisory check is
+sufficient" would be a claim about 0 of 0 rounds — an unfalsifiable reading of
+exactly the shape `CLAUDE.md` refuses ("a 0%, a 100%, or an identical value
+across many inputs is a defect until proven otherwise"; a predicate with no
+opportunities cannot discriminate). Recording it would have satisfied the
+Accept literally and published a number that means nothing, which is the
+failure the criterion rule exists to prevent.
+
+### 287.2 — what IS measurable: the repair was already computed and printed, and nothing ran it
+
+The gap between "advisory" and "self-healing" turned out to be one step, not a
+format change. `stamp_provenance` already distinguishes the mid-round fault
+from every other way a stamp can fail to reproduce — the introducing commit
+touched the surface's own source — and already printed the exact repair,
+`--restamp <surface> --at <rev>`. It was a standing request for a human to
+read one stderr block among three and type a command.
+
+**Shipped:** the verdict is split (`orphan-midround`, separate from `orphan`),
+`stamp_provenance` returns the revision rather than only naming it in prose,
+and `heal_midround` applies the repair — restamping to `digest@rev`, the
+suffixed form `parse_stamp`'s docstring reserves for a revision known by
+construction.
+
+**The repair runs from `--apply` at Polish step 0, NOT from the post-commit
+report, and where the write lands is the whole reason.** Step 0 already writes
+this ledger, so a healed row is committed by the round about to happen.
+Healing from `record_iteration.py` would edit a tracked file *after* the
+wake's slice commit — a new way to hand off a dirty tree, which `LOOPS.md`
+Step 0 reads as "the previous wake was interrupted". The evidence is equally
+available at either point: the fault is visible once the round's commit
+exists, and by step 0 of any later wake it does. It is convergent rather than
+one-shot — the search re-runs from git history, so a heal computed and not
+committed is recomputed identically next time.
+
+**Healing happens BEFORE the re-queue set is computed**, not after: a healed
+row's stamp may now equal today's digest, and marking it `RE-QUEUED` on the
+strength of the digest it held a moment ago would be a false re-queue
+manufactured by the repair itself.
+
+### 287.3 — red-proved by injection with a control, in a throwaway worktree
+
+Per `CLAUDE.md`'s rule that a green red-proof is a defect in the injection
+until proven otherwise, the injection was confirmed **in the commit**, not in
+the file: `git show --stat` shows `polish-state.md` and `tree/tree.css` both
+in it, and `git show HEAD:.roundtable/polish-state.md` carries both bogus
+cells. Two rows were injected in ONE commit to make the discrimination
+unavoidable:
+
+| injected | commit touched its source? | verdict | healed? |
+|---|---|---|---|
+| `component/tree` = `deadbeef` | **yes** (`tree.css` edited in the same commit) | `orphan-midround` | **yes** → `aff8f038@66eebfef` |
+| `component/icon` = `feedface` | no | `orphan` | **no** — left at `feedface` |
+
+Four readings, each a different question:
+
+- **Red:** `--verify-stamps` went `2 of 21`, naming the two kinds apart. Green
+  before the injection and green again for `tree` after the heal.
+- **Reconciled through a different function:** after healing, `component/tree`
+  drops out of `--check`'s re-queue set — and that set is computed by
+  `digest()` reading the working tree, not by the `digest_paths(…, rev)` that
+  produced the heal. Two code paths agreeing on the value.
+- **Idempotent:** a second `--apply` printed `ledger UNCHANGED — nothing to
+  write`.
+- **It does not erase a real signal.** The injection was restored and a
+  *further* commit touched `tree.css`; the heal still restamped at the
+  introducing commit (`aff8f038@66eebfef`) and the row **still re-queued**
+  (`-> 9cfa2515`). A repair that silently cleared genuine source movement
+  would have looked identical on the first three readings.
+
+The worktree and its branch were removed; `main` carries none of it.
+
+### 287.4 — filed, not fixed: `LOOPS.md` §3b step 5 has a run-on paragraph from 283.2's own edit
+
+Noticed while editing next to it. The sentence *"This is what reconciles the
+budgets with this file's standing 'don't manufacture busywork' rule…"* belongs
+to the **`dry++`** bullet above it and now trails the `--stamp` ordering
+paragraph, keeping the earlier bullet's 5-space indent mid-paragraph. It is a
+prose defect in a file the loop reads every wake, introduced by the commit
+that added the paragraph it now trails.
+
+4. [ ] **287.5 — re-attach the orphaned sentence in `LOOPS.md` §3b step 5.**
+       Deliberately not fixed in this slice: it is a markdown move whose
+       correct target is a judgement about what 283.2 meant, and this wake's
+       diff is already in that paragraph — repairing prose you are editing
+       around is how a bulk edit gets verified against its own diff.
+       - **Accept:** the sentence sits under the bullet it belongs to **or**
+         a recorded reading of `git show fc79ea85 -- LOOPS.md` establishing
+         that the run-on is what 283.2 intended, in which case this closes as
+         no-change.
+
 ## Slice 286 — the defect Slice 285 listed under "what reproduced": 281's decay is dated to the hour and its CAUSE is false — `69a53364` is a pure addition that never touched the table, the table is still reached by the rule, and the claim was shipped in the `data-table` spacing cite (2026-09-06)
 
 **Dispatcher trace, cloud wake — and this wake LOST TWO COLLISIONS, which is new.**
@@ -1145,7 +1278,14 @@ icon           stamped 2026-08-30  4 commits        +72/-4
        by the message disagreeing with a probe taken minutes earlier, which is
        the only thing that ever catches this shape.
 
-3. [ ] **283.3 — `--stamp` cannot verify its own output, and the fix for that
+3. [x] **283.3 — DONE 2026-09-06 (cloud wake), and the answer is neither branch
+       as written: the sufficiency question has an EMPTY DENOMINATOR — 0 Polish
+       rounds have run since 283.2, so the advisory check has never had a live
+       opportunity to fire. Closed by shipping the self-healing branch instead,
+       at the one step whose write lands in the round's own commit. See Slice
+       287.** Original text follows.
+
+       **`--stamp` cannot verify its own output, and the fix for that
        is ordering plus an advisory check. Is that enough?** 283.2 shipped
        `--verify-stamps` (advisory, post-commit) and a `LOOPS.md` rule that
        `--stamp` runs last. Both were the affordable fix, and neither *prevents*

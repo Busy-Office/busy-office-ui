@@ -836,6 +836,21 @@ remaining, per `.roundtable/polish-state.md`.
 
 0. **Re-queue first**: `python3 scripts/loops/polish_requeue.py --apply`.
    Nothing else in the loop notices that a surface's source moved.
+
+   **It also HEALS a stamp taken mid-round, and that write is why the repair
+   is here rather than in the post-commit report** (roadmap 283.3,
+   2026-09-06). A stamp orphaned by an edit made after `--stamp` and before
+   the commit has one unambiguous repair — the digest at the commit that
+   carries it — which `--verify-stamps` already computed and printed as a
+   command nobody ran. `--apply` now applies it, and the healed row lands in
+   the round's own commit, because this step already writes this ledger.
+   Healing from `record_iteration.py` would edit a tracked file *after* the
+   wake's slice commit, which is a new way to hand off a dirty tree. Only the
+   `orphan-midround` verdict is healed; `narrow`, `path-set`, `orphan` and
+   `unknown` are still reported and left alone. Red-proved by injection with
+   a control: the mid-round row healed and the same-commit plain orphan did
+   not, and a row whose source moved AGAIN after the bad stamp was healed and
+   still re-queued — the repair does not erase a real signal.
 1. **Pick** the surface with the LOWEST score and rounds remaining. Ties
    break by fewest rounds used. **One round per surface per pass** — never
    the same surface twice running while another sits at the same score.
@@ -888,7 +903,12 @@ remaining, per `.roundtable/polish-state.md`.
    the two live cases (`data-table`, `pagination`): every committed blob
    combination was enumerated, 2 and 4 candidate trees, and none reproduced the
    stamp. `--verify-stamps` (advisory, from `record_iteration.py`, after the
-   commit) is what catches it; the process rule alone is not the mechanism. This is what reconciles the budgets
+   commit) is what catches it; the process rule alone is not the mechanism.
+   **And catching it is no longer where this stops** — 283.3 measured that the
+   advisory report's sufficiency could not be answered at all (0 Polish rounds
+   had run since 283.2, so it had never had a live opportunity to fire), and
+   closed the gap it could measure instead: step 0's `--apply` now repairs the
+   mid-round kind. This is what reconciles the budgets
      with this file's standing "don't manufacture busywork" rule: a
      surface that cannot produce a measurable gain twice running is
      finished, whatever its budget says.
