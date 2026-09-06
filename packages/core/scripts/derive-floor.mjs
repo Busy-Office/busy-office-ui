@@ -59,6 +59,32 @@ const FEATURES = [
   { tier: 'degrades', id: 'popover', path: ['html', 'global_attributes', 'popover'], test: (c, js) => /popover/.test(js) || /\[popover/.test(c) },
   { tier: 'degrades', id: '@starting-style', path: ['css', 'at-rules', 'starting-style'], test: (c) => /@starting-style\b/.test(c) },
   { tier: 'core', id: 'dialog', path: ['html', 'elements', 'dialog'], test: (c, js) => /showModal\(/.test(js) || /\bdialog\b/.test(c) },
+  /* The three below ship NOWHERE today — re-measured rather than carried from
+     the item that asked for them (roadmap 294.1):
+
+       grep -c -F 'light-dark(' packages/core/dist/css/index.css   # 0
+       grep -c -F 'oklch('      packages/core/dist/css/index.css   # 0
+       grep -c -F 'scroll-state(' packages/core/dist/css/index.css # 0
+
+     and `grep -rl` over all of `dist/css/` agrees at 0 for each. So adding them
+     moves no number today, which is the point: this list is what the floor CAN
+     see, and a feature nobody probed for does not raise it. The case they exist
+     for is a later edit landing one of them UNguarded.
+
+     TIER IS CHOSEN FOR THE UNGUARDED CASE, and that is checkable rather than a
+     forecast: the framework's two guarded modern features, `color-mix()` and
+     `subgrid`, are both tiered `polish` for exactly that reason. If one of
+     these three ever lands inside an `@supports`, re-tier it the same way —
+     this script has no `@supports` awareness by design, tier is where the guard
+     is recorded. */
+  { tier: 'core', id: 'light-dark()', path: ['css', 'types', 'color', 'light-dark'], test: (c) => /light-dark\(/.test(c) },
+  { tier: 'core', id: 'oklch()', path: ['css', 'types', 'color', 'oklch'], test: (c) => /\boklch\(/.test(c) },
+  /* `scroll-state_queries`, NOT `scroll-state` — the obvious spelling is not a
+     BCD key, and `compatOf` throws on it rather than silently lowering the
+     floor. Tiered `polish`: an unsupported browser ignores the whole
+     `@container scroll-state(…)` block, so the affordance simply does not
+     paint, which is this file's own definition of the tier. */
+  { tier: 'polish', id: 'scroll-state()', path: ['css', 'at-rules', 'container', 'scroll-state_queries'], test: (c) => /scroll-state\(/.test(c) },
 ];
 
 const css = await readFile(join(DIST, 'css', 'index.css'), 'utf8');
@@ -72,6 +98,26 @@ try {
 /** Walk a BCD path, or throw — a silently-missing key would lower the floor.
  *  Shared with check-rf-floor.mjs; see bcd-compat.mjs for why. */
 const compatOf = (path) => bcdCompatOf(path, 'derive-floor');
+
+/** BCD's "this browser will never run it" — `version_added: false` on every
+ *  unflagged entry. It is NOT the same as `earliestUsableVersion` returning
+ *  null, and conflating the two is the hole 294.1's third probe opens:
+ *  `floorFor` skips a null, so *"no version supports this"* and *"we did not
+ *  detect this"* produce the identical output — a floor published for a browser
+ *  that cannot run the thing. That is verbatim the failure this file exists to
+ *  prevent, pointing the other way.
+ *
+ *  BASE RATE, measured before adding this rather than after (CLAUDE.md):
+ *  across the 20 probes that predate 294.1, **0 of 80 probe/browser pairs** are
+ *  known-unsupported. `scroll-state()` is the first — Firefox and Safari both
+ *  read `version_added: false` — so this is a case that has never existed here
+ *  and now can. Re-run it; it is a snapshot: for each probe path,
+ *  `entries.every((e) => e.version_added === false)` per browser. */
+const NEVER = 'never';
+function isNeverSupported(support) {
+  const entries = (Array.isArray(support) ? support : [support]).filter((e) => !e.flags);
+  return entries.length > 0 && entries.every((e) => e.version_added === false);
+}
 
 /**
  * The earliest version a browser supports this feature in a form THE FRAMEWORK
@@ -122,7 +168,11 @@ function detect(cssText, jsText) {
        adds them, so the answer is a fact about the artifact, not an intention. */
     const emitsPrefixed = new RegExp(`-webkit-${f.id.replace(/[^a-z-]/g, '')}\\s*:`).test(cssText);
     const versions = {};
-    for (const b of BROWSERS) versions[b] = earliestUsableVersion(support[b], emitsPrefixed);
+    for (const b of BROWSERS) {
+      versions[b] = isNeverSupported(support[b])
+        ? NEVER
+        : earliestUsableVersion(support[b], emitsPrefixed);
+    }
     out.push({ tier: f.tier, id: f.id, prefixed: emitsPrefixed, versions });
   }
   return out;
@@ -160,7 +210,7 @@ const floorFor = (tiers, from = detected) => {
     for (const d of from) {
       if (!tiers.includes(d.tier)) continue;
       const v = d.versions[b];
-      if (v == null) continue;
+      if (v == null || v === NEVER) continue;
       if (max === null || parseFloat(v) > parseFloat(max)) { max = v; who = d.id; }
     }
     f[b] = max;
@@ -173,6 +223,37 @@ const supported = floorFor(['core', 'degrades']);
 const full = floorFor(TIERS);
 const floor = supported.floor;
 const drivenBy = supported.drivenBy;
+
+/* A DETECTED feature no version of a browser supports, split by tier, because
+   the two halves want opposite answers:
+
+     core / degrades — these set the published floor, so shipping one that (say)
+       Firefox will never run means there IS no Firefox floor. Printing a number
+       anyway is the original bug in a new place. FAIL.
+     polish — "a cosmetic affordance that simply does not paint" already covers
+       a browser that never paints it, so this is legal. But `fullFidelity` is
+       published as "where every cosmetic enhancement also paints", and that
+       sentence stops being true the moment one of them cannot. REPORTED into
+       floor.json as `neverSupported`, never silently dropped.
+
+   Refused: failing on `polish` too. It would forbid ever shipping a
+   progressive enhancement one engine lacks, which is a product decision nobody
+   has taken, and this script's job is to describe the artifact rather than to
+   constrain it. */
+const neverSupported = [];
+const neverFatal = [];
+for (const d of detected) {
+  const browsers = BROWSERS.filter((b) => d.versions[b] === NEVER);
+  if (!browsers.length) continue;
+  (d.tier === 'polish' ? neverSupported : neverFatal).push({ id: d.id, tier: d.tier, browsers });
+}
+if (neverFatal.length) {
+  console.error('derive-floor FAILED — a core/degrades feature no version of a browser supports:');
+  for (const n of neverFatal) console.error(`  ${n.id} (${n.tier}) — ${n.browsers.join(', ')}`);
+  console.error('  Refusing to publish a floor for a browser that cannot run the shipped CSS.');
+  console.error('  Either guard the feature and re-tier it `polish`, or drop it.');
+  process.exit(1);
+}
 
 /* REACH, computed rather than asserted (roadmap 38.2). A floor is two numbers:
    which browsers, and how many people that is. The second is the one a team
@@ -259,6 +340,10 @@ const out = {
   /** Where every cosmetic enhancement also paints. Higher, and NOT the floor. */
   fullFidelity: full.floor,
   fullFidelityDrivenBy: full.drivenBy,
+  /** Detected `polish` features some browser will never support, so
+   *  `fullFidelity` is read as "every cosmetic enhancement paints EXCEPT
+   *  these". Empty is the normal state; see the block that builds it. */
+  neverSupported,
   /** Human-readable, so every page and README prints the same string. */
   label: `Chrome/Edge ${floor.chrome} · Firefox ${floor.firefox} · Safari ${floor.safari}`,
   reach,
@@ -277,6 +362,10 @@ console.log(`  from ${detected.length} detected feature(s), against ${out.source
 console.log(`  reach ${reach}% of tracked browser usage (${out.reachSource}); @layer ceiling ${ceiling}%`);
 console.log('full fidelity (every cosmetic enhancement painting too):');
 for (const b of BROWSERS) console.log(`  ${b.padEnd(8)} ${full.floor[b]}  (set by ${full.drivenBy[b]})`);
+if (neverSupported.length) {
+  console.log('  EXCEPT these, which one or more browsers will never paint:');
+  for (const n of neverSupported) console.log(`    ${n.id} — ${n.browsers.join(', ')}`);
+}
 {
   const labels = new Set(Object.values(perComponent).map((c) => c.label));
   console.log(

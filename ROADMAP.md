@@ -315,6 +315,129 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 311 — 294.1: the three probes are one line each, and the item's own reason for calling them harmless — "they arrive `@supports`-guarded" — is not a thing `derive-floor.mjs` can see. Adding the third opens the first hole in the floor where BCD says a browser will NEVER support it (2026-09-07)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty), `ENVIRONMENT.md` trap 1, fixed with
+`git checkout -B main origin/main` before any commit; `origin/main` again
+arrived as a **forced update** (`26447ba...af1618a`). Trap 2 clean in one
+`--unshallow` (**1,975** commits, no `shallow.lock`), and it again brought the
+tags — the **twenty-fifth** consecutive container to do so; `git tag | wc -l` →
+**8**.
+
+Step 1 read both intakes with `ENVIRONMENT.md` §8's controls in one run:
+`/discussions` → 200 len **0**; `/not-a-real-route` → **404**;
+`/issues?state=open` → 200 len **1** (issue #2, already triaged as `300.2`). No
+new input, so Step 1 committed nothing. Rule 1: no open P0 —
+`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` reads **0** across the 25 open
+items. Rule 2 `Standardize 1 / 4 … ok`; rule 3 `Objective 1 / 3 [292] … ok`.
+**Rule 4 dispatched Continue, build mode, on `294.1`** — every open item older
+than it re-classified from its own body rather than from the hand-off:
+owner-blocked Slice 15, `112.3`, `112.4`, `249.7`, `249.10`, `249.11`,
+`249.12`, `249.13`, `273.2`; browser-blocked in the SCREENSHOT sense `249.6`,
+`249.9`. Rule 5 read **STALE** (`1 wake-date(s) newer`), so per its own text it
+**could not be evaluated** and is not reported clear.
+
+**The premise reproduces, and the command is written next to it.** All three
+features ship nowhere, on the built artefact `derive-floor.mjs` actually reads:
+
+```
+grep -c -F 'light-dark('   packages/core/dist/css/index.css   # 0
+grep -c -F 'oklch('        packages/core/dist/css/index.css   # 0
+grep -c -F 'scroll-state(' packages/core/dist/css/index.css   # 0
+grep -rl -F '<each>' packages/core/dist/css/ | wc -l           # 0 for each
+```
+
+So the headline floor was always going to be unchanged, and 294.1's Accept
+names that as a satisfying outcome. It is: **`Chrome/Edge 119 · Firefox 129 ·
+Safari 17.5`, 19 detected features, reach 80.09%, before and after.** The
+generated artefact's diff is one added key and nothing else —
+`diff floor-before.json floor-after.json` → `27a28 > "neverSupported": [],`.
+That is what makes "no screenshot was needed" a measurement rather than a
+hope: three docs pages render `floor.label`, and the label is byte-identical.
+
+**Finding A — "they arrive `@supports`-guarded" does not protect the floor,
+because this script cannot see a guard.** That clause is the item's whole
+reason for calling the gap harmless, and it is false about the mechanism. The
+framework's two guarded modern features are the control: all **3**
+`color-mix(` uses in `packages/core/src/css` sit inside badge.css's
+`@supports (color: color-mix(in oklab, red, red))`, and `color-mix()` is
+**detected anyway** — it is in `floor.json`'s `features` with chrome 111 /
+firefox 113 / safari 16.2. What keeps it off the published floor is not the
+guard; it is `tier: 'polish'`. Same for `subgrid`, 9 uses, guarded in
+`form-section.css` and `kv.css`.
+
+So the tier is where a guard is recorded, and the three new probes are tiered
+for the **unguarded** case they exist to catch — `core` for `light-dark()` and
+`oklch()` (a colour value with no fallback in its own declaration), `polish`
+for `scroll-state()` (an unsupported browser ignores the whole
+`@container scroll-state(…)` block, which is this file's own definition of the
+tier). The rule for a later wake is written in the file: **if one of these ever
+lands inside an `@supports`, re-tier it, exactly as `color-mix()` and `subgrid`
+already are.** No `@supports` parsing was added — that would be a second
+instrument disagreeing with the tier field.
+
+**Finding B — the obvious BCD key for the third probe does not exist.**
+`css.at-rules.container.scroll-state` is **MISSING**; the key is
+`scroll-state_queries`. `compatOf` throws on a missing path by design, so this
+would have failed loudly rather than silently lowering the floor — but it is
+the reason the "one line" in the item's own header is one line plus a lookup.
+
+**Finding C — the third probe opens the first `version_added: false` hole this
+script has ever had, and `floorFor` was silently blind to it.**
+`scroll-state_queries` reads `version_added: false` for **firefox and safari**.
+`earliestUsableVersion` filters on `typeof version_added === 'string'`, so both
+returned `null`, and `floorFor` skips a null — meaning *"no version of Firefox
+will ever run this"* and *"we did not detect this"* produced the identical
+output: a floor published for a browser that cannot run the shipped CSS. That
+is verbatim the failure this file exists to prevent, pointing the other way.
+
+**Base rate measured before adding the guard, not after:** across the 20 probes
+that predate this slice, **0 of 80 probe/browser pairs** are known-unsupported.
+`scroll-state()` is the first, which is what makes the guard a reachable case
+rather than ceremony. The command is in the script beside `isNeverSupported`.
+
+The guard splits by tier, because the two halves want opposite answers:
+`core`/`degrades` **FAIL** (they set the published floor); `polish` is legal
+but **REPORTED** into `floor.json` as `neverSupported`, because `fullFidelity`
+is published as *"where every cosmetic enhancement also paints"* and that
+sentence stops being true the moment one of them cannot. **Refused:** failing
+on `polish` too — it would forbid ever shipping a progressive enhancement one
+engine lacks, which is a product decision nobody has taken.
+
+**Four red-proofs, each red on exactly its own case, plus two controls.** Every
+injection was confirmed to land in the file `derive-floor.mjs` reads
+(`grep -c -F` before → after, `0 → 1` each), and each reported version was
+checked against an independent BCD read taken before the code was written:
+
+| injection into `dist/css/index.css` | result |
+|---|---|
+| `.bo-redproof{color:light-dark(#111,#eee)}` | detected 19→**20**; `light-dark()` → chrome 123 / edge 123 / firefox 120 / safari 17.5; **label moves `119` → `123`**, driven by `light-dark()` |
+| `.bo-redproof{color:oklch(0.7 0.1 200)}` | detected **20**; `oklch()` → 111 / 111 / 113 / 15.4; label unchanged, all four below the floor |
+| `@container scroll-state(stuck: top){…}` | detected **20**; `scroll-state()` → 133 / 133 / **never** / **never**; `neverSupported` → `[{scroll-state(), polish, [firefox, safari]}]`; `fullFidelity.chrome` 121 → **133**; label unchanged |
+| the same, with `scroll-state()` re-tiered `degrades` (1 site, verified) | **rc=1** — `derive-floor FAILED — … scroll-state() (degrades) — firefox, safari` |
+
+Controls, so the fourth row is not just "degrades fails": the same re-tier with
+**no** injection exits **0** (the guard needs the feature DETECTED, not merely
+tiered), and the un-injected tree exits 0 with `neverSupported: []`. All four
+reported version sets match the BCD read exactly, which is 294.1's Accept.
+
+**Gates green on the committed tree** — all 17 cloud-runnable entry points
+`ENVIRONMENT.md` derives from `ci.yml`: core `build`, `test`, `lint:css`,
+`docs:build`, `check:claims` (**169** live, the *"3 NOT VERIFIED"* being
+`ENVIRONMENT.md` 6b), `check:formatting`, `check:scroll` (**914**),
+`check:layout` (**127**), `check:forced-colors`, `test:axe` (**127 x 2**, zero
+violations), `check:target-size`, `check:search`, `check:pseudo`,
+`check:quickstart`, `check:po-app` (**20**), `check -w @busy-office/create-ui`,
+`npm run suite` (**28** screens x 2). `check:floor` — the second half of
+294.1's Accept — passes on **580** source files with no hand-typed floor.
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots; a cloud
+wake has no Podman. **Nothing visual is claimed** — the generated `floor.json`
+differs from the previous one by a single added key and no rendered string
+changes, measured above rather than assumed. `292.4/292.5`'s screenshot lane on
+`/components/icon` remains unspent, now from four wakes back.
+
 ## Slice 310 — filed while closing 292.9: the two reference APPS hand a reader four deprecated glyphs that the docs gate deliberately does not cover, and `/base/motion` declares five copyable markup samples the page never renders (2026-09-07)
 
 Both were measured while building `check:deprecated-icons` and are outside
@@ -1690,7 +1813,12 @@ a 53-point gap. `derive-floor.mjs`'s own comment names this: browserslist's
 script's own `reachQuery`, it reproduces **80.09%** exactly. The discrepancy
 was the tell, and it is why the 1.30 figure above is trustworthy.
 
-1. [ ] **294.1 — `derive-floor.mjs` has no probe for `light-dark()`,
+1. [x] **294.1 — DONE 2026-09-07 (Slice 311). Three probes added; the headline
+       floor did not move, which its own Accept names as a satisfying outcome.
+       The item's premise about `@supports` guarding is where the work went —
+       see Slice 311.** Original text kept below.
+
+       **294.1 — `derive-floor.mjs` has no probe for `light-dark()`,
        `oklch()` or `scroll-state()`.** Not a defect today — nothing shipped
        uses them — and **not** a blocker for the contribution, since all three
        arrive `@supports`-guarded. It is a gap that only bites if a later edit
