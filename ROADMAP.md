@@ -1461,8 +1461,88 @@ filed as 292.3 instead, where it can be decided rather than assumed.
          rebasing onto the 0.8.0 release, which did not move them either.
          Nothing renders differently because nothing reaches the browser.
 
-7. [ ] **292.7 — four `content` cites score a page property while citing the
-       CSS.** Found by 292.3's classification, not by reading. `content` is
+7. [x] **292.7 — four `content` cites score a page property while citing the
+       CSS. DONE 2026-09-06 (cloud wake, Continue/build — the lane this item
+       named). The four reproduce exactly; the sentence beside them does
+       not, and it omitted a fifth component of the same shape.**
+
+       **Premise re-checked before acting on it**, per CLAUDE.md's rule that a
+       premise which is itself an earlier wake's measurement is part of the
+       criterion. 292.3's classifier was a throwaway and left no script, so it
+       was reconstructed from 292.3's own description of the lexicon (css-side:
+       a `.css` file, a `--bo-` property, an at-rule, a `.bo-` selector, a
+       length literal, a declaration name; page-side: the opener, the page, the
+       docs, a caption, `.astro`, the wrong-choice clause) and run over the 40
+       `content` cites, reconciled 40 = 40 against the component count:
+
+       ```
+       page 33 | css 0 | both 3 (money quantity richtext) | neither 4 (amount breadcrumb tabs dialog)
+       ```
+
+       - **The finding reproduces.** The `neither` bucket is exactly the four
+         this item names — no more, no fewer.
+       - **The sentence about `form` and `prose` does NOT reproduce, and it is
+         a lexicon artifact rather than a change in the tree.** Both classify
+         **page**-side here, because this reconstruction reads `EXEMPT` and
+         `check:wrong-choice` as page-side signals and 292.3's evidently did
+         not. The tell that the old lexicon was the inconsistent one:
+         **`button` is the third `check:wrong-choice` EXEMPT component**, its
+         cite says *"it is EXEMPT in check:wrong-choice rather than missing the
+         clause"* — the same shape as the other two — and 292.7 does not
+         mention it at all. A rule that caught two of three identical cases was
+         reading something other than the property.
+       - **Three cites this item does not mention are `both`** — `money`,
+         `quantity` and `richtext` each name the opener AND an alternative's
+         `.bo-` class. Each opens *"the opener says…"*, so each already names
+         the page property the score is taken on. **Recorded as already
+         adequate and NOT rewritten**, which the Accept names as a satisfying
+         outcome.
+
+       **Landed:** the four cites now name the opener's wrong-choice clause and
+       the alternative it links, quoting the clause so a reader can check the
+       score against the page. `neither` goes **4 → 0**; `page` **33 → 37**;
+       `both` unchanged at 3; every score and the whole `rubric` block asserted
+       byte-identical across the edit, and the four target strings asserted
+       unique in the raw file before replacement (the first attempt **failed
+       that assertion** — `json.dumps` escapes the em dash to `—` and
+       found 0 occurrences of the `dialog` cite, so the run aborted before
+       writing rather than silently replacing three of four).
+
+       **Red-proved by injection, asserted to land**: `alert`'s content cite
+       replaced with a css-only sentence, the injection confirmed *through the
+       parser* rather than in the file, moves the buckets `page 37 → 36,
+       css 0 → 1` — exactly one component, not the too-broad red that certifies
+       nothing — and the tree restores to `page 37 / neither 0`.
+
+       **Nothing was lost, checked rather than assumed.** Each displaced CSS
+       fact already lives in the stylesheet's own comment —
+       `breadcrumb.css:45-47` (the separator's empty accessible name),
+       `dialog.css:139-147` (why forced-colors needs a border when the edge is
+       box-shadow only), `tabs.css:39-42` (why the fade is not applied to
+       `.bo-data-table-container`) — and `amount`'s two-channel fact is carried
+       by its own `colour` cite (*"negative/positive is the two-channel
+       signature contract, AA-gated"*).
+
+       **Refused: a gate.** 292.3 already refused one asserting each cite
+       respects its dimension's scope, on the ground that the classifier for it
+       is a keyword pass — and this run is fresh evidence for that refusal, not
+       against it: the reconstruction disagrees with the original on `form`,
+       `prose` and `button` purely on lexicon. Per CLAUDE.md 94.11 the checkable
+       shape is not the property.
+       - **Accept:** every `content` cite names the page property the score is
+         taken on, or states the exemption; asserted by re-running 292.3's
+         classifier over the `content` dimension and reconciling its buckets
+         against the EXEMPT set, with the finding that a cite is already
+         adequate recorded as a satisfying outcome rather than rewritten
+         **(done — `neither` 0, all three EXEMPT components state the
+         exemption, and the three `both` cites are recorded adequate rather
+         than rewritten)**.
+
+       ORIGINAL TEXT, kept because the correction above is only readable
+       against it (236.2 — archived text may be amended, and a struck claim
+       stays visible):
+
+       Found by 292.3's classification, not by reading. `content` is
        page-scoped by definition (*"the opener carries the wrong-choice
        clause"*) and assertion 4c ties the score to `check:wrong-choice`'s
        verdict on the page, so a `content: 3` is a claim about the opener.
@@ -1474,11 +1554,9 @@ filed as 292.3 instead, where it can be decided rather than assumed.
        a reader can check a score against (assertion 3's stated reason). The
        other two non-page cites, `form` and `prose`, are correct as they
        stand: both are `check:wrong-choice` EXEMPT and their cites say so.
-       - **Accept:** every `content` cite names the page property the score is
-         taken on, or states the exemption; asserted by re-running 292.3's
-         classifier over the `content` dimension and reconciling its buckets
-         against the EXEMPT set, with the finding that a cite is already
-         adequate recorded as a satisfying outcome rather than rewritten.
+       ← **this last sentence is the half that did not reproduce; see above.**
+       (The Accept is quoted once, in the closure above, rather than twice
+       here.)
        - **Note:** rewriting a published cite is a scoring judgement, so this
          is Continue's or the owner's, not Polish's — same lane as 292.3.
 

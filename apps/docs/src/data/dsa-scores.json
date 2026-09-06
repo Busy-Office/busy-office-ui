@@ -111,7 +111,7 @@
         },
         "content": {
           "score": 3,
-          "cite": "the sign/parentheses carry meaning in text, never colour alone"
+          "cite": "opener carries the wrong-choice clause: \"Not for capturing a value\" — this is display only, and the clause names and links the two entry components instead (Money for currency, Quantity for a count)"
         },
         "fit": {
           "score": 3,
@@ -550,7 +550,7 @@
         },
         "content": {
           "score": 3,
-          "cite": "separator is content(\"/\" / \"\") with an EMPTY accessible name, so it is not read between every crumb"
+          "cite": "opener carries the wrong-choice clause: \"Not for progress through a flow\" — a crumb says where a record sits in a hierarchy you can climb, not how far through a task you are, and the clause names and links Stepper for the other case"
         },
         "fit": {
           "score": 3,
@@ -608,7 +608,7 @@
         },
         "content": {
           "score": 3,
-          "cite": "the mask comment states why a background fade would be wrong (list sits on canvas in docs, surface in a card) and why it is NOT applied to data-table"
+          "cite": "opener carries the wrong-choice clause: \"Not for moving between pages\" — tabs swap panels within one screen and keep the URL, so a browser Back that skips the whole screen is the tell; the clause names and links sidebar-nav and Breadcrumb for cross-screen movement"
         },
         "fit": {
           "score": 3,
@@ -637,7 +637,7 @@
         },
         "content": {
           "score": 3,
-          "cite": "the forced-colors rule states WHY it exists — the panel edge is box-shadow only, which forced-colors does not render"
+          "cite": "opener carries the wrong-choice clause: \"Not for telling the user something\" — a modal takes the screen and demands a decision now, so the clause names and links an alert or toast for reporting an outcome"
         },
         "fit": {
           "score": 3,
