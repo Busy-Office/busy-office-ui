@@ -1503,3 +1503,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-06 10:48 · Continue · build · Slice 292.4 — /components/icon stops teaching a deprecated glyph; guard extended to the markup string and live demos, red-proved twice · landed · 901ce9af
 - 2026-09-06 10:48 · Meta · refusal · un-deprecating --settings: reverses a dated published deprecation (53.2), the shape 249.13 was sent to the owner for; its stated ground (the caption's 'cog') is refuted by the shipped mask · refused · 901ce9af
 - 2026-09-06 10:48 · Meta · refusal · a tree-wide gate in this round: it would be red on the five sites 292.9 now records, and the deprecation's own text says an existing render is not by itself a defect · refused · 901ce9af
+- 2026-09-06 11:52 · Continue · build · 292.5 — /components/icon's copyable block teaches --bo-icon-src and carries bo-sidebar-nav__icon; icon.css header's contradicting mask-image line fixed · landed · 689297c8
+- 2026-09-06 11:52 · Meta · refusal · a tree-wide gate for 'the copyable block teaches a class the page shows' — measured 0 of 9 pages, uniformly true, ceremony per 94.11 · refused · 689297c8
+- 2026-09-06 11:52 · Meta · refusal · converting the page's six hand-written demo sections to <Demo code={…}/> — it would blind 292.4's literal-class guard, which matches literals on purpose · refused · 689297c8
