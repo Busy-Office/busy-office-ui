@@ -3,32 +3,35 @@ name: CI
 on:
   push:
     branches: [main]
-    # Narrative-only commits skip CI entirely. This repo records every loop
-    # iteration, and 8 of the last 30 commits touched ONLY these paths — at
-    # ~12 minutes a run that was ~96 CI-minutes per 30 commits spent proving
-    # that a log entry does not break a stylesheet.
+    # EVERY COMMIT IS BUILT. There is no paths-ignore, and this comment block
+    # is the history of why there was one — kept because the reasoning keeps
+    # coming back, not because any of it is live. The whole list is gone as of
+    # 2026-09-07 (roadmap 312.2); the decision and its cost are at the bottom.
     #
-    # The list is deliberately short. DESIGN.md, LOOPS.md, README.md and
-    # CHANGELOG.md are READ BY GATE SCRIPTS (check:rtl reads DESIGN.md,
+    # The list was always deliberately short. DESIGN.md, LOOPS.md, README.md
+    # and CHANGELOG.md are READ BY GATE SCRIPTS (check:rtl reads DESIGN.md,
     # stamp-readme reads the READMEs), so a markdown edit can genuinely turn
-    # CI red and none of those may be ignored.
+    # CI red and none of those was ever ignorable.
     #
-    # `.roundtable/**` IS SAFE TO IGNORE, and that is now checked rather than
-    # assumed (roadmap 169.4). It was not safe when this comment last claimed
-    # it: `check:repo` ran check-resume-charter.mjs, which opens
-    # .roundtable/RESUME.md — so a commit touching only .roundtable/** could
-    # break check:repo and never be built. The charter check moved onto the
-    # loop's own path (record_iteration.py), where its input lives.
+    # `.roundtable/**` WAS BELIEVED SAFE TO IGNORE, and 169.4 already had to
+    # withdraw that once: `check:repo` ran check-resume-charter.mjs, which
+    # opens .roundtable/RESUME.md, so a commit touching only .roundtable/**
+    # could break check:repo and never be built. The charter check moved onto
+    # the loop's own path (record_iteration.py), where its input lives, and the
+    # entry was kept.
     #
-    # check:ci-ignores could not see this. It skipped every entry containing
-    # '*', and this is the only glob — the gate written to catch exactly this
-    # was blind in the one slot that mattered. It now covers globs by directory
-    # prefix, and derives WHICH SCRIPTS CI RUNS from this file rather than
-    # scanning every script on disk. Verify with:
+    # check:ci-ignores could not see that either. It skipped every entry
+    # containing '*', and this was the only glob — the gate written to catch
+    # exactly this was blind in the one slot that mattered. 169.4 gave it
+    # directory-prefix matching for globs, and made it derive WHICH SCRIPTS CI
+    # RUNS from this file rather than scanning every script on disk. That fix
+    # was real and insufficient: it still only recognised a read that NAMES the
+    # path, which none of the three below does. Verify with:
     #     npm run check:ci-ignores -w docs
     #
     # ROADMAP.md IS READ BY A GATE, and the route to that sentence is worth
-    # keeping. The old comment here claimed two gate scripts read it and used
+    # keeping — it is the same shape as the removal below, one iteration
+    # earlier. The old comment here claimed two gate scripts read it and used
     # that to justify not ignoring it. Measured on 2026-08-25: zero did — four
     # mentioned it in a comment, and the only opener was
     # scripts/loops/generate_status.py, which never runs in CI. So it was added
@@ -42,36 +45,52 @@ on:
     # saving is forfeited because a roadmap-only commit can now genuinely turn
     # CI red by deleting a cited slice.
     #
-    # STATUS.md is read by nothing, and check:ci-ignores asserts that rather
-    # than trusting this comment — which is the lesson, since this comment was
-    # wrong for months.
+    # STATUS.md WAS "read by nothing", asserted by check:ci-ignores rather than
+    # trusted — and the assertion was as wrong as the sentence it replaced.
+    # Three gates read it; none of them names it. That is the lesson twice
+    # over: the comment was wrong for months, and then the gate written to stop
+    # the comment being wrong was wrong for months in the same direction.
     #
-    # .roundtable/** IS NOW READ BY A CI SCRIPT, and this comment used to claim
-    # otherwise (2026-08-28, roadmap 169.4). check-resume-charter.mjs opens
-    # .roundtable/RESUME.md and .roundtable/ENVIRONMENT.md, and it runs inside
-    # check:repo. check:ci-ignores did NOT catch it: line ~80 filters out any
-    # entry containing '*', because a directory glob has no single file to
-    # open — so of the two entries here it verifies STATUS.md and skips this
-    # one. Measured, not reasoned: the gate's pass line reads "verified against
-    # 124 script(s): STATUS.md", and feeding check-resume-charter.mjs to its own
-    # readsFile() returns true for both names.
+    # THERE IS NO paths-ignore ANY MORE, and the two entries that used to sit
+    # here — '.roundtable/**' and 'STATUS.md' — were removed on 2026-09-07
+    # (roadmap 312.1 / 312.2), because both were read by gates this workflow
+    # runs. Not by the script 169.4 blamed: check-resume-charter moved off
+    # check:repo and no longer runs in CI at all. By three others, none of
+    # which NAMES the path anywhere in its code:
     #
-    # The consequence, stated rather than glossed: a commit touching ONLY
-    # .roundtable/** can break check:repo and will not be built, so the failure
-    # surfaces on the next commit that is. The attribution harm is smaller than
-    # the general case this comment warns about — the gate names the file and
-    # the reason in its failure text — but the invariant is genuinely violated.
-    # Whether to un-ignore .roundtable/** (~27% more full runs, the saving this
-    # list exists for) or move the charter check out of check:repo is a
-    # cost/benefit call for the owner, filed as roadmap 169.4 rather than
-    # decided by the wake that caused it.
-    paths-ignore:
-      - '.roundtable/**'
-      - 'STATUS.md'
+    #   check-floor.mjs        walks REPO_ROOT past SOURCE_SKIP_DIRS, which
+    #                          does not contain .roundtable, and keeps .md
+    #   check-slice-refs.mjs   runs `git ls-files` and reads every tracked file
+    #   check-vendor-names.mjs has both as bare elements of its ROOTS array
+    #
+    # Established twice over, not argued (ROADMAP 312 carries both tables):
+    # every node process in the CI-runnable suite was run under an fs spy that
+    # recorded each access under an ignored path, and each named gate was then
+    # driven red by injecting a violation IT can detect. 7 of 7 (path, gate)
+    # pairs agree with what check:ci-ignores now reports.
+    #
+    # WHY THE READS WERE NOT REMOVED INSTEAD, which 312.2 names as the other
+    # satisfying outcome: all three are deliberate, each recorded separately.
+    # 256.2 settled that .roundtable/** is NOT exempt from check:floor; the
+    # standing owner instruction on product names covers the .roundtable notes;
+    # and check:slice-refs exists so citations from .roundtable/ keep
+    # resolving. Keeping the ignore means reversing three decisions to protect
+    # a saving.
+    #
+    # WHAT IT COSTS, re-measured on the day it was taken rather than carried:
+    # 9 of the last 30 commits and 38 of the last 100 touched ONLY those paths,
+    # and one full run is ~14.7 machine-minutes across 6 parallel jobs (~3 min
+    # wall). Those commit counts are an UPPER bound on the runs saved: a push
+    # is what CI evaluates, and a wake pushes its hand-off together with a
+    # ROADMAP change, which triggers a run regardless. Over one 13.7-hour
+    # window, main took 47 commits and CI ran 30 times; how much of that gap
+    # was this list rather than push bundling is not separable from the data.
+    #
+    # A cheap second workflow running only the three repo-wide prose gates on
+    # these paths was considered and refused: it needs a hand-kept list of
+    # which gates are repo-wide, and a hand-kept list is what every other
+    # comment in this file records rotting.
   pull_request:
-    paths-ignore:
-      - '.roundtable/**'
-      - 'STATUS.md'
 
 # Pushing twice in a minute used to run the whole suite twice. The older run
 # is superseded the moment the newer one starts, so cancel it.

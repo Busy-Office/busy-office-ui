@@ -171,8 +171,13 @@ tiering.**
 - `main` protected, requiring CI green.
 - Anything that reads a file must not be in `paths-ignore` — `DESIGN.md`,
   `ROADMAP.md`, `LOOPS.md`, `README.md` and `CHANGELOG.md` are each read by
-  gate scripts, so none of them may be ignored. Only `.roundtable/**` and
-  `STATUS.md` are read by nothing.
+  gate scripts, so none of them may be ignored. **`.roundtable/**` and
+  `STATUS.md` were the two exceptions and they are not exceptions: both are
+  read, and `paths-ignore` is gone entirely** (312.2, 2026-09-07). The rule
+  survives; only its exception list died. The `~4x` above still holds — it was
+  sharding, not the ignore: sharding took wall clock 12.4 min → 184s, and one
+  run today measures ~3 min wall / ~14.7 machine-minutes. What the removal
+  costs is *more runs*, not slower ones.
 - Re-measure before optimising again. The single biggest win here was a loop
   written the wrong way round, and no amount of workflow tuning would have
   found it.
@@ -315,7 +320,159 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 313 — 312.1 + 312.2: the honest reader set is FOUR gates, not two, and three of the four never spell the path at all. `paths-ignore` is removed rather than the reads, because keeping it means reversing three recorded decisions (2026-09-07)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty), `ENVIRONMENT.md` trap 1, fixed with
+`git checkout -B main origin/main` before any commit; `origin/main` again
+arrived as a **forced update** (`26447ba...0a7521a`). Trap 2 clean in one
+`--unshallow` (**1,979** commits, no `shallow.lock`), and it again brought the
+tags — the **twenty-sixth** consecutive container to do so; `git tag | wc -l` →
+**8**. Step 1 read both intakes with `ENVIRONMENT.md` §8's controls in one run:
+`/discussions` → 200 len **0**; `/not-a-real-route` → **404**;
+`/issues?state=open` → 200 len **1** (issue #2, already triaged as `300.2`). No
+new input, so Step 1 committed nothing. **Rule 1 matched** —
+`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` read **1** — and dispatched
+**Continue, bug mode, on `312.1`**. Rules 2-8 were not reached.
+
+### The probe, run two independent ways, because the gate's claim is about behaviour
+
+**Instrument A — an fs spy over the whole CI-runnable suite.** A
+`NODE_OPTIONS=--require` preload wraps the content- and listing-read entry
+points of `fs` and `fs/promises`, logs every access resolving under an ignored
+path together with `process.argv[1]`, and is inherited by every child node
+process. All seventeen entry points from `ENVIRONMENT.md`'s cloud list were run
+under it, **all seventeen green**.
+
+**Its first run was wrong, and the failure is the base rate arriving on
+schedule.** The first version also wrapped `realpathSync`, whose own property
+`.native` the wrapper dropped; vite destructures exactly that, `astro build`
+died with `safeRealpathSync is not a function`, and every gate after it failed
+for a missing `dist`. The instrument broke its subject. Fixed by copying own
+properties onto every wrapper and dropping metadata calls, then re-controlled:
+`fs.realpathSync.native` reads `function`, `STATUS.md` and `.roundtable` are
+logged, `README.md` is not — positive and negative control in one command.
+
+**Instrument B — a per-gate injection probe.** For each ignored path, inject a
+violation *that gate* can detect, confirm it landed with `grep -c -F`, and run
+nine candidate gates. Seven injections; **two came back green, and both were
+defects in the injection, exactly as CLAUDE.md says to assume:**
+
+- `check-slice-refs` reads `git ls-files`, which lists **tracked** files only.
+  A scratch file under `.roundtable/` is invisible to it. `git add -N` on the
+  same file → `rc=1`. **This retires Slice 312's own "Not established" note**,
+  which recorded that probe's green as evidence the needle misses — the needle
+  was fine and the injection was unreachable.
+- `check-imports` is a **case**-sensitivity gate, not an existence gate: its own
+  comment says "a genuinely missing file is the module resolver's job". A
+  broken import proves nothing; `.roundtable/ZZ-Real-312.mjs` imported as
+  `'./zz-real-312.mjs'` → `rc=1`.
+
+### The two instruments agree, and the set is four
+
+| script | `.roundtable/**` | `STATUS.md` | route, in its own source |
+|---|---|---|---|
+| `check-floor.mjs` | red | red | `files(REPO_ROOT)` past `SOURCE_SKIP_DIRS`, keeps `.md` |
+| `check-vendor-names.mjs` | red | red | `.roundtable` / `STATUS.md` are bare `ROOTS` elements |
+| `check-slice-refs.mjs` | red | red | `git ls-files`, every tracked file |
+| `check-imports.mjs` | red | — | same repo walk, allow-list `.mjs/.js/.ts` |
+
+**`check-imports` is the pair that separates a conservative detector from an
+honest one.** It walks the whole repo, so it reaches `.roundtable/`; it keeps
+only three extensions, so no change to `STATUS.md` can ever make it red. The
+fs spy shows exactly that — a `readdir` of `.roundtable`, zero accesses to
+`STATUS.md`. **7 of 7 (path, gate) pairs**, and the widened gate names the same
+seven with the tree unchanged, which is 312.1's Accept.
+
+**Controls that stayed green under every injection**, because they are the
+false positives the design exists to refuse: `check-loop-vocab`,
+`check-selftests`, `check-src-css-walkers`, `gen-suite-index`,
+`check-deprecated-icons`.
+
+### Three routes, and why the third one is narrow
+
+`readsFile`/`opensPath` — *mention is not a read* — were right and are kept.
+Added:
+
+- **`namesPathRoot`** — a string literal that *begins with* the path. Anchoring
+  on the opening quote is what keeps it off `<code>.roundtable/…</code>` inside
+  a template literal, the one false positive 169.4 recorded.
+- **`enumeratesRepo`** — `git ls-files`, or a `readdir`/`opendir` walk seeded at
+  `REPO_ROOT` **itself**. The looser form ("`REPO_ROOT` appears as an
+  argument") was measured first and flagged three more scripts, every one of
+  which passes `join(REPO_ROOT, 'apps/docs/scripts')`; the fs spy recorded zero
+  accesses from all three, so the tighter seed is what removes them. **Base
+  rate before shipping: 5 of the scripts CI runs, not 100%** — the predicate
+  discriminates.
+- **`keptExtensions`** — applied only to decide whether a *walk* reaches a
+  single named file, and deliberately **not** to `git ls-files`. That route has
+  denial regexes and no allow-list, and asking a denylist "which extensions do
+  you keep?" answers with the ones it rejects — the fail-open direction.
+
+**Escape hatch, consulted from `paths.mjs` rather than from the walker:** a
+directory in `SOURCE_SKIP_DIRS` is not flagged. That is not decoration — it is
+the green half of the red-proof below, and it has to read the shared skip list
+because a correctly-excluded directory is never named by the walker at all.
+
+**Red-proved in both directions on the committed shape.** Re-adding
+`.roundtable/**` **and** a control entry `visual-baselines/**` (in
+`SOURCE_SKIP_DIRS`) to `paths-ignore`, injection confirmed present in the file:
+`rc=1` with **4 of 148** failing — all four for `.roundtable/**`, **zero** for
+the control, from the same walkers. Removing them again → `rc=0`. Self-test
+grew 7 → **18** cases.
+
+### 312.2: the ignore is removed, and what that costs
+
+The three reads are each deliberate and separately recorded — 256.2 settled
+that `.roundtable/**` is **not** exempt from `check:floor`; the standing owner
+instruction on product names covers the `.roundtable` notes; `check:slice-refs`
+exists so citations from `.roundtable/` keep resolving. 312.2's other
+satisfying outcome — keep the ignore, change the gates — means reversing all
+three to protect a saving. So the exemption goes, not the reads.
+
+**Cost, re-measured on the day rather than carried** (169.4's snapshot was
+*8 of 30*):
+
+```
+9 of the last 30 commits, 38 of the last 100, touched ONLY those paths
+one full run: 6 parallel jobs, ~14.7 machine-minutes, ~3 min wall (run 34060872973)
+median wall over the last 30 push runs on main: 186s
+```
+
+**Those commit counts are an UPPER bound and the honest figure is not
+separable.** CI evaluates a *push*, not a commit, and a wake pushes its hand-off
+together with a ROADMAP change — which triggers a run regardless. Over one
+13.7-hour window `main` took **47 commits** and CI ran **30 times**; how much of
+that gap was this list rather than push bundling cannot be told from the data
+available here.
+
+**Refused: a second cheap workflow** running only the three repo-wide prose
+gates on these paths. It preserves most of the saving and needs a hand-kept
+list of which gates are repo-wide — and a hand-kept list rotting is what four
+separate comments in `ci.yml` already record.
+
+**Consequence for every future wake, worth saying plainly: a `.roundtable`-only
+push now runs CI.** `ENVIRONMENT.md` §3b's rule (re-run `docs:build` after
+writing the hand-off) stops being a subtlety and becomes the ordinary case.
+
+**Two documents corrected by measurement, not by reading:** §3b's list of gates
+that walk `.roundtable/**` named `check:loop-vocab`, which reads `CLAUDE.md`,
+`LOOPS.md` and `record_iteration.py` and nothing else — green under all seven
+injections, zero accesses in the spy trace; and it did not name `check:imports`,
+which does walk it. `ci.yml`'s "STATUS.md is read by nothing" was wrong in the
+same direction as the comment it had replaced.
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. Nothing in this slice renders: the diff is one gate script,
+`ci.yml`, and prose. `292.4/292.5`'s screenshot lane on `/components/icon`
+remains unspent, now from five wakes back, and the withdrawn-claim paragraph on
+`/components/data-table` is still unlooked-at.
+
 ## Slice 312 — P0: `check:ci-ignores` asserts that nothing CI runs reads `.roundtable/**`, and two gates CI runs read it — one of them has the directory as a literal string in its own `ROOTS` array (2026-09-07)
+
+> **Closed by Slice 313 (2026-09-07).** Both items. The reader set was **four**,
+> not two, and `check-slice-refs`'s "Not established" note below is retired: its
+> green probe was an untracked file, invisible to `git ls-files`.
 
 **Triaged from inside Slice 311's wake**, after `main` went red on
 `check:floor` for a hand-typed floor label in `RESUME.md`. That red was not
@@ -390,7 +547,7 @@ CI-run scripts that import `SOURCE_SKIP_DIRS` — `check-deprecated-icons`,
 `check-imports`, `check-loop-vocab` — were **not** probed at all. Whoever takes
 this item enumerates them properly rather than trusting this paragraph.
 
-1. [ ] **312.1 — P0: `check:ci-ignores` must see a directory walk, not only a
+1. [x] **312.1 — P0: `check:ci-ignores` must see a directory walk, not only a
        named read.** The detector's stated rule (*mention is not a read*) is
        right and must survive; what is missing is the second route into a file,
        which is a walk that fails to exclude it.
@@ -412,7 +569,7 @@ this item enumerates them properly rather than trusting this paragraph.
          exists to protect. Both directions, or it is not red-proved.
        - **Lane**: cloud-takeable. No browser, no screenshot.
 
-2. [ ] **312.2 — decide whether `.roundtable/**` stays in `paths-ignore` at
+2. [x] **312.2 — decide whether `.roundtable/**` stays in `paths-ignore` at
        all, once 312.1 makes the answer visible.** The ignore is not free to
        remove: `ci.yml`'s comment measures its value at *"8 of the last 30
        commits touched ONLY these paths — at ~12 minutes a run that was ~96

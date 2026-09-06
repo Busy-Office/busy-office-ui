@@ -241,19 +241,32 @@ gate ran *before* the file existed.
 
 The wake's normal order is: run the gate suite → commit the slice → write the
 hand-off → commit → push. Everything after step 1 is unverified, and several
-gates in `docs:build` walk `.roundtable/**`:
+gates in `docs:build` read `.roundtable/**`.
+
+**This list was wrong in both directions until 2026-09-07, and it is now the
+output of an instrument rather than a reading** (roadmap 313). Every node
+process in the CI-runnable suite was run under an fs spy that logs each access
+under the path, and each gate named was then driven red by an injection into
+`.roundtable/`:
 
 ```
 check:floor          # a hand-typed browser floor — ROADMAP.md is exempt, .roundtable/** is NOT (256.2)
-check:slice-refs     # every `roadmap NNN` citation must resolve
+check:slice-refs     # every `roadmap NNN` citation must resolve — TRACKED files only, it reads `git ls-files`
 check:vendor-names   # the standing owner instruction on product names
-check:loop-vocab     # the six outcome words record_iteration enforces
+check:imports        # walks the whole repo for .mjs/.js/.ts — a CASE-mismatched relative import, not a missing one
 ```
 
-**`.roundtable/**` being in CI's `paths-ignore` does not save you.** That only
-decides whether a push *triggers* CI. A wake always pushes a code or ROADMAP
-change alongside its hand-off, so CI runs, and when it runs the gates walk the
-whole repo — hand-off included.
+`check:loop-vocab` **was in this list and does not belong**: it reads
+`CLAUDE.md`, `LOOPS.md` and `scripts/loops/record_iteration.py`, and nothing
+else. Zero accesses in the spy trace, green under all seven injections.
+`check:imports` was missing and does walk it.
+
+**`.roundtable/**` IS NO LONGER IN CI's `paths-ignore` — there is no
+`paths-ignore` at all** (roadmap 312.2, removed *because* of the reads above).
+So a `.roundtable`-only push now runs the full suite: this section stops being
+a subtlety about pushes that carry something else, and becomes the ordinary
+case. The older warning still holds for the same reason it always did — when
+CI runs, the gates walk the whole repo, hand-off included.
 
 So: **re-run `npm run docs:build` AFTER writing `RESUME.md`, before pushing.**
 Not the whole 17-command list — the four gates above all live inside that one

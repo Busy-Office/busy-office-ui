@@ -36,12 +36,32 @@
  * would fail on every one of those four comments — a gate that cannot pass.
  * It looks for the file being OPENED: readFile/readFileSync/open() with the
  * name in the same call, or a path join that feeds one.
+ *
+ * A READ THAT NAMES NOTHING IS STILL A READ (roadmap 312.1, 2026-09-07). The
+ * rule above is right and survives; what it could not see is the second route
+ * into a file — an enumeration that fails to EXCLUDE it. Both live gates that
+ * were missed reach `.roundtable/**` without the string appearing in their
+ * code at all:
+ *
+ *   - `check-floor.mjs` runs `files(REPO_ROOT)`, a recursive walk past
+ *     SOURCE_SKIP_DIRS, which does not contain `.roundtable`.
+ *   - `check-slice-refs.mjs` runs `git ls-files` and reads every tracked file.
+ *
+ * A third, `check-vendor-names.mjs`, has `.roundtable` and `STATUS.md` as bare
+ * elements of its own ROOTS array — a string literal eleven lines from the
+ * read, matched by no read-shaped call.
+ *
+ * So there are three routes now, and the detector's verdict was checked
+ * against an EMPIRICAL probe rather than against itself: every node process in
+ * the CI-runnable suite was run under an fs spy that recorded each access
+ * under an ignored path, and each named gate was then driven red by injecting
+ * a violation IT can detect into `.roundtable/`. Both sets are in roadmap 313.
  */
 import { readFile, readdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gate, assertScanned, selfTest } from './gate-report.mjs';
-import { REPO_ROOT as ROOT } from './paths.mjs';
+import { REPO_ROOT as ROOT, SOURCE_SKIP_DIRS } from './paths.mjs';
 import { stripComments } from './source-files.mjs';
 
 
@@ -80,6 +100,68 @@ function opensPath(source, prefix) {
   );
 }
 
+/**
+ * Is this path named as a path ROOT — a string literal that IS the path, or
+ * that begins with it?
+ *
+ * `opensPath` needs a read- or join-shaped call around the literal, and
+ * `check-vendor-names` has neither: `.roundtable` and `STATUS.md` are bare
+ * elements of a `ROOTS` array that `collectSource` walks. Anchoring on the
+ * opening quote is what keeps this off the one false positive the file above
+ * records — `<code>.roundtable/erp-suite-gaps.md</code>` inside a template
+ * literal, where the literal starts with `<code>` and not with the path.
+ */
+function namesPathRoot(source, path) {
+  const esc = path.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`['"\`]${esc}(?:['"\`]|/)`).test(stripComments(source));
+}
+
+/** The local binding of `REPO_ROOT` in this source, honouring `as` aliases. */
+function repoRootBinding(code) {
+  const m = code.match(/\bREPO_ROOT(?:\s+as\s+(\w+))?/);
+  return m ? (m[1] ?? 'REPO_ROOT') : null;
+}
+
+/**
+ * Does this script enumerate the WHOLE repository? Returns the route, or null.
+ *
+ * The seed must be `REPO_ROOT` itself — `files(REPO_ROOT)`, `readdir(ROOT, …)`
+ * — never a path built from it. The looser form, "REPO_ROOT appears as an
+ * argument", was measured first and flagged three more scripts
+ * (`check-selftests`, `check-src-css-walkers`, `gen-suite-index`), every one of
+ * which passes `join(REPO_ROOT, 'apps/docs/scripts')` and walks a subtree. The
+ * fs spy recorded zero accesses under an ignored path from all three, so those
+ * were false positives and the tighter seed is what removes them.
+ */
+function enumeratesRepo(code) {
+  if (/execFile\w*\s*\(\s*['"`]git['"`][\s\S]{0,40}ls-files/.test(code)) return 'git ls-files';
+  const root = repoRootBinding(code);
+  if (!root) return null;
+  if (!/\b(?:readdir|opendir)(?:Sync)?\s*\(/.test(code)) return null;
+  if (new RegExp(`\\w+\\s*\\(\\s*${root}\\s*\\)`).test(code)) return 'repo walk';
+  if (new RegExp(`\\b(?:readdir|opendir)(?:Sync)?\\s*\\(\\s*${root}\\s*[,)]`).test(code)) return 'repo walk';
+  return null;
+}
+
+/**
+ * Extensions a walk keeps, as an ALLOW-list: `['.mjs', '.js']` or
+ * `/\.(astro|mjs|md)$/`.
+ *
+ * Used only to decide whether a repo WALK reaches a single named file, and
+ * deliberately not applied to `git ls-files` — that route has no allow-list,
+ * only denial regexes, and the two are indistinguishable from source text.
+ * Asking a denylist "which extensions do you keep?" would answer with the ones
+ * it REJECTS, which is the fail-open direction.
+ */
+function keptExtensions(code) {
+  const exts = new Set();
+  for (const m of code.matchAll(/['"`]\.([a-z0-9]{1,5})['"`]/gi)) exts.add(m[1].toLowerCase());
+  for (const m of code.matchAll(/\\\.\(([a-z0-9|]+)\)\$/gi)) {
+    for (const e of m[1].split('|')) exts.add(e.toLowerCase());
+  }
+  return exts;
+}
+
 function readsFile(source, name) {
   const bare = name.replace(/\.[a-z]+$/i, '');
   const patterns = [
@@ -110,8 +192,33 @@ if (yml === null) {
   );
   process.exit(0);
 }
-const ignored = [...yml.matchAll(/^\s*-\s*'([^']+)'\s*$/gm)]
-  .map((m) => m[1])
+/* Scoped to the `paths-ignore:` blocks rather than grepping the whole file for
+   single-quoted list items. The global form was correct only because those
+   were the only single-quoted entries in ci.yml, and it could not tell an
+   EMPTY paths-ignore from a missing one — which is the state this repo is in
+   from 312.2 onward, and the state a `assertScanned` would have failed on. */
+const ymlLines = yml.split('\n');
+const hasKey = /^\s*paths-ignore:\s*$/m.test(yml);
+const ignoredRaw = [];
+for (let i = 0; i < ymlLines.length; i++) {
+  const head = ymlLines[i].match(/^(\s*)paths-ignore:\s*$/);
+  if (!head) continue;
+  for (let j = i + 1; j < ymlLines.length; j++) {
+    const item = ymlLines[j].match(/^(\s*)-\s*'([^']+)'\s*$/);
+    if (!item || item[1].length <= head[1].length) break;
+    ignoredRaw.push(item[2]);
+  }
+}
+if (!hasKey) {
+  console.log(
+    'ci-ignores check passed — .github/workflows/ci.yml declares no paths-ignore,\n' +
+      '  so no path is exempt from being built and there is nothing to verify.\n' +
+      '  (roadmap 312.2: the two entries that used to live here were read by three\n' +
+      '  gates CI runs, so the exemption was removed rather than the reads.)',
+  );
+  process.exit(0);
+}
+const ignored = ignoredRaw
   // Globs are KEPT (roadmap 169.4). They were filtered out with the comment
   // "directory globs have no single file to read", and that was true of the
   // reader but not of the risk: `.roundtable/**` was the only glob entry and
@@ -195,10 +302,80 @@ if (process.argv.includes('--self-test')) {
     ['a glob prefix opened by readFile is a read', opensPath("readFile(join(R,'.roundtable/RESUME.md'))", '.roundtable'), true],
     ['a glob prefix inside a <code> tag is NOT a read', opensPath('const html = `<code>.roundtable/erp-suite-gaps.md</code>`;', '.roundtable'), false],
     ['a glob prefix in a comment is NOT a read', opensPath('// writes to .roundtable/loop-log.md\nconst x = 1;', '.roundtable'), false],
+
+    /* The three routes added by 312.1. Each NOT-flagged case is a live script
+       the fs spy recorded making zero accesses under an ignored path, so every
+       one of them is a false positive this detector must keep refusing. */
+    ['a bare ROOTS-array element is a path root',
+      namesPathRoot("const ROOTS = ['README.md', '.roundtable', 'examples'];", '.roundtable'), true],
+    ['a single-file ROOTS element is a path root',
+      namesPathRoot("const ROOTS = ['README.md', 'STATUS.md'];", 'STATUS.md'), true],
+    ['a path root inside a longer literal is NOT one',
+      namesPathRoot('const html = `<code>.roundtable/erp-suite-gaps.md</code>`;', '.roundtable'), false],
+    ['a path root in a comment is NOT one',
+      namesPathRoot('/* .roundtable/ is loop machinery */\nconst x = 1;', '.roundtable'), false],
+    ['a walk seeded at REPO_ROOT enumerates the repo',
+      enumeratesRepo("import { REPO_ROOT } from './paths.mjs';\nfor await (const f of files(REPO_ROOT)) {}\nawait readdir(dir);") === 'repo walk', true],
+    ['an aliased REPO_ROOT seed counts too',
+      enumeratesRepo("import { REPO_ROOT as R } from './paths.mjs';\nawait readdir(R, { recursive: true });") === 'repo walk', true],
+    ['git ls-files enumerates the repo',
+      enumeratesRepo("execFileSync('git', ['ls-files'], { cwd: ROOT })") === 'git ls-files', true],
+    ['a walk of a SUBTREE of REPO_ROOT does not',
+      enumeratesRepo("import { REPO_ROOT } from './paths.mjs';\nconst d = join(REPO_ROOT, 'apps/docs/scripts');\nawait readdir(d);"), null],
+    ['REPO_ROOT with no walk at all does not',
+      enumeratesRepo("import { REPO_ROOT } from './paths.mjs';\nawait readFile(join(REPO_ROOT, 'LOOPS.md'));"), null],
+    ['an extension allow-list is read as one',
+      keptExtensions("const EXTS = ['.mjs', '.js', '.ts'];").has('md'), false],
+    ['a regex alternation allow-list is read as one',
+      keptExtensions('const KEEP = /\\.(astro|mjs|js|ts|md)$/;').has('md'), true],
   ]);
 }
 
 const SELF = join(ROOT, 'apps', 'docs', 'scripts', 'check-ci-ignores.mjs');
+
+/**
+ * How does this script reach an ignored path, if it does? Returns the route as
+ * a phrase for the failure message, or null.
+ *
+ * Order matters only for the message. The three routes are independent, and
+ * the empirical probe in roadmap 313 names which live gate each one catches.
+ */
+function readsIgnored(source, path) {
+  const isGlob = path.includes('*');
+  // For a glob, any read of a file under that directory is a violation —
+  // there is no single name to look for, so the directory prefix is the
+  // signal. Same comment-stripping as readsFile, for the same reason: four
+  // scripts NAME these paths in prose.
+  const target = path.replace(/\/?\*+$/, '');
+
+  if (namesPathRoot(source, target)) return `names '${target}' as a path root`;
+  if (isGlob ? opensPath(source, target) : readsFile(source, target.split('/').pop())) {
+    return `opens ${target} by name`;
+  }
+
+  const mode = enumeratesRepo(stripComments(source));
+  if (!mode) return null;
+
+  if (isGlob) {
+    /* The escape hatch, and the only one that is not "stop reading it": a
+       directory the shared skip list excludes is not reached by any walk built
+       on it. Consulting SOURCE_SKIP_DIRS rather than looking for the name in
+       THIS script is deliberate — the skip decision lives in paths.mjs, so a
+       correctly-excluded directory is never mentioned by the walker at all. */
+    const top = target.split('/')[0];
+    if (SOURCE_SKIP_DIRS.has(top)) return null;
+    return `enumerates the repository (${mode}) without excluding ${top}/`;
+  }
+
+  /* A single named file. A walk reaches it only if its allow-list keeps that
+     extension — `check-imports` walks the whole repo for .mjs/.js/.ts and
+     genuinely never reads STATUS.md, which the fs spy confirms. `git ls-files`
+     has no allow-list, so it always reaches it. */
+  if (mode === 'git ls-files') return `enumerates the repository (${mode}), which has no extension allow-list`;
+  const ext = target.includes('.') ? target.split('.').pop().toLowerCase() : null;
+  if (ext && !keptExtensions(stripComments(source)).has(ext)) return null;
+  return `enumerates the repository (${mode}) and keeps .${ext} files`;
+}
 
 let scanned = 0;
 
@@ -228,17 +405,12 @@ for (const dir of SCRIPT_DIRS) {
          PATH, so a real read added elsewhere in this file is still caught by
          the fixtures being the only thing here. */
       if (join(dir, e) === SELF) continue;
-      const isGlob = path.includes('*');
-      // For a glob, any read of a file under that directory is a violation —
-      // there is no single name to look for, so the directory prefix is the
-      // signal. Same comment-stripping as readsFile, for the same reason: four
-      // scripts NAME these paths in prose.
-      const dirPrefix = path.replace(/\/?\*+$/, '');
+      const route = readsIgnored(source, path);
       g.check(
         `${join(dir, e).replace(ROOT + '/', '')} does not read ${path}`,
-        isGlob ? !opensPath(source, dirPrefix) : !readsFile(source, path.split('/').pop()),
-        `A commit touching only ${path} is never built, so this script's ` +
-          `dependency on it would be untested. Either stop reading it, or ` +
+        route === null,
+        `It ${route}. A commit touching only ${path} is never built, so this ` +
+          `script's dependency on it would be untested. Either stop reading it, or ` +
           `remove ${path} from paths-ignore in .github/workflows/ci.yml.`,
       );
     }
