@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-06 16:57 UTC
+Generated at: 2026-09-06 17:25 UTC
 
 ## Open items by slice
 
@@ -24,8 +24,7 @@ Generated at: 2026-09-06 16:57 UTC
 - **Slice 294** (2 open)
   - 294.1 — `derive-floor.mjs` has no probe for `light-dark()`, `oklch()` or `scroll-state()`.
   - 294.2 — rank the six proposals against the Objective; adopt none on arrival.
-- **Slice 296** (2 open)
-  - 296.2 — An interaction-latency instrument, or a recorded refusal.
+- **Slice 296** (1 open)
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - **Slice 297** (1 open)
   - 297.1 — The first real intake run is the test of this, not the config.
@@ -40,16 +39,19 @@ Generated at: 2026-09-06 16:57 UTC
   - 305.2 — Run the repo's own gates on a gauntlet artifact BEFORE spending a critic round.
 - **Slice 306** (1 open)
   - 306.1 — rule 5's staleness comparison must not be able to report "stale" for a reason that is only a timezone.
+- **Slice 307** (1 open)
+  - 307.1 — Rule 5 starves structurally: 42 metric names, 130 samples, 13 names sampled twice.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1541 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-09-06 23:20   ok
-  Objective     1 / 3 slice           since 2026-09-07 00:21   ok  [292]
-  Optimize      1 wake-date(s) newer   since 2026-09-06 16:56   STALE   [newest pair: axe-violations; 130 sample(s), 13 of 42 name(s) sampled twice]
+dispatch status — counter-triggered rules (1543 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-09-06 23:20   OVERDUE
+  Objective     2 / 3 slices          since 2026-09-07 00:21   ok  [292, 307]
+  -> a counter is at or past its threshold; the dispatcher should pick it
+  Optimize      1 wake-date(s) newer   since 2026-09-06 16:56   STALE   [newest pair: axe-violations; 132 sample(s), 13 of 44 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-06, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-06 (2026-09-07), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
 ```
@@ -70,8 +72,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-06 23:59 · Continue · build · Slice 303 — the layered-reset recipe on /getting-started/troubleshooting was documented, demoed with two live iframes, and ungated: no gate referenced app-reset or preflight and check-claims never visited the page. Added a two-arm case (control: unlayered reset strips .bo-btn; recipe: same reset in a layer declared first survives), both red-proved independently. check:claims 170 -> 172. Also answered the owner's Tailwind question by measurement: no dependency, no config, no code — 20 palette ranges of copied hex with a build-time pin assert · landed · 2b3ba89f
-- 2026-09-06 23:59 · Meta · refusal · trusting the page's two iframes as the check — a demo where both frames break to the same wrong result still renders two plausible frames; the gate asserts the difference · refused · 2b3ba89f
 - 2026-09-07 00:21 · Objective · grill · Slice 304 — grill of 300, 301, 303 (292 dropped, already grilled; counter re-armed it). 24 of 26 reproduce. Both failures are one defect: Slice 301's four post-sweep figures (4,676/335/7.2%/282) exist at no committed revision — measured after the move but before the write-up inserted itself, and the write-up is a closed slice so it lands in both numerator and denominator. Breaks ENVIRONMENT.md's own read-from-THAT-commit rule. Corrected in place; conclusion unchanged. Verification run by a fresh-context agent, not a fork, because all three slices are the grilling author's own · logged · 522b9f61
 - 2026-09-07 00:21 · Meta · refusal · using a fork to verify my own three slices — a fork inherits the builder's reasoning, which is the marking-your-own-homework shape the blind re-score exists to prevent · refused · 522b9f61
 - 2026-09-07 00:35 · Gauntlet · round · 296.1 / Slice 305 — the Gauntlet ran its full 3-round budget on a Class A list-report recreation and FAILED at budget; bar not moved, gap carried as 305.1. Three fresh blind critics (general-purpose, not forks, so none inherited the builder's reasoning); the named failure mode — a critic that cannot fail the builder — did not occur, and two rounds caught things the builder had no idea about. Every remaining defect is a class the framework already ships: the framework was never the gap, the recreation was · refused · 11503760
@@ -80,6 +80,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-06 16:56 · Meta · refusal · a gate over raw font-size in docs pages — 41 of 41 component pages now satisfy the predicate, and 2 of the 4 tree-wide source hits carry no style attribute at all in the built page (prose, and a copyable @page print sample) · refused · 0879c6c3
 - 2026-09-06 16:56 · Meta · refusal · converting patterns/app-launch.astro's 2rem launcher icon — no token equals 2rem, so the swap would shrink the glyph, and that is a rendered-image judgement a cloud wake cannot make · refused · 0879c6c3
 - 2026-09-06 16:57 · Roadmap · triage · Slice 306 — rule 5's staleness line floors at 1 from a cloud wake: the newest metric (2026-09-06 16:56 UTC) and the newest log rows (2026-09-07 00:21/00:35, +0800) are the same moment from two clocks · triaged · 40041a74
+- 2026-09-07 01:25 · Continue · build · Slice 307 / closes 296.2 — refused the interaction-latency gate on the repo's own precedent (rule 5 already records CI wall time declared regressed on a 290s reading that was noise: next two runs 267s and 265s). The measurement found something better than either branch: /components/data-table already publishes runtime figures from 2026-08-15 that nothing re-runs, and the page names its date, stack and harness but NOT its machine. Re-ran the /stress harness: select-all 3ms/1k and 7ms/5k against a published 4ms/18ms — different hardware, so not comparable in either direction. Fixed the claim to state its own reproducibility limit rather than gating a wall-clock number · landed · 29457bae
+- 2026-09-07 01:25 · Meta · refusal · a gate asserting absolute select-all milliseconds — flaky by construction across machines and CI runners, and it would manufacture exactly the wake-spending false positives LOOPS.md rule 5 already documents · refused · 29457bae
 
 ## Sunset test
 

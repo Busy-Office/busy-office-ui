@@ -315,6 +315,95 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 307 — 296.2: the latency gate is REFUSED on the repo's own precedent, and the real defect was a published claim that cannot be reproduced by anyone else (2026-09-07)
+
+**Dispatched by rule 4**, not on the oldest open item: `249.6` is oldest and the
+cloud routine also takes oldest-first, so that is a collision. `296.2` was
+chosen because **rule 5 has now read STALE for four wake-dates and is
+worsening** (3 → 4 since yesterday), and `296.2` is precisely the item asking
+whether a real performance instrument should exist.
+
+**The item offered two branches — build an instrument, or refuse — and the
+measurement found a third thing that is better than either.**
+
+**What already exists, measured before deciding.** `/components/data-table`
+publishes a table headed *"Performance at scale — measured, not guessed"* with
+figures from **2026-08-15**: initial render 85 / 174 / 558 ms and select-all
+4 / 18 / 49 ms at 1k / 5k / 20k rows. The `/stress?n=…` harness in
+`examples/po-app` that produced them is still there and still works. So a
+runtime performance claim was **already published and re-run by nothing** —
+the same shape Slice 303 found in the layered-reset recipe.
+
+**Re-run today against the same harness:**
+
+```
+node examples/po-app/server.mjs           # :8080
+/stress?n=1000  select-all   3 ms   (published 4 ms)
+/stress?n=5000  select-all   7 ms   (published 18 ms)
+```
+
+**Not slower — and that is exactly the problem.** These are different hardware,
+so the comparison is not valid in either direction. A wall-clock millisecond
+published without the machine that produced it is not a figure anyone can
+reproduce, and the page names its date, its stack and its harness but **not its
+machine**.
+
+### The gate is refused, on this repo's own measured precedent
+
+Not on taste. `LOOPS.md` rule 5 already records what happens when this project
+gates a timing number: CI wall time was declared regressed on a single 290 s
+reading against a 288 s budget, an Optimize item was raised, and the next two
+runs came in at **267 s and 265 s** — *"the 290 was noise on a shared runner"*.
+Three ascending samples were also read as a trend and were not. A gate
+asserting *"select-all under 18 ms"* would be flaky by construction across
+machines and CI runners, and would manufacture exactly the wake-spending false
+positives that rule already documents. **The honest scope for "performance" in
+`gauntlet/BAR.md` stays what it says: a size claim, plus this shape-not-figures
+table.**
+
+### What shipped instead: the claim now states its own limit
+
+`/components/data-table` gains one paragraph saying these are one machine's
+milliseconds, that the machine is not recorded, that the **shape** is what to
+read (roughly linear to 20k, select-all cheap, the style flush the real cost),
+and that re-running on other hardware in 2026-09 read 3 ms / 7 ms against the
+4 ms / 18 ms below. The harness is kept precisely so an adopter can get figures
+for their own hardware — which is what the page's existing re-open condition
+already assumes and never quite said.
+
+### Rule 5 has input again
+
+Two metrics recorded — `select-all-1k-ms=3`, `select-all-5k-ms=7`. That does
+not un-stale rule 5 by itself: it needs **two consecutive samples of one name**,
+so the second reading is what makes these comparable, and the honest state
+today is still *not evaluable*. Recorded so a later wake has a first point
+rather than none. **42 distinct metric names across 130 samples, only 13
+sampled twice** — the starvation is structural, and worth its own item rather
+than another one-off sample.
+
+1. [x] **296.2 — DONE, closed as a refusal with the measurement that decided
+       it**, which is what its Accept asked for: *"if refused, the refusal names
+       what was measured to decide it"*, and *"finding that the existing
+       `check:size` plus the data-table page's own measurements already cover
+       the useful range is a satisfying outcome"*. They do. The published table
+       is the interaction-latency instrument this item imagined building — it
+       existed already, and what it needed was not a gate but an honest
+       statement of what a millisecond means without its machine.
+
+2. [ ] **307.1 — Rule 5 starves structurally: 42 metric names, 130 samples,
+       13 names sampled twice.** A rule that needs two consecutive readings of
+       one name cannot fire on a corpus where most names are sampled once.
+       Recording another one-off sample does not fix it, which is why this is
+       filed rather than papered over with today's two.
+       - **Accept** — the property: either a small fixed set of names is
+         sampled on a stated cadence so pairs actually accumulate, or rule 5 is
+         re-scoped to the metrics that do pair (`axe-violations`,
+         `bundle-gz-kb`, `ci-wall-time` are the only three with real history),
+         or the rule is retired with the count that justified it. **Retiring it
+         is a satisfying outcome** — a dispatcher rule that has fired 3 times in
+         1,500 iterations and reads STALE for four days is a rule the loop is
+         carrying, not using.
+
 ## Slice 306 — Rule 5's staleness line cannot reach `ok` from a cloud wake while the other dispatcher is a calendar day ahead (2026-09-06, triaged from inside a Continue round)
 
 Found the way `LOOPS.md` says this family is always found: by reading
@@ -1110,7 +1199,7 @@ without the stack.
          PASS graded by the builder, or a bar edited mid-round to make the
          artifact pass.
 
-2. [ ] **296.2 — An interaction-latency instrument, or a recorded refusal.**
+2. [x] **296.2 — DONE (refused, with the measurement), Slice 307.** An interaction-latency instrument, or a recorded refusal.
        The bar cannot grade "performant" beyond bundle size today. Either an
        instrument lands that measures something real in a browser — first
        input delay on a dense grid, time to interactive on the heaviest
