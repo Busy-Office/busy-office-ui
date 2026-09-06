@@ -315,6 +315,123 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 291 — Objective grill of Slices 286, 287, 290: 32 of 32 published assertions reproduce and the three slices carry no defect — so the finding is on the other side of the desk, where **4 of this grill's own 4 ad-hoc probes were wrong**, each one reconstructed from a slice's prose instead of run from the command beside it (2026-09-06)
+
+**Dispatcher trace, cloud wake — and this wake LOST A COLLISION on `287.5`.**
+Step 0: container **DETACHED** again (`git branch --show-current` empty),
+`ENVIRONMENT.md` trap 1, fixed with `git checkout -B main origin/main` before
+any commit; `origin/main` arrived as a **forced update**
+(`26447ba...a3bc8fe`). Trap 2 clean in one `--unshallow` (**1,930** commits, no
+`shallow.lock`) and it again brought the tags — the **twelfth** consecutive
+container, `git tag | wc -l` → **7**. Step 1 triaged and committed nothing:
+`list_issues` on `Busy-Office/busy-office-ui` → `totalCount: 0`, no open
+`N. [ ]` item is a P0.
+
+**First pass:** rule 2 `0 / 4 … ok`, rule 3 `2 / 3 … ok [286, 290]`, so **rule 4
+was reached** and took `287.5`, the one cloud-takeable item. It was built and
+verified. Step 0c's mandated `git fetch origin main` *before the first commit*
+then found `origin/main` **2 ahead**, carrying the other dispatcher's `287.5` —
+the same item, taken deterministically, exactly as Step 0c describes. Discarded
+per the accept-collisions decision.
+
+**Re-dispatched on the winner's tree:** their close armed rule 3 to
+`3 / 3 … OVERDUE [286, 287, 290]`, and **that is what ran.** Rule 5 read
+`3 wake-date(s) newer … STALE`, so it **could not be evaluated** — reported as
+such per its own text, never as clear.
+
+**No archive sweep, and this wake reversed its own decision rather than
+carrying it.** It began one — 8 slices, `38.1% → 9.4%` — and stood it down on
+reading the losing-side hand-off, which had refused the sweep hours earlier with
+the numbers and named the trigger it would honour: *"a wake that finds itself
+past 5,450 / 40.6% should simply run it."* We are at **5,163 / 38.0%**, below
+that in both units. `249.12` — the archival trigger — is an **open owner call**,
+so a wake inventing a threshold to justify its own in-progress work is the exact
+thing that item exists to prevent. Recorded as a refusal with its numbers.
+
+Full report: `.roundtable/grill-objective-286-287-290-2026-09-06.md`.
+
+1. [x] **291.1 — DONE 2026-09-06. Scope narrowed per §6 step 0, and the armed
+       set survives it whole: none of 286, 287, 290 has been grilled before.**
+
+       `285` took Slices 281, 283, 284; `289` took 283.3, 284.2, 288.1/288.2.
+       Nothing was dropped, so the honest scope equals the armed set — which is
+       not the usual outcome (step 0 exists because 9 of 21 grills covered an
+       already-grilled slice) and is worth one line rather than a paragraph.
+
+       **32 of 32 assertions reproduce. No defect was found in any of the three
+       slices.** By slice: **290** 21/21 (four lane readings, the region table's
+       five rows, and 290.1's four-row discrimination table), **286** 8/8,
+       **287** 3/3. Commands and figures are in the report.
+
+2. [x] **291.2 — DONE 2026-09-06. The finding: a 100% is a suspicious number,
+       so the pipeline was checked for whether it can disagree at all — it can,
+       it disagreed four times, and all four were the GRILL's fault.**
+
+       CLAUDE.md says a 0%, a 100% or an identical value across many inputs is a
+       defect in the instrument until proven otherwise. A grill reporting 32/32
+       is that shape. The check is that this pipeline **did** produce
+       disagreements — four — and every one traced to the probe:
+
+       | # | probe | what made it wrong |
+       |---|---|---|
+       | 1 | `\b284\b` over open items | matches inside **`1,284,734`**; `\b` is a poor boundary for a number, because a comma IS a word boundary. Falsely reported `249.9` naming Slice 284 against `roadmap_scope.py` |
+       | 2 | lane 1 re-derived over `packages/core/src/css` | the slice's own block says `-- apps/docs/src`; read **0 in 0 files** against a true 390 in 79 |
+       | 3 | a synthetic "legacy 4-field" log row | its item was a **single token**, so `ROW`'s `([\w-]+)` ate it and the row matched — apparently refuting the load-bearing half of 290.1's refusal |
+       | 4 | 286.2's table figures | measured **height** and compared it to a claim about **width**; 202/213/388/756 against 260/310/310/310 |
+
+       Each was fixed by running the slice's stated command, and each then
+       reproduced exactly. The needle in #1 is red-proved by discrimination —
+       `(?<![\d,.])(2[89][0-9])(?![\d,])` rejects `1,284,734` and accepts
+       `Slice 284`, `284.2`, `290.1`.
+
+       **The asymmetry is the point, and it continues 289's finding from the
+       other side.** 289 found that all six of its non-reproducing assertions
+       *sat beside no command*. Here every published claim had a command and all
+       32 held; the four things with no command were the grill's own probes.
+       **Re-deriving what to measure from prose is where the error enters** —
+       not the slice's measurement, and not the detector.
+
+       Also recorded, because *"reconcile against an independent count"* is
+       written here for catching a dead script: in #1 the script was right and
+       the reconciliation was wrong. **A disagreement is a signal to
+       investigate, never a verdict about which side is broken.**
+
+3. [x] **291.3 — DONE 2026-09-06. One real gap, minor: Slice 290's lane-1 block
+       states `in 79 files`, which the command it quotes cannot produce.**
+
+       The quoted pipeline ends `| grep -c ':'` and yields the declaration count
+       alone; the file count needs a second command. **The number is TRUE** —
+       `git grep -l 'style="' <rev> -- apps/docs/src | wc -l` reads **79** at all
+       four revisions — so this is an incomplete command beside a correct claim,
+       not a wrong figure. Filed rather than waved off precisely because it is
+       the property 291.2 is about: the half of that claim with no command is the
+       half a re-deriving wake has to guess at, and guessing is what produced
+       four wrong probes here. **Amended in place** in Slice 290's own text, per
+       236.2, so a reader reaches the working command rather than this note.
+
+4. [x] **291.4 — DONE 2026-09-06. Recorded, not raised: 287.5's answer was
+       derived twice independently, by two dispatchers, and the two `LOOPS.md`
+       diffs are BYTE-IDENTICAL.**
+
+       Both name `f57570f4` as the commit that stranded the sentence (here via
+       `git log --oneline -S "Either way, close the round with" -- LOOPS.md`),
+       and both reject the Accept's no-change branch on the same ground — the
+       `9c1bacbe` diff carries the trailing fragment on its `-` side as well as
+       its `+` side, so 283.2 only changed *which* paragraph the sentence trails.
+
+       **n = 2 independent derivations agreeing is the strongest corroboration
+       in this report, and no single-dispatcher grill could produce it.** Stated
+       as what it is and no more: it is not an argument for collisions — Step 0c
+       already prices one at a wake's work discarded — it is what this
+       particular collision happened to yield, alongside Slice 162's postscript
+       that the redundant wake is not pure waste.
+
+**NOT VERIFIED, said plainly:** no screenshots at 1440px and 390px in light and
+dark were taken — a cloud wake has no Podman and no `:8081`. None is owed: this
+slice changes no shipped surface. Its one *rendered* measurement (286.2's
+re-take, §C of the report) is layout geometry — `ENVIRONMENT.md`'s **second**
+list, which a cloud wake can take, and it was taken live against the built tree.
+
 ## Slice 290 — Standardize sweep, 4 of 4 lanes clean, and the reading that makes that honest rather than dead: the inputs three lanes measure did not move since Slice 284. Lane 4's carried worry — `LOOPS.md`'s dispatch region regrowing — did NOT continue, and step 1's one live candidate is refused by discrimination (2026-09-06)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
@@ -352,6 +469,8 @@ measured rather than the detectors trusted:
 ```
 # lane 1's source surface — inline style= declarations under apps/docs/src
 git grep -oh 'style="[^"]*"' <rev> -- apps/docs/src | tr ';' '\n' | grep -c ':'
+# and the FILE count, which the line above cannot produce (added by 291.3):
+git grep -l 'style="' <rev> -- apps/docs/src | wc -l
   702a6408 (Slice 214, 2026-08-30)  390 declarations in 79 files
   1de97177 (Slice 284, 2026-09-06)  390 declarations in 79 files
   1023579f (HEAD)                   390 declarations in 79 files
