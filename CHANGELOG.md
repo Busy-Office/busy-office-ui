@@ -9,6 +9,11 @@ pin.
 
 ## Unreleased
 
+_Nothing yet._
+
+
+## 0.8.0 (2026-09-06)
+
 ### Added
 
 - **`behaviors.json` gains `byComponent`, and each behavior gains `serves`** —
