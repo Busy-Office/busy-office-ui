@@ -320,6 +320,197 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 314 — Standardize sweep, 4 of 4 lanes: lanes 1-4 clean, and the finding came from the re-scan step 4 mandates — 292.8's scope was "the whole page tree", and the 24 shared components/layouts that render INTO every page were outside every count it took (2026-09-07)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty), `ENVIRONMENT.md` trap 1, fixed with
+`git checkout -B main origin/main` before any commit; `origin/main` again
+arrived as a **forced update** (`26447ba...ba22f5d`). Trap 2 clean in one
+`--unshallow` (**1,981** commits, no `shallow.lock`), and it again brought the
+tags — the **twenty-seventh** consecutive container to do so; `git tag | wc -l`
+→ **8**. Trap 1c did not bite (`CHROME_PATH` exported in the same command as
+every browser-driven gate).
+
+Rule 1: no open P0 — `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` reads **0**
+across the 24 open items. Step 1 read **both** intakes with `ENVIRONMENT.md`
+§8's controls in one run (`/discussions` → 200 len **0**; `/not-a-real-route` →
+**404**; `/issues?state=open` → 200 len **1**, issue #2, already triaged as
+`300.2`) and triaged nothing: no new input. **Rule 2 matched** —
+`dispatch_status.py` read `Standardize 4 / 4 Continue rounds … OVERDUE`. Rule 3
+`3 / 3 slices … OVERDUE [292, 294, 312]` was **not reached**, because rule 2
+sits above it. Rules 4-8 not reached. Rule 5 reports **STALE** (`1 wake-date(s)
+newer`), so per `LOOPS.md` it **could not be evaluated** and is not reported
+clear; `306.1` is the open item saying why a cloud wake cannot drive it to `ok`.
+
+**All four lanes ran; saying `n of 4` per the playbook. This is 4 of 4.**
+
+| lane | command | result |
+|---|---|---|
+| 1 dead-style | `npm run scan:dead-style -w docs` | **0 dead** of **1,433** live inline declarations, 0 pages |
+| 2 css-repeats | `npm run report:css-repeats -w @busy-office/ui` | **8 repeated bodies**, `LOOPS.md`'s table exactly; 74 files · 242 rules · 230 distinct |
+| 3 report:prose | `npm run report:prose -w docs` | **0 unverdicted** — 118 pages · median 792 · **111,907** words; 10 over the corpus median, 11 over a family median, union **15** |
+| 4 loop-prose | `python3 scripts/loops/report_loop_prose.py` | no finding — see below |
+
+**Three of the four readings are BYTE-IDENTICAL to Slice 293's, and every lane's
+input MOVED in between, so the identical values were treated as a defect until
+proven otherwise** (CLAUDE.md: *an identical value across many inputs is a
+defect until proven otherwise*). Both are explained, not merely observed:
+
+- **Lane 1's 1,433, unmoved while 10 docs files changed (+102/−35).** The diff
+  touches `style="` on exactly **8** lines — `4 +` and `4 −`, four in-place
+  substitutions of `font-size: 1.5rem` → `font-size: var(--bo-font-size-xl)`
+  (Slice 292.8). A substitution is declaration-count-neutral, and neither side
+  is dead, so 1,433 is the correct answer rather than a stuck one.
+  Command: `git diff e8c7b0f2..HEAD -- 'apps/docs/src/**' | grep -E '^[+-].*style="'`.
+- **Lane 2's 242 rules / 230 distinct, unmoved while `icon.css` gained +14/−1.**
+  The whole of that diff is inside one CSS **comment** (292.6's dating of the
+  four size endpoints). No rule was added, so the totals cannot move.
+  Command: `git diff e8c7b0f2..HEAD -- packages/core/src/css/components/icon/icon.css`.
+
+**Lane 4 has no finding, and the reason is that Slice 308 already answered it.**
+The `by region` block still reports the dispatch region growing faster than the
+file (1,525 → 6,535, +328.5%, 39.9% of the file), which is the standing reading
+274.1 installed — but 308.1's rule says a rising region number is not a
+regrowth reading until it is attributed per section, and `git diff --stat
+4e0248ed HEAD -- LOOPS.md` is **empty**: the file has not changed by one byte
+since 308 attributed it. Re-attributing an unchanged file would be a
+re-derivation, which is what that rule exists to prevent. Every other row
+carries a verdict: `CLAUDE.md` 167.1 (HONEST, with the eighth-section reopen
+condition **met and discharged by Slice 284**, re-measured here as **16 `##`
+sections, family still 7 of them**, 2,414 of 5,717 section words); `DESIGN.md`,
+`RESUME.md`, `ROADMAP.md` 167.1; `ENVIRONMENT.md` its own later verdict.
+
+### The finding — step 4's re-scan, not a lane
+
+Standardize step 4 asks *"did fixing this reveal another instance of the same
+drift"*. Lane 1's explanation above is what surfaced it: the four substitutions
+it accounts for are **292.8**, whose subject is *"the display-sizing font-size
+literals in docs pages now read a token"*.
+
+**292.8's premise re-runs exactly** (CLAUDE.md: re-checking a premise is part of
+the criterion). Its widened command still returns **4 of 127**, the same four
+files, each with the reason it recorded. What that scope is called is *"the
+whole page tree"* — and it is `apps/docs/src/pages/`. The **24 `.astro` files in
+`apps/docs/src/components/` and `apps/docs/src/layouts/`** — the shared files
+that render INTO every one of those 127 pages — were outside every count 292.8
+took, and the same command over them returns **2 of 24**:
+
+```
+grep -rlE 'font-size:\s*[0-9]' apps/docs/src/pages --include='*.astro'                       # 4 of 127
+grep -rnE 'font-size:\s*[0-9]' apps/docs/src/components apps/docs/src/layouts --include='*.astro'   # 2 of 24
+```
+
+Same shape as **292.9** (*"292.4's property is tree-wide and the guard it landed
+is page-local"*), one directory over.
+
+**Base rate measured before treating it as a finding** (94.11), with the
+property↔token-family filter that a bare value match does not have — an exact
+value match alone proposes `font-size: 2rem → --bo-space-8` and
+`padding-block-end: 2px → --bo-focus-ring-width`, which are coincidences, not
+conversions. Semantically convertible inline declarations: **18 of 210 raw in
+`pages/` (8.6%)**, **7 of 32 raw in `components/`+`layouts/` (21.9%)**. Neither
+0% nor 100%, so the predicate distinguishes.
+
+1. [x] **314.1 — the two `font-size` literals in the shared docs components read
+       a token; the third does not, for 292.8's own recorded reason.** Both
+       files are **live rendered markup**, not copyable samples — checked,
+       because that distinction is what kept `output-form`'s `9pt` and
+       `troubleshooting`'s `62.5%` out of 292.8's scope:
+       `PatternPreview.astro` renders through `set:html={preview.html}`, and
+       `AppTile.astro` applies its consts through `style={MARK}` / `style={BOX}`.
+
+       - `components/PatternPreview.astro:35` — `font-size: 1.5rem` →
+         `var(--bo-font-size-xl)`, exact (`tokens/typography.css:11`). Every
+         other declaration in that file already reads a `var(--bo-space-*)`,
+         so this is a one-off inside an otherwise fully tokenised file.
+       - `components/AppTile.astro:45` — `font-size: 1rem` →
+         `var(--bo-font-size-md)`, exact (`tokens/typography.css:9`).
+       - `components/AppTile.astro:38` — `font-size: 2rem` **stays**. Same
+         verdict 292.8 recorded for `patterns/app-launch.astro:134`: the scale
+         tops out at `xl` = `1.5rem`, so **no token equals 2rem** and a swap
+         would shrink it — a rendered-image judgement a cloud wake cannot make.
+         Here there is a second reason: line 39's `BOX` pairs it with
+         `block-size: 2rem`, the fixed box the comment says exists so tiles line
+         up, so the two would have to move together.
+
+       - **Accept:** the count of `.astro` files under
+         `apps/docs/src/components/` and `apps/docs/src/layouts/` carrying a raw
+         `font-size` literal **outside a site with a recorded reason** reaches 0;
+         a computed-style probe over the built pages that render these two
+         components reports **no** computed `font-size` difference before/after,
+         AND that no-op is red-proved against being a dead edit by overriding
+         the token on `:root` and re-reading (the 292.8 method — a no-op diff
+         alone is also what an edit that never landed produces); and no gate is
+         added unless a measured base rate justifies one.
+       - **DONE 2026-09-07 (cloud wake).** Both swaps landed; the `2rem` stays,
+         with its reason recorded **at the site** (`AppTile.astro`'s own comment,
+         where a reader meets the question) as well as here — the same placement
+         292.8 chose. The re-run count for the Accept's first clause is **0**:
+         `grep -rnE 'font-size:\s*[0-9]' apps/docs/src/components apps/docs/src/layouts
+         --include='*.astro'` now returns the single `AppTile.astro` `MARK`
+         literal, which is the site carrying a recorded reason.
+
+         **The no-op and the red-proof, one probe, three pages.** A throwaway
+         probe (scratchpad, not the repo) drove `serve-dist.mjs` +
+         `browser-harness.mjs` over `/patterns/`, `/patterns/app-launch/` and
+         `/patterns/suite-home/` — the three pages that render these two
+         components — reading the computed `font-size` of every element:
+
+         | comparison | elements | key-set diffs | computed differences |
+         |---|---|---|---|
+         | before vs after, unmodified | 4,276 | 0 | **0** |
+         | `--bo-font-size-xl` → `3.25rem`, **before** tree | 4,276 | 0 | 4 |
+         | `--bo-font-size-xl` → `3.25rem`, **after** tree | 4,276 | 0 | **7** |
+         | `--bo-font-size-md` → `3.25rem`, **before** tree | 4,276 | 0 | **0** |
+         | `--bo-font-size-md` → `3.25rem`, **after** tree | 4,276 | 0 | **2** |
+
+         The no-op row alone proves nothing — it is also what an edit that never
+         landed produces — so the override rows are what discriminate, and they
+         do it in **both** directions. `xl` moves 4 → 7: the four are
+         pre-existing `.bo-stat__value` uses of that token, and the **+3** are
+         exactly the three `PatternPreview` tiles the `app-launch` preview
+         renders on `/patterns/` (`cart`, `box`, `chart`), every one
+         `24px → 52px`. `md` is the sharper half — **0 before, 2 after**, both on
+         `/patterns/app-launch/`, both `16px → 52px`: the two `AppTile` initials
+         badges (AP, AR). A token nothing referenced before the edit moving
+         exactly two elements after it is the wiring, not an inference from it.
+
+         **Gates: all 17 cloud-runnable entry points green** on the committed
+         tree (`ENVIRONMENT.md`'s derived list), `docs:build` included.
+       - **NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots —
+         a cloud wake has no Podman. What that would add is *"does it look
+         right"*; what is claimed instead is that **nothing rendered changed**,
+         asserted over 4,276 elements' computed `font-size` plus `check:layout`
+         and `test:axe` across the built site. The claim is structural rather
+         than hopeful: the swap's value is byte-equal to the literal it replaces
+         (`1.5rem`, `1rem`), so a visual difference would require the token to
+         differ from its own definition.
+
+2. [ ] **314.2 — the same scope gap exists for SPACING and `font-weight`
+       literals, and it is a different property with no verdict — filed, not
+       built.** 292.8 measured and claimed `font-size` only. Widening this sweep
+       into the other families would be scope creep against a property nothing
+       has ever adjudicated, so it is refused here and recorded instead:
+
+       | family | `pages/` | `components/`+`layouts/` |
+       |---|---|---|
+       | `margin`/`padding` → `--bo-space-*` | 11 in 5 files | 4 in 3 files |
+       | `font-weight` → `--bo-font-weight-*` | 3 in 1 file | 0 |
+
+       **Half of the spacing hits are a zero**, and converting `padding: 0` to
+       `var(--bo-space-0)` is the wrong direction: a reset is not a scale step,
+       it adds indirection for no shared decision, and lane 1 already reports
+       these as **live** rather than dead. The non-zero ones
+       (`base/primitives.astro`'s four `margin-block-start: 1.5rem`,
+       `ApiTable.astro`/`Gallery.astro`'s `padding-inline-start: 1.25rem`) are
+       the real candidates.
+
+       - **Accept:** a recorded verdict for the non-zero spacing literals —
+         converted, or refused with the reason — and an explicit decision on
+         whether `--bo-space-0` is ever the right spelling of a zero. **Deciding
+         no change is needed is a satisfying outcome** if it carries the re-run
+         counts; the counts above are the input, and they are snapshots.
+
 ## Slice 313 — 312.1 + 312.2: the honest reader set is FOUR gates, not two, and three of the four never spell the path at all. `paths-ignore` is removed rather than the reads, because keeping it means reversing three recorded decisions (2026-09-07)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again

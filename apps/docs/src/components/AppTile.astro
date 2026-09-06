@@ -34,7 +34,12 @@ const { label, icon, initials } = Astro.props;
 /* One shared box for every mark so tiles line up whichever kind they use.
    The height is FIXED rather than left to the content: a `.bo-badge` chip is
    37px tall against an icon's 32px, which pushed the initials tiles' labels 5px
-   below their neighbours' in the same row (measured, not eyeballed). */
+   below their neighbours' in the same row (measured, not eyeballed).
+   The 2rem stays a literal on purpose (roadmap 314.1, and 292.8 recorded the
+   same verdict for patterns/app-launch): the font-size scale tops out at
+   --bo-font-size-xl = 1.5rem, so no token equals it and a swap would shrink
+   the mark — and BOX's block-size below is the same 2rem, so the two would
+   have to move together. The badge's own size one line down IS a token. */
 const MARK = 'font-size: 2rem; line-height: 1; color: var(--bo-color-accent); margin-inline: auto; margin-block-end: var(--bo-space-2)';
 const BOX = `${MARK}; display: flex; align-items: center; justify-content: center; block-size: 2rem`;
 ---
@@ -42,7 +47,7 @@ const BOX = `${MARK}; display: flex; align-items: center; justify-content: cente
   {icon && <span class={`bo-icon bo-icon--${icon}`} aria-hidden="true" style={MARK}></span>}
   {initials && (
     <span aria-hidden="true" style={BOX}>
-      <span class="bo-badge" style="font-size: 1rem">{initials}</span>
+      <span class="bo-badge" style="font-size: var(--bo-font-size-md)">{initials}</span>
     </span>
   )}
   {!icon && !initials && (

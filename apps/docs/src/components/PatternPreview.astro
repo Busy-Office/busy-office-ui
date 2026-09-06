@@ -32,7 +32,7 @@ const day = (n: number, attrs = '') => `<span class="bo-calendar__day"${attrs}>$
    helper, not a docs class — fragments stay strings either way, a class
    would couple them to tile-preview.css, and check-markup validates only
    bo-* classes so it could never gate one. */
-const tile = (icon: string, label: string) => `<span class="bo-widget" style="text-align: center; padding-block: var(--bo-space-3)"><span class="bo-icon bo-icon--${icon}" style="font-size: 1.5rem; color: var(--bo-color-accent); margin-inline: auto"></span><span>${label}</span></span>`;
+const tile = (icon: string, label: string) => `<span class="bo-widget" style="text-align: center; padding-block: var(--bo-space-3)"><span class="bo-icon bo-icon--${icon}" style="font-size: var(--bo-font-size-xl); color: var(--bo-color-accent); margin-inline: auto"></span><span>${label}</span></span>`;
 const card = (text: string) => `<span class="bo-widget"><span class="bo-widget__body">${text}</span></span>`;
 const stat = (label: string, value: string) => `<span class="bo-widget"><span class="bo-stat"><span class="bo-stat__label">${label}</span><span class="bo-stat__value">${value}</span></span></span>`;
 const PREVIEWS: Record<string, { scale: number; html: string }> = {
