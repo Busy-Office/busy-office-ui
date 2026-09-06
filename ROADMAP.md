@@ -315,6 +315,101 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 304 — Objective grill of Slices 300, 301, 303: 24 of 26 reproduce, and both failures are one defect — four figures quoted from a working tree that no commit ever held (2026-09-07)
+
+Dispatched by rule 3, OVERDUE at `4 / 3`. **Armed set narrowed from four to
+three**: `292` was already covered by a prior grill and re-armed only because
+the counter names slices, not rounds — §6 step 0's documented hazard, so it is
+dropped rather than re-grilled. The remaining three are **all this author's
+own**, which is why the verification was run by a **fresh-context agent rather
+than a fork**: a fork inherits the builder's reasoning, and a self-grill that
+inherits its own reasoning is the marking-your-own-homework shape §3b step 4
+exists to prevent.
+
+### The finding: a measurement taken mid-edit and published as a commit's state
+
+Slice 301 published its post-sweep state as `4,676 lines / 335 closed / 7.2%`,
+and `check:slice-refs` as `282`. **None of those four values exists at any
+committed revision.** At `384e6a8b`, the sweep commit itself:
+
+```
+python3 scripts/loops/roadmap_scope.py --rev 384e6a8b
+#   4,738 lines · 396 closed · 8.4%        (published: 4,676 / 335 / 7.2%)
+python3 scripts/loops/roadmap_scope.py --rev 384e6a8b~1
+#   6,839 lines · 2,534 closed · 37.1%     (published: identical — exact)
+```
+
+**The gap is the write-up itself.** Slice 301 is 62 lines — 1 heading, 61 body
+— and it is a *closed* slice, so it lands in both numerator and denominator:
+`4,738 − 62 = 4,676`, `396 − 61 = 335`, `283 − 1 = 282`. Every published
+figure was taken after the move and before the slice inserted itself.
+
+**This breaks `ENVIRONMENT.md`'s own standing rule** — *a figure describing a
+commit is read from THAT COMMIT, never from the working tree* — in a wake that
+had read that file at Step 0 the same day. Recorded plainly rather than
+softened: the rule was known, written down, and not applied.
+
+**The tell was present and unexamined.** `6,839 → 4,676` was reported to the
+line while being unreachable from the repo. CLAUDE.md's "a suspiciously tidy
+number is a defect in the instrument until proven otherwise" points at exactly
+this, and the pre-state's exactness is what made the post-state look equally
+trustworthy.
+
+**And the enabling condition is a missing command, not carelessness.** Slice
+301 names its four lane scripts but never names the tool behind
+`37.1% / 6,839 / closed history` — it is `roadmap_scope.py`, which
+`report_loop_prose.py`, the lane the slice credits, does not print. The
+verifier had to find it by grep. **Had the command sat beside the claim, its
+`--rev` flag would have made the error visible while writing.** That is
+CLAUDE.md's "write the command next to the claim" earning its place a second
+time.
+
+Corrected in place per 236.2, with the original struck rather than deleted.
+**The conclusion is untouched**: the move is still 12 slices, byte-identical,
+`−2,163 = −2,211 + 48`, and still the largest on record.
+
+### What held
+
+**Slice 300 — 5 of 5 exact.** All four published exit codes reproduce (quoted
+glob `1`, typo `1`, `--help` `0`, real dist `0`), as do `165 files` and
+`88,943 class uses` to the digit, and `--self-test` passes.
+
+**Slice 301's move — every structural property.** An independently written
+line-scan parser over `git show 384e6a8b{~1,}` confirms all five: each of the
+12 present-once and byte-identical in the archive, absent from the live file
+bar its pointer, untouched sections unchanged, pre-existing archive sections
+unchanged, checkboxes `22 → 22`. Slice 283 correctly held back on 273.2's flag.
+Line arithmetic exact. Archive `40,235 → 42,446`, `259 → 271` sections.
+
+**Slice 303 — including its red-proofs, re-done independently.** The verifier
+made its OWN injections rather than trusting the slice's account: dropping
+`app-reset` from `ORDER` fails the layered arm only; neutering `HOSTILE` fails
+the control arm only; each reverted and the suite re-run to 172. **The control
+is real — it is not a test that cannot fail**, which was the specific thing
+worth checking about a two-arm case an author wrote and then vouched for.
+
+The Tailwind findings hold: absent from every manifest, `node_modules` and
+config; 20 of 24 ranges seeded, 4 OKLCH-generated here; and before `522b9f61`
+no gate referenced `app-reset` or `preflight` and `check-claims` never visited
+the page — both re-measured at `522b9f61~1`.
+
+**One moved-expected**: Slice 303's prose word count reads `111,703` against a
+published `111,622`, +81 from the relicence edit to `index.astro`. Expected, not
+a defect.
+
+1. [ ] **304.1 — `roadmap_scope.py`'s figures should be quotable only with a
+       revision.** The defect above was possible because the script reports a
+       working-tree reading by default and nothing in its output says which
+       tree it read. It already supports `--rev`; what it does not do is make
+       the ambiguity visible at the point a wake copies the number.
+       - **Accept** — the property, not a prediction: a figure printed by that
+         script carries the revision it describes, or says outright that it is
+         reading an uncommitted working tree. **Refusing is a satisfying
+         outcome** if the base rate says otherwise — this is one instance, and
+         a header line is a cheap fix that may still be ceremony. Measure how
+         many published `roadmap_scope` figures across the archive were taken
+         mid-edit before building anything.
+
 ## Slice 303 — The framework's central promise was documented, demoed, and ungated: the layered-reset recipe is now executable (2026-09-06)
 
 **Input**: the owner asked whether Tailwind is used here, then pointed at *"an
@@ -462,10 +557,29 @@ over a property no artefact carries.
 three-line pointer.
 
 ```
-ROADMAP.md        6,839 -> 4,676 lines
-closed history     37.1% -> 7.2%   (2,534 -> 335 lines)
+ROADMAP.md        6,839 -> 4,738 lines
+closed history     37.1% -> 8.4%   (2,534 -> 396 lines)
 archive          40,235 -> 42,446 lines, 259 -> 271 sections
 ```
+
+**⚠ THE POST-SWEEP FIGURES WERE CORRECTED BY THE GRILL IN SLICE 304.** As
+first published they read `4,676 / 335 / 7.2%`, and **none of those three
+exists at any committed revision.** They were measured after the move but
+before this write-up was inserted — and the write-up is itself a closed slice,
+62 lines (1 heading + 61 body), so it lands in BOTH numerator and denominator:
+`4,738 - 62 = 4,676`, `396 - 61 = 335`. `check:slice-refs` was published as
+`282` for the same reason; it reads `283` at the commit.
+
+This is `ENVIRONMENT.md`'s own standing rule — *a figure describing a commit is
+read from THAT COMMIT, never from the working tree* — broken by a wake that had
+read it. The tell was there and was not acted on: `6,839 -> 4,676` was reported
+to the line while being unreachable from the repo. `roadmap_scope.py --rev
+<sha>` is the command that settles it, and this slice never named the tool at
+all, which is what let the error stand.
+
+The pre-state (`6,839 / 2,534 / 37.1%`) reproduces exactly, and the move
+itself — 12 slices, byte-identical, `-2,163 = -2,211 + 48` — reproduces in
+full. **The conclusion is unchanged; only these four numbers were wrong.**
 
 **One slice was deliberately NOT moved**: **283**, flagged by
 `roadmap_scope.py`'s dependency report as named by the still-open `273.2`.
@@ -486,8 +600,9 @@ output**: flipping one character inside archived Slice 290 took the verifier to
 `exit 1`; restoring took it back to `exit 0`.
 
 **Line accounting reconciles in both directions**: live **−2,163** = −2,211
-body + 48 pointer lines (12 × 4). `check:slice-refs` reports **282 slice
-numbers each heading one section**, so the sweep introduced no duplicate
+body + 48 pointer lines (12 × 4). `check:slice-refs` reports **283 slice
+numbers each heading one section** (published as 282 — same off-by-this-write-up
+as the figures above, corrected in Slice 304), so the sweep introduced no duplicate
 heading and broke no citation. Full docs and core builds green, 165 tests pass.
 
 **What this does NOT do, said plainly: it does not answer `249.12`.** The

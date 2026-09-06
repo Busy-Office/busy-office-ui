@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-06 15:59 UTC
+Generated at: 2026-09-06 16:21 UTC
 
 ## Open items by slice
 
@@ -35,19 +35,20 @@ Generated at: 2026-09-06 15:59 UTC
   - 298.1 — `gen-og-card.mjs`'s display sizes are literals with a stated reason, and nothing checks that the reason stays true.
 - **Slice 300** (1 open)
   - 300.2 — Issue #2: no board/kanban component, triaged, NOT built.
+- **Slice 304** (1 open)
+  - 304.1 — `roadmap_scope.py`'s figures should be quotable only with a revision.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1533 iterations logged)
+dispatch status — counter-triggered rules (1535 iterations logged)
   Standardize   2 / 4 Continue rounds since 2026-09-06 23:20   ok
-  Objective     4 / 3 slices          since 2026-09-06 15:05   OVERDUE  [292, 300, 301, 303]
-  -> a counter is at or past its threshold; the dispatcher should pick it
-  Optimize      3 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
-  -> rule 5's newest comparable pair predates 3 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-03, not this one — record a metric or say the rule could not be evaluated.
-     the unit is DISTINCT LOG DATES after 2026-09-03 (2026-09-04, 2026-09-05, 2026-09-06), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
+  Objective     0 / 3 slices          since 2026-09-07 00:21   ok
+  Optimize      4 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
+  -> rule 5's newest comparable pair predates 4 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-03, not this one — record a metric or say the rule could not be evaluated.
+     the unit is DISTINCT LOG DATES after 2026-09-03 (2026-09-04, 2026-09-05, 2026-09-06, 2026-09-07), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
 ```
 
 ## Owner-blocked
@@ -66,8 +67,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-06 23:09 · Roadmap · plan · 300.2 — triaged issue #2 (no board/kanban component): premise verified (40 components, only bo-icon--keyboard in the vocabulary), argument accepted as strong, but NOT dispatched as a build — a new component is the largest surface addition here, so it goes to an Explore spike that answers whether the keyboard contract and announcement can be decided once. Also answered 297.1: both issues arrived in the right intake, but both were filed by the owner's agent, so the router was not actually tested · triaged · 1c889eee
-- 2026-09-06 23:20 · Standardize · sweep · Slice 301 — Standardize sweep 4 of 4 lanes: lanes 1-3 clean (0 dead of 1,433 run WITHOUT CHROME_PATH to exercise 298's §1c fix; css-repeats 74/242/230/8 no delta; prose 118/792/111,622 unchanged), lane 4 carried the eleventh archive sweep. 12 slices moved verbatim, ROADMAP.md 6,839 -> 4,676 lines, closed history 37.1% -> 7.2%, Slice 283 held back on 273.2's flag. Verified by an independently-written parser off git show, red-proved both directions by exit code · landed · ed0c0650
 - 2026-09-06 23:20 · Meta · refusal · answering 249.12's archival trigger from inside the sweep — a threshold is a policy about how much history a wake should walk, not a measurement a sweep can take; this is the eleventh sweep run on judgement and the case for settling it is now stronger · refused · ed0c0650
 - 2026-09-06 15:52 · Roadmap · triage · Slice 302 — Step 1's Discussions intake was unrunnable in a cloud wake (no gh, GraphQL refused); restated as a property, REST substitute recorded in ENVIRONMENT.md §8 with 404/known-content controls. Both intakes read: issues 1 open (#2, already triaged), discussions 0 open · triaged · ea70ab50
 - 2026-09-06 15:52 · Meta · refusal · a gate asserting a wake read both intakes — the evidence is an API call, not a file, so no artefact carries the property · refused · ea70ab50
@@ -76,6 +75,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-06 15:53 · Meta · refusal · a gate asserting each cite respects its dimension's scope — 292.3 refused it and this run is fresh evidence for the refusal (CLAUDE.md 94.11) · refused · ea70ab50
 - 2026-09-06 23:59 · Continue · build · Slice 303 — the layered-reset recipe on /getting-started/troubleshooting was documented, demoed with two live iframes, and ungated: no gate referenced app-reset or preflight and check-claims never visited the page. Added a two-arm case (control: unlayered reset strips .bo-btn; recipe: same reset in a layer declared first survives), both red-proved independently. check:claims 170 -> 172. Also answered the owner's Tailwind question by measurement: no dependency, no config, no code — 20 palette ranges of copied hex with a build-time pin assert · landed · 2b3ba89f
 - 2026-09-06 23:59 · Meta · refusal · trusting the page's two iframes as the check — a demo where both frames break to the same wrong result still renders two plausible frames; the gate asserts the difference · refused · 2b3ba89f
+- 2026-09-07 00:21 · Objective · grill · Slice 304 — grill of 300, 301, 303 (292 dropped, already grilled; counter re-armed it). 24 of 26 reproduce. Both failures are one defect: Slice 301's four post-sweep figures (4,676/335/7.2%/282) exist at no committed revision — measured after the move but before the write-up inserted itself, and the write-up is a closed slice so it lands in both numerator and denominator. Breaks ENVIRONMENT.md's own read-from-THAT-commit rule. Corrected in place; conclusion unchanged. Verification run by a fresh-context agent, not a fork, because all three slices are the grilling author's own · logged · 522b9f61
+- 2026-09-07 00:21 · Meta · refusal · using a fork to verify my own three slices — a fork inherits the builder's reasoning, which is the marking-your-own-homework shape the blind re-score exists to prevent · refused · 522b9f61
 
 ## Sunset test
 
