@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-06 14:54 UTC
+Generated at: 2026-09-06 15:05 UTC
 
 ## Open items by slice
 
@@ -40,9 +40,9 @@ Generated at: 2026-09-06 14:54 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1519 iterations logged)
+dispatch status — counter-triggered rules (1521 iterations logged)
   Standardize   3 / 4 Continue rounds since 2026-09-06 12:51   ok
-  Objective     0 / 3 slices          since 2026-09-06 22:54   ok
+  Objective     0 / 3 slices          since 2026-09-06 15:05   ok
   Optimize      3 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 3 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-03, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-03 (2026-09-04, 2026-09-05, 2026-09-06), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -64,8 +64,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-06 21:47 · Meta · refusal · publishing to the shadcn registry format as a distribution channel — it advertises this framework to consumers expecting React components · refused · 691102d3
-- 2026-09-06 21:47 · Meta · refusal · a ninth dispatcher rule for the Gauntlet — a counter under an always-true condition is the exact bug that starved Objective for ten slices, five times over · refused · 691102d3
 - 2026-09-06 21:47 · Meta · refusal · importing the contribution's two existing gauntlet rounds as precedent — both were self-graded by the builder, which this loop's step 2 refuses · refused · 691102d3
 - 2026-09-06 13:50 · Continue · build · 292.6 — icon.css's PRICED block dates its four size endpoints (d48f361d/43ea922a) and points at the stat:size stamp · landed · c3637cb9
 - 2026-09-06 13:50 · Meta · refusal · filing an item for the 162-byte gzip level spread — GZIP_TOLERANCE_KB=0.3 (307 bytes) already absorbs it · refused · c3637cb9
@@ -74,6 +72,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-06 22:54 · Objective · grill · Slice 298 — grill of 292, 293, 295: 44 of 47 assertions reproduce. Two real defects, both fixed in place: 295's claim that the OG card 'invents no colour' was false (raw #fff -> --bo-color-text-inverse, card byte-identical at 97,379), and ENVIRONMENT.md §1c's CHROME_PATH evidence is container-only but read as universal (env -u CHROME_PATH scan:dead-style exits 0 on macOS via resolve-chrome's fallback) · logged · bf55dca5
 - 2026-09-06 22:54 · Meta · refusal · a gate over 'a durable file names the environment its measurement was taken in' — semantic predicate, base rate 1 section, 94.11's wall for the sixth time · refused · bf55dca5
 - 2026-09-06 22:54 · Meta · refusal · re-filing 295's display font-size literals as a defect — a poster sits outside the component type scale legitimately; only the sentence claiming otherwise was wrong · refused · bf55dca5
+- 2026-09-06 15:05 · Objective · grill · Slice 299 — the same Objective grill of 292/293/295 run twice by two dispatchers; this pass LOST the Step 0c collision to Slice 298 and re-dispatched, landing the two findings the winner did not make: Slice 295's metadata baseline 'up from 387' is 1,022 (each gate revision run against one dist), so the change adds 128 assertions not 763; and ENVIRONMENT.md 1c's consumer count, diagnosed as 14->15 by Slice 298, was still reading 14 · landed · 0e52b565
+- 2026-09-06 15:05 · Meta · refusal · a gate over the CHROME_PATH consumer count — it is already self-announcing when re-run, and classifying a new consumer needs the semantic judgement 94.11 refuses to gate · refused · 0e52b565
 
 ## Sunset test
 

@@ -15,7 +15,7 @@ Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_
 - [`surface-baseline.md`](surface-baseline.md) — the scored-surface baseline
 - [`surface-review-rubric.md`](surface-review-rubric.md) — how a surface is scored
 
-## Findings — 181 snapshots, newest first
+## Findings — 182 snapshots, newest first
 
 A **·** marks a file nothing outside `.roundtable/` links to. That is not a defect: a grill can settle a question without anything needing to cite it afterwards. It is here so the uncited set stays visible instead of growing unnoticed.
 
@@ -29,6 +29,7 @@ A **·** marks a file nothing outside `.roundtable/` links to. That is not a def
 | 2026-09-06 | [Finding — Slice 281's decay cause is false, and Slice 285 listed it under "what reproduced" (202](finding-281-decay-cause-2026-09-06.md) | · |
 | 2026-09-06 | [Objective grill — the three items built since the last grill (2026-09-06, cloud wake)](grill-objective-283-284-288-2026-09-06.md) | ✓ |
 | 2026-09-06 | [Objective grill — Slices 286, 287, 290 (2026-09-06, cloud wake)](grill-objective-286-287-290-2026-09-06.md) | ✓ |
+| 2026-09-06 | [Objective grill — Slices 292, 293, 295: the SECOND of two independent passes (2026-09-06, cloud ](grill-objective-292-293-295-second-pass-2026-09-06.md) | · |
 | 2026-09-05 | [Objective grill — Slices 271, 272, 273, 274 (2026-09-05, cloud wake)](grill-objective-271-272-273-274-2026-09-05.md) | ✓ |
 | 2026-09-05 | [Objective grill — Slices 276, 277, 278, 279 (2026-09-05, cloud wake)](grill-objective-276-277-278-279-2026-09-05.md) | · |
 | 2026-09-05 | [Objective grill — Slices 281, 283, 284 (2026-09-05, cloud wake)](grill-objective-281-283-284-2026-09-05.md) | ✓ |
@@ -214,4 +215,4 @@ The signature of a directory that has outgrown retrieval is the same subject inv
 
 Two files on one subject is usually a deliberate follow-up (a grill and its sign-off). Three is worth a look.
 
-— 189 files, 135 cited from outside, 55 uncited snapshots, 4 repeated subject(s).
+— 190 files, 135 cited from outside, 56 uncited snapshots, 4 repeated subject(s).
