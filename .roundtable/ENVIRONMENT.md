@@ -121,11 +121,41 @@ Every consumer imports the resolver directly, so one grep is exact — measured,
 ```
 grep -rl 'browser-harness\.mjs\|resolve-chrome\.mjs' \
     apps/docs/scripts/*.mjs examples/erp-suite/*.mjs
-  # 14 files on 2026-09-06 = 12 npm-script entry points, plus
-  # browser-harness.mjs (the module itself) and score.mjs (not an npm script).
+  # 15 files on 2026-09-06 (late) = 12 npm-script entry points, plus THREE
+  # files that are not npm scripts: browser-harness.mjs (the module itself),
+  # score.mjs, and gen-og-card.mjs (run by hand to regenerate the OG card).
 ```
 
 Re-run it; the count is the reconciliation, not the list.
+
+**The count moved within a day of being written, and the comment stayed at 14
+for one more wake** (roadmap 299.2). 293.1's **14** was exact at its own commit
+— reconstructed by re-running the grep against `649ca8ef`'s tree. Slice 295
+(`605829ca`, hours later) added `gen-og-card.mjs`, a direct
+`browser-harness.mjs` importer that is **not** an npm script, so the
+arithmetic above stopped summing. Slice 298's grill *reported* the move and
+left the comment reading 14; the number is corrected here, which is the point
+of the mechanism rather than an addition to it.
+
+**When the count disagrees, the question is which KIND of consumer arrived**,
+because only one kind changes what a wake must export:
+
+- a new **npm-script entry point** — the gate list grew; export the variable
+  for it (where the resolver has no candidate, i.e. the container).
+- a new **non-script consumer**, like this one — nothing a gate runs changed;
+  the file needs the variable only when a human runs it directly.
+- a **transitive-only** consumer — the grep is now under-reporting and the
+  one-level shortcut has expired. Still **0** today, re-measured rather than
+  carried: a relative-import graph over both directories, closed under
+  reachability from `browser-harness.mjs`/`resolve-chrome.mjs`, returns a
+  closure of **15** against the grep's **15** — equal sets, so nothing reaches
+  the resolver only through another module. That equality is what licenses a
+  one-level grep to stand in for a real closure; if the two ever disagree,
+  believe the closure.
+
+Which one it is takes one command:
+`grep -rn '<basename>' --include='package.json' . --exclude-dir=node_modules`
+— no hit means it is not an npm script.
 
 ## 2. THE CLONE IS SHALLOW — any history measurement is silently 50x wrong
 

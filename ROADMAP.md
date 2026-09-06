@@ -315,6 +315,172 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 299 — The SAME Objective grill, run twice by two dispatchers: this one lost the race and re-dispatched, and the re-dispatch is what caught the two things the winner did not — a metadata baseline that matches no revision of its gate, and the count Slice 298 diagnosed and left uncorrected (2026-09-06)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty), fixed with `git checkout -B main
+origin/main`; `origin/main` again arrived as a **forced update**
+(`26447ba...b3abc5f`). Trap 2 clean in one `--unshallow` (**1,952** commits, no
+`shallow.lock`) and it again brought the tags — the **nineteenth** consecutive
+container to do so, and the first to read `git tag | wc -l` → **8** rather than
+7 (`v0.8.0`). Trap 1c did not bite.
+
+Rule 1: no open P0 — `list_issues` returns `totalCount: 0` and
+`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` reads **0**. Step 1 triaged and
+committed nothing. Rule 2 `3 / 4 … ok`. **Rule 3 matched** —
+`Objective 3 / 3 … OVERDUE [292, 293, 295]`. Rule 5 **STALE**, so per its own
+text it **could not be evaluated** and is not reported clear. Rules 4 and 6 were
+not reached.
+
+### This is a COLLISION in Step 0c's sense — the third, and the first where both wakes finished
+
+Two dispatchers took the same item: the grill Slice 298 records and this one
+are the same dispatch, run in parallel. **Slice 298 pushed first and won.**
+Step 0c's rule is that the loser loses its work and re-dispatches, and that is
+what happened — this wake's own Slice 298 was reset away rather than merged, so
+none of the duplicated verification is in this diff.
+
+**Caught by the mandated pre-commit fetch, twice in one wake**, which is the
+working half Step 0c names:
+
+```
+b3abc5fd..bf55dca5   Slice 297 (owner call, feedback intake)  -> a NUMBER collision
+bf55dca5..66cd85da   Slice 298 (the same grill)               -> an ITEM collision
+```
+
+The first is a shape Step 0c does not discuss: both dispatchers read
+`ROADMAP.md`, both took `max + 1`, and both were right when they read it. It
+cost a renumber, not a wake — but nothing prevents it, and had the fetch been
+skipped the push would have carried a duplicate heading, which
+`check:slice-refs` fails on (*"each slice number heads one section"*, 280 of
+280 today).
+
+**Slice 162's postscript is the precedent, and it holds again**: the redundant
+wake earned its keep. The two findings below are not in Slice 298, and one of
+them is a defect Slice 298 read past.
+
+1. [x] **299.1 — Slice 295's "the gate returns to 1,150 assertions … up from
+       387" names a baseline no revision of that gate has ever produced. The
+       real prior count is 1,022. CORRECTED IN PLACE 2026-09-06.**
+
+       **Slice 298 checked the 1,150 and marked it "✓ exact"; the 387 beside it
+       was not re-run.** That is this grill's own headline arriving one level
+       up — 192.1's rule is that *the defect lands in what shipped BESIDE the
+       number*, and a grill can shed a claim the same way the slice did.
+
+       **Measured by running each historical revision of `check-metadata.mjs`
+       against ONE dist**, so the only thing varying is the script:
+
+       ```
+       01fd7fc5 (249.2)  ->   133 assertions across 127 built pages
+       93ad43ad (260)    -> 1,022
+       bdb73d8f (263)    -> 1,022      <- the revision Slice 295 replaced
+       66cd85da (HEAD)   -> 1,150
+       ```
+
+       **The delta reconciles exactly**, which is what makes 1,022 the right
+       baseline rather than merely a different reading: the diff at `605829ca`
+       adds `'og:image'` to `OG_REQUIRED` (+1 per page x 127) and adds the
+       distinct-url resolve arm (+1, a Set over one url) —
+       `1,022 + 127 + 1 = 1,150`. So the change adds **128** assertions, not
+       763: a fifth again as large a contribution as published, on a gate five
+       times larger than published.
+
+       **387 appears exactly twice in this repo's prose** — in 295's own
+       sentence, and in an unrelated archived slice reading *"2451 references,
+       189 distinct names, **387** definitions"*, which is the likeliest
+       source: a number carried across from a different instrument.
+
+       **The instrument was red-proved before its number was used.** Running an
+       old script against a new dist could plausibly inflate its count; the
+       three revisions returning three different values on one dist (133 /
+       1,022 / 1,150) is the discrimination — the reading tracks the script,
+       not the corpus. Per-page ratios agree with the structure (8.047 and
+       9.055, the fractional part being the corpus-level arms).
+
+       **Where it spread, and what was left alone.** Three records carry 387:
+       `ROADMAP.md` (struck in place here, with the measurement beside it),
+       `605829ca`'s commit message, and `.roundtable/loop-log.md`'s row for the
+       slice (mirrored into the generated `STATUS.md`). The latter two stay as
+       history — 164.2 forbids backfilling log rows, and 292.6 set the
+       precedent for leaving a commit message's wrong figure while correcting
+       the durable text.
+       - **Accept:** the published baseline agrees with what the replaced
+         revision of the gate actually prints, asserted by running it rather
+         than by reasoning about the diff, with the arithmetic from that
+         baseline to the current count reconciled; finding the 1,150 sound and
+         only its companion wrong is a satisfying outcome **(done — all
+         three)**.
+
+2. [x] **299.2 — Slice 298 diagnosed §1c's consumer count as having moved
+       14 → 15 and left the comment reading 14. CORRECTED 2026-09-06.**
+
+       Both grills found the move; only this one repaired it. §1c's own rule is
+       *"the count is the reconciliation, not the list"*, so a wake that
+       follows it gets **15** against a comment saying **14** — with Slice 298's
+       roadmap prose explaining the discrepancy in a file that wake is not
+       reading at Step 0. A reconciliation whose stated value is knowingly
+       wrong is worse than one that is merely stale, because the next wake
+       cannot tell which of the two it is looking at.
+
+       Repaired with the arithmetic restored (**12 npm-script entry points plus
+       THREE non-scripts**: `browser-harness.mjs`, `score.mjs`, and Slice 295's
+       `gen-og-card.mjs`), plus the reading that was missing: **what a moved
+       count MEANS** — a new gate to export for, a non-script consumer that
+       changes nothing a gate runs, or the transitive-only consumer that would
+       retire the one-level grep — and the one command that tells them apart.
+
+       **The transitive-zero premise re-verifies on a stronger instrument than
+       the one that states it.** §1c asserts it from the one-level grep itself.
+       A relative-import graph over both directories, closed under reachability
+       from `browser-harness.mjs`/`resolve-chrome.mjs`, returns a closure of
+       **15** against the grep's **15** — equal sets, **0** transitive-only.
+       That equality is what licenses the shortcut, and §1c now says so.
+       - **Accept:** §1c's stated count agrees with what its own grep prints on
+         the tree carrying it, and the entry states how to classify a moved
+         count rather than only that it may move; the transitive-only figure is
+         re-measured by something other than the grep it licenses **(done — all
+         three)**.
+
+**Refused: a gate over the consumer count.** It was considered because this is
+the second wake in a row to touch it. It is refused on the same ground 94.11
+sets: the count is already self-announcing when re-run, and deciding whether a
+new consumer is a gate, a hand-run script or a transitive import is the
+semantic judgement a regex cannot make. The repair is a sentence, not a check.
+
+**Also recorded, and NOT a defect in any grilled slice.** Lane 4's
+dispatch-region flat run has ended, and this wake read it at three revisions
+because the tree moved under it twice:
+
+```
+29e3e7f7  (293's own HEAD)   dispatch 6,112   file 15,201
+b3abc5fd  (this wake's base) dispatch 6,164   file 15,747
+bf55dca5  (after Slice 297)  dispatch 6,351   file 15,934
+```
+
+293 recorded **+929 words of file, +0 of dispatch** since 284 and called the
+worry retired, as 290 had. **+239 words of dispatch region landed in two
+commits on one day** — `+52` from Slice 296's Gauntlet loop, `+187` from Slice
+297's intake rule. Both owner-directed, so this is a signal rather than rot;
+the next Standardize sweep should read lane 4 knowing the flat run ended
+rather than inheriting "retired".
+
+**One of this wake's own probes was wrong first, and is recorded rather than
+quietly re-run** (291's finding — that all four of its ad-hoc probes were wrong
+— is what makes this worth stating). The first cite-classification probe
+returned **`0 of 0` for all six dimensions**: it read `dsa-scores.json` as
+`components[name][dim]` when the shape is `components[name].dimensions[dim]`.
+A 0 across every input is CLAUDE.md's own signature for a defect in the
+instrument, which is what it was. **Had the expected answer been 0 rather than
+nonzero, it would have passed review.**
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a
+cloud wake has no Podman. **None is owed, and that is checkable rather than
+asserted:** this slice's diff touches `.roundtable/*.md` and `ROADMAP.md` only
+— **0** CSS files, **0** docs pages, **0** scripts. Nothing in it renders.
+Every DOM, computed-style and geometry reading behind this grill was taken in
+the same headless Chrome the docs gates drive here.
+
 ## Slice 298 — Objective grill of Slices 292, 293, 295: 44 of 47 assertions reproduce, and the two real defects are a durable file that reads as universal and a claim I made about my own work (2026-09-06)
 
 Dispatched by rule 3, OVERDUE at `3 / 3` `[292, 293, 295]`. Scope per §6 step 0:
@@ -665,7 +831,19 @@ twitter:card -> summary           (1 occurrence, grep-confirmed)
 ```
 
 Both reverted; the gate returns to **1,150 assertions across 127 pages**, up
-from 387.
+from ~~387~~ **1,022** — struck in place per 236.2.
+
+> **CORRECTION (2026-09-06, second grill pass — roadmap 299.1).** The **1,150
+> is right and the 387 is wrong**; the pre-change count is **1,022**, so this
+> change adds **128 assertions, not 763**. Measured by running each historical
+> revision of `check-metadata.mjs` against ONE dist, so only the script varies:
+> `01fd7fc5` (249.2) → **133**, `93ad43ad` (260) → **1,022**, `bdb73d8f` (263,
+> the revision this slice replaced) → **1,022**, HEAD → **1,150**. No revision
+> has ever printed 387 on this corpus. The delta reconciles exactly:
+> `OG_REQUIRED` gained `og:image` (+1 per page × 127) and the distinct-url
+> resolve arm adds 1 — `1,022 + 127 + 1 = 1,150`. The figure also reached
+> `605829ca`'s commit message and `loop-log.md`'s row for this slice; both stay
+> as history, per 164.2 and 292.6's precedent.
 
 **The resolve arm is a Set, not a per-page `stat()`.** All 127 pages point at
 one asset, so 127 identical filesystem calls would measure the disk rather
