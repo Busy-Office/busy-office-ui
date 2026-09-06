@@ -315,6 +315,208 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 309 — Objective grill of Slices 307, 308: Slice 308 reproduces to the word, and underneath Slice 307's re-measurement is a P0 — the reference app's shared init has been swallowed by a trailing comment since 2026-08-23, so the select-all it timed did nothing (2026-09-06)
+
+**Dispatched by rule 3**, `dispatch_status.py` reading `Objective 3 / 3 slices
+since 2026-09-07 00:21 OVERDUE [292, 307, 308]`. Rule 1: no open P0 —
+`grep -nE '^\s*[0-9]+\. \[ \]' ROADMAP.md | grep -i p0` returns nothing across
+the 23 open items. Rule 2: `Standardize 0 / 4 … ok`. Step 1 read both intakes
+with `ENVIRONMENT.md` §8's controls in one run (`/discussions` → 200 len **0**;
+`/not-a-real-route` → **404**; `/issues?state=open` → 200 len **1**, issue #2,
+already triaged as `300.2`) and triaged nothing: no new input.
+
+**Scope narrowed per §6 step 0.** The armed set was `[292, 307, 308]`; **292 is
+dropped**, already grilled in full and twice — Slice 298 and the redundant
+second pass in `grill-objective-292-293-295-second-pass-2026-09-06.md`. Grilled
+here: **307 and 308**.
+
+### Slice 308 reproduces in full, including the instrument reconciliation
+
+Re-derived independently, not read off the slice. The per-section split of
+`LOOPS.md`'s dispatch region at the eight revisions since 274.2's cut:
+
+```
+### Step 0c  (274.2's cut)   1378 -> 936, and 936 at every revision since, HEAD included
+### Step 0                    563 -> 714   (+151)
+### Step 1                    300 -> 671   (+371)
+### Step 2 (rule 3 within)   3203 -> 3506  (+303)
+## the loops table            214 -> 266   (+52)
+TOTAL body words             5602 -> 6479  (+877)
+```
+
+Every figure Slice 308 published matches. **The 56-word instrument gap
+reproduces too**: heading-line words are the whole difference between the
+report's row (**6,535** at HEAD) and the body split (**6,479**), and it is
+exactly 56 at all eight revisions, so the deltas agree and the totals never
+will. A third splitter written here — one that also strips the numbered rule
+lines — reads a constant **93** below 308's table at all eight revisions, which
+is the same agreement seen from a third angle. **Nothing in 308 is corrected.**
+
+### Slice 307: the shipped correction is right, and the measurement under it is not
+
+307's own thesis — *a wall-clock millisecond published without its machine is
+not reproducible* — is correct and the paragraph it shipped to
+`/components/data-table` says so well. What it also shipped was **two more
+unmachined milliseconds**, and those turn out to be a measurement of nothing.
+
+`/stress` takes its behaviours from the reference app's shared `page()`
+template. On **2026-08-23**, commit `1f75dab4` reformatted that template's init
+block:
+
+```
+-  initDialogs(); initDataTables(); initAlerts(); initDropdowns();
++  initDialogs();
++  initGroupedNumber(); // grouped amounts (0.4.0), dogfooded 2026-08-23 initDataTables(); initAlerts(); initDropdowns();
+```
+
+**All three calls landed inside the `//` comment.** They have not run on initial
+page load since — **15 days**. So the select-all checkbox 307 timed toggled
+itself and selected no rows, and its "3 ms / 1k, 7 ms / 5k, not slower" is the
+cost of a no-op.
+
+**Found by a control, not by reading the code.** The probe written to re-run
+307's measurement counted how many row checkboxes ended up checked, and read
+`checkedAfterLast=0` beside its timings. Without that column the wake would have
+published a third set of plausible-looking milliseconds. This is CLAUDE.md's
+"an instrument's first output is not evidence" doing its job in the ordinary
+direction — the instrument was fine and the *subject* was dead.
+
+**Blast radius, measured over all 10 GET routes rather than assumed:**
+
+| behaviour | measured state before the fix |
+|---|---|
+| `initDataTables` | **DEAD** on the 2 routes carrying a select-all — `/pos` `0/10` rows, `/stress` `0/200` |
+| `initDropdowns` | not initialised on load on the 5 routes with a dropdown surface and no own init |
+| `initAlerts` | **inert** — `grep -c 'bo-alert__dismiss'` over the app reads **0**, so it had no surface to lose |
+
+`/movements`, `/inbox` and `/receive` were unaffected: each runs its own inline
+`initDataTables()`. That is also exactly why `check:po-app` reported **19
+behaviours green** throughout — every browser assertion it makes lives on a page
+that self-inits or on htmx-swapped content, which the template re-inits on a
+separate line. The gate was real and structurally blind to this one line.
+
+**A first dropdown reading of `0` in this grill was wrong and was caught by the
+same discipline** — the probe used `[data-dropdown], .bo-dropdown`, and the
+behaviour keys off `[popovertarget]` / `.bo-dropdown__item`. Re-measured with
+the behaviour's own selectors, 9 of 10 routes carry a surface. A zero is a
+defect in the instrument until proven otherwise; this one was.
+
+1. [x] **309.1 — DONE. P0 fixed: the three init calls are back on their own
+       line**, with a comment saying why they must stay there. Red-proved by
+       discrimination, not by inspection: `/pos` `DEAD(0/10)` → `LIVE(10/10)`
+       and `/stress` `DEAD(0/200)` → `LIVE(200/200)` on the same probe across
+       the one-line change.
+
+2. [x] **309.2 — DONE. The gate that should have caught it now exists and has
+       been watched failing.** `check:po-app` gains one case — the shared
+       template inits data-tables, so select-all on `/pos` checks every row,
+       driven with `page.click` per `ENVIRONMENT.md`'s trusted-dispatch rule.
+       19 → **20 behaviours**. Red-proof by re-injecting the exact broken line
+       (occurrence count asserted at 1 before and after the replace): the gate
+       exits 1 with **`1 of 20`** failing and
+       `{"boxesBefore":10,"checked":0,"count":""}` — the one case under test and
+       no other, which is the "red TOO BROADLY certifies nothing" check.
+
+3. [x] **309.3 — DONE. The published claim is withdrawn on the page that
+       carries it.** `/components/data-table` no longer quotes 3 ms / 7 ms as a
+       re-run. It says the re-run is withdrawn, why (the control was not wired),
+       that the 2026-08-15 table predates the break and is unaffected, and the
+       reusable half: **a timing probe needs a control proving the work
+       happened**. Called out rather than deleted, following this repo's own
+       precedent for a withdrawn diagnosis (`ENVIRONMENT.md` §6).
+
+       **No replacement figure is published, deliberately.** Today's fixed-tree
+       readings — median **122 ms / 1k** and **586 ms / 5k** — include a forced
+       style+layout flush, which the table below them scores as its own separate
+       column (231 ms at 5k). They are not comparable to the `Select-all`
+       column, and publishing them would repeat the exact error being corrected.
+       They are recorded here, where the incomparability can be stated, and not
+       there.
+
+4. [x] **309.4 — DONE. `307.1`'s Accept named three metric names and two of the
+       three claims are false today**, so it is rewritten to name the property.
+       Measured over the 132 samples in `loop-metrics.jsonl`:
+
+       | name | samples | distinct days | newest |
+       |---|---|---|---|
+       | `ci-wall-time` | 26 | **1** | 2026-08-18 |
+       | `axe-violations` | 17 | 8 | 2026-09-06 |
+       | `bundle-gz-kb` | 11 | 5 | 2026-09-03 |
+       | `claims` | 11 | 3 | **2026-09-06** |
+
+       `ci-wall-time`'s 26 samples all fall inside **17 hours of one day** and
+       nothing has been recorded for it in 19 days — it is the deadest of the
+       four, not one of the three live ones. `claims` is sampled as recently as
+       `axe-violations` and was omitted. A later wake executing that criterion
+       literally would have re-scoped rule 5 onto a dead name and dropped a live
+       one. **CLAUDE.md's criterion rule, landing again**: the Accept now says
+       *derive the pairing set from the log at execution time and record the
+       command*, which is satisfiable by measuring.
+
+**Two smaller things this grill noticed, logged rather than fixed** (per the
+operating rule: fix only what is smaller than the explaining):
+
+- **307's recorded re-run command does not run on a fresh clone.** It reads
+  `node examples/po-app/server.mjs # :8080`; that exits `MODULE_NOT_FOUND` on
+  `htmx.org/dist/htmx.min.js`, because `examples/po-app/node_modules` does not
+  exist until `check:po-app` performs its own `npm pack` + install
+  (`ENVIRONMENT.md` already documents the non-hoisting, not this consequence).
+  The working recipe is `npm run check:po-app -w docs` first. Filed as `309.5`.
+- **No re-measurement probe is kept anywhere** — `grep -rln` over
+  `apps/docs/scripts`, `packages/core/scripts` and `examples/` finds the
+  `/stress` route and no timing script. The docs page says the harness is kept
+  so an adopter can re-measure, and what is kept is the page that renders rows,
+  not the measurement. Both re-runs (307's and this one) had to invent a method,
+  which is why their numbers are not comparable even before hardware. Filed as
+  `309.5` with the recipe above.
+
+6. [x] **309.6 — DONE, and found by this slice breaking it: `roadmap_scope.py`
+       read a `## ` row inside a ``` fence as a real heading**, so every item
+       BELOW such a row was charged to "no slice" and dropped out of the OPEN
+       set dispatcher rule 4 reads.
+
+       Not hypothetical and not new. Writing Slice 309's per-section table —
+       whose rows begin `## the loops table  214 -> 266` — made the script
+       report **23 open** against a raw `grep -c` of **24**, and `OPEN:` omitted
+       Slice 309 entirely while listing 309 as a *closed* sweep target. The same
+       bug had already swallowed **`308.1`**: the previous hand-off recorded the
+       anomaly as *"it also counts … `308.1`"* and explained it as arithmetic
+       rather than diagnosing it.
+
+       **The reconciliation did not fire, and that is correct behaviour** — it
+       accounts for strays, so a mis-attributed marker still balances. What it
+       cannot do is notice that the marker was attributed to the *wrong* place.
+       Body-line counts and the closed-share figure are unaffected.
+
+       Fixed with a fence guard, and gated: `--self-test` gains **case F**, which
+       carries its own discrimination (the same fixture with the fence removed
+       must parse differently, or the case proves nothing). Red-proved by
+       removing the guard — case F fails and names the item that would be
+       invisible to rule 4; restored and green. After the fix: **24 open**,
+       matching the raw count, `OPEN` includes 309, strays drop 8 → 2 (the two
+       real `## STATE` owner calls).
+
+       **Prior readings of this instrument are suspect wherever a slice quoted a
+       `## ` row inside a fence**, which is a habit this loop has only recently
+       acquired (Slices 308 and 309). The open-count figures in hand-offs before
+       308 are unaffected.
+
+5. [ ] **309.5 — The `/stress` harness is half a harness: the rows are kept, the
+       measurement is not.** Two re-runs have now written their own probe and
+       produced numbers that cannot be compared to each other or to the
+       published table. The start recipe is also incomplete (see above).
+       - **Accept** — the property, not a figure: a committed probe that anyone
+         can run against `/stress` and that **carries its own control** (it
+         asserts the rows actually ended up selected, and fails loudly if not —
+         this grill's whole finding is that a timing number without that column
+         is unfalsifiable), plus the start command that works from a clean
+         clone. It records what it measures — whether the style flush is inside
+         the number or beside it — so two runs are comparable. **Deciding the
+         probe should NOT be committed is a satisfying outcome** if the reason
+         is recorded: a plausible one is that a per-adopter number is meant to
+         be taken with their own tooling, in which case the docs page should
+         stop implying a re-run is a supported operation.
+
 ## Slice 308 — Standardize sweep, 4 of 4 lanes: lanes 1-3 clean, and lane 4's "the dispatch region is regrowing" is FALSE as stated — the section 274.2 cut has not regrown by ONE word, and the +877 is five new rules in five sections the cut never touched (2026-09-07)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
@@ -525,12 +727,22 @@ than another one-off sample.
        filed rather than papered over with today's two.
        - **Accept** — the property: either a small fixed set of names is
          sampled on a stated cadence so pairs actually accumulate, or rule 5 is
-         re-scoped to the metrics that do pair (`axe-violations`,
-         `bundle-gz-kb`, `ci-wall-time` are the only three with real history),
-         or the rule is retired with the count that justified it. **Retiring it
-         is a satisfying outcome** — a dispatcher rule that has fired 3 times in
-         1,500 iterations and reads STALE for four days is a rule the loop is
+         re-scoped to the metrics that **actually pair**, or the rule is retired
+         with the count that justified it. **Retiring it is a satisfying
+         outcome** — a dispatcher rule that has fired 3 times in 1,500
+         iterations and reads STALE for four days is a rule the loop is
          carrying, not using.
+
+         **Derive the pairing set from the log at execution time and record the
+         command** — do not take it from this item. This clause named
+         `axe-violations`, `bundle-gz-kb` and `ci-wall-time` as *"the only three
+         with real history"*, and Slice 309 measured two of those three claims
+         false on the day after they were written: `ci-wall-time`'s 26 samples
+         all fall inside 17 hours of **one day** (2026-08-18, nothing since),
+         while `claims` — 11 samples, newest 2026-09-06 — was omitted. Sample
+         count alone is the wrong test; **distinct days** is the one that
+         answers "can rule 5 compare two runs". CLAUDE.md's criterion rule: name
+         the property, never the value it will have.
 
 ## Slice 306 — Rule 5's staleness line cannot reach `ok` from a cloud wake while the other dispatcher is a calendar day ahead (2026-09-06, triaged from inside a Continue round)
 

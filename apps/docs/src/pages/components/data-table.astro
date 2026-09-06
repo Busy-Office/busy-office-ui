@@ -274,12 +274,22 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     <p class="bo-u-text-muted"><strong>These are one machine's milliseconds, and
     the machine is not recorded</strong> — so read the <em>shape</em> (roughly
     linear to 20k, select-all cheap, the style flush the real cost) rather than
-    the absolute figures. Re-running the same harness on other hardware in
-    2026-09 read select-all at <strong>3 ms / 1k</strong> and
-    <strong>7 ms / 5k</strong> against the 4 ms and 18 ms below: not slower, but
-    not the same numbers either. The harness is kept precisely so you can get
-    figures for <em>your</em> hardware; a wall-clock millisecond published
-    without its machine is not a number anyone else can reproduce.</p>
+    the absolute figures. The harness is kept precisely so you can get figures
+    for <em>your</em> hardware; a wall-clock millisecond published without its
+    machine is not a number anyone else can reproduce.</p>
+    <p class="bo-u-text-muted"><strong>A 2026-09 re-run was published here and
+    is withdrawn.</strong> It reported select-all at 3 ms / 1k and 7 ms / 5k and
+    concluded &ldquo;not slower&rdquo;. It was timing a control that was not
+    wired: the stress harness gets its behaviours from the reference app's
+    shared page template, and from 2026-08-23 to 2026-09-07 a trailing comment
+    on that template's init line swallowed <code>initDataTables()</code>, so the
+    select-all checkbox toggled itself and selected no rows. The figures in the
+    table below predate that break and are unaffected; the re-run is simply not
+    evidence of anything. It is called out rather than deleted because the
+    lesson is the reusable part — <strong>a timing probe needs a control that
+    proves the work happened</strong> (here: count the rows that ended up
+    selected), and the probe that produced those two numbers was not kept, so
+    nobody could re-run it to find out.</p>
     <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table" data-density="compact">
         <thead><tr><th scope="col" class="bo-data-table__col--numeric">Rows</th><th scope="col" class="bo-data-table__col--numeric">Initial render</th><th scope="col" class="bo-data-table__col--numeric">Select-all</th><th scope="col" class="bo-data-table__col--numeric">Post-bulk-check style flush</th></tr></thead>

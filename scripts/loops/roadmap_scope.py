@@ -97,6 +97,7 @@ LIVE = 'ROADMAP.md'
 ARCHIVE = 'ROADMAP-archive.md'
 
 HEADING = re.compile(r'^## ')
+FENCE = re.compile(r'^\s*```')
 SLICE = re.compile(r'^## Slice (\d+)\b')
 OPEN_BOX = re.compile(r'^\s*\d+\. \[ \]')
 DONE_BOX = re.compile(r'^\s*\d+\. \[x\]')
@@ -135,8 +136,20 @@ def scan(text):
     body, opened, boxes, stray = {}, set(), [0, 0], []
     open_items = []
     cur, head, item = None, '(before any heading)', None
+    fenced = False
     for n, line in enumerate(text.splitlines(), 1):
-        if HEADING.match(line):
+        # A ``` fence suspends heading recognition. Slices quote per-section
+        # word tables whose rows begin `## the loops table  214 -> 266`, and
+        # without this the parser reads that row as a real H2: `cur` goes None
+        # and every item BELOW it in the slice is charged to "no slice" — which
+        # silently removes it from the OPEN set dispatcher rule 4 reads.
+        # Found 2026-09-06 (Slice 309): 308.1 and this wake's own 309.5 were
+        # both attributed to a code-block row. The reconciliation did not fire,
+        # correctly — it accounts for strays, so a mis-attributed marker still
+        # balances. Body-line counts are unaffected either way.
+        if FENCE.match(line):
+            fenced = not fenced
+        if not fenced and HEADING.match(line):
             m = SLICE.match(line)
             cur = int(m.group(1)) if m else None
             head, item = line.strip(), None
@@ -357,11 +370,39 @@ def self_test():
                  f'after an open item is being charged to it, so this lane would '
                  f'fire on a healthy state and mean nothing.')
 
+    # F — a `## ` row INSIDE a ``` fence is not a heading. Slice 309's own
+    # per-section table carries `## the loops table  214 -> 266`, and before the
+    # fence guard that row ended the slice: the item below it was charged to
+    # "no slice" and vanished from the OPEN set rule 4 reads. Red-proved by
+    # discrimination — the same fixture must give a DIFFERENT answer when the
+    # fence is removed, or the case is passing on a parser that never looked.
+    fenced_src = ('## Slice 4 — a\n'
+                  '```\n'
+                  '## the loops table            214 -> 266   (+52)\n'
+                  '```\n'
+                  '1. [ ] **4.1 — open, and it sits BELOW the fenced row.**\n')
+    if '## the loops table' not in fenced_src:
+        sys.exit('SELF-TEST FAILED: case F injection did not land.')
+    _, opened_f, boxes_f, stray_f, _ = scan(fenced_src)
+    if opened_f != {4} or boxes_f != [1, 0] or stray_f:
+        sys.exit(f'SELF-TEST FAILED (F): a `## ` row inside a ``` fence was read '
+                 f'as a heading — open={opened_f} boxes={boxes_f} '
+                 f'stray={stray_f}, want {{4}}, [1, 0] and no stray. The item '
+                 f'below it is invisible to rule 4.')
+    unfenced = fenced_src.replace('```\n', '')
+    _, opened_g, _, stray_g = scan(unfenced)[:4]
+    if opened_g or not stray_g:
+        sys.exit(f'SELF-TEST FAILED (F): with the fence removed the same fixture '
+                 f'still parsed as open={opened_g} stray={stray_g}. The case '
+                 f'cannot tell a fenced row from a real heading, so it proves '
+                 f'nothing.')
+
     print('self-test OK — openness discriminates (A), a non-slice H2 is charged '
           'to nobody (B),\n  an open item outside every slice is caught and '
           'flagged (C), the\n  reconciliation refuses when a lane stops '
-          'accounting for a marker (D), and\n  a citation is charged to an OPEN '
-          'item and not to a closed one (E).')
+          'accounting for a marker (D), a citation is\n  charged to an OPEN '
+          'item and not to a closed one (E), and a `## ` row\n  inside a ``` '
+          'fence is not read as a heading (F).')
 
 
 def main():

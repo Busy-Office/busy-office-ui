@@ -446,6 +446,36 @@ try {
     JSON.stringify(win),
   );
 
+  /* ---- the SHARED template's init actually runs ----
+
+     Every other browser assertion above lives on a page that initialises its
+     own behaviours (/movements has `initWindowedList(); initDataTables();
+     initLoadMore();` inline) or arrives through an htmx swap, which the shared
+     template re-inits separately. So the one thing NOTHING here exercised was
+     the shared `page()` template's own init call — and on 2026-08-23 commit
+     1f75dab4 appended a trailing comment to that line and swallowed
+     `initDataTables(); initAlerts(); initDropdowns();` into it. Select-all on
+     /pos did nothing for 15 days and this gate reported 19 behaviours green
+     throughout.
+
+     /pos is the route that depends on that line: it carries a select-all and
+     does not init data-tables on load. Driven with page.click (a trusted
+     click) per ENVIRONMENT.md's rule about el.click() and the untrusted
+     dispatch path. */
+  await page.setViewport({ width: DESKTOP_WIDTH, height: 900 });
+  await page.goto(`${base}/pos`, { waitUntil: 'networkidle0', timeout: 20000 });
+  const boxesBefore = await page.$$eval('.bo-data-table__row-select', (e) => e.length);
+  await page.click('.bo-data-table__select-all');
+  const sel = await page.evaluate(() => ({
+    checked: [...document.querySelectorAll('.bo-data-table__row-select')].filter((b) => b.checked).length,
+    count: document.querySelector('.bo-data-table__selection-count')?.textContent?.trim(),
+  }));
+  check(
+    'the shared page template inits data-tables: select-all on /pos checks every row',
+    boxesBefore > 0 && sel.checked === boxesBefore,
+    JSON.stringify({ boxesBefore, ...sel }),
+  );
+
   /* ---- accessibility over the app's own routes ---- */
   await page.evaluateOnNewDocument(AXE);
   // escalatedId is deliberately left Pending (never approved above), so the

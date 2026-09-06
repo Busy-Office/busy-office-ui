@@ -151,7 +151,11 @@ const page = (title, current, main, density = 'compact') => `<!doctype html>
 <script type="module">
   import { initDialogs, initDataTables, initAlerts, initDropdowns, initGroupedNumber } from '/assets/js/index.js';
   initDialogs();
-  initGroupedNumber(); // grouped amounts (0.4.0), dogfooded 2026-08-23 initDataTables(); initAlerts(); initDropdowns();
+  initGroupedNumber(); // grouped amounts (0.4.0), dogfooded 2026-08-23
+  // Keep these on their OWN line: 1f75dab4 (2026-08-23) appended the comment
+  // above to the same line and swallowed all three for 15 days — select-all on
+  // /pos and /stress did nothing, and no gate could see it.
+  initDataTables(); initAlerts(); initDropdowns();
   document.body.addEventListener('htmx:after:swap', (e) => { initDataTables(e.target); window.__btt?.(); });
   document.getElementById('density-switch').addEventListener('change', (e) => {
     const d = e.target.value;
