@@ -9,7 +9,20 @@ pin.
 
 ## Unreleased
 
-_Nothing yet._
+### Fixed
+
+- **`check-markup` no longer crashes on a path that does not exist** — it
+  printed a raw Node `ENOENT` stack trace instead of its own message. The walk
+  yielded any argument ending `.html` without checking it was a file, so the
+  path reached `readFile` and threw. Reported as issue #1 against a quoted
+  glob — the form the docstring itself showed, which the shell leaves
+  unexpanded — but the glob was one instance: a plain typo (`check-markup
+  indx.html`) crashed identically, and that is the case a consumer hits more
+  often. Both now reach the existing "no HTML files found" message, and a glob
+  argument gets a line saying the shell expands globs and this tool does not.
+  `--help` is also handled, where it used to be read as a path and reported as
+  `no HTML files found in: --help`. The docstring's example is corrected to the
+  unquoted form that works.
 
 
 ## 0.8.0 (2026-09-06)

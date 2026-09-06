@@ -7,7 +7,13 @@
 /**
  * Validate HTML against the framework's GENERATED surface.
  *
- *   npx @busy-office/ui check-markup "src/**\/*.html"
+ *   npx @busy-office/ui check-markup dist
+ *
+ * A directory is the usual form. A glob works too, UNQUOTED, because the shell
+ * expands it and this tool expands none itself — that is deliberate (zero
+ * dependencies, and `fs.promises.glob` would put a Node 22 floor on a package
+ * that declares no `engines`). This line used to show the QUOTED form, which
+ * the shell leaves alone and which therefore crashed; issue #1 reported it.
  *
  * Two checks, both answered from `dist/api.json`, which is extracted from the
  * shipped CSS and therefore cannot drift from what actually exists:
@@ -31,7 +37,7 @@
  * checking. Values ARE checkable, because the attribute being known is what
  * makes its value knowable.
  */
-import { readFile, readdir } from 'node:fs/promises';
+import { readFile, readdir, stat } from 'node:fs/promises';
 import { join, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -124,17 +130,54 @@ if (process.argv.includes('--self-test')) {
 }
 
 const roots = process.argv.slice(2);
+/* `--help` used to be taken as a path and reported as "no HTML files found in:
+   --help" — technically true and useless (issue #1's second case). Exit 0: the
+   user asked a question and got an answer, so this is not a failure. */
+if (roots.includes('--help') || roots.includes('-h')) {
+  console.log('usage: check-markup <dir-or-file> [...]   (reads BUILT html)');
+  console.log('');
+  console.log('  check-markup dist              a directory, walked for .html — the usual form');
+  console.log('  check-markup out/index.html    one file');
+  console.log('  check-markup src/**/*.html     a glob YOUR SHELL expands — do not quote it');
+  console.log('');
+  console.log('  Validates every bo-* class and framework data-* value against the');
+  console.log('  shipped api.json. Exits non-zero on a finding, or when it finds no');
+  console.log('  HTML at all — silence would read as approval.');
+  process.exit(0);
+}
 if (!roots.length) {
   console.error('usage: check-markup <dir-or-file> [...]   (HTML files)');
+  console.error("  check-markup --help   for the forms it accepts");
   process.exit(2);
 }
 
+/* The `catch` used to yield ANY path ending `.html`, without checking it
+   existed — so a path that merely looked like an HTML file reached `readFile`
+   below and threw a raw ENOENT stack trace (GitHub issue #1, the first filed
+   against this package).
+
+   The report named a quoted glob, which is the documented form: the shell
+   leaves `"src/**\/*.html"` unexpanded, it ends in `.html`, and it was yielded
+   as if real. But the glob is one INSTANCE, not the defect — a plain typo
+   (`check-markup indx.html`) crashed identically, and that is the case a
+   consumer hits most. Verifying the file is what fixes both, so that is what
+   this does; anything narrower would have fixed the example and left the bug.
+
+   `stat` rather than `existsSync`: this walk is already async, and a directory
+   that fails `readdir` for a reason OTHER than not existing (a permissions
+   error, say) must not be silently treated as a missing file. */
 async function* htmlFiles(path) {
   let entries;
   try {
     entries = await readdir(path, { withFileTypes: true });
   } catch {
-    if (path.endsWith('.html')) yield path;
+    if (!path.endsWith('.html')) return;
+    try {
+      if ((await stat(path)).isFile()) yield path;
+    } catch {
+      /* Not a readable file. The no-files message below explains it — falling
+         through to `readFile` is what produced the unhandled throw. */
+    }
     return;
   }
   for (const e of entries) {
@@ -270,8 +313,17 @@ function nearest(cls) {
  * available. See "a gate that cannot run must fail loudly" in CLAUDE.md. */
 if (!files) {
   console.error(`check-markup FAILED — no HTML files found in: ${roots.join(', ')}`);
-  console.error('  It reads BUILT html, so it must run after your build, and the path must');
-  console.error('  be the directory your build wrote (dist, build, public, out, _site…).');
+  /* A quoted glob is the case the docstring itself used to send people to, so
+     it gets its own line rather than the generic advice. This tool expands no
+     globs by design — see the header — so the fix is the shell's, not ours. */
+  if (roots.some((r) => /[*?[]/.test(r))) {
+    console.error('  That looks like a glob, and this tool does not expand one — your shell does.');
+    console.error('  Drop the quotes (check-markup src/**/*.html), or pass the directory instead');
+    console.error('  (check-markup dist), which is what it is built for.');
+  } else {
+    console.error('  It reads BUILT html, so it must run after your build, and the path must');
+    console.error('  be the directory your build wrote (dist, build, public, out, _site…).');
+  }
   console.error('  Exiting non-zero rather than reporting a pass it did not earn.');
   process.exit(1);
 }

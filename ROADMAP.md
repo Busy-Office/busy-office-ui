@@ -315,6 +315,105 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 300 — P0: the first two issues ever filed against this package, and the shipped CLI crashes on its own documented usage (2026-09-06)
+
+**The intake wired up in Slice 297 has real traffic**, hours later: issues
+**#1** and **#2**, the first ever filed against this repo. Rule 1 fires — #1 is
+a bug — so it jumps the queue ahead of everything.
+
+**297.1 is answered, and honestly rather than flatteringly.** Its Accept asked
+one wake to report on a real filed item, naming which intake it arrived in and
+whether that was the right one, with *"the router sent it to the wrong place"*
+allowed as a satisfying outcome. Both arrived as **issues**, and both belong
+there: #1 is a defect with a pasted repro, #2 carries the real ERP scenario the
+feature template asks for. **The router was not tested.** Both were filed by
+the owner's own agent working in `busy-office-erp`, not by a stranger who had
+to choose a door — so this confirms the templates accept well-formed input, and
+says nothing yet about whether Discussions catch what issues should not. 297.1
+stays open for a filing that actually exercises the choice.
+
+### The P0
+
+`check-markup` is a **published binary** (`bo-check-markup`, in the 0.8.0
+tarball) and it **crashed on the form its own docstring showed**. Both halves
+of #1 reproduced exactly before anything was changed:
+
+```
+node packages/core/scripts/check-markup.mjs "…/*.html"   # raw ENOENT stack trace
+node packages/core/scripts/check-markup.mjs --help       # "no HTML files found in: --help"
+```
+
+**The report named a glob; the defect is wider, and finding that is what made
+the fix right.** `htmlFiles()`'s `catch` yielded *any* argument ending `.html`
+without checking it existed, so the path reached `readFile` and threw. A quoted
+glob is one instance. A plain typo is another, and it is the one a consumer
+hits most:
+
+```
+node packages/core/scripts/check-markup.mjs indx.html    # identical crash
+```
+
+Fixing only the glob would have fixed the example and left the bug. The fix is
+to verify the file — `stat().isFile()` before yielding — which repairs both.
+`stat` rather than `existsSync` because the walk is already async and a
+`readdir` that fails for a reason *other* than absence (permissions) must not
+be silently reclassified as a missing file.
+
+Three smaller corrections in the same change, each because the issue is right
+that this tool's failure handling is otherwise good and these were the
+exceptions:
+
+- The no-files message now **names the glob case** when an argument contains
+  `* ? [`, because that is where the docstring was sending people: *"this tool
+  does not expand one — your shell does."*
+- **`--help` is handled** and exits **0**. A user who asked a question and got
+  an answer has not failed.
+- **The docstring is corrected** to the unquoted form that works.
+
+**Glob expansion is refused, with the reason recorded**: `fs.promises.glob`
+would put a Node 22 floor on a package that declares no `engines`, and this
+package's zero-dependency surface looks deliberate. The shell already expands
+globs; the tool's job is to say so when it is handed one it cannot.
+
+Verified after the fix — all four paths, by exit code, not by output shape:
+quoted glob `1`, typo `1`, `--help` `0`, `dist` `0` (165 files, 88,943 class
+uses). `--self-test` still passes. CHANGELOG entry added under Unreleased as
+**Fixed**, not Breaking: a crash becoming a message is strictly better, and no
+documented contract moved.
+
+1. [x] **300.1 — DONE.** Issue #1 fixed. It reaches consumers on the next
+       release; the fix is in `main` now.
+
+2. [ ] **300.2 — Issue #2: no board/kanban component, triaged, NOT built.**
+       Premise verified before accepting it: `api.json` ships **40** components,
+       the only board-ish name is `dashboard` (a widget grid, not a board), and
+       the class vocabulary's single hit is `bo-icon--keyboard` — the false
+       positive the reporter had already anticipated and named.
+
+       The argument is strong and is the strongest part of the report: every
+       other ERP screen kind has a component — `list` → `data-table`, `form` →
+       `form`, `dashboard` → `dashboard`, `settings` → `data-table` — and the
+       board is the one that does not, while being the screen kind whose
+       accessibility is easiest to get wrong (drag-and-drop with no keyboard
+       path, column state carried by position alone).
+
+       **Not dispatched as a build, because a new component is the largest
+       surface addition this framework makes** and the Objective's
+       less-for-more test has to be answered first, not after. The reporter's
+       own composition — `bo-widget` + `bo-widget-grid` with `role="list"` —
+       renders and passes `check-markup` today, which is evidence *for* a
+       component (it names three things composition cannot own: the keyboard
+       move affordance, drop-target styling, the announcement) and equally
+       evidence that the gap is not blocking.
+
+       - **Accept** — an Explore spike, not a build: the spike answers whether
+         the keyboard contract and the live-region announcement can be decided
+         **once** in a component, or whether they are screen decisions that
+         differ per board. **A refusal is a satisfying outcome** and closes
+         this, provided it records what the spike measured. If it graduates, it
+         graduates as a roadmap item with its own Accept criteria, per the
+         Explore playbook.
+
 ## Slice 299 — The SAME Objective grill, run twice by two dispatchers: this one lost the race and re-dispatched, and the re-dispatch is what caught the two things the winner did not — a metadata baseline that matches no revision of its gate, and the count Slice 298 diagnosed and left uncorrected (2026-09-06)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
