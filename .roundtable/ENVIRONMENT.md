@@ -369,6 +369,60 @@ printf 'alpha — beta\n' | LC_ALL=C.UTF-8 wc -w  # 3
 loop-machinery files. Any ad-hoc word count taken here is low unless the locale
 is pinned. Full figures in ROADMAP 167.1.
 
+## 8. `LOOPS.md` STEP 1's TWO INTAKE COMMANDS BOTH FAIL IN A CLOUD WAKE — AND THE SECOND FAILS SILENTLY IN THE WORST WAY
+
+Step 1 mandates reading **issues AND Discussions** every wake, and spells both
+as `gh` invocations. **There is no `gh` in this container** (`command -v gh` →
+nothing), and the GraphQL endpoint the Discussions command needs is refused for
+this session outright:
+
+```
+This GraphQL query is not enabled for this session — only the pinned set of
+PR-review operations is served. Use REST via `gh api repos/{owner}/{repo}/...`
+```
+
+The issues half has an MCP tool (`mcp__github__list_issues`), so it merely
+looks different. **The Discussions half has none**, and the previous hand-off
+(2026-09-06) recorded the honest consequence: *"Discussions were **not**
+checked this wake."* A mandated intake that no wake can execute is the shape
+this repo already refuses in `LOOPS.md`'s own gate rule — *a gate that cannot
+run must fail loudly, never skip quietly*.
+
+**What works, measured 2026-09-06 (cloud wake, roadmap 302.1):** the REST
+route, with the `GITHUB_TOKEN` already in the container's environment.
+
+```
+curl -sS -H "Authorization: bearer $GITHUB_TOKEN" \
+     -H "Accept: application/vnd.github+json" \
+     https://api.github.com/repos/Busy-Office/busy-office-ui/discussions
+```
+
+**Read the empty answer carefully — this is trap 2's shape one API over.** An
+empty `[]` is what "no open discussions" looks like AND what a route that does
+not serve this resource would look like, so the reading needs a control. Both
+run in one command:
+
+```
+.../discussions          -> HTTP 200, len 0     the reading
+.../not-a-real-route     -> HTTP 404            an unserved route does NOT answer 200 []
+.../issues?state=open    -> HTTP 200, len 1     a list route with known content
+```
+
+The 404 control is what makes the 200 mean *served*, and the issues control is
+what makes `len` mean *how many*. `has_discussions` on the repo object reads
+`true`, so the feature is on and the zero is a real zero. Note
+`/discussions/categories` 404s — it is not a route; its own
+`documentation_url` (`rest/repos/discussions#get-a-discussion`) is nonetheless
+what identifies the `/discussions` family as **repository** discussions rather
+than the org/team endpoint of the same name.
+
+**Not red-proved, said plainly**: nothing has ever been filed in this repo's
+Discussions, so the route has never been observed returning a non-empty list.
+The controls above are the strongest evidence available without filing one.
+The day a discussion exists, re-run this and confirm it appears — until then
+the reading is *"a served route reports zero"*, not *"a route known to report
+correctly reports zero"*.
+
 ---
 
 ## Cloud-wake toolchain — what works, in order

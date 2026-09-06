@@ -248,6 +248,22 @@ gh api graphql -f query='{repository(owner:"Busy-Office",name:"busy-office-ui"){
         "#\(.number) [\(.category.name)] answered=\(.isAnswered // "n/a") — \(.title)"'
 ```
 
+**Those are two `gh` invocations, and `gh` is not the requirement — a READING
+from each intake is** (roadmap 302.1, 2026-09-06). Neither command runs in a
+cloud wake: there is no `gh` binary, and the GraphQL endpoint the Discussions
+one needs is refused for that session with *"only the pinned set of PR-review
+operations is served"*. The issues half has an obvious substitute and was being
+read anyway; **the Discussions half had none, and the wake that first met this
+rule recorded "Discussions were not checked this wake"** — a mandated intake
+that no wake could execute, which is this file's own gate rule pointing at
+itself: *a gate that cannot run must fail loudly, never skip quietly*.
+
+So the rule is: **each intake produces a count this wake, or the wake says
+which one it could not read and why.** Never report the triage step clear on an
+intake that was not opened. `ENVIRONMENT.md` §8 carries the substitute that
+works in the container, the controls that make an empty answer mean *zero*
+rather than *wrong route*, and the red-proof that is still owed.
+
 **Issues are for DEFECTS; Discussions are for everything that is not one yet**
 (enabled 2026-09-06, roadmap 297). The split is not bureaucracy — an issue
 template demanding a version, a browser, a theme, a density and a minimal repro

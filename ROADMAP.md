@@ -315,6 +315,68 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 302 — Step 1 mandates two intakes and a cloud wake could execute neither command; the Discussions half had no substitute at all, so the rule was unrunnable rather than merely awkward (2026-09-06)
+
+**Triage finding, from running Step 1 rather than from reading it.** Slice 297
+(2026-09-06) enabled Discussions and rewrote Step 1 to read **both** intakes
+every wake, spelling each as a `gh` invocation. The very next cloud wake
+recorded *"Discussions were **not** checked this wake"* and attributed it to
+timing — the rule had landed mid-wake. **That was only half the reason.** This
+wake reached Step 1 with the rule already in place and still could not run it:
+
+```
+command -v gh                    -> nothing
+POST https://api.github.com/graphql
+  -> "This GraphQL query is not enabled for this session — only the pinned set
+      of PR-review operations is served."
+```
+
+The issues half survives because an MCP tool covers it
+(`mcp__github__list_issues`). The Discussions half had **no substitute in this
+container**, which makes it a step that no cloud wake can execute — the shape
+`LOOPS.md` itself refuses one section earlier: *a gate that cannot run must
+fail loudly, never skip quietly*.
+
+**The substitute, measured with controls rather than trusted on its first
+output** (CLAUDE.md: an instrument's first output is not evidence, and an empty
+answer is the silent-absence shape `ENVIRONMENT.md` trap 2 exists for):
+
+```
+.../repos/Busy-Office/busy-office-ui/discussions       -> HTTP 200, len 0
+.../repos/Busy-Office/busy-office-ui/not-a-real-route  -> HTTP 404          (control: unserved routes do not answer 200 [])
+.../repos/Busy-Office/busy-office-ui/issues?state=open -> HTTP 200, len 1   (control: len tracks real content)
+repo object: has_discussions = true
+```
+
+Both controls are load-bearing: without the 404 one, `200 []` cannot be
+distinguished from a route that does not serve this resource; without the
+issues one, `len` is not known to track anything. **What is still owed is a
+real red-proof** — nothing has ever been filed in this repo's Discussions, so
+the route has never been seen returning a non-empty list. Said plainly rather
+than dressed up as verification.
+
+**Landed:** `ENVIRONMENT.md` §8 (the container mechanics, the controls, the
+owed red-proof) and a paragraph in `LOOPS.md` Step 1 restating the rule as the
+property — *each intake produces a count this wake, or the wake says which one
+it could not read and why* — rather than as two commands. Same correction shape
+as §1c's `CHROME_PATH` list: the durable file carries what the container does,
+and the playbook carries what a wake must produce.
+
+**Refused: a gate.** The checkable form is "did this wake read both intakes",
+which is unobservable from the tree — the evidence is an API call, not a file —
+and the honest enforcement is the wake's own report, which rule 4's
+blocked-kind precedent already relies on. Adding a gate here would be ceremony
+over a property no artefact carries.
+
+1. [x] **302.1 — DONE.** Both intakes read this wake: issues **1 open** (#2,
+       already triaged as `300.2`), discussions **0 open**. No new untriaged
+       input.
+       - **Accept:** `LOOPS.md` Step 1 states the intake requirement as a
+         property a wake can satisfy in any environment, and the working
+         command for this container is recorded where Step 0 already sends a
+         wake to read; a finding that the substitute cannot yet be red-proved
+         is recorded rather than glossed **(done — all three)**.
+
 ## Slice 301 — Standardize sweep, 4 of 4 lanes: three clean, and lane 4 carried the eleventh archive sweep — 37.1% closed history down to 7.2%, the largest single move on record (2026-09-06)
 
 **Dispatched by rule 2**, OVERDUE at `4 / 4` Continue rounds. Say `n of 4`:
