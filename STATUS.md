@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-06 05:43 UTC
+Generated at: 2026-09-06 06:48 UTC
 
 ## Open items by slice
 
@@ -28,10 +28,9 @@ Generated at: 2026-09-06 05:43 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1480 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-09-05 22:51   OVERDUE
-  Objective     1 / 3 slice           since 2026-09-06 03:45   ok  [286]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+dispatch status — counter-triggered rules (1482 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-09-06 06:48   ok
+  Objective     2 / 3 slices          since 2026-09-06 03:45   ok  [286, 290]
   Optimize      3 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 3 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-03, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-03 (2026-09-04, 2026-09-05, 2026-09-06), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -51,8 +50,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-06 02:43 · Meta · refusal · fixing 287.5's orphaned sentence in §3b step 5 while editing §3b — it is a separate open item, not this dispatch · refused · d257b9b8
-- 2026-09-06 03:45 · Objective · grill · Slice 289 — Objective grill of 283.3, 284.2, 288.1/288.2: 22 of 28 assertions reproduce; 287.1 mis-labels fc79ea85 as where 283.2 landed (it is 9c1bacbe), which put an EMPTY DIFF into open item 287.5's Accept; 284.2's concentration figures and 288's instrument B carry no recorded command and neither reproduces; every figure whose command IS recorded reproduces · landed · 7ad1aca6
 - 2026-09-06 03:45 · Meta · refusal · a gate over 'the sha beside this claim is the one it means' — semantic in 94.11's sense, and the checkable shape is near-universally true in these files; base rate measured before writing one, not after · refused · 7ad1aca6
 - 2026-09-06 03:45 · Meta · refusal · re-grilling Slices 283 and 284 as the counter armed them — Slice 285 covered both in full; scope narrowed to the three items built since the last Objective row, per the playbook's own step 0 · refused · 7ad1aca6
 - 2026-09-06 03:45 · Meta · refusal · rewriting 287.1's evidence line rather than annotating it — 285.2's transcript rule; only 287.5's Accept, a live instruction a later wake executes, was corrected outright · refused · 7ad1aca6
@@ -61,6 +58,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-06 05:43 · Continue · build · 286.4: fit's rubric definition scored against a 4-row field matrix reaching 4 of 40 scored components; definition rewritten to the property it scores, and scan's published cite corrected (0 occurrences on the page it claimed placed it) · landed · 04073028
 - 2026-09-06 05:43 · Meta · refusal · widening the field matrix with a scan row — that makes the definition true by editing the artefact it points at; the matrix covers field types, scan is an input mechanism · refused · 04073028
 - 2026-09-06 05:43 · Meta · refusal · a gate over 'a fit cite naming the matrix also links from it' — 94.11 base rate first: true of 5 of the 6 cites that mention it, vacuously true of the 34 that do not, so it fires on a healthy tree · refused · 04073028
+- 2026-09-06 06:48 · Standardize · sweep · 290.1 Standardize sweep 4 of 4 lanes — all clean, with the inputs measured rather than the detectors trusted; lane 4 retires 284's dispatch-region worry (flat at 6,112 across three commits, +686 file) · logged · 2f3ff9a8
+- 2026-09-06 06:48 · Meta · refusal · consolidating _common.parse_log_line and dispatch_status.ROW — they agree 1,480/1,480/1,480 but discriminate on synthetic legacy rows; the recovery path must be tolerant and the counter must not be · refused · 2f3ff9a8
 
 ## Sunset test
 
