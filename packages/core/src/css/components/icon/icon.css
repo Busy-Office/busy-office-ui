@@ -198,7 +198,20 @@
      it is comparable to the number in both READMEs. (The 7,898-byte
      figure quoted above predates this and was measured another way; it is
      left as written rather than restated from a method I cannot
-     reproduce.) If a future set costs more than this, put it in the
+     reproduce.)
+
+     THE FOUR ENDPOINTS ABOVE ARE DATED; only the delta stays true (roadmap
+     292.6, 2026-09-06). They were taken at d48f361d (before) and 43ea922a
+     (after), 2026-08-24 — re-read from the `stat:size` stamp in each of
+     those two revisions' READMEs rather than restated from memory. The
+     framework is bigger now, so read today's absolute off that same stamp,
+     which stamp-readme.mjs keeps current: 84 kB is not what ships. Keeping
+     the delta and dating it, rather than refreshing the endpoints, is the
+     header's own argument applied here — a fresh absolute would decay
+     again, while +0.6 kB over the wire is a fact about adding these eleven
+     glyphs and cannot.
+
+     If a future set costs more than this, put it in the
      consuming app instead — --bo-icon-src is extensible precisely so that
      choice exists. */
   .bo-icon--list-bullet {

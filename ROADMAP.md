@@ -1254,7 +1254,7 @@ filed as 292.3 instead, where it can be decided rather than assumed.
        looked at `/components/icon`. The live demos and every rendered element
        are untouched; only the text inside the code block changed.
 
-6. [ ] **292.6 — `icon.css` forbids figures in itself and carries two.** Its
+6. [x] **292.6 — `icon.css` forbids figures in itself and carries two.** Its
        header's `NO FIGURES HERE, deliberately` block says the two figures it
        used to carry were exact when written and wrong five days later, and
        that live numbers belong on `/components/icon` — which computes them.
@@ -1274,6 +1274,49 @@ filed as 292.3 instead, where it can be decided rather than assumed.
          age, or states them with the revision they were taken at; deciding it
          needs no new figure is a satisfying outcome, recorded with the reading
          above as its evidence.
+       - **CLOSED 2026-09-06** (cloud wake), by the Accept's SECOND branch: the
+         endpoints are dated rather than deleted or refreshed, and the block now
+         points a reader at the live stamp instead of carrying an absolute.
+
+         **The premise re-verifies, and so do the endpoints — the second is the
+         part that was never checked.** Rebuilt here:
+         `wc -c < packages/core/dist/css/index.min.css` → **95,172**, and
+         `zlib.gzipSync(...)` → **15,458**, both exactly the figures above. The
+         endpoints were then read from the artifact rather than believed:
+         `git show <rev>:README.md | grep stat:size` at **`d48f361d`** (parent)
+         gives `80 kB minified (13.2 kB gzipped)` and at **`43ea922a`**
+         (2026-08-24, "Slices 136/137") gives `84 kB minified (13.8 kB
+         gzipped)`. So all four are *correct at their revisions* — the defect is
+         only that nothing said which revisions, which is why dating them is a
+         repair and refreshing them would not be. `git show 43ea922a --
+         .../icon.css | grep -cE '^\+  \.bo-icon--'` → **11**, so the block's
+         "these eleven" is right; the commit MESSAGE's "ten formatting glyphs"
+         is the wrong one of the pair, left as history.
+
+         **The `stat:size` stamp is the live equivalent this block can point
+         at**, exactly as the header points at `/components/icon`: both READMEs
+         read `93 kB minified (15.0 kB gzipped)` today, kept current by
+         `stamp-readme.mjs`. Nothing new is asserted in the CSS.
+
+         **One measurement contradicts this item's own parenthetical, and it
+         costs nothing.** The 15,305-vs-15,458 gap was attributed to
+         zlib-build variance. On this one tree and one Node build,
+         `gzipSync(buf)` = **15,458** and `gzipSync(buf, {level: 9})` =
+         **15,296** — a **162-byte** spread from compression LEVEL alone, with
+         no second build involved. That does not identify what produced 15,305
+         (neither reading is it), so the cause stays unknown; what dies is the
+         inference that a gap of this size implies two zlib backends.
+         **No new item**: `GZIP_TOLERANCE_KB = 0.3` (307 bytes) in
+         `stamp-readme.mjs` already absorbs 162, so the latent gate risk this
+         would otherwise be does not exist. Re-run it; these are snapshots.
+
+         **NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots
+         — a cloud wake has no Podman. **None is owed, and that is measured
+         rather than argued:** the only CSS touched is a comment body, and
+         `index.min.css` is byte-identical across the edit — **95,172 / 15,458**
+         before, **95,172 / 15,458** after, re-measured a third time after
+         rebasing onto the 0.8.0 release, which did not move them either.
+         Nothing renders differently because nothing reaches the browser.
 
 7. [ ] **292.7 — four `content` cites score a page property while citing the
        CSS.** Found by 292.3's classification, not by reading. `content` is
