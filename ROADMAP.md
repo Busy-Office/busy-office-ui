@@ -315,6 +315,275 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 292 — Polish round 3 on `component/icon`: the page's Markup heading had been outside every `<section>` for 18 days, and the blind re-score then found the deprecation note resting on a **census** — "no pattern screen renders this glyph" — that a pattern screen falsifies (2026-09-06)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty), `ENVIRONMENT.md` trap 1, fixed with
+`git checkout -B main origin/main` before any commit; `origin/main` arrived as
+a **forced update** (`26447ba...911233e`). Trap 2 clean in one `--unshallow`
+(**1,934** commits, no `shallow.lock`) and it again brought the tags —
+`git tag | wc -l` → **7**, the **thirteenth** consecutive container to do so.
+
+Rule 1: no open P0 — `list_issues` on `Busy-Office/busy-office-ui` returns
+`totalCount: 0`, and `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` reads **0**.
+Step 1 triaged and committed nothing: no new input. Rule 2 `1 / 4 … ok`, rule 3
+`0 / 3 … ok`. **Rule 4 was reached and found nothing it can take** — the open
+set is 12 and the cloud lane is dry for the third consecutive wake; each item
+re-classified from its own text per `LOOPS.md` 186.2, not carried over from the
+hand-off: **owner-blocked (9)** Slice 15, `112.3`, `112.4`, `249.7`, `249.10`,
+`249.11`, `249.12`, `249.13`, `273.2`; **browser-blocked in the SCREENSHOT
+sense (3)** `249.6`, `249.9`, `249.15` — `249.15`'s own text says outright that
+a cloud wake should not pick it up. Rule 5 read **STALE** (`3 wake-date(s)
+newer`), so per its own text it **could not be evaluated** and is not reported
+clear. **Rule 6 dispatched Polish.**
+
+**The pick was measured, and the tie is now total.** §3b step 0's
+`polish_requeue.py --apply` re-queued **10** surfaces and wrote nothing (`ledger
+UNCHANGED`); `--audit-stamps` reads **0 of 21 stamps naming a source state no
+revision carries**, so 283.3's repair is still holding. All ten sit at
+`content: 3`, `2/3 rounds`, `dry 0` — so neither the score (171.1: no DSA
+dimension can rank) nor §3b's "fewest rounds" tie-break discriminates at all,
+for the seventh time. Broken on 216.1's discriminator, but measured **since each
+surface's own last round** rather than since `scored`, because a round's own
+repair commits inflate the older reading:
+
+```
+# per surface: B=$(git rev-list -1 --before="<its round-2 date>T23:59:59+08:00" HEAD)
+#              git log --oneline $B..HEAD -- <its path set>
+icon 4 commits +72/-4   alerts 3 +7/-1   dashboard 3 +7/-1   stepper 3 +7/-1
+tree-table 3 +6/-1   badge 2 +4/-1   calendar 2 +4/-1   sidebar-nav 2 +5/-1
+state-patterns 2 +9/-1   byline 0 +0/-0
+```
+
+`icon` leads by an order of magnitude on lines, and what moved is substantive
+rather than whitespace: `96bd852a` (227.3's divisor guard), `5754ea02` (229's
+deprecation-set mirror), `01fd7fc5` (249.2), `4dbec5bd` (249.8).
+
+1. [x] **292.1 — the deprecation note rested on a CENSUS, and the census is
+       false.** Found by §3b step 4's blind re-score and then re-derived here
+       from the repo rather than taken on the scorer's word. Five live sites
+       published *"No pattern screen in these docs renders this glyph — only
+       this component's own showcase page does"*: the four `DEPRECATED` blocks
+       in `packages/core/src/css/components/icon/icon.css` (shipped to
+       consumers) and the caption on `/components/icon`, with the page's own
+       frontmatter comment carrying a fifth copy of the same claim.
+
+       Both of its clauses fail, and the commands are here so the next wake
+       re-runs them rather than re-deriving them:
+
+       ```
+       grep -rn 'bo-icon--building' apps/docs/src/pages/patterns/
+       #  -> patterns/app-frame.astro:114   ← a PATTERN screen. Clause 1 false.
+       grep -rn 'bo-icon--\(settings\|barcode\|building\|user\)' apps/docs/src \
+         --include='*.astro' | grep -v 'pages/components/icon.astro'
+       #  -> app-frame (building), offcanvas, sidebar-nav, motion x2 (settings)
+       #     ← five renders outside the showcase. Clause 2 false.
+       grep -n 'icon:' examples/erp-suite/_shell.mjs
+       #  -> MODULES gives crm `user` and prod `settings`; _shell.mjs:79 composes
+       #     `bo-icon bo-icon--${name}`, so two of the reference suite's six
+       #     modules wear a deprecated glyph as their identity.
+       ```
+
+       **The class of error is not "a stale count" but "a count that could
+       never stay true"**, which is why the fix removes it rather than
+       refreshing it (217.2 and 220.1's precedent, now with a third
+       confirmation and a stronger reason): deprecating a glyph does not stop
+       anything already rendering it, so renders can only ever go **up** after
+       the note is written. The four blocks now carry only the mechanism
+       argument they already had — the glyph was one example value of
+       `--bo-icon-src` — which needs no census. The correction itself is
+       recorded **once**, in `icon.css`'s header beside its existing
+       `NO FIGURES HERE` rule (the same lesson, one level out), rather than
+       four times: `LOOPS.md` lane 4 exists to notice prose growing by copy.
+
+       **A trap this repo has hit before was hit again and caught by the
+       build.** `icon.astro`'s `deprecationMarkers` guard equates a raw count
+       of the string `DEPRECATED` in `icon.css` with the number of parsed
+       deprecated glyphs, and the first draft of the header note used that
+       word in prose — 5 markers against 4 glyphs. Its own comment predicts
+       exactly this and calls the loud failure the acceptable direction of the
+       trade; it was reworded to *"deprecation blocks"*, and
+       `grep -o 'DEPRECATED' … | wc -l` reads **4** again. The one surviving
+       source copy of the removed sentence is this correction quoting it, which
+       is CLAUDE.md's assertion-tripped-by-its-own-explanation shape landing
+       where it is harmless.
+       - **Accept:** no live source copy of the census remains outside a
+         quotation of it (`grep -rn 'No pattern screen\|zero pattern screens'
+         apps/docs/src packages/core/src` returns only the explanatory comment);
+         the deprecated set still derives to the same four glyphs; `docs:build`
+         green **(done — all three)**.
+
+2. [x] **292.2 — `/components/icon` rendered its Markup heading outside every
+       `<section>`, and had since 2026-08-19.** The round's own finding, before
+       the re-score. `icon.astro`'s Markup block lost its
+       `<section class="demo">` opener in `efd4fd02` (Slice 53.2) when the
+       Deprecated section was inserted, leaving the file with 7 openers and 8
+       closers; the HTML parser drops the unmatched closer, so nothing errored.
+
+       **Measured in the built DOM, not read off the diff.** Before the fix,
+       `/components/icon/` rendered **13 `<h2>` against 12 `section.demo`**,
+       with the Markup heading's parent chain reading
+       `h2 < div.bo-stack.docs-content` where every comparator reads
+       `h2 < section.demo`. The visible consequence is `Gallery.astro:737`'s
+       `.demo h2 { font-size: var(--bo-font-size-lg) }` not applying: the
+       heading rendered at **21px** among twelve siblings at **18px**, and
+       every other page's Markup heading is 18px. After the fix it is 18px.
+
+       Swept the whole built corpus with the DOM predicate rather than the
+       source one — **1 of 80** built component and pattern pages carried an
+       `h2` outside every `<section>` (4 redirect stubs skipped), and it was
+       this one; **0 of 80** after. **Red-proved by injection with the
+       injection asserted to land**: deleting one `<section class="demo">`
+       opener from `calendar`'s *built* HTML moves the detector `0 → 1`, and
+       the probe throws if the replace matches nothing. It still discriminates
+       on the fixed tree, so the clean sweep is a measurement rather than a
+       detector that has stopped being able to fail.
+
+       **A second, DOM-neutral instance was fixed in the same pass and is
+       stated separately because its evidence is different.**
+       `sidebar-nav.astro` carried a duplicated `</section>` (4 openers, 5
+       closers). Nothing rendered differently — asserted, not assumed: its
+       built page is **byte-for-byte identical** before and after
+       (`diff -q` on `dist/components/sidebar-nav/index.html`). Both pages'
+       source is now balanced, and the sweep over all 41 component pages finds
+       no third case by either instrument (`<section class="demo"` and any
+       `<section`, which agree).
+       - **Accept:** the built `/components/icon/` has as many `section.demo`
+         as `.docs-content h2`, its Markup heading resolves `closest('section')`
+         and computes the same `font-size` as its siblings; the corpus sweep
+         reads 0; the detector is red-proved by an injection confirmed to land
+         **(done — all four)**.
+
+**§3b step 4 — the blind re-score RAN, and this is the trigger clause working
+as 288.1 intended.** The round edited the surface a score is taken on, so the
+re-score was owed rather than optional; a second agent scored `typography` and
+`content` from the shipped CSS and the page source, told that the built page
+publishes a prior verdict and that it is not evidence.
+
+- It reports it **never saw the prior value**, and says why it could not: it
+  was pointed at `apps/docs/src/data/dsa-rubric.json`, **which does not
+  exist** — the rubric lives under a `rubric` key inside `dsa-scores.json`,
+  the file the instruction forbids — and it read that file with `components`
+  deleted so no entry rendered. That is a defect in **this wake's own
+  instruction**, worth recording because §3b's blindness protocol names four
+  paths to avoid and the rubric's real location is inside one of them.
+- **`content` 3, agreeing with the published 3**, verified by running
+  `hasWrongChoiceClause` from `wrong-choice-rule.mjs` against the page and
+  again with the clause stripped — `true` then `false`, so the pass is not a
+  detector that cannot fail.
+- **`typography` 2, contradicting the published 3** — and the disagreement is
+  about SCOPE, not about a fact. On a CSS-only reading it scores 3 and says
+  so outright. The 2 is for `icon.astro` hard-coding `font-size: 1.5rem` four
+  times while using `var(--bo-font-size-xs)` two lines away, `1.5rem` being
+  `--bo-font-size-xl` in `tokens/typography.css`. Base rate it measured
+  itself: **1 of 41** component pages carries a raw `font-size` literal, and
+  it is this one.
+
+**The score is NOT moved, and the reason is a rule rather than a preference.**
+The rubric scores the component; `typography`'s own cite is about
+`icon.css`'s `1em` box, and this round changed no CSS declaration. Rewriting a
+published score on a dimension the round did not touch, from a reading the
+scorer itself flags as out of scope, would be the ledger recording an opinion
+as a measurement. `scored` stays **2026-08-23**. The page-scoped reading is
+filed as 292.3 instead, where it can be decided rather than assumed.
+
+3. [ ] **292.3 — is the DSA `typography` dimension page-scoped or CSS-scoped?**
+       Raised by the blind re-score above, which scored the same surface 2 or 3
+       depending on the answer and could not resolve it from the rubric text.
+       Three of the six dimensions (`content`, `fit`, `interaction`) are
+       explicitly about the docs page; `typography`, `colour` and `spacing`
+       read as being about the shipped CSS, and every cite for them names a
+       CSS file. If they are page-scoped, `icon.astro`'s four raw `1.5rem`
+       literals are a real finding at a base rate of 1 of 41 pages; if they are
+       CSS-scoped, they are outside the rubric and belong to whatever polices
+       docs-page style.
+       - **Accept:** `dsa-scores.json`'s `rubric` states the scope of each
+         dimension explicitly, and the statement agrees with what the 40
+         existing cites actually read (asserted by counting them, not by
+         reading a few); a scope that turns out to be already unambiguous is a
+         satisfying outcome and closes this with the count as its evidence.
+       - **Note:** this is a rubric DEFINITION change, which `LOOPS.md`
+         101.3's stop rule forbids Polish from making. It is filed for a
+         Continue round or the owner, deliberately not taken here.
+
+4. [ ] **292.4 — `/components/icon` deprecates `--settings` and then teaches it
+       as canonical, twice, in the two places a reader copies.** Verified from
+       the page source, not the re-score's word: `--settings` is one of the
+       four derived deprecated glyphs, and it is also in the `markup` string
+       (`icon.astro`'s canonical copy-paste block, the icon-only button) and in
+       the live "In context" demo, under a caption that endorses it — *"a cog
+       for settings … conventions a reader already holds"*. The page's own
+       `bothLists` build guard exists to catch exactly this contradiction and
+       structurally cannot see it: it compares the editorial eight against the
+       deprecated four, and the `markup` string and hand-written demos are in
+       neither list. Two honest resolutions, and picking between them is a
+       design call rather than maintenance: un-deprecate `--settings` (the
+       reference suite gives it to a module, and the caption's argument for it
+       is sound), or move both teaching sites to a non-deprecated glyph.
+       - **Accept:** no glyph is simultaneously in the derived deprecated set
+         and in the `markup` string or a live demo on the same page, and
+         whichever resolution is chosen, the guard that would have caught it is
+         extended to the markup string and red-proved by putting a deprecated
+         glyph back into it.
+
+5. [ ] **292.5 — the canonical `markup` block teaches a different mechanism
+       than the page it sits on, and drops a slot class its own demo uses.**
+       Two divergences, both verified in `icon.astro`: (a) the block teaches
+       `.my-icon--rocket { mask-image: url(…) }` and the `ApiTable` note says
+       *"add your own with one `mask-image` line"*, while the page's headline
+       section and `icon.css`'s header both say `--bo-icon-src` IS the
+       mechanism — and the two are not equivalent, since `.bo-icon` lives in
+       `@layer bo-components`, so a consumer's unlayered `mask-image` override
+       wins by accident of layering while the custom property is
+       layer-independent and is what `api.json` publishes; (b) the block's
+       sidebar-link sample omits `bo-sidebar-nav__icon`, which the live demo one
+       section above uses and whose caption names, and which
+       `sidebar-nav.css` sizes at `1.3em` with the collapsed-rail width
+       computed from it — so the copied markup mis-aligns labels.
+       **The structural cause is one thing**: six of the seven demo sections
+       hand-write their preview and then a separate `markup` string rewrites
+       it, which is the recipe's *"never write the preview and code twice"*.
+       The one section using `<Demo code={…} />` is the only one that cannot
+       diverge, and it is the only one showing `--bo-icon-src`.
+       - **Accept:** the sidebar-link sample a reader copies renders with the
+         same classes as the live demo it sits beside (asserted against the
+         BUILT page, both blocks, not against the source), and the custom-glyph
+         line the page teaches is the one its own header calls the mechanism.
+
+6. [ ] **292.6 — `icon.css` forbids figures in itself and carries two.** Its
+       header's `NO FIGURES HERE, deliberately` block says the two figures it
+       used to carry were exact when written and wrong five days later, and
+       that live numbers belong on `/components/icon` — which computes them.
+       The 137.1 note lower in the same file then states *"took the whole
+       framework from 80 kB to 84 kB minified and 13.2 kB to 13.8 kB
+       gzipped"*. Measured here: `packages/core/dist/css/index.min.css` is
+       **95,172 bytes (92.9 kB)**, gzipped **15,458 (15.1 kB)**.
+       **Weaker than the two defects above, and stated as such**: the sentence
+       is framed as a before/after DELTA of adding eleven glyphs, names its
+       method (`stamp-readme.mjs`'s own stat), and a historical delta does not
+       decay the way an absolute does. What has decayed is the pair of
+       absolute endpoints a reader reads as current. Also note the gzip figure
+       is the kind `LOOPS.md` warns must never be gated byte-exact — the
+       re-score's independent reading was 15,305 against this wake's 15,458 on
+       the same tree, which is the zlib-build variance that rule exists for.
+       - **Accept:** the block states the delta without absolute endpoints that
+         age, or states them with the revision they were taken at; deciding it
+         needs no new figure is a satisfying outcome, recorded with the reading
+         above as its evidence.
+
+**No gate is proposed for 292.2's class, and this is the sixth consecutive
+refusal in this ledger** (216.2, 217.2, 220.2, 227.2, 231). `LOOPS.md` 101.3
+confines Polish to maintaining the existing ratchet, and the predicate would be
+a new arm on `check-page-shape`, not maintenance of one. **The base rate is
+recorded here rather than argued, because it is the unusual one**: unlike
+94.11's 155-of-155 ceremony, this predicate genuinely discriminated — 1 of 80
+built pages failed it and 79 passed — and the defect survived
+`check-page-shape`, `check:layout`, `test:axe`, two Polish rounds and two
+Objective grills for 18 days. That is the strongest case for a gate this ledger
+has assembled; it is still not Polish's to add. Filed for a Continue round with
+the detector and its red-proof already written, in
+`.roundtable/polish-state.md`'s entry for this round.
+
 ## Slice 291 — Objective grill of Slices 286, 287, 290: 32 of 32 published assertions reproduce and the three slices carry no defect — so the finding is on the other side of the desk, where **4 of this grill's own 4 ad-hoc probes were wrong**, each one reconstructed from a slice's prose instead of run from the command beside it (2026-09-06)
 
 **Dispatcher trace, cloud wake — and this wake LOST A COLLISION on `287.5`.**

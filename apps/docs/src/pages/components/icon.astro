@@ -56,10 +56,18 @@ const catalogueKb = Math.round((iconBytes / glyphCount) * 200 / 1024);
    exited 1 with 116 problems). */
 const glyphs = ['doc', 'invoice', 'cart', 'check-circle', 'truck', 'box', 'chart', 'grid'];
 
-/* DEPRECATED (roadmap 53.2): zero pattern screens in these docs render these —
-   only this page's own showcase did. Kept for the deprecation window (next
-   major), shown separately so the showcase stops implying they earned their
-   place the way the eight above did.
+/* DEPRECATED (roadmap 53.2). Kept for the deprecation window (next major),
+   shown separately so the showcase stops implying they earned their place the
+   way the eight above did.
+
+   This block used to justify the deprecation with "zero pattern screens in
+   these docs render these — only this page's own showcase did". That census
+   was exact on 2026-08-19 and false when read on 2026-09-06 (roadmap 292.1):
+   /patterns/app-frame renders --building, three other docs pages render
+   --settings, and the reference suite gives two of its six modules --user and
+   --settings as their identity. A deprecation does not stop existing renders,
+   so it can never rest on a count of them; icon.css's header carries the same
+   correction beside its NO FIGURES rule.
 
    DERIVED, not hand-typed — the one mirror on this page that `check:markup`
    structurally cannot see, because a wrongly-listed glyph is still a class the
@@ -165,10 +173,12 @@ const customIcon = `<span class="bo-icon" aria-hidden="true"
         </span>
       ))}
     </div>
-    <p class="bo-u-text-muted">No pattern screen in these docs renders any of
-    these — only this showcase did. Kept shipping (removing published
-    classes is a next-major change, not a tidy-up) but no longer recommended:
-    point <code>--bo-icon-src</code> at your own SVG instead (next section).</p>
+    <p class="bo-u-text-muted">Kept shipping (removing published classes is a
+    next-major change, not a tidy-up) but no longer recommended: each was only
+    ever one example value of <code>--bo-icon-src</code>, so point that at your
+    own SVG instead (next section). Screens that already render one keep
+    working until the next major — deprecating a glyph deprecates the
+    <em>recommendation</em>, not the class.</p>
   </section>
 
   <section class="demo">
@@ -288,6 +298,7 @@ const customIcon = `<span class="bo-icon" aria-hidden="true"
     </p>
   </section>
 
+  <section class="demo">
     <h2>Markup</h2>
     <pre><code>{markup}</code></pre>
   </section>

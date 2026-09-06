@@ -139,7 +139,7 @@ what 276.1's widening produced silently.
 | component/dashboard | content | **3** | 2/3 | 0 | 71d34737@e60338c8 | round 1 landed — blind 2→3, "not a wrapper round every section"; **round 2 (2026-09-02) FOUND TWO DEFECTS, and the first is the only one in this ledger where the SCORE was wrong rather than the cite — `interaction: na` on a component that ships `initCollapsibleCards`; blind re-scored to 3 by a second agent, the first blind re-score this ledger has actually run. See below** · **RE-QUEUED — source changed** |
 | component/data-table | content | **3** | 3/3 | 0 | 71b996e2@6cb26268 | round 1 landed — blind 2→3, "not for laying out a page"; **round 2 (2026-08-30) FOUND A DEFECT — the `spacing` cite named a literal 94.3 had removed two days before the score was taken, see below**; **round 3 (2026-09-05) NOT a no-op, and the defect is ON this surface again — a new arm 16 re-took the live measurement the `spacing` cite publishes and found its worked example unreachable by the rule it explains: 0 of 4 containers on `/patterns/detail-form` move under either mutation, because `69a53364` added `data-density="compact"` 28 hours after `79f7fec9` measured it. A second defect in the same sentence — `28 -> 30` is the row-height floor, produced by padding 0 of 101 times — was introduced by COPYING: archived 94.3 names it separately and all three live copies dropped that sentence. ROADMAP 281, see below** · **RE-QUEUED — source changed** |
 | component/date | content | 2 | — | — | 399709aa@3909b80a | **SKIPPED** — deprecated, see note below |
-| component/icon | content | **3** | 2/3 | 0 | f0d9f50b | round 1 landed — blind 2→3; scorer caught the demo contradiction, clause narrowed; **round 2 (2026-08-30) FOUND A DEFECT — `fit` cited "12 ERP glyphs" against 26 shipped, and the same 12 was hard-coded as the DIVISOR of the page's published size projection, see below** · **RE-QUEUED — source changed** |
+| component/icon | content | **3** | 3/3 | 0 | ed441c58 | round 1 landed — blind 2→3; scorer caught the demo contradiction, clause narrowed; **round 2 (2026-08-30) FOUND A DEFECT — `fit` cited "12 ERP glyphs" against 26 shipped, and the same 12 was hard-coded as the DIVISOR of the page's published size projection, see below**; **round 3 (2026-09-06) FOUND TWO DEFECTS, and the first is in the page's SHAPE rather than in any cite — the Markup heading had rendered outside every `<section>` since 2026-08-19, at 21px among twelve siblings at 18px, invisible to `check-page-shape`, `check:layout`, `test:axe`, two Polish rounds and two grills; the second came from the blind re-score and is in the SHIPPED CSS — all four deprecation blocks justified themselves with a census (`no pattern screen renders this glyph`) that `/patterns/app-frame` falsifies. ROADMAP 292, see below** |
 | component/inline-editing | content | **3** | 2/3 | 0 | 644dde35 | round 1 landed — blind 3, "not for creating a record" (unscored in DSA); **round 2 (2026-09-05) NO-OP on the surface — all five arms reproduce, including the row-edit cites no arm had ever read — and a new arm 14 FOUND A DEFECT in this loop's own step 0: the surface source set was blind to every behavior module, 31 commits across 7 surfaces. ROADMAP 276, see below** |
 | component/navbar | content | **3** | 2/3 | 0 | 35528cb6 | round 1 landed — blind 2→3, "not the page's own title or actions"; **round 2 (2026-09-04) NO-OP on the surface — all six cites hold, including the `interaction: na` no arm covered — and two NEW arms found a defect elsewhere: `breadcrumb · interaction` scored `na` 7h14m before the rubric clause that forbids it existed. ROADMAP 268, see below** |
 | component/pagination | content | **3** | 2/3 | 0 | 514138cd@e4d7493c | round 1 landed — blind 2→3, "not for stepping through a process"; **round 2 (2026-09-05) NOT a no-op, and the defect is ON this surface — six cites hold, but a new arm 15 read the page's claims against `load-more.ts` and found `data-load-more-auto` published as a runtime promise in five places, asserted in none, all five naming a trigger the shipped module does not have. ROADMAP 277, see below** · **RE-QUEUED — source changed** |
@@ -2840,3 +2840,162 @@ the round's ordinary last step. `dry` stays **0**: 273.2 is the open owner call
 on whether a no-op round increments it, and this round does not pre-empt it.
 No blind re-score was run — §3b step 4 exists so a round cannot mark its own
 homework, and nothing on the surface changed, so there is no score to mark.
+
+## Re-entry: icon — round 3 (2026-09-06, cloud wake) — TWO DEFECTS (ROADMAP 292)
+
+Dispatcher rule 6, reached because rules 1-5 were all clear: no P0, Standardize
+`1 / 4`, Objective `0 / 3`, rule 4 reached and finding **0 of 12** open items
+cloud-takeable (9 owner-blocked, 3 browser-blocked in the screenshot sense), and
+rule 5 **STALE** at 3 wake-dates, so reported as *could not be evaluated* rather
+than clear. `polish_requeue.py --apply` re-queued **10** surfaces and wrote
+nothing; `--audit-stamps` read **0 of 21** stamps naming a source state no
+revision carries, so 283.3's repair is holding a second wake.
+
+**The tie is now total, and the discriminator had to be re-derived.** All ten
+re-queued surfaces read `content: 3`, `2/3 rounds`, `dry 0` — the seventh round
+in a row where neither the score (171.1) nor §3b's "fewest rounds" tie-break
+separates anything. 216.1's discriminator (source movement since the surface's
+own `scored` date) no longer separates either, because every surface has since
+had a round and **a round's own repair commits inflate its count**. Measured
+since each surface's *last round* instead:
+
+```
+# per surface: B=$(git rev-list -1 --before="<its round-2 date>T23:59:59+08:00" HEAD)
+#              git log --oneline $B..HEAD -- <its path set from polish_requeue>
+icon 4 commits +72/-4   alerts 3 +7/-1   dashboard 3 +7/-1   stepper 3 +7/-1
+tree-table 3 +6/-1   badge 2 +4/-1   calendar 2 +4/-1   sidebar-nav 2 +5/-1
+state-patterns 2 +9/-1   byline 0 +0/-0
+```
+
+`icon` leads by an order of magnitude on lines, and what moved is substantive:
+227.3's divisor guard, 229's deprecation-set mirror, 249.2 and 249.8.
+
+**`byline`'s 0 was checked before the pick, not after** — a zero is a defect
+until proven otherwise, and `polish_requeue` had just reported its source moved.
+Both readings are right and they answer different questions: `--audit-stamps`
+resolves its stamp to `d8c9b5d1`, a revision *earlier* than its own round-2
+commit, so what re-queued `byline` is that round's own edit rather than anything
+after it. Nothing to fix — the stamp describes a real tree, which is all
+`--verify-stamps` claims — but worth recording that "re-queued" and "moved since
+the last round" are not the same predicate.
+
+### The two defects
+
+**1. The page's Markup heading was outside every `<section>`, and had been for
+18 days.** Found by reading the surface before scoring it. `icon.astro` lost the
+`<section class="demo">` opener on its Markup block in `efd4fd02` (Slice 53.2,
+2026-08-19) when the Deprecated section was inserted; the file went to 7 openers
+against 8 closers, and the HTML parser silently drops the unmatched closer.
+
+Measured in the built DOM: **13 `<h2>` against 12 `section.demo`**, the Markup
+heading's parent chain reading `h2 < div.bo-stack.docs-content` where every
+comparator reads `h2 < section.demo`. Visible consequence:
+`Gallery.astro:737`'s `.demo h2 { font-size: var(--bo-font-size-lg) }` did not
+apply, so the heading rendered at **21px** among twelve siblings at **18px**.
+Now 18px, all thirteen.
+
+**2. The four deprecation blocks in the SHIPPED CSS rest on a false census.**
+Found by §3b step 4's blind re-score and then re-derived from the repo rather
+than taken on its word. Five live sites published *"No pattern screen in these
+docs renders this glyph — only this component's own showcase page does"*;
+`/patterns/app-frame` renders `--building`, three other docs pages render
+`--settings`, and `examples/erp-suite`'s `MODULES` gives two of its six modules
+`--user` and `--settings` as their identity. Commands in ROADMAP 292.1.
+
+**A fifth class for this ledger, and the most durable of them.** The four
+recorded before were cites that decayed: right when written, falsified later by
+the same file (icon's `12 ERP glyphs`), by a different tree (sidebar-nav,
+breadcrumb), or by a change two days earlier (data-table). This one **could
+never have stayed true**: deprecating a glyph does not stop anything already
+rendering it, so a count of renders can only rise after the note is written. The
+fix therefore removes the census rather than refreshing it — 217.2 and 220.1's
+precedent, with a stronger reason than either had.
+
+### The blind re-score, and the instruction defect it exposed
+
+§3b step 4's trigger clause (288.1) is what made this re-score owed rather than
+optional: the round edits the surface a score is taken on. A second agent scored
+`typography` and `content` from the shipped CSS and page source, told that the
+built page publishes a prior verdict and that it is not evidence.
+
+- It reports it **never saw the prior value** — and the reason is a defect in
+  the instruction it was given: it was pointed at
+  `apps/docs/src/data/dsa-rubric.json`, **which does not exist**. The rubric
+  lives under a `rubric` key inside `dsa-scores.json`, one of the four paths
+  §3b's blindness protocol forbids opening. It resolved this itself by printing
+  that file with `components` deleted. **Recorded here because the protocol
+  needs it**: the next round's instruction should name
+  `dsa-scores.json`'s `rubric` key and how to read it without the entries.
+- `content` **3**, agreeing with the published 3, red-proved by running
+  `hasWrongChoiceClause` with and without the clause (`true` / `false`).
+  268.2's bias note applies: an agreeing re-score is weak evidence.
+- `typography` **2**, contradicting the published 3 — and per 268.2 a
+  contradiction is *not* weakened by leakage. The disagreement is about SCOPE,
+  which is why the score does not move: it scores the page's four raw
+  `font-size: 1.5rem` literals, says on a CSS-only reading the answer is 3, and
+  the dimension's own cite is about `icon.css`'s `1em` box, which this round did
+  not touch. Filed as **292.3** for a Continue round or the owner, since fixing
+  it means changing a rubric DEFINITION, which 101.3 forbids Polish from doing.
+
+The re-score returned four further findings; three were verified here and filed
+(**292.4** `--settings` deprecated and taught as canonical in the same page's
+copy-paste block; **292.5** the markup block teaching `mask-image` where the
+page teaches `--bo-icon-src`, and dropping `bo-sidebar-nav__icon`; **292.6**
+`icon.css` forbidding figures in itself and carrying two). The fourth — that the
+opener names "search" as a convention glyph while the set ships none — is
+recorded here and **not filed**: the sentence is about conventions a reader
+holds, not about this set's contents, so it is not wrong.
+
+### The gate, refused a sixth time — but the base rate is the unusual one
+
+A detector for defect 1 would be a new arm on `check-page-shape`, and 101.3
+confines Polish to maintaining the existing ratchet. Refused on that ground
+alone, because unlike the previous five refusals **the base rate here argues
+FOR a gate**: 94.11's dimension-literal predicate was true of 155 of 155
+literals and so distinguished nothing, whereas this one separated **1 of 80**
+built pages from 79 and the defect survived `check-page-shape`, `check:layout`,
+`test:axe`, two Polish rounds and two Objective grills for 18 days. The
+detector and its red-proof are written out below so a Continue round does not
+re-derive them.
+
+```js
+// Over the BUILT pages, JS disabled — the question is what the HTML parser
+// builds, not what the boost layer does. Read each dist page with setContent;
+// navigating hits redirect stubs and destroys the execution context mid-sweep.
+const QUERY = () => [...document.querySelectorAll('.docs-content h2')]
+  .filter((h) => !h.closest('section'))
+  .map((h) => h.textContent.trim().slice(0, 30));
+// RED-PROOF: delete ONE `<section class="demo">` opener from a clean page's
+// built html so its `</section>` becomes stray — the same shape as the real
+// defect — and assert the replace matched something before believing the result.
+const injected = clean.replace(/<section class="demo"[^>]*>(\s*<h2[^>]*>Markup<\/h2>)/, '$1');
+if (injected === clean) throw new Error('INJECTION DID NOT LAND');
+// clean 0 -> injected 1, on 2026-09-06. Still 0/80 and still 0 -> 1 after the fix,
+// so the clean sweep is a measurement, not a detector that stopped being able to fail.
+```
+
+**A second, DOM-neutral instance was fixed in the same pass**, and its evidence
+is deliberately different: `sidebar-nav.astro` carried a duplicated
+`</section>` (4 openers, 5 closers) that the parser drops. Its built page is
+**byte-for-byte identical** before and after — asserted with `diff -q`, not
+assumed. Both source-level instruments (`<section class="demo"` and any
+`<section`) now find all 41 component pages balanced.
+
+### Closing the round
+
+`rounds` moves 2→3 on 182.1's precedent — the round changed the published
+artefact — which spends the last of this surface's component budget. `dry`
+stays **0**: 273.2 is the open owner call on whether a round that moves no score
+increments it, and this round does not pre-empt it. `scored` stays
+**2026-08-23**; moving it would claim an independent second opinion for a
+dimension the re-score itself scoped out.
+
+**Not verified, said plainly.** Cloud wake: no Podman and no `localhost:8081`,
+so no 1440/390 light-and-dark screenshots were taken. What this round rests on
+is not a rendered image — it is `closest('section')`, a computed `font-size`,
+a parent chain and a byte diff, all of which are `ENVIRONMENT.md`'s **second**
+list and were taken live in this container against the built tree via
+`browser-harness.mjs` + `serve-dist.mjs`. The one thing a screenshot would add
+that these do not is whether the corrected Markup section *looks* right beside
+its siblings; the fix makes it identical in class and computed size to twelve
+of them, which is the strongest statement available without eyes.

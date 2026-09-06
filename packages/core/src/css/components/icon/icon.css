@@ -50,7 +50,20 @@
        were both exact when written on 2026-08-19 and both wrong by 2026-08-24,
        when 137.1's toolbar glyphs took the set from 12 to 23. /components/icon
        computes the live equivalents from this stylesheet at build time, which
-       is where a number that has to stay true belongs. */
+       is where a number that has to stay true belongs.
+
+       NO CENSUS EITHER, for the same reason (roadmap 292.1, 2026-09-06). The
+       four deprecation blocks below each used to justify themselves with a
+       count of who renders the glyph — "no pattern screen in these docs
+       renders this glyph, only the showcase page does". Exact on 2026-08-19,
+       false by the time it was read: /patterns/app-frame renders --building,
+       three other docs pages render --settings, and examples/erp-suite gives
+       two of its six modules --user and --settings as their identity
+       (_shell.mjs MODULES, composed at :79). Deprecating a glyph does not
+       stop anything already rendering it, so a census of renders is the one
+       kind of evidence a deprecation note is guaranteed to outlive. The
+       mechanism argument each block now carries needs no census and cannot
+       decay. */
     mask-image: var(--bo-icon-src);
   }
 
@@ -105,10 +118,9 @@
     --bo-icon-src: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 4v16h16'/><path d='M8 16v-5M13 16V8M18 16v-8'/></svg>");
   }
 
-  /* DEPRECATED (2026-08-19, roadmap 53.2). No pattern screen in these
-     docs renders this glyph — only this component's own showcase page
-     does. Kept, not deleted: @busy-office/ui is published, so removal is
-     a next-major change. Compose instead: point --bo-icon-src at your own
+  /* DEPRECATED (2026-08-19, roadmap 53.2). Kept, not deleted:
+     @busy-office/ui is published, so removal is a next-major change.
+     Compose instead: point --bo-icon-src at your own
      SVG (see /components/icon, "Any icon you like") — the mechanism is
      general on purpose; this glyph was never more than one example value
      of it. See CHANGELOG. */
@@ -120,10 +132,9 @@
     --bo-icon-src: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='4' width='7' height='7' rx='1'/><rect x='13' y='4' width='7' height='7' rx='1'/><rect x='4' y='13' width='7' height='7' rx='1'/><rect x='13' y='13' width='7' height='7' rx='1'/></svg>");
   }
 
-  /* DEPRECATED (2026-08-19, roadmap 53.2). No pattern screen in these
-     docs renders this glyph — only this component's own showcase page
-     does. Kept, not deleted: @busy-office/ui is published, so removal is
-     a next-major change. Compose instead: point --bo-icon-src at your own
+  /* DEPRECATED (2026-08-19, roadmap 53.2). Kept, not deleted:
+     @busy-office/ui is published, so removal is a next-major change.
+     Compose instead: point --bo-icon-src at your own
      SVG (see /components/icon, "Any icon you like") — the mechanism is
      general on purpose; this glyph was never more than one example value
      of it. See CHANGELOG. */
@@ -131,10 +142,9 @@
     --bo-icon-src: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'><path d='M4 6v12M8 6v12M12 6v12M16 6v12M20 6v12'/></svg>");
   }
 
-  /* DEPRECATED (2026-08-19, roadmap 53.2). No pattern screen in these
-     docs renders this glyph — only this component's own showcase page
-     does. Kept, not deleted: @busy-office/ui is published, so removal is
-     a next-major change. Compose instead: point --bo-icon-src at your own
+  /* DEPRECATED (2026-08-19, roadmap 53.2). Kept, not deleted:
+     @busy-office/ui is published, so removal is a next-major change.
+     Compose instead: point --bo-icon-src at your own
      SVG (see /components/icon, "Any icon you like") — the mechanism is
      general on purpose; this glyph was never more than one example value
      of it. See CHANGELOG. */
@@ -142,10 +152,9 @@
     --bo-icon-src: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 21V4h10v17M15 9h4v12M3 21h18'/><path d='M8 8h2M8 12h2M8 16h2M12 8h1M12 12h1M12 16h1'/></svg>");
   }
 
-  /* DEPRECATED (2026-08-19, roadmap 53.2). No pattern screen in these
-     docs renders this glyph — only this component's own showcase page
-     does. Kept, not deleted: @busy-office/ui is published, so removal is
-     a next-major change. Compose instead: point --bo-icon-src at your own
+  /* DEPRECATED (2026-08-19, roadmap 53.2). Kept, not deleted:
+     @busy-office/ui is published, so removal is a next-major change.
+     Compose instead: point --bo-icon-src at your own
      SVG (see /components/icon, "Any icon you like") — the mechanism is
      general on purpose; this glyph was never more than one example value
      of it. See CHANGELOG. */
