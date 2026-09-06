@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-06 21:11 UTC
+Generated at: 2026-09-06 21:54 UTC
 
 ## Open items by slice
 
@@ -43,18 +43,16 @@ Generated at: 2026-09-06 21:11 UTC
 - **Slice 310** (2 open)
   - 310.1 — `examples/erp-suite` and `examples/po-app` render deprecated glyphs, and whether that is a defect is undecided.
   - 310.2 — `/base/motion` declares five copyable markup samples the template never renders.
-- **Slice 312** (2 open)
-  - 312.1 — P0: `check:ci-ignores` must see a directory walk, not only a named read.
-  - 312.2 — decide whether `.roundtable/
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1553 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-09-06 17:49   ok
-  Objective     2 / 3 slices          since 2026-09-06 18:56   ok  [292, 294]
+dispatch status — counter-triggered rules (1556 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-09-06 17:49   OVERDUE
+  Objective     3 / 3 slices          since 2026-09-06 18:56   OVERDUE  [292, 294, 312]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      1 wake-date(s) newer   since 2026-09-06 16:56   STALE   [newest pair: axe-violations; 132 sample(s), 13 of 44 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-06, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-06 (2026-09-07), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -76,9 +74,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-06 17:49 · Standardize · sweep · Slice 308 — Standardize sweep 4 of 4 lanes: 1-3 clean; lane 4's region finding REFUSED by per-section measurement (Step 0c holds at 936; +877 is five new rules) · landed · 4e0248ed
-- 2026-09-06 17:49 · Meta · refusal · no second cut to LOOPS.md's dispatch region — the section 274.2 cut has not regrown by one word, so a cut would remove instruction · refused · 4e0248ed
-- 2026-09-06 18:56 · Objective · grill · Slice 309 — Objective grill of 307/308: 308 reproduces to the word; under 307 a P0 (the reference app's shared init swallowed by a trailing comment since 2026-08-23, so the published select-all timing was a no-op), fixed + gated; roadmap_scope.py fence bug also fixed · landed · 26d464fe
 - 2026-09-06 18:56 · Meta · refusal · publishing a replacement select-all figure — today's fixed-tree readings include a style flush the published table scores as its own column, so quoting them would repeat the exact error being corrected · refused · 26d464fe
 - 2026-09-06 20:03 · Continue · build · 292.9 — tree-wide check:deprecated-icons (source + dist phases); 6 sites resolved, Slice 310 filed · landed · 8f23f658
 - 2026-09-06 20:48 · Continue · build · 294.1 — light-dark()/oklch()/scroll-state() probes in derive-floor.mjs; floor unchanged, and the third probe opened the first version_added:false hole (Slice 311) · landed · e0da2fc4
@@ -86,6 +81,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-06 20:48 · Meta · refusal · @supports parsing in derive-floor — tier is where a guard is recorded; a second instrument would disagree with the tier field · refused · e0da2fc4
 - 2026-09-06 21:11 · Continue · bug · main red on check:floor — a hand-typed floor label in RESUME.md, written after the gate had already run; ENVIRONMENT.md gains §3b (re-run docs:build after writing the hand-off) · landed · e4d0459f
 - 2026-09-06 21:11 · Roadmap · triage · Slice 312 filed P0 — check:ci-ignores asserts nothing CI runs reads .roundtable/**, and check:floor + check:vendor-names both do; red-proved by injection · triaged · e4d0459f
+- 2026-09-06 21:54 · Continue · bug · 312.1/312.2 — check:ci-ignores could only see a read that NAMES the path; widened to enumeration + path-root routes, verdict matched against an fs-spy trace and a per-gate injection probe (7/7 pairs), and paths-ignore removed · landed · 024445f5
+- 2026-09-06 21:54 · Meta · refusal · a second cheap workflow running the three repo-wide prose gates on the ignored paths — it needs a hand-kept list of which gates are repo-wide · refused · 024445f5
+- 2026-09-06 21:54 · Meta · refusal · making the three gates stop reading .roundtable/** and STATUS.md — that reverses 256.2, the standing product-name instruction, and check:slice-refs' reason for existing · refused · 024445f5
 
 ## Sunset test
 
