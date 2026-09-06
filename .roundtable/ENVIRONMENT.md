@@ -232,6 +232,41 @@ re-run the fetch with no `tail` and read the FIRST line.
 than a stale number once — `report:prose` died with `ENOENT … apps/docs/dist`
 before the build — but that is luck, not a guard.
 
+## 3b. THE HAND-OFF IS GATED CONTENT, AND THE WAKE'S OWN ORDER LEAVES IT UNGATED
+
+Bit for real on 2026-09-07 (Slice 311, cloud wake): `main` went red on
+`check:floor` for a label hand-typed **in `RESUME.md`**, one commit after the
+same gate had passed on 580 files. Nothing regressed between the two runs — the
+gate ran *before* the file existed.
+
+The wake's normal order is: run the gate suite → commit the slice → write the
+hand-off → commit → push. Everything after step 1 is unverified, and several
+gates in `docs:build` walk `.roundtable/**`:
+
+```
+check:floor          # a hand-typed browser floor — ROADMAP.md is exempt, .roundtable/** is NOT (256.2)
+check:slice-refs     # every `roadmap NNN` citation must resolve
+check:vendor-names   # the standing owner instruction on product names
+check:loop-vocab     # the six outcome words record_iteration enforces
+```
+
+**`.roundtable/**` being in CI's `paths-ignore` does not save you.** That only
+decides whether a push *triggers* CI. A wake always pushes a code or ROADMAP
+change alongside its hand-off, so CI runs, and when it runs the gates walk the
+whole repo — hand-off included.
+
+So: **re-run `npm run docs:build` AFTER writing `RESUME.md`, before pushing.**
+Not the whole 17-command list — the four gates above all live inside that one
+command. The advisory `check-resume-*` scripts are not a substitute: they check
+the charter and stale slice ids, and neither of them reads for any of the four.
+
+The general shape, which is why this is here and not in a slice: **a gate you
+ran is a statement about the tree at the moment it ran.** Any file written after
+it — a hand-off, a grill report, an amended ROADMAP entry — is ungated until
+something re-runs. `check:formatting` reaching CI unrun on 2026-08-29 is the
+same failure by a different route (a list that did not name it); this one is a
+list that named it and an ORDER that ran it too early.
+
 ## 4. `npx prettier` IS NOT THIS REPO'S FORMATTER
 
 No prettier config and no prettier dependency exists here. The style enforcers

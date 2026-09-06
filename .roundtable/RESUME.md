@@ -91,9 +91,16 @@ third one turned out to open.
 
 **The premise reproduces, with the command beside it.** `light-dark(`, `oklch(`
 and `scroll-state(` each read **0** in `packages/core/dist/css/index.css` and
-**0** files across all of `dist/css/`. So the headline floor does not move —
-`Chrome/Edge 119 · Firefox 129 · Safari 17.5`, 19 detected, reach 80.09% —
-which 294.1's Accept names as a satisfying outcome, and it is the outcome.
+**0** files across all of `dist/css/`. So the headline floor does not move — 19
+detected, reach 80.09%, and the label is what
+`node -p "require('./packages/core/dist/floor.json').label"` prints, unchanged.
+294.1's Accept names that as a satisfying outcome, and it is the outcome.
+
+**The label is a command here and a literal in ROADMAP 311 on purpose.**
+`check:floor` exempts `ROADMAP.md` and deliberately does **not** exempt
+`.roundtable/**` (settled 256.2, in the gate's own header), so a hand-off that
+pins the value fails the build — which is exactly what this one did on its
+first push; see the CI note below.
 
 **The item's own reason for calling the gap harmless is false about the
 mechanism.** *"They arrive `@supports`-guarded"* does not protect the floor,
@@ -142,6 +149,32 @@ three docs pages that print `floor.label` render byte-identical text.
 **`292.4/292.5`'s screenshot lane on `/components/icon` remains unspent**, now
 from four wakes back, and the withdrawn-claim paragraph on
 `/components/data-table` is still unlooked-at.
+
+## The first push turned `main` RED, and the cause is now ENVIRONMENT.md §3b
+
+`99217a5f` failed CI on `check:floor` — **a hand-typed browser floor in this
+file**, at the paragraph that now prints a command instead. The base commit
+`af1618aa` was green on both workflows, so it was this wake's, not inherited;
+that was checked before touching anything.
+
+**The gate did not regress and nothing was skipped: it ran too early.** The
+wake's order is run-the-suite → commit the slice → write the hand-off → commit
+→ push, so `check:floor`'s green **580 source file(s)** describes a tree that
+did not yet contain the sentence that broke it. `.roundtable/**` sitting in
+CI's `paths-ignore` does not help — that decides whether a push *triggers* CI,
+and this push also carried `ROADMAP.md`, so the gates ran and walked everything.
+
+**Fixed by re-running `npm run docs:build` AFTER writing this file**, both plain
+and at `DOCS_BASE=/busy-office-ui`, which is the new rule in ENVIRONMENT.md §3b.
+Four gates inside that one command read `.roundtable/**` (`check:floor`,
+`check:slice-refs`, `check:vendor-names`, `check:loop-vocab`) and the two
+advisory `check-resume-*` scripts read none of them, so they were never going to
+catch it.
+
+**The label now lives as a literal in ROADMAP 311 and as a command here.** That
+is the pattern `check:floor`'s own header prescribes from its only previous
+firing: the report keeps the finding and makes it re-runnable, `ROADMAP.md` is
+where a historical value may be pinned.
 
 ## `origin/main` did NOT move under this wake
 
