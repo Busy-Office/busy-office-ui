@@ -1814,7 +1814,7 @@ filed as 292.3 instead, where it can be decided rather than assumed.
        - **Note:** rewriting a published cite is a scoring judgement, so this
          is Continue's or the owner's, not Polish's — same lane as 292.3.
 
-8. [ ] **292.8 — nothing polices style in a docs PAGE, and 292.3 is what makes
+8. [x] **292.8 — nothing polices style in a docs PAGE, and 292.3 is what makes
        that visible.** With `typography` established as CSS-scoped, a raw
        `font-size` in an `.astro` page is outside the rubric, outside
        `lint:css` (which lints `packages/core/src/css`), and outside every
@@ -1833,6 +1833,64 @@ filed as 292.3 instead, where it can be decided rather than assumed.
          reason records why no gate was added, or the recipe in `CLAUDE.md`
          states that docs-page style is unpoliced and why; deciding no change
          is needed is satisfying if it carries the re-run count.
+       - **DONE 2026-09-07 (cloud wake).** First branch taken: the three
+         display-sizing literals are gone, the demo keeps its three, and no gate
+         was added. **Premise re-run before building on it** — the same command
+         still returns **1 of 41** (`icon.astro`, six numeric declarations, the
+         other two `font-size` uses on that page already reading
+         `var(--bo-font-size-xs)`).
+
+         **The swap is exact, not approximate:** `--bo-font-size-xl` is
+         `1.5rem` in `tokens/typography.css:11`, the literal's own value. Three
+         sites moved on `components/icon.astro` (the set gallery, the deprecated
+         gallery, the themable row) and **one on `base/motion.astro`** — the
+         spinner glyph, the same shape one directory over, taken because leaving
+         it would have made the recorded property untrue of the tree while
+         claiming it of the page.
+
+         **Verified by measurement, and the no-op was red-proved against being a
+         dead edit.** A throwaway probe (scratchpad, not the repo) read the
+         computed `font-size` of every element on both built pages before and
+         after: **1,565 + 1,337 elements, 0 key-set differences, 0 computed
+         differences.** A no-op diff alone proves nothing — it is also what an
+         edit that never landed produces — so the same probe re-read each page
+         with `--bo-font-size-xl` overridden to `3.25rem` on `:root`:
+         **before, 0 elements moved on either page; after, 31 on icon and 1 on
+         motion**, exactly the four edited sites and their inheriting
+         descendants, every one `24px → 52px`. The token is therefore wired, and
+         the elements it is wired to are the intended ones.
+
+       - **Why no gate — three measured grounds, not one.**
+         1. **Base rate.** After the edit, component pages carrying a raw
+            `font-size` outside a deliberate size demo: **0 of 41**. A predicate
+            already true of everything cannot fail (CLAUDE.md 94.11).
+         2. **A text-grep predicate over this property is unsound, measured.**
+            Widened past the Accept's scope to the whole page tree, the source
+            grep returns **4 files of 127** — and **2 of the 4 carry no style
+            attribute at all in the built page**:
+            `getting-started/troubleshooting.astro` names
+            `html { font-size: 62.5% }` in PROSE, inside `<code>`, as the
+            symptom of a hostile host page, and `patterns/output-form.astro`
+            carries `font-size: 9pt` inside a **copyable `@page` print sample**
+            where `pt` is right and a docs token does not exist in the
+            consumer's stylesheet. Commands:
+            `grep -c 'style="[^"]*font-size: 62.5%' apps/docs/dist/getting-started/troubleshooting/index.html`
+            → **0**, same shape for `9pt` on `patterns/output-form` → **0**,
+            against `font-size: 2rem` on `patterns/app-launch` → **1**.
+         3. **The one real remaining site should not be converted.**
+            `patterns/app-launch.astro:134` sizes a launcher icon at `2rem`, and
+            **no token equals 2rem** (`xl` is the largest at 1.5rem), so a swap
+            would shrink it — a rendered-image judgement a cloud wake cannot
+            make. Left, with the reason here rather than a gate red on it.
+
+         The decision is recorded at the site too: an Astro comment above the
+         Sizes section says the three literals are the demonstration, which is
+         where a reader of the page meets the question.
+       - **NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots
+         (a cloud wake has no Podman). What that would add here is *"does it
+         look right"*; what is claimed instead is that **nothing changed** —
+         asserted over 2,902 elements' computed font-size, plus `check:layout`
+         across 127 pages and `test:axe` at both widths.
 
 9. [ ] **292.9 — 292.4's property is tree-wide and the guard it landed is
        page-local: four other docs pages hand a reader a deprecated glyph.**

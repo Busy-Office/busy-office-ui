@@ -310,7 +310,7 @@ if (/mask-image\s*:/.test(markupCode))
 
   <section class="demo">
     <h2>The set</h2>
-    <div class="bo-cluster" style="--bo-cluster-gap: var(--bo-space-4); font-size: 1.5rem">
+    <div class="bo-cluster" style="--bo-cluster-gap: var(--bo-space-4); font-size: var(--bo-font-size-xl)">
       {glyphs.map((g) => (
         <span style="display: inline-flex; flex-direction: column; align-items: center; gap: var(--bo-space-1)">
           <span class={`bo-icon bo-icon--${g}`} aria-hidden="true"></span>
@@ -325,7 +325,7 @@ if (/mask-image\s*:/.test(markupCode))
 
   <section class="demo">
     <h2>Deprecated <span class="bo-badge bo-badge--warning">{deprecatedGlyphs.length}</span></h2>
-    <div class="bo-cluster bo-u-text-muted" style="--bo-cluster-gap: var(--bo-space-4); font-size: 1.5rem">
+    <div class="bo-cluster bo-u-text-muted" style="--bo-cluster-gap: var(--bo-space-4); font-size: var(--bo-font-size-xl)">
       {deprecatedGlyphs.map((g) => (
         <span style="display: inline-flex; flex-direction: column; align-items: center; gap: var(--bo-space-1)">
           <span class={`bo-icon bo-icon--${g}`} aria-hidden="true"></span>
@@ -343,7 +343,7 @@ if (/mask-image\s*:/.test(markupCode))
 
   <section class="demo">
     <h2>Themable — it's just <code>currentColor</code></h2>
-    <p style="font-size: 1.5rem">
+    <p style="font-size: var(--bo-font-size-xl)">
       <span class="bo-icon bo-icon--check-circle" aria-hidden="true" style="color: var(--bo-color-success-text)"></span>
       <span class="bo-icon bo-icon--truck" aria-hidden="true" style="color: var(--bo-color-accent)"></span>
       <span class="bo-icon bo-icon--box" aria-hidden="true" style="color: var(--bo-color-danger-text)"></span>
@@ -355,6 +355,10 @@ if (/mask-image\s*:/.test(markupCode))
     color instead of vanishing (mask icons need an explicit opt-out; shipped).</p>
   </section>
 
+  {/* The three raw sizes below are the DEMONSTRATION — a token here would hide
+      the one thing this section teaches. They are the only raw font-size
+      literals left on any component page (roadmap 292.8); the display-sizing
+      ones above now read --bo-font-size-xl, which is 1.5rem exactly. */}
   <section class="demo">
     <h2>Sizes — font-size IS the size</h2>
     <p>
