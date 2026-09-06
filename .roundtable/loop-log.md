@@ -1557,3 +1557,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-06 20:48 · Continue · build · 294.1 — light-dark()/oklch()/scroll-state() probes in derive-floor.mjs; floor unchanged, and the third probe opened the first version_added:false hole (Slice 311) · landed · e0da2fc4
 - 2026-09-06 20:48 · Meta · refusal · failing derive-floor on a polish-tier feature a browser will never support — it would forbid any progressive enhancement one engine lacks · refused · e0da2fc4
 - 2026-09-06 20:48 · Meta · refusal · @supports parsing in derive-floor — tier is where a guard is recorded; a second instrument would disagree with the tier field · refused · e0da2fc4
+- 2026-09-06 21:11 · Continue · bug · main red on check:floor — a hand-typed floor label in RESUME.md, written after the gate had already run; ENVIRONMENT.md gains §3b (re-run docs:build after writing the hand-off) · landed · e4d0459f
+- 2026-09-06 21:11 · Roadmap · triage · Slice 312 filed P0 — check:ci-ignores asserts nothing CI runs reads .roundtable/**, and check:floor + check:vendor-names both do; red-proved by injection · triaged · e4d0459f

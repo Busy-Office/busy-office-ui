@@ -315,6 +315,116 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 312 — P0: `check:ci-ignores` asserts that nothing CI runs reads `.roundtable/**`, and two gates CI runs read it — one of them has the directory as a literal string in its own `ROOTS` array (2026-09-07)
+
+**Triaged from inside Slice 311's wake**, after `main` went red on
+`check:floor` for a hand-typed floor label in `RESUME.md`. That red was not
+caused by this hole — the same commit carried `ROADMAP.md`, so CI ran and
+caught it correctly. Chasing *why a `.roundtable` edit was gated at all* is what
+found the hole, and the hole is latent, not live. It is filed **P0** on the
+precedent of Slices 180 and 204: a gate asserting a property it does not have
+is this repo's most-repeated failure class, and rule 4 takes the OLDEST open
+item, so a newest-filed item would otherwise wait behind ten blocked ones.
+
+**The claim, in the gate's own words:** *"every path in CI's `paths-ignore` is
+genuinely read by nothing that runs in CI"*, because *"`paths-ignore` means a
+commit touching only those paths is NEVER BUILT. That is safe exactly as long
+as no gate depends on them, and that condition is invisible: the day a gate
+starts reading an ignored file, nothing fails — CI simply stops testing a class
+of change, silently, and the next red build is attributed to whatever landed
+after it."* `ci.yml`'s own comment says `.roundtable/**` **IS SAFE TO IGNORE,
+and that is now checked rather than assumed (roadmap 169.4)**.
+
+**It is not safe, red-proved by injection into a scratch file under
+`.roundtable/`, each injection confirmed to land before the gate was run:**
+
+```
+printf 'Chrome/Edge 119 · Firefox 129 · Safari 17.5\n' > .roundtable/zz-probe.md
+grep -c 'Firefox 129' .roundtable/zz-probe.md            # 1 — the injection landed
+node apps/docs/scripts/check-floor.mjs                   # rc=1  FAILED
+
+# NAME=<any element of check-vendor-names.mjs's own NAMES array — not spelled
+#       here, because THIS file is one of that gate's ROOTS; see the note below>
+printf 'we should copy %s here\n' "$NAME" > .roundtable/zz-probe.md
+grep -c "$NAME" .roundtable/zz-probe.md                  # 1 — the injection landed
+node apps/docs/scripts/check-vendor-names.mjs            # FAILED — 1 of 604 file(s)
+
+rm .roundtable/zz-probe.md
+node apps/docs/scripts/check-ci-ignores.mjs
+# ci-ignores check passed — 148 CI-ignored file(s) verified against 144 script(s):
+#   .roundtable/**, STATUS.md
+```
+
+Both gates run in CI (`check:floor` in the docs `build` chain, `check:vendor-names`
+in `check:repo`). So a commit touching **only** `.roundtable/**` can introduce a
+violation of either, never be built, and hand the red to whatever lands next —
+verbatim the harm the gate's header describes.
+
+**The two reach it by different routes, and only one is a subtle miss.**
+
+- `check-floor.mjs` walks `REPO_ROOT` recursively past `SOURCE_SKIP_DIRS`,
+  which is `{node_modules, .git, .astro, dist, versions, visual-baselines,
+  visual-diffs}` — `.roundtable` is not in it. The directory is never NAMED, so
+  the gate's *"MENTION IS NOT A READ"* detector, which looks for
+  `readFile`/`open` with the name in the same call, cannot see it. **A
+  recursive walk is a read of every directory it does not skip**, and that is
+  the general form of the miss.
+- `check-vendor-names.mjs` is the one with no excuse: `.roundtable` is a
+  literal element of its `ROOTS` array, fed to `collectSource(ROOTS, …)`. The
+  gate written to catch a dependency on an ignored path misses one spelled as a
+  bare string in a const array eleven lines from the read.
+
+**The vendor-name probe cannot be quoted literally in this file, and finding
+that out cost a gate run.** Writing the denied word into this entry turned
+`check:vendor-names` red on `ROADMAP.md` itself — the gate's ROOTS include this
+file, so a report OF the gate trips it, which is CLAUDE.md's
+assertion-trips-on-its-own-explanation in its plainest form. Substituting a
+`$NAME` shell variable keeps the command re-runnable without pinning the word,
+the same shape `check:floor`'s header prescribes for a floor label.
+
+**Not established, said plainly:** `check:slice-refs` was probed the same way
+(`roadmap 9999.1` in the same scratch file, injection confirmed) and reported
+**passed** — that is one probe of one citation spelling, so it is evidence that
+this needle misses, not evidence the gate ignores `.roundtable`. The other two
+CI-run scripts that import `SOURCE_SKIP_DIRS` — `check-deprecated-icons`,
+`check-imports`, `check-loop-vocab` — were **not** probed at all. Whoever takes
+this item enumerates them properly rather than trusting this paragraph.
+
+1. [ ] **312.1 — P0: `check:ci-ignores` must see a directory walk, not only a
+       named read.** The detector's stated rule (*mention is not a read*) is
+       right and must survive; what is missing is the second route into a file,
+       which is a walk that fails to exclude it.
+       - **Accept** — the property, not a value: with the tree unchanged,
+         `check:ci-ignores` reports a verdict that **agrees with an empirical
+         probe** of every script CI runs — for each ignored path, inject a
+         violation the gate under test can detect, confirm the injection landed,
+         and record which gates go red. The gate's verdict and the probe's
+         result must name the same set. **Finding that the honest set is
+         non-empty and therefore that `.roundtable/**` must leave
+         `paths-ignore` is a satisfying outcome**, and so is finding that the
+         two gates should stop reading it; this item does not prejudge which.
+       - **Red-proof required, and the trap is named in advance**: the gate's
+         own header records that 169.4's glob handling *"flagged a path inside a
+         `<code>` tag in generated HTML"*, and that its first `@exact` tag was
+         self-declared and wrong. A widened detector that goes red on the two
+         known gates is not proof — it must stay green on the scripts that only
+         MENTION these paths in prose, which is the case the current design
+         exists to protect. Both directions, or it is not red-proved.
+       - **Lane**: cloud-takeable. No browser, no screenshot.
+
+2. [ ] **312.2 — decide whether `.roundtable/**` stays in `paths-ignore` at
+       all, once 312.1 makes the answer visible.** The ignore is not free to
+       remove: `ci.yml`'s comment measures its value at *"8 of the last 30
+       commits touched ONLY these paths — at ~12 minutes a run that was ~96
+       CI-minutes per 30 commits"*. And it is not free to keep, on the evidence
+       above. The trade is real in both directions, which is why it is a
+       separate item from the detector fix.
+       - **Accept:** one recorded decision with the CI-minutes cost and the
+         untested-change risk both re-measured on the day it is taken —
+         **keeping the ignore is a satisfying outcome** provided the gates that
+         read the path are the ones that changed. Re-measure the `8 of 30`; it
+         is a snapshot from 169.4.
+
 ## Slice 311 — 294.1: the three probes are one line each, and the item's own reason for calling them harmless — "they arrive `@supports`-guarded" — is not a thing `derive-floor.mjs` can see. Adding the third opens the first hole in the floor where BCD says a browser will NEVER support it (2026-09-07)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again

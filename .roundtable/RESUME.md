@@ -23,8 +23,10 @@ survives none.
 ## In flight: nothing
 
 Last updated 2026-09-07 (**cloud** wake, scheduled routine). Working tree clean
-at hand-off. Two commits this wake: the Slice 311 build, and this hand-off.
-One iteration recorded — `Continue · build` — with **two** refusals.
+at hand-off. **Four commits this wake, and the third exists because the second
+turned `main` red** — the Slice 311 build, its hand-off, the `check:floor` fix,
+and this rewrite. **Three iterations recorded**: `Continue · build` (two
+refusals), `Continue · bug` for the red, and `Roadmap · triage` for Slice 312.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -40,14 +42,17 @@ Counters read **after** recording this wake's row, which is the comparison
 `LOOPS.md` mandates:
 
 ```
-Standardize   2 / 4 Continue rounds   since 2026-09-06 17:49   ok
+Standardize   3 / 4 Continue rounds   since 2026-09-06 17:49   ok
 Objective     2 / 3 slices  [292, 294] since 2026-09-06 18:56  ok
 Optimize      1 wake-date(s) newer     since 2026-09-06 16:56  STALE
 ```
 
-Both counters moved on this wake's row, which is the counter agreeing with
-something just written down — the comparison `LOOPS.md` says has found two of
-the five parser recurrences. **One more closed slice arms rule 3.**
+Both moved on this wake's rows, which is the counter agreeing with something
+just written down — the comparison `LOOPS.md` says has found two of the five
+parser recurrences. **Standardize is at 3 of 4 because the CI fix was a second
+Continue row**, so one more Continue round arms rule 2; the `Roadmap · triage`
+row correctly moved neither. **Neither matters next wake: a P0 is open, and
+rule 1 sits above both.**
 
 **Rule 5 is reported as *could not be evaluated*, never clear.** The residual
 `1` is `306.1`'s clock artefact and **a cloud wake cannot drive it to `ok` by
@@ -176,6 +181,28 @@ is the pattern `check:floor`'s own header prescribes from its only previous
 firing: the report keeps the finding and makes it re-runnable, `ROADMAP.md` is
 where a historical value may be pinned.
 
+**Chasing *why* a `.roundtable` edit was gated at all found a P0 — Slice 312,
+filed this wake and NOT fixed.** `check:ci-ignores` asserts that nothing CI runs
+reads `.roundtable/**`, and two gates CI runs read it: `check:floor` (a
+recursive `REPO_ROOT` walk — `.roundtable` is not in `SOURCE_SKIP_DIRS`, and the
+directory is never named, so the *"mention is not a read"* detector cannot see
+it) and `check:vendor-names`, which has `.roundtable` as a **literal element of
+its `ROOTS` array**. Both red-proved by injection into a scratch file, each
+injection confirmed to land first; `check:ci-ignores` passes on the same tree.
+**Rule 1 dispatches this next wake.**
+
+**Today's red was not caused by that hole** — the same commit carried
+`ROADMAP.md`, so CI ran and caught the label correctly. The hole is latent: a
+commit touching ONLY `.roundtable/**` can break either gate, never be built, and
+hand the red to whatever lands next. Filing it P0 is on the precedent of Slices
+180 and 204, and because rule 4 takes the OLDEST item, so a newest-filed one
+would wait behind ten blocked ones.
+
+**Writing that entry tripped a third gate**, which is worth one line because it
+is the same shape: spelling the denied vendor name into `ROADMAP.md` turned
+`check:vendor-names` red on this file, since the file is one of its ROOTS. A
+report OF a gate trips the gate. The entry now uses a `$NAME` variable.
+
 ## `origin/main` did NOT move under this wake
 
 `git fetch origin main` at Step 0 and again immediately before the first commit,
@@ -194,15 +221,22 @@ it is safe here for a stated reason**: the A/B was of the SCRIPT against a
 it — both runs read the identical `dist/css/index.css`. `git stash list` is
 empty at hand-off.
 
-## The open set is 24 — and 11 are cloud-takeable
+## The open set is 26 — one of them a P0, and 13 are cloud-takeable
 
-`roadmap_scope.py` reports **24 open / 44 closed**, OPEN slices
-`[15, 112, 249, 273, 294, 296, 297, 298, 300, 304, 305, 306, 307, 309, 310]`.
-Net from the last hand-off's 25: **−1 closed (`294.1`)**, nothing filed. **The
-raw counts reconcile exactly**: `grep -c` reads 24 open / **46** closed, and
-46 = 44 attributed + the 2 `[x]` under the non-slice `## STATE` heading.
+`roadmap_scope.py` reports **26 open / 44 closed**, OPEN slices
+`[15, 112, 249, 273, 294, 296, 297, 298, 300, 304, 305, 306, 307, 309, 310,
+312]`. Net from the last hand-off's 25: **−1 closed (`294.1`) +2 filed
+(`312.1`, `312.2`)**. **The raw counts reconcile exactly**: `grep -c` reads 26
+open / **46** closed, and 46 = 44 attributed + the 2 `[x]` under the non-slice
+`## STATE` heading.
 
-- **cloud-takeable: 11** — `294.2`, `298.1`, `300.2`, `304.1`, `305.1`,
+**`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` now reads 1**, where every
+previous hand-off recorded 0. **Rule 1 matches next wake and dispatches
+`312.1`** — the dispatcher does not need to reach rule 4 at all, and the
+cloud-takeable list below is not what it should read first.
+
+- **cloud-takeable: 13** — `312.1` and `312.2` (both; no browser, no
+  screenshot), `294.2`, `298.1`, `300.2`, `304.1`, `305.1`,
   `305.2`, `306.1`, `307.1`, `309.5`, `310.1`, `310.2`. (`297.1` is takeable
   here too but is counted once, under input-blocked, because that is what
   actually gates it.) **`294.2` is now the oldest of these and has gone eight
@@ -228,22 +262,23 @@ raw counts reconcile exactly**: `grep -c` reads 24 open / **46** closed, and
   do not cover. It stays open because both filed issues came from the owner's
   own agent, so the router was never tested.
 
-11 + 10 + 2 + 1 = 24, asserted rather than left to the reader, and reconciled
+13 + 10 + 2 + 1 = 26, asserted rather than left to the reader, and reconciled
 against `grep -nE '^\s*[0-9]+\. \[ \]' ROADMAP.md` rather than against this
-list — the 24 ids it prints are exactly the ones named above.
+list — the 26 ids it prints are exactly the ones named above.
 
 ## No archive sweep — declined on the SHARE half, and the reason is stated
 
-Measured on the **committed** tree (`roadmap_scope.py`, run after the slice
-commit): **5,946 lines**, closed-history share **27.4%** (1,632 lines across 7
-closed slices). The standing trigger the hand-offs carry is *"past 5,450 lines
+Measured on the **committed** tree (`roadmap_scope.py`, run after Slice 312 was
+filed): **6,056 lines**, closed-history share **26.9%** (1,632 lines across 7
+closed slices). The share FELL as the file grew, which is the denominator
+moving, not history shrinking — 312's own text is 110 of those lines. The standing trigger the hand-offs carry is *"past 5,450 lines
 / 40.6%"*: the line half is past, the share half is not, and that is the same
 judgement the last wake made on 26.0% — recorded as a repeat rather than
-re-derived as new.
+re-derived as new, and a P0 now sits above any sweep anyway.
 
 Trend across twenty readings: 27.5% → 32.0% → 34.2% → 38.0% → 39.4% → 37.5% →
 36.9% → 36.2% → 35.5% → 37.3% → 36.9% → 38.3% → 37.6% → 9.4% → 10.3% → 10.9% →
-11.8% → 26.0% → **27.4%**.
+11.8% → 26.0% → **26.9%**.
 
 **What a sweep would take, so the next wake need not re-derive it:** of the
 seven eligible targets, **292 is pinned by `310.1`/`310.2` and 283 by `273.2`**
