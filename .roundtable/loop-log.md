@@ -1469,3 +1469,7 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-06 00:53 · Continue · build · 283.3 — the advisory stamp check's sufficiency has an empty denominator (0 Polish rounds since 283.2); closed by healing orphan-midround stamps from --apply at Polish step 0, red-proved by injection with a control · landed · e68ede5f
 - 2026-09-06 00:53 · Meta · refusal · recording 'the advisory check is sufficient' as 283.3's refusal branch — it would be a claim about 0 of 0 rounds · refused · e68ede5f
 - 2026-09-06 00:53 · Meta · refusal · healing from record_iteration.py (post-commit): it would edit a tracked file after the wake's slice commit, a new way to hand off a dirty tree · refused · e68ede5f
+- 2026-09-06 01:46 · Continue · build · 284.2 — CLAUDE.md accumulation verdict: HONEST; removable surface measured at 181 words (3.1%) by two red-proved instruments · landed · 167a1092
+- 2026-09-06 01:46 · Meta · refusal · cutting the 181-word triple-telling of the 39.2 example — it is 3.1% of the file, illustrates three distinct rules, and a pointer is read less than a paragraph · refused · 167a1092
+- 2026-09-06 01:46 · Meta · refusal · verdicting INSTRUMENT on the ratchet's blindness to 284.1's fold — 1 of 33 up-steps is not enough; the file has genuinely never been cut by words · refused · 167a1092
+- 2026-09-06 01:46 · Meta · refusal · shipping a third scripts/loops report for the 8-gram sweep — the command is recorded in the entry instead; 94.11's ceremony test · refused · 167a1092
