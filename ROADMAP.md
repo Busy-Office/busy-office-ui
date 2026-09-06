@@ -315,6 +315,121 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 298 — Objective grill of Slices 292, 293, 295: 44 of 47 assertions reproduce, and the two real defects are a durable file that reads as universal and a claim I made about my own work (2026-09-06)
+
+Dispatched by rule 3, OVERDUE at `3 / 3` `[292, 293, 295]`. Scope per §6 step 0:
+the heading grep over `ROADMAP.md` + `ROADMAP-archive.md` returns **0** prior
+grills naming any of the three, so nothing was dropped and nothing re-grilled.
+
+**Slice 295 is this session's own work, and it was grilled first** — a
+self-grill is the one most likely to go soft, so it went before the others
+rather than after.
+
+### 295 — every NUMBER reproduces; the PROSE beside them was false
+
+| claim | re-run | verdict |
+|---|---|---|
+| `og:image` on every built docs page | `grep -rl` over `dist` | **127 of 127** ✓ (138 raw `index.html` less the 11 redirect stubs + `suite/` the gate excludes by design) |
+| gate assertion count 1,150 | `check-metadata.mjs` | ✓ exact |
+| asset 97,379 bytes | `stat` | ✓ exact |
+| *"nothing in the card's own CSS invents a colour, radius or border"* | comment-stripped hex scan | **FALSE** |
+
+`.dot` carried a raw `#fff`. The script's own header claimed more still —
+*"every colour, radius, **font-size** and border comes from a `--bo-*`
+token"* — and seven display font sizes are literals.
+
+**This is CLAUDE.md's rule landing on the wake that quoted it.** 192.1 says the
+defect lands in what shipped BESIDE the number, not in the number: 295 spent
+its red-proofs on the gate arms, and the unverified sentence next to them is
+the one that was wrong.
+
+Fixed rather than filed, both halves being small:
+
+- `#fff` → `--bo-color-text-inverse`, the token `.bo-btn` already uses for a
+  label on an accent fill. The regenerated card is **byte-identical at 97,379
+  bytes**, which is the proof the change is a correctness fix and not a visual
+  one.
+- The header now says what is true: **tokens for colour, radius, shadow and
+  border; literals for the display sizes and the 1200×630 crop**, with the
+  reason — 1200×630 is the platform's, and the framework's type scale stops
+  far below a 2.9rem wordmark because nothing in an ERP screen is set that
+  large. A card is a poster, not a component; inventing token tiers to serve
+  one poster is the ceremony 94.11 refuses.
+- 295's own sentence is struck in place with the correction, per 236.2.
+
+**And the verification tripped on its own explanation**, which is worth one
+line because this repo names the trap: after the fix, `grep -c '#fff'` still
+reads **1** — the hit is the new comment *explaining* that `#fff` was removed.
+Comment-stripped, the code reads **zero**. Assert on the parsed form, never the
+raw text (Slice 49/50/53.1's rule).
+
+### 292 — 13 of 14, the fourteenth moved as expected
+
+Every load-bearing figure re-runs exactly: the `bo-icon--building` line, the 5
+renders outside the showcase, `_shell.mjs`'s two modules, the 4-glyph
+deprecated set, balanced openers in both `.astro` sources, and the built-page
+DOM readings (13/13 `section.demo` ↔ `h2`, all at 18px, 0 orphan `h2` across 91
+pages). The open-set figure of 12 now reads **20** — Slices 294, 296 and 297
+added items since. Moved, expected, not a defect.
+
+### 293 — 18 of 20, and the miss is in the file Step 0 reads every wake
+
+Four sweep lanes reproduce byte-exact (1,433 declarations; `8 · 74 · 242 · 230`;
+118 pages / median 792 / 111,622 words; the union of 15 flagged pages and the
+14-plus-`/concepts/scale/` attribution), as do all six dispatch-region rows and
+both ratchet readings.
+
+**`ENVIRONMENT.md` §1c is wrong outside the container, and reads as
+universal.** It states that `scan:dead-style` "died on" a missing
+`CHROME_PATH`. Re-run here:
+
+```
+env -u CHROME_PATH npm run scan:dead-style -w docs   # exit 0, 1,433 declarations
+```
+
+`resolve-chrome.mjs` tries `$CHROME_PATH` first and then a candidate list
+ending in `/Applications/Google Chrome.app/…`, so **on a Mac with Chrome
+installed no gate needs the variable at all.** 293.1's measurement was taken
+in the Linux container and is correct there; the section never says so.
+
+**Why this is more than pedantry, and why it was fixed in place rather than
+filed:** a local wake reading §1c, finding every gate green without the
+export, could reasonably conclude the section is stale and stop exporting it —
+and then lose a cloud wake to the trap §1c correctly describes. That is the
+same shape as the `--short` trap two sections above it, which this file already
+records as having cost a wake. §1c now names its environment in the heading and
+in the evidence.
+
+**293.1's conclusion is unchanged** — `check-boost.mjs` was genuinely deleted
+by `f1be2485`, `docs:build` genuinely does not need the variable, and the
+12 npm entry points and 0 transitive consumers all re-run exactly. It is the
+wording that was wrong, not the finding.
+
+**One figure moved and the mechanism worked**: 293.1's grep printed 14 files,
+now **15** — Slice 295's `gen-og-card.mjs` imports the harness and is not an
+npm script. §1c's own rule is that the count is the reconciliation, and it
+reconciled.
+
+### Refused
+
+- **A gate over "a durable file names the environment its measurement was
+  taken in".** The predicate is semantic — no regex separates a universal
+  claim from a container-scoped one — and the base rate is 1 of the sections
+  in that file. 94.11's wall, and the shape this loop has refused six times.
+- **Re-filing 295's font-size literals as a defect.** They were never a defect;
+  only the sentence claiming otherwise was.
+
+1. [ ] **298.1 — `gen-og-card.mjs`'s display sizes are literals with a stated
+       reason, and nothing checks that the reason stays true.** Not filed as a
+       defect — a poster legitimately sits outside the component type scale.
+       Filed because the *next* fixed-size artifact will face the same question
+       and there is now exactly one precedent to point at.
+       - **Accept:** either a second such artifact appears and the two agree a
+         convention, or this closes as "one instance is not a pattern" with the
+         count that decided it. **Closing it as not-a-pattern is a satisfying
+         outcome**; the item exists so the question is asked once, not so a
+         convention is manufactured.
+
 ## Slice 297 — Owner call: feedback intake stays on GitHub, and Discussions are enabled because issues were the only door (2026-09-06)
 
 **Input**: the owner asked whether feedback should come through GitHub or
@@ -507,7 +622,13 @@ arm that was written to be replaced by this wake.
 `scripts/gen-og-card.mjs` renders a fixed 1200×630 composition at
 `packages/core/dist/css/index.css` — the framework's own shipped stylesheet —
 so the card is made of `.bo-data-table`, `.bo-badge` and the `--bo-*` tokens it
-advertises. Nothing in the card's own CSS invents a colour, radius or border.
+advertises. ~~Nothing in the card's own CSS invents a colour, radius or
+border.~~ **CORRECTED by the grill in Slice 298 — that sentence was false when
+written**: `.dot` carried a raw `#fff`. It is now
+`--bo-color-text-inverse` (the token `.bo-btn` uses for a label on an accent
+fill) and the regenerated card is **byte-identical at 97,379 bytes**, so the
+claim is true as of that fix rather than as of this slice. The display font
+sizes remain literals and always were; see 298.1.
 A card mocked up in bespoke CSS would be a picture of a design idea; this is a
 picture of the artifact. It is deliberately **not** wired into `build`: the
 output is committed to `public/` beside `favicon.svg` and `robots.txt`,

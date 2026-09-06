@@ -81,7 +81,7 @@ git push -u origin main
 **Anchor every command with an absolute `cd`, or none at all.** A `cd apps/docs`
 to run one gate leaves the NEXT command there.
 
-## 1c. `CHROME_PATH` DOES NOT PERSIST EITHER
+## 1c. `CHROME_PATH` DOES NOT PERSIST EITHER — **in the Linux container**
 
 ```
 export CHROME_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome && npm run <gate>
@@ -89,13 +89,31 @@ export CHROME_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome && npm run
 
 Export it in the SAME command as the gate, every time.
 
+**⚠ THIS WHOLE SECTION IS ABOUT THE CLOUD CONTAINER, AND USED TO READ AS
+UNIVERSAL** (Objective grill, Slice 298). `resolve-chrome.mjs` tries
+`process.env.CHROME_PATH` first and then a candidate list that ends with
+`/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`. So **on a Mac
+with Chrome installed, no gate needs this variable at all** — measured, not
+inferred: `env -u CHROME_PATH npm run scan:dead-style -w docs` exits **0** and
+reports its usual 1,433 declarations.
+
+That matters because the failure below is the section's own evidence. A local
+wake reading it, finding every gate green without the export, could reasonably
+conclude the section is stale and stop exporting it — and then lose a cloud
+wake to the trap it correctly describes. **The variable is required where the
+resolver's candidates are absent (the container), and is inert where a
+candidate resolves (this Mac).** Name the environment before quoting the
+measurement.
+
 **WHICH gates need it is DERIVED, never listed here** (roadmap 293.1,
 2026-09-06). This section named three — `docs:build` "(`check-boost.mjs`)",
 `check:layout`, `test:axe` — and **both halves of the first were wrong**:
 `check-boost.mjs` was deleted on 2026-08-30 by `f1be2485`, and `docs:build`
 passes with the variable **unset** (measured, exit 0). Meanwhile
 `scan:dead-style`, unnamed here, died on it at the top of that wake's
-Standardize sweep — the sweep's own lane 1, blocked by this file.
+Standardize sweep — the sweep's own lane 1, blocked by this file. **Both of
+those measurements were taken IN THE CONTAINER**; on a Mac neither reproduces,
+for the reason the warning above gives.
 
 Every consumer imports the resolver directly, so one grep is exact — measured,
 **0** files reach it only transitively:

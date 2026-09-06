@@ -37,9 +37,24 @@ const FRAMEWORK_CSS = join(REPO_ROOT, 'packages/core/dist/css/index.css');
 
 const css = await readFile(FRAMEWORK_CSS, 'utf8');
 
-/* The card's own layout only. Every colour, radius, font-size and border below
-   comes from a `--bo-*` token defined by the stylesheet above — nothing here
-   invents a value, which is what keeps the card honest when a token moves. */
+/* The card's own LAYOUT only. Stated precisely, because the first version of
+   this comment claimed more than the file delivers and the Objective grill of
+   Slice 295 caught it:
+
+     - Every COLOUR, radius, shadow and border comes from a `--bo-*` token.
+       That is the part that matters — it is what moves the card when a token
+       moves, and `#fff` on `.dot` was the one exception until the grill; it
+       is now `--bo-color-text-inverse`, the same token `.bo-btn` uses for a
+       label on an accent fill.
+     - The DISPLAY FONT SIZES and the two card dimensions are literals and are
+       NOT tokens. 1200×630 is the platform's crop, not a design choice, and
+       the framework's type scale tops out far below a 2.9rem wordmark because
+       nothing in an ERP screen is set that large. A card is a poster, not a
+       component. Inventing token tiers to serve one poster would be the
+       ceremony CLAUDE.md's base-rate rule names.
+
+   So: tokens where the framework has an opinion, literals where it does not,
+   and the comment no longer claims the second set are the first. */
 const page = `<!doctype html>
 <html lang="en" data-density="compact">
 <head><meta charset="utf-8"><style>
@@ -63,7 +78,7 @@ body {
 .dot {
   inline-size: 2.6rem; block-size: 2.6rem; border-radius: var(--bo-radius-md);
   background: var(--bo-color-accent); display: grid; place-items: center;
-  color: #fff; font-size: 1.6rem; font-weight: 700; line-height: 1;
+  color: var(--bo-color-text-inverse); font-size: 1.6rem; font-weight: 700; line-height: 1;
 }
 h1 { font-size: 2.9rem; margin: 0; letter-spacing: -0.025em; font-weight: 700; }
 p.lede {
