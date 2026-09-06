@@ -388,6 +388,35 @@ read it** — 290 saw two of those and called the worry retired; two more have
 landed the same way. The cumulative `+300.8%` against the file's `+247.1%` is a
 *window* figure carrying the old history, not a current trend.
 
+### Round 2 — the re-scan, generalized from the finding, and it comes back clean
+
+§3 step 4 asks whether fixing this revealed another instance of the same drift.
+The shape is **a durable instruction file naming a file that no longer exists**,
+so it was asked mechanically of all four files a wake reads as current
+(`CLAUDE.md`, `LOOPS.md`, `ENVIRONMENT.md`, `DESIGN.md`): every
+`` `name.{mjs,js,py,ts,json,css,yml}` `` in backticks, against `git ls-files`.
+
+**11 hits, 1 true positive — the one already fixed.** The other ten are the
+reason this was triaged rather than filed:
+
+- **`api.json`, `contrast.json`, `behaviors.json`, `tokens.css`, `reset.css`,
+  `primitives.css`** — generated build outputs, git-ignored by design, so
+  absence from `git ls-files` says nothing. All four CSS files verified present
+  in `packages/core/dist/css/` (the detector looked in `dist/` and would have
+  reported them missing on a path error too).
+- **`serve-DIST.mjs`** in `CLAUDE.md` — the bulk-edit section's own worked
+  example of the APFS case-rename bug. Correct as written.
+- **`.d.ts`** — a suffix, not a filename. An instrument artefact.
+- **`check-boost.mjs` x2** in `ENVIRONMENT.md` — **293.1's own explanation**,
+  which names the script it removed. CLAUDE.md's standing rule ("the comment
+  written by that same edit legitimately names the thing removed") landing on
+  the detector written in the same commit.
+
+So the generalized detector's base rate here is **1 of 11**, and it is kept as
+a paragraph rather than promoted to a gate: nine of the ten false hits need a
+judgement about whether a name is generated, illustrative or historical, which
+is the semantic half 94.11 already refused to gate.
+
 1. [x] **293.1 — DONE 2026-09-06. `ENVIRONMENT.md` §1c named `check-boost.mjs`,
        deleted seven days earlier, and did not name the gate that actually
        stopped this sweep. The three-name snapshot is replaced by the
