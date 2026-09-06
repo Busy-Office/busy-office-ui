@@ -315,6 +315,54 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 306 — Rule 5's staleness line cannot reach `ok` from a cloud wake while the other dispatcher is a calendar day ahead (2026-09-06, triaged from inside a Continue round)
+
+Found the way `LOOPS.md` says this family is always found: by reading
+`dispatch_status.py` immediately after recording, and seeing a number disagree
+with what had just been done by hand. Two metrics were recorded to answer the
+long-standing complaint that rule 5 has no input. The line moved **4 wake-dates
+→ 1**, not to `ok`, and the residual is not a missing measurement:
+
+```
+tail -3 .roundtable/loop-metrics.jsonl   # newest: 2026-09-06 16:56
+tail -6 .roundtable/loop-log.md          # newest rows: 2026-09-07 00:21, 00:35
+date -u                                  # Sun Sep  6 16:56:47 UTC 2026
+```
+
+Both stamps describe the **same wall-clock moment**. `record_iteration.py`
+writes a naive local timestamp (the decision in `LOOPS.md` 164.2, kept
+deliberately), the local dispatcher runs at `+0800`, and this container runs at
+UTC — so rows written alongside a cloud wake's own carry *tomorrow's* date.
+Rule 5's staleness unit is **distinct log dates after the newest metric's
+date**, so a metric a cloud wake records is one date behind the moment it is
+written, whenever the other dispatcher has run in its evening.
+
+**What this is not.** It is not the rule-5 staleness the last several hand-offs
+reported — that was real, and recording a metric fixed most of it here. It is a
+floor underneath it: the residual `1` is an artefact of the clock, and a wake
+that reads it as "still no input" will record another metric that cannot help
+either. `LOOPS.md` 164.2 already refused appending `%z` to log rows
+(`dispatch_status.py`'s `ROW` rejects it) and refused backfilling the existing
+rows, so the fix is not there.
+
+1. [ ] **306.1 — rule 5's staleness comparison must not be able to report
+       "stale" for a reason that is only a timezone.** The two stamps it
+       compares come from different clocks, and nothing in the line says so, so
+       the number under-reports the loop's freshness by up to a day in one
+       direction and could over-report it in the other.
+       - **Accept:** `dispatch_status.py`'s rule-5 line agrees with what the
+         underlying files say about *measurement freshness* rather than about
+         calendar dates from two clocks — either by comparing on a basis that
+         both sides share, or by naming the clock skew in the line so a wake
+         cannot read the residual as missing input. Red-proved by constructing
+         a log row and a metric written at the same instant under the two
+         offsets and showing the line distinguishes that case from a genuinely
+         stale one. **Finding that the honest answer is to state the skew
+         rather than remove it is a satisfying outcome**, provided the line
+         says so and the wake reading it is not misled.
+       - **Lane:** cloud-takeable — it is a Python script, a jsonl file and a
+         markdown log; no browser and no rendered image.
+
 ## Slice 305 — 296.1: the Gauntlet ran its full three-round budget and the artifact FAILED — the loop worked, the framework was never the gap (2026-09-07)
 
 **Dispatched by rule 4's in-flight override**, not by oldest-open. `296.1` was
