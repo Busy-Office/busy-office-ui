@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-06 21:54 UTC
+Generated at: 2026-09-06 22:53 UTC
 
 ## Open items by slice
 
@@ -43,15 +43,17 @@ Generated at: 2026-09-06 21:54 UTC
 - **Slice 310** (2 open)
   - 310.1 — `examples/erp-suite` and `examples/po-app` render deprecated glyphs, and whether that is a defect is undecided.
   - 310.2 — `/base/motion` declares five copyable markup samples the template never renders.
+- **Slice 314** (1 open)
+  - 314.2 — the same scope gap exists for SPACING and `font-weight` literals, and it is a different property with no verdict — filed, not built.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1556 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-09-06 17:49   OVERDUE
-  Objective     3 / 3 slices          since 2026-09-06 18:56   OVERDUE  [292, 294, 312]
+dispatch status — counter-triggered rules (1558 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-09-06 22:53   ok
+  Objective     4 / 3 slices          since 2026-09-06 18:56   OVERDUE  [292, 294, 312, 314]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      1 wake-date(s) newer   since 2026-09-06 16:56   STALE   [newest pair: axe-violations; 132 sample(s), 13 of 44 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-06, not this one — record a metric or say the rule could not be evaluated.
@@ -74,8 +76,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-06 18:56 · Meta · refusal · publishing a replacement select-all figure — today's fixed-tree readings include a style flush the published table scores as its own column, so quoting them would repeat the exact error being corrected · refused · 26d464fe
-- 2026-09-06 20:03 · Continue · build · 292.9 — tree-wide check:deprecated-icons (source + dist phases); 6 sites resolved, Slice 310 filed · landed · 8f23f658
 - 2026-09-06 20:48 · Continue · build · 294.1 — light-dark()/oklch()/scroll-state() probes in derive-floor.mjs; floor unchanged, and the third probe opened the first version_added:false hole (Slice 311) · landed · e0da2fc4
 - 2026-09-06 20:48 · Meta · refusal · failing derive-floor on a polish-tier feature a browser will never support — it would forbid any progressive enhancement one engine lacks · refused · e0da2fc4
 - 2026-09-06 20:48 · Meta · refusal · @supports parsing in derive-floor — tier is where a guard is recorded; a second instrument would disagree with the tier field · refused · e0da2fc4
@@ -84,6 +84,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-06 21:54 · Continue · bug · 312.1/312.2 — check:ci-ignores could only see a read that NAMES the path; widened to enumeration + path-root routes, verdict matched against an fs-spy trace and a per-gate injection probe (7/7 pairs), and paths-ignore removed · landed · 024445f5
 - 2026-09-06 21:54 · Meta · refusal · a second cheap workflow running the three repo-wide prose gates on the ignored paths — it needs a hand-kept list of which gates are repo-wide · refused · 024445f5
 - 2026-09-06 21:54 · Meta · refusal · making the three gates stop reading .roundtable/** and STATUS.md — that reverses 256.2, the standing product-name instruction, and check:slice-refs' reason for existing · refused · 024445f5
+- 2026-09-06 22:53 · Standardize · sweep · Slice 314 — Standardize sweep 4 of 4 lanes clean; step 4's re-scan found 292.8's scope excluded the 24 shared components/layouts, and 314.1 tokenises the two font-size literals there · landed · f5c6ecd1
+- 2026-09-06 22:53 · Meta · refusal · 314.2 — widening the sweep to spacing/font-weight inline literals: a different property with no verdict; base rates measured (8.6% pages / 21.9% shared), filed not built, and no gate added · refused · f5c6ecd1
 
 ## Sunset test
 
