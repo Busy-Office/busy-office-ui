@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-06 15:20 UTC
+Generated at: 2026-09-06 15:53 UTC
 
 ## Open items by slice
 
@@ -19,8 +19,7 @@ Generated at: 2026-09-06 15:20 UTC
   - 249.13 — Reconsider demo-first/spec-last (the proposal's B1), explicitly, not as a ratification.
 - **Slice 273** (1 open)
   - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
-- **Slice 292** (3 open)
-  - 292.7 — four `content` cites score a page property while citing the CSS.
+- **Slice 292** (2 open)
   - 292.8 — nothing polices style in a docs PAGE, and 292.3 is what makes that visible.
   - 292.9 — 292.4's property is tree-wide and the guard it landed is page-local: four other docs pages hand a reader a deprecated glyph.
 - **Slice 294** (2 open)
@@ -42,9 +41,10 @@ Generated at: 2026-09-06 15:20 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1526 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-09-06 23:20   ok
-  Objective     2 / 3 slices          since 2026-09-06 15:05   ok  [300, 301]
+dispatch status — counter-triggered rules (1531 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-09-06 23:20   ok
+  Objective     3 / 3 slices          since 2026-09-06 15:05   OVERDUE  [292, 300, 301]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      3 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 3 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-03, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-03 (2026-09-04, 2026-09-05, 2026-09-06), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -66,16 +66,16 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-06 22:54 · Objective · grill · Slice 298 — grill of 292, 293, 295: 44 of 47 assertions reproduce. Two real defects, both fixed in place: 295's claim that the OG card 'invents no colour' was false (raw #fff -> --bo-color-text-inverse, card byte-identical at 97,379), and ENVIRONMENT.md §1c's CHROME_PATH evidence is container-only but read as universal (env -u CHROME_PATH scan:dead-style exits 0 on macOS via resolve-chrome's fallback) · logged · bf55dca5
-- 2026-09-06 22:54 · Meta · refusal · a gate over 'a durable file names the environment its measurement was taken in' — semantic predicate, base rate 1 section, 94.11's wall for the sixth time · refused · bf55dca5
-- 2026-09-06 22:54 · Meta · refusal · re-filing 295's display font-size literals as a defect — a poster sits outside the component type scale legitimately; only the sentence claiming otherwise was wrong · refused · bf55dca5
-- 2026-09-06 15:05 · Objective · grill · Slice 299 — the same Objective grill of 292/293/295 run twice by two dispatchers; this pass LOST the Step 0c collision to Slice 298 and re-dispatched, landing the two findings the winner did not make: Slice 295's metadata baseline 'up from 387' is 1,022 (each gate revision run against one dist), so the change adds 128 assertions not 763; and ENVIRONMENT.md 1c's consumer count, diagnosed as 14->15 by Slice 298, was still reading 14 · landed · 0e52b565
-- 2026-09-06 15:05 · Meta · refusal · a gate over the CHROME_PATH consumer count — it is already self-announcing when re-run, and classifying a new consumer needs the semantic judgement 94.11 refuses to gate · refused · 0e52b565
 - 2026-09-06 23:09 · Continue · fix · 300.1/P0 — check-markup crashed with a raw ENOENT on any path ending .html that does not exist, including the quoted glob its own docstring showed (GitHub issue #1, the first ever filed). The report named globs; a plain typo crashed identically, so the fix verifies the file (stat().isFile()) rather than special-casing globs. Also: glob-aware failure message, --help handled at exit 0, docstring corrected. All four paths verified by exit code · landed · 1c889eee
 - 2026-09-06 23:09 · Meta · refusal · fs.promises.glob for internal expansion — it puts a Node 22 floor on a package that declares no engines, against a zero-dependency surface that looks deliberate · refused · 1c889eee
 - 2026-09-06 23:09 · Roadmap · plan · 300.2 — triaged issue #2 (no board/kanban component): premise verified (40 components, only bo-icon--keyboard in the vocabulary), argument accepted as strong, but NOT dispatched as a build — a new component is the largest surface addition here, so it goes to an Explore spike that answers whether the keyboard contract and announcement can be decided once. Also answered 297.1: both issues arrived in the right intake, but both were filed by the owner's agent, so the router was not actually tested · triaged · 1c889eee
 - 2026-09-06 23:20 · Standardize · sweep · Slice 301 — Standardize sweep 4 of 4 lanes: lanes 1-3 clean (0 dead of 1,433 run WITHOUT CHROME_PATH to exercise 298's §1c fix; css-repeats 74/242/230/8 no delta; prose 118/792/111,622 unchanged), lane 4 carried the eleventh archive sweep. 12 slices moved verbatim, ROADMAP.md 6,839 -> 4,676 lines, closed history 37.1% -> 7.2%, Slice 283 held back on 273.2's flag. Verified by an independently-written parser off git show, red-proved both directions by exit code · landed · ed0c0650
 - 2026-09-06 23:20 · Meta · refusal · answering 249.12's archival trigger from inside the sweep — a threshold is a policy about how much history a wake should walk, not a measurement a sweep can take; this is the eleventh sweep run on judgement and the case for settling it is now stronger · refused · ed0c0650
+- 2026-09-06 15:52 · Roadmap · triage · Slice 302 — Step 1's Discussions intake was unrunnable in a cloud wake (no gh, GraphQL refused); restated as a property, REST substitute recorded in ENVIRONMENT.md §8 with 404/known-content controls. Both intakes read: issues 1 open (#2, already triaged), discussions 0 open · triaged · ea70ab50
+- 2026-09-06 15:52 · Meta · refusal · a gate asserting a wake read both intakes — the evidence is an API call, not a file, so no artefact carries the property · refused · ea70ab50
+- 2026-09-06 15:53 · Continue · build · 292.7 — the four off-scope `content` cites (amount, breadcrumb, tabs, dialog) now quote the opener's wrong-choice clause; classifier reconstructed and re-run, neither 4->0, page 33->37, red-proved by injection. Premise's second half (form/prose as non-page) refuted as a lexicon artifact; button, the third EXEMPT component, was omitted by it entirely · landed · ea70ab50
+- 2026-09-06 15:53 · Meta · refusal · rewriting money/quantity/richtext — all three already name the opener, recorded adequate per the Accept · refused · ea70ab50
+- 2026-09-06 15:53 · Meta · refusal · a gate asserting each cite respects its dimension's scope — 292.3 refused it and this run is fresh evidence for the refusal (CLAUDE.md 94.11) · refused · ea70ab50
 
 ## Sunset test
 
