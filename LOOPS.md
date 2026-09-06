@@ -14,7 +14,7 @@ demand: `/loop <type> …`.
 
 ---
 
-## The eight loops
+## The nine loops
 
 | Loop | Job (one line) | Cadence | Primary skills / agents |
 |------|----------------|---------|-------------------------|
@@ -26,6 +26,7 @@ demand: `/loop <type> …`.
 | **Optimize** | Smaller, faster, lower-specificity | on demand / size-budget breach | build metrics, `Explore` |
 | **Explore** | Find & spike a *new* idea (try/error) | on demand (seed list exhausted 2026-08-14) | `frontend-design`, `Plan`, worktree isolation |
 | **Objective** | Grill the product *vision* | dispatched at milestones / on demand | `round-table` (rt-*), project panel |
+| **Gauntlet** | Build ONE artifact to an absolute bar, graded by a BLIND critic — ≤3 rounds, then stop and report the gap | dispatched by rule 4 when the oldest open item is a gauntlet item; **no counter of its own** | builder + a fresh-context critic subagent, `.roundtable/gauntlet/` |
 
 ---
 
@@ -1131,6 +1132,61 @@ never dirties main.
    `Hypothesis`; every claim carries counter-evidence.
 3. Feed findings back into the Roadmap loop's triage as re-prioritization, not as vibes.
 **Exit:** a scored report lands in `.roundtable/`.
+
+---
+
+### 7. Gauntlet (build to an absolute bar, graded blind)
+
+**Trigger:** dispatched by **rule 4**, like any other build item, when the
+oldest open item names a gauntlet artifact and its class. **It has no counter
+and no rule of its own, deliberately** — this file records five separate
+occasions where a counter sat under an always-true condition and starved
+silently, and Objective alone lost ten slices to it. A ninth rule would be a
+sixth instance of that bug. The gauntlet is a *playbook*, not a new place in
+the dispatch order.
+
+**Origin:** arrived with the owner-supplied upstream contribution (Slice 294)
+and is adapted here rather than adopted as shipped — its bar referenced
+`ui_kits/` and `explorations/` paths that do not exist in this repo. The bar
+that governs is `.roundtable/gauntlet/BAR.md` in THIS tree.
+
+**What makes it different from the loops it sits beside**, stated because the
+overlap is real and a loop that duplicates one of these should be refused:
+
+- **Polish** raises ONE scored dimension on an existing surface and stops when
+  a blind re-score does not move. The gauntlet builds an artifact to an
+  **absolute** bar and may FAIL outright.
+- **Objective** grills a shipped slice's *claims*. The gauntlet grades an
+  *artifact* against a reference, before it is a claim.
+- **Continue** is done when its Accept criteria are met. The gauntlet's Accept
+  is a critic's verdict, and the critic is not the builder.
+
+**One round = build → blind critic → verdict.**
+
+0. **Name the artifact, its class and its reference** in the roadmap item, from
+   `.roundtable/gauntlet/BAR.md`. A gauntlet item with no reference cannot be
+   graded and is not dispatchable.
+1. **Build.** Ordinary work: framework classes only, semantic tokens only, the
+   repo's gates green.
+2. **Grade with a critic that has NOT seen the build.** Spawn a fresh-context
+   subagent with `.roundtable/gauntlet/CRITIC.md`, the artifact path, the class
+   and the reference. **The builder may not grade its own artifact** — that is
+   the load-bearing step, for the same reason §3b step 4 spells out: an agent
+   marking its own homework cannot produce a failing verdict, and this file's
+   own doctrine already says an instrument's first output is not evidence.
+3. **Record the round** in `.roundtable/gauntlet/ROUNDS.md` — artifact, class,
+   critic, verdict, fixes taken. One row per round, appended, never rewritten.
+4. **Verdict.**
+   - **PASS** → commit, record the iteration, close the item.
+   - **FAIL** → take the fixes and run another round.
+5. **Budget: three rounds.** If it has not passed by round three, **stop and
+   report the gap rather than lowering the bar** — file what is missing as its
+   own item and close the gauntlet item as `refused` with the reason. Moving
+   the bar to make an artifact pass is the one thing this loop may not do.
+
+**Record rows as `--loop Gauntlet --mode round`.** The outcome vocabulary is
+unchanged and is owned by `record_iteration.py`; a gauntlet round that lands is
+`landed`, one that exhausts its budget is `refused`.
 
 ---
 

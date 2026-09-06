@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-06 13:41 UTC
+Generated at: 2026-09-06 13:47 UTC
 
 ## Open items by slice
 
@@ -27,13 +27,17 @@ Generated at: 2026-09-06 13:41 UTC
 - **Slice 294** (2 open)
   - 294.1 — `derive-floor.mjs` has no probe for `light-dark()`, `oklch()` or `scroll-state()`.
   - 294.2 — rank the six proposals against the Objective; adopt none on arrival.
+- **Slice 296** (3 open)
+  - 296.1 — Run the first gauntlet round, Class A, on the reference this repo actually has.
+  - 296.2 — An interaction-latency instrument, or a recorded refusal.
+  - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1508 iterations logged)
+dispatch status — counter-triggered rules (1512 iterations logged)
   Standardize   2 / 4 Continue rounds since 2026-09-06 12:51   ok
   Objective     3 / 3 slices          since 2026-09-06 07:53   OVERDUE  [292, 293, 295]
   -> a counter is at or past its threshold; the dispatcher should pick it
@@ -46,6 +50,7 @@ dispatch status — counter-triggered rules (1508 iterations logged)
 
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
+- 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - 294.2 — rank the six proposals against the Objective; adopt none on arrival.
 - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
 - 249.10 — SAP/Fiori terminology column for 249.7.
@@ -57,16 +62,16 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-06 11:52 · Meta · refusal · a tree-wide gate for 'the copyable block teaches a class the page shows' — measured 0 of 9 pages, uniformly true, ceremony per 94.11 · refused · 689297c8
-- 2026-09-06 11:52 · Meta · refusal · converting the page's six hand-written demo sections to <Demo code={…}/> — it would blind 292.4's literal-class guard, which matches literals on purpose · refused · 689297c8
-- 2026-09-06 12:51 · Standardize · sweep · Slice 293 — Standardize sweep 4 of 4 lanes: lanes 1-3 identical to 290 (cited, not re-derived), lane 4's dispatch region flat at 6,112 for a fourth commit; the finding came from lane 1 FAILING — ENVIRONMENT.md §1c named check-boost.mjs, deleted 7 days earlier by f1be2485, while docs:build needs no CHROME_PATH at all and unnamed scan:dead-style does · landed · f3743b3e
-- 2026-09-06 12:51 · Meta · refusal · promoting the round-2 nonexistent-file scan to a gate — base rate 1 true positive of 11, and 9 of the 10 false hits need a judgement about generated vs illustrative vs historical, the semantic half 94.11 refused to gate · refused · f3743b3e
 - 2026-09-06 21:22 · Roadmap · plan · Slice 294 — triaged the owner-supplied upstream-contribution zip (6 proposals): guide verifies clean (44 sheets, 26 behaviours, 11/11 edit targets exist, stylelint exit 0); the light-dark() floor risk is real but @supports-guarded so reach stays 80.09%; filed 294.1 (missing floor probes) and 294.2 (Objective ranking, brand mark = owner call) · triaged · e8c7b0f2
 - 2026-09-06 21:22 · Meta · refusal · two of this triage's own findings — 'raw hex outside @media print' (base rate: repo carries 139) and 'an !important' (the hit is inside a comment saying the layer needs none) · refused · e8c7b0f2
 - 2026-09-06 21:31 · Continue · build · Slice 295 / 249.15 — the social card, generated from packages/core/dist/css/index.css rather than drawn; og:image on 127/127 pages, twitter:card -> summary_large_image, two new check-metadata arms both red-proved with the injection grep-confirmed first (gate 387 -> 1150 assertions); verified against a real DOCS_BASE build · landed · c6643153
 - 2026-09-06 21:31 · Meta · refusal · keeping arm 5's 'og:image absent OR twitter:card summary' disjunction — once the image ships its left side is permanently true, so it would pass on a tree that had left the card at summary · refused · c6643153
 - 2026-09-06 21:31 · Meta · refusal · wiring gen-og-card.mjs into docs:build — it would put Chrome on the critical path of every build to emit a static asset that belongs in public/ · refused · c6643153
 - 2026-09-06 21:41 · Continue · release · v0.8.0 released — @busy-office/ui 0.8.0 and @busy-office/create-ui 0.1.3 live on npm with SLSA provenance, verified via npm view rather than from the green CI run; 220 commits since 0.7.0 (2026-08-30). introduced.json refreshed against the registry per its own note · released · 2a4bb245
+- 2026-09-06 21:47 · Roadmap · plan · Slice 296 — owner direction: installed a Gauntlet loop (LOOPS.md §7, builder -> blind critic, 3-round budget) with NO counter of its own to avoid the starvation bug this file records five times; adapted BAR.md/CRITIC.md to references that exist in this tree; explored 21st.dev and read it as a reference not a template (React/Tailwind/shadcn is the refused stack; the AI-prompt distribution shape is already half-built as 294's registry.json) · triaged · 691102d3
+- 2026-09-06 21:47 · Meta · refusal · publishing to the shadcn registry format as a distribution channel — it advertises this framework to consumers expecting React components · refused · 691102d3
+- 2026-09-06 21:47 · Meta · refusal · a ninth dispatcher rule for the Gauntlet — a counter under an always-true condition is the exact bug that starved Objective for ten slices, five times over · refused · 691102d3
+- 2026-09-06 21:47 · Meta · refusal · importing the contribution's two existing gauntlet rounds as precedent — both were self-graded by the builder, which this loop's step 2 refuses · refused · 691102d3
 
 ## Sunset test
 

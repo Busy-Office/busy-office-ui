@@ -315,6 +315,113 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 296 — Owner direction: a Gauntlet loop aimed at next-generation ERP UI, and 21st.dev read as a reference rather than a template (2026-09-06)
+
+**Input**: the owner asked for (a) a **gauntlet loop** whose goal is "the new
+generation ERP UI — performance, UX best for the user, scalable, secure,
+modern", (b) `https://21st.dev/` explored, and (c) the roadmap updated so the
+**scheduled** loop can run it.
+
+**(c) needed no scheduling change, and that is worth recording rather than
+silently relying on.** The wake prompt the owner pastes — and the cloud
+routine runs — deliberately restates no dispatch order: it says *"act as the
+Roadmap dispatcher exactly as `LOOPS.md` specifies… evaluate the dispatcher
+rules in the order that file states them"*. That was a deliberate fix
+(roadmap 102.4) after an earlier prompt drifted for weeks. So **adding the
+loop to `LOOPS.md` is what schedules it**; no cron, routine or prompt was
+touched.
+
+**The loop is installed with NO counter and NO rule of its own.** It is
+dispatched by rule 4 like any build item, when the oldest open item names a
+gauntlet artifact. This file records **five** separate occasions where a
+counter sat beneath an always-true condition and starved silently — Objective
+alone lost ten slices — and a ninth dispatcher rule would be the sixth
+instance. `LOOPS.md` §7 carries the playbook and states the overlap with
+Polish, Objective and Continue explicitly, so a later wake can see why this is
+not a duplicate of the blind re-score it resembles.
+
+**The bar was adapted, not adopted.** The contribution's `BAR.md` graded
+`ui_kits/` and `explorations/` against an `assets/` screenshot — none of which
+exist in this tree. `.roundtable/gauntlet/BAR.md` now names references that
+are actually here (`packages/core/media/list-report-compact.png`,
+`check-po-app.mjs`'s route contracts, the reverted tree) and hoists the six
+requirements every class shares out of the per-class lists.
+
+**Two of the owner's five properties are NOT gradeable today, and the bar says
+so instead of inviting a critic to judge them by feel.** This is the repo's own
+base-rate rule applied to a rubric: a criterion nothing can measure is one the
+builder argues past.
+
+| property | instrument today | verdict |
+|---|---|---|
+| Performance | `check:size` gzip budgets over all shipped artifacts | **partial** — size only; no interaction-latency or render instrument, so an artifact may not claim runtime performance |
+| UX / user-centric | Class B's five-minute blind task test | **gradeable** |
+| Scalable | `/components/data-table`'s measured wide-table and 50-column demos | **partial** — a claim beyond what those measure needs a new instrument |
+| Secure | **none** | **not gradeable, and the framework is the wrong layer** — it ships CSS and optional behaviours, holds no credentials, makes no requests, owns no data layer. The honest scope is a pattern page documenting the server contract it assumes, which is documentation |
+| Modern | Class C: a guarded platform feature with the floor unmoved | **gradeable** |
+
+**(b) 21st.dev, read against `references-are-floors`.** A community registry of
+12,000+ React components distributed three ways — an **AI-ready prompt** pasted
+into Claude Code or Cursor, the `shadcn` CLI, or copy-paste — on a
+React + Tailwind + shadcn stack, with "you own the code, there is no version of
+us to upgrade" as its stated philosophy.
+
+**The stack is the one this framework refuses**, so nothing about React,
+Tailwind or shadcn primitives transfers, and the contribution's own guide
+already says its React wrappers exist for a design tool and not for the
+product. What is genuinely interesting is narrower and is **already half-built
+here**:
+
+- **The ownership philosophy is this framework's existing position**, not a new
+  idea to import: `dist/` copies into any asset pipeline, the cascade is the
+  API, and there is no runtime to upgrade.
+- **The AI-prompt distribution shape is the transferable part**, and the
+  owner-supplied `registry.json` + `install-prompts.md` (Slice 294, item 2 of
+  its order) are exactly that, rebuilt HTML-first. That is where this belongs —
+  filed there, not duplicated here.
+
+**Refused, so it is not re-proposed:** publishing to the shadcn registry
+format as a distribution channel. `registry.json` in the contribution already
+carries `$schema: ui.shadcn.com/schema/registry.json`, and shipping into an
+ecosystem whose consumers expect React components would advertise this
+framework as something it is not. The prompt half is the half that works
+without the stack.
+
+1. [ ] **296.1 — Run the first gauntlet round, Class A, on the reference this
+       repo actually has.** Artifact: a rebuild of `/patterns/list-report` at
+       `data-density="compact"`; reference:
+       `packages/core/media/list-report-compact.png`. This is the smallest real
+       exercise of the loop and it tests the loop itself as much as the
+       artifact — a blind critic that cannot fail the builder is the failure
+       mode to watch for.
+       - **Accept** — the property, not a predicted verdict: a round is
+         recorded in `.roundtable/gauntlet/ROUNDS.md` naming a critic that ran
+         in a **fresh context** and did not see the build; the verdict is
+         whatever it is, and a FAIL that stops at round three with the gap
+         reported is a satisfying outcome. What would NOT satisfy this is a
+         PASS graded by the builder, or a bar edited mid-round to make the
+         artifact pass.
+
+2. [ ] **296.2 — An interaction-latency instrument, or a recorded refusal.**
+       The bar cannot grade "performant" beyond bundle size today. Either an
+       instrument lands that measures something real in a browser — first
+       input delay on a dense grid, time to interactive on the heaviest
+       pattern page — or this closes as a refusal stating that size is the
+       honest scope and why.
+       - **Accept:** if built, it reports a number from a real browser run and
+         is red-proved by making the measured thing worse; if refused, the
+         refusal names what was measured to decide it. Finding that the
+         existing `check:size` plus the data-table page's own measurements
+         already cover the useful range is a satisfying outcome.
+
+3. [ ] **296.3 — OWNER CALL: is "secure" in scope for this framework at all?**
+       The bar currently says no, with a reason: the framework ships CSS and
+       optional behaviours and owns no data layer, so a security claim would be
+       about the *consumer's* server. The alternative reading is that pattern
+       pages should carry a threat-model section the way they carry a data
+       contract. **Not built either way without a decision** — it changes what
+       every pattern page owes.
+
 ## Slice 295 — 249.15 built: the social card, generated from the framework's own stylesheet rather than drawn — and the gate arm it replaces had become undeleteable-by-design (2026-09-06)
 
 **Dispatcher trace, local session.** Rules 1-3 clear (`Standardize 0 / 4`,
