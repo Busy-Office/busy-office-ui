@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-06 13:47 UTC
+Generated at: 2026-09-06 13:52 UTC
 
 ## Open items by slice
 
@@ -19,8 +19,7 @@ Generated at: 2026-09-06 13:47 UTC
   - 249.13 — Reconsider demo-first/spec-last (the proposal's B1), explicitly, not as a ratification.
 - **Slice 273** (1 open)
   - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
-- **Slice 292** (4 open)
-  - 292.6 — `icon.css` forbids figures in itself and carries two.
+- **Slice 292** (3 open)
   - 292.7 — four `content` cites score a page property while citing the CSS.
   - 292.8 — nothing polices style in a docs PAGE, and 292.3 is what makes that visible.
   - 292.9 — 292.4's property is tree-wide and the guard it landed is page-local: four other docs pages hand a reader a deprecated glyph.
@@ -37,8 +36,8 @@ Generated at: 2026-09-06 13:47 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1512 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-09-06 12:51   ok
+dispatch status — counter-triggered rules (1514 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-09-06 12:51   ok
   Objective     3 / 3 slices          since 2026-09-06 07:53   OVERDUE  [292, 293, 295]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      3 wake-date(s) newer   since 2026-09-03 09:54   STALE   [newest pair: bundle-gz-kb; 128 sample(s), 13 of 42 name(s) sampled twice]
@@ -62,8 +61,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-06 21:22 · Roadmap · plan · Slice 294 — triaged the owner-supplied upstream-contribution zip (6 proposals): guide verifies clean (44 sheets, 26 behaviours, 11/11 edit targets exist, stylelint exit 0); the light-dark() floor risk is real but @supports-guarded so reach stays 80.09%; filed 294.1 (missing floor probes) and 294.2 (Objective ranking, brand mark = owner call) · triaged · e8c7b0f2
-- 2026-09-06 21:22 · Meta · refusal · two of this triage's own findings — 'raw hex outside @media print' (base rate: repo carries 139) and 'an !important' (the hit is inside a comment saying the layer needs none) · refused · e8c7b0f2
 - 2026-09-06 21:31 · Continue · build · Slice 295 / 249.15 — the social card, generated from packages/core/dist/css/index.css rather than drawn; og:image on 127/127 pages, twitter:card -> summary_large_image, two new check-metadata arms both red-proved with the injection grep-confirmed first (gate 387 -> 1150 assertions); verified against a real DOCS_BASE build · landed · c6643153
 - 2026-09-06 21:31 · Meta · refusal · keeping arm 5's 'og:image absent OR twitter:card summary' disjunction — once the image ships its left side is permanently true, so it would pass on a tree that had left the card at summary · refused · c6643153
 - 2026-09-06 21:31 · Meta · refusal · wiring gen-og-card.mjs into docs:build — it would put Chrome on the critical path of every build to emit a static asset that belongs in public/ · refused · c6643153
@@ -72,6 +69,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-06 21:47 · Meta · refusal · publishing to the shadcn registry format as a distribution channel — it advertises this framework to consumers expecting React components · refused · 691102d3
 - 2026-09-06 21:47 · Meta · refusal · a ninth dispatcher rule for the Gauntlet — a counter under an always-true condition is the exact bug that starved Objective for ten slices, five times over · refused · 691102d3
 - 2026-09-06 21:47 · Meta · refusal · importing the contribution's two existing gauntlet rounds as precedent — both were self-graded by the builder, which this loop's step 2 refuses · refused · 691102d3
+- 2026-09-06 13:50 · Continue · build · 292.6 — icon.css's PRICED block dates its four size endpoints (d48f361d/43ea922a) and points at the stat:size stamp · landed · c3637cb9
+- 2026-09-06 13:50 · Meta · refusal · filing an item for the 162-byte gzip level spread — GZIP_TOLERANCE_KB=0.3 (307 bytes) already absorbs it · refused · c3637cb9
 
 ## Sunset test
 

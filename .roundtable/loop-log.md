@@ -1518,3 +1518,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-06 21:47 · Meta · refusal · publishing to the shadcn registry format as a distribution channel — it advertises this framework to consumers expecting React components · refused · 691102d3
 - 2026-09-06 21:47 · Meta · refusal · a ninth dispatcher rule for the Gauntlet — a counter under an always-true condition is the exact bug that starved Objective for ten slices, five times over · refused · 691102d3
 - 2026-09-06 21:47 · Meta · refusal · importing the contribution's two existing gauntlet rounds as precedent — both were self-graded by the builder, which this loop's step 2 refuses · refused · 691102d3
+- 2026-09-06 13:50 · Continue · build · 292.6 — icon.css's PRICED block dates its four size endpoints (d48f361d/43ea922a) and points at the stat:size stamp · landed · c3637cb9
+- 2026-09-06 13:50 · Meta · refusal · filing an item for the 162-byte gzip level spread — GZIP_TOLERANCE_KB=0.3 (307 bytes) already absorbs it · refused · c3637cb9
