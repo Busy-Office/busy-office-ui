@@ -149,6 +149,12 @@ forensics into `LOOPS.md` rather than here, because nothing executes this
 charter. Collisions 3 and 4 were moved here by that item; a count in a heading
 goes stale on the next incident, so these name the subject instead.
 
+**Collision 5 is the first written up under the charter contemporaneously** —
+by the wake that lost it, in the same commit as its `LOOPS.md` line, rather
+than reconstructed later by a sweep. That is the charter working as intended
+once, not evidence that it now executes itself: nothing enforces it, and the
+next incident is written up by whoever notices.
+
 ### The collision forensics, and the argument they refuted
 
 **⚠ THE "SAFE BY CONSTRUCTION" ARGUMENT BELOW IS FALSE, AND THE SECOND
@@ -239,6 +245,40 @@ NUMBER.** Both wrote `## Slice 335`. The loser's pre-commit fetch saw
 rebased — one conflict, both hunks kept, `ROADMAP.md` ordered 336 / 335 / 334 —
 and landed intact. The renumber mechanic that makes this cheap stays inline in
 `LOOPS.md`, because it is what a wake in this position DOES.
+
+**Collision 5 — `319.3` (rule 4) against `319.3` (rule 4), 2026-09-08.** Both
+dispatchers ran the same rule on the same item, as rule 4's determinism
+predicts. What is new is that **both carried it to a verdict and the verdicts
+AGREED** — refuse the sweep growth — reached through different instruments, and
+both independently wrote `## Slice 340`. Collision 1 duplicated an item;
+collision 3 duplicated a wake; this one duplicated a *conclusion*, which is the
+first evidence the section holds that the queue's determinism extends past the
+pick into the answer.
+
+The loser's pre-commit `git fetch origin main` saw `273c7ae3..1a973395` and
+three commits. It had by then re-run the item's two counts, measured five
+numeric claims live, timed a 21-page copy of the gate (10.25s → 28.05s,
+**+173.7%**), red-proved the gate's blindness by injection with a
+discrimination control, written the slice, and run all 17 CI-runnable gates
+green. Nothing was committed; the tree was reset and rebased.
+
+**"Check the loser's output before discarding" ran and returned nothing**, and
+that is worth recording precisely because the instruction exists on the
+strength of collision 3, where it returned something. The winner's analysis
+**strictly dominated** on the one axis that mattered: the loser measured the 14
+unswept pages and implicitly accepted the 4-page overlap as coverage, while the
+winner red-proved that the overlap was never coverage either — a claim on the
+*swept* `/components/button` page (*"`--sm` is a 24px control"*) is equally
+invisible to the gate, making the real figure **0 of 18, not 4 of 18**. The
+loser's one distinctive finding — that two of the 18 are grep artefacts
+(`/patterns/inbox`'s "nitrile gloves" is demo data, `/patterns/record-detail`'s
+`124px`/`277px` are column widths) — the winner had already recorded, better,
+as `340.3`'s 7-of-14 split. Two independent measurements of the same subject
+agreeing is a reconciliation the section can bank; it cost a wake to get.
+
+The two cost figures differ and do not conflict: the loser costed 7 → **21**
+pages (every unswept vocabulary page, +173.7%), the winner 7 → **14** (only the
+claim-making ones, +86%). Different proposals, same refusal.
 
 ### The three refused alternatives, with the measurement behind each
 

@@ -146,7 +146,7 @@ corrupted by one yet: the loser has always been rejected or has found out before
 committing, never merged. **Count them by re-reading the list below rather than
 trusting a number in prose** — "it has happened once" stood here unedited for ten
 days, across a second collision this section already described (forensics in
-`LOOPS-archive.md`). Four as of 2026-09-07:
+`LOOPS-archive.md`). Five as of 2026-09-08:
 
 1. **157.3** — the cloud routine and the local session both built it within an
    hour (Slice 162). `git push` rejected the loser.
@@ -160,6 +160,16 @@ days, across a second collision this section already described (forensics in
    rules**, so nothing was duplicated. They collided on the one shared resource
    this section had never named, **the slice NUMBER**; the loser renumbered
    `## Slice 335` to 336, rebased, and landed intact.
+5. **`319.3` (rule 4), both dispatchers, 2026-09-08** — the first collision in
+   which both wakes ran the item to a **verdict** and reached the **same one**
+   (refuse), by different instruments, and independently numbered it
+   `## Slice 340`. The loser's pre-commit fetch saw `273c7ae3..1a973395` after
+   it had finished its analysis and run all 17 gates green; it discarded and
+   re-dispatched. **It is also the first time "check the loser's output before
+   discarding" was executed and returned NOTHING** — the winner's analysis
+   strictly dominated, and had independently found the loser's one distinctive
+   result. That is a negative result for that instruction, not a reason to drop
+   it: the check is cheap and this time it said discard.
 
 **A new collision adds a LINE here and its forensics to `LOOPS-archive.md`** —
 274.2's charter, which collisions 3 and 4 did not follow, and applying it late is
@@ -168,9 +178,15 @@ DOES about a collision is the fetch rule, the renumber mechanic and
 keep-both-rows, all below.
 
 **So the cost model has a fourth point and it is the cheapest: a renumber, not a
-wake.** Three of the four now cost less than the "up to one wake's work"
+wake.** Three of the five (2, 3, 4) cost less than the "up to one wake's work"
 budgeted above, which is worth knowing before anyone re-argues partitioning —
-but the sample is four, and collision 1 did cost a whole wake. The renumber is
+but the sample is five, and **two of them, collisions 1 and 5, did spend a
+wake's work**, collision 5 the most of any: a full measurement, a red-proof, a
+discrimination control and all 17 gates, discarded. **The cheap cases are the
+ones caught EARLY**, which is the argument for the pre-commit fetch rather than
+for partitioning — collision 3 was stopped before its first commit and cost
+nearly nothing, while collision 5 ran the fetch at the mandated point and still
+paid, because that point is *after* the work. The renumber is
 mechanical and easy to get wrong in one specific way: `sed 's/335/336/g'` over
 `ROADMAP.md` also rewrites unrelated arithmetic (`396 − 61 = 335` is live in the
 file today), so match `335\.` and the `^## Slice 335` heading, and count the hits
