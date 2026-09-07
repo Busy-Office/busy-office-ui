@@ -25,7 +25,7 @@ survives none.
 Last updated 2026-09-07 (**cloud** wake, scheduled routine). Working tree clean
 at hand-off. **One iteration recorded**: `Continue · build` (outcome `landed`,
 two refusals) and **no metric** — see rule 5 below. The work landed as
-**`422601c4`**, followed by this hand-off's own commit.
+**`ac4a9a0f`**, followed by this hand-off's own commit.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -35,83 +35,89 @@ node apps/docs/scripts/check-resume-slice-ids.mjs # names any stale closed ids
 python3 scripts/loops/roadmap_scope.py            # OPEN set + sweep scope
 ```
 
-Every figure below was taken at **`422601c4`**, the slice commit — **not** the
+Every figure below was taken at **`ac4a9a0f`**, the slice commit — **not** the
 working tree and **not** `HEAD` once this hand-off commits, which is
 `ENVIRONMENT.md`'s figure rule.
 
-## THE HAND-OFF THIS WAKE READ WAS TWO COMMITS STALE, AND IT MIS-DIRECTED THE DISPATCH
-
-Not a collision — nothing was lost — but worth the top of the file, because the
-previous hand-off's most prominent instruction was **wrong by the time it was
-read**:
+## RULE 3 IS OVERDUE — THE NEXT WAKE IS THE GRILL, NOT RULE 4
 
 ```
-534b097a  the tree the hand-off this wake read describes
-8d078221  chore(loops): record the Objective grill's iteration and the hand-off
-a7a64595  Slice 332: Standardize sweep — 4 of 4 lanes          ← landed 14:24:44Z
-          (this wake's first fetch: ~14:31Z, six minutes later)
+Standardize   2 / 4 Continue rounds   since 2026-09-07 22:24   ok
+Objective     3 / 3 slices            since 2026-09-07 14:01   OVERDUE  [315, 332, 333]
+Optimize      0 wake-date(s) newer    since 2026-09-07 12:59   ok
 ```
 
-That hand-off said, in bold, **"the next wake dispatches rule 2, Standardize —
-not rule 4"**, on a counter reading `Standardize 4 / 4 OVERDUE`. Slice 332 then
-ran exactly that sweep and **did not rewrite this file**, so the counter read
-`0 / 4 ok` when this wake looked. Following the instruction would have run a
-second Standardize sweep six minutes after the first.
+Read **after** recording this wake's row. `315` crossed it: 315.3 was that
+slice's last open item, so closing it moved 315 out of the OPEN set and into
+the arming list.
 
-**Nothing caught this except `dispatch_status.py` being re-read rather than
-trusted**, which is `LOOPS.md` Step 0b's whole point. It is the third
-consecutive occasion a slice has landed without rewriting this file (`623c98d9`,
-`8ef9b944`, now `a7a64595`) — recorded, **not filed as a defect**, because the
-reconcile-first instruction above is the designed mitigation and it worked.
+**Re-read `dispatch_status.py` rather than trusting this block.** The previous
+hand-off's most prominent instruction was wrong by the time it was read — a
+sibling slice had landed six minutes earlier and reset the counter it named —
+and the only thing that caught it was Step 0b being executed instead of
+believed. Two dispatchers share this queue, and `LOOPS.md` Step 0c records that
+**rule 3 collides harder than rule 4**: it hands both dispatchers the same
+arming set, so they duplicate a whole wake rather than one item. If the counter
+still reads OVERDUE when you look, the grill of **315, 332 and 333** is the
+dispatch.
 
-## What landed: Slice 333, closing 310.2
+## What landed: Slice 334, closing 315.3
 
-`174/1` ROADMAP, `12/2` `check-deprecated-icons.mjs`, `32/37` `motion.astro`.
+`160/1` ROADMAP, `131/6` `check-selftests.mjs`, `13/3` `check-rf-floor.mjs`,
+`7/2` `check-size.mjs`, `4/1` `check-markup.mjs`.
 
-`/base/motion` declared five markup consts the template never rendered. The
-Accept allowed either rendering or deleting them; **all five are deleted**, and
-the reason is not deadness but **drift**. They were a hand-maintained second
-copy of markup the page's "In context" section already renders live — the shape
-CLAUDE.md's *"`Demo` renders a preview **and** its copyable code from ONE
-string"* exists to prevent — and measured against the built page's own DOM,
-**3 of the 5** had already diverged:
+315.3 asked whether `check:selftests` should EXECUTE each heuristic gate's
+`--self-test` rather than grep for the `process.argv` branch. **Decided:
+execute, on a case-count marker.** The argument is 315.1's own defect — a real,
+correct `--self-test` block sitting BELOW a `ci.yml` read that returned first,
+so the gate exited **0 having classified nothing**, which a grep and an exit
+code alike read as eighteen passing cases. Reading the source cannot answer
+reachability.
 
-| const | verdict |
+**The Accept's re-measurement ran first, and the base rate had moved twice:**
+
+| 315.3 recorded | here, at `1363ffb9` |
 |---|---|
-| `toastMarkup` | MATCHES |
-| `menuMarkup` | **DIFFERS** — page adds `bo-alert`, `role="group"`, `<p>` not `<div class="bo-card">` |
-| `rowMarkup` | **DIFFERS** — page renders `<tr class="">`; the class is applied by `data-motion-class`, which is that showcase's point |
-| `savingMarkup` | MATCHES — inner markup equal after whitespace collapse, driven by a real click |
-| `removeMarkup` | **DIFFERS** — source `<tr class="bo-motion-fade-out">`, page `<div class="bo-alert bo-motion-fade-out">` |
+| 1 of 20 run zero cases | **0 of 20** — all twenty exit 0, **157** cases between them |
+| "4 gates died with no `apps/docs/dist`" | **does not reproduce at all** |
 
-So the *render* branch of the Accept would have shipped three copyable samples
-contradicting the live showcase beside them.
+Four contexts, byte-identical output in every one: full tree; `apps/docs/dist`
+parked; `CHROME_PATH` unset; and the **docs-image context** (`ROADMAP.md`,
+`LOOPS.md`, `CLAUDE.md`, `.roundtable/`, `.github/` and `dist` all absent —
+exactly what `apps/docs/Containerfile` does not copy). Twenty identical outputs
+is a suspiciously tidy number, so it carries a control: with `dist` parked, the
+**plain** runs of `check-escaped-entities`, `check-learning-path`,
+`check-components-used` and `check-notes` all exit **1** on ENOENT under `dist`
+while those same four gates' `--self-test` exits **0**. The absence was real;
+the self-tests are simply independent of it. That is what makes this buildable
+at all — `check-selftests` runs first in `check:repo`, which runs first in
+`docs:build`, **before** `astro build`.
 
-**The probe was wrong on its first run**, in the way this repo names: v1's claim
-table was hand-transcribed and its `removeMarkup` row carried the RENDERED value
-in the "const claims" column, so it reported `MATCHES` for a pair that differs —
-both columns came from the same side. v2 parses the const out of the source
-(a regex whose failure throws) and carries a **control**: `entranceMarkup` IS
-rendered and must come back `MATCHES`. It does. 3-of-5 with a passing control
-discriminates; 5-of-5 would not have.
+**A FORMAT, not a shared helper**, and that is forced: three of the twenty live
+in `packages/core/scripts`, which must not import from `apps/docs`. Written to
+accept both shapes already in the tree, so it moved **3 gates, not 20**.
 
-**The Accept's own re-run command is the one thing that does NOT apply.** Run
-literally it reads **2, 2, 2, 3, 2**, because the comment this edit wrote to
-explain the deletion legitimately names all five — CLAUDE.md's
-*"verifying a removal: assert on structure, never on raw text"* arriving inside
-a criterion rather than inside a script. Comment-stripped identifier counts read
-**0** for all five and **2** for each of the four that legitimately remain.
+**Cost:** scan only `69/68/65 ms`, whole gate `1355/1295/1300 ms` — `check:repo`
+grows by about **1.23 s**.
+
+**Red-proved three ways**, injection confirmed present by `grep -c -F` first,
+control green before and after, each reverted to a `grep -c` of 0. The
+discriminating one: with the argv branch made **unreachable**, the new gate is
+`rc=1` and the **old grep-only logic PASSES on that identical tree**.
+
+**One thing this cost, and it is worth carrying:** a `git checkout <file>` used
+to revert an injection **silently took a real edit of this slice with it** —
+the file had been injected *and* legitimately edited. The gate went green again
+only because the edit was re-applied by hand; nothing would have reported it.
+**Stage before injecting**, so `git checkout` restores the intended state rather
+than `HEAD`'s.
 
 ## NOT VERIFIED, said plainly — and this wake adds NO visual debt
 
 **No 1440/390 light-and-dark screenshots — a cloud wake has no Podman.**
-**None are owed for this slice**, and that is measured rather than asserted: the
-built page is **byte-identical** before and after — `md5sum`
-`f8886e3e9ee20f6464ae9545cd44d7aa`, 87,802 bytes both, from a fresh
-`rm -rf apps/docs/dist && npm run docs:build` (all 139 pages rewritten, mtimes
-`14:34:21-24Z`). Byte-identical is a suspiciously tidy number, so the comparison
-was **red-proved**: the same `diff` against a *different* built page reports a
-difference, so the instrument discriminates.
+**None are owed for this slice**, and that is structural rather than measured:
+the diff is four gate scripts and roadmap prose. No `.astro`, no `.css`, no
+docs page, no generated artefact under `dist/` is touched by it.
 
 **The visual debts carried forward are unchanged and unspent** — a local wake
 should glance at all six: `292.4/292.5`'s screenshot lane on `/components/icon`;
@@ -121,66 +127,63 @@ the withdrawn-claim paragraph and Slice 325's performance paragraph on
 `310.1`'s three `prod/` Refresh buttons (`/prod/production-orders`,
 `/prod/capacity`, `/prod/bom`).
 
-**Gates green on the committed tree:** all **17** CI-runnable entry points,
-re-derived from `ci.yml` rather than read off a snapshot — core `build`, core
-`test` (165 passed), `lint:css`, `docs:build` (`check:repo`), `check:claims`
-(**170** live · 3 NOT VERIFIED, which is `ENVIRONMENT.md` §6b's container fact,
-not a regression), `check:formatting`, `check:scroll` (914 containers / 118
-pages × 2), `check:layout` (**128** pages), `check:forced-colors`, `test:axe`
-(**128 × 2**, zero violations), `check:target-size`, `check:search`,
-`check:pseudo`, `check:quickstart`, `check:po-app` (**20** behaviours),
-`check -w create-ui`, `npm run suite` (**28** screens) — plus `check:selftests`
-(54 gates: 20 heuristic, 34 exact) and the §3b `docs:build` re-run after this
-file was written.
+**Gates green on the committed tree:** all **17** CI-runnable entry points, and
+the whole list was run **twice** — once before the adversarial re-read of the
+staged diff, and again after the four fixes it produced. Core `build`, core
+`test` (**165** passed, 29 files), `lint:css`, `docs:build` (`check:repo`, which
+now reports `20 heuristic (all self-tested; 160 cases actually run)`),
+`check:claims` (**170** live · 3 NOT VERIFIED, which is `ENVIRONMENT.md` §6b's
+container fact, not a regression), `check:formatting`, `check:scroll` (914
+containers / 118 pages × 2), `check:layout` (**128** pages),
+`check:forced-colors`, `test:axe` (**128 × 2**, zero violations),
+`check:target-size`, `check:search`, `check:pseudo`, `check:quickstart`,
+`check:po-app` (**20** behaviours), `check -w create-ui`, `npm run suite`
+(**28** screens) — plus the §3b `docs:build` re-run after this file was written.
+
+**The 160 reconciles against an independent count**: the sweep counted **157**
+per-case output *lines*, and `check-rf-floor` prints none while now declaring
+**3**. Two instruments, agreeing.
 
 **The `verifier` agent is not available in this session**, so `LOOPS.md` §2 step
-6's verifier pass was done by hand — the staged diff re-read adversarially.
-**It caught two unmeasured sentences in this wake's own ROADMAP entry before
-they landed**: *"this repo has no `tsconfig.json` at all"* (false —
-`tsconfig.base.json` and `packages/core/tsconfig.json` both exist; what is true,
-and is what the argument needed, is that the core one's `include` is
-`src/js/**/*.ts` and `apps/docs/` has none, so no TS config here has ever looked
-at a docs `.astro` file), and *"Slice 332 reset the counter an hour earlier"*
-when the gap was **six minutes**. A third data point for `327.3`: the practice
-works when it is executed.
+6's verifier pass was done by hand — the staged diff re-read adversarially. **It
+found four things and all four were fixed before the commit**: `spawnSync`
+reporting `exited null` with no cause on a spawn error or timeout (it now names
+`r.error`); `indent('')` emitting a lone indented blank line for the most
+interesting case of all, a branch that printed nothing (it now says so); an
+identifier named `unreachable` that actually held three different failure kinds;
+and **two numbers asserted rather than measured** — the retag's `55/21/34`
+consequence, and a `1.38 s` cost quoted from the whole gate when the question is
+what it *adds*. Both are now measured and both moved. A fourth data point for
+`327.3`: the practice works when it is executed.
 
-## Counters read AFTER recording this wake's row — rule 4 again next wake
+## Rule 5 was EVALUATED and does not fire; no metric this wake, on purpose
 
-```
-Standardize   1 / 4 Continue rounds   since 2026-09-07 22:24   ok
-Objective     2 / 3 slices            since 2026-09-07 14:01   ok   [332, 333]
-Optimize      0 wake-date(s) newer    since 2026-09-07 12:59   ok
-```
-
-**Objective is at `2 / 3`. One more closed slice arms rule 3**, so the wake
-after next is the likelier grill. Nothing preempts rule 4 right now.
-
-**Rule 5 is `ok`, not STALE, and no metric was recorded this wake on purpose.**
 The comparable set's only mover is `claims`, whose day-pair is already
 `2026-09-06 169 -> 2026-09-07 170 +1`. This wake's `check:claims` read **170**
 again, on the *same day* as the existing sample, so a second `claims=170` is not
 a second run and would move nothing. `axe-violations` reads `NEVER MOVED` and
-cannot fire the rule either way. **Rule 5 was EVALUATED and does not fire.**
+cannot fire the rule either way.
 
 **`polish_requeue.py` was not run in `--apply` mode** — §3b step 0 is owed only
 once rule 6 is reached, and rule 4 matched first.
 
-## The open set is 29 — no P0, and 17 are cloud-takeable
+## The open set is still 29 — no P0, and 17 are cloud-takeable
 
-`roadmap_scope.py` at `422601c4` reports **29 open / 63 closed**, OPEN slices
-`[15, 112, 249, 273, 296, 297, 315, 316, 319, 320, 322, 323, 324, 325, 326, 327,
-328, 330, 331, 332, 333]`. **Slice 310 left the OPEN list entirely** (310.2 was
-its last open item); 333 entered. The raw counts reconcile: `grep -c` reads 29
-open / **65** closed, and 65 = 63 attributed + the 2 `[x]` under the non-slice
-`## STATE` heading.
+`roadmap_scope.py` at `ac4a9a0f` reports **29 open / 64 closed**, OPEN slices
+`[15, 112, 249, 273, 296, 297, 316, 319, 320, 322, 323, 324, 325, 326, 327, 328,
+330, 331, 332, 333, 334]`. **Slice 315 left the OPEN list entirely** (315.3 was
+its last open item); 334 entered. The raw counts reconcile: `grep -c` reads 29
+open / **66** closed, and 66 = 64 attributed + the 2 `[x]` under the non-slice
+`## STATE` heading. The count is unchanged at 29 because 315.3 closed and 334.1
+opened in the same commit.
 
 **Enumerated, not carried from the last hand-off** — every entry was re-derived
 from its own item text this wake:
 
-- **cloud-takeable: 17** — `315.3`, `316.1`, `319.3`, `320.2`, `322.3`,
-  `323.1`, `324.1`, `324.2`, `325.1`, `325.2`, `326.3`, `327.3`, `328.1`,
-  `330.1`, `331.1`, `332.1`, `333.1`. **`315.3` is now the oldest of these**,
-  `310.2` having closed.
+- **cloud-takeable: 17** — `316.1`, `319.3`, `320.2`, `322.3`, `323.1`,
+  `324.1`, `324.2`, `325.1`, `325.2`, `326.3`, `327.3`, `328.1`, `330.1`,
+  `331.1`, `332.1`, `333.1`, `334.1`. **`316.1` is now the oldest of these**,
+  `315.3` having closed.
 - **owner-blocked (10):** Slice 15 (AT runtime evidence, owner hardware),
   `112.3` ("BLOCKED ON OWNER BRIEFS"), `112.4` (blocked on 112.3's verdict),
   `249.7` (its first Accept clause is executed; the rest holds for `249.10`,
@@ -196,30 +199,29 @@ item whose Accept says *re-measure* names an artifact, and the artifact either
 resolves or it does not. Nothing in the current open set is of that kind,
 checked rather than assumed.
 
-## The archive sweep is NOT due, and the two halves disagree for the SIXTH wake
+## The archive sweep is NOT due, and the two halves disagree for the SEVENTH wake
 
-Measured at **`422601c4`**: **7,817 lines**, closed-history share **29.5%**
-(2,305 lines across 8 closed slices). The standing trigger is *past 5,450 lines
+Measured at **`ac4a9a0f`**: **7,976 lines**, closed-history share **30.7%**
+(2,451 lines across 9 closed slices). The standing trigger is *past 5,450 lines
 **and/or** 40.6%*: lines are past, **share is not**. That is precisely the
 AND-vs-OR case `249.12` is open on, and it decides something here — under AND,
-no sweep. **Sixth consecutive wake where the two halves disagree.**
+no sweep. **Seventh consecutive wake where the two halves disagree.**
 
-The share ROSE again (27.8% → 29.5%), for the same mechanism as last wake: the
-numerator moved 2,102 → 2,305 because **Slice 310 closed and entered it**, while
-the denominator grew by this wake's own entry. A wake reaching for a sweep
-should read `roadmap_scope.py`'s pin line first — **10 targets are named by a
-still-open item**, and `310` is now among the eligible targets.
+The share ROSE again (29.5% → 30.7%), for the same mechanism as the last two
+wakes: **Slice 315 closed and entered the numerator**, while the denominator
+grew by this wake's own entry. A wake reaching for a sweep should read
+`roadmap_scope.py`'s pin line first — **10 targets are named by a still-open
+item**, and `315` is now among the eligible targets.
 
-Trend across thirty-eight readings: 27.5% → 32.0% → 34.2% → 38.0% → 39.4% →
+Trend across thirty-nine readings: 27.5% → 32.0% → 34.2% → 38.0% → 39.4% →
 37.5% → 36.9% → 36.2% → 35.5% → 37.3% → 36.9% → 38.3% → 37.6% → 9.4% → 10.3% →
 10.9% → 11.8% → 26.0% → 26.9% → 30.5% → 29.5% → 28.9% → 31.2% → 35.3% → 34.7%
 → 36.4% → 38.1% → 40.3% → 39.4% → 39.9% → 41.5% → 24.6% → 28.2% → 27.4% →
-26.9% → 26.4% → 27.8% → **29.5%**.
+26.9% → 26.4% → 27.8% → 29.5% → **30.7%**.
 
 ## Step 1 — both intakes read, with the controls ENVIRONMENT.md §8 names
 
-**`LOOPS.md` Step 1 now mandates the REST form** (Slice 332 replaced the `gh`
-commands six minutes before this wake started), and it ran clean here:
+`LOOPS.md` Step 1's REST form ran clean here:
 
 ```
 /discussions        -> HTTP 200, len 0     the reading
@@ -231,7 +233,7 @@ commands six minutes before this wake started), and it ran clean here:
 Step 1 committed nothing. The red-proof `ENVIRONMENT.md` §8 still owes remains
 owed — nothing has ever been filed in this repo's Discussions.
 
-**Issue #2's `updated_at` has not moved for a second consecutive hand-off.**
+**Issue #2's `updated_at` has not moved for a third consecutive hand-off.**
 See Direction.
 
 ## The standing environment fact: CI HAS NO `paths-ignore`
@@ -249,24 +251,22 @@ between a red `main` and the next wake.
 
 ## Step 0 traps
 
-Trap 1 bit — `git branch --show-current` was **empty** and the fetch reported a
-forced update `26447ba...a7a6459`, so the local ref was both detached and stale.
-Fixed with `git checkout -B main origin/main` before any commit. `git rev-parse
---short main HEAD` also produced its documented `fatal: Needed a single
-revision` mid-wake — §1's trap, not a state problem. Trap 2 clean in one
-`--unshallow` (no `shallow.lock`), and it again brought the tags — `git fetch
---unshallow origin` printed `* [new tag] v0.6.0 / v0.7.0 / v0.8.0` and
-`git tag | wc -l` → **8**, which is §2's mandated check rather than an
-assumption either way. (The previous hand-off's running "Nth consecutive
-container" tally is deliberately not incremented here: this wake measured the
-count, not the streak.) No `git stash` was used at any point.
+Trap 1 bit again — the fetch reported a forced update `26447ba...1363ffb` and
+`git branch --show-current` was empty, so the local ref was both detached and
+stale; fixed with `git checkout -B main origin/main` before any commit. Trap 2
+needed the documented patience: `git fetch --unshallow origin` **exceeded the
+400 s tool timeout** and had to finish in the background, which is §2b's shape
+without its lock — `.git/shallow.lock` was pre-emptively removed and the fetch
+completed, `is-shallow-repository` reading `false` at **2,026** commits. It
+again brought the tags: `git tag | wc -l` → **8**, which is §2's mandated count
+rather than an assumption either way. No `git stash` was used at any point.
 
 ## Direction
 
 Nothing new from the owner reached this wake to triage. **Both intakes were
 read** (issues **1** open, discussions **0** open).
 
-**Two things want the owner's attention, unchanged from the last hand-off:**
+**Two things want the owner's attention, unchanged from the last two hand-offs:**
 
 1. **Issue #2 is open and carries only the triage comment.** Slice 317 refuses
    the component with the measurement; Slice 319 corrected a second false claim
@@ -278,13 +278,15 @@ read** (issues **1** open, discussions **0** open).
    whether a Polish round whose score does not move should increment `dry`. Not
    touched this wake; rule 6 was never reached.
 
-**`249.12` stays a live question and is sharper for the sixth time** — a sixth
-consecutive wake where the two halves of the archival trigger DISAGREE, and the
-share has now moved *toward* the threshold two wakes running (26.4 → 27.8 →
-29.5%). Still not urgent, but the trend is no longer flat.
+**`249.12` stays a live question and is sharper for the seventh time** — a
+seventh consecutive wake where the two halves of the archival trigger DISAGREE,
+and the share has now moved *toward* the threshold three wakes running (26.4 →
+27.8 → 29.5 → 30.7%). Still not urgent, but the trend is no longer flat.
 
-**`333.1` is new and is a cheap owner-free decision** — whether a gate, a
-`tsconfig` that would actually see docs `.astro` files, or neither should forbid
-a never-used frontmatter const. Its Accept explicitly makes *"build nothing"* a
-satisfying outcome. `315.3` is the oldest cloud-takeable item and is what rule 4
-reaches next.
+**`334.1` is new and is a cheap owner-free decision** — whether
+`check-selftests.mjs` is now `@heuristic` itself, given that part of its verdict
+rests on matching a regex against a child process's prose. Its Accept makes a
+**refusal** satisfying, and says outright to re-read the tag definitions before
+deciding. It is not, however, what the next wake should reach for: **rule 3 is
+OVERDUE and preempts rule 4.** `316.1` is the oldest cloud-takeable item for
+whenever rule 4 comes round again.
