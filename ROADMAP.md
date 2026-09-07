@@ -320,6 +320,61 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 316 — 298.1: the second fixed-medium artifact was already here and PREDATES the first by 25 days. The two agree, and the half nobody wrote down is the load-bearing one — a theme token in `@media print` prints at 2.54:1 on white paper (2026-09-07)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty), `ENVIRONMENT.md` trap 1, fixed with
+`git checkout -B main origin/main` before any commit; `origin/main` again
+arrived as a **forced update** (`26447ba...f26af8f`). Trap 2 clean in one
+`--unshallow` (**1,985** commits, no `shallow.lock`), and it again brought the
+tags — the **twenty-ninth** consecutive container to do so; `git tag | wc -l`
+→ **8**.
+
+Rule 1: no open P0 (`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0**).
+Step 1 read both intakes with `ENVIRONMENT.md` §8's controls and triaged
+nothing: issues **1** open (#2, already triaged as `300.2`), discussions
+**0** open, `/not-a-real-route` → 404, so the zero is a served zero. Rule 2
+`0 / 4 … ok`; rule 3 `0 / 3 … ok`. Rule 5 read **STALE** (`1 wake-date(s)
+newer`), so per its own text it **could not be evaluated** and is not reported
+clear. **Rule 4 dispatched Continue, build mode.**
+
+**The pick corrects a classification the hand-offs have carried for twelve
+wakes.** Rule 4 wants the oldest still-open item; walking the open set from
+the oldest, `294.2` is the first the hand-off calls cloud-takeable, and it is
+not takeable by any wake in this container: the six proposals it must rank
+live in an owner-supplied `busyofficeui_Design_System.zip`, and the
+`upstream-contribution/` folder **is correctly absent from this repo** —
+`git ls-files | grep -i contribution` returns nothing, and Slice 298's own
+grill records the absence as correct. Ranking six proposals that cannot be
+read would be inventing verdicts. So `294.2` is **input-blocked**, the same
+fourth kind as `297.1` and not one of `LOOPS.md` 186.2's three; the next
+oldest takeable item is `298.1`, which is what ran.
+
+1. [ ] **316.1 — should a gate forbid a theme token in a `@media print` colour
+       declaration?** Filed, not built, and the base rate is measured rather
+       than promised: the predicate "a colour declaration inside `@media print`
+       references `var(--bo-color-*)`" is true of **0 of 11** such declarations
+       today, across 6 files. By 94.11's rule that is a predicate uniformly
+       false rather than uniformly true — it distinguishes nothing *now* and
+       would distinguish exactly the regression 298.1 measured (a token here
+       prints at 2.54:1). Unlike 94.11's refused gate this one is an **exact**
+       membership test, not a semantic one, so it can go red.
+       - **Accept:** either the gate ships red-proved by injecting
+         `color: var(--bo-color-text-muted)` at the `#555` site, or this
+         closes as refused **with the reason** — the likeliest being that a
+         blanket ban is wrong for a fill whose colour IS content
+         (`print-color-adjust: exact` markers), which would need the exemption
+         list this repo's other gates carry. **Refusing is a satisfying
+         outcome.** Re-run the base rate first; it is a snapshot.
+
+       Command, so the next wake re-runs rather than re-derives — brace-match
+       every `@media print` block under `packages/core/src/css`, strip
+       comments, and classify each `color|background|background-color|
+       border-color|fill|stroke|outline-color` declaration as token vs literal.
+       On 2026-09-07 at this slice's own tree: **11 literal, 0 token**, in
+       `approval-workflow` (1), `badge` (2), `data-table` (2), `stepper` (3),
+       `print/index.css` (1) and `reset/index.css` (2).
+
 ## Slice 315 — Objective grill of Slices 294, 312, 314: the gate written to catch a detector that cannot fail became one — `check:ci-ignores`'s `--self-test` has sat below an early return since 312.2 emptied `paths-ignore`, running 0 of its 18 cases while `check:selftests` reported it self-tested (2026-09-07)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
@@ -2082,6 +2137,29 @@ rather than after.
 *"every colour, radius, **font-size** and border comes from a `--bo-*`
 token"* — and seven display font sizes are literals.
 
+**Amended 2026-09-07 by Slice 316 — "seven display font sizes" carries no
+command and is unreproducible under the plain reading; the VERDICT is
+unchanged.** The file has never held seven `font-size` literals. Measured at
+both of its two commits and identical at `HEAD`:
+
+```
+git show <rev>:apps/docs/scripts/gen-og-card.mjs \
+  | grep -cE 'font-size:\s*[0-9.]+(rem|px|em)'      # 4  at 605829ca AND 66cd85da
+git show <rev>:apps/docs/scripts/gen-og-card.mjs \
+  | grep -oE ':\s*[0-9.]+rem\b' | wc -l             # 8  raw rem literals
+  # ... | sort -u | wc -l                           # 7  DISTINCT rem values
+```
+
+Four `font-size` declarations (`1.6rem` `.dot`, `2.9rem` `h1`, `1.5rem`
+`p.lede`, `1.05rem` `.screen`) and **zero** `font-size: var(…)`. The seven is
+recoverable only as *distinct rem-valued literals*, which counts `.dot`'s box
+size, `.right`'s `padding-block-start` and the cell padding — none of them a
+font size. Same shape as 315.2 one slice earlier, and the same cost CLAUDE.md's
+*write the command next to the claim* predicts: the number could only be
+re-derived, and re-deriving is where the second, different mistake comes from.
+The sentence's point — the header claimed tokens for something that is a
+literal — stands at 4 exactly as it did at 7.
+
 **This is CLAUDE.md's rule landing on the wake that quoted it.** 192.1 says the
 defect lands in what shipped BESIDE the number, not in the number: 295 spent
 its red-proofs on the gate arms, and the unverified sentence next to them is
@@ -2163,7 +2241,74 @@ reconciled.
 - **Re-filing 295's font-size literals as a defect.** They were never a defect;
   only the sentence claiming otherwise was.
 
-1. [ ] **298.1 — `gen-og-card.mjs`'s display sizes are literals with a stated
+1. [x] **298.1 — DONE 2026-09-07 (Slice 316). Closed by the FIRST branch, not
+       the expected one: the second artifact already existed and predates the
+       first by 25 days.** Original text kept below.
+
+       **The premise is what failed.** "There is now exactly one precedent to
+       point at" is false. Enumerated rather than recalled — every tracked
+       image asset plus every script that renders one:
+
+       ```
+       git ls-files | grep -iE '\.(png|jpg|jpeg|gif|webp|svg|avif)$'
+       #  -> favicon.svg (+3 archived copies under versions/), og-card.png,
+       #     packages/core/media/list-report-compact.png
+       git ls-files '*.mjs' | xargs grep -ln 'screenshot('
+       #  -> apps/docs/scripts/gen-og-card.mjs   ← the ONLY renderer
+       ```
+
+       Of those, `favicon.svg` declares **0** `font-size` (274 bytes, a
+       24-unit viewBox mark) and `list-report-compact.png` photographs a real
+       docs page, so its type comes from the component scale — neither
+       authors display sizes. On images alone the count really is **1**.
+
+       **The second artifact is not an image.** `packages/core/src/css/print/
+       index.css` has been in the tree since the initial commit (`4ef554fa`,
+       2026-08-12) against `gen-og-card.mjs`'s `605829ca` (2026-09-06) — 25
+       days earlier — and it is the same shape: dimensions from the medium
+       (`@page { margin: 1.6cm }`), display type as a literal outside the rem
+       screen scale (`font-size: 10pt`), colour authored for the medium. That
+       print counts as "a fixed-size artifact" is a judgement and is stated as
+       one; what makes it the right judgement is that DESIGN.md's unit
+       doctrine **already** had half this rule written down as rule 6
+       (`pt` only inside `@media print`) before either artifact existed.
+
+       **The two agree, and the half nobody had written down is the
+       load-bearing one.** The card takes colour from tokens; the print sheet
+       uses **zero** tokens and a literal `#555`. That reads like a
+       disagreement and is the same rule applied to two media — measured under
+       print emulation on the built site, with the light/dark control the
+       probe must pass to be reading the theme at all:
+
+       ```
+       matchMedia('print').matches           true      (body font-size 13.3333px = 10pt)
+       --bo-color-text-muted   light theme   rgb(75,85,99)     7.56:1 on white
+       --bo-color-text-muted   DARK theme    rgb(156,163,175)  2.54:1 on white   ← below AA
+       shipped literal #555    both themes   rgb(85,85,85)     7.46:1 on white
+       control: light and dark token readings differ            true
+       ```
+
+       So a token there is not tidier, it is a contrast regression for anyone
+       printing from the dark theme. **The convention holds at 11 of 11**:
+       every colour declaration inside `@media print` in the shipped CSS is a
+       literal, 0 tokens, across 6 files (`approval-workflow`, `badge`,
+       `data-table`, `stepper`, `print/index.css`, `reset/index.css`).
+
+       **What shipped, kept deliberately small** — the item's own warning is
+       that it exists so the question is asked once, not so a convention is
+       manufactured, and the convention was already half-recorded:
+       - DESIGN.md unit doctrine gains **rule 7**, written from both
+         precedents, carrying the measurement above.
+       - The `#555` site gains the reason it never had — the one literal whose
+         value is load-bearing was the one with no explanation, so a future
+         tidy-up would have shipped the regression silently.
+       - The gate question is **filed, not built** (`316.1`), with its base
+         rate measured first.
+
+       No new token tier, no gate, no rubric. **`gen-og-card.mjs` itself is
+       unchanged** — nothing about it was wrong.
+
+       **298.1 — `gen-og-card.mjs`'s display sizes are literals with a stated
        reason, and nothing checks that the reason stays true.** Not filed as a
        defect — a poster legitimately sits outside the component type scale.
        Filed because the *next* fixed-size artifact will face the same question
@@ -2457,6 +2602,18 @@ was the tell, and it is why the 1.30 figure above is trustworthy.
          complete an outcome as an adoption. **OWNER CALL on the brand mark**,
          which the contribution correctly identifies as the one decision in
          the folder with no traceable source.
+       - **Blocked kind, recorded 2026-09-07 (Slice 316) so it stops being
+         re-derived: INPUT-BLOCKED, not cloud-takeable.** Eleven hand-offs
+         listed this as the oldest cloud-takeable item, classified from Slice
+         294's triage text rather than from the material. The six proposals
+         live in an owner-supplied `busyofficeui_Design_System.zip`; the
+         `upstream-contribution/` folder is **correctly absent** from this repo
+         (`git ls-files | grep -i contribution` → nothing, and Slice 298's
+         grill records the absence as correct — nothing was merged). Ranking
+         six proposals no wake in this repo can read would be inventing
+         verdicts, so this needs the owner to land the folder on a branch
+         first. Same fourth kind as `297.1`, which `LOOPS.md` 186.2's three
+         kinds do not cover.
 
 ## Slice 293 — Standardize sweep, 4 of 4 lanes: all four instrumented lanes clean for the fourth consecutive sweep, and the finding came from lane 1 FAILING — `ENVIRONMENT.md` §1c named a script deleted a week ago and missed the gate that actually needed the export (2026-09-06)
 

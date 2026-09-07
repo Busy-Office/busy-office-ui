@@ -62,7 +62,17 @@
     }
 
     /* Links: show the destination for absolute URLs in printed reports —
-       opt-in via the report wrapper so app chrome links stay clean. */
+       opt-in via the report wrapper so app chrome links stay clean.
+
+       `#555` is a LITERAL on purpose and must stay one (roadmap 298.1,
+       DESIGN.md unit-doctrine rule 7). The tokens carry the reader's THEME,
+       and paper does not: measured under print emulation on the built site,
+       `--bo-color-text-muted` resolves to `rgb(156,163,175)` when the page is
+       in the dark theme, which is **2.54:1 on white paper** — below AA for
+       body text. This literal reads **7.46:1 in both themes**. Every colour
+       inside `@media print` in the shipped CSS is a literal for this reason
+       (11 of 11, 6 files); "tidying" one into a token is a contrast
+       regression, and nothing gates it yet. */
     .bo-print-report a[href^="http"]::after {
       content: " (" attr(href) ")" / "";
       font-size: 0.85em;

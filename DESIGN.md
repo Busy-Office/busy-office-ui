@@ -138,6 +138,28 @@ Behavioral state via `data-state` / `data-loading` attributes and native ARIA.
    columns instead. Unitless `line-height` only. `100dvh` accepted for shells
    (svh trade-off recorded). Interactive target floor: 1.5rem in every density
    tier; bare checkboxes/radios sit in a padded label or cell restoring 24px.
+7. **A FIXED-MEDIUM artifact takes its dimensions, its display type AND its
+   colour from the medium, not from the tokens** (roadmap 298.1, 2026-09-07).
+   Two exist and they agree; the rule is written from both rather than from
+   either. A printed page (`@media print`, since the initial commit) and the
+   1200x630 social card (`apps/docs/scripts/gen-og-card.mjs`) are both output
+   the framework does not control the surface of.
+   - **Dimensions** come from the medium — `@page` margins in `cm`, the
+     platform's 1200x630 crop — never from a token.
+   - **Display type** is a literal outside the rem screen scale: 10pt body on
+     paper, a 2.9rem wordmark on the card. The scale tops out far below a
+     poster because nothing in an ERP screen is set that large; inventing a
+     token tier to serve one poster is the ceremony 94.11 refuses.
+   - **Colour follows the same test, which is why the two look different and
+     are not.** The card's medium is a screen carrying the framework's own
+     theme, so its colours are tokens. Paper is not, and a theme token is
+     actively wrong there: measured under print emulation on the built site,
+     `--bo-color-text-muted` resolves to `rgb(156,163,175)` in the dark theme
+     — **2.54:1 on white paper**, against the shipped literal `#555`'s
+     **7.46:1 in both themes**. Every colour declaration inside `@media print`
+     in the shipped CSS is a literal: **11 of 11, across 6 files, 0 tokens.**
+     That is the convention, not an oversight, and "tidying" one of them into
+     a token is a contrast regression nothing currently gates (roadmap 316.1).
 
 ## State attributes: when to add one, and why there are three
 
