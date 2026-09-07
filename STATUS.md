@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-07 11:48 UTC
+Generated at: 2026-09-07 12:58 UTC
 
 ## Open items by slice
 
@@ -25,8 +25,7 @@ Generated at: 2026-09-07 11:48 UTC
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - **Slice 297** (1 open)
   - 297.1 — The first real intake run is the test of this, not the config.
-- **Slice 310** (2 open)
-  - 310.1 — `examples/erp-suite` and `examples/po-app` render deprecated glyphs, and whether that is a defect is undecided.
+- **Slice 310** (1 open)
   - 310.2 — `/base/motion` declares five copyable markup samples the template never renders.
 - **Slice 315** (1 open)
   - 315.3 — should `check:selftests` EXECUTE each self-test rather than grep for the branch? Filed with its base rate, deliberately not built inside a grill.
@@ -57,9 +56,9 @@ Generated at: 2026-09-07 11:48 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1597 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-09-07 10:47   ok
-  Objective     0 / 3 slices          since 2026-09-07 11:48   ok
+dispatch status — counter-triggered rules (1599 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-09-07 10:47   ok
+  Objective     1 / 3 slice           since 2026-09-07 11:48   ok  [310]
   Optimize      1 wake-date(s) newer   since 2026-09-06 16:56   STALE   [newest pair: axe-violations; 132 sample(s), 7 of 44 name(s) paired across days]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-06, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-06 (2026-09-07), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -90,8 +89,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-07 08:56 · Roadmap · sweep · 324.3 archive sweep — 249.12's trigger crossed both halves for the first time (8,188 lines / 41.5%); 15 slices moved, 8,188 -> 6,476 lines, share 41.5% -> 24.6% · landed · 3cb2381a
-- 2026-09-07 08:56 · Meta · refusal · the sweep's own first attempt — a mover that read any '## ' line as a heading truncated Slice 308 at a fenced '## the loops table' row; reverted whole rather than patched, because its byte-identity check reused the same splitter and could not fail · refused · 3cb2381a
 - 2026-09-07 09:54 · Continue · build · 309.5 — commit the /stress re-measurement probe with its own control, and correct its style-flush column, which shipped as a dead detector reading ~0 across a 20-fold input range · landed · 82dc60e6
 - 2026-09-07 09:54 · Meta · refusal · a gate over npm-run commands cited in docs pages — base rate is 4 occurrences on 2 pages, 4 of 4 valid; filed as 325.1 rather than built unasked · refused · 82dc60e6
 - 2026-09-07 10:47 · Standardize · sweep · 326.1 — lane 3's 'Verdicts to date' list was stale 12h after it was written (178.3 added the 16th verdict the same day); fixed as an enumeration + amend-in-same-commit obligation, with the grep alternative red-proved dead via negative controls · landed · e1f5a12f
@@ -100,6 +97,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-07 11:48 · Objective · grill · Objective grill of Slices 309, 323, 326 (Slice 327): 74 of 75 assertions reproduce; 309's three-route init claim false for 2 of 3, 326.1's negative control self-destroying · landed · ac0fc752
 - 2026-09-07 11:48 · Meta · refusal · a new CLAUDE.md section for the self-destroying-control shape — the file already carries its mirror image and 326.3 is open on prose growth; a pinned revision plus one sentence in the lane that uses it is smaller · refused · ac0fc752
 - 2026-09-07 11:48 · Meta · refusal · a gate over 'this claim names its instrument' (327.3) — semantic, 94.11's rule, and the checkable shape would be true of nearly every slice · refused · ac0fc752
+- 2026-09-07 12:58 · Continue · build · 310.1 — deprecated glyphs in the two reference apps: 3 sites replaced onto the suite's own Refresh convention, 3 kept with the reason at the code · landed · 0879ec3d
+- 2026-09-07 12:58 · Meta · refusal · a gate over examples/** for deprecated glyphs — post-change the exemption map would be the population (94.11 base rate); reopen condition recorded in the gate header · refused · 0879ec3d
 
 ## Sunset test
 
