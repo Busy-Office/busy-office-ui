@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-07 13:49 UTC
+Generated at: 2026-09-07 14:01 UTC
 
 ## Open items by slice
 
@@ -58,9 +58,9 @@ Generated at: 2026-09-07 13:49 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1611 iterations logged)
+dispatch status — counter-triggered rules (1614 iterations logged)
   Standardize   4 / 4 Continue rounds since 2026-09-07 10:47   OVERDUE
-  Objective     1 / 3 slice           since 2026-09-07 21:41   ok  [331]
+  Objective     0 / 3 slices          since 2026-09-07 14:01   ok
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-09-07 12:59   ok   [newest pair: claims; 133 sample(s), 7 of 44 name(s) paired across days]
      rule 5's comparable set — 7 name(s) sampled on 2+ distinct days (37 of 44 name(s) have only one day and are not an input to a rule that compares two runs):
@@ -89,9 +89,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-07 21:01 · Meta · refusal · cutting three of the six rows, or padding those pages with a bare pattern link — nothing was missing, and padding would be fitting the page to the gate · refused · 9a4be080
-- 2026-09-07 21:16 · Continue · build · Slice 329 / closes 249.9 — the component catalogue at /components/: 42 cards, 8 groups, every field generated (tagline+category from api.json meta, JS status from behaviors.json byComponent, floor from floor.json perComponent, DSA from dsa-scores.json). Caught a defect in my own code before shipping: 2 of 6 'no tagline' cards were real components whose page slug differs from their CSS dir (alerts->alert, state-patterns->state) — CLAUDE.md's named trap; inverted api.json's pageSlug map rather than special-casing, 6 -> 0. Edited check-page-shape to stop treating a section front door as a component, red-proved with an orphan probe · landed · 623c98d9
-- 2026-09-07 21:16 · Meta · refusal · the build-time miniature 249.9 specified — measured 40s and 1.1MB for 40 components, ~12x the whole framework's minified size, to show a still picture of a demo that is live one click away; that is re-photographing, which the pattern recipe already refuses · refused · 623c98d9
 - 2026-09-07 21:16 · Meta · refusal · dispatching 249.7 as the oldest open item — its first Accept clause is already executed and its own text says settling the rest before the owner answers 249.10 would decide it on the thinnest input; reported as owner-blocked per rule 4 · refused · 623c98d9
 - 2026-09-07 21:41 · Objective · grill · Slice 330 — grill of 310, 328, 329: 23 of 25 reproduce. The one that matters is mine: 329's miniature cost (29kB/PNG, ~1.1MB for 40) was extrapolated from five components and does not reproduce — an independent five-sample read 49kB/1.91MB, and a census over all 39 reads 0.89MB with a 2.2-60.7kB spread. Two samples landed either side of the truth. The refusal survives (0.89MB is ~10x the framework) but the wrong figure was written into the shipped page header. Corrected there and in the slice, with the command shape added · logged · 8ef9b944
 - 2026-09-07 21:41 · Meta · refusal · a gate over 'a published figure carries the command that produces it' — semantic predicate, 94.11's wall for the seventh time; the fix that works is putting the command next to the claim · refused · 8ef9b944
@@ -99,6 +96,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-07 21:49 · Continue · build · Slice 331 / closes 294.2 — fixed the input block instead of reporting it a twelfth time: landed the owner-supplied contribution on branch contribution/upstream-2026-09-06 (31 files, secret-scanned, NOT on main, nothing adopted) so every verdict cites a readable path — 321.1's defect fixed as a class. All six proposals ranked: brand mark OWNER CALL; registry refused / install-prompts adopt-with-changes (must be generated, filed 331.1); gauntlet already adopted Slice 296; static consumer REFUSED because erp-suite already ships a file-openable static dist; modern CSS split (probes landed 311, OKLCH blocked by its own PR.md gate, surface.css withdrawn by its author); proposals refused as product · landed · 19fc0045
 - 2026-09-07 21:49 · Meta · refusal · the shadcn registry.json — publishing into that ecosystem advertises this framework to consumers expecting React components; Slice 296's refusal stands · refused · 19fc0045
 - 2026-09-07 21:49 · Meta · refusal · examples/static-list-report — erp-suite already ships a static dist openable with file:// and has no server at all, so a second consumer is coverage duplication carrying a hand-transcribed copy of three shipped behaviours · refused · 19fc0045
+- 2026-09-07 14:01 · Objective · grill · Slice 330 amended — grill of 310/328/329 lost the collision; the 17-of-31 corpus finding survives, the census and group-count errors are recorded · logged · 534b097a
+- 2026-09-07 14:01 · Meta · refusal · re-proposing a gate over 'a published figure carries its command' — the landed Slice 330 already refuses it on the semantic wall · refused · 534b097a
+- 2026-09-07 14:01 · Meta · refusal · keeping this wake's duplicate grill report in .roundtable/ — a second report of the same three slices is the repeated-subject shape INDEX.md measures · refused · 534b097a
 
 ## Sunset test
 
