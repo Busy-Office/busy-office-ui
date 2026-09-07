@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-07 05:45 UTC
+Generated at: 2026-09-07 06:57 UTC
 
 ## Open items by slice
 
@@ -43,16 +43,17 @@ Generated at: 2026-09-07 05:45 UTC
 - **Slice 320** (2 open)
   - 320.2 — judge each declaration separately, so a dead one cannot hide behind a live sibling.
   - 320.3 — the same idiom, two values, in two shared components.
+- **Slice 322** (1 open)
+  - 322.3 — should a phrase-count over `ROADMAP.md` / `ROADMAP-archive.md` be taken whitespace-normalised by default?
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1578 iterations logged)
+dispatch status — counter-triggered rules (1581 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-09-07 05:14   ok
-  Objective     3 / 3 slices          since 2026-09-07 03:02   OVERDUE  [304, 305, 320]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-09-07 06:57   ok
   Optimize      1 wake-date(s) newer   since 2026-09-06 16:56   STALE   [newest pair: axe-violations; 132 sample(s), 13 of 44 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-06, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-06 (2026-09-07), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -74,9 +75,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-07 03:49 · Meta · refusal · attributing a published bare percentage by git log -S — the needle collides with the tail of a longer percentage (79.5% contains 9.5%) · refused · 8beee329
-- 2026-09-07 03:49 · Meta · refusal · matching an 'N lines' figure — it cannot tell the denominator from the numerator, a subset, or the trigger threshold · refused · 8beee329
-- 2026-09-07 05:14 · Standardize · sweep · Slice 320 — 4 of 4 lanes; the last two inline spellings of .docs-list/.docs-list-bare lived in the shared components; closes 314.2; lane 1's headline number counts attributes while saying declarations · landed · 7dacd80b
 - 2026-09-07 05:14 · Meta · refusal · base/primitives.astro's four margin-block-start: 1.5rem — inside copyable samples, out of 292.8's live-markup scope · refused · 7dacd80b
 - 2026-09-07 05:14 · Meta · refusal · ClassRef.astro:44's off-scale .4rem — unifying it with ApiTable's 0.5rem is a rendered change a cloud wake cannot judge; filed as 320.3 · refused · 7dacd80b
 - 2026-09-07 05:14 · Meta · refusal · --bo-space-0 as the spelling of a zero — refused on evidence, it has never been used anywhere · refused · 7dacd80b
@@ -84,6 +82,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-07 05:45 · Continue · build · 305.1 — the gauntlet artifact three blind critic rounds graded is in no commit; LOOPS.md §7 gains the committed-path clause · landed · cbd8419d
 - 2026-09-07 05:45 · Meta · refusal · 305.2's proposed §7 step — 1 of 12 findings gate-catchable, and step 1 already says 'the repo's gates green' · refused · cbd8419d
 - 2026-09-07 05:45 · Meta · refusal · a gate over 'open items cite resolvable paths' — 2 of 10 legitimate absences on a healthy tree (94.11) · refused · cbd8419d
+- 2026-09-07 06:57 · Objective · grill · Slice 322 — grill of 304/305/320: 26 of 29 reproduce, and both defects are a COUNT published beside a fix that was red-proved correctly. 320's wrong-noun blast radius is 17 Standardize sweeps (208..314, all 17), not the published 'five consecutive (214,284,290,301,314)' — and this grill's own first line-based scan reproduced the same undercount, missing exactly 301 whose phrase wraps a newline. 304's base rate (11/7/4) carries no command and is not re-runnable; re-derived from its stated form it is corpus 10, split 8 parent / 0 commit / 2 neither — the same omission 304 diagnoses in Slice 301 two paragraphs earlier. Both corrected in place per 236.2 with the commands recorded; 322.3 filed open · landed · ccb7d3ce
+- 2026-09-07 06:57 · Meta · refusal · a gate over 'this count was taken correctly' — not a checkable shape; it would have to re-run every count in the corpus against an instrument nobody wrote down (94.11) · refused · ccb7d3ce
+- 2026-09-07 06:57 · Meta · refusal · adjudicating 304's '3 of 11 name a revision' half — the verdict depends on how wide a window counts as surrounding text (a ±3-line window returns 4 of 9), so it is reported undecidable rather than scored · refused · ccb7d3ce
 
 ## Sunset test
 
