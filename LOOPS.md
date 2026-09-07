@@ -539,6 +539,14 @@ match to its full playbook below:
    be evaluated rather than reporting it clear.** A rule answered from a dead
    instrument reports "nothing to do" exactly as convincingly as a healthy one.
 
+   **A third flag, `SKEW`, means the opposite of STALE and is not a milder
+   version of it** (roadmap 306.1, 2026-09-07). Both files carry naive local
+   stamps from two dispatchers eight hours apart, so a log date can be newer
+   than a metric's date purely because the clocks crossed a calendar boundary —
+   seven distinct occasions across 958 revisions of `loop-log.md`. `SKEW` says
+   every such date sits inside that envelope: the input is as fresh as the log,
+   the rule IS evaluable, and **recording another metric moves nothing**.
+
    Two, not one, and the wording is deliberate. CI wall time was declared
    regressed on a single 290s reading against a 288s budget, an Optimize item
    was raised, and the next two runs came in at 267s and 265s — the 290 was

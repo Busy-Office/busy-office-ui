@@ -28,8 +28,10 @@ The output is the product. Exit status is 0 on a clean read and NON-ZERO on a
 parse failure — a counter that cannot see its own input must say so rather than
 print a number, which is the whole reason this file exists.
 """
+import datetime
 import json
 import re
+import subprocess
 import sys
 
 from _common import LOG, METRICS
@@ -419,6 +421,143 @@ def report(all_rows, loop, threshold, unit):
 # heuristic in this file and carries the self-test.
 
 
+# ---------------------------------------------------------------------------
+# THE CLOCK SKEW (roadmap 306.1). The paragraph above says date granularity is
+# "immune to the whole eight-hour ambiguity". It is immune to it WITHIN a date
+# and not across one, which is the case Slice 306 found live: a metric this
+# container recorded at `2026-09-06 16:56` (+0000) sat one calendar day behind
+# log rows the other dispatcher had written at `2026-09-07 00:21` (+0800) — the
+# same wall-clock moment. The line read `1 wake-date(s) newer   STALE`, and the
+# residual was the clock, not missing input. A wake that reads it as missing
+# input records another metric that cannot help either, which is exactly what
+# 306 was triaged from inside a Continue round for noticing.
+#
+# Both files carry NAIVE local stamps from two dispatchers (164.2 measured the
+# split and refused to add `%z`), so neither side can be converted to a shared
+# basis from its own contents. What CAN be stated exactly is the envelope: with
+# offsets `off_row` and `off_met` drawn from the observed set,
+#
+#   row_real <= metric_real   <=>   row_naive - metric_naive <= off_row - off_met
+#
+# so a row is provably newer than a metric only when it is naive-later by MORE
+# than the widest offset difference. Inside that envelope the ordering is
+# genuinely undetermined and the honest report is "the clock cannot rule this
+# out", never "stale". This is the second branch of 306.1's Accept — naming the
+# skew rather than pretending to remove it — and it is conservative in one
+# direction only: it can soften a STALE, never manufacture one, and it never
+# touches an `ok`.
+#
+# The dates that survive the envelope are always a SUFFIX of the newer dates,
+# because every row on a later date is naive-later than every row on an earlier
+# one. So "1 date provably newer" is never hiding an older date that was.
+#
+# BASE RATE, measured before shipping, per CLAUDE.md — a discrimination that
+# fires on nothing looks exactly like a passing one. Replayed over every
+# revision of `loop-log.md` with both files taken AT that commit (the state a
+# wake actually read), not as-of-date:
+#
+#   958 revisions -> 581 STALE, 323 ok, 51 SKEW, 2 NO LIVE INPUT, 1 no metrics
+#   the 51 are SEVEN distinct occasions, not 51 events — 2026-08-13/15/16/17/18
+#   (bundle-gz-kb, ci-gates, ci-wall-time), 2026-08-19 (framework_classes, 23
+#   revisions), and 2026-09-06 (axe-violations), which is Slice 306's own.
+#
+# An as-of-DATE replay reports ZERO of them and would have refused this change
+# as ceremony: it sees the whole of the later date, including rows written after
+# the wake read the line, so every occasion resolves to provably-newer by the
+# end of its day. The granularity of the replay was the finding.
+#
+#   python3 - <<'PY'   # re-run; the figures are snapshots
+#   import json, re, collections, datetime, subprocess
+#   ROW = re.compile(r"^- (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) · ")
+#   M = lambda t: datetime.datetime.strptime(t, "%Y-%m-%d %H:%M")
+#   shas = subprocess.run(["git", "log", "--format=%H", "--", ".roundtable/loop-log.md"],
+#                         capture_output=True, text=True).stdout.split()
+#   blob = lambda s, p: subprocess.run(["git", "show", f"{s}:{p}"],
+#                                      capture_output=True, text=True).stdout
+#   tally = collections.Counter()
+#   for sha in shas:
+#       lg, mt = blob(sha, ".roundtable/loop-log.md"), blob(sha, ".roundtable/loop-metrics.jsonl")
+#       rows = [ROW.match(l).group(1) for l in lg.splitlines() if ROW.match(l)]
+#       mets = [json.loads(l) for l in mt.splitlines() if l.strip()]
+#       if not rows or not mets: continue
+#       c = collections.Counter(m["name"] for m in mets)
+#       pairs = [m for m in mets if c[m["name"]] >= 2]
+#       if not pairs: tally["NO LIVE INPUT"] += 1; continue
+#       n = max(pairs, key=lambda s: s["ts"])
+#       stale = sorted({r[:10] for r in rows if r[:10] > n["ts"][:10]})
+#       prov = [d for d in stale if any(M(r) - M(n["ts"]) > MAX_CLOCK_SKEW
+#                                       for r in rows if r[:10] == d)]
+#       tally["ok" if not stale else ("STALE" if prov else "SKEW")] += 1
+#   print(tally)
+#   PY
+#
+# The VALUE is measured, not assumed, and `observed_skew` below re-derives it
+# from git and says so when it disagrees — a constant nobody re-reads is the
+# failure this repo keeps paying for:
+#
+#   git blame --line-porcelain -- .roundtable/loop-log.md \
+#     | grep '^author-tz' | sort | uniq -c     # +0000 495, +0800 1094 (2026-09-07)
+#   git blame --line-porcelain -- .roundtable/loop-metrics.jsonl \
+#     | grep '^author-tz' | sort | uniq -c     # +0000  33, +0800   99 (2026-09-07)
+MAX_CLOCK_SKEW = datetime.timedelta(hours=8)
+
+
+def at_minutes(stamp):
+    """A naive `YYYY-MM-DD HH:MM` stamp as a datetime. Local to SOME clock."""
+    return datetime.datetime.strptime(stamp, "%Y-%m-%d %H:%M")
+
+
+def observed_skew():
+    """The widest author-offset difference git actually records on these files.
+
+    Reconciliation for `MAX_CLOCK_SKEW`, per CLAUDE.md's mirror doctrine: a
+    measured constant that nothing re-reads goes stale silently, and a third
+    dispatcher at a third offset would widen the envelope without a line of
+    this file changing. Returns None when git cannot answer — a shallow clone
+    attributes truncated history to the boundary commit, which can only NARROW
+    the observed set, so this under-reports rather than false-alarming.
+    """
+    offsets = set()
+    for path in (LOG, METRICS):
+        try:
+            out = subprocess.run(
+                ["git", "blame", "--line-porcelain", "--", str(path)],
+                capture_output=True, text=True, timeout=60,
+            )
+        except (OSError, subprocess.SubprocessError):
+            return None
+        if out.returncode != 0:
+            return None
+        for line in out.stdout.splitlines():
+            if line.startswith("author-tz "):
+                tz = line.split(" ", 1)[1].strip()
+                sign = -1 if tz.startswith("-") else 1
+                offsets.add(sign * datetime.timedelta(
+                    hours=int(tz[1:3]), minutes=int(tz[3:5])))
+    if not offsets:
+        return None
+    return max(offsets) - min(offsets)
+
+
+def skew_split(newest_ts, all_rows):
+    """Log dates after `newest_ts`, split into skew-explained and provably newer.
+
+    The second list is what rule 5 may treat as newer loop activity; the first
+    is a calendar-day boundary crossed by two clocks and nothing more.
+    """
+    ref = at_minutes(newest_ts)
+    undetermined, provable = [], []
+    by_date = {}
+    for r in all_rows:
+        by_date.setdefault(r["at"][:10], []).append(r["at"])
+    for date in sorted(d for d in by_date if d > newest_ts[:10]):
+        if any(at_minutes(a) - ref > MAX_CLOCK_SKEW for a in by_date[date]):
+            provable.append(date)
+        else:
+            undetermined.append(date)
+    return undetermined, provable
+
+
 def metric_samples():
     """Every recorded metric sample, reconciled against the raw file.
 
@@ -464,7 +603,6 @@ def report_metrics(all_rows):
     # 2026-08-20 are exactly that, which is why "3 recent samples" is not the
     # reassurance it looks like.
     pairs = [s for s in samples if counts[s["name"]] >= 2]
-    log_dates = sorted({r["at"][:10] for r in all_rows})
     if not pairs:
         print(
             f"  Optimize     {len(samples)} sample(s) over {len(counts)} name(s), none "
@@ -480,27 +618,55 @@ def report_metrics(all_rows):
     # aged it by nothing; only 257 moved it, by falling on 2026-09-04 (roadmap
     # 258.1). The advisory line below says the unit, because that is where the
     # misreading happens.
-    stale = [d for d in log_dates if d > newest["ts"][:10]]
-    flag = "ok" if not stale else "STALE"
+    #
+    # ...and a date that is newer ONLY because two clocks crossed a calendar
+    # boundary is not newer at all (roadmap 306.1, block above). `provable` is
+    # what rule 5 may count; `undetermined` is reported and never counted.
+    undetermined, provable = skew_split(newest["ts"], all_rows)
+    stale = undetermined + provable
+    flag = "ok" if not stale else ("STALE" if provable else "SKEW")
     print(
-        f"  {'Optimize':<12} {len(stale):>2} wake-date(s) newer   "
+        f"  {'Optimize':<12} {len(provable):>2} wake-date(s) newer   "
         f"since {newest['ts']}   {flag}   "
         f"[newest pair: {newest['name']}; {len(samples)} sample(s), "
         f"{sum(1 for n in counts if counts[n] >= 2)} of {len(counts)} name(s) sampled twice]"
     )
-    if stale:
+    if provable:
         print(
-            f"  -> rule 5's newest comparable pair predates {len(stale)} wake-date(s) of "
+            f"  -> rule 5's newest comparable pair predates {len(provable)} wake-date(s) of "
             f"loop activity. Any regression verdict quoted from it is about the tree as "
             f"it was on {newest['ts'][:10]}, not this one — record a metric or say the "
             f"rule could not be evaluated."
         )
         print(
             f"     the unit is DISTINCT LOG DATES after {newest['ts'][:10]} "
-            f"({', '.join(stale)}), not wakes: several wakes on one date add "
+            f"({', '.join(provable)}), not wakes: several wakes on one date add "
             f"nothing, and one wake on a new date adds the whole step."
         )
-    return bool(stale)
+    if undetermined:
+        print(
+            f"     {len(undetermined)} further date(s) ({', '.join(undetermined)}) are NOT "
+            f"counted above: every row on them is naive-later than the pair by less than "
+            f"the {int(MAX_CLOCK_SKEW.total_seconds() // 3600)}h between the two dispatchers' "
+            f"clocks, so the ordering is undetermined, not stale (roadmap 306.1). "
+            f"Both files carry naive local stamps and neither says which clock wrote it."
+            + ("" if provable else " Recording another metric does not move this line.")
+        )
+    seen = observed_skew()
+    if seen is None:
+        print(
+            "     NOTE: the clock-skew envelope could NOT be reconciled against git "
+            f"(blame unavailable), so the {int(MAX_CLOCK_SKEW.total_seconds() // 3600)}h "
+            "above is the last measured value and is unverified on this tree."
+        )
+    elif seen > MAX_CLOCK_SKEW:
+        print(
+            f"     NOTE: git records author offsets spanning {seen} on these two files, "
+            f"WIDER than the {MAX_CLOCK_SKEW} envelope this script applies — a dispatcher "
+            f"at a new offset has appeared and the split above under-reports the "
+            f"undetermined dates. Widen MAX_CLOCK_SKEW."
+        )
+    return bool(provable)
 
 
 # Measured share of slice-closing rows that legitimately name no slice. Used
@@ -542,18 +708,61 @@ SELF_TEST = [
 # Roadmap rows, which CLOSES_A_SLICE excludes, so neither reaches the counter.
 
 
+# 306.1's red-proof, and it is a discrimination test rather than the heuristic
+# ceremony above: `skew_split` is @exact arithmetic, but the whole point of the
+# item is that the line must tell a clock artefact APART from real staleness, so
+# a fixture that only ever shows one of the two would certify nothing.
+#
+# The first two cases are the pair the Accept names — a log row and a metric
+# written at the SAME instant under the two offsets. `2026-09-06 16:56` is what
+# this container wrote at that moment; `2026-09-07 00:56` is what the +0800
+# dispatcher wrote at the very same moment. The third moves that row eight hours
+# and one minute out, past the envelope, where no offset assignment can make it
+# anything but newer. Case 4 is the state Slice 306 actually read.
+SKEW_SELF_TEST = [
+    # (metric stamp, log row stamps, expected (undetermined, provable))
+    # same instant, two clocks: the calendar date differs and nothing is stale
+    ("2026-09-06 16:56", ["2026-09-07 00:56"], (["2026-09-07"], [])),
+    # the boundary itself — exactly 8h is still inside the envelope
+    ("2026-09-06 16:56", ["2026-09-07 00:56", "2026-09-06 20:00"], (["2026-09-07"], [])),
+    # one minute past it: no assignment of the two offsets makes this not newer
+    ("2026-09-06 16:56", ["2026-09-07 00:57"], ([], ["2026-09-07"])),
+    # Slice 306's own reading: two rows inside, two provably outside, one date
+    ("2026-09-06 16:56",
+     ["2026-09-07 00:21", "2026-09-07 00:35", "2026-09-07 05:14", "2026-09-07 06:57"],
+     ([], ["2026-09-07"])),
+    # a row on the metric's own date is never newer, however much later it is
+    ("2026-09-06 16:56", ["2026-09-06 23:59"], ([], [])),
+    # two dates, one inside and one out — provable is a SUFFIX, never a subset
+    ("2026-09-06 16:56", ["2026-09-07 00:10", "2026-09-08 09:00"],
+     (["2026-09-07"], ["2026-09-08"])),
+]
+
+
+def skew_self_test():
+    bad = []
+    for metric_ts, row_stamps, want in SKEW_SELF_TEST:
+        got = skew_split(metric_ts, [{"at": a} for a in row_stamps])
+        if got != want:
+            bad.append(f"    {metric_ts} vs {row_stamps} -> {got}, expected {want}")
+    return bad
+
+
 def self_test():
     bad = [
         f"    {item!r} -> {got!r}, expected {want!r}"
         for item, want in SELF_TEST
         for got in [slice_of(item)]
         if got != want
-    ]
+    ] + skew_self_test()
     if bad:
         print("dispatch_status --self-test FAILED:", file=sys.stderr)
         print("\n".join(bad), file=sys.stderr)
         return 1
-    print(f"dispatch_status --self-test: {len(SELF_TEST)} cases classified correctly")
+    print(
+        f"dispatch_status --self-test: {len(SELF_TEST)} slice-reference case(s) and "
+        f"{len(SKEW_SELF_TEST)} clock-skew case(s) classified correctly"
+    )
     return 0
 
 

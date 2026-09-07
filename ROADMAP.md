@@ -320,6 +320,89 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 323 — rule 5's staleness line compared naive stamps from two clocks, so a calendar boundary read as missing input; the fix states the skew rather than removing it, and the base rate that justifies it is invisible at date granularity (2026-09-07)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again (trap 1;
+`git branch --show-current` empty), fixed with `git checkout -B main
+origin/main` before any commit. `origin/main` again a **forced update**
+(`26447ba...152b9bc`). Trap 2 clean in one `--unshallow` (**2,004** commits, no
+`shallow.lock`) and it again brought the tags — the **thirty-sixth** consecutive
+container to do so; `git tag | wc -l` → **8**. `origin/main` was `152b9bc9` at
+Step 0 and `152b9bc9` again immediately before the first commit, so no
+collision. Step 1: both intakes read via the REST substitute with
+`ENVIRONMENT.md` §8's two controls — **issues 1 open** (#2, already triaged as
+`300.2`, unchanged since 2026-09-06), **discussions 0 open**,
+`/not-a-real-route` **404**. No new input, so Step 1 committed nothing.
+
+Rule 1: no open P0 — `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` reads **0**
+across the 25 open items. Rule 2: `Standardize 1 / 4`. Rule 3: `Objective 0 / 3`
+(reset by Slice 322's own row, one wake back). Rule 4: the oldest still-open
+item no other rule blocks is **`306.1`** — everything older is owner-blocked
+(Slice 15, `112.3`, `112.4`, `249.7`, `249.10`-`249.13`, `273.2`, `296.3`),
+browser-blocked in the screenshot sense (`249.6`, `249.9`) or input-blocked
+(`294.2`, `297.1`) — so **Continue, build mode**.
+
+### The finding: "immune to the eight-hour ambiguity" was true within a date and false across one
+
+`dispatch_status.py`'s own header argued date granularity was *"immune to the
+whole eight-hour ambiguity"*, and it is — for two stamps that land on the same
+date. Slice 306 caught the other case live: a metric this container wrote at
+`2026-09-06 16:56` (+0000) sat one calendar day behind log rows the other
+dispatcher wrote at `2026-09-07 00:21` (+0800), the **same wall-clock moment**,
+and the line reported `1 wake-date(s) newer   STALE`. The remedy a wake reaches
+for on reading that — record another metric — cannot help, because the residual
+is not missing input.
+
+Neither file can be converted to a shared basis from its own contents: both
+carry naive local stamps, and `LOOPS.md` 164.2 already refused to add `%z` and
+refused to backfill. So the fix takes the Accept's second branch and states the
+skew. The full mechanism, the reconciliation, both red-proofs and the
+one-directional-softening argument are in `306.1` above and in the script's own
+header.
+
+### The base rate is the part worth carrying, because the first measurement said "refuse this"
+
+CLAUDE.md requires the base rate before a predicate ships. The obvious replay —
+as-of-DATE over the log's 26 wake-dates, the form the script's existing base-rate
+command already uses — returned **zero** SKEW verdicts and an identical 13 ok /
+13 STALE split. Read literally that is *"the discrimination fires on nothing"*,
+which is this repo's own reason to refuse a gate (94.11).
+
+It was the wrong instrument, and the tell was that Slice 306 had **watched the
+state happen**. An as-of-date replay includes every row on the later date,
+including rows written hours after the wake read the line, so each occasion
+resolves to provably-newer by the end of its own day. Replayed at the
+granularity a wake actually reads — both files taken **at each commit** of
+`loop-log.md` — it reads `958 revisions -> 581 STALE, 323 ok, 51 SKEW`, and the
+51 are **seven distinct occasions**, the last being 306's own.
+
+**Two lessons, and the second is the transferable one.** A replay's granularity
+is part of the instrument, not a detail of it: a state that exists for four
+hours is invisible to a daily sampler however many days it sweeps. And **a base
+rate of zero is a claim about the instrument first** — the same grammar as *a
+0%, a 100%, or an identical value across many inputs is a defect until proven
+otherwise*, which this repo already writes down and which pointed at the replay
+rather than at the predicate. Had the tell been absent, refusing would have been
+correct on that evidence; what licensed looking again was a recorded observation
+the instrument could not see, not a preference for shipping.
+
+1. [ ] **323.1 — the script's existing base-rate command, the one quoted above
+       `metric_samples`, is an as-of-DATE replay and is now known to be blind to
+       states that live less than a day.** It was written for rule 5's own
+       liveness question, where a date is arguably the right unit, so this is
+       not a defect in it — but it sits three screens above a second replay that
+       had to be written at commit granularity for exactly this reason, with
+       nothing saying why they differ.
+       - **Accept** — the property: a reader of either command can tell from the
+         file which question each answers and why the units differ, OR the two
+         are reconciled into one. **Concluding that the two units are both
+         correct for their own questions and that a sentence naming the
+         difference is the whole fix is a satisfying outcome** — measure what
+         the date-granularity command would report on the seven occasions
+         before proposing anything larger. No gate: "the right granularity was
+         chosen" is not a checkable shape (94.11).
+       - **Lane:** cloud-takeable — Python, git history, no browser.
+
 ## Slice 322 — Objective grill of Slices 304, 305, 320: 26 of 29 assertions reproduce, and both defects are a COUNT published beside a correctly red-proved fix. One of them the grill's own first instrument reproduced, by the same mechanism (2026-09-07)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again (trap 1;
@@ -2637,23 +2720,73 @@ either. `LOOPS.md` 164.2 already refused appending `%z` to log rows
 (`dispatch_status.py`'s `ROW` rejects it) and refused backfilling the existing
 rows, so the fix is not there.
 
-1. [ ] **306.1 — rule 5's staleness comparison must not be able to report
-       "stale" for a reason that is only a timezone.** The two stamps it
-       compares come from different clocks, and nothing in the line says so, so
-       the number under-reports the loop's freshness by up to a day in one
-       direction and could over-report it in the other.
-       - **Accept:** `dispatch_status.py`'s rule-5 line agrees with what the
-         underlying files say about *measurement freshness* rather than about
-         calendar dates from two clocks — either by comparing on a basis that
-         both sides share, or by naming the clock skew in the line so a wake
-         cannot read the residual as missing input. Red-proved by constructing
-         a log row and a metric written at the same instant under the two
-         offsets and showing the line distinguishes that case from a genuinely
-         stale one. **Finding that the honest answer is to state the skew
-         rather than remove it is a satisfying outcome**, provided the line
-         says so and the wake reading it is not misled.
-       - **Lane:** cloud-takeable — it is a Python script, a jsonl file and a
-         markdown log; no browser and no rendered image.
+1. [x] **306.1 — DONE 2026-09-07 (Slice 323, cloud wake). The Accept's second
+       branch was the honest one: the skew is STATED, not removed**, because
+       neither file can be converted to a shared basis from its own contents —
+       both carry naive local stamps and 164.2 refused to add `%z`. What CAN be
+       stated exactly is the envelope. With offsets drawn from the observed set,
+       `row_real <= metric_real  <=>  row_naive - metric_naive <= off_row -
+       off_met`, so a log row is **provably** newer than a metric only when it
+       is naive-later by MORE than the widest offset difference. Inside that
+       window the ordering is genuinely undetermined, and the line now says so
+       instead of counting it.
+       - **Shipped** in `dispatch_status.py`: `skew_split()` splits the newer
+         log dates into skew-explained and provably-newer; the flag is `ok` /
+         `SKEW` / `STALE`; the counted number is the provable half. The
+         softening is one-directional by construction — it can turn a STALE
+         into a SKEW, never manufacture a STALE, and it never touches an `ok`.
+         The provable dates are always a **suffix** of the newer dates (every
+         row on a later date is naive-later than every row on an earlier one),
+         so a count of 1 is never hiding an older date that also qualified.
+       - **The envelope is 8h, measured rather than assumed, and reconciled on
+         every run.** `git blame --line-porcelain` over both files records
+         author offsets `+0000` and `+0800` (log: 495 / 1094 lines; metrics:
+         33 / 99, 2026-09-07). `observed_skew()` re-derives that spread from
+         git each run and prints a NOTE when it is WIDER than the constant — a
+         third dispatcher at a third offset would otherwise widen the true
+         envelope with nothing in the file changing. It returns `8:00:00`
+         against a constant of `8:00:00` on this tree, and red-proved by
+         narrowing the constant to 1h, which fires the NOTE. When git cannot
+         answer it says the constant is unverified rather than passing quietly.
+       - **Base rate measured BEFORE shipping, and the first measurement said
+         "ceremony".** An as-of-DATE replay over the 26 wake-dates in the log
+         reported **zero** SKEW verdicts — 13 ok / 13 STALE, identical to the
+         old logic. That replay is the wrong granularity: it sees the whole of
+         the later date, including rows written after the wake read the line,
+         so every occasion resolves to provably-newer by the end of its day.
+         Replayed instead over **every revision of `loop-log.md` with both
+         files taken AT that commit** — the state a wake actually read — it
+         reads `958 revisions -> 581 STALE, 323 ok, 51 SKEW, 2 NO LIVE INPUT`.
+         The 51 are **seven distinct occasions**, not 51 events (2026-08-13,
+         -15, -16, -17, -18, -19 and 2026-09-06), and the last of them is Slice
+         306's own reading. Quoting the 51 without the 7 would be a revision
+         count dressed up as an event count. Both commands are in the script.
+       - **Red-proved twice, and the injections were confirmed to land before
+         the result was believed.** (a) `--self-test` gains six clock-skew
+         cases, including the pair the Accept names — a metric at
+         `2026-09-06 16:56` (+0000) against a row at `2026-09-07 00:56`
+         (+0800), the same instant — plus the boundary at exactly 8h and one
+         minute past it. Setting the envelope to `0` reproduces the OLD
+         behaviour and fails 3 of 6; setting it to 999 days fails a
+         complementary 3 of 6; the case that survives both is the one testing
+         the date boundary rather than the envelope. Each injection was
+         verified by printing `skew_split`'s output before running the test,
+         not by trusting the red. (b) End-to-end on synthetic files, the
+         printed LINE distinguishes all three states: same-instant-two-clocks
+         → `0 wake-date(s) newer   SKEW` plus *"Recording another metric does
+         not move this line"*, which is exactly the misdirection 306 was
+         triaged for; a row 12 hours later → `1 … STALE`; and a mixed case →
+         STALE on the provable date with the skew-explained date reported and
+         not counted.
+       - **Today's live reading is UNCHANGED — `1 wake-date(s) newer  STALE` —
+         and that is the result, not a null.** The rows at `2026-09-07 05:14`
+         and `06:57` are naive-later than the `2026-09-06 16:56` pair by 12h18m
+         and 14h01m, past the envelope under any offset assignment, so the
+         current staleness is genuine and is now earned rather than asserted.
+         A fix that also flipped the reading it was built from would be the
+         suspicious outcome.
+       - **NOT VERIFIED:** nothing here renders, so no screenshot was taken and
+         none is owed — the diff is one Python script, `LOOPS.md` and this file.
 
 ## Slice 305 — 296.1: the Gauntlet ran its full three-round budget and the artifact FAILED — the loop worked, the framework was never the gap (2026-09-07)
 
