@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-07 19:15 UTC
+Generated at: 2026-09-07 19:53 UTC
 
 ## Open items by slice
 
@@ -19,8 +19,6 @@ Generated at: 2026-09-07 19:15 UTC
   - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
 - **Slice 296** (1 open)
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
-- **Slice 316** (1 open)
-  - 316.1 — should a gate forbid a theme token in a `@media print` colour declaration?
 - **Slice 319** (1 open)
   - 319.3 — should a docs page be allowed to assert a target size at all without a gate that can see it?
 - **Slice 320** (2 open)
@@ -58,15 +56,18 @@ Generated at: 2026-09-07 19:15 UTC
   - 336.2 — should `report:prose` print the flagged UNION, since that is what its lane is defined on?
 - **Slice 337** (1 open)
   - 337.1 — A Standardize lane that never RAN is recorded as clean, and nothing in the sweep can tell the two apart.
+- **Slice 338** (1 open)
+  - 338.1 — the gap `check:print-tokens` cannot see: a theme token that reaches paper through the ORDINARY CASCADE.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1628 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-09-07 22:24   ok
-  Objective     0 / 3 slices          since 2026-09-08 03:15   ok
+dispatch status — counter-triggered rules (1630 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-09-07 22:24   OVERDUE
+  Objective     1 / 3 slice           since 2026-09-08 03:15   ok  [316]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      1 wake-date(s) newer   since 2026-09-07 12:59   STALE   [newest pair: claims; 133 sample(s), 7 of 44 name(s) paired across days]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-07, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-07 (2026-09-08), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -96,8 +97,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-07 14:49 · Meta · refusal · rendering the five as pre blocks — three of them contradict the live showcase they describe, so the render branch of 310.2's Accept ships worse than nothing without first rendering preview and code from one string · refused · 422601c4
-- 2026-09-07 16:07 · Continue · build · 315.3 — check:selftests executes each heuristic gate's --self-test and asserts a case-count marker; base rate re-measured (0 of 20 run zero cases), 3 gates standardised, 334.1 filed · landed · ac4a9a0f
 - 2026-09-07 16:07 · Meta · refusal · retagging check-selftests.mjs @heuristic inside this slice — it would move the two counts stamped on the npm front page (54/20/34 -> 55/21/34) and require a README re-stamp; filed as 334.1 instead · refused · ac4a9a0f
 - 2026-09-07 16:07 · Meta · refusal · exit code alone as the execution signal — it cannot distinguish 18 passing cases from a branch that never ran, which is 315.1 exactly · refused · ac4a9a0f
 - 2026-09-07 16:09 · Roadmap · plan · cloud-wake hand-off for Slice 334; rule 3 armed at 3/3 for the next wake · logged · ac4a9a0f
@@ -106,6 +105,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-07 19:07 · Meta · refusal · a gate for 'the noun matches the population' — semantic, 94.11's wall · refused · 86f034ce
 - 2026-09-07 19:07 · Meta · refusal · building 336.2 inside the grill — the union question is filed with its base rate, not answered here · refused · 86f034ce
 - 2026-09-08 03:15 · Objective · grill · Objective grill of 297 (collision 5 — the cloud dispatcher ran the same rule and took 315/332/333, so those are ceded to its Slice 336). Defect: 297 called config.yml a third 'template' that 'enforces', when it is the router whose first line is blank_issues_enabled:true — the escape hatch counted as an enforcer. The archive entry it compressed had said 'blank issues on' outright, and Slice 335 spent an API round-trip rediscovering it. Filed 337.1. · landed · 69e43460
+- 2026-09-07 19:53 · Continue · build · 316.1 — check:print-tokens: no theme colour token inside @media print, red-proved twice · landed · e4742fd4
+- 2026-09-07 19:53 · Meta · refusal · the exemption list 316.1 anticipated for print-color-adjust:exact fills — measured, all three such rules declare no colour inside @media print at all · refused · e4742fd4
 
 ## Sunset test
 
