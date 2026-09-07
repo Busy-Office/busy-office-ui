@@ -23,9 +23,9 @@ survives none.
 ## In flight: nothing
 
 Last updated 2026-09-07 (**cloud** wake, scheduled routine). Working tree clean
-at hand-off. **One iteration recorded**: `Objective · grill` (outcome `landed`,
-two additional refusals). The work landed as **`ccb7d3ce`** (Slice 322),
-followed by this hand-off's own commit. Read `git log ccb7d3ce~1..` for the
+at hand-off. **One iteration recorded**: `Continue · build` (outcome `landed`,
+two additional refusals). The work landed as **`a6e7fff6`** (Slice 323),
+followed by this hand-off's own commit. Read `git log a6e7fff6~1..` for the
 exact set.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
@@ -36,7 +36,7 @@ node apps/docs/scripts/check-resume-slice-ids.mjs # names any stale closed ids
 python3 scripts/loops/roadmap_scope.py            # OPEN set + sweep scope
 ```
 
-Every figure below was taken `--rev ccb7d3ce`, the slice commit — **not** the
+Every figure below was taken `--rev a6e7fff6`, the slice commit — **not** the
 working tree and **not** `HEAD`, which is `ENVIRONMENT.md`'s figure rule and the
 one two consecutive wakes broke from the `HEAD` side.
 
@@ -46,32 +46,43 @@ Counters read **after** recording this wake's row, which is the comparison
 `LOOPS.md` mandates:
 
 ```
-Standardize   1 / 4 Continue rounds     since 2026-09-07 05:14   ok
-Objective     0 / 3 slices              since 2026-09-07 06:57   ok
-Optimize      STALE  (1 wake-date newer)
+Standardize   2 / 4 Continue rounds    since 2026-09-07 05:14   ok
+Objective     1 / 3 slices  [323]      since 2026-09-07 06:57   ok
+Optimize      1 wake-date newer        since 2026-09-06 16:56   STALE
 ```
 
-**Rule 3 fired on this wake and its counter reset to `0 / 3`**, which is the
-expected behaviour — an Objective row resets it. The mandated hand-check turns
-up nothing anomalous this time: the reset is attributable to this wake's own row
-and to nothing else.
+Both counters moved by exactly what this wake did by hand — one Continue round,
+one slice closed — which is the disagreement check `LOOPS.md` says is the only
+thing that has ever caught rule 3's parser. Nothing anomalous.
 
-**Rule 5 is reported as *could not be evaluated*, never clear.** No metric was
-recorded this wake. `306.1` explains why a cloud wake cannot drive that line to
-`ok` by recording more; do not try. `bundle-gz-kb` still cannot be sampled
-(`259.1`, carried forward, not re-run).
+**Rule 5 reads STALE, and this wake is the one that made that word mean
+something.** The line now has a third flag, `SKEW`, and STALE is no longer
+reachable by a calendar boundary alone. Today's `1` is genuine: the rows at
+`05:14` and `06:57` are 12h18m and 14h01m past the newest pair, outside the 8h
+envelope under any offset assignment. **Still report rule 5 as *could not be
+evaluated*, not clear** — a real STALE is still no input. What changed is that a
+future `SKEW` reading means the opposite and must NOT be answered by recording
+another metric; the line says so itself.
+
+**No metric was recorded this wake**, deliberately: the one thing this slice
+establishes is that adding a sample to chase a skew residual is wasted. This
+STALE is not a skew residual, so a metric would have helped — but the item under
+build was the instrument, and measuring with it in the same wake it changed is
+the shape `LOOPS.md` warns about. `bundle-gz-kb` still cannot be sampled
+(`259.1` — carried forward, not re-run this wake).
 
 **`polish_requeue.py` did NOT run this wake** in any mode — `LOOPS.md` §3b step
-0 is owed only once rule 6 is reached, and rule 3 matched first. No stamp
+0 is owed only once rule 6 is reached, and rule 4 matched first. No stamp
 reading from this wake exists to quote.
 
-Of the three advisory checks, only `check:resume-slice-ids` printed, and it ran
-against the **previous** revision of this file. **Re-run it against this file as
-it now stands**, per the header's own instruction. The previous hand-off's note
-still applies and is the one thing worth carrying: **saying that an id is being
-dropped keeps it named**, because the check reads backticked ids and cannot tell
-a historical reference from a live claim. The remedy is silence, not an
-announcement. The charter check and `--verify-stamps` were silent.
+Of the three advisory checks, only `check:resume-slice-ids` printed, against the
+**previous** revision of this file. **Re-run it against this file as it now
+stands.** The standing note still applies and is the one thing worth carrying:
+**saying that an id is being dropped keeps it named**, because the check reads
+backticked ids and cannot tell a historical reference from a live claim. The
+remedy is silence, not an announcement — which is why the item this wake closed
+is named in prose below rather than in backticks. The charter check and
+`--verify-stamps` were silent.
 
 ## The standing environment fact: CI HAS NO `paths-ignore`
 
@@ -94,56 +105,75 @@ REST substitute was used, with both controls in the same run:
 ```
 /discussions        -> HTTP 200, len 0     the reading
 /not-a-real-route   -> HTTP 404            an unserved route does NOT answer 200 []
-/issues?state=open  -> HTTP 200, len 1     #2, triaged as 300.2, which Slice 317 closed
+/issues?state=open  -> HTTP 200, len 1     #2, updated 2026-09-06T15:10:34Z
 ```
 
 **Readings: issues 1 open, discussions 0 open. No new untriaged input**, so
 Step 1 committed nothing. The red-proof `ENVIRONMENT.md` §8 says is still owed
 remains owed — nothing has ever been filed in this repo's Discussions.
 
-**Issue #2 carries the owner's own triage comment** (2026-09-06) and is still
-open. See Direction.
+**Issue #2's `updated_at` has not moved since the last hand-off**, so it carries
+the same single owner triage comment. See Direction.
 
 ## What landed this wake
 
-**Slice 322**, an Objective grill of **304, 305, 320**, dispatched by **rule 3**
-at `3 / 3 OVERDUE`. Rule 1 found no open P0; rule 2 was at `1 / 4`. §6 step 0's
-narrowing check found no prior grill naming any of the three, so the armed set
-was taken **whole**.
+**Slice 323**, dispatched by **rule 4** on the oldest still-open item no other
+rule blocks. Rule 1 found no open P0; rule 2 was at `1 / 4`; rule 3 at `0 / 3`.
 
-**26 of 29 re-run assertions reproduce. Two fail, and one is not adjudicable.
-Both failures are a COUNT published beside a fix that was red-proved
-correctly** — CLAUDE.md's 192.1 landing twice in one armed set.
+`dispatch_status.py`'s own header argued date granularity was *"immune to the
+whole eight-hour ambiguity"*. It is — **within** a date, and not across one.
+Slice 306 had caught the other case live: a metric this container wrote at
+`2026-09-06 16:56` (+0000) sitting one calendar day behind log rows the other
+dispatcher wrote at `2026-09-07 00:21` (+0800), the same wall-clock moment,
+reported as `1 wake-date(s) newer   STALE`. The remedy a wake reaches for on
+reading that — record another metric — cannot help.
 
-- **Slice 320's blast radius is 17, not five.** It published the wrong-noun
-  quote as *"five consecutive sweep write-ups"*; whitespace-normalised and
-  attributed to the containing slice heading, **17 slices** quote it at the
-  value 1,433 and **all 17 are Standardize sweeps**, with ten of them between
-  the two the list names — so *consecutive* is false as well as low. The
-  corrected statement is stronger: **no sweep has ever quoted it correctly.**
-  **This grill's own first scan was line-based and made the identical mistake**,
-  returning 16 and missing exactly the one slice whose phrase wraps a newline.
-  That is the mechanism, not a lapse, and it is why `322.3` is filed.
-- **Slice 304's base rate cannot be re-run.** Its `11 / 7 / 4` split carries no
-  command — the exact omission it diagnoses in Slice 301 two paragraphs earlier
-  — and an independent re-derivation from its stated form gives corpus **10**,
-  split **8 parent / 0 commit / 2 neither**. This shows the figure cannot be
-  checked, **not** that it is wrong, and the conclusion it supports is untouched
-  and if anything strengthened. Marked NOT REPRODUCIBLE in place rather than
-  replaced.
+**The fix STATES the skew rather than removing it**, which is the branch that
+item's Accept named as a satisfying outcome. Neither file can be converted to a
+shared basis from its own contents, and 164.2 already refused both `%z` and a
+backfill. `skew_split()` splits the newer log dates into skew-explained and
+provably-newer; the flag is `ok` / `SKEW` / `STALE`; the counted number is the
+provable half. The softening is **one-directional by construction** — it can
+turn a STALE into a SKEW, never manufacture a STALE, and never touches an `ok`.
+The 8h envelope is git-blame-measured (`+0000` / `+0800` on both files) and
+`observed_skew()` re-derives that spread every run, printing a NOTE when it is
+wider than the constant or when git cannot answer at all.
 
-Both corrected in place per 236.2 with the originals struck and the commands
-recorded. `322.3` is filed **open**: should a phrase-count over the roadmap
-files be whitespace-normalised by default? Its Accept says measure the base rate
-first and names **refusing with the number as a satisfying outcome**; a gate is
-refused in the item itself, because *"this count was taken correctly"* is not a
-checkable shape.
+**The base rate is the part worth carrying, because the first measurement said
+"refuse this".** An as-of-DATE replay over the log's 26 wake-dates returned
+**zero** SKEW verdicts and an identical 13 ok / 13 STALE split — read literally,
+a discrimination that fires on nothing, which is this repo's own reason to
+refuse a gate (94.11). Wrong instrument: a date-granularity replay includes rows
+written hours after the wake read the line, so every occasion resolves to
+provably-newer by the end of its day. Replayed at the granularity a wake
+actually reads — both files taken **at each commit** of `loop-log.md` — it reads
+**958 revisions → 581 STALE, 323 ok, 51 SKEW**, and the 51 are **seven distinct
+occasions**, the last being Slice 306's own reading. Quoting 51 without the 7
+would be a revision count dressed up as an event count.
 
-**Four of this grill's own instruments were wrong on their first output** and
-are recorded in the report rather than tidied away. One was a hair from
-publishing a fabricated defect against a correct claim of 320's: a
-`grep -rl 'ApiTable[^>]*notes='` cannot span lines and reported 5 where the
-built DOM says 40.
+**Two lessons, and the second is the transferable one.** A replay's granularity
+is part of the instrument, not a detail of it — a state that lives four hours is
+invisible to a daily sampler however many days it sweeps. And **a base rate of
+zero is a claim about the instrument first**, the same grammar CLAUDE.md already
+writes down; what licensed looking again was a recorded observation the
+instrument could not see, not a preference for shipping.
+
+**`323.1` is filed open**: the script now carries two replays at different
+units, three screens apart, with nothing saying why they differ. Its Accept
+names *"a sentence naming the difference is the whole fix"* as a satisfying
+outcome and refuses a gate in the item itself.
+
+**Today's live reading is UNCHANGED — `1 wake-date(s) newer  STALE`.** That is
+the result, not a null: a fix that also flipped the reading it was built from
+would be the suspicious outcome.
+
+**Both red-proofs had their injections confirmed to land before the result was
+believed**, per CLAUDE.md's rule that a green red-proof is a defect in the
+injection until proven otherwise. Envelope `0` reproduces the old behaviour and
+fails 3 of 6 self-test cases; envelope 999d fails a complementary 3 of 6; the
+case surviving both is the one testing the date boundary rather than the
+envelope. The end-to-end fixtures showed the printed LINE distinguishing all
+three states.
 
 **Gates green on the committed tree:** all **17** cloud-runnable entry points,
 re-derived from `ci.yml` rather than read off a list (the two documented set
@@ -152,50 +182,56 @@ differences still hold — `check:ci-ignores` is covered by `check:repo` inside
 --root packages/core`), plus the §3b re-run of `docs:build` after this file was
 written.
 
+**The `verifier` agent is not available in this session**, so `LOOPS.md` §2 step
+6's verifier pass was done by hand — the staged diff re-read adversarially, and
+every timestamp in `loop-metrics.jsonl` checked to parse across all **108**
+revisions of that file, since `at_minutes()` would raise on one that did not.
+Named rather than skipped quietly.
+
 **NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
 wake has no Podman. Nothing rendered changed and no claim rests on rendering:
-the diff is **three markdown files**, no CSS, no `.astro`, no script.
+the diff is one Python script and two markdown files, no CSS, no `.astro`.
 **The visual debts carried forward are unchanged and unspent**: `292.4/292.5`'s
-screenshot lane on `/components/icon`, now fourteen wakes back; the
+screenshot lane on `/components/icon`, now fifteen wakes back; the
 withdrawn-claim paragraph on `/components/data-table`; Slice 319's paragraph on
 `/patterns/kanban` at 390px; and `320.3`'s `ApiTable.astro` `0.5rem` against
-`ClassRef.astro` `.4rem` — whose premise this wake re-confirmed by grep and
+`ClassRef.astro` `.4rem`, whose premise a previous wake re-confirmed by grep and
 still cannot judge, because judging it is the rendered comparison itself. **A
 local wake should glance at all four.**
 
 ## `origin/main` did NOT move under this wake
 
 `git fetch origin main` at Step 0 and again immediately before the first commit,
-as Step 0c mandates: `203f0a64` both times. No collision.
+as Step 0c mandates: `152b9bc9` both times. No collision.
 
 **Step 0 traps:** trap 1 bit again (detached HEAD, `git branch --show-current`
 empty), fixed with `git checkout -B main origin/main` before any commit, and
-`origin/main` again arrived as a **forced update** (`26447ba...203f0a6`). Trap 2
-clean in one `--unshallow` (**2,002** commits, no `shallow.lock`), and it again
-brought the tags — the **thirty-fifth** consecutive container to do so;
+`origin/main` again arrived as a **forced update** (`26447ba...152b9bc`). Trap 2
+clean in one `--unshallow` (**2,004** commits, no `shallow.lock`), and it again
+brought the tags — the **thirty-sixth** consecutive container to do so;
 `git tag | wc -l` → **8**. Trap 1c did not bite. No `git stash` was used at any
 point this wake.
 
 ## The open set is 25 — no P0, and 10 are cloud-takeable
 
-`roadmap_scope.py --rev ccb7d3ce` reports **25 open / 63 closed**, OPEN slices
-`[15, 112, 249, 273, 294, 296, 297, 306, 307, 309, 310, 315, 316, 319, 320,
-322]`. Net from the last hand-off's 24: **`322.3` filed open, nothing closed**
-— `322.1` and `322.2` landed closed. The raw counts reconcile exactly:
-`grep -c` reads 25 open / **65** closed, and 65 = 63 attributed + the 2 `[x]`
-under the non-slice `## STATE` heading.
+`roadmap_scope.py --rev a6e7fff6` reports **25 open / 64 closed**, OPEN slices
+`[15, 112, 249, 273, 294, 296, 297, 307, 309, 310, 315, 316, 319, 320, 322,
+323]`. Net from the last hand-off's 25: one closed and `323.1` filed, so the
+count is unchanged and **Slice 306 has left the open set**. The raw counts
+reconcile exactly: `grep -c` reads 25 open / **66** closed, and 66 = 64
+attributed + the 2 `[x]` under the non-slice `## STATE` heading.
 
-- **cloud-takeable: 10** — `306.1`, `307.1`, `309.5`, `310.1`, `310.2`,
-  `315.3`, `316.1`, `319.3`, `320.2`, `322.3`. (`297.1` is takeable here too but
+- **cloud-takeable: 10** — `307.1`, `309.5`, `310.1`, `310.2`, `315.3`,
+  `316.1`, `319.3`, `320.2`, `322.3`, `323.1`. (`297.1` is takeable here too but
   is counted once, under input-blocked, because that is what actually gates it.)
-  **`306.1` remains the oldest of these.** The cheapest are unchanged from the
-  last hand-off — `309.5`, `310.2`, `315.3`, `316.1`, `319.3`, `320.2` — and
-  **`322.3` joins them**: its Accept is a base-rate measurement over
-  re-derivable phrase-counts, it names refusing as a satisfying outcome, and it
-  already refuses the gate, so the round is the measurement rather than the
-  design. **Everything in this bullet below the count except the `322.3`
-  sentence is carried from the previous hand-off**; only the OPEN set, the count
-  and the new entry were re-measured.
+  **`307.1` is now the oldest of these**, and it is rule 5's other half — the
+  structural starvation this wake did *not* touch. The cheapest are unchanged:
+  `309.5`, `310.2`, `315.3`, `316.1`, `319.3`, `320.2`, `322.3`, and **`323.1`
+  joins them** — its Accept is one measurement over git history, it names a
+  sentence as a satisfying fix, and it already refuses a gate. **Everything in
+  this bullet below the count except the `307.1` and `323.1` sentences is
+  carried from the previous hand-off**; only the OPEN set, the count and the two
+  new entries were re-measured.
 - **owner-blocked (11):** Slice 15 (AT runtime evidence, owner hardware),
   `112.3`, `112.4`, `249.7`, `249.10`, `249.11`, `249.12`, `249.13`, `273.2`,
   `296.3`, and **`294.2`'s brand-mark half** — but `294.2` is counted below,
@@ -220,44 +256,46 @@ resolves or it does not. It mis-sorts as one of the other four; it did so for
 two hand-offs before Slice 321 caught it. Nothing in the current open set is of
 that kind, checked rather than assumed.
 
-## No archive sweep — declined on the SHARE half, twelfth wake running
+## No archive sweep — declined on the SHARE half, thirteenth wake running
 
-Measured at **`ccb7d3ce`**: **7,861 lines**, closed-history share **39.4%**
-(3,096 lines across 17 closed slices). The standing trigger the hand-offs carry
+Measured at **`a6e7fff6`**: **7,994 lines**, closed-history share **39.9%**
+(3,193 lines across 18 closed slices). The standing trigger the hand-offs carry
 is *"past 5,450 lines / 40.6%"*: the line half is past, the share half is
-**1.2 points short**. Same judgement as the last eleven wakes.
+**0.7 points short** — the closest it has come. Same judgement as the last
+twelve wakes, and the next wake may well be the one that crosses it with no
+recorded answer for what to do. See Direction.
 
-**It went DOWN this wake, and the attribution is exact rather than inferred.**
-Numerator 3,057 → 3,096 = **+39**, entirely the correction block written into
-Slice **304**, which is closed and so lands on both sides. Denominator 7,584 →
-7,861 = **+277** = that same 39, plus Slice **322**'s own body (**208**) and the
-correction block written into Slice **320** (**30**) — both of which are OPEN
-slices and so land only in the denominator. `39 + 208 + 30 = 277`, and
-`3,057 + 39 = 3,096`; both sides reconcile to the line.
+**It went UP this wake, and the attribution is exact rather than inferred.**
+Numerator 3,096 → 3,193 = **+97**, entirely Slice **306** becoming closed: its
+body is 98 lines at this commit including its heading, which `roadmap_scope.py`
+counts as 97 body lines. Denominator 7,861 → 7,994 = **+133** = that same slice
+growing by **50** (the closing entry written into 306.1) plus Slice **323**'s
+own body (**83**). `50 + 83 = 133`, and the sum of every slice body moves
+`7,539 → 7,672`, the same +133; both sides reconcile to the line.
 
-That is the fourth fall against five rises, all from ordinary work, and it is
-the same argument `249.12` needs: **a wake that corrects an open slice pushes
-the share down, and a wake that closes an item in a large slice pushes it up.**
-Nothing is wrong in either direction, and no amount of waiting resolves it.
+That is the fifth rise against four falls, all from ordinary work, and it is the
+same argument `249.12` needs: **a wake that corrects an open slice pushes the
+share down, and a wake that CLOSES an item in a large slice pushes it up.** This
+wake is the second kind, plainly — closing one item moved the share more than
+anything else this wake did.
 
-Trend across thirty readings: 27.5% → 32.0% → 34.2% → 38.0% → 39.4% → 37.5% →
-36.9% → 36.2% → 35.5% → 37.3% → 36.9% → 38.3% → 37.6% → 9.4% → 10.3% → 10.9% →
-11.8% → 26.0% → 26.9% → 30.5% → 29.5% → 28.9% → 31.2% → 35.3% → 34.7% → 36.4%
-→ 38.1% → 40.3% → **39.4%**.
+Trend across thirty-one readings: 27.5% → 32.0% → 34.2% → 38.0% → 39.4% →
+37.5% → 36.9% → 36.2% → 35.5% → 37.3% → 36.9% → 38.3% → 37.6% → 9.4% → 10.3% →
+10.9% → 11.8% → 26.0% → 26.9% → 30.5% → 29.5% → 28.9% → 31.2% → 35.3% → 34.7%
+→ 36.4% → 38.1% → 40.3% → 39.4% → **39.9%**.
 
 **What a sweep would take, so the next wake need not re-derive it:**
 `roadmap_scope.py` reports the pins itself — **8 targets are named by a
-still-open item** at this commit, up one from the last hand-off's 7 because
-`322`'s own text names an archive-bound slice. Read that line before moving
-anything. It is a wake's work, not a tail-end tidy.
+still-open item** at this commit, unchanged in count from the last hand-off
+though the target list gained Slice 306. Read that line before moving anything.
+It is a wake's work, not a tail-end tidy.
 
 ## Direction
 
 Nothing new from the owner reached this wake to triage. **Both intakes were
 read** (issues **1** open, discussions **0** open).
 
-**Four things want the owner's attention, unchanged in substance from the last
-hand-off:**
+**Four things want the owner's attention. Item 2 is the one that has moved.**
 
 1. **Issue #2 is open and carries only the triage comment.** Slice 317 refuses
    the component with the measurement; Slice 319 corrected a second false claim
@@ -266,12 +304,13 @@ hand-off:**
    owner action**, and `LOOPS.md` Step 1 says an issue "gets closed with a
    comment linking the fixing commit once its item ships". Whether a *wake*
    should post that comment is `297.1`, still open.
-2. **`249.12` — the archival trigger — is the same owner call as the last eleven
-   wakes.** The share half sits at **39.4%** against a 40.6% trigger, having now
-   moved down four times and up five times with nothing ever archived, from
-   ordinary work in both directions. Nothing states whether the trigger is an
-   AND or an OR, and there is no recorded answer for what a wake should do the
-   first time it crosses.
+2. **`249.12` — the archival trigger — is now 0.7 points from firing, the
+   closest in thirty-one readings, and there is still no recorded answer for
+   what a wake should do the first time it crosses.** Nothing states whether the
+   trigger is an AND or an OR. The line half has been past for thirteen wakes;
+   the share half has oscillated either side of 40% without ever being acted on.
+   **A one-line answer — AND or OR, and what the crossing wake does — unblocks
+   every future wake**, and the next one may be the wake that needs it.
 3. **`294.2` still cannot be advanced by anyone but the owner.** The six
    proposals it ranks live in an owner-supplied zip that never reached the repo.
    **Landing `upstream-contribution/` on a branch is a one-command unblock.**
