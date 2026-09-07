@@ -15,6 +15,7 @@
     "check:target-size": "node scripts/check-target-size.mjs",
     "check:formatting": "node scripts/check-formatting.mjs",
     "check:po-app": "node scripts/check-po-app.mjs",
+    "measure:stress": "node scripts/measure-stress.mjs",
     "check:search": "node scripts/check-search.mjs",
     "check:published": "node scripts/check-published.mjs",
     "check:imports": "node scripts/check-imports.mjs",

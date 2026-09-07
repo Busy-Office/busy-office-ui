@@ -17,78 +17,22 @@
  * @exact — boots the reference app and asserts responses. Exempt from --self-test: there is no
  * judgement to get wrong, and ceremony around a lookup is noise.
 */
-import { spawn, spawnSync } from 'node:child_process';
-import { readFileSync, renameSync, rmSync } from 'node:fs';
-import { createServer } from 'node:http';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { gate } from './gate-report.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
+import { startPoApp } from './po-app-harness.mjs';
 import { WIDTHS, DESKTOP_WIDTH } from './viewports.mjs';
 import { REPO_ROOT } from './paths.mjs';
 
 const repoRoot = REPO_ROOT;
 const AXE = readFileSync(join(repoRoot, 'node_modules/axe-core/axe.min.js'), 'utf8');
 
-/* po-app is not an npm workspace (its own package.json calls it a "reference
-   consumer … installs @busy-office/ui FROM THE TARBALL"), so a root `npm ci`
-   never installs its dependencies — this gate used to just spawn server.mjs
-   and trust that @busy-office/ui and htmx.org would BOTH happen to be
-   reachable via require.resolve walking up into root node_modules (the
-   workspace symlink). That held for @busy-office/ui by luck; it never held
-   for htmx.org, which npm leaves nested under apps/docs/node_modules with a
-   single declaring workspace — confirmed on a genuinely fresh `npm ci`, and
-   confirmed as the exact cause of a real CI break (2026-08-30, htmx 4
-   migration, roadmap 222.1's investigation). Doing the REAL tarball-consumer
-   install here — matching examples/po-app/Dockerfile's own flow — removes
-   the dependency on hoisting entirely, which is also the more honest test:
-   this gate exists to verify what a real consumer experiences.
-   A stale local busy-office-ui.tgz/package-lock.json/node_modules from a
-   previous manual run can pin an OLD tarball's resolution even after a
-   fresh `npm pack` (hit once this session) — wiping all three first is what
-   makes this install actually fresh rather than merely re-run. */
-const poAppDir = join(repoRoot, 'examples/po-app');
-for (const p of ['node_modules', 'package-lock.json', 'busy-office-ui.tgz']) {
-  rmSync(join(poAppDir, p), { recursive: true, force: true });
-}
-const pack = spawnSync(
-  'npm',
-  ['pack', '-w', '@busy-office/ui', '--pack-destination', poAppDir],
-  { cwd: repoRoot, encoding: 'utf8' },
-);
-if (pack.status !== 0) throw new Error(`npm pack -w @busy-office/ui failed:\n${pack.stderr}`);
-const tgzName = pack.stdout.trim().split('\n').filter(Boolean).pop();
-renameSync(join(poAppDir, tgzName), join(poAppDir, 'busy-office-ui.tgz'));
-const install = spawnSync('npm', ['install', '--omit=dev', '--no-audit', '--no-fund'], {
-  cwd: poAppDir,
-  encoding: 'utf8',
-});
-if (install.status !== 0) throw new Error(`npm install (examples/po-app) failed:\n${install.stderr}`);
-
-const freePort = () =>
-  new Promise((res) => {
-    const s = createServer();
-    s.listen(0, () => {
-      const { port } = s.address();
-      s.close(() => res(port));
-    });
-  });
-
-const PORT = await freePort();
-const app = spawn(process.execPath, [join(repoRoot, 'examples/po-app/server.mjs')], {
-  env: { ...process.env, PORT: String(PORT) },
-  stdio: ['ignore', 'pipe', 'pipe'],
-});
-let appErr = '';
-app.stderr.on('data', (d) => { appErr += d; });
-
-const base = `http://localhost:${PORT}`;
-// Wait for the listener rather than sleeping a guessed amount.
-await new Promise((res, rej) => {
-  const t = setTimeout(() => rej(new Error(`po-app did not start in 20s\n${appErr}`)), 20000);
-  app.stdout.on('data', (d) => { if (String(d).includes('po-app on')) { clearTimeout(t); res(); } });
-  app.on('exit', (code) => { clearTimeout(t); rej(new Error(`po-app exited (${code})\n${appErr}`)); });
-});
+/* The boot — tarball pack + install, free port, wait for the listener — lives
+   in po-app-harness.mjs, because measure-stress.mjs needs exactly the same one
+   and the boot is the part with the traps in it (roadmap 309.5). Its header
+   carries the hoisting history that used to sit here. */
+const { base, stop: stopPoApp } = await startPoApp();
 
 const g = gate('po-app smoke check', 'behaviours');
 const check = g.check;
@@ -500,7 +444,7 @@ try {
     violations.slice(0, 8).join(' | '),
   );
 } finally {
-  app.kill();
+  stopPoApp();
 }
 
 g.report('verified end to end');

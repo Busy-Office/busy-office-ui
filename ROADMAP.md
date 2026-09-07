@@ -320,6 +320,89 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 325 — 309.5: the `/stress` measurement is committed, and its own style-flush column shipped dead first — an identical ~0 across inputs differing 20-fold, because the event loop pays the recalculation between tasks (2026-09-07)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again (trap 1;
+`git branch --show-current` empty, fixed with `git checkout -B main
+origin/main` before any commit), and `origin/main` again arrived as a **forced
+update** (`26447ba...14a0dbd`). Trap 2 clean in one `--unshallow` (**2,009**
+commits, no `shallow.lock`), and it again brought the tags — the
+**thirty-eighth** consecutive container to do so; `git tag | wc -l` → **8**.
+Step 0b counters read `Standardize 3/4`, `Objective 2/3 [307, 323]`, `Optimize
+1 wake-date newer STALE`. Step 1: both intakes read with `ENVIRONMENT.md` §8's
+controls (`/discussions` 200 len 0, `/not-a-real-route` 404,
+`/issues?state=open` 200 len 1) — **issues 1 open, discussions 0 open**, issue
+#2's `updated_at` unmoved at `2026-09-06T15:10:34Z`, so **no new input and Step
+1 committed nothing**. Step 2: rule 1 no open P0 (`grep -cE '^\s*[0-9]+\. \[
+\].*P0' ROADMAP.md` → **0**), rule 2 `3/4`, rule 3 `2/3`, **rule 4** on the
+oldest still-open item no other kind of block covers — `309.5`.
+
+**Every older open item was re-checked in `ROADMAP.md` itself, not carried
+from the hand-off**, and one of those re-checks is worth recording rather than
+asserting. **`297.1` reads as newly takeable and is not.** Its Accept is *"one
+wake reports on a real filed item, naming which intake it arrived in and
+whether that was the right one"*, and an intake is now non-empty — but the
+question it asks is whether the **template or the contact link** routed the
+filer, and both issues ever filed were authored by **`ThePFMind`**, the owner,
+who does not pass through either. Measured, not inferred:
+`/issues?state=all` reports `#1` and `#2`, `user.login` `ThePFMind` on both.
+So it stays **input-blocked** — the fourth kind — on an external filer, and
+that is the item's own measurement rather than the previous hand-off's claim
+repeated.
+
+`309.5` is closed above with its Accept table, its red-proof and its readings.
+The two things that outlive it are below.
+
+1. [ ] **325.1 — a docs page can name an `npm run` command and nothing checks
+       the command exists.** The page edited by `309.5` now cites `npm run
+       measure:stress -w docs`, which is precisely the defect `309.5` existed
+       to fix, one level over: Slice 307 recorded a re-run command
+       (`node examples/po-app/server.mjs`) that exits `MODULE_NOT_FOUND` from a
+       clean clone, and nothing caught it for a day.
+
+       **Base rate measured before proposing a gate, per CLAUDE.md, and it is
+       what makes this a question rather than a build:**
+
+       ```
+       grep -roh 'npm run [a-z:@/-]*' apps/docs/src/pages/ | sort | uniq -c
+         #   2 npm run check:markup
+         #   2 npm run build
+       grep -rl 'npm run ' apps/docs/src/pages/ | wc -l    # 2 pages
+       ```
+
+       **4 occurrences on 2 pages, 4 of 4 valid today** — so the predicate is
+       100% true of the tree, which is the shape 94.11 refuses a gate over.
+       Unlike 94.11's case it is *not* structurally unfalsifiable — renaming a
+       cited script would drive it red — so the refusal is not automatic. The
+       question is whether a corpus of four earns a gate, or whether the
+       honest answer is that citing a command in a docs page is rare enough to
+       stay a review matter.
+       - **Accept** — the property, not a verdict: a decision recorded with the
+         base rate re-measured at execution time (the two commands above are a
+         snapshot). **Refusing the gate is a satisfying outcome** if the reason
+         is the corpus size; building it is satisfying if the corpus has grown.
+         Either way the decision names what happens when a cited script is
+         renamed.
+
+2. [ ] **325.2 — `measure:stress`'s render columns have no counterpart in the
+       published table, and the published table's method is unrecoverable.**
+       `render-dcl` / `render-load` are `domContentLoadedEventEnd` and
+       `loadEventEnd` minus `responseEnd`; the 2026-08-15 *Initial render*
+       column is 85 / 174 / 558 ms with no definition written anywhere. The
+       probe's header and the docs page both say outright that the two are not
+       comparable, which is honest and also means the published column can
+       never be re-run — it is a number with a shape and no method, exactly the
+       state `309.3` withdrew a different number for.
+       - **Accept** — the property, not a predicted outcome: either the
+         published *Initial render* column gains a definition the probe can
+         reproduce, **or** it is withdrawn the way the 2026-09 re-run was, with
+         the reason. **Finding that the original method is recoverable from
+         Slice 30-era history is a satisfying outcome** and closes it by
+         writing the definition down; finding it is not is equally satisfying
+         and closes it by withdrawal. A third reading — that a shape-only
+         column is worth keeping undefined — is admissible only if it says what
+         a reader is supposed to do with it.
+
 ## Slice 324 — rule 5's pairing test counted SAMPLES, so a 26-sample afternoon read as a series; re-scoped to distinct days its actionable input set is one metric, and the reason nobody records that one was a premise this wake refuted (2026-09-07)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again (trap 1;
@@ -1615,7 +1698,7 @@ operating rule: fix only what is smaller than the explaining):
        acquired (Slices 308 and 309). The open-count figures in hand-offs before
        308 are unaffected.
 
-5. [ ] **309.5 — The `/stress` harness is half a harness: the rows are kept, the
+5. [x] **309.5 — The `/stress` harness is half a harness: the rows are kept, the
        measurement is not.** Two re-runs have now written their own probe and
        produced numbers that cannot be compared to each other or to the
        published table. The start recipe is also incomplete (see above).
@@ -1630,6 +1713,81 @@ operating rule: fix only what is smaller than the explaining):
          is recorded: a plausible one is that a per-adopter number is meant to
          be taken with their own tooling, in which case the docs page should
          stop implying a re-run is a supported operation.
+
+       **DONE 2026-09-07 (cloud wake), by committing the probe rather than by
+       the refusal branch.** `apps/docs/scripts/measure-stress.mjs`, run as
+       `npm run measure:stress -w docs`. It is explicitly **not a gate** — CI
+       runs nothing here and it asserts no budget, which is Slice 307's own
+       refused-latency-gate finding still standing.
+
+       Each Accept clause and how it was met:
+
+       | clause | how |
+       |---|---|
+       | runs from a clean clone | it drives `startPoApp()`, which does the tarball pack + install; the recorded `node examples/po-app/server.mjs` never could |
+       | carries its own control | every row prints `checked/rows`; a run where they disagree, or either is 0, prints **no timing at all** and exits 1 |
+       | records what it measures | four named definitions in the header; `select-all` and `style-flush` are separate columns |
+       | style flush inside or beside | **beside** — `update()` in `data-table.ts` only writes to the DOM, so the recalculation is not in the dispatch |
+
+       **The control is red-proved by injection, and the injection was
+       confirmed to land** (occurrence counts asserted: 1 live line → 0 live,
+       1 commented). Re-applying `1f75dab4`'s exact break — the trailing
+       comment that swallowed `initDataTables(); initAlerts();
+       initDropdowns();` — the probe exits **1** with `0/1000 checked` and an
+       empty timing row. It went red narrowly: the control failed, nothing
+       crashed, and `check:po-app` was separately re-run green at **20
+       behaviours**, unchanged by the refactor below.
+
+       **The `style-flush` column's FIRST implementation was a dead detector,
+       and the tell was the one CLAUDE.md names.** It timed a forced
+       `offsetHeight` inside a `setTimeout(…, 0)` after the dispatch, and read
+       **0.0 / 0.1 / 0.0 ms at 1k / 5k / 20k** — an identical value across
+       inputs differing 20-fold, against a published column of 231 ms at 5k.
+       The event loop takes a rendering opportunity *between* tasks, so the
+       later task always finds the style recalculation already paid. Moved into
+       the same task, at the end of the `change` dispatch, the same column
+       reads **90.1 / 342.8 / 2415.2 ms** and scales monotonically. That
+       transition is the red-proof by discrimination: the old form cannot
+       distinguish 1k from 20k, the new one can.
+
+       **`change`, not `click`, is what is bracketed** — `data-table.ts` binds
+       `change` on the container, and a checkbox fires `change` from its
+       activation behaviour *after* the `click` dispatch has finished, so a
+       click-bracketed timing would have excluded the entire body of work. The
+       click itself is driven with `page.click` per `ENVIRONMENT.md`'s
+       trusted-dispatch rule.
+
+       **Readings taken while verifying, recorded with their machine** (Intel
+       Xeon @ 2.80GHz, 4 cores, 15.7 GB, linux x64, Node v22.22.2,
+       Chrome/141.0.7390.37, no throttle, 1440px, medians of 3):
+
+       | rows | control | render-dcl | select-all | style-flush |
+       |---|---|---|---|---|
+       | 1,000 | 1000/1000 | 399.9 ms | 4.6 ms | 90.1 ms |
+       | 5,000 | 5000/5000 | 1782.7 ms | 14.4 ms | 342.8 ms |
+       | 20,000 | 20000/20000 | 4416.8 ms | 64.3 ms | 2415.2 ms |
+
+       **These are NOT published on the docs page and must not be read against
+       its 2026-08-15 table.** `select-all` is the one column whose definition
+       is close enough to compare in shape (4 / 18 / 49 there), and even that
+       is different hardware. `render-dcl` is `domContentLoadedEventEnd -
+       responseEnd`, which includes the reference app's own deferred
+       subresources; the published *Initial render* column's method was never
+       written down, so no comparison to it is available in either direction.
+       Publishing them would be the exact error `309.3` withdrew.
+
+       **One refactor came with it**: the po-app boot (tarball pack + install,
+       stale-artifact wipe, free port, wait for the listener) moved out of
+       `check-po-app.mjs` into `apps/docs/scripts/po-app-harness.mjs`, because
+       a second caller was about to copy it and the boot is the part carrying
+       the hoisting history. Behaviour-neutral, verified by the gate's own
+       count.
+
+       **The docs page now names the command**, in the paragraph that already
+       said the harness is kept so an adopter can re-measure and did not say
+       how. Its last sentence — *"the probe that produced those two numbers was
+       not kept"* — is left standing: it is a true statement about 307's probe,
+       and the new paragraph opens `One is kept now.`
 
 ## Slice 308 — Standardize sweep, 4 of 4 lanes: lanes 1-3 clean, and lane 4's "the dispatch region is regrowing" is FALSE as stated — the section 274.2 cut has not regrown by ONE word, and the +877 is five new rules in five sections the cut never touched (2026-09-07)
 

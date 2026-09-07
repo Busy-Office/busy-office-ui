@@ -290,6 +290,16 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     proves the work happened</strong> (here: count the rows that ended up
     selected), and the probe that produced those two numbers was not kept, so
     nobody could re-run it to find out.</p>
+    <p class="bo-u-text-muted"><strong>One is kept now.</strong>
+    <code>npm run measure:stress -w docs</code> boots the reference app and
+    re-measures against <code>/stress</code> from a clean clone. It reports the
+    rows it actually selected next to every timing and exits non-zero when those
+    disagree, so it cannot produce the withdrawn numbers above; it records the
+    machine, the Chrome build and the CPU throttle factor; and it keeps the
+    style flush in its own column rather than folding it into select-all. Its
+    render figures are comparable across its own runs, not to the
+    <em>Initial render</em> column below — that column's method was never
+    written down.</p>
     <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table" data-density="compact">
         <thead><tr><th scope="col" class="bo-data-table__col--numeric">Rows</th><th scope="col" class="bo-data-table__col--numeric">Initial render</th><th scope="col" class="bo-data-table__col--numeric">Select-all</th><th scope="col" class="bo-data-table__col--numeric">Post-bulk-check style flush</th></tr></thead>
