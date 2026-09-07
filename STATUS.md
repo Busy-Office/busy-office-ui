@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-07 05:14 UTC
+Generated at: 2026-09-07 05:45 UTC
 
 ## Open items by slice
 
@@ -25,9 +25,6 @@ Generated at: 2026-09-07 05:14 UTC
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - **Slice 297** (1 open)
   - 297.1 — The first real intake run is the test of this, not the config.
-- **Slice 305** (2 open)
-  - 305.1 — The four defects round 3 left standing.
-  - 305.2 — Run the repo's own gates on a gauntlet artifact BEFORE spending a critic round.
 - **Slice 306** (1 open)
   - 306.1 — rule 5's staleness comparison must not be able to report "stale" for a reason that is only a timezone.
 - **Slice 307** (1 open)
@@ -52,9 +49,10 @@ Generated at: 2026-09-07 05:14 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1575 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-09-07 05:14   ok
-  Objective     2 / 3 slices          since 2026-09-07 03:02   ok  [304, 320]
+dispatch status — counter-triggered rules (1578 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-09-07 05:14   ok
+  Objective     3 / 3 slices          since 2026-09-07 03:02   OVERDUE  [304, 305, 320]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      1 wake-date(s) newer   since 2026-09-06 16:56   STALE   [newest pair: axe-violations; 132 sample(s), 13 of 44 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-06, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-06 (2026-09-07), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -76,9 +74,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-07 03:02 · Objective · grill · Slice 319 — grill of 298/300/318: 23 of 25 assertions reproduce; 318's "99 other fixed waits" is 98 (a removal counted against raw text its own comment names), and /patterns/kanban's glove-target claim is false at 24px — corrected, and its keyboard claim made executable and red-proved twice · landed · 6e5724bb
-- 2026-09-07 03:02 · Meta · refusal · adding /patterns/kanban to check:target-size's 7-page sweep — the menu items measure 0x0 while the popover is closed, so the sweep could not see the claim it would exist to check; filed as 319.3 with its base rate (18 vocabulary pages / 7 swept / 4 overlap) instead · refused · 6e5724bb
-- 2026-09-07 03:49 · Continue · build · 304.1 — roadmap_scope.py's header names the tree its figures describe; base rate 7 of 11 published ratios describe the parent, not the commit · landed · 8beee329
 - 2026-09-07 03:49 · Meta · refusal · attributing a published bare percentage by git log -S — the needle collides with the tail of a longer percentage (79.5% contains 9.5%) · refused · 8beee329
 - 2026-09-07 03:49 · Meta · refusal · matching an 'N lines' figure — it cannot tell the denominator from the numerator, a subset, or the trigger threshold · refused · 8beee329
 - 2026-09-07 05:14 · Standardize · sweep · Slice 320 — 4 of 4 lanes; the last two inline spellings of .docs-list/.docs-list-bare lived in the shared components; closes 314.2; lane 1's headline number counts attributes while saying declarations · landed · 7dacd80b
@@ -86,6 +81,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-07 05:14 · Meta · refusal · ClassRef.astro:44's off-scale .4rem — unifying it with ApiTable's 0.5rem is a rendered change a cloud wake cannot judge; filed as 320.3 · refused · 7dacd80b
 - 2026-09-07 05:14 · Meta · refusal · --bo-space-0 as the spelling of a zero — refused on evidence, it has never been used anywhere · refused · 7dacd80b
 - 2026-09-07 05:14 · Meta · refusal · fixing scan:dead-style's per-declaration detection inside this round — it moves a number five write-ups quoted; filed as 320.2 · refused · 7dacd80b
+- 2026-09-07 05:45 · Continue · build · 305.1 — the gauntlet artifact three blind critic rounds graded is in no commit; LOOPS.md §7 gains the committed-path clause · landed · cbd8419d
+- 2026-09-07 05:45 · Meta · refusal · 305.2's proposed §7 step — 1 of 12 findings gate-catchable, and step 1 already says 'the repo's gates green' · refused · cbd8419d
+- 2026-09-07 05:45 · Meta · refusal · a gate over 'open items cite resolvable paths' — 2 of 10 legitimate absences on a healthy tree (94.11) · refused · cbd8419d
 
 ## Sunset test
 

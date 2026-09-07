@@ -1581,3 +1581,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-07 05:14 · Meta · refusal · ClassRef.astro:44's off-scale .4rem — unifying it with ApiTable's 0.5rem is a rendered change a cloud wake cannot judge; filed as 320.3 · refused · 7dacd80b
 - 2026-09-07 05:14 · Meta · refusal · --bo-space-0 as the spelling of a zero — refused on evidence, it has never been used anywhere · refused · 7dacd80b
 - 2026-09-07 05:14 · Meta · refusal · fixing scan:dead-style's per-declaration detection inside this round — it moves a number five write-ups quoted; filed as 320.2 · refused · 7dacd80b
+- 2026-09-07 05:45 · Continue · build · 305.1 — the gauntlet artifact three blind critic rounds graded is in no commit; LOOPS.md §7 gains the committed-path clause · landed · cbd8419d
+- 2026-09-07 05:45 · Meta · refusal · 305.2's proposed §7 step — 1 of 12 findings gate-catchable, and step 1 already says 'the repo's gates green' · refused · cbd8419d
+- 2026-09-07 05:45 · Meta · refusal · a gate over 'open items cite resolvable paths' — 2 of 10 legitimate absences on a healthy tree (94.11) · refused · cbd8419d
