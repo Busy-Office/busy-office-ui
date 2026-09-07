@@ -125,7 +125,10 @@ if (process.argv.includes('--self-test')) {
     console.log(`self-test: ${what.padEnd(46)} ${got} (want ${want}) ${got === want ? 'ok' : 'WRONG'}`);
   }
   if (!ok) { console.error('  the detector misses cases it is supposed to catch'); process.exit(1); }
-  console.log('self-test passed — the detector can fail');
+  /* The count is the marker check:selftests reads (roadmap 315.3) — it comes
+     from the list just executed, never a literal, so an unreachable branch
+     cannot produce it. */
+  console.log(`self-test passed — the detector can fail (${results.length} cases)`);
   process.exit(0);
 }
 

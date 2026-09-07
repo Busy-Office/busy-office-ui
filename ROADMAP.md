@@ -320,6 +320,153 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 334 — 315.3: `check:selftests` now RUNS each self-test, because the third rung of its own ladder was open — and the two costs that were expected to refuse it both measure zero (2026-09-07)
+
+**Dispatched by rule 4**, on the oldest genuinely dispatchable open item. Rule 1
+no open P0 (`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0**); rule 2
+`Standardize 1 / 4 ok`; rule 3 `Objective 2 / 3 ok [332, 333]`; rule 5
+`Optimize 0 wake-date(s) newer — ok`, so it was EVALUATED and does not fire —
+its comparable set's only mover is `claims`, already day-paired at
+`2026-09-06 169 -> 2026-09-07 170`. Rule 4's oldest open item is Slice 15, and
+everything from there to `315.3` is owner- or input-blocked, re-derived from
+each item's own text rather than carried from the hand-off: **15**
+NEEDS-RUNTIME (owner hardware), **112.3** "BLOCKED ON OWNER BRIEFS", **112.4**
+blocked on 112.3's verdict, **249.7** holds its remaining rows for 249.10 with
+its first Accept clause already executed, **249.10-13** each `OWNER CALL`,
+**273.2** `OWNER CALL` in its own heading, **296.3** `OWNER CALL`, **297.1**
+waits on a filer who is not the owner. `315.3` is the oldest cloud-takeable
+one, and its own Lane line says so.
+
+**Step 1 read both intakes, with `ENVIRONMENT.md` §8's controls:**
+`/discussions` → `HTTP 200, len 0`; `/not-a-real-route` → `HTTP 404` (so the
+`200 []` means *served and empty*); `/issues?state=open` → `HTTP 200, len 1` —
+issue #2, `updated_at` **2026-09-06T15:10:34Z**, unmoved for a third
+consecutive hand-off. No new untriaged input, so Step 1 committed nothing.
+
+### The Accept's own re-measurement first, and the base rate has moved twice
+
+The item asks for the per-gate `--self-test` sweep re-run **with `dist` built**,
+reading each gate's raw output rather than grepping one format. Run that way
+(`selftest-sweep.py`, which dumps rc + stdout + stderr per gate and classifies
+nothing):
+
+| reading | figure |
+|---|---|
+| 315.3's honest row (snapshot) | **1 of 20** ran zero cases — `check-ci-ignores`, which **315.1 fixed** |
+| here, at `1363ffb` | **0 of 20**. All twenty exit 0, classifying **157** cases between them |
+
+And the *other* half of 315.3's first wrong reading — *"taken with no
+`apps/docs/dist` — 4 gates died before their own branch"* — **no longer
+reproduces at all**. With `apps/docs/dist` moved aside, all twenty
+self-tests produce **byte-identical output** to the built-tree run. So do they
+with `CHROME_PATH` unset, and so do they in the **docs-image context**
+(`ROADMAP.md`, `LOOPS.md`, `CLAUDE.md`, `.roundtable/`, `.github/` and `dist`
+all absent — exactly what `apps/docs/Containerfile` does not copy). Twenty
+identical outputs across four contexts is a suspiciously tidy number, so it
+carries a **control**: with `dist` parked, the *plain* runs of
+`check-escaped-entities`, `check-learning-path`, `check-components-used` and
+`check-notes` all exit **1** with an ENOENT under `dist`, while the same four
+gates' `--self-test` exits **0** in the same tree. The absence was real and
+consequential; the self-tests are simply independent of it.
+
+That kills the objection that would have refused this outright.
+`check-selftests.mjs` runs **first** in `check:repo`, which runs **first** in
+`docs:build` — before `astro build` — so if any self-test needed `dist`,
+executing them here could not work at all. None does.
+
+### The decision: EXECUTE, with a marker — and why exit code alone is not enough
+
+`315.1`'s defect is the argument. That gate had a real, correct, fully-written
+`--self-test` block sitting **below** a `ci.yml` read that returned first, so
+`node check-ci-ignores.mjs --self-test` exited **0 having classified nothing**.
+A grep for the `process.argv` branch sees the branch; an exit code sees a zero.
+Neither can see **reachability**, which is the only thing that was wrong.
+
+So the contract is a **count**: a passing `--self-test` prints a line saying
+`self-test passed` and naming how many cases it classified. A branch that never
+runs cannot print one.
+
+**It is a FORMAT, not a shared function, and that is forced rather than
+chosen.** Three of the twenty live in `packages/core/scripts`, and core must
+not import from `apps/docs` — `check-markup.mjs` says so in its own comment,
+because it ships as a `bin`. A format is the only contract both packages can
+hold. It was written to accept both shapes already in the tree, so adopting it
+moved **3 gates, not 20**:
+
+| shape | gates | change |
+|---|---|---|
+| `self-test passed — the detector can fail (18 cases)` | 15, via `gate-report.mjs`'s `selfTest()` | none |
+| `resume charter self-test passed — 9 cases classified correctly` | `check-resume-charter`, `check-resume-slice-ids` | none |
+| a passing verdict with **no count** | `check-markup`, `check-size`, `check-rf-floor` | one line each |
+
+`check-rf-floor` is the one that needed more than a count appended: it folded
+three assertions into a boolean chain and printed one sentence, so its three
+booleans became a named `cases` array and the count is now derived from it.
+Its failure diagnostics are unchanged.
+
+**Cost, measured rather than feared.** Three runs each, same container:
+
+```
+scan only (scanGates, node startup included)    69 / 68 / 65 ms
+the whole gate, twenty child processes        1355 / 1295 / 1300 ms
+```
+
+So `check:repo` grows by about **1.23 s**. `scanGates()` stays a pure read —
+`derive-readme-facts` imports it to stamp a number on the npm front page and
+must not spawn twenty processes to do so — and the execution lives behind the
+run guard.
+
+### Red-proved three ways, each with the injection confirmed present first
+
+The control is the unmodified tree: `20 heuristic (all self-tested; 160 cases
+actually run), 34 exact`, rc 0. **160 reconciles against an independent count**:
+the sweep counted **157** per-case output *lines*, and `check-rf-floor` prints
+none while now declaring **3**.
+
+| injection | landed? | new gate | old grep-only logic |
+|---|---|---|---|
+| the argv branch made **unreachable** (an early `process.exit(0)` above it — 315.1's exact defect) | `grep -c -F ZZINJECT` = 1, and the argv branch is still in the source, = 1 | **rc 1**, *"exited 0 but printed no case count"* | **PASS** — `untagged 0, owed 0` |
+| the count stripped from a passing verdict | 1 | **rc 1** | n/a |
+| one fixture's expectation made wrong | 1 | **rc 1**, printing the WRONG case | n/a |
+
+The first row is the whole point: **on an identical tree the new rung is red and
+the old one is green.** Both were driven by an env var so the injected file was
+byte-identical in the control run, and each was reverted with `git checkout`
+plus a `grep -c` reading **0**.
+
+**One thing this cost, recorded because it is the bulk-edit rule's cousin:** the
+second revert used `git checkout <file>` on a file this slice had *also*
+legitimately edited, and silently took the real edit with it. The gate went
+green again only because the edit was re-applied; nothing would have reported
+it. **Stage before injecting** — `git add -A` first, and `git checkout` then
+restores the intended state rather than `HEAD`'s.
+
+1. [ ] **334.1 — should `check-selftests.mjs` itself be `@heuristic` now?** Its
+       verdict used to rest on a `readdir` and a tag comparison. It now also
+       rests on matching `SELF_TEST_MARKER` against a child process's prose,
+       which is recognising a pattern — a per-case *label* containing the words
+       "self-test passed — 3 cases" would satisfy it. Filed rather than taken,
+       because the retag is not a one-word edit: this file is **excluded from
+       its own scan**, so it would have to stop being, which moves the two
+       counts `derive-readme-facts.mjs` stamps onto the npm front page and
+       requires a README re-stamp that `stamp-readme.mjs --check` gates inside
+       the core build. Measured rather than forecast — `scanGates()` reports
+       **54 / 20 / 34** today, so counting this file as a heuristic gate makes
+       it **55 / 21 / 34**.
+
+       - **Accept:** a recorded decision — either the retag, its `--self-test`,
+         and both READMEs re-stamped in one commit; or a refusal naming what
+         makes the marker match a format comparison rather than a judgement.
+         **Refusing is a satisfying outcome**, and so is finding the premise
+         false: re-read the tag definitions in this file's header before
+         deciding, and say which one the marker match actually is.
+       - **Lane:** cloud-takeable. No browser, no screenshot.
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. **Nothing in this slice renders**: the diff is four gate
+scripts and roadmap prose, and no `.astro`, `.css` or docs page is touched. The
+six visual debts carried in the hand-off are unchanged and unspent.
+
 ## Slice 333 — 310.2: the five unrendered markup consts are deleted, and the reason is not tidiness — 3 of the 5 had already drifted from the showcase they describe (2026-09-07)
 
 **Dispatched by rule 4**, on the oldest genuinely dispatchable open item.
@@ -2430,7 +2577,7 @@ element, `check-loop-vocab` genuinely clean).
        - **DONE 2026-09-07** — amended in place, with the command and both
          readings.
 
-3. [ ] **315.3 — should `check:selftests` EXECUTE each self-test rather than
+3. [x] **315.3 — should `check:selftests` EXECUTE each self-test rather than
        grep for the branch? Filed with its base rate, deliberately not built
        inside a grill.** 315.1 fixes the one site; this is the general question
        underneath it.
@@ -2457,6 +2604,18 @@ element, `check-loop-vocab` genuinely clean).
          each gate's raw output rather than grepping one format. The figures
          above are snapshots.
        - **Lane:** cloud-takeable. No browser, no screenshot.
+       - **DONE 2026-09-07 (cloud wake) — a marker contract, ADOPTED.** The
+         sweep was re-run as the Accept asks; both figures above had moved
+         (**0 of 20** run zero cases, and the no-`dist` half no longer
+         reproduces at all — all twenty are byte-identical without it). The
+         two costs that were expected to refuse this measure zero: 1.38 s for
+         twenty child processes, and only **3 of 20** gates needed an edit,
+         because the contract was written to accept both shapes already in the
+         tree. Exit code alone was rejected for the reason this item states —
+         it cannot see 315.1 — and the count is what an unreachable branch
+         cannot print. Full working, the four contexts, and the three
+         red-proofs are in **Slice 334**; the one question left over is
+         `334.1`.
 
 **NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
 wake has no Podman. Nothing in this slice renders: the diff is one gate script's

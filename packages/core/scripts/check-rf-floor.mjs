@@ -263,7 +263,17 @@ if (process.argv.includes('--self-test')) {
   const emits = earliestChrome(prefixedSupport, (p) => p === '-webkit-');
   const prefixFilterWorks = doesNotEmit === 43 && emits === 1;
 
-  if (!guardedPasses || !unguardedCatchesAll || !prefixFilterWorks) {
+  /* Named cases rather than three loose booleans, so the count below is DERIVED
+     from what ran (roadmap 315.3's marker contract) instead of being a literal
+     a never-reached branch could still print. The diagnostics on failure are
+     unchanged — they are what a reader needs, and a case list is not. */
+  const cases = [
+    ['guarded use is not flagged', guardedPasses],
+    ['unguarded use is flagged for all three features', unguardedCatchesAll],
+    ['a prefixed BCD entry counts only when the profile emits that prefix', prefixFilterWorks],
+  ];
+
+  if (cases.some(([, ok]) => !ok)) {
     console.error('check-rf-floor --self-test FAILED');
     console.error('  guarded input violations (expect none):', guardedResult);
     console.error('  unguarded input violations (expect all 3):', unguardedResult);
@@ -271,8 +281,8 @@ if (process.argv.includes('--self-test')) {
     process.exit(1);
   }
   console.log(
-    'check-rf-floor --self-test passed — distinguishes guarded from unguarded use, ' +
-      'and counts a prefixed BCD entry only when the profile emits that prefix',
+    `check-rf-floor --self-test passed — ${cases.length} cases: distinguishes guarded from ` +
+      'unguarded use, and counts a prefixed BCD entry only when the profile emits that prefix',
   );
   process.exit(0);
 }

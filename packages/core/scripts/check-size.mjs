@@ -243,8 +243,9 @@ if (process.argv.includes('--self-test')) {
     ['a multi-file bucket declaring no per-file max is reported', kinds(noMax), 'missing-max'],
   ];
 
+  const cases = [...classify, ...compare];
   let ok = true;
-  for (const [what, got, want] of [...classify, ...compare]) {
+  for (const [what, got, want] of cases) {
     const pass = got === want;
     ok &&= pass;
     console.log(`self-test: ${what.padEnd(62)} ${String(got)} (want ${String(want)}) ${pass ? 'ok' : 'WRONG'}`);
@@ -253,7 +254,11 @@ if (process.argv.includes('--self-test')) {
     console.error('  the detector cannot tell the cases apart — it would pass on a real breach');
     process.exit(1);
   }
-  console.log('self-test passed — the classifier and the comparator can both fail');
+  /* The count is the marker check:selftests reads (roadmap 315.3) — derived
+     from the list just executed, so an unreachable branch cannot print it. */
+  console.log(
+    `self-test passed — the classifier and the comparator can both fail (${cases.length} cases)`,
+  );
   process.exit(0);
 }
 
