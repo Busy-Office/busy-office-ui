@@ -320,6 +320,99 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 329 — 249.9 built: the component catalogue ships with every field generated, and the miniature it specified is refused with the cost it asked for (2026-09-07)
+
+**Dispatched by rule 4.** The oldest open item is `249.7`, and it is
+**owner-blocked in substance though it does not look it**: its first Accept
+clause is already executed (the seed spot-check ran, four of five rows
+refuted), and its own text says settling the rest before `249.10` — an OWNER
+CALL for the SAP/Fiori vocabulary — *"would decide it on the thinnest version
+of the input"*. Reported per rule 4's instruction to say **which kind** of
+blocked, and skipped. `249.9` is next, its dependencies (`249.8` tagline,
+`249.3` maturity labels) both landed.
+
+### The miniature is refused, with the measurement the Accept demanded
+
+`249.9` specified *"a build-time miniature via `browser-harness.mjs`"* and its
+Accept required *"the cost of miniature rendering measured and written into
+the item before it closes"*. Measured first, rendering the first demo section
+of five real component pages at 640px:
+
+```
+launch 781ms · 1,006ms per component · ~40s for 40
+29 kB per PNG   · ~1.1 MB for 40
+```
+
+**1.1 MB is roughly twelve times the whole framework's 93 kB minified**,
+carried in the repo and shipped in `dist`, to show a still picture of a demo
+that is live, interactive, and one click away on the card's own link. That is
+**re-photographing** — the same thing the pattern recipe already refuses when
+it bars per-domain demo variants. Refused; the card links to the living thing
+instead, and the page says so in its own opener rather than leaving a reader
+to wonder where the pictures are.
+
+### What shipped
+
+`/components/` — the section front door, the role `patterns/index.astro`
+already plays. **Every field on every card is generated**: tagline and
+category from `api.json`'s `meta` (249.8), JS status from `behaviors.json`'s
+`byComponent` (0.8.0's `serves` work), the CSS floor from `floor.json`'s
+`perComponent` (249.3), the DSA score and date from `dsa-scores.json`. 42
+cards across 8 groups.
+
+The per-component floor is the field that earns its place: **Button reads
+Chrome/Edge 99 and Dropdown reads 117**, which is exactly the distinction
+`249.3` built `perComponent` for — a consumer importing one component is not
+held to the framework's whole floor.
+
+**Two badges, not three, and the floor demoted to muted text.** Three heavy
+badges per card made the grid unreadable. The two that remain are the ones a
+reader decides *from* — does it need JS, how is it scored; the floor is a fact
+you check rather than scan.
+
+### A defect in this wake's own code, caught before it shipped
+
+The first render showed **six** cards reading *"No tagline in its CSS header
+yet"*. Four were honest (anchors and page-only entries with no CSS directory).
+**Two were wrong**: `/components/alerts` and `/components/state-patterns` are
+real components whose PAGE slug differs from their CSS directory (`alert`,
+`state`). Looking up `api.components[pageSlug]` silently missed them.
+
+This is CLAUDE.md's named trap — *"page slugs are not class names: `alerts` →
+`bo-alert`"* — and `api.json` ships a `pageSlug` map for exactly it. Inverted
+that map rather than special-casing the two, so a third alias is handled
+without an edit. After the fix, cards reading "no tagline" went **6 → 0**, and
+the two remaining absences are the genuine anchor entries, whose text now says
+*why* ("a section of another component's page — no stylesheet of its own")
+rather than implying a gap that is not there.
+
+### The gate edit, and its red-proof
+
+`check-page-shape` failed the new page: it requires every `.astro` under
+`pages/components/` to have a sidebar entry, and a front door belongs in no
+category. Fixed on both sides rather than by exemption alone —
+
+- **Reachability made real**: the landing nav and CTA now point at
+  `/components/`. They pointed at `/components/data-table` and
+  `/components/button`, arbitrary components, because no index existed.
+- **The gate stops treating a front door as a component**, mirroring the
+  `PATTERN_SECTIONS_EXEMPT` the patterns index already has, with the reason in
+  the code.
+
+**Red-proved, because the edit was to a gate**: injecting an orphan component
+page with no sidebar entry still fails it, naming the file on both the
+reachability and Related arms; removing the probe returns it to green at 40
+component pages and 41 reachable. The gate's property — no COMPONENT page goes
+unreachable — is unchanged.
+
+Full docs build green, `check:links` verifies **14,586** internal links, 2
+columns at 1440px and 1 at 390px.
+
+9. [x] **249.9 — DONE.** Every badge traces to a JSON key, or the card renders
+       the absence and names its reason, which is 249.3's standing rule. The
+       miniature cost is measured and written into the page's own header —
+       the Accept's other half — and the miniature refused on it.
+
 ## Slice 328 — 249.6 built: the router lands, its "three rows have no rendered result" premise was FALSE, and the gate its Accept asks for cannot discriminate (2026-09-07)
 
 **Dispatched by rule 4** on the oldest open item. Counters clear
@@ -5505,7 +5598,7 @@ claimed.
        (912 containers x 2 widths), both green. All **17** CI entry points,
        re-derived from `ci.yml`, ran green in this container.
 
-9. [ ] **249.9 — Visual component catalogue.** Depends on 249.8 (tagline) and
+9. [x] **249.9 — DONE, Slice 329.** Visual component catalogue. Depends on 249.8 (tagline) and
        249.3 (maturity labels). `/components/` index: one card per component
        — name, tagline, CSS-only/JS-enhanced/JS-required (derived: component
        classes ∩ `behaviors.json` hooks), DSA score + date, floor, AT line,

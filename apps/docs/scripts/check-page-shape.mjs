@@ -181,7 +181,16 @@ for (const d of dirs) {
    from COMPONENT_NAV_EXTRAS (its mentions in the module went 1 -> 0) left
    this gate GREEN. That is the "a skipped page looks exactly like a passing
    one" failure the `scan` comment above records, in a second place. */
-const PAGE_DIR_ONLY = new Set(['demos']);
+/* `index.astro` is the components section's FRONT DOOR (roadmap 249.9) — a
+   generated card grid over the pages below, not a component doc, exactly as
+   `PATTERN_SECTIONS_EXEMPT` already treats the patterns index. It has no CSS
+   directory and belongs in no category, so neither route to a sidebar entry
+   fits it: filing it under a category would be false, and the reachability
+   this loop protects is satisfied instead by the landing nav and CTA, which
+   both point at `/components/` (they used to point at an arbitrary component
+   page because no index existed). The gate's property — no COMPONENT page
+   goes unreachable — is unchanged. */
+const PAGE_DIR_ONLY = new Set(['demos', 'index.astro']);
 let reachability = 0;
 for (const entry of await readdir(pagesDir, { withFileTypes: true })) {
   if (!entry.isFile() || !entry.name.endsWith('.astro') || PAGE_DIR_ONLY.has(entry.name)) continue;

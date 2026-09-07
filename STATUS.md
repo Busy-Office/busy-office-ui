@@ -2,16 +2,15 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-07 13:02 UTC
+Generated at: 2026-09-07 13:16 UTC
 
 ## Open items by slice
 
 - **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS + FOUR ANSWERS (grilled 2026-08-29 at the owner's request; full report `.roundtable/grill-112.3-pilot-still-worth-it-2026-08-29.md`).
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-- **Slice 249** (6 open)
+- **Slice 249** (5 open)
   - 249.7 — Terminology table, re-scoped after its own worked example failed verification.
-  - 249.9 — Visual component catalogue.
   - 249.10 — SAP/Fiori terminology column for 249.7.
   - 249.11 — "Migrate an existing admin UI" path.
   - 249.12 — Archival trigger for `ROADMAP.md`.
@@ -57,9 +56,10 @@ Generated at: 2026-09-07 13:02 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1602 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-09-07 10:47   ok
-  Objective     2 / 3 slices          since 2026-09-07 11:48   ok  [310, 328]
+dispatch status — counter-triggered rules (1605 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-09-07 10:47   ok
+  Objective     3 / 3 slices          since 2026-09-07 11:48   OVERDUE  [310, 328, 329]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-09-07 12:59   ok   [newest pair: claims; 133 sample(s), 7 of 44 name(s) paired across days]
      rule 5's comparable set — 7 name(s) sampled on 2+ distinct days (37 of 44 name(s) have only one day and are not an input to a rule that compares two runs):
        claims                      4d  2026-09-06 169 count -> 2026-09-07 170 count  +1
@@ -88,9 +88,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-07 10:47 · Meta · refusal · replacing the verdict list with a per-path grep — 6 of 7 unverdicted control pages hit, so the detector cannot discriminate (94.11: no gate on a semantic property) · refused · e1f5a12f
-- 2026-09-07 10:47 · Meta · refusal · cutting the LOOPS.md dispatch region — 308.1's per-section attribution shows the cut section did not regrow and all four risers are rules that changed; filed as 326.3 instead · refused · e1f5a12f
-- 2026-09-07 11:48 · Objective · grill · Objective grill of Slices 309, 323, 326 (Slice 327): 74 of 75 assertions reproduce; 309's three-route init claim false for 2 of 3, 326.1's negative control self-destroying · landed · ac0fc752
 - 2026-09-07 11:48 · Meta · refusal · a new CLAUDE.md section for the self-destroying-control shape — the file already carries its mirror image and 326.3 is open on prose growth; a pinned revision plus one sentence in the lane that uses it is smaller · refused · ac0fc752
 - 2026-09-07 11:48 · Meta · refusal · a gate over 'this claim names its instrument' (327.3) — semantic, 94.11's rule, and the checkable shape would be true of nearly every slice · refused · ac0fc752
 - 2026-09-07 12:58 · Continue · build · 310.1 — deprecated glyphs in the two reference apps: 3 sites replaced onto the suite's own Refresh convention, 3 kept with the reason at the code · landed · 0879ec3d
@@ -98,6 +95,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-07 21:01 · Continue · build · Slice 328 / closes 249.6 — shipped the six-row adoption-scenario router on index.astro (3+3 at 1440, 1 col at 390, all hrefs resolve). Its premise was FALSE: the three 'no rendered result' rows render 103, 11 and 8 live framework elements inside their demo sections, more than the page that passed (14) — the detector counted the Demo COMPONENT, which is CLAUDE.md's own recorded 1-of-18-vs-16-of-18 error repeating. The Accept's gate is refused on base rate: the honest predicate reads 30 of 30, uniformly true · landed · 9a4be080
 - 2026-09-07 21:01 · Meta · refusal · the check-learning-path arm the Accept asked for — the honest predicate is 30/30 uniformly true, and the anchored 17/31 alternative discriminates on WHICH mechanism a page uses to show a result rather than whether it shows one · refused · 9a4be080
 - 2026-09-07 21:01 · Meta · refusal · cutting three of the six rows, or padding those pages with a bare pattern link — nothing was missing, and padding would be fitting the page to the gate · refused · 9a4be080
+- 2026-09-07 21:16 · Continue · build · Slice 329 / closes 249.9 — the component catalogue at /components/: 42 cards, 8 groups, every field generated (tagline+category from api.json meta, JS status from behaviors.json byComponent, floor from floor.json perComponent, DSA from dsa-scores.json). Caught a defect in my own code before shipping: 2 of 6 'no tagline' cards were real components whose page slug differs from their CSS dir (alerts->alert, state-patterns->state) — CLAUDE.md's named trap; inverted api.json's pageSlug map rather than special-casing, 6 -> 0. Edited check-page-shape to stop treating a section front door as a component, red-proved with an orphan probe · landed · 623c98d9
+- 2026-09-07 21:16 · Meta · refusal · the build-time miniature 249.9 specified — measured 40s and 1.1MB for 40 components, ~12x the whole framework's minified size, to show a still picture of a demo that is live one click away; that is re-photographing, which the pattern recipe already refuses · refused · 623c98d9
+- 2026-09-07 21:16 · Meta · refusal · dispatching 249.7 as the oldest open item — its first Accept clause is already executed and its own text says settling the rest before the owner answers 249.10 would decide it on the thinnest input; reported as owner-blocked per rule 4 · refused · 623c98d9
 
 ## Sunset test
 
