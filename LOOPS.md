@@ -271,15 +271,34 @@ surfaced since the last wake — in chat, added to `ROADMAP.md`'s backlog by
 someone else, or **filed on GitHub**. **Two intakes, and both are read every
 wake** (public since 0.1.0 shipped on npm):
 
-```
-gh issue list -R Busy-Office/busy-office-ui --state open
+**Use the REST form. It is the only one that runs in BOTH environments**, and
+`$GITHUB_TOKEN` is already in the cloud container's environment (locally,
+`TOK=$(gh auth token)`):
 
-gh api graphql -f query='{repository(owner:"Busy-Office",name:"busy-office-ui"){
-  discussions(first:20,states:OPEN,orderBy:{field:UPDATED_AT,direction:DESC}){
-  nodes{number title category{name} isAnswered updatedAt}}}}' \
-  --jq '.data.repository.discussions.nodes[] |
-        "#\(.number) [\(.category.name)] answered=\(.isAnswered // "n/a") — \(.title)"'
 ```
+R=https://api.github.com/repos/Busy-Office/busy-office-ui
+H="Authorization: bearer $GITHUB_TOKEN"
+
+curl -sS -H "$H" "$R/issues?state=open"      # the issue intake
+curl -sS -H "$H" "$R/discussions"            # the discussion intake
+curl -sS -o /dev/null -w '%{http_code}\n' -H "$H" "$R/not-a-real-route"
+```
+
+**The third line is not decoration — it is the control that makes an empty
+answer mean anything.** An empty `[]` is what *"no open discussions"* looks
+like AND what an unserved route would look like; the `404` proves the `200 []`
+means **served and empty**. Verified identical in both environments
+(2026-09-07): `200 len 0` / `404` / `200 len 1`.
+
+**The `gh` forms this file used to mandate DO NOT RUN in a cloud wake**
+(roadmap 302.1, and the wake that found it recorded *"Discussions were not
+checked this wake"*). There is no `gh` binary in that container, and its
+GraphQL endpoint is refused outright — *"only the pinned set of PR-review
+operations is served"*. The commands were written and verified on a local Mac
+and never in the environment that runs most wakes, which is exactly the
+"a gate that only runs in CI is not known to work" rule pointing the other
+way. `gh issue list` and `mcp__github__list_issues` both remain fine where
+they exist; the REST form above is what a wake can always fall back to.
 
 **Those are two `gh` invocations, and `gh` is not the requirement — a READING
 from each intake is** (roadmap 302.1, 2026-09-06). Neither command runs in a

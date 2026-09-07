@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-07 14:01 UTC
+Generated at: 2026-09-07 14:24 UTC
 
 ## Open items by slice
 
@@ -52,16 +52,17 @@ Generated at: 2026-09-07 14:01 UTC
   - 330.1 — Sampling is now a named failure mode here, twice.
 - **Slice 331** (1 open)
   - 331.1 — `install-prompts.md`, generated from `api.json`.
+- **Slice 332** (1 open)
+  - 332.1 — `ENVIRONMENT.md` doubled in 8 days and every wake reads all of it.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1614 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-09-07 10:47   OVERDUE
-  Objective     0 / 3 slices          since 2026-09-07 14:01   ok
-  -> a counter is at or past its threshold; the dispatcher should pick it
+dispatch status — counter-triggered rules (1616 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-09-07 22:24   ok
+  Objective     1 / 3 slice           since 2026-09-07 14:01   ok  [332]
   Optimize      0 wake-date(s) newer   since 2026-09-07 12:59   ok   [newest pair: claims; 133 sample(s), 7 of 44 name(s) paired across days]
      rule 5's comparable set — 7 name(s) sampled on 2+ distinct days (37 of 44 name(s) have only one day and are not an input to a rule that compares two runs):
        claims                      4d  2026-09-06 169 count -> 2026-09-07 170 count  +1
@@ -89,8 +90,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-07 21:16 · Meta · refusal · dispatching 249.7 as the oldest open item — its first Accept clause is already executed and its own text says settling the rest before the owner answers 249.10 would decide it on the thinnest input; reported as owner-blocked per rule 4 · refused · 623c98d9
-- 2026-09-07 21:41 · Objective · grill · Slice 330 — grill of 310, 328, 329: 23 of 25 reproduce. The one that matters is mine: 329's miniature cost (29kB/PNG, ~1.1MB for 40) was extrapolated from five components and does not reproduce — an independent five-sample read 49kB/1.91MB, and a census over all 39 reads 0.89MB with a 2.2-60.7kB spread. Two samples landed either side of the truth. The refusal survives (0.89MB is ~10x the framework) but the wrong figure was written into the shipped page header. Corrected there and in the slice, with the command shape added · logged · 8ef9b944
 - 2026-09-07 21:41 · Meta · refusal · a gate over 'a published figure carries the command that produces it' — semantic predicate, 94.11's wall for the seventh time; the fix that works is putting the command next to the claim · refused · 8ef9b944
 - 2026-09-07 21:41 · Meta · refusal · re-filing 329's 8-vs-7 group count as a defect — wording only, the conclusion never depended on it · refused · 8ef9b944
 - 2026-09-07 21:49 · Continue · build · Slice 331 / closes 294.2 — fixed the input block instead of reporting it a twelfth time: landed the owner-supplied contribution on branch contribution/upstream-2026-09-06 (31 files, secret-scanned, NOT on main, nothing adopted) so every verdict cites a readable path — 321.1's defect fixed as a class. All six proposals ranked: brand mark OWNER CALL; registry refused / install-prompts adopt-with-changes (must be generated, filed 331.1); gauntlet already adopted Slice 296; static consumer REFUSED because erp-suite already ships a file-openable static dist; modern CSS split (probes landed 311, OKLCH blocked by its own PR.md gate, surface.css withdrawn by its author); proposals refused as product · landed · 19fc0045
@@ -99,6 +98,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-07 14:01 · Objective · grill · Slice 330 amended — grill of 310/328/329 lost the collision; the 17-of-31 corpus finding survives, the census and group-count errors are recorded · logged · 534b097a
 - 2026-09-07 14:01 · Meta · refusal · re-proposing a gate over 'a published figure carries its command' — the landed Slice 330 already refuses it on the semantic wall · refused · 534b097a
 - 2026-09-07 14:01 · Meta · refusal · keeping this wake's duplicate grill report in .roundtable/ — a second report of the same three slices is the repeated-subject shape INDEX.md measures · refused · 534b097a
+- 2026-09-07 22:24 · Standardize · sweep · Slice 332 — Standardize sweep 4 of 4 lanes: lanes 1-3 clean (0 dead of 1,365 style attributes; css-repeats 74/242/230/8 unchanged a 4th time; 119 prose pages, all 10 flagged carry verdicts, checked per page). Lane 4's ratchet led to the finding: ENVIRONMENT.md doubled in 8 days (391->731 lines) and its §8 records that LOOPS.md Step 1's intake commands — including the Discussions GraphQL I added in 297 — CANNOT RUN in a cloud wake (no gh binary, GraphQL refused), so Discussions have been silently unchecked. Replaced with a REST form verified identically in both environments, with its 404 control · landed · 8d078221
+- 2026-09-07 22:24 · Meta · refusal · leaving Step 1's gh commands with a note that they only work locally — a mandated intake that silently cannot execute is what 'a gate that cannot run must fail loudly' forbids; the portable form exists and was already measured · refused · 8d078221
 
 ## Sunset test
 

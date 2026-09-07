@@ -320,6 +320,82 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 332 — Standardize sweep, 4 of 4 lanes: three clean, and lane 4 led to a mandated intake command that CANNOT RUN where most wakes run (2026-09-07)
+
+**Dispatched by rule 2**, OVERDUE at `4 / 4`. Say `n of 4`: **4 of 4 lanes
+run.**
+
+- **Lane 1 — `scan:dead-style`: clean.** 0 dead style attributes across
+  **1,365** live ones. The instrument changed under this lane since the last
+  sweep — it now counts style *attributes* and reports separately that 357 of
+  them carry more than one declaration, which it cannot judge individually.
+  Noted so a later reader does not compare 1,365 against an older sweep's
+  1,433 and read a drop that is a unit change.
+- **Lane 2 — `report:css-repeats`: clean, no delta.** `74 · 242 · 230 · 8`,
+  unchanged for a fourth consecutive sweep.
+- **Lane 3 — `report:prose`: clean.** 119 pages, median **798**, **113,787**
+  words, 10 over 2x. Every one of the 10 flagged pages carries a verdict in
+  `ROADMAP.md` or the archive — checked per page rather than assumed from the
+  count.
+- **Lane 4 — the ratchet: carried the finding**, via `ENVIRONMENT.md`.
+
+### The finding: Step 1 mandates a command no cloud wake can execute
+
+`ENVIRONMENT.md` read **16 up, last cut 2026-08-30** — 8 days, and it has
+**doubled**: 391 → 731 lines, 3,130 → 6,316 words, in the file Step 0 makes
+every wake read before it does anything. Reading what had accumulated found
+its §8, and §8 is about a defect **this author shipped**.
+
+`LOOPS.md` Step 1 mandated the two intake commands as `gh` invocations —
+including the Discussions GraphQL query added in Slice 297. **Neither runs in a
+cloud wake**: there is no `gh` binary in that container, and its GraphQL
+endpoint is refused outright (*"only the pinned set of PR-review operations is
+served"*). The issues half has an MCP tool and merely looks different; **the
+Discussions half has none**, and a cloud hand-off recorded the honest
+consequence — *"Discussions were not checked this wake."*
+
+**This is the "a gate that only runs in CI is not known to work" rule pointing
+the other way.** The commands were written and verified on a local Mac, and
+never in the environment that runs most wakes. A mandated intake that silently
+cannot execute is exactly what that rule exists to prevent, and Slice 297's own
+`297.1` — *"the router is still untested"* — was open the whole time without
+anyone noticing the intake itself was the untested half.
+
+**Fixed, with a form verified in BOTH environments.** Step 1 now mandates the
+REST route (roadmap 302.1 found it; this slice applies it), with its controls:
+
+```
+curl -sS -H "$H" "$R/issues?state=open"       200, len 1
+curl -sS -H "$H" "$R/discussions"             200, len 0
+curl -sS -o /dev/null -w '%{http_code}' "$R/not-a-real-route"   404
+```
+
+**The 404 line is the load-bearing one.** An empty `[]` is what *"no open
+discussions"* looks like AND what an unserved route looks like; the 404 is what
+makes the `200 []` mean **served and empty** rather than *not answered*. Same
+shape as trap 2, one API over. Re-run locally for this slice: identical
+`200 len 0` / `404` / `200 len 1`, so the command is portable rather than
+merely documented as such.
+
+**Not red-proved, and said plainly**: nothing has ever been filed in this
+repo's Discussions, so the route has never been seen returning a non-empty
+list. The controls are the strongest evidence available without filing one,
+and `297.1` already carries the obligation to check on the day one appears.
+
+1. [ ] **332.1 — `ENVIRONMENT.md` doubled in 8 days and every wake reads all
+       of it.** 391 → 731 lines, 3,130 → 6,316 words since its last cut, with
+       18 top-level sections. It is Step 0's first read, so its length is a
+       tax on every wake, and 169.3 already split it out of `RESUME.md` for
+       exactly this reason once.
+       - **Accept** — the property, not a target size: each section either
+         still describes a trap that can bite a wake TODAY, or moves to
+         `LOOPS-archive.md` with a pointer. **Finding that all 18 still bite
+         is a satisfying outcome** and closes this — the file is long because
+         the environment is hostile, not because it is untidy. Measure before
+         cutting: a section whose trap is fixed in the toolchain is the only
+         safe cut, and §1c is the worked example of one that looked stale and
+         was not.
+
 ## Slice 331 — 294.2: the input block is fixed rather than reported, and all six proposals carry a verdict (2026-09-07)
 
 **Dispatched by rule 4** as the oldest genuinely dispatchable item. `249.7`
