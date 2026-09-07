@@ -147,17 +147,50 @@ same item.
 one that pushes second loses its work and re-dispatches. Nothing partitions the
 queue and nothing claims an item.
 
-**What it costs, named:** up to one wake's work, discarded. It has happened once
-— the cloud routine and the local session both built 157.3 within an hour
-(Slice 162). Nothing was corrupted, because `git push` rejected the loser rather
-than merging it.
+**What it costs, named:** up to one wake's work, discarded. Nothing has been
+corrupted by one yet: the loser has always been rejected or has found out before
+committing, never merged. **Count them by re-reading this section's own record
+rather than trusting a number here** — the words "it has happened once" entered
+at `15ab347b` on 2026-08-28 and stood **unedited for ten days**, across a second
+collision this same section goes on to describe (`git log -S'It has happened
+once' -- LOOPS.md` returns exactly that one commit). That is the stale-snapshot
+failure this file records elsewhere, in the paragraph naming the cost.
+Three as of 2026-09-07:
+
+1. **157.3** — the cloud routine and the local session both built it within an
+   hour (Slice 162). `git push` rejected the loser.
+2. **169/170/172** — the loser's rebase merged **clean**, refuting the
+   "guaranteed conflict" argument below (roadmap 175.4).
+3. **The Objective grill of 310/328/329** (2026-09-07) — both dispatchers were
+   armed by the same `Objective 3 / 3 OVERDUE`, ran the same grill, and reached
+   the **same primary finding** (Slice 329's miniature cost resting on an
+   unstable five-page sample). The loser was stopped by the pre-commit fetch
+   **before it had made any commit at all** — the mechanism below working
+   exactly as specified. Whether that is a first is NOT claimed: collision 2's
+   record credits the same fetch while also describing a rebase, so its loser
+   may well have committed, and `LOOPS-archive.md` does not settle it.
+
+**Collision 3 says something the first two do not: rule 3 collides harder than
+rule 4.** Rule 4 picks the oldest open item, so two dispatchers duplicate one
+item; rule 3 hands both of them the *same arming set*, so they duplicate a whole
+wake. It is recorded, **not fixed** — the loser here did not re-dispatch to a
+different loop; it discarded the duplicated 95%, kept the one finding the winner
+had not made, and amended it into the winner's slice (roadmap 330). So the cost
+was a fraction of a wake rather than the whole one this section budgets for, and
+partitioning the queue is already refused below on starvation.
+
+**And the loser's output is not automatically the worse one — check before
+discarding.** Here it mostly was: the losing wake's census enumerated
+`readdir(dist/components)` and swallowed two non-component directories, and it
+scored a heading count as a category count. Both are recorded in Slice 330,
+because a superseded wake's *errors* are as much evidence as its findings.
 
 **⚠ THE COLLISION IS NOT CAUGHT BY A GUARANTEED CONFLICT. That argument was
 made here, and the second collision refuted it** (Objective grill of
-169/170/172, 2026-08-28; roadmap 175.4, which leaves the *decision* open). Two
-dispatchers have taken the same item twice, and the second time the loser's
-rebase resolved with **no conflict at all** — it overlapped on `ROADMAP.md` and
-`LOOPS.md` and merged clean, with `loop-log.md` not in its diff.
+169/170/172, 2026-08-28; roadmap 175.4, which leaves the *decision* open). Of
+the collisions listed above, the second one's loser rebased with **no conflict
+at all** — it overlapped on `ROADMAP.md` and `LOOPS.md` and merged clean, with
+`loop-log.md` not in its diff.
 
 **What actually caught it was the `git fetch origin main` before the first
 commit, mandated below.** That is the working half, and it is a process rule
@@ -172,7 +205,7 @@ Resolving such a conflict: **keep BOTH row sets**, then regenerate the mirrors
 rather than hand-merging them, and check the parser against a raw
 `grep -c "^- "` before committing.
 
-The forensics of both collisions, and the refuted "safe by construction"
+The forensics of the first two collisions, and the refuted "safe by construction"
 argument with its 5-of-5 measurement, are in **`LOOPS-archive.md`**.
 
 **The one thing that changes, and it costs no push:** `git fetch origin main` at

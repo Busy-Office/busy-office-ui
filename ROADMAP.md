@@ -510,6 +510,71 @@ returned green at *40 component pages … 41 reachable* after removal.
          may be a habit to correct rather than a systemic gap, and a gate over
          "is this number a census" is the semantic wall 94.11 names.
 
+### AMENDED by the colliding wake, 2026-09-07 — one finding this grill did not cover
+
+**A second dispatcher ran this same grill concurrently and lost the race**
+(Step 0c, collision #3 — see `LOOPS.md`). Its census and its group count were
+both **wrong where this slice is right**, and that is recorded here rather than
+discarded, because the two errors are the ones this slice's own findings
+predict:
+
+- its census read **42 components / 1.03 MB / 25.1 kB mean** against the 39 /
+  0.89 MB / 23.3 kB above, because it enumerated `readdir(dist/components)` and
+  swallowed **`demos/` and `nav/`** — two directories that are not component
+  pages. The population came from a *convention* (a directory listing) instead
+  of from `api.nav`, which is CLAUDE.md's *derive names from the generated
+  source, never from a convention*, arriving in a denominator.
+- it recorded *"42 cards across 8 groups ✓"* as reproducing. `COMPONENT_GROUPS`
+  is **7**; the eighth `<h2>` is the `Related` footer, exactly as this slice
+  says. A heading count is not a category count — the same detector shape
+  39.2 produced four of.
+
+**Amended per 236.2** (the archive and closed text may be corrected), and it is
+worth the paragraph because two independent censuses disagreeing by 3 pages is
+the strongest available evidence for 330.1's premise: the population is as easy
+to get wrong as the sample was.
+
+**The one finding that survives, and it is not about sampling.** Slice 328
+re-publishes a figure banked from `249.6` — *"the anchored predicate the item
+banked (17 of 31, which does discriminate)"* — with **no command beside it**.
+Re-deriving it takes four attempts, because *"31 learning-path pages"* names a
+corpus that does not exist:
+
+| reading | count |
+|---|---|
+| source `.astro` under gs+concepts+base | 18 of **30** |
+| `check-learning-path`'s OWN corpus (`ON_PATH = /^\/(getting-started\|concepts)\//`) | 16 of **24** |
+| built pages, gs+concepts+base | 18 of **30** |
+| built pages, gs+concepts+base, **`skipRedirects: false`** | 18 of **31** ✓ |
+
+Only the fourth resolves the 31, and it needs two undisclosed choices at once:
+include `base/`, which `ON_PATH` excludes and which the name *learning-path*
+therefore contradicts, **and** stop skipping redirect pages, which `distPages`
+does by default. The predicate itself is faithful — the gate's own `contentOf`
+anchor, `html.slice(html.indexOf('<section class="demo"'))`.
+
+**The +1 on the numerator is drift, not error.** 30 of the 31 pages changed
+since `856ede33` while the corpus size did not move (24 + 6, then and now), so
+one page gained a pattern link inside its demo region. And `17/31 = 55%` — the
+percentage the slice prints beside it. CLAUDE.md's tell exactly: *a commit's
+own numbers always reconcile*, so review could not catch this and only
+re-running could.
+
+**The conclusion is untouched.** 18/31, 18/30 and 16/24 all discriminate, so
+Slice 328's argument — that the anchored predicate discriminates on *which
+mechanism* rather than *whether* — stands whole. The sibling figure in the same
+249.6 paragraph reproduces sharply: whole-page, *"the page contains a pattern
+link"* reads **24 of 24** uniformly true, per-page minimum exactly the published
+**78** (the upper bound is now 136; those pages have grown). That is what makes
+this a **retrievability** defect and not a sloppy wake.
+
+**No new item, deliberately.** The remedy is already this slice's own — *put
+the command next to the claim* — and the gate over it is already **Refused**
+above on the semantic wall. Re-proposing it under a second id would be the
+duplicate this amendment exists to avoid. The redirect mechanism is also the
+same one this slice records its verifier stumbling over on `base/tokens`, one
+paragraph up: **two wakes, two instruments, one undisclosed corpus choice.**
+
 ## Slice 329 — 249.9 built: the component catalogue ships with every field generated, and the miniature it specified is refused with the cost it asked for (2026-09-07)
 
 **Dispatched by rule 4.** The oldest open item is `249.7`, and it is
