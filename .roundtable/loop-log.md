@@ -1630,3 +1630,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-07 16:07 · Meta · refusal · exit code alone as the execution signal — it cannot distinguish 18 passing cases from a branch that never ran, which is 315.1 exactly · refused · ac4a9a0f
 - 2026-09-07 16:09 · Roadmap · plan · cloud-wake hand-off for Slice 334; rule 3 armed at 3/3 for the next wake · logged · ac4a9a0f
 - 2026-09-08 03:00 · Continue · continue · 297.1 answered — both filed issues landed in Issues correctly, but zero labels prove both bypassed the templates entirely (blank_issues_enabled). Router never exercised; Discussions intake still never returned a non-empty list. Filed 335.1. · landed · 6a009a4b
+- 2026-09-07 19:07 · Objective · grill · Slice 336 — grill of 315, 332, 333: 26 of 29 assertions reproduce; three defects, each a number reading a different population than its noun names · logged · 86f034ce
+- 2026-09-07 19:07 · Meta · refusal · a gate for 'the noun matches the population' — semantic, 94.11's wall · refused · 86f034ce
+- 2026-09-07 19:07 · Meta · refusal · building 336.2 inside the grill — the union question is filed with its base rate, not answered here · refused · 86f034ce

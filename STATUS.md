@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-07 19:00 UTC
+Generated at: 2026-09-07 19:07 UTC
 
 ## Open items by slice
 
@@ -54,16 +54,17 @@ Generated at: 2026-09-07 19:00 UTC
   - 334.1 — should `check-selftests.mjs` itself be `@heuristic` now?
 - **Slice 335** (1 open)
   - 335.1 — The Discussions intake has never returned a non-empty list, in either environment.
+- **Slice 336** (1 open)
+  - 336.2 — should `report:prose` print the flagged UNION, since that is what its lane is defined on?
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1624 iterations logged)
+dispatch status — counter-triggered rules (1627 iterations logged)
   Standardize   3 / 4 Continue rounds since 2026-09-07 22:24   ok
-  Objective     4 / 3 slices          since 2026-09-07 14:01   OVERDUE  [297, 315, 332, 333]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-09-07 19:07   ok
   Optimize      1 wake-date(s) newer   since 2026-09-07 12:59   STALE   [newest pair: claims; 133 sample(s), 7 of 44 name(s) paired across days]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-07, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-07 (2026-09-08), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -93,9 +94,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-07 22:24 · Standardize · sweep · Slice 332 — Standardize sweep 4 of 4 lanes: lanes 1-3 clean (0 dead of 1,365 style attributes; css-repeats 74/242/230/8 unchanged a 4th time; 119 prose pages, all 10 flagged carry verdicts, checked per page). Lane 4's ratchet led to the finding: ENVIRONMENT.md doubled in 8 days (391->731 lines) and its §8 records that LOOPS.md Step 1's intake commands — including the Discussions GraphQL I added in 297 — CANNOT RUN in a cloud wake (no gh binary, GraphQL refused), so Discussions have been silently unchecked. Replaced with a REST form verified identically in both environments, with its 404 control · landed · 8d078221
-- 2026-09-07 22:24 · Meta · refusal · leaving Step 1's gh commands with a note that they only work locally — a mandated intake that silently cannot execute is what 'a gate that cannot run must fail loudly' forbids; the portable form exists and was already measured · refused · 8d078221
-- 2026-09-07 14:49 · Continue · build · Slice 333 / closes 310.2 — deleted /base/motion's five never-rendered markup consts. The deciding measurement is drift, not deadness: they were a hand-maintained second copy of markup the In-context section already renders live, and 3 of 5 (menuMarkup, rowMarkup, removeMarkup) had already diverged from the built page's own DOM, so the Accept's render branch would have shipped three samples contradicting the showcase beside them. Built page byte-identical before and after (md5 f8886e3e), so no screenshot is owed. Probe v1 was wrong in the named way — a hand-transcribed claim table carrying the rendered value in the source column; v2 parses the source and carries a passing control · landed · 422601c4
 - 2026-09-07 14:49 · Meta · refusal · a gate over 'a never-used frontmatter const in an .astro page' — filed as 333.1 rather than built: the base rate after this fix is 0 of 152, and the ordinary tool is noUnusedLocals plus a tsconfig that would actually see docs .astro files, which nothing here has · refused · 422601c4
 - 2026-09-07 14:49 · Meta · refusal · rendering the five as pre blocks — three of them contradict the live showcase they describe, so the render branch of 310.2's Accept ships worse than nothing without first rendering preview and code from one string · refused · 422601c4
 - 2026-09-07 16:07 · Continue · build · 315.3 — check:selftests executes each heuristic gate's --self-test and asserts a case-count marker; base rate re-measured (0 of 20 run zero cases), 3 gates standardised, 334.1 filed · landed · ac4a9a0f
@@ -103,6 +101,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-07 16:07 · Meta · refusal · exit code alone as the execution signal — it cannot distinguish 18 passing cases from a branch that never ran, which is 315.1 exactly · refused · ac4a9a0f
 - 2026-09-07 16:09 · Roadmap · plan · cloud-wake hand-off for Slice 334; rule 3 armed at 3/3 for the next wake · logged · ac4a9a0f
 - 2026-09-08 03:00 · Continue · continue · 297.1 answered — both filed issues landed in Issues correctly, but zero labels prove both bypassed the templates entirely (blank_issues_enabled). Router never exercised; Discussions intake still never returned a non-empty list. Filed 335.1. · landed · 6a009a4b
+- 2026-09-07 19:07 · Objective · grill · Slice 336 — grill of 315, 332, 333: 26 of 29 assertions reproduce; three defects, each a number reading a different population than its noun names · logged · 86f034ce
+- 2026-09-07 19:07 · Meta · refusal · a gate for 'the noun matches the population' — semantic, 94.11's wall · refused · 86f034ce
+- 2026-09-07 19:07 · Meta · refusal · building 336.2 inside the grill — the union question is filed with its base rate, not answered here · refused · 86f034ce
 
 ## Sunset test
 
