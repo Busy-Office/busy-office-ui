@@ -23,9 +23,9 @@ survives none.
 ## In flight: nothing
 
 Last updated 2026-09-07 (**cloud** wake, scheduled routine). Working tree clean
-at hand-off. **Two commits this wake** — Slice 317 and this rewrite — and **one
-iteration recorded**, `Continue · build`, outcome **`refused`**, with one
-additional refusal.
+at hand-off. **Four commits this wake** — Slice 317, its record, Slice 318 and
+this rewrite — and **two iterations recorded**: `Continue · build` (outcome
+`refused`, one additional refusal) and `Continue · bug` (outcome `landed`).
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -48,22 +48,32 @@ Counters read **after** recording this wake's row, which is the comparison
 `LOOPS.md` mandates:
 
 ```
-Standardize   2 / 4 Continue rounds  since 2026-09-06 22:53   ok
-Objective     2 / 3 slices [298, 300] since 2026-09-06 23:47  ok
+Standardize   3 / 4 Continue rounds          since 2026-09-06 22:53   ok
+Objective     3 / 3 slices [298, 300, 318]   since 2026-09-06 23:47   OVERDUE
 Optimize      STALE  (1 wake-date newer)
 ```
 
-**This wake's row moved BOTH counters, and that is the expected reading for a
-`Continue` row that closed a slice** — rule 2 counts Continue rounds (1 → 2),
-and rule 3 counts slices closed by `Continue`/`Standardize`/`Polish`, so `300`
-joins `298` in its armed set. **Rule 3 is now at `2 / 3`: one more slice closed
-by one of those three loops arms an Objective grill.** Nothing here disagreed
-with what was written by hand, which is the check that has found two of the five
-parser recurrences. **Re-run `dispatch_status.py` rather than trusting these
-three lines.**
+**⚠ Rule 3 is OVERDUE. That is a reading taken after both rows were recorded,
+not a prediction of the next dispatch** — `LOOPS.md` puts rule 3 above rule 4
+precisely so a counter cannot starve under an always-true rule, and it is now at
+its threshold. **Re-run `dispatch_status.py` and believe that, not this block.**
 
-`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` reads **0**, so rule 1 does not
-match.
+Both of this wake's rows moved both counters, which is the expected reading for
+two `Continue` rows that each closed a slice: rule 2 counts Continue rounds
+(1 → 3) and rule 3 counts slices closed by `Continue`/`Standardize`/`Polish`, so
+`300` and `318` joined `298`. Nothing here disagreed with what was written by
+hand, which is the check that has found two of the five parser recurrences.
+
+**A note for whoever runs that grill: `318` is in the armed set and is one of
+its own subjects.** Slices 317 and 318 are both this wake's, and 318 was not
+dispatched by any rule — it came from checking CI. A grill of 316/317/318 is
+grilling work done hours earlier by the same loop, which `LOOPS.md` says goes
+FIRST rather than last, because a self-grill is the one most likely to go soft.
+
+`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` reads **0**, so rule 1 did not
+match at Step 2 — and Slice 318, the CI failure this wake fixed, was
+deliberately NOT filed as one, because `main` was already green again by the
+time it was written. See below.
 
 **Rule 5 is reported as *could not be evaluated*, never clear.** No metric was
 recorded this wake. `306.1` explains why a cloud wake cannot drive that line to
@@ -74,10 +84,26 @@ recorded this wake. `306.1` explains why a cloud wake cannot drive that line to
 0 is owed only once rule 6 is reached, and rule 4 matched first. No stamp
 reading from this wake exists to quote.
 
-Of the three advisory checks, only `check:resume-slice-ids` printed, against the
-*previous* revision of this file. It named `300.2` among the closed ids, which
-is this wake's own work and is fixed by this rewrite; `312.2`, `298.1` and
-`315.2` are historical references and stay.
+Of the three advisory checks, only `check:resume-slice-ids` printed, both times
+it ran. On the second run it named `312.2`, `300.2`, `298.1`, `315.2` and
+`317.1` as closed — **every one is a historical reference here, none is claimed
+open**, which is the distinction the check says outright it cannot make. The
+charter check and `--verify-stamps` were silent.
+
+## CHECK CI AFTER PUSHING — this wake found `main` red and nobody had noticed
+
+**The previous wake's hand-off commit (`8f1d43f`, run 807) failed CI** and that
+wake did not look, so `main` sat red for an hour with nothing reporting it. This
+wake found it only because it checked after pushing. **Make that a habit:** one
+`actions/runs?branch=main` read after the push costs nothing and is the only
+thing standing between a red `main` and the next wake.
+
+`main` is **green now** — run **808** (`71c6adc2`, Slice 317) passed, before
+Slice 318 was written. The failure and its fix are Slice 318; the short version
+is that `check:claims`'s calendar case waited a fixed 400ms for a real form-GET
+navigation, and on a runner hosting six parallel Chrome jobs the navigation
+outran it. That it recovered on a re-run **with no code change** is the
+observation that makes it a race rather than a defect in the page.
 
 ## Step 1 — both intakes read, with the controls ENVIRONMENT.md §8 names
 
@@ -160,6 +186,20 @@ re-derived from `ci.yml` rather than read off a list (the two documented
 set differences still hold), plus the §3b re-run of `docs:build` after this file
 was written.
 
+**Slice 318 also landed, and it was NOT dispatched by a rule** — it came from
+checking CI after the push, which no rule mandates. `check:claims`'s calendar
+case now waits for the navigation instead of for 400ms, which is the pattern the
+file's **sibling** navigation-gated claim (saved views) has always used: of the
+2 assertions that gate on a full page navigation, this was the one that did not.
+**Red-proved by injection with a control**: with the navigation delayed 800ms,
+the old fixed wait reproduces CI run 807's **exact** reading (`submitted: null`,
+every other field true) and the new one passes; undelayed, both pass, so the
+injection discriminates rather than breaking the page. Not filed P0 — `main` is
+green, so the label would have been false by the time anyone read it. The **99
+other fixed waits** in that file are untouched and unexamined; they gate on
+in-page DOM updates, which is a different thing, and sweeping them from a sample
+of one would be widening.
+
 **NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
 wake has no Podman. The change is prose inside two existing tables and one
 existing `<p>`. It was verified against the **rendered artefact** rather than the
@@ -188,12 +228,13 @@ brought the tags — the **thirtieth** consecutive container to do so;
 
 ## The open set is 25 — no P0, and 11 are cloud-takeable
 
-`roadmap_scope.py` reports **25 open / 52 closed**, OPEN slices
+`roadmap_scope.py` reports **25 open / 53 closed**, OPEN slices
 `[15, 112, 249, 273, 294, 296, 297, 304, 305, 306, 307, 309, 310, 314, 315,
-316]`. Net from the last hand-off's 26: **300.2 closed, 317.1 filed and closed
-in the same slice**, so 25, and **Slice 300 left the open set**. **The raw
-counts reconcile exactly**: `grep -c` reads 25 open / **54** closed, and 54 = 52
-attributed + the 2 `[x]` under the non-slice `## STATE` heading.
+316]`. Net from the last hand-off's 26: **300.2 closed; 317.1 and 318.1 each
+filed and closed in their own slice**, so 25, and **Slice 300 left the open
+set**. **The raw counts reconcile exactly**: `grep -c` reads 25 open / **55**
+closed, and 55 = 53 attributed + the 2 `[x]` under the non-slice `## STATE`
+heading.
 
 - **cloud-takeable: 11** — `304.1`, `305.1`, `305.2`, `306.1`, `307.1`,
   `309.5`, `310.1`, `310.2`, `314.2`, `315.3`, `316.1`. (`297.1` is takeable
@@ -235,28 +276,28 @@ so the arithmetic uses 10.)
 
 ## No archive sweep — declined on the SHARE half, seventh wake running
 
-Measured on the working tree after Slice 317 was written (`roadmap_scope.py`):
-**6,905 lines**, closed-history share **34.5%** (2,385 lines across 12 closed
-slices). The standing trigger the hand-offs carry is *"past 5,450 lines /
+Measured on the working tree after Slices 317 and 318 were written
+(`roadmap_scope.py`): **6,987 lines**, closed-history share **35.3%** (2,466
+lines across 13 closed slices). The standing trigger the hand-offs carry is *"past 5,450 lines /
 40.6%"*: the line half is past, the share half is not — the same judgement the
 last six wakes made, at 26.9%, 30.5%, 29.5%, 28.9%, 31.2% and now this.
 
-**It went UP again, and for the same reason as last wake, twice over.** 31.2% →
-34.5% with nothing archived: Slices 300 and 317 both closed, so their lines
-moved from the open side of the ratio to the closed side. **Two consecutive
-rises now, both caused by slices closing**, after two falls caused by a growing
-denominator — the trigger's share half is moved by the loop's ordinary work in
+**It went UP again, and for the same reason as last wake, three times over.**
+31.2% → 35.3% with nothing archived: Slices 300, 317 and 318 all closed, so
+their lines moved from the open side of the ratio to the closed side. **Two
+consecutive rises now, both caused by slices closing**, after two falls caused
+by a growing denominator — the trigger's share half is moved by the loop's ordinary work in
 both directions, which is the argument `249.12` needs and which no amount of
 waiting resolves.
 
 Trend across twenty-five readings: 27.5% → 32.0% → 34.2% → 38.0% → 39.4% →
 37.5% → 36.9% → 36.2% → 35.5% → 37.3% → 36.9% → 38.3% → 37.6% → 9.4% → 10.3% →
-10.9% → 11.8% → 26.0% → 26.9% → 30.5% → 29.5% → 28.9% → 31.2% → **34.5%**.
+10.9% → 11.8% → 26.0% → 26.9% → 30.5% → 29.5% → 28.9% → 31.2% → **35.3%**.
 
 **What a sweep would take, so the next wake need not re-derive it:**
 `roadmap_scope.py` reports the pins itself — **7 targets are named by a
-still-open item** now. That leaves **317, 313, 311, 308, 303, 302, 301** and
-**300** — a bulk edit, and CLAUDE.md's rule says it is verified against the
+still-open item** now. That leaves **318, 317, 313, 311, 308, 303, 302, 301**
+and **300** — a bulk edit, and CLAUDE.md's rule says it is verified against the
 rendered artefact one slice at a time. It is a wake's work, not a tail-end tidy.
 
 ## Direction

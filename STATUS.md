@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-07 01:50 UTC
+Generated at: 2026-09-07 02:00 UTC
 
 ## Open items by slice
 
@@ -51,9 +51,10 @@ Generated at: 2026-09-07 01:50 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1564 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-09-06 22:53   ok
-  Objective     2 / 3 slices          since 2026-09-06 23:47   ok  [298, 300]
+dispatch status — counter-triggered rules (1565 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-09-06 22:53   ok
+  Objective     3 / 3 slices          since 2026-09-06 23:47   OVERDUE  [298, 300, 318]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      1 wake-date(s) newer   since 2026-09-06 16:56   STALE   [newest pair: axe-violations; 132 sample(s), 13 of 44 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-06, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-06 (2026-09-07), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -75,7 +76,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-06 21:54 · Meta · refusal · a second cheap workflow running the three repo-wide prose gates on the ignored paths — it needs a hand-kept list of which gates are repo-wide · refused · 024445f5
 - 2026-09-06 21:54 · Meta · refusal · making the three gates stop reading .roundtable/** and STATUS.md — that reverses 256.2, the standing product-name instruction, and check:slice-refs' reason for existing · refused · 024445f5
 - 2026-09-06 22:53 · Standardize · sweep · Slice 314 — Standardize sweep 4 of 4 lanes clean; step 4's re-scan found 292.8's scope excluded the 24 shared components/layouts, and 314.1 tokenises the two font-size literals there · landed · f5c6ecd1
 - 2026-09-06 22:53 · Meta · refusal · 314.2 — widening the sweep to spacing/font-weight inline literals: a different property with no verdict; base rates measured (8.6% pages / 21.9% shared), filed not built, and no gate added · refused · f5c6ecd1
@@ -85,6 +85,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-07 00:48 · Meta · refusal · building the @media-print token gate in the same round — filed as 316.1 with its base rate measured (0 of 11) rather than manufactured alongside the convention · refused · 810e37fa
 - 2026-09-07 01:50 · Continue · build · 300.2 — board/kanban spike: refuse the component (4 of 5 params are announcement strings); fix /patterns/kanban's unexecutable screen-reader-announcement claim · refused · 0c24d13e
 - 2026-09-07 01:50 · Meta · refusal · lifting data-grid.ts's roving-tabindex navigation out of <table> — one candidate consumer (a board that does not exist); bo-calendar, the only other non-table grid, deliberately refuses the model · refused · 0c24d13e
+- 2026-09-07 02:00 · Continue · bug · 318.1 — check:claims's calendar case raced a real form-GET navigation against a fixed 400ms wait (red on CI run 807, green on 808 with no code change); waits for the navigation now, red-proved by an 800ms delay injection · landed · 168269ac
 
 ## Sunset test
 
