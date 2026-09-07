@@ -817,23 +817,37 @@ surfaced more:
    reason as `scan:dead-style`: it is deliberately not a gate, so this step is
    the only thing that keeps it from rotting.
 
-   **The instruction names the PROPERTY, not a list of page names, and that is
-   a correction this file paid for three times.** It used to name
-   `/base/motion/`, `/concepts/js-behaviors/` and `/concepts/design-language/`
-   as "the three the family split adds and nobody has read". **161.1 verdicted
-   all three**, in the very run that wrote that sentence. 166.1 then re-derived
-   them, found the verdicts already existed, and corrected `.roundtable/RESUME.md`
-   — the file that is rewritten every wake — leaving the durable playbook
-   saying the wrong thing. Slice 169 re-derived them a third time, throwaway
-   probe and all, before finding 161.1's entry. A snapshot of names in a
-   playbook goes stale silently and is read as current; the property does not.
-   This is CLAUDE.md's own criterion rule ("name the property, never the value
-   it will have") applied one level up, to an instruction rather than an Accept.
+   **The verdict set is an ENUMERATION, and it is the one list in this playbook
+   that may NOT be replaced by a command.** Sixteen pages carry a verdict:
+   **158.1**'s twelve, **161.1**'s three (`/base/motion/`,
+   `/concepts/js-behaviors/`, `/concepts/design-language/`) and **178.3**'s
+   `/concepts/scale/`. Check membership against that enumeration, and **amend it
+   in the same commit as any round that records a new verdict** — nothing else
+   keeps it true.
 
-   Verdicts to date: **158.1** the twelve over the corpus median, **161.1** the
-   three the family split added. As of Slice 169 every flagged page in both
-   lists carries one, so a clean round here is the expected result and is worth
-   one line, not a re-derivation.
+   **Why not a command** — 228.1 recorded that a per-path grep "returns hits for
+   everything whatever the truth is", and 326.1 re-measured it with the negative
+   controls no record carries: grepping each flagged page path out of `ROADMAP.md` +
+   `ROADMAP-archive.md` hits **15 of 15** flagged pages *and* **6 of 7** pages
+   carrying no prose verdict at all (`/patterns/kanban` 13, `/components/badge`
+   8, `/getting-started/install` 6). It reports "verdicted" for anything the
+   roadmap has ever discussed. A mention is not a verdict, and *"this page
+   carries a verdict"* is semantic — roadmap 94.11's rule, so **no gate**. This
+   is the one place CLAUDE.md's "name the property, never the value" does NOT
+   apply, because the property is not checkable; a wake following that rule
+   alone reaches for the grep and ships the dead detector.
+
+   **This clause has gone stale four times, and the fourth took twelve hours.**
+   The list was written at **07:42:07Z on 2026-08-28** (`87bf0f54`); **178.3
+   added the sixteenth verdict at 19:46:14Z the same day** (`e5edf61f`) and did
+   not amend it. It then read fifteen for **ten days**, until a wake on
+   2026-09-07 built its set from the two ids named here and reported
+   `/concepts/scale/` as "flagged, carrying no verdict". Same shape as the
+   `check:resume-charter` pair Step 0 records — two commits hours apart, neither
+   naming the other. The first three recurrences are in `LOOPS-archive.md`.
+
+   As of 2026-09-07 every flagged page carries a verdict, so a clean round here
+   is the expected result and is worth one line, not a re-derivation.
    **Why a cadence and not a budget** (158.2's decision, and it is measured, not
    asserted): across nine daily builds 2026-08-20→28, on the **89 pages present
    throughout**, prose went **51,051 → 77,080 words (+51%)** and **not one page

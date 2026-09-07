@@ -217,3 +217,27 @@ wake commits several times and records once. The claim is about wakes.
   `td[data-tone="success"]` — precisely by re-deriving the same claim
   independently. Redundant coverage is the mechanism that caught it. Rule 1 also
   has to run wherever owner input lands, which is the local session.
+
+## Standardize lane 3 — the first three recurrences of the stale verdict list
+
+Moved from `LOOPS.md` §3 lane 3 by roadmap item **326.1 (2026-09-07)**, on this
+file's charter: the operative content — the sixteen-page enumeration, the
+maintenance obligation, and the measurement showing the list cannot become a
+command — all stay inline. What moves is the archaeology of the first three
+recurrences, which a wake needs when it ARGUES about the clause, never when it
+runs the lane.
+
+The clause used to name `/base/motion/`, `/concepts/js-behaviors/` and
+`/concepts/design-language/` as "the three the family split adds and nobody has
+read". **161.1 verdicted all three**, in the very run that wrote that sentence.
+166.1 then re-derived them, found the verdicts already existed, and corrected
+`.roundtable/RESUME.md` — the file that is rewritten every wake — leaving the
+durable playbook saying the wrong thing. Slice 169 re-derived them a third time,
+throwaway probe and all, before finding 161.1's entry.
+
+The lesson drawn at the time was CLAUDE.md's criterion rule ("name the property,
+never the value it will have") applied one level up, to an instruction rather
+than an Accept. **The fourth recurrence, 326.1, is what qualified it**: for this
+particular list the property is not checkable, so the names are unavoidable and
+the obligation to amend them is the mechanism. The general lesson survives; what
+died is the assumption that every stale list has a command behind it.

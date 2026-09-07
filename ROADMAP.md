@@ -320,6 +320,195 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 326 — Standardize sweep, 4 of 4 lanes: the lane that warns against stale name lists carried one, and following it produced a false finding on a page verdicted ten days earlier (2026-09-07)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again (trap 1;
+`git branch --show-current` empty, fixed with `git checkout -B main
+origin/main`), `origin/main` a **forced update** (`26447ba...7c6f7ec`). Trap 2
+clean in one `--unshallow` (**2,011** commits, no `shallow.lock`), tags again
+arrived with it — the **thirty-ninth** consecutive container; `git tag | wc -l`
+→ **8**. Step 1: both intakes read via the REST substitute with
+`ENVIRONMENT.md` §8's two controls in the same run — `/discussions` **200 len
+0**, `/not-a-real-route` **404**, `/issues?state=open` **200 len 1**. Issue #2's
+`updated_at` unmoved at `2026-09-06T15:10:34Z`; **no new input, so Step 1
+committed nothing.** Step 2: rule 1 **0** open P0
+(`grep -cE '^\s*[0-9]+\. \[ \].*P0'`); **rule 2 matched at 4 / 4 OVERDUE** →
+Standardize.
+
+**All four lanes ran.** The playbook's own warning — four consecutive sweeps ran
+three — is why the count is stated: **4 of 4**.
+
+1. [x] **326.1 — lane 3's own "Verdicts to date" line was a stale snapshot, and
+       it is the FOURTH recurrence of the failure the paragraph directly above
+       it documents three of.**
+
+       *Accept was* (§3 lane 3): every page `report:prose` flags — over 2x the
+       corpus median or over 2x its family median — carries a recorded verdict,
+       or gains one here.
+
+       ```
+       npm run report:prose -w docs
+       #  118 pages of 127 built · median 792 · mean 953 · total 112,395 words
+       #  10 over 2x the corpus median (1,584); 11 over a family median; union = 15
+       ```
+
+       **The lane is CLEAN — all 15 flagged pages carry a verdict.** But
+       reaching that answer required disbelieving this playbook, which is the
+       finding.
+
+       **What the clause said.** *"Verdicts to date: 158.1 the twelve over the
+       corpus median, 161.1 the three the family split added. As of Slice 169
+       every flagged page in both lists carries one."* Fifteen pages, two
+       sources.
+
+       **It was falsified twelve hours after it was written, and the two commits
+       do not name each other.**
+
+       ```
+       git log -S'Verdicts to date' -- LOOPS.md     # ONE commit, never amended since
+       87bf0f54  2026-08-28 07:42:07 +0000   Standardize (169): the clause is written
+       e5edf61f  2026-08-28 19:46:14 +0000   Slice 178: 178.3 verdicts /concepts/scale/
+       git merge-base --is-ancestor 87bf0f54 e5edf61f   # true — clause predates the verdict
+       ```
+
+       It then read fifteen for **ten days** and roughly 150 slices. This is the
+       same shape `LOOPS.md` Step 0 already records for `check:resume-charter` —
+       hardened at 11:42:09Z and demoted at 12:26:17Z, 44 minutes apart, neither
+       document naming the other.
+
+       **The cost, incurred in this wake rather than hypothesised.** Following
+       the clause literally, the verdicted set was built from the two ids it
+       names and diffed against the flagged union. It returned
+       `/concepts/scale/` as **flagged, carrying no verdict** — a false finding
+       against a page verdicted ten days earlier, and the next step would have
+       been to write a duplicate verdict for it. It survived only because the
+       absence was grepped before being believed, which is CLAUDE.md's base-rate
+       rule doing exactly its job.
+
+       **The counts were equal and the sets were not** — 15 verdicted, 15
+       flagged, which reads as a match and is a coincidence of `/concepts/scale/`
+       swapping in as `/patterns/output-form/` swapped out. 158.1's own entry
+       warns of this in the same shape (*"the sets are printed, not the counts,
+       for that reason"*).
+
+       **The fix is NOT "replace the list with a command", and that matters more
+       than the correction itself**, because the paragraph above the list
+       (*"name the PROPERTY, not a list of page names"*) points a wake straight
+       at a grep. 228.1 recorded that a per-path grep *"returns hits for
+       everything whatever the truth is"*, and a later sweep leaned on that to
+       check lane 3 by set membership. **No record carries a negative control
+       for it**, so the claim was re-measured here rather than quoted:
+
+       ```
+       grep -Fc -- "<page path>" ROADMAP.md ROADMAP-archive.md   # no trailing slash (178.3)
+       #  flagged pages, all 16-set verdicted:  15 of 15 hit
+       #  CONTROLS carrying no prose verdict:    6 of 7 hit
+       #    /patterns/kanban 13 · /components/badge 8 · /getting-started/install 6
+       #    /components/breadcrumb 5 · /base/tokens 2 · /components/skeleton 1
+       #    /components/tooltip 0   ← the only control that reads absent
+       ```
+
+       A mention is not a verdict, so the detector reports "verdicted" for
+       anything the roadmap has ever discussed — nearly everything. *"This page
+       carries a verdict"* is semantic, which is roadmap **94.11**'s rule, so
+       **no gate**: the shape is checkable and the meaning is not.
+
+       **So the enumeration is load-bearing and the obligation is the
+       mechanism.** `LOOPS.md` now names all sixteen with their three sources,
+       states that a round recording a new verdict amends the list **in the same
+       commit**, and says outright that this is the one place CLAUDE.md's "name
+       the property, never the value" does not apply — because here the property
+       is not checkable, and a wake following that rule alone ships the dead
+       detector. The first three recurrences moved to `LOOPS-archive.md` on its
+       charter (archaeology moves, the behaviour-changing lesson stays inline).
+
+       **Net prose:** `LOOPS.md` **+10** lines, `LOOPS-archive.md` **+24**.
+       Stated rather than dressed up as a cut — this is instruction added, which
+       is the kind 308.1 licenses, not narrative trimmed.
+
+2. [x] **326.2 — lanes 1, 2 and 4: two clean, and lane 4's rising region number
+       is NOT regrowth, attributed per section as 308.1 requires.**
+
+       **Lane 1 — `scan:dead-style`: clean.** `0` dead style attribute(s) on `0`
+       pages, of **1,272** live inline `style` attributes (1,677 declarations;
+       273 attributes carry more than one, which the scan cannot judge
+       separately). Screen **and** print measured; 0 dead-on-screen-but-live-in-
+       print.
+
+       **Lane 2 — `report:css-repeats`: zero delta, exactly the standing
+       eight.** 74 source files · **242** rules with 3+ declarations · **230**
+       distinct bodies · **8** repeated — one x4, two x3, five x2, and every
+       group's members match `LOOPS.md`'s table. Totals moved 237→242 rules and
+       225→230 bodies since the table was written; the repeat count did not. The
+       joined-control x4 group is still **two components** (money, quantity,
+       twice each), so its reopen trigger — a THIRD component — is unmet.
+
+       **Lane 4 — `report_loop_prose.py`, `ratchet` block read first.**
+       `CLAUDE.md` **33 up / never cut** and `DESIGN.md` **23 up / never cut**
+       are 167.1's standing verdicts (HONEST; `DESIGN.md` is its control, and
+       `CLAUDE.md`'s watch was retired by 193.1). No file changed accumulate
+       class. `LOOPS.md` reads **13 up, last cut `8848ed55` (2026-09-05)**, and
+       its `by region` block reports the dispatch region growing **faster** than
+       the file (+343.2% vs +283.4% against the 2026-08-20 base).
+
+       **308.1 forbids calling that regrowth without per-section attribution,
+       and the attribution changes the answer.** Splitting the region on its own
+       headings at `8848ed55` and at `HEAD`:
+
+       ```
+       git show <rev>:LOOPS.md | awk '/^## Playbooks/{exit} {print}'
+       #   split on ^#{2,4} and on ^[0-9]+\. \*\*, sum each section
+       ```
+
+       | section | was | now | delta |
+       |---|---|---|---|
+       | `Step 1 — Triage new input` | 300 | 671 | **+371** |
+       | rule 3 (Objective counter) | 660 | 963 | **+303** |
+       | rule 5 (Optimize) | 349 | 573 | **+224** |
+       | `Step 0 — Read the handover` | 563 | 714 | **+151** |
+       | `The eight loops` → `The nine loops` | 214 | 266 | +52 (rename) |
+
+       **The section that was cut did not regrow** — `8848ed55`'s cut is the
+       loop-table rename, and it is the smallest mover. Every one of the four
+       real risers is a section nothing cut, each carrying a rule that genuinely
+       changed since 2026-09-05: **302.1**'s intake substitute (Step 1),
+       **279.4**'s Polish amendment (rule 3), **307.1/306.1**'s comparable-set
+       and SKEW blocks (rule 5), **283.2**'s third advisory check (Step 0).
+
+       That is 308.1's second branch verbatim — *"other sections grew → a second
+       cut would remove instruction rather than narrative; say so and file the
+       structural question; do not reach for a cut."* **So no cut is proposed
+       here**, and the structural question is filed as `326.3`. First execution
+       of 308.1's attribution step since it landed.
+
+3. [ ] **326.3 — the dispatch region has grown +1,101 words in two days with no
+       narrative left in it to cut. What is the answer when the region a wake
+       must read grows because the RULES grew?**
+
+       *Accept*: a recorded decision, or a recorded refusal with its reason.
+       Either outcome closes this. Do **not** treat "cut something" as the
+       default — 326.2 measured that the four rising sections are rules that
+       changed, and 274.1 already refused a cut that would move the file's
+       number while leaving what a wake reads untouched.
+
+       The shape of the question, so a later wake does not re-derive it: the
+       dispatch region is now **6,759 words** and is what every wake reads
+       before deciding anything. Its growth is legitimate — each riser is a rule
+       correcting itself, and this repo's doctrine says a correction that
+       changes behaviour stays inline rather than becoming a pointer. Those two
+       facts are in tension and nothing currently resolves it. Candidate
+       answers worth weighing rather than assumed: a per-rule word ceiling that
+       forces the *decision content* to stay short while the evidence moves to
+       `LOOPS-archive.md`; a split of Step 2's rules into a rules file the
+       dispatcher reads and a rationale file it does not; or accepting the
+       growth outright and saying so, which is a legitimate outcome and would
+       retire lane 4's `by region` finding rather than leaving it to fire every
+       sweep.
+
+       **Owner-relevant, not owner-blocked** — a wake can decide this, but it is
+       a structural call about the loop's own machinery, which is the kind
+       `LOOPS.md` says to file rather than to take mid-sweep.
+
 ## Slice 325 — 309.5: the `/stress` measurement is committed, and its own style-flush column shipped dead first — an identical ~0 across inputs differing 20-fold, because the event loop pays the recalculation between tasks (2026-09-07)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again (trap 1;
