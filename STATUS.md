@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-07 00:48 UTC
+Generated at: 2026-09-07 01:50 UTC
 
 ## Open items by slice
 
@@ -25,8 +25,6 @@ Generated at: 2026-09-07 00:48 UTC
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - **Slice 297** (1 open)
   - 297.1 — The first real intake run is the test of this, not the config.
-- **Slice 300** (1 open)
-  - 300.2 — Issue #2: no board/kanban component, triaged, NOT built.
 - **Slice 304** (1 open)
   - 304.1 — `roadmap_scope.py`'s figures should be quotable only with a revision.
 - **Slice 305** (2 open)
@@ -53,9 +51,9 @@ Generated at: 2026-09-07 00:48 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1562 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-09-06 22:53   ok
-  Objective     1 / 3 slice           since 2026-09-06 23:47   ok  [298]
+dispatch status — counter-triggered rules (1564 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-09-06 22:53   ok
+  Objective     2 / 3 slices          since 2026-09-06 23:47   ok  [298, 300]
   Optimize      1 wake-date(s) newer   since 2026-09-06 16:56   STALE   [newest pair: axe-violations; 132 sample(s), 13 of 44 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-06, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-06 (2026-09-07), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -77,8 +75,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-06 21:11 · Roadmap · triage · Slice 312 filed P0 — check:ci-ignores asserts nothing CI runs reads .roundtable/**, and check:floor + check:vendor-names both do; red-proved by injection · triaged · e4d0459f
-- 2026-09-06 21:54 · Continue · bug · 312.1/312.2 — check:ci-ignores could only see a read that NAMES the path; widened to enumeration + path-root routes, verdict matched against an fs-spy trace and a per-gate injection probe (7/7 pairs), and paths-ignore removed · landed · 024445f5
 - 2026-09-06 21:54 · Meta · refusal · a second cheap workflow running the three repo-wide prose gates on the ignored paths — it needs a hand-kept list of which gates are repo-wide · refused · 024445f5
 - 2026-09-06 21:54 · Meta · refusal · making the three gates stop reading .roundtable/** and STATUS.md — that reverses 256.2, the standing product-name instruction, and check:slice-refs' reason for existing · refused · 024445f5
 - 2026-09-06 22:53 · Standardize · sweep · Slice 314 — Standardize sweep 4 of 4 lanes clean; step 4's re-scan found 292.8's scope excluded the 24 shared components/layouts, and 314.1 tokenises the two font-size literals there · landed · f5c6ecd1
@@ -87,6 +83,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-06 23:47 · Meta · refusal · executing each self-test inside check:selftests — base rate 1 of 20 and no single parseable output shape across the heuristic gates; filed as 315.3 instead · refused · 066d9878
 - 2026-09-07 00:48 · Continue · build · 298.1 — fixed-medium artifact convention: the second precedent predates the first by 25 days; a theme token in @media print prints at 2.54:1 on white paper · landed · 810e37fa
 - 2026-09-07 00:48 · Meta · refusal · building the @media-print token gate in the same round — filed as 316.1 with its base rate measured (0 of 11) rather than manufactured alongside the convention · refused · 810e37fa
+- 2026-09-07 01:50 · Continue · build · 300.2 — board/kanban spike: refuse the component (4 of 5 params are announcement strings); fix /patterns/kanban's unexecutable screen-reader-announcement claim · refused · 0c24d13e
+- 2026-09-07 01:50 · Meta · refusal · lifting data-grid.ts's roving-tabindex navigation out of <table> — one candidate consumer (a board that does not exist); bo-calendar, the only other non-table grid, deliberately refuses the model · refused · 0c24d13e
 
 ## Sunset test
 
