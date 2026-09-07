@@ -320,6 +320,214 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 322 — Objective grill of Slices 304, 305, 320: 26 of 29 assertions reproduce, and both defects are a COUNT published beside a correctly red-proved fix. One of them the grill's own first instrument reproduced, by the same mechanism (2026-09-07)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again (trap 1;
+`git branch --show-current` empty), fixed with `git checkout -B main
+origin/main` before any commit. `origin/main` again a **forced update**
+(`26447ba...203f0a6`). Trap 2 clean in one `--unshallow` (**2,002** commits, no
+`shallow.lock`) and it again brought the tags — the **thirty-fifth**
+consecutive container to do so; `git tag | wc -l` -> **8**. Trap 1c did not
+bite (`CHROME_PATH` exported in the same command as every browser-driven gate).
+
+Rule 1: no open P0 — `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` reads **0**
+across the 24 open items. Step 1 read **both** intakes with `ENVIRONMENT.md`
+§8's controls in one run (`/discussions` -> 200 len **0**; `/not-a-real-route`
+-> **404**; `/issues?state=open` -> 200 len **1**, issue #2, already triaged as
+`300.2` and closed by Slice 317) and triaged nothing: no new input, so Step 1
+committed nothing. Rule 2 `1 / 4` did not match. **Rule 3 matched** —
+`dispatch_status.py` read `Objective 3 / 3 slices [304, 305, 320] OVERDUE`.
+Rules 4-8 not reached. Rule 5 reports **STALE** (`1 wake-date newer`), so per
+`LOOPS.md` it **could not be evaluated** and is not reported clear; `306.1` is
+the open item saying why a cloud wake cannot drive it to `ok`.
+
+**Scope, per §6 step 0: the armed set is taken WHOLE, three of three.** The
+step exists because the counter names slices rather than rounds, so a slice an
+earlier grill already covered can re-arm. It has not happened here — `grep -hoE
+'^## Slice [0-9]+ — Objective grill of Slices [0-9, -]+' ROADMAP.md
+ROADMAP-archive.md` returns no grill naming 304, 305 or 320. Two properties of
+this set are worth stating rather than leaving for a reader to notice. **304 is
+itself a grill**, so this is a grill of a grill — legitimate, and its one built
+item (`304.1`) is ordinary buildable work. And **305's two open items were
+closed by Slice 321**, which is *not* in the armed set: the counter attributed
+that closure to 305 because the recording row's `--item` text leads with
+`305.1`. So grilling 305 necessarily grills what 321 concluded about it, and
+321's own conclusions are in scope here for that reason and no other.
+
+### The through-line: both defects are in a count that shipped BESIDE a fix that was red-proved correctly
+
+Neither slice's *fix* is wrong. `roadmap_scope.py`'s header works and its case-G
+red-proof re-does exactly; `scan:dead-style`'s corrected line prints the triple
+it claims. Both defects are in the number published alongside — which is
+CLAUDE.md's 192.1 (*the defect lands in what shipped BESIDE the number*) landing
+twice in one armed set, and in both cases in the count that describes **how big
+the problem was**, the one figure nobody re-runs because the fix is already in
+hand.
+
+### Defect A — Slice 320 published a blast radius of 5; the corpus says 17, and they are not consecutive
+
+320's own headline is that lane 1's number counts attributes while saying
+"declarations". It then reported the wrong noun as *"quoted as a declaration
+count in five consecutive sweep write-ups (214, 284, 290, 301, 314)"*.
+
+Whitespace-normalised and attributed to the containing `## Slice` heading, the
+figure `1,433` is quoted with that noun by **17** slices — 208, 214, 230, 235,
+237, 244, 252, 255, 257, 263, 274, 284, 290, 293, 301, 308, 314 — and **all 17
+are Standardize sweeps**, classified from their own headings, with nothing else
+in the set. Ten of them sit *between* 214 and 314, so "consecutive" is false as
+well as low. Widening to any value of the number (the era before 1,428 became
+1,433) adds 161, 166, 169, 187, 191, 194, 197, 202 and 206, for **23**.
+
+**The correct statement is stronger than the published one**, which is what
+makes the undercount worth correcting rather than shrugging at: *no Standardize
+sweep has ever quoted this number correctly* — every sweep since 208, without
+exception, for the whole life of the instrument. Corrected in place at Slice
+320 per 236.2, original struck, with the command recorded beside it.
+
+**And the grill's own first instrument made the same mistake, which is the
+reusable half.** A line-based scan returned **16** of the 17 and missed exactly
+**301** — whose `live inline` and `declarations` straddle a newline. That is not
+a coincidence with 320's undercount, it is the same mechanism: this repo's prose
+wraps at ~78 columns, and a phrase-count taken per line silently drops every
+wrapped instance. Caught here only because 320 *named* 301 and the scan did not
+find it — a hand-written list disagreeing with an instrument, which is
+`LOOPS.md`'s own stated way this class of bug gets found.
+
+### Defect B — Slice 304's base rate is not reproducible, and an independent re-derivation disagrees
+
+304.1's decision rests on a base rate: *"Of the **11** published full-ratio
+figures (`N / M = P%`) …, **7 reproduce at the PARENT** of the commit carrying
+them and **4 at the commit itself**, and only **3 of the 11** name a revision."*
+It is the number that refused the refusal — i.e. the number that authorised
+building the fix.
+
+**No command was recorded beside it.** That is the precise omission 304 itself
+diagnoses in Slice 301, two paragraphs earlier in the same item, and quotes
+CLAUDE.md for: *"had the command sat beside the claim, its `--rev` flag would
+have made the error visible while writing."* The consequence is not
+hypothetical — this grill could not re-run it, only re-derive it, and the
+re-derivation disagrees:
+
+| | published | re-derived at `8beee329` |
+|---|---|---|
+| corpus | 11 | **10** (`RESUME.md` contributes 0 — it spells its share as prose, not `N / M = P%`) |
+| reproduce at the parent | 7 | **8** |
+| reproduce at the commit itself | 4 | **0** |
+| reproduce at neither | (0, implied by 7+4=11) | **2** |
+
+The two "neither" figures are the pair on `ROADMAP-archive.md:31573`
+(`1568 / 3085 = 50.8%`, `1568 / 3197 = 49.0%`), which are a later grill's
+arithmetic *about* 214.1's published figure rather than readings of the tree
+carrying them — so they are arguably outside the corpus, and are reported rather
+than quietly dropped.
+
+**This does not show 304's number is wrong; it shows it cannot be checked**,
+which is what this repo's doctrine says a load-bearing number may not be. And
+the conclusion it supports is untouched — under the re-derivation *every*
+reproducible figure describes the parent while printing identically to a
+mid-edit reading, which strengthens the argument for the header rather than
+weakening it. The `3 of 11 name a revision` half is **not adjudicated**: it
+depends on how wide a window counts as "surrounding text", and ±3 lines returns
+4 of 9 here. Corrected in place at Slice 304 per 236.2, with both commands.
+
+### What held — 26 of 29
+
+**Slice 320 — 15 of 16.** Lane 1's corrected triple reproduces exactly
+(`1272 / 1677 / 273`); lane 2 `74 files · 242 rules · 230 distinct · 8 repeats`;
+lane 3 `118 pages · median 792 · 112,297 words`, 10 over the corpus median and
+11 over a family median. Of the two inline spellings, only the two *comments* in
+`Gallery.astro` survive. `--bo-space-0` is still used nowhere but its own
+definition. The after-state of the custom-property base rate is **0 of 41**,
+exact. `ApiTable.astro:57` now reads `var(--bo-space-2)` and `ClassRef.astro:44`
+still `.4rem`, so `320.3`'s premise holds. `273 / 1,272 = 21.5%`.
+
+Two of those deserve their commands, because an independently written instrument
+landed on the digit:
+
+- **`.docs-list` 59 files / `.docs-list-bare` 40** reproduce **exactly** at
+  `7dacd80b~1` — the pre-conversion state, which is the tree the claim
+  describes — under a class-attribute matcher written without reading 320's.
+  At `7dacd80b` both read 60 / 41, the +1/+1 being the two files converted.
+- **The 161 decomposition reconciles component by component.** `<Related` 116
+  and `<ApiTable` 40 occurrences in `src/pages`, the latter confirmed
+  independently in the built DOM (`data-api-notes`, 40 occurrences on 39 pages).
+  The **5 page-level sites** are the knob-to-own-fallback removals whose
+  attribute held nothing else: of the 6 such declarations at `7dacd80b~1`,
+  **5 are sole occupants** and the sixth is inside `Related.astro`'s own
+  attribute, already counted in the 116. 116 + 40 + 5 = 161, exact.
+
+**Slice 305 — 5 of 5.** All five classes the round-3 critic named as missing do
+ship: `bo-data-table__col--code`, `bo-data-table__col--tertiary`,
+`bo-data-table__col--secondary`, `bo-u-text-truncate` and `bo-pagination` are
+all in `dist/api.json`, and the two *invented* ones (`bo-segmented__label`,
+`bo-u-text-end`) are not. So the slice's headline — *the framework was never the
+gap* — reproduces. `check-markup` catches both invented classes and suggests
+`bo-segmented__option` and `bo-u-text-right`, i.e. the correct names, in one
+run. `git log --all -- '*gauntlet-a*'` is still empty, and
+`.roundtable/gauntlet/` now carries the committed path `321.1` added.
+
+**Slice 304 — 6 of 7 (the base rate is Defect B).** The header names its tree
+(`at HEAD 203f0a64 (ROADMAP.md and ROADMAP-archive.md clean)`). Case G was
+red-proved **by discrimination, re-done independently**: a probe copy with
+`line[3:]` restored fails naming `OADMAP.md` and exits **1**; the shipped script
+exits 0. `roadmap_scope.py` still has no machine consumers — only its own header
+and `_common.py`'s docstring. Slice 301's figures reproduce at both revisions
+(`384e6a8b` -> 4,738 / 396; `~1` -> 6,839 / 2,534), and the arithmetic
+`4,738 − 62 = 4,676`, `396 − 61 = 335` holds.
+
+**Four of this grill's own instruments were wrong on their first output**, which
+is CLAUDE.md's base rate holding rather than an aside: a `bo.css` grep against a
+file that does not exist (dist ships per-file CSS under `dist/css/`); a
+`grep -rl 'ApiTable[^>]*notes='` that cannot span lines and reported 5 where the
+built DOM says 40; a `docs-list\b` matcher whose `\b` matches inside
+`docs-list-bare`; and the line-based phrase scan above. Every one was caught by
+reconciling against a second, differently-shaped reading before the number was
+used.
+
+1. [x] **322.1 — Slice 320's blast-radius count corrected in place**: 17
+       sweeps, not five; the list, the classification and the command are
+       recorded beside the struck original, per 236.2.
+2. [x] **322.2 — Slice 304's base rate re-measured in place** and marked NOT
+       REPRODUCIBLE rather than replaced, since this grill can show the figure
+       cannot be re-run but not which split is right. Both commands recorded.
+3. [ ] **322.3 — should a phrase-count over `ROADMAP.md` / `ROADMAP-archive.md`
+       be taken whitespace-normalised by default?** Two instruments made the
+       same wrapped-phrase mistake in two days — 320's published 5 and this
+       grill's own first scan — and the mechanism is mechanical, not a lapse:
+       the corpus is hand-wrapped at ~78 columns, so any phrase longer than a
+       few words straddles a newline somewhere.
+       - **Accept** — the property, not a prediction: **measure the base rate
+         first** (94.11). Take the phrase-counts published across the last N
+         slices that are re-derivable, re-run each line-based and
+         whitespace-normalised, and report how many change. If few change, a
+         helper is ceremony and **recording the refusal with the number is a
+         satisfying outcome**; if many do, ship one shared normaliser in
+         `scripts/loops/` and name its callers. Either way the closing text
+         carries the command, which is the thing both defects above lacked.
+       - **Not a gate, and that is decided rather than deferred**: "this count
+         was taken correctly" is not a checkable shape — the gate would have to
+         re-run every count in the corpus against an instrument nobody wrote
+         down. `check:slice-refs` is the precedent for what IS checkable here
+         (does a citation resolve), and it is silent on whether the number
+         beside it is right.
+
+**Gates: all 17 cloud-runnable entry points green** on the committed tree, the
+list re-derived from `ci.yml` rather than read off a snapshot (the two
+documented set differences still hold: `check:ci-ignores` is covered by
+`check:repo`, and `npm run test -w @busy-office/ui` is CI's
+`npx vitest run --root packages/core`).
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. Nothing rendered changed and no claim here rests on
+rendering: the diff is **markdown only** — `ROADMAP.md`, the grill report and
+the hand-off — with no CSS, no `.astro` and no script touched. The visual debts
+carried forward are unchanged and unspent: `292.4/292.5`'s screenshot lane on
+`/components/icon`, the withdrawn-claim paragraph on `/components/data-table`,
+Slice 319's paragraph on `/patterns/kanban` at 390px, and `320.3`'s
+`ApiTable.astro` `0.5rem` against `ClassRef.astro` `.4rem` — whose premise this
+grill re-confirmed by grep but cannot judge, because judging it is exactly the
+rendered comparison a cloud wake cannot make.
+
 ## Slice 321 — rule 4's oldest item asked a wake to re-measure an artifact that exists in no commit: the Gauntlet's bar protected the REFERENCE and never the graded thing, so three blind critic rounds bought findings nobody can check (2026-09-07)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again (trap 1;
@@ -544,8 +752,38 @@ inherited value. After: **0 of 41**.
 fires once per element carrying `[style]`, so 1,433 was **attributes**. Measured
 on one page set on one day: **1,272 attributes holding 1,677 declarations**, a
 **24.2%** under-report, and the wrong noun has been quoted as a declaration
-count in five consecutive sweep write-ups (214, 284, 290, 301, 314) and in the
+count in ~~five consecutive sweep write-ups (214, 284, 290, 301, 314)~~ and in the
 script's own header.
+
+> **CORRECTED 2026-09-07 by Slice 322 (Objective grill): the blast radius is
+> `17` sweeps, not five, and the five named are not a consecutive run.** Every
+> Standardize sweep from **208** onward quoted it — 208, 214, 230, 235, 237,
+> 244, 252, 255, 257, 263, 274, 284, 290, 293, 301, 308, 314 — all 17
+> classified as sweeps from their own headings, none of them anything else.
+> The struck list omitted ten sweeps sitting *between* 214 and 314, which is
+> what makes "consecutive" false as well as low. The true statement is
+> stronger than the published one: **no sweep has ever quoted this number
+> correctly.** The command, recorded here because the original carried none:
+>
+> ```
+> # whitespace-normalised — a LINE-based grep is what produced the undercount
+> python3 - <<'PY'
+> import re
+> pat = re.compile(r'1,?433[^.\n]{0,40}live inline\s+decl', re.I|re.S)
+> for f in ['ROADMAP.md','ROADMAP-archive.md']:
+>     txt=open(f).read()
+>     heads=[(m.start(), m.group(1)) for m in re.finditer(r'^## Slice (\d+)', txt, re.M)]
+>     own=lambda p: max([n for s,n in heads if s<=p], key=lambda _:0, default=None)
+>     print(f, sorted({[n for s,n in heads if s<=m.start()][-1]
+>                      for m in pat.finditer(txt)}, key=int))
+> PY
+> ```
+>
+> **The grill's own first instrument made the same mistake and that is the
+> reusable part.** A line-based scan returned 16 of the 17 and missed exactly
+> **301**, whose `live inline` / `declarations` straddle a newline. This repo's
+> prose wraps at ~78 columns, so a phrase-count taken per line silently drops
+> every wrapped instance — filed as `322.3`.
 
 **The unit is also a detection gap, and it is red-proved rather than reasoned.**
 The verdict joins every property the attribute names into ONE string, so an
@@ -2625,6 +2863,45 @@ a defect.
        301's post-move `4,676 / 335 / 7.2%` is the other kind and is what 304
        was filed about: it reproduces at **neither** `384e6a8b` (which reads
        4,738 / 396 / 8.4%) nor its parent.
+
+       > **RE-MEASURED 2026-09-07 by Slice 322 (Objective grill): this base
+       > rate is NOT REPRODUCIBLE, and an independent re-derivation disagrees
+       > with it.** No command was recorded beside it, so it can only be
+       > re-derived — which is the exact omission this same slice diagnoses in
+       > Slice 301 two paragraphs up (*"had the command sat beside the claim,
+       > its `--rev` flag would have made the error visible while writing"*).
+       > Re-derived from the stated form `N / M = P%` over the three named
+       > files at `8beee329`, the commit carrying this item:
+       >
+       > ```
+       > for f in ROADMAP.md ROADMAP-archive.md .roundtable/RESUME.md; do
+       >   git show 8beee329:$f |
+       >   grep -noE '[0-9][0-9,]*\s*/\s*[0-9][0-9,]*\s*=\s*[0-9]+(\.[0-9]+)?%'
+       > done                                  # 10 figures on 9 lines, 0 in RESUME.md
+       > # then per figure: oldest commit adding the string (git log -S over both
+       > # files jointly, so an archive sweep does not break attribution), and
+       > # roadmap_scope.py --rev C vs --rev C~1
+       > ```
+       >
+       > **Corpus 10, not 11** — `RESUME.md` contributes none, because it
+       > spelled its share as prose (*"7,181 lines, closed-history share
+       > 34.7% (2,493 lines across 13 closed slices)"*), not as `N / M = P%`.
+       > Counting that prose form is the likeliest reconstruction of the 11th
+       > and is stated as a guess, not a finding. **Split 8 / 0 / 2, not 7 / 4**:
+       > eight reproduce at the parent, **none at its own commit**, and two
+       > reproduce at neither — the pair on `ROADMAP-archive.md:31573`, which
+       > are a later grill's arithmetic *about* 214.1's published figure rather
+       > than readings of the tree carrying them, so neither is a published
+       > scope figure at all.
+       >
+       > **The conclusion is untouched and is if anything strengthened**: under
+       > this re-derivation *every* reproducible figure describes the parent
+       > while printing identically to a mid-edit reading, which is the whole
+       > argument for the header. Slice 301's own `4,676 / 335 / 7.2%` is
+       > correctly outside both corpora — it is slash-separated with no `=`, so
+       > the stated form does not match it. The `3 of 11 name a revision` half
+       > is **not adjudicated**: it depends on how wide a window counts as
+       > "surrounding text", and a ±3-line window here returns 4 of 9.
 
        So the fix earns its place on the majority case, not the rare one:
        printing `at HEAD <sha>` on a clean default run makes all 7 quotable,
