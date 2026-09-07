@@ -11,7 +11,7 @@ const { links = [] } = Astro.props;
 {links.length > 0 && (
   <section class="demo related">
     <h2>Related</h2>
-    <ul class="bo-cluster" style="--bo-cluster-gap: var(--bo-space-2); list-style: none; padding: 0">
+    <ul class="bo-cluster docs-list-bare">
       {links.map(([href, label]: [string, string]) => (
         <li><a class="bo-chip" href={base + href}>{label} →</a></li>
       ))}

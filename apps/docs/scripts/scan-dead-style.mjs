@@ -17,6 +17,26 @@
  * `inline-size: 14rem` restated `.bo-sidebar-nav`'s own default, and a
  * `display: inline-block` was silently blockified as a flex item.
  *
+ * WHAT THE COUNT COUNTS — one style ATTRIBUTE, never a declaration, and the
+ * output said "declaration(s)" for its whole life (corrected 2026-09-07,
+ * roadmap 320.1). `live += 1` fires once per element carrying `[style]`, so the
+ * headline number is elements. Measured on the same page set the same day:
+ * **1,272 attributes holding 1,677 declarations**, a 24.2% under-report, and
+ * the wrong noun had been quoted as a declaration count in five consecutive
+ * sweep write-ups. Both numbers are printed now, so the historical series stays
+ * comparable and the missing one is available rather than inferred.
+ *
+ * THE UNIT IS ALSO A DETECTION GAP, and it is red-proved rather than reasoned:
+ * the verdict joins every property the attribute names into ONE string, so an
+ * attribute is dead only if ALL of its declarations are. Running this probe's
+ * own logic over three injected elements returns `margin: 40px` live,
+ * `margin: 0` DEAD, and `margin: 40px; padding: 0` **live** — the `padding: 0`
+ * being exactly the case the paragraph above calls the canonical dead one.
+ * **273 of 1,272 attributes (21.5%) carry more than one declaration** and are
+ * therefore in that blind spot. Closing it is roadmap 320.2, filed rather than
+ * built: it moves a headline number five write-ups have quoted, so it owes its
+ * own red-proof and self-test cases.
+ *
  * SELF-RED-PROOF, run before every sweep. The whole verdict is "removing this
  * changed no computed value", which is exactly the shape of a detector that
  * reports a clean tree because it can no longer see. So each run first injects
@@ -74,7 +94,7 @@ const PROBE = () => {
     void el.offsetHeight; // force a restyle before reading back
     const after = read(el, names);
     el.setAttribute('style', saved); // restore EXACTLY what was there
-    out.push({ decl: saved, dead: before === after });
+    out.push({ decl: saved, dead: before === after, n: names.length });
   }
   return out;
 };
@@ -127,6 +147,11 @@ const byPage = new Map();
 let dead = 0;
 let live = 0;
 let printOnlyLive = 0;
+/* The verdict unit is one style ATTRIBUTE, so these track the declarations
+   inside them — see the "WHAT THE COUNT COUNTS" note in the header. */
+let liveDecls = 0;
+let deadDecls = 0;
+let multi = 0;
 for (const p of await distPages(DIST)) {
   await page.goto(`http://localhost:${port}${base}${p.url}`, { waitUntil: 'networkidle0', timeout: 20000 });
   await page.emulateMediaType('screen');
@@ -137,12 +162,14 @@ for (const p of await distPages(DIST)) {
   for (let i = 0; i < onScreen.length; i += 1) {
     const r = onScreen[i];
     const inPrint = onPaper[i];
-    if (!r.dead) { live += 1; continue; }
+    if (r.n > 1) multi += 1;
+    if (!r.dead) { live += 1; liveDecls += r.n; continue; }
     // Dead on screen, live on paper: the declaration is doing its job where it
     // matters. Counted separately so the number is visible rather than folded
     // into "live" as if nothing interesting happened.
-    if (inPrint && !inPrint.dead) { live += 1; printOnlyLive += 1; continue; }
+    if (inPrint && !inPrint.dead) { live += 1; liveDecls += r.n; printOnlyLive += 1; continue; }
     dead += 1;
+    deadDecls += r.n;
     byDecl.set(r.decl, (byDecl.get(r.decl) ?? 0) + 1);
     byPage.set(p.url, (byPage.get(p.url) ?? 0) + 1);
   }
@@ -155,10 +182,14 @@ for (const p of await distPages(DIST)) {
    impossible, which is exactly the misreadable number this repo keeps warning
    about (Standardize sweep, 2026-08-27). */
 console.log(
-  `dead-style scan — ${dead} dead declaration(s) on ${byPage.size} page(s); ` +
-    `${live} live inline declaration(s) in total`,
+  `dead-style scan — ${dead} dead style attribute(s) on ${byPage.size} page(s); ` +
+    `${live} live inline style attribute(s) in total`,
 );
-console.log(`  (screen + print measured; ${printOnlyLive} declaration(s) are dead on screen but LIVE in print)`);
+console.log(
+  `  (${liveDecls + deadDecls} declaration(s) inside them; ` +
+    `${multi} attribute(s) carry more than one, which this scan cannot judge separately)`,
+);
+console.log(`  (screen + print measured; ${printOnlyLive} attribute(s) are dead on screen but LIVE in print)`);
 if (dead) {
   console.log('\n  by declaration:');
   for (const [d, n] of [...byDecl].sort((a, b) => b[1] - a[1])) console.log(`    ${String(n).padStart(3)}x  ${d}`);

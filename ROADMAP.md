@@ -320,6 +320,202 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 320 — Standardize sweep, 4 of 4 lanes: two shared components carried the LAST inline spellings of two classes a 2026-08-17 sweep created to replace them, and lane 1's own headline number counts attributes while saying "declarations" (2026-09-07)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty), `ENVIRONMENT.md` trap 1, fixed with
+`git checkout -B main origin/main` before any commit; `origin/main` again
+arrived as a **forced update** (`26447ba...e3de656`). Trap 2 clean in one
+`--unshallow` (**1,998** commits, no `shallow.lock`), and it again brought the
+tags — the **thirty-third** consecutive container to do so; `git tag | wc -l`
+-> **8**. Trap 1c did not bite (`CHROME_PATH` exported in the same command as
+every browser-driven gate).
+
+Rule 1: no open P0 — `grep -nE '^\s*[0-9]+\. \[ \]' ROADMAP.md | grep -i P0`
+returns nothing across the 25 open items. Step 1 read **both** intakes with
+`ENVIRONMENT.md` §8's controls in one run (`/discussions` -> 200 len **0**;
+`/not-a-real-route` -> **404**; `/issues?state=open` -> 200 len **1**, issue #2,
+already triaged as `300.2`) and triaged nothing: no new input. **Rule 2
+matched** — `dispatch_status.py` read `Standardize 4 / 4 Continue rounds …
+OVERDUE`. Rule 3 `1 / 3 slice … ok [304]` did not match. Rules 4-8 not reached.
+Rule 5 reports **STALE** (`1 wake-date(s) newer`), so per `LOOPS.md` it **could
+not be evaluated** and is not reported clear; `306.1` is the open item saying
+why a cloud wake cannot drive it to `ok`.
+
+**All four lanes ran; saying `n of 4` per the playbook. This is 4 of 4.**
+
+| lane | command | result |
+|---|---|---|
+| 1 dead-style | `npm run scan:dead-style -w docs` | **0 dead** of **1,433**, and the unit of that 1,433 is the finding — see below |
+| 2 css-repeats | `npm run report:css-repeats -w @busy-office/ui` | **8 repeated bodies**, `LOOPS.md`'s table exactly; 74 files · 242 rules · 230 distinct |
+| 3 report:prose | `npm run report:prose -w docs` | **0 unverdicted** — 118 pages · median 792 · **112,297** words; 10 over the corpus median, 11 over a family median, union **15** |
+| 4 loop-prose | `python3 scripts/loops/report_loop_prose.py` | no finding — `git diff --stat 4e0248ed..HEAD -- LOOPS.md` is **empty**, so 308.1's per-section attribution still stands and re-deriving it would be the re-derivation that rule exists to prevent |
+
+**Lane 2's membership is unchanged group-for-group**, not merely unchanged in
+count: all eight bodies match `LOOPS.md`'s table one-for-one, and the
+joined-control `x4` group is still **two** components, so its stated reopen
+trigger — a THIRD — is unmet. **Lane 3's corpus moved and the flagged set did
+not**: `111,907 -> 112,297` words (+390 since Slice 314), median 792 unchanged,
+the same **15** pages, none entering unverdicted.
+
+### The finding — a 2026-08-17 consolidation that stopped at `pages/`
+
+`Gallery.astro`'s own `is:global` block carries two docs-local classes whose
+comments record what they replaced: `.docs-list` was *"an identical inline
+`style="padding-inline-start: 1.25rem"` repeated 37 times across 27 pages"*,
+and `.docs-list-bare` was *"`style="list-style: none; padding: 0"` repeated 14
+times"*, both from the Standardize sweep of 2026-08-17.
+
+Every one of those 51 inline copies is gone from `pages/`. **Two survived, and
+both are in the shared components that render INTO those pages** — the exact
+directory Slice 314 established was outside 292.8's scope, one property over:
+
+```
+grep -rnE 'style="[^"]*padding-inline-start:\s*1\.25rem' apps/docs/src --include='*.astro'
+grep -rnE 'style="[^"]*list-style:\s*none[^"]*padding:\s*0'  apps/docs/src --include='*.astro'
+  # ApiTable.astro:74 and Related.astro:14 — and, in Gallery.astro, only the
+  # two COMMENTS quoting the strings the classes replaced.
+```
+
+`.docs-list` is used by class in **59** files and `.docs-list-bare` in **40**,
+so this is a one-off surviving beside a settled pattern, which is what this loop
+means by drift. Both now use the class.
+
+### 314.2 — closed here, because this sweep's own scan reached its sites independently
+
+314.2 asked for a verdict on the non-zero spacing literals and an explicit
+decision on `--bo-space-0`. The counts were re-run rather than quoted, with an
+instrument restricted to inline `style=` **attributes** — a `<style>`-block
+declaration is a stylesheet rule, not an inline one-off, and a raw grep for
+`padding:` conflates them.
+
+| site | verdict |
+|---|---|
+| `ApiTable.astro:74` `padding-inline-start: 1.25rem` | **converted** — to `.docs-list`, not to `var(--bo-space-5)`. A class that already owns the decision beats tokenising a one-off. |
+| `Related.astro:14` `list-style: none; padding: 0` | **converted** — to `.docs-list-bare`. |
+| `ApiTable.astro:57` `margin-inline-end: 0.5rem` | **converted** — `var(--bo-space-2)`, exact. |
+| `detail-form.astro` x3 `font-weight: 400` | **converted** — `var(--bo-font-weight-normal)`, exact. This is 314.2's whole `font-weight` row. |
+| `base/primitives.astro` x4 `margin-block-start: 1.5rem` | **refused** — all four are INSIDE a template literal, i.e. copyable samples, which 292.8's own live-markup rule puts out of scope. `1.5rem` does equal `--bo-space-6`, so the refusal is about the site, not the value: the page's subject is the primitives' gap knobs, and a token spelling in the sample teaches a second thing the sample is not about. |
+| `ClassRef.astro:44` `margin-inline-end:.4rem` | **refused, and it files 320.3** — `0.4rem` is off-scale (between `--bo-space-1` 0.25rem and `--bo-space-2` 0.5rem), so any swap is a rendered change, which is the judgement 314.1 recorded for its own `2rem`. |
+| every zero (`margin: 0`, `padding: 0`, `margin-block-end: 0`) | **refused. `--bo-space-0` is never the right spelling of a zero**, and the evidence is that nothing has ever used it: `grep -rn -- '--bo-space-0\b' packages/core/src apps/docs/src` excluding its own definition returns **0**. A reset is not a scale step. |
+
+The classifier that split "copyable sample" from "live markup" is backtick
+parity to the match OFFSET, and it was **wrong on its first version** — parity
+to the start of the LINE misreads a line that OPENS a template literal, which
+is `combobox.astro:61`. Red-proved on two controls before any verdict rested on
+it (`primitives.astro:30` INSIDE, `combobox.astro:61` INSIDE), per this repo's
+own base rate that an instrument's first output is not evidence.
+
+### And a second class of inline one-off nothing had a name for
+
+A knob set to exactly the value the consuming rule already falls back to.
+`.bo-cluster` is `gap: var(--bo-cluster-gap, var(--bo-space-2))`, and six
+elements set `--bo-cluster-gap: var(--bo-space-2)` (or `--bo-grid-min: 16rem`,
+`.bo-grid`'s own fallback) on top of it.
+
+**Base rate measured before treating it as a finding** (94.11): **6 of 47
+inline custom-property declarations (12.8%)** — neither 0% nor 100%, so the
+predicate distinguishes. All six are live markup, none nested inside another
+cluster or grid that sets the knob, so removing them cannot uncover an
+inherited value. After: **0 of 41**.
+
+### The instrument defect — lane 1's headline number is not what it says
+
+`scan:dead-style` printed **"1,433 live inline declaration(s)"**. `live += 1`
+fires once per element carrying `[style]`, so 1,433 was **attributes**. Measured
+on one page set on one day: **1,272 attributes holding 1,677 declarations**, a
+**24.2%** under-report, and the wrong noun has been quoted as a declaration
+count in five consecutive sweep write-ups (214, 284, 290, 301, 314) and in the
+script's own header.
+
+**The unit is also a detection gap, and it is red-proved rather than reasoned.**
+The verdict joins every property the attribute names into ONE string, so an
+attribute is dead only if ALL of its declarations are. That probe's own logic,
+run verbatim over three injected elements:
+
+```
+live   style="margin: 40px"                 <- the script's own live control
+DEAD   style="margin: 0"                    <- the script's own dead control
+live   style="margin: 40px; padding: 0"     <- the gap
+```
+
+The hidden `padding: 0` is exactly the case the script's header calls the
+canonical dead one (25 of the first sweep's 29). **273 of 1,272 attributes
+(21.5%)** carry more than one declaration and are in that blind spot.
+
+1. [x] **320.1 — the output says what it counts, and prints the number it was
+       missing.** Both figures now print, so the historical series stays
+       comparable rather than being silently redefined, and the multi-declaration
+       count publishes the blind spot's size beside the verdict that cannot see
+       into it. The corrected line reproduces an independent probe exactly —
+       `1272 / 1677 / 273` from both — which is the reconciliation against
+       something independent that CLAUDE.md asks for before a number is quoted.
+2. [ ] **320.2 — judge each declaration separately, so a dead one cannot hide
+       behind a live sibling.** Filed rather than built: it moves a headline
+       number five write-ups have quoted, and the scan is `@exact`, so it owes
+       its own red-proof and new self-test cases discriminating a mixed
+       attribute — which the current self-test, two single-declaration controls,
+       cannot do.
+       - **Accept:** the scan reports a per-declaration dead count; its
+         self-test gains a mixed case and **fails when that case is judged as a
+         whole**; and the run's own before/after is reconciled against the 273
+         attributes named above rather than against the list it was handed.
+         **Finding that the gap yields zero real dead declarations is a
+         satisfying outcome** if it carries the re-run counts.
+3. [ ] **320.3 — the same idiom, two values, in two shared components.**
+       `ApiTable.astro:57` and `ClassRef.astro:44` both space a wrapping run of
+       inline `<code>` chips, at `0.5rem` and `.4rem`. One decision, two
+       spellings, and the 1.6px difference is invisible in a diff.
+       - **Accept:** the two agree, or a recorded reason they should not.
+         Unifying them is a **rendered** change a cloud wake cannot judge, so
+         this needs a wake that can look at both, at 1440px and 390px.
+
+**Verified live — measured, not screenshotted.** A throwaway probe (scratchpad,
+not the repo) drove `serve-dist.mjs` + `browser-harness.mjs` over the eight
+affected pages, reading 13 computed properties for every element:
+
+| comparison | elements | key-set diffs | computed differences |
+|---|---|---|---|
+| before vs after, unmodified | 12,593 | 0 | **0** |
+| `.docs-list`/`.docs-list-bare` forced, **before** tree | 12,593 | 0 | 38 |
+| `.docs-list`/`.docs-list-bare` forced, **after** tree | 12,593 | 0 | **107** |
+| `--bo-space-2` -> 37px, before vs after | 12,593 | 0 | **60** |
+| `--bo-font-weight-normal` -> 123, before vs after | 12,593 | 0 | **3** |
+
+The no-op row alone proves nothing — it is also what an edit that never landed
+produces — so the override rows are what discriminate. Forcing the two classes
+moves **38** elements in the before tree (the pages' own existing uses, 3 pages)
+and **107** in the after tree (**8** pages), the **+69** being the two `<ul>`s
+this round rewired plus what inherits `list-style-type` from them. The
+font-weight override moves **exactly 3**, all `SPAN`s on `/patterns/detail-form/`
+— the three sites edited, no more.
+
+**And the re-scan reconciles to the element, which is what caught the unit
+defect.** Lane 1 re-run reads **1,433 -> 1,272**, a drop of **161**. Predicted
+from the source sites: Related's `<ul>` renders **116** times and ApiTable's
+notes `<ul>` **40**, plus the 5 page-level sites = **161**, exact. It reconciles
+**only** in the element unit — the first prediction, in declarations, said 392
+and was wrong by 231. A hand-derived number disagreeing with the instrument is
+what this repo says to investigate rather than quote, and here the instrument
+was right and its LABEL was wrong.
+
+**Gates: all 17 cloud-runnable entry points green** on the committed tree, the
+list re-derived from `ci.yml` rather than read off a snapshot (the two
+documented set differences still hold: `check:ci-ignores` is covered by
+`check:repo`, and `npm run test -w @busy-office/ui` is CI's
+`npx vitest run --root packages/core`).
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. What that would add is *"does it look right"*; what is
+claimed instead is that **nothing rendered changed**, asserted over 12,593
+elements' computed values on eight pages plus `check:layout`, `check:scroll` and
+`test:axe` across the whole built site. The claim is structural: every converted
+value is byte-equal to the literal it replaces, and every removed declaration
+restated a fallback the consuming rule already carries, so a visual difference
+would require a class or a token to differ from its own definition. **320.3 is
+the one item here that genuinely needs a rendered image, and it is left OPEN for
+that reason rather than guessed at.**
+
 ## Slice 319 — Objective grill of Slices 298, 300, 318: 25 of 27 published assertions reproduce, and both defects are in what shipped BESIDE the number. Slice 317 audited a three-part runtime claim, removed the false third, and re-published the other two unmeasured — one of them is also false (2026-09-07)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
@@ -1131,7 +1327,7 @@ conversions. Semantically convertible inline declarations: **18 of 210 raw in
          (`1.5rem`, `1rem`), so a visual difference would require the token to
          differ from its own definition.
 
-2. [ ] **314.2 — the same scope gap exists for SPACING and `font-weight`
+2. [x] **314.2 — the same scope gap exists for SPACING and `font-weight`
        literals, and it is a different property with no verdict — filed, not
        built.** 292.8 measured and claimed `font-size` only. Widening this sweep
        into the other families would be scope creep against a property nothing
@@ -1155,6 +1351,20 @@ conversions. Semantically convertible inline declarations: **18 of 210 raw in
          whether `--bo-space-0` is ever the right spelling of a zero. **Deciding
          no change is needed is a satisfying outcome** if it carries the re-run
          counts; the counts above are the input, and they are snapshots.
+       - **DONE 2026-09-07 (cloud wake), by Slice 320's own sweep, which reached
+         these sites from lane 1 rather than from this item.** Every non-zero
+         literal carries a verdict in 320's table — four converted, two refused
+         with the reason, and the refusal of `ClassRef.astro:44` filed as
+         `320.3` because unifying it is a rendered change. **`--bo-space-0` is
+         decided: never.** It has never been used —
+         `grep -rn -- '--bo-space-0\b' packages/core/src apps/docs/src` outside
+         its own definition returns **0** — so this closes on evidence rather
+         than on the reasoning this item filed.
+       - **The counts moved, and the re-run is what showed it.** This item's
+         table read `4 in 3 files` for `components/`+`layouts/`; restricted to
+         inline `style=` attributes the honest figure was **6 in 4 files**, and
+         the difference is `Gallery.astro`'s `<style>`-block rules and its two
+         explanatory COMMENTS, which a raw grep cannot tell from markup.
 
 ## Slice 313 — 312.1 + 312.2: the honest reader set is FOUR gates, not two, and three of the four never spell the path at all. `paths-ignore` is removed rather than the reads, because keeping it means reversing three recorded decisions (2026-09-07)
 

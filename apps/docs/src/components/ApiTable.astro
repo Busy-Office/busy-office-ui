@@ -54,7 +54,7 @@ const aa = (contrast.themes.light as any[])
         {rows.map(([label, values]) => (
           <tr>
             <th scope="row" style="white-space: nowrap">{label}</th>
-            <td>{values.map((v: string) => <code style="margin-inline-end: 0.5rem">{v}</code>)}</td>
+            <td>{values.map((v: string) => <code style="margin-inline-end: var(--bo-space-2)">{v}</code>)}</td>
           </tr>
         ))}
         {/* data-js-required carries the COMPONENT NAME, not a value: it is the
@@ -71,7 +71,7 @@ const aa = (contrast.themes.light as any[])
     </table>
   </div>
   {notes.length > 0 && (
-    <ul class="bo-stack bo-stack--tight" style="padding-inline-start: 1.25rem" data-api-notes>
+    <ul class="bo-stack bo-stack--tight docs-list" data-api-notes>
       {notes.map((n: string) => <li set:html={n} />)}
     </ul>
   )}
