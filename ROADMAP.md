@@ -320,6 +320,88 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 330 — Objective grill of Slices 310, 328, 329: 23 of 25 reproduce, and the figure that does not is the one a design refusal rests on (2026-09-07)
+
+Dispatched by rule 3, OVERDUE at `3 / 3`. No prior grill names any of the
+three, so nothing was dropped. **Two of the three are this author's own**, so
+verification went to a **fresh-context agent, not a fork** — a fork inherits
+the builder's reasoning, which is the shape §3b step 4 exists to prevent.
+
+### The finding: a refusal justified by an unstable extrapolation
+
+Slice 329 refused 249.9's build-time miniature and published the cost that
+decided it: *"29 kB per PNG · ~1.1 MB for 40"*, extrapolated from **five**
+components. The verifier's own five-component sample read **49 kB and
+1.91 MB**. Neither is right. Measured as a **census over all 39** component
+pages that have a demo section:
+
+```
+39.1s · 0.89 MB total · per PNG 2.2 kB min, 60.7 kB max, 23.3 kB mean
+```
+
+**Per-PNG size spans a 28x range**, so a five-sample mean is not a statistic —
+which is precisely what CLAUDE.md says about a suspiciously convenient number,
+and the two independent samples landing on either side of the truth is the
+cleanest possible demonstration. **The slice recorded no command**, so the
+discrepancy could not even be attributed until someone re-measured from
+scratch.
+
+**The conclusion survives and the number did not.** 0.89 MB is ~10x the
+framework's own 93 KiB, so the refusal is unchanged — a still picture of a
+demo that is live one click away still does not earn ten framework-sizes of
+repo weight. But the figure was **written into the shipped page header** as
+the reason the design looks the way it does, which is the one place a wrong
+number does real work. Corrected in both places, with the command shape now
+beside it.
+
+**This is 192.1 landing again**: the defect is in what shipped BESIDE the
+verified thing. 329 red-proved its gate edit properly and got that right; the
+number it did not red-prove is the one that was wrong.
+
+**Second correction, wording only:** 329 said *"42 cards across 8 groups"*.
+`COMPONENT_GROUPS` has **7**; the eighth `<h2>` is the `Related` footer. The
+probe counted headings, not categories.
+
+### What held
+
+**Slice 310 — 8 of 8**, including the deprecated-glyph site counts at their
+own revision, the 26 shipped glyphs, and `check-markup` at 4,229 across 28
+files.
+
+**Slice 328 — every load-bearing figure to the digit.** An independent browser
+probe reproduced **103 / 11 / 8 / 14** live framework elements inside
+`section.demo`, and the **30 of 30** base rate that refused its gate. The
+verifier's own first reading was 31/31 — it had followed a redirect
+(`base/tokens` → `/reference/tokens`) — and it caught and reported that as its
+own instrument error rather than filing it against the slice.
+
+**Slice 329's gate red-proof reproduces under an independent injection.** The
+verifier injected its own orphan component page twice; the gate failed both
+times naming the file, on the reachability arm and the `Related` arm, and
+returned green at *40 component pages … 41 reachable* after removal.
+
+### Refused
+
+- **A gate over "a published figure carries the command that produces it".**
+  The predicate is semantic — no regex separates a figure that needs a command
+  from prose that mentions a number — and this repo has refused that shape
+  six times on 94.11. The fix that works is the one applied: put the command
+  next to the claim.
+- **Re-filing 329's group count as a defect.** It is wording; the conclusion
+  (every field generated) never depended on it.
+
+1. [ ] **330.1 — Sampling is now a named failure mode here, twice.** 301 quoted
+       a working tree as a commit's state; 329 quoted a five-sample mean as a
+       population. Both were caught by re-measurement, neither by review, and
+       both were figures that justified a decision rather than described one.
+       - **Accept** — measure before proposing anything: count how many
+         published figures in the live `ROADMAP.md` rest on a sample or an
+         extrapolation rather than a census, and whether any is load-bearing
+         for a still-open decision. **Finding that this is two instances and
+         not a pattern closes it** — two occurrences by one author in one day
+         may be a habit to correct rather than a systemic gap, and a gate over
+         "is this number a census" is the semantic wall 94.11 names.
+
 ## Slice 329 — 249.9 built: the component catalogue ships with every field generated, and the miniature it specified is refused with the cost it asked for (2026-09-07)
 
 **Dispatched by rule 4.** The oldest open item is `249.7`, and it is
@@ -339,11 +421,20 @@ the item before it closes"*. Measured first, rendering the first demo section
 of five real component pages at 640px:
 
 ```
-launch 781ms · 1,006ms per component · ~40s for 40
-29 kB per PNG   · ~1.1 MB for 40
+39 components (one has no demo section) · 39.1s
+0.89 MB total · per PNG 2.2 kB min, 60.7 kB max, 23.3 kB mean
 ```
 
-**1.1 MB is roughly twelve times the whole framework's 93 kB minified**,
+**⚠ THOSE ARE THE CORRECTED FIGURES (Slice 330).** As first published this
+read *"29 kB per PNG · ~1.1 MB for 40"*, extrapolated from five components,
+and it **does not reproduce**: an independent five-component sample read 49 kB
+and 1.91 MB. Both estimates are wrong, in opposite directions, because per-PNG
+size spans **2.2 kB to 60.7 kB** — a 28x range — so no five-sample mean is
+stable. The census above replaces both. The slice also recorded **no command**
+for the original figure, which is why the discrepancy could not be attributed;
+the page header now carries the command shape.
+
+**0.89 MB is roughly ten times the framework's own 93 KiB minified**,
 carried in the repo and shipped in `dist`, to show a still picture of a demo
 that is live, interactive, and one click away on the card's own link. That is
 **re-photographing** — the same thing the pattern recipe already refuses when
@@ -358,7 +449,8 @@ already plays. **Every field on every card is generated**: tagline and
 category from `api.json`'s `meta` (249.8), JS status from `behaviors.json`'s
 `byComponent` (0.8.0's `serves` work), the CSS floor from `floor.json`'s
 `perComponent` (249.3), the DSA score and date from `dsa-scores.json`. 42
-cards across 8 groups.
+cards across **7** groups (published as 8 — the eighth `<h2>` on the page is
+the `Related` footer, not a category; corrected in Slice 330).
 
 The per-component floor is the field that earns its place: **Button reads
 Chrome/Edge 99 and Dropdown reads 117**, which is exactly the distinction

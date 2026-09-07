@@ -13,19 +13,33 @@
  *
  * NO MINIATURES, and this is the item's own open question answered with the
  * measurement it asked for. 249.9 proposed a build-time screenshot per card
- * via `browser-harness.mjs`. Measured before deciding, rendering the first
- * demo section of five real component pages at 640px:
+ * via `browser-harness.mjs`. Measured across ALL of them, not sampled —
+ * screenshotting the first `section.demo` of every component page at 640px:
  *
- *   launch 781ms · 1,006ms per component · ~40s for 40
- *   29 kB per PNG · ~1.1 MB for 40
+ *   39 components (one has no demo section) · 39.1s
+ *   0.89 MB total · per PNG 2.2 kB min, 60.7 kB max, 23.3 kB mean
  *
- * 1.1 MB is roughly TWELVE TIMES the whole framework's 93 kB minified, carried
- * in the repo and shipped in `dist`, to show a still picture of a demo that is
- * live, interactive and one click away on the card's own link. That is
- * re-photographing — the same thing the pattern recipe already refuses when it
- * bars per-domain demo variants — so the miniature is refused and the card
- * links to the living thing instead. The cost is written here rather than in a
- * commit message because it is the reason the design looks like this.
+ * 0.89 MB is roughly TEN TIMES the framework's own 93 KiB minified
+ * (`packages/core/dist/css/index.min.css`), carried in the repo and shipped in
+ * `dist`, to show a still picture of a demo that is live, interactive and one
+ * click away on the card's own link. That is re-photographing — what the
+ * pattern recipe already refuses when it bars per-domain demo variants — so
+ * the miniature is refused and the card links to the living thing instead.
+ *
+ * THE FIRST VERSION OF THIS FIGURE WAS EXTRAPOLATED FROM FIVE COMPONENTS AND
+ * WAS WRONG (Objective grill, Slice 330). It read "29 kB per PNG, ~1.1 MB for
+ * 40"; an independent five-component sample read 49 kB and 1.91 MB. Both are
+ * off, in opposite directions, because per-PNG size spans 2.2 kB to 60.7 kB —
+ * a 28x range across the real population, so no five-sample mean is stable.
+ * The refusal was right and the number was not, which is why the figure above
+ * is now a census rather than an estimate. Re-run it with:
+ *
+ *   node -e "…serveDist + launchDocsBrowser, screenshot section.demo per
+ *            api.nav slug at 640px, sum the buffer lengths…"
+ *
+ * (kept as a command shape rather than a committed script: it is a decision
+ * record, not a gate, and a script nothing runs is the thing this repo calls
+ * ceremony.)
  */
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
