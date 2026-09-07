@@ -320,6 +320,96 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 337 — Objective grill of Slice 297: `config.yml` is the router, not a third template, and the slice counted the escape hatch as an enforcer (2026-09-08)
+
+**Dispatched by rule 3**, `Objective 4 / 3 … OVERDUE [297, 315, 332, 333]`.
+Rule 1 no open P0 (**0**). Step 1 read both intakes in Slice 332's REST form
+with §8's controls — issues **1** (#2, already triaged as `300.2`),
+discussions **0**, `/discussionz` **404** — and triaged nothing. Rule 2
+`Standardize 3 / 4 ok`. Rule 5 **STALE**, so it could not be evaluated and is
+not reported clear.
+
+### Collision 5, and the first where both dispatchers ran the SAME rule
+
+This wake grilled all four overdue slices. Mid-write-up the scheduled cloud
+dispatcher pushed **Slice 336**, an Objective grill of **315, 332, 333** — 29
+assertions, three defects, deeper on those three than this one was. Per Step 0c
+the loser discards, so **315/332/333 are ceded to 336** and this slice keeps
+**297**, which was in this wake's overdue list and not in that one's.
+
+**The two do not contradict, and one overlap is worth keeping.** Both wakes
+re-ran 332's three lane figures independently, on different machines, and both
+got them to the digit — `0 / 1,365 / 357`, `74 · 242 · 230 · 8`,
+`119 · 798 · 113,787 · 10`. A figure reproduced twice by two dispatchers that
+had not seen each other's run is better evidence than either run alone.
+
+**Full report:** `.roundtable/grill-objective-297-2026-09-08.md`.
+
+### The defect
+
+Slice 297 wrote that *"three templates enforce version/browser/theme/density
+plus a minimal repro on bugs and a real ERP scenario on features"*. There are
+**two**, and no third was ever deleted:
+
+```
+git log --all --pretty=format: --name-only -- '.github/ISSUE_TEMPLATE/*' | sort -u
+#   bug_report.yml   config.yml   feature_request.yml
+```
+
+`config.yml` enforces nothing. It is the router, and **its first line is
+`blank_issues_enabled: true`** — so the file folded into the count of things
+that enforce is the one file that lets a reporter skip enforcement.
+
+**The correct fact was already written down.** `ROADMAP-archive.md:15107`, the
+entry 297 was compressing, reads *"bug report form (…) + feature request form
+(…) + `config.yml` (**blank issues on**, docs link)"* — two forms named
+separately, with the blank-issue setting stated. 297 lost both in one word.
+
+**And the loss cost a slice.** `297.1` asked whether the router worked; Slice
+335 answered it by pulling the API, finding **zero labels** on both issues, and
+reasoning from the forms' `labels:` keys that neither form had rendered. That
+conclusion is what `blank_issues_enabled: true` says outright. The archive knew
+it on 2026-08-30, 297 dropped it on 2026-09-06, 335 rediscovered it on
+2026-09-08.
+
+**Corrected in place** — 236.2's precedent, the same one Slice 336 invoked
+hours earlier for its own three. **No gate**: a detector for one sentence in
+one slice is the ceremony 94.11 refuses, and *"the noun matches the
+population"* is the same semantic wall 336 hit. Filed as an instance of the
+rule `CLAUDE.md` already carries — *re-checking an earlier wake's measurement
+is part of the criterion* — not as a new section, because `158.2` has prose
+growth open.
+
+### Instrument note: the removal check nearly produced a false finding
+
+Re-running 333 (before it was ceded), the first pass grepped the five deleted
+const names in `motion.astro` and found **2–3 hits each**, which reads as *the
+deletion never happened*. They are the comment the deleting edit wrote to
+explain itself, at lines 44, 60 and 302. This is `CLAUDE.md`'s *"verifying a
+removal: assert on structure, never on raw text"* in its exact predicted form —
+`grep -nE "const (name) ="` returns nothing and the deletion holds. **The rule
+caught a live case in the session that had just re-read it.**
+
+1. [ ] **337.1 — A Standardize lane that never RAN is recorded as clean, and
+       nothing in the sweep can tell the two apart.** Re-running 332's lanes,
+       `npm run -s scan:dead-style -w @busy-office/docs` printed **nothing at
+       all** and did not visibly fail — the workspace is named `docs`, and
+       `-s` swallowed npm's `No workspaces found` error. Empty stdout is
+       indistinguishable from a clean lane, and the Standardize sweep IS these
+       four commands. Neither 332 nor Slice 336's grill of it was affected —
+       every figure reproduces twice — so this is a live trap, not a past
+       failure. It is the workspace trap `CLAUDE.md` records, compounded by
+       `-s`.
+       - **Accept** — the property, not a fix I am predicting: each lane's
+         entry in the sweep quotes **a figure the lane itself printed**, so a
+         lane that produced no output cannot be written up as clean. Whether
+         that comes from a wrapper that exits non-zero on empty stdout, from
+         dropping `-s`, or from the sweep's own write-up rule is open.
+         **Finding that the sweep already cannot record an empty lane is a
+         satisfying outcome** — verify by actually running a lane with a wrong
+         workspace name and seeing what the sweep does with it, not by reading
+         the procedure.
+
 ## Slice 336 — Objective grill of Slices 315, 332, 333: 26 of 29 assertions reproduce, and all three defects are a number that is a faithful reading of a DIFFERENT population than the noun beside it names (2026-09-07)
 
 **Dispatched by rule 3**, `Objective 3 / 3 slices … OVERDUE [315, 332, 333]`,
@@ -3832,9 +3922,22 @@ is the `registry.ts` shape refused in Slice 294, one decision stored twice and
 drifting. **Refused, recorded so it is not re-proposed.**
 
 **What was already built, and is not being rebuilt**: issues are public,
-three templates enforce version/browser/theme/density plus a minimal repro on
-bugs and a real ERP scenario on features, and `LOOPS.md` Step 1 already made
-`gh issue list` a dispatcher step read every wake.
+~~three templates enforce~~ **two forms** enforce version/browser/theme/density
+plus a minimal repro on bugs and a real ERP scenario on features, and
+`LOOPS.md` Step 1 already made `gh issue list` a dispatcher step read every
+wake.
+
+> **Corrected 2026-09-08 by the Objective grill in Slice 337.** There are and
+> have only ever been **two** templates — `git log --all --name-only` over
+> `.github/ISSUE_TEMPLATE/*` returns exactly `bug_report.yml`,
+> `feature_request.yml`, `config.yml`. The third file is not a template and
+> does not enforce anything: `config.yml` is the ROUTER, and its first line is
+> `blank_issues_enabled: true`. **This slice counted the escape hatch as an
+> enforcer** — and the archive entry it was compressing had said
+> *"blank issues on"* in as many words. Slice 335 spent an API round-trip and
+> a label analysis rediscovering that both real issues bypassed the forms; the
+> fact that they COULD was already written down, correctly, and was lost in a
+> one-word compression.
 
 **The gap was that issues were the ONLY door.** Measured before acting:
 `hasDiscussionsEnabled: false`, `stargazerCount: 0`. An issue template
