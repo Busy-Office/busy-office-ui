@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-07 03:02 UTC
+Generated at: 2026-09-07 03:49 UTC
 
 ## Open items by slice
 
@@ -25,8 +25,6 @@ Generated at: 2026-09-07 03:02 UTC
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - **Slice 297** (1 open)
   - 297.1 — The first real intake run is the test of this, not the config.
-- **Slice 304** (1 open)
-  - 304.1 — `roadmap_scope.py`'s figures should be quotable only with a revision.
 - **Slice 305** (2 open)
   - 305.1 — The four defects round 3 left standing.
   - 305.2 — Run the repo's own gates on a gauntlet artifact BEFORE spending a critic round.
@@ -53,9 +51,10 @@ Generated at: 2026-09-07 03:02 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1567 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-09-06 22:53   ok
-  Objective     0 / 3 slices          since 2026-09-07 03:02   ok
+dispatch status — counter-triggered rules (1570 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-09-06 22:53   OVERDUE
+  Objective     1 / 3 slice           since 2026-09-07 03:02   ok  [304]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      1 wake-date(s) newer   since 2026-09-06 16:56   STALE   [newest pair: axe-violations; 132 sample(s), 13 of 44 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-06, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-06 (2026-09-07), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -77,9 +76,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-06 22:53 · Meta · refusal · 314.2 — widening the sweep to spacing/font-weight inline literals: a different property with no verdict; base rates measured (8.6% pages / 21.9% shared), filed not built, and no gate added · refused · f5c6ecd1
-- 2026-09-06 23:47 · Objective · grill · Slice 315 — grill of 294/312/314: check:ci-ignores' --self-test unreachable since 312.2 (0 of 18 cases), fixed; 294's 139-hex base rate unreproducible, amended · landed · 066d9878
-- 2026-09-06 23:47 · Meta · refusal · executing each self-test inside check:selftests — base rate 1 of 20 and no single parseable output shape across the heuristic gates; filed as 315.3 instead · refused · 066d9878
 - 2026-09-07 00:48 · Continue · build · 298.1 — fixed-medium artifact convention: the second precedent predates the first by 25 days; a theme token in @media print prints at 2.54:1 on white paper · landed · 810e37fa
 - 2026-09-07 00:48 · Meta · refusal · building the @media-print token gate in the same round — filed as 316.1 with its base rate measured (0 of 11) rather than manufactured alongside the convention · refused · 810e37fa
 - 2026-09-07 01:50 · Continue · build · 300.2 — board/kanban spike: refuse the component (4 of 5 params are announcement strings); fix /patterns/kanban's unexecutable screen-reader-announcement claim · refused · 0c24d13e
@@ -87,6 +83,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-07 02:00 · Continue · bug · 318.1 — check:claims's calendar case raced a real form-GET navigation against a fixed 400ms wait (red on CI run 807, green on 808 with no code change); waits for the navigation now, red-proved by an 800ms delay injection · landed · 168269ac
 - 2026-09-07 03:02 · Objective · grill · Slice 319 — grill of 298/300/318: 23 of 25 assertions reproduce; 318's "99 other fixed waits" is 98 (a removal counted against raw text its own comment names), and /patterns/kanban's glove-target claim is false at 24px — corrected, and its keyboard claim made executable and red-proved twice · landed · 6e5724bb
 - 2026-09-07 03:02 · Meta · refusal · adding /patterns/kanban to check:target-size's 7-page sweep — the menu items measure 0x0 while the popover is closed, so the sweep could not see the claim it would exist to check; filed as 319.3 with its base rate (18 vocabulary pages / 7 swept / 4 overlap) instead · refused · 6e5724bb
+- 2026-09-07 03:49 · Continue · build · 304.1 — roadmap_scope.py's header names the tree its figures describe; base rate 7 of 11 published ratios describe the parent, not the commit · landed · 8beee329
+- 2026-09-07 03:49 · Meta · refusal · attributing a published bare percentage by git log -S — the needle collides with the tail of a longer percentage (79.5% contains 9.5%) · refused · 8beee329
+- 2026-09-07 03:49 · Meta · refusal · matching an 'N lines' figure — it cannot tell the denominator from the numerator, a subset, or the trigger threshold · refused · 8beee329
 
 ## Sunset test
 
