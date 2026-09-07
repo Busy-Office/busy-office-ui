@@ -2248,11 +2248,12 @@ the page — both re-measured at `522b9f61~1`.
 published `111,622`, +81 from the relicence edit to `index.astro`. Expected, not
 a defect.
 
-1. [ ] **304.1 — `roadmap_scope.py`'s figures should be quotable only with a
-       revision.** The defect above was possible because the script reports a
-       working-tree reading by default and nothing in its output says which
-       tree it read. It already supports `--rev`; what it does not do is make
-       the ambiguity visible at the point a wake copies the number.
+1. [x] **304.1 — DONE (2026-09-07, cloud wake). `roadmap_scope.py`'s header now
+       names the tree its figures describe.** The defect above was possible
+       because the script reports a working-tree reading by default and nothing
+       in its output says which tree it read. It already supports `--rev`; what
+       it does not do is make the ambiguity visible at the point a wake copies
+       the number.
        - **Accept** — the property, not a prediction: a figure printed by that
          script carries the revision it describes, or says outright that it is
          reading an uncommitted working tree. **Refusing is a satisfying
@@ -2260,6 +2261,53 @@ a defect.
          a header line is a cheap fix that may still be ceremony. Measure how
          many published `roadmap_scope` figures across the archive were taken
          mid-edit before building anything.
+
+       **The base rate was measured first and it refused the refusal.** Of the
+       **11** published full-ratio figures (`N / M = P%`) across `ROADMAP.md`,
+       `ROADMAP-archive.md` and `.roundtable/RESUME.md`, **7 reproduce at the
+       PARENT of the commit carrying them and 4 at the commit itself**, and only
+       **3 of the 11** name a revision anywhere in their surrounding text. The 7
+       are not mistakes — a wake runs this at dispatch, on a clean tree, then
+       writes its slice and commits — but they print **identically** to a
+       mid-edit reading, which is exactly what makes them unquotable. Slice
+       301's post-move `4,676 / 335 / 7.2%` is the other kind and is what 304
+       was filed about: it reproduces at **neither** `384e6a8b` (which reads
+       4,738 / 396 / 8.4%) nor its parent.
+
+       So the fix earns its place on the majority case, not the rare one:
+       printing `at HEAD <sha>` on a clean default run makes all 7 quotable,
+       and the dirty branch catches the 301 shape. Scoped to the script's **two
+       inputs**, not the whole repo — a wake with an edited `RESUME.md` and an
+       untouched `ROADMAP.md` still gets a figure reproducible at HEAD, and
+       crying wolf there would train the reader to skip the line. Verified in
+       this wake's own tree: `roadmap_scope.py` was modified and the header
+       still correctly read `at HEAD 9e08040e`.
+
+       **Two candidate instruments were built, measured and refused**, each a
+       detector that could not fail, and both are named in the script's header
+       so a later wake does not rebuild them: attributing a bare `P%` with
+       `git log -S'9.5%'` collides with the tail of `+79.5%`; and an `N lines`
+       match cannot tell the denominator from the numerator (`2,493 lines
+       across 13 closed slices`), from a subset (`673 lines are the four
+       targets`), or from the trigger threshold (`past 5,450 lines`). Only the
+       full-ratio corpus is quoted.
+
+       **Red-proved live, and the injection found a real bug the self-test had
+       certified.** Appending a line to `ROADMAP.md` correctly flipped the
+       header to `UNCOMMITTED WORKING TREE` — and printed the filename as
+       **`OADMAP.md`**. `git()` strips the whole of stdout, which de-indents the
+       *first* porcelain line only, so ` M ROADMAP.md` arrives as `M
+       ROADMAP.md` and a `line[3:]` slice eats one character too many. Case G's
+       original fixture passed an **unstripped** single line — the one shape the
+       real caller never produces — so it certified the bug. The fixture now
+       feeds two lines in the stripped form `git()` actually returns, and the
+       case was red-proved by discrimination: restoring `line[3:]` turns G red
+       naming `OADMAP.md`, and the fix turns it green. CLAUDE.md's rule landing
+       one level up — a green red-proof is a defect in the injection.
+       - **Not verified**: nothing visual. This is a hand-run reporting script
+         with **no machine consumers** (`grep -rn roadmap_scope` over `*.py
+         *.mjs *.js *.json *.yml` finds only its own header and a mention in
+         `_common.py`'s docstring), so no rendered artefact changed.
 
 ## Slice 303 — The framework's central promise was documented, demoed, and ungated: the layered-reset recipe is now executable (2026-09-06)
 

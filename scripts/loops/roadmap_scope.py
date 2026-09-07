@@ -83,12 +83,55 @@ one slice at a time, per 177.1 and CLAUDE.md's bulk-edit rule. The `>6 lines`
 floor is a heuristic that excludes slices already reduced to their standing
 three-line pointer; it is labelled as one and is adjustable with `--min-lines`.
 
+WHICH TREE THE FIGURES DESCRIBE (roadmap 304.1). Every figure below is a
+reading of ONE tree, and until 2026-09-07 the output named that tree only when
+`--rev` was passed. A default run printed `roadmap scope — ROADMAP.md is N
+lines` with nothing saying which N that is, so a wake copied the number into
+prose and a later reader had no way to reconstruct it.
+
+**The base rate says this is not ceremony.** Of the 11 published full-ratio
+figures (`N / M = P%`) in `ROADMAP.md`, `ROADMAP-archive.md` and
+`.roundtable/RESUME.md`, **7 reproduce at the PARENT of the commit carrying
+them and 4 at the commit itself**, and only **3 of the 11** name a revision
+anywhere in their surrounding text. The 7 are the ordinary case rather than a
+mistake — a wake runs this at dispatch, on a clean tree, then writes its slice
+and commits — but they print identically to a mid-edit reading, which is what
+makes them unquotable. Slice 301's post-move `4,676 / 335 / 7.2%` is the other
+kind and is what 304 was filed about: it reproduces at NEITHER `384e6a8b` (which
+reads 4,738 / 396 / 8.4%) nor its parent, because it was taken before the
+result block was written back into the file.
+
+So the header now always names the tree: `--rev X` reports `at X`, a clean
+default run reports `at HEAD <sha>` — which is the quotable form the 7 above
+were entitled to — and a run over modified sources says outright that no
+revision carries the figure. Scoped to THIS script's two inputs, not the whole
+repo: a wake with an edited `RESUME.md` and an untouched `ROADMAP.md` gets a
+figure that is genuinely reproducible at HEAD, and saying otherwise would train
+the reader to ignore the line.
+
+**The base-rate command is here beside the claim**, per CLAUDE.md — the figures
+above are snapshots and the instrument had two dead shapes before this one:
+
+    # for each `N / M = P%` in the three files, the commit that first added it,
+    # then `roadmap_scope.py --rev <sha>` and `--rev <sha>~1` compared to N/M.
+    # Needle the numerator with its slash (`2,730 /`) — the prose wraps the
+    # ratio mid-line, so `-S'2,730 / 5,870'` finds nothing and reads as absent.
+
+Two shapes were built, measured and REFUSED rather than quoted, because each
+was a detector that could not fail: matching a bare `P%` attributes the commit
+with `git log -S'9.5%'`, which collides with the tail of `+79.5%`; and matching
+`N lines` cannot tell the denominator from the numerator (`2,493 lines across
+13 closed slices`), from a subset (`673 lines are the four targets`), or from
+the trigger threshold (`past 5,450 lines`). Both are named so a later wake does
+not rebuild them.
+
 NOT A GATE. Every figure here is legitimately non-zero on a healthy day — a
 sweep is a cadence, not an invariant — so a gate would fail the build on a
 correct state. `LOOPS.md` rule 4 and the Standardize playbook's lane 4 are what
 keep it from rotting.
 """
 import re
+import subprocess
 import sys
 
 from _common import from_disk, from_rev
@@ -115,6 +158,62 @@ def cites(lines):
         for whole, dotted in CITE.findall(line):
             found.add(int(whole or dotted))
     return found
+
+
+def git(args):
+    """Stripped stdout of a `git` call, or None if it could not be run.
+
+    None is distinct from '' on purpose: an empty `status --porcelain` means
+    *clean*, and a failed call means *unknown*. Collapsing the two would report
+    a clean tree whenever git is absent, which is the quiet skip this repo's
+    gate rule forbids.
+    """
+    try:
+        done = subprocess.run(['git'] + args, capture_output=True, text=True)
+    except OSError:
+        return None
+    return done.stdout.strip() if done.returncode == 0 else None
+
+
+def provenance(rev, run=git):
+    """`(header_suffix, warning)` naming the tree every figure describes (304.1).
+
+    Three answers, because a figure can describe three different things:
+
+      --rev X            the revision asked for.
+      clean default      HEAD, named by sha — the QUOTABLE form. 7 of the 11
+                         published ratios are this case printing anonymously.
+      modified sources   no revision carries it. Said outright rather than
+                         guessed at, and this is the Slice 301 case.
+
+    Scoped to LIVE and ARCHIVE rather than the whole repo: those are the only
+    files `report` reads, so a dirty `RESUME.md` does not make this figure
+    unreproducible and must not be reported as if it did.
+    """
+    if rev:
+        return f' at {rev}', None
+    head, dirty = run(['rev-parse', '--short', 'HEAD']), run(
+        ['status', '--porcelain', '--', LIVE, ARCHIVE])
+    if head is None or dirty is None:
+        return (' of the working tree at an UNKNOWN revision',
+                '  ⚠ git could not be read, so the tree these figures describe '
+                'cannot be named. Do not quote them without a revision.')
+    if dirty:
+        # `XY PATH`, split on the status code rather than sliced at a fixed
+        # column: `git` above strips the whole stdout, so the FIRST porcelain
+        # line loses the leading space of ` M ROADMAP.md` and the rest keep it.
+        # A `line[3:]` slice therefore reported `OADMAP.md` for the first file
+        # and the right name for every other one — caught by injecting into the
+        # real tree, and NOT by the self-test below, whose fixture fed an
+        # unstripped string and so never exercised the path the caller takes.
+        changed = ', '.join(sorted(line.split(maxsplit=1)[1]
+                                   for line in dirty.splitlines()
+                                   if line.split(maxsplit=1)[1:]))
+        return (' of an UNCOMMITTED WORKING TREE',
+                f'  ⚠ {changed} differ(s) from HEAD {head}, so NO revision carries '
+                f'the figures below.\n    Re-run after committing, or with --rev, '
+                f'before quoting any of them.')
+    return f' at HEAD {head} ({LIVE} and {ARCHIVE} clean)', None
 
 
 def scan(text):
@@ -205,10 +304,12 @@ def report(read, min_lines, rev):
     targets = {s: n for s, n in body.items() if s not in opened and n > min_lines}
     carried = sum(targets.values())
     total = len(live_text.splitlines())
-    where = f' at {rev}' if rev else ''
+    where, warning = provenance(rev)
 
     print(f'roadmap scope{where} — {LIVE} is {total} lines, '
           f'{len(body)} slice section(s), {boxes[0]} open / {boxes[1]} closed item(s)')
+    if warning:
+        print(warning)
     print(f'  OPEN: {sorted(opened)}')
     print(f'  {len(targets)} closed slice(s) carrying {carried} lines here; '
           f'{sum(1 for s in targets if s in arch)} already in the archive')
@@ -397,12 +498,69 @@ def self_test():
                  f'cannot tell a fenced row from a real heading, so it proves '
                  f'nothing.')
 
+    # G — provenance (304.1) DISCRIMINATES the three trees a figure can describe.
+    # The git calls are injected, so the case does not depend on the tree the
+    # suite happens to run in — which is the only way a "clean" and a "dirty"
+    # branch can both be exercised in one run.
+    #
+    # Red-proved by discrimination, not by reading: asserting only that the
+    # dirty run warns would pass on a function that warns unconditionally, and a
+    # header that always cries wolf is a line readers learn to skip. So the
+    # clean and dirty answers must DIFFER, and the clean one must carry HEAD's
+    # sha — the quotable form the 7 anonymous published ratios were entitled to.
+    def fake(head, status):
+        return lambda args: head if args[0] == 'rev-parse' else status
+
+    at_rev, warn_rev = provenance('abc1234', fake('deadbee', ''))
+    if at_rev != ' at abc1234' or warn_rev:
+        sys.exit(f'SELF-TEST FAILED (G): --rev gave {at_rev!r} / {warn_rev!r}, '
+                 f'want " at abc1234" and no warning.')
+
+    clean, warn_clean = provenance(None, fake('deadbee', ''))
+    if 'deadbee' not in clean or warn_clean:
+        sys.exit(f'SELF-TEST FAILED (G): a clean tree gave {clean!r} / '
+                 f'{warn_clean!r}. It must name HEAD, or a default run stays '
+                 f'unquotable — which is the whole of 304.1.')
+
+    # TWO dirty lines, and the first is fed WITHOUT its leading space — that is
+    # exactly what `git` hands back, because it strips the whole stdout and so
+    # de-indents the first porcelain line only. The original fixture passed a
+    # single unstripped line, which is the one shape the real caller never
+    # produces, and it certified a `line[3:]` slice that printed `OADMAP.md`.
+    # A fixture that cannot reproduce the caller's input proves nothing about
+    # the caller (CLAUDE.md: a green red-proof is a defect in the injection).
+    dirty, warn_dirty = provenance(
+        None, fake('deadbee', 'M ROADMAP.md\n M ROADMAP-archive.md'))
+    if 'UNCOMMITTED' not in dirty or not warn_dirty:
+        sys.exit(f'SELF-TEST FAILED (G): a modified source gave {dirty!r} / '
+                 f'{warn_dirty!r}, want an UNCOMMITTED header and a warning.')
+    for want in ('ROADMAP.md', 'ROADMAP-archive.md'):
+        if want not in warn_dirty:
+            sys.exit(f'SELF-TEST FAILED (G): the warning is {warn_dirty!r} and '
+                     f'does not name {want!r} intact. The path is being sliced '
+                     f'at a fixed column instead of split on the status code.')
+    if clean == dirty:
+        sys.exit(f'SELF-TEST FAILED (G): clean and dirty trees both report '
+                 f'{clean!r} — the header does not discriminate, so it says '
+                 f'nothing about which tree the figures describe.')
+
+    # An unreadable git must say UNKNOWN, never fall through to the clean
+    # branch: '' means clean and None means unknown, and collapsing them would
+    # report a clean tree wherever git is absent (LOOPS.md's gate rule — a check
+    # that cannot run must fail loudly, never skip quietly).
+    unknown, warn_unknown = provenance(None, fake(None, None))
+    if 'UNKNOWN' not in unknown or not warn_unknown:
+        sys.exit(f'SELF-TEST FAILED (G): an unreadable git gave {unknown!r} / '
+                 f'{warn_unknown!r}, want an UNKNOWN header and a warning. A '
+                 f'failed call is being read as a clean tree.')
+
     print('self-test OK — openness discriminates (A), a non-slice H2 is charged '
           'to nobody (B),\n  an open item outside every slice is caught and '
           'flagged (C), the\n  reconciliation refuses when a lane stops '
           'accounting for a marker (D), a citation is\n  charged to an OPEN '
-          'item and not to a closed one (E), and a `## ` row\n  inside a ``` '
-          'fence is not read as a heading (F).')
+          'item and not to a closed one (E), a `## ` row\n  inside a ``` '
+          'fence is not read as a heading (F), and the header tells a\n  '
+          'revision, a clean HEAD and an uncommitted tree apart (G).')
 
 
 def main():
