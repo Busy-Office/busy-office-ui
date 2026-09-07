@@ -320,6 +320,84 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 335 — 297.1 answered: both issues landed in the right channel, and the router that was supposed to put them there was never used (2026-09-08)
+
+**Dispatched by rule 4** as the oldest item that is not owner-blocked. `297.1`
+became answerable only recently: it needed a real filed item, and Slice 332
+had to fix the intake command before a wake could reliably read one.
+
+**Its Accept asked for the property, not a happy answer**: *"one wake reports
+on a real filed item, naming which intake it arrived in and whether that was
+the right one. Finding that the router sent it to the wrong place is a
+satisfying outcome."* The measurement is better than either branch it
+anticipated.
+
+### The channel was right. The router was bypassed.
+
+Two issues exist, `#1` (closed) and `#2` (open). Both belong in Issues on
+substance — `#1` is a defect with a pasted repro, `#2` is a feature request
+carrying the real ERP scenario the template asks for. **So the channel choice
+was correct both times.**
+
+**But neither used a template.** Measured on the API rather than inferred:
+
+```
+curl .../issues?state=all   ->  #1 labels: NONE   body starts "## What happens"
+                                #2 labels: NONE   body starts "## The gap"
+```
+
+`bug_report.yml` declares `labels: ["bug"]` and `feature_request.yml` declares
+`labels: ["enhancement"]`, and **GitHub applies those automatically to anything
+filed through the form**. Zero labels on both is therefore not a tidiness
+detail — it is proof the forms were never rendered. `blank_issues_enabled:
+true` is what let them through.
+
+**So the six enforced fields never fired.** The bug form would have demanded
+Version, Browser + version, Theme, Density, a minimal HTML repro, and
+expected-vs-actual. Issue `#1` supplied a version, a repro and exact command
+output **voluntarily** — which is the finding's sharpest edge: the intake
+produced excellent input, and **the machinery I built is not what made it
+good.** A disciplined reporter was.
+
+### The verdict on `blank_issues_enabled`
+
+**Left `true`, deliberately.** Both real issues are *better* than the form
+would have produced — `#1` reasons about why the rough edge is worth fixing
+and quotes the tool's own docstring; a six-field form has nowhere to put that.
+Forcing every reporter through a form to protect against the ones who would
+under-report is the ceremony this repo's base-rate rule refuses, and the
+measured base rate here is **2 of 2 filed well without it**. The templates
+stay as a floor for someone who needs the prompts, not a gate on someone who
+does not.
+
+### What is still untested, stated rather than quietly closed
+
+- **The Issues-vs-Discussions router has still never been exercised.** Both
+  issues were filed by the owner's own agent, which had no reason to consult a
+  contact link. A stranger choosing a door remains unobserved.
+- **The Discussions half is untested twice over.** Zero have been filed, and
+  until Slice 332 the command that reads them **could not run in a cloud
+  wake** — so a discussion filed any time before yesterday would have been
+  silently missed by most wakes. The intake was broken for the whole period
+  `297.1` was open waiting to test it.
+
+1. [x] **297.1 — DONE.** A real filed item is reported, naming the intake it
+       arrived in (Issues, twice, correctly) and whether the routing worked —
+       it was **bypassed**, which the Accept explicitly names as a satisfying
+       outcome. The config was not the thing that worked.
+
+1. [ ] **335.1 — The Discussions intake has never returned a non-empty list,
+       in either environment.** `332`'s REST fix is verified by controls (a
+       404 on an unserved route, a known-content issues list) but never by an
+       actual discussion, and `ENVIRONMENT.md` §8 says so outright.
+       - **Accept** — the property: the day a discussion exists, a wake re-runs
+         the REST command and confirms it appears with its number and title,
+         then records that the intake is proved end-to-end. **Filing one to
+         test it is explicitly allowed** and is cheaper than waiting — a
+         throwaway Q&A discussion, checked, then closed, would settle it. What
+         is NOT allowed is closing this on the controls alone; they prove the
+         route is served, not that a real item surfaces.
+
 ## Slice 334 — 315.3: `check:selftests` now RUNS each self-test, because the third rung of its own ladder was open — and the two costs that were expected to refuse it both measure zero (2026-09-07)
 
 **Dispatched by rule 4**, on the oldest genuinely dispatchable open item. Rule 1
@@ -3634,7 +3712,7 @@ signal an adopter produces.
   rather than assumed; a contact link to a category that does not exist is a
   dead end that looks like help.
 
-1. [ ] **297.1 — The first real intake run is the test of this, not the
+1. [x] **297.1 — DONE, Slice 335.** The first real intake run is the test of this, not the
        config.** Nothing has been filed yet (0 issues, 0 discussions), so every
        claim above is about a door nobody has walked through. The next wake
        that finds either intake non-empty should record what the split did:

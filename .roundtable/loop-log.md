@@ -1629,3 +1629,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-07 16:07 · Meta · refusal · retagging check-selftests.mjs @heuristic inside this slice — it would move the two counts stamped on the npm front page (54/20/34 -> 55/21/34) and require a README re-stamp; filed as 334.1 instead · refused · ac4a9a0f
 - 2026-09-07 16:07 · Meta · refusal · exit code alone as the execution signal — it cannot distinguish 18 passing cases from a branch that never ran, which is 315.1 exactly · refused · ac4a9a0f
 - 2026-09-07 16:09 · Roadmap · plan · cloud-wake hand-off for Slice 334; rule 3 armed at 3/3 for the next wake · logged · ac4a9a0f
+- 2026-09-08 03:00 · Continue · continue · 297.1 answered — both filed issues landed in Issues correctly, but zero labels prove both bypassed the templates entirely (blank_issues_enabled). Router never exercised; Discussions intake still never returned a non-empty list. Filed 335.1. · landed · 6a009a4b
