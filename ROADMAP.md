@@ -320,7 +320,7 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
-## Slice 319 — Objective grill of Slices 298, 300, 318: 23 of 25 published assertions reproduce, and both defects are in what shipped BESIDE the number. Slice 317 audited a three-part runtime claim, removed the false third, and re-published the other two unmeasured — one of them is also false (2026-09-07)
+## Slice 319 — Objective grill of Slices 298, 300, 318: 25 of 27 published assertions reproduce, and both defects are in what shipped BESIDE the number. Slice 317 audited a three-part runtime claim, removed the false third, and re-published the other two unmeasured — one of them is also false (2026-09-07)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
 (`git branch --show-current` empty), `ENVIRONMENT.md` trap 1, fixed with
@@ -350,7 +350,10 @@ same loop, which `LOOPS.md` says goes first rather than last, because a
 self-grill is the one most likely to go soft.
 
 **Full report:** `.roundtable/grill-objective-298-300-318-2026-09-07.md`.
-**23 of 25 re-run assertions reproduce exactly** — including every one of Slice
+**25 of 27 re-run assertions reproduce exactly** (10 of 10 on Slice 316, 9 of 10
+on 317, 6 of 7 on 318 — the per-slice tables in the report are the enumeration
+that count is reconciled against, which the first draft of this figure was not)
+— including every one of Slice
 316's (the 6-file image enumeration, the single `screenshot(` renderer, the
 25-day gap `4ef554fa` 2026-08-12 → `605829ca` 2026-09-06, the 274-byte favicon,
 DESIGN.md rule 7, and all three contrast ratios recomputed from the token hexes:

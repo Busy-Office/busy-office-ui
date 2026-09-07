@@ -116,7 +116,8 @@ each grill: 298 and 300 are armed by the **builds** of `298.1` and `300.2`
 grilled 300's P0 half, which is different work — and 318 is named by no grill.
 Nothing was dropped.
 
-**23 of 25 re-run assertions reproduce exactly.** Slice 316 carries **no
+**25 of 27 re-run assertions reproduce exactly** (10/10 on Slice 316, 9/10 on
+317, 6/7 on 318). Slice 316 carries **no
 defect**: the 6-file image enumeration, the single `screenshot(` renderer, the
 25-day gap, the 274-byte favicon, DESIGN.md rule 7, all three contrast ratios
 recomputed from the token hexes (7.56 / 2.54 / 7.46 on white), and the
