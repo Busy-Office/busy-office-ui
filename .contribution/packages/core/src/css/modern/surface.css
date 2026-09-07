@@ -1,0 +1,159 @@
+/* The surface refresh.
+
+   The dated signal in this system was never the density — it is that EVERY
+   box carries the same 1px hairline, so nothing has a hierarchy: a table, a
+   widget, a dialog and an input all sit at the same visual depth. The 2026
+   answer is tonal separation — a surface that is a step lighter than its
+   canvas reads as raised without a line around it.
+
+   What this deliberately does NOT do, because these are load-bearing:
+
+     - Inputs, selects and tables keep their borders. On a control the border
+       is the only affordance it has, and --bo-color-border-control is spec'd
+       at >= 3:1 for exactly that reason. Trading it for a tonal fill would be
+       a real accessibility regression, not a style choice.
+     - No backdrop-filter, no gradients, no imagery. Flat colour is what keeps
+       a 300-row table legible, and translucency cannot be used on a sticky
+       cell that must stay opaque over scrolled content.
+     - Density is untouched. Row heights and control heights are density's job. */
+
+:root {
+  /* Radii up one step. 6px was the 2019 default; 8px is the current one, and
+     the gap between md and lg widens so a dialog reads as a different KIND of
+     surface from a card rather than a slightly rounder one. */
+  --bo-radius-sm: 0.375rem; /* 6px, was 4px */
+  --bo-radius-md: 0.5rem; /* 8px, was 6px */
+  --bo-radius-lg: 0.75rem; /* 12px, was 8px */
+
+  /* The tonal step a raised surface sits at, and the hairline it uses when it
+     still needs one. Both are derived from existing tokens rather than being
+     new literals, so a brand re-map carries them for free. */
+  --bo-color-border-subtle: color-mix(in oklab, var(--bo-color-border-default) 55%, transparent);
+
+  /* A soft shadow is nearly invisible on a dark canvas, so it deepens while
+     the hairline above it carries more of the separation. Expressed with
+     light-dark() rather than a [data-theme] block for the same reason as the
+     colour tokens: it resolves off color-scheme, so it is correct for the
+     explicit themes and the OS-following default through one declaration. */
+  --bo-shadow-card: light-dark(
+    0 1px 2px rgb(0 0 0 / 0.04) 0 1px 3px rgb(0 0 0 / 0.06),
+    0 1px 2px rgb(0 0 0 / 0.3)
+  );
+  --bo-shadow-card-raised: light-dark(
+    0 2px 4px rgb(0 0 0 / 0.04) 0 4px 12px rgb(0 0 0 / 0.08),
+    0 4px 12px rgb(0 0 0 / 0.4)
+  );
+}
+
+/* light-dark() takes two comma-separated arguments, so a multi-shadow value
+   cannot be passed through it directly — the commas between shadow layers
+   would read as extra arguments. The two single-layer fallbacks above are
+   correct but flatter than intended, so the real values are set here, where
+   the layered light value can keep its commas. */
+:root {
+  --bo-shadow-card: 0 1px 2px rgb(0 0 0 / 0.04), 0 1px 3px rgb(0 0 0 / 0.06);
+  --bo-shadow-card-raised: 0 2px 4px rgb(0 0 0 / 0.04), 0 4px 12px rgb(0 0 0 / 0.08);
+}
+
+[data-theme="dark"] {
+  --bo-shadow-card: 0 1px 2px rgb(0 0 0 / 0.3);
+  --bo-shadow-card-raised: 0 4px 12px rgb(0 0 0 / 0.4);
+}
+
+/* And the OS-following default needs the dark values too, which is the one
+   place a media query is still required — @media, not a selector guard, so
+   an explicit [data-theme="light"] above still wins on specificity order. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bo-shadow-card: 0 1px 2px rgb(0 0 0 / 0.3);
+    --bo-shadow-card-raised: 0 4px 12px rgb(0 0 0 / 0.4);
+  }
+}
+
+/* Widgets and dashboard panels: tonal + soft elevation instead of a hairline. */
+.bo-widget {
+  border-color: var(--bo-color-border-subtle);
+  background: var(--bo-color-bg-surface);
+  box-shadow: var(--bo-shadow-card);
+}
+
+/* The widget header was separated by a rule. A tint separates it just as
+   clearly and stops the panel looking like a stack of boxed rows. */
+.bo-widget__header {
+  border-block-end-color: var(--bo-color-border-subtle);
+  background: color-mix(in oklab, var(--bo-color-bg-muted) 45%, transparent);
+}
+
+.bo-widget__band {
+  background: color-mix(in oklab, var(--bo-color-bg-muted) 45%, transparent);
+  border-block-start-color: var(--bo-color-border-subtle);
+}
+
+/* The table shell gets the same treatment. The GRID inside keeps every rule
+   it has — row separation in a dense table is the reading aid, not decoration. */
+.bo-data-table-container {
+  border-color: var(--bo-color-border-subtle);
+  box-shadow: var(--bo-shadow-card);
+}
+
+/* Dialogs and drawers sit at the raised tier. */
+.bo-dialog,
+.bo-offcanvas {
+  box-shadow: var(--bo-shadow-card-raised);
+  border: 1px solid var(--bo-color-border-subtle);
+}
+
+/* Menus and listboxes: less border, more elevation. */
+.bo-dropdown__menu,
+.bo-combobox__listbox {
+  border-color: var(--bo-color-border-subtle);
+  box-shadow: var(--bo-shadow-card-raised);
+}
+
+/* Optical alignment. text-box-trim removes the font's built-in leading above
+   the cap and below the baseline, which is what makes a 12px uppercase label
+   in a 30px row sit 1-2px high — visible at this density, and previously only
+   fixable with a magic-number margin per component.
+
+   Applied to single-line, box-tight things ONLY. Never to prose or a table
+   cell that can wrap: trimming both edges of a multi-line block collapses the
+   space between its lines. */
+@supports (text-box: trim-both cap alphabetic) {
+  .bo-badge,
+  .bo-chip,
+  .bo-kbd,
+  .bo-stat__label,
+  .bo-stat__value,
+  .bo-kv dt,
+  .bo-form-section__legend,
+  .bo-sidebar-nav__heading,
+  .bo-data-table thead th,
+  .bo-widget__title {
+    text-box: trim-both cap alphabetic;
+  }
+}
+
+/* Widget collapse, without the grid-template-rows hack.
+
+   Height cannot be animated to or from `auto`, so the framework animates a
+   grid track instead — the standard workaround, and it costs a wrapper
+   element plus a rule nobody can read the intent of. interpolate-size makes
+   the keyword itself interpolable, so block-size: auto animates directly.
+
+   Declared on :root because it INHERITS — that is the only way to turn it on,
+   and it is opt-in precisely because it also makes every other auto-sized
+   transition in the document animate. */
+@supports (interpolate-size: allow-keywords) {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+
+  .bo-widget__body {
+    transition: block-size var(--bo-motion-duration-slow) var(--bo-motion-easing-standard);
+    overflow: clip;
+  }
+
+  .bo-widget[data-collapsed="true"] .bo-widget__body {
+    block-size: 0;
+  }
+}

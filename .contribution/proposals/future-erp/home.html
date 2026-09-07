@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en" data-density="compact" data-theme="light">
+<head>
+<meta charset="utf-8">
+<title>Busy Office — Home</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../packages/core/src/css/index.css">
+<link rel="stylesheet" href="../../packages/core/src/css/integrations/htmx.css">
+<style>
+html,body{margin:0}
+body{background:var(--bo-color-bg-canvas);font-family:var(--bo-font-sans);color:var(--bo-color-text-primary)}
+a{color:var(--bo-color-accent);text-decoration:none}a:hover{color:var(--bo-color-accent-strong);text-decoration:underline}
+.bo-stat{padding:var(--bo-space-2) var(--bo-space-3);border-radius:var(--bo-radius-md)}.bo-stat:hover{background:var(--bo-state-hover-overlay)}
+#explain{inline-size:min(28rem,100%)}
+</style>
+<script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js"></script>
+</head>
+<body>
+<div class="bo-app-shell">
+  <div class="bo-app-shell__header">
+    <header class="bo-navbar">
+      <a class="bo-navbar__brand" href="#" style="display:inline-flex;align-items:center;gap:var(--bo-space-2)"><span class="bo-icon" aria-hidden="true" style="--bo-icon-src:url('../../packages/core/media/brand/logo-mono.svg');font-size:1.25rem"></span>Busy Office</a>
+      <!-- Demo-only role switch. In production the role comes from sign-in;
+           what it changes is the queue's contents and sort, the palette's
+           actions, and the density tier — never the product. -->
+      <form class="bo-segmented" role="group" aria-label="Role (demo)" style="margin-inline-start:var(--bo-space-4)">
+        <label class="bo-segmented__option"><input class="bo-segmented__input" type="radio" name="role" value="approver" checked hx-get="/home?role=approver" hx-target="#main" hx-select="#main"> Approver</label>
+        <label class="bo-segmented__option"><input class="bo-segmented__input" type="radio" name="role" value="ap" hx-get="/home?role=ap" hx-target="#main" hx-select="#main"> AP clerk</label>
+        <label class="bo-segmented__option"><input class="bo-segmented__input" type="radio" name="role" value="controller" hx-get="/home?role=controller" hx-target="#main" hx-select="#main"> Controller</label>
+        <label class="bo-segmented__option"><input class="bo-segmented__input" type="radio" name="role" value="warehouse" hx-get="/home?role=warehouse" hx-target="#main" hx-select="#main"> Warehouse</label>
+      </form>
+      <span class="bo-navbar__spacer"></span>
+      <span class="htmx-indicator" style="font-size:var(--bo-font-size-xs);color:var(--bo-color-text-muted)">Loading…</span>
+      <span class="bo-avatar">RK</span>
+    </header>
+  </div>
+
+  <div class="bo-app-shell__sidebar">
+    <nav class="bo-sidebar-nav" aria-label="Main">
+      <div class="bo-sidebar-nav__section">
+        <ul>
+          <li><a class="bo-sidebar-nav__link" href="#" aria-current="page"><span class="bo-sidebar-nav__icon bo-icon bo-icon--grid" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Home</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="../../examples/static-list-report/index.html"><span class="bo-sidebar-nav__icon bo-icon bo-icon--cart" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Purchase orders</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-sidebar-nav__icon bo-icon bo-icon--invoice" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Invoices</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-sidebar-nav__icon bo-icon bo-icon--truck" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Goods receipt</span></a></li>
+        </ul>
+      </div>
+      <div class="bo-sidebar-nav__section">
+        <div class="bo-sidebar-nav__heading">Finance</div>
+        <ul>
+          <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-sidebar-nav__icon bo-icon bo-icon--chart" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Period close</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="#"><span class="bo-sidebar-nav__icon bo-icon bo-icon--building" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Cost centres</span></a></li>
+        </ul>
+      </div>
+      <div class="bo-sidebar-nav__section">
+        <div class="bo-sidebar-nav__heading">Explorations</div>
+        <ul>
+          <li><a class="bo-sidebar-nav__link" href="readiness.html"><span class="bo-sidebar-nav__icon bo-icon bo-icon--check-circle" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Readiness panel</span></a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+  <main class="bo-app-shell__main" id="main"></main>
+</div>
+
+<!-- Two top-layer surfaces, shared by every role. -->
+<div id="palette-host"></div>
+<dialog class="bo-offcanvas bo-offcanvas--end" id="explain" aria-label="Explanation"></dialog>
+
+<script src="home-data.js"></script>
+<script src="home-render.js"></script>
+<script src="../../examples/static-list-report/behaviors.js"></script>
+<script type="module">
+const { initDataTables } = window.boBehaviors;
+
+window.addEventListener('DOMContentLoaded', () => {
+  if (window.htmx) {
+    htmx.config.allowScriptTags = false;
+    htmx.config.selfRequestsOnly = true;
+  }
+  /* Server-rendered on first paint in production; here the shim fills it. */
+  document.getElementById('main').outerHTML = window.HOME.mainHtml();
+  document.getElementById('palette-host').innerHTML = window.HOME.paletteHtml();
+  window.htmx?.process(document.body);
+  window.HOME.wirePalette();
+  initDataTables();
+});
+
+/* The palette is re-rendered when the role changes so its placeholder and
+   voice affordance follow the role. */
+document.body.addEventListener('htmx:after:swap', (e) => {
+  if (e.target.id === 'main') {
+    document.getElementById('palette-host').innerHTML = window.HOME.paletteHtml();
+    window.htmx?.process(document.getElementById('palette-host'));
+    window.HOME.wirePalette();
+  }
+});
+</script>
+</body>
+</html>

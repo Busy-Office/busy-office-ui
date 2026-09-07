@@ -1,0 +1,41 @@
+/* Density by input type.
+
+   Density is the framework's headline idea and its default is comfortable —
+   a value chosen for a library that cannot know its host. An APP does know:
+   a coarse pointer is a finger, and a finger needs the 44px tier. Shipping
+   compact to a warehouse tablet is a usability bug, and shipping spacious to
+   a mouse throws away half the rows on screen.
+
+   Both blocks are guarded with :not([data-density]), so this only ever fills
+   in a default nobody declared. Every explicit data-density in the project —
+   the ERP kit's compact, the RF kit's spacious, one compact table inside a
+   comfortable page — still wins, because those attributes stop these
+   selectors matching at all.
+
+   pointer, not width. A 1280px kiosk with a touchscreen needs the glove tier
+   and a 1280px laptop does not; a width query cannot tell them apart. Note
+   this is the PRIMARY pointer: a laptop with a touchscreen reports fine and
+   stays compact, which is right — the trackpad is what it is mostly driven
+   with. any-pointer would flip it to spacious on the same hardware. */
+
+@media (pointer: coarse) {
+  :root:not([data-density]) {
+    --bo-density-control-height: 2.75rem; /* 44px */
+    --bo-density-row-height: 3rem; /* 48px */
+    --bo-density-cell-padding-y: var(--bo-space-3);
+    --bo-density-cell-padding-x: var(--bo-space-6);
+    --bo-density-field-gap: var(--bo-space-6);
+    --bo-density-font-size: var(--bo-font-size-md);
+  }
+}
+
+@media (pointer: fine) {
+  :root:not([data-density]) {
+    --bo-density-control-height: 1.75rem; /* 28px */
+    --bo-density-row-height: 1.875rem; /* 30px */
+    --bo-density-cell-padding-y: var(--bo-space-1);
+    --bo-density-cell-padding-x: var(--bo-space-2);
+    --bo-density-field-gap: var(--bo-space-2);
+    --bo-density-font-size: var(--bo-font-size-sm);
+  }
+}

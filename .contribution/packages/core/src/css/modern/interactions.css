@@ -1,0 +1,124 @@
+/* Platform behaviours that replace JS or replace a hack. */
+
+/* ---- Anchor positioning -------------------------------------------------
+   Menus and listboxes were positioned with inline styles computed at author
+   time, which is wrong in the one case that matters: a dropdown on the last
+   row of a scrolled table opens downward, off the viewport.
+
+   Anchor positioning moves that decision to the compositor. For .bo-dropdown
+   no anchor-name is needed at all — a popover invoked by popovertarget gets
+   its invoker as an IMPLICIT anchor, so position-area alone is enough.
+
+   position-try-fallbacks is the actual fix: the browser tries the preferred
+   placement, and if the menu would overflow, it flips to the next one. That
+   is the behaviour that used to require a positioning library. */
+@supports (position-area: bottom span-right) {
+  .bo-dropdown__menu[popover] {
+    position: absolute;
+    position-area: bottom span-inline-end;
+    position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
+    position-visibility: anchors-visible;
+    margin: var(--bo-space-1) 0 0 0;
+    inset: auto;
+    /* Never taller than the space available — scroll inside instead of
+       running off the screen. */
+    max-block-size: var(--bo-anchor-max-height, 60vh);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* A combobox listbox is not a popover, so it needs a named anchor.
+     anchor-scope keeps the name from colliding between the many comboboxes
+     on a detail form — without it, every listbox on the page would resolve
+     to whichever input the browser saw first. */
+  .bo-combobox {
+    anchor-scope: --bo-combobox;
+  }
+
+  .bo-combobox .bo-input {
+    anchor-name: --bo-combobox;
+  }
+
+  .bo-combobox__listbox {
+    position: absolute;
+    position-anchor: --bo-combobox;
+    position-area: bottom span-inline-end;
+    position-try-fallbacks: flip-block;
+    inset: auto;
+    margin: var(--bo-space-1) 0 0 0;
+    inline-size: anchor-size(width);
+    min-inline-size: 16rem;
+    max-block-size: 40vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+/* ---- field-sizing -------------------------------------------------------
+   A textarea in an ERP form is either three rows too tall or two rows too
+   short, forever, because rows= is a guess made before the data exists.
+   field-sizing: content makes it fit what is actually in it.
+
+   The ceiling is the important half: a rejection reason can be four words or
+   four paragraphs, and an unbounded textarea pushes the form actions off the
+   screen. min/max in lh bounds it in lines, which is the unit the content is
+   actually measured in.
+
+   The seamless in-cell input gets the same treatment for the opposite reason
+   — it should occupy the width of its value, not a fixed column, so an
+   in-cell edit does not reflow the row it lives in. */
+@supports (field-sizing: content) {
+  textarea.bo-input {
+    field-sizing: content;
+    min-block-size: 3lh;
+    max-block-size: 12lh;
+  }
+
+  .bo-input--seamless:not(:focus),
+  .bo-select--seamless:not(:focus) {
+    field-sizing: content;
+    min-inline-size: 4ch;
+  }
+
+  .bo-tag-input__field {
+    field-sizing: content;
+    min-inline-size: 6ch;
+  }
+}
+
+/* ---- Sticky header, honestly -------------------------------------------
+   The sticky thead either always casts a shadow or never does. Always is
+   wrong: an unscrolled table gets a shadow over nothing, which is the exact
+   visual noise a dense grid cannot afford.
+
+   scroll-state(stuck) asks the only correct question — is this element
+   CURRENTLY stuck — and answers it in CSS, with no scroll listener and no
+   IntersectionObserver sentinel. The shadow appears at the moment the header
+   detaches and goes away when it sits back down.
+
+   container-type takes both values: bo-table's existing inline-size query
+   still resolves, and the scroll-state query is added alongside it. */
+@supports (container-type: scroll-state) {
+  .bo-data-table thead {
+    container-type: scroll-state;
+  }
+
+  @container scroll-state(stuck: top) {
+    .bo-data-table thead th {
+      box-shadow: 0 1px 0 var(--bo-color-border-strong), 0 4px 8px -4px rgb(0 0 0 / 0.15);
+    }
+  }
+
+  /* Same question for the sticky form-actions bar: it only needs its upward
+     shadow while there is content scrolled underneath it. */
+  .bo-form-actions {
+    container-type: scroll-state;
+    box-shadow: none;
+  }
+
+  @container scroll-state(stuck: bottom) {
+    .bo-form-actions {
+      box-shadow: var(--bo-shadow-up);
+    }
+  }
+}

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en" data-density="compact">
+<head>
+<meta charset="utf-8">
+<title>Busy Office — Purchase orders</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../packages/core/src/css/index.css">
+<!-- Opt-in HTMX integration: styles ONLY the classes HTMX itself sets
+     (.htmx-indicator, .htmx-swapping, .htmx-settling) and bridges the
+     framework's data-loading / aria-busy conventions onto request state.
+     Never imported by index.css — this is the documented opt-in path. -->
+<link rel="stylesheet" href="../../packages/core/src/css/integrations/htmx.css">
+<style>html,body{margin:0}body{background:var(--bo-color-bg-canvas);font-family:var(--bo-font-sans);color:var(--bo-color-text-primary)}a:not([class]){color:var(--bo-color-accent);text-decoration:none}a:not([class]):hover{color:var(--bo-color-accent-strong);text-decoration:underline}.bo-kv{margin:0}</style>
+<script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js"></script>
+<script>
+  /* The reference app vendors HTMX locally rather than loading it from a CDN
+     (roadmap 211.1) — an egress-restricted container refused unpkg outright
+     and burned four CI runs on what looked like a broken feature. Do the same
+     in production; the CDN here is only so this file opens standalone.
+
+     HTMX evaluates <script> tags inside swapped content by default. A server
+     rendering any user-supplied text into a fragment must turn that off, or a
+     stored-XSS payload executes on swap. This is the single most important
+     line in this file. */
+  document.addEventListener('htmx:config-request', () => {});
+  window.addEventListener('DOMContentLoaded', () => {
+    if (window.htmx) {
+      htmx.config.allowScriptTags = false;
+      htmx.config.selfRequestsOnly = true;
+    }
+  });
+</script>
+</head>
+<body>
+<div class="bo-app-shell">
+  <div class="bo-app-shell__header">
+    <header class="bo-navbar">
+      <a class="bo-navbar__brand" href="#" style="display:inline-flex;align-items:center;gap:var(--bo-space-2)"><span class="bo-icon" aria-hidden="true" style="--bo-icon-src:url('../../packages/core/media/brand/logo-mono.svg');font-size:1.25rem"></span>Busy Office</a>
+      <span style="font-size:var(--bo-font-size-sm);color:var(--bo-color-text-muted)">Client <span class="bo-u-mono">northwind-prod</span></span>
+      <span class="bo-navbar__spacer"></span>
+      <span class="htmx-indicator" style="font-size:var(--bo-font-size-xs);color:var(--bo-color-text-muted)">Loading…</span>
+      <button class="bo-btn bo-btn--ghost bo-btn--sm" type="button" id="theme">Dark</button>
+      <span class="bo-avatar">RK</span>
+    </header>
+  </div>
+
+  <div class="bo-app-shell__sidebar">
+    <nav class="bo-sidebar-nav" aria-label="Main">
+      <div class="bo-sidebar-nav__section">
+        <div class="bo-sidebar-nav__heading">Purchasing</div>
+        <ul>
+          <li><a class="bo-sidebar-nav__link" href="/"><span class="bo-sidebar-nav__icon bo-icon bo-icon--grid" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Overview</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="/pos" aria-current="page" hx-get="/pos" hx-target="#list" hx-select="#list" hx-push-url="true"><span class="bo-sidebar-nav__icon bo-icon bo-icon--cart" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Purchase orders</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="/inbox"><span class="bo-sidebar-nav__icon bo-icon bo-icon--invoice" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Inbox</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="/receive"><span class="bo-sidebar-nav__icon bo-icon bo-icon--truck" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Goods receipt</span></a></li>
+        </ul>
+      </div>
+      <div class="bo-sidebar-nav__section">
+        <div class="bo-sidebar-nav__heading">Finance</div>
+        <ul>
+          <li><a class="bo-sidebar-nav__link" href="/spend"><span class="bo-sidebar-nav__icon bo-icon bo-icon--chart" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Spend</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="/import"><span class="bo-sidebar-nav__icon bo-icon bo-icon--doc" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Import</span></a></li>
+          <li><a class="bo-sidebar-nav__link" href="/movements"><span class="bo-sidebar-nav__icon bo-icon bo-icon--box" aria-hidden="true"></span><span class="bo-sidebar-nav__label">Movements</span></a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+  <main class="bo-app-shell__main" id="main">
+    <div class="bo-cluster bo-cluster--split">
+      <h1 style="margin:0;font-size:var(--bo-font-size-base);font-weight:500;white-space:nowrap">Purchase orders</h1>
+      <a class="bo-btn" href="/pos/new">+ New purchase order</a>
+    </div>
+    <!-- Server-rendered on first paint in production. Here the shim fills it
+         on load, which is the one thing about this kit that is not how the
+         real app boots. -->
+    <div id="list"></div>
+  </main>
+</div>
+
+<script src="preview-shim.js"></script>
+<script src="behaviors.js"></script>
+<script type="module">
+const { initDataTables, initSavedViews, initTableToolbar } = window.boBehaviors;
+
+/* In production this is one call per page load against the real package:
+     import { initDataTables, initSavedViews, initTableToolbar } from '@busy-office/ui';
+   Call them again after a swap — the listeners install once, the
+   reconciliation pass re-runs. That is the documented re-call convention. */
+window.boInit = () => { initDataTables(); initSavedViews(); initTableToolbar(); };
+
+document.body.addEventListener('bo:table-export', (e) => {
+  /* The framework signals the INTENT; producing the file is the consumer's
+     code. Same split as bo:row-save and bo:scan. */
+  console.log('bo:table-export', e.detail.format);
+});
+
+/* The page ships NO data-theme, so it follows the OS through light-dark() —
+   the modern/ layer's OS-following default. The toggle therefore has to read
+   the RESOLVED scheme to label itself, not an attribute that isn't there yet;
+   labelling from the attribute alone is how you get a button that says "Dark"
+   on an already-dark page. Once clicked it writes an explicit theme, which
+   takes over from the OS for the rest of the session. */
+const themeBtn = document.getElementById('theme');
+const resolved = () =>
+  document.documentElement.getAttribute('data-theme') ||
+  (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+const label = () => { themeBtn.textContent = resolved() === 'dark' ? 'Light' : 'Dark'; };
+themeBtn.addEventListener('click', () => {
+  document.documentElement.setAttribute('data-theme', resolved() === 'dark' ? 'light' : 'dark');
+  label();
+});
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', label);
+label();
+
+/* Boot: render the list the way the server would have. */
+document.getElementById('list').outerHTML = window.__boPreview.listFragment('');
+window.htmx?.process(document.body);
+window.boInit();
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+/* View transitions on list -> detail.
+
+   This is the one change here that is about feel rather than correctness, and
+   it earns its place because of what an ERP list report actually is: the user
+   clicks INV-10234 in a 300-row table and a full page of a different shape
+   replaces it. Nothing tells them which row they are now looking at, so they
+   re-read the header to confirm. Morphing the row's identity into the object
+   page's title answers that before they can ask it.
+
+   Three properties of the implementation matter:
+
+     - It is CSS-only and additive. No JS, no router integration. A browser
+       without support does an instant cut — the same thing it does today.
+     - Only the identity morphs. The table does not slide, the page does not
+       wipe, nothing bounces. The invoice number is the only element with a
+       view-transition-name, so it is the only thing that animates.
+     - It is honestly reduced-motion gated. A cross-fade is exactly the kind
+       of full-viewport movement that triggers vestibular symptoms, and the
+       framework's rule is that motion is a token, so this obeys the same
+       switch as everything else. */
+
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-group(*) {
+  animation-duration: var(--bo-motion-duration-base);
+  animation-timing-function: var(--bo-motion-easing-standard);
+}
+
+/* The morph pair. The app sets a matching view-transition-name on the row's
+   invoice link and on the detail page's title — see InvoiceList.jsx and
+   RecordDetail.jsx, which both derive it from the document id, so every row
+   gets its own name and the browser can pair them. */
+.bo-vt-record-id {
+  view-transition-name: var(--bo-vt-name, none);
+  /* Keeps the mono figure from being scaled mid-flight, which would make the
+     tabular digits jitter as the box resizes. */
+  view-transition-class: bo-record-id;
+}
+
+::view-transition-group(.bo-record-id) {
+  animation-duration: var(--bo-motion-duration-base);
+}
+
+::view-transition-old(.bo-record-id),
+::view-transition-new(.bo-record-id) {
+  /* Cross-fade the two texts rather than scaling either — the type sizes
+     differ (13px cell to 24px heading) and a scaled glyph reads as blurred. */
+  height: 100%;
+  object-fit: none;
+  object-position: left center;
+}
+
+/* The root cross-fade is the part that can cause harm, so it is the part that
+   goes away. The named morph is a small, local, opt-in movement and is left
+   alone; the framework's duration tokens are already 0ms under this query, so
+   the group animations above collapse on their own. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(root),
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}

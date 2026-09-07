@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en" data-density="compact" data-theme="light">
+<head>
+<meta charset="utf-8">
+<title>Busy Office — PO-88213 readiness</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../packages/core/src/css/index.css">
+<link rel="stylesheet" href="../../packages/core/src/css/integrations/htmx.css">
+<style>
+html,body{margin:0}
+body{background:var(--bo-color-bg-canvas);font-family:var(--bo-font-sans);color:var(--bo-color-text-primary)}
+a{color:var(--bo-color-accent);text-decoration:none}a:hover{color:var(--bo-color-accent-strong);text-decoration:underline}
+.wrap{max-inline-size:64rem;margin-inline:auto;padding:var(--bo-space-6)}
+.bo-kv{margin:0}
+
+/* PROPOSED markup. If this pattern were adopted upstream these would be
+   .bo-readiness* in a component sheet; every value below is a framework
+   token, so nothing here introduces a new colour, radius or spacing step. */
+.rd{list-style:none;margin:0;padding:0}
+.rd__item{display:grid;grid-template-columns:auto 1fr auto;gap:var(--bo-space-3);align-items:start;padding:var(--bo-space-3) var(--bo-space-4);border-block-start:1px solid var(--bo-color-border-subtle,var(--bo-color-border-default))}
+.rd__item:first-child{border-block-start:0}
+.rd__icon{font-size:1.125rem;line-height:1.25}
+.rd__item[data-severity="blocker"] .rd__icon{color:var(--bo-color-danger)}
+.rd__item[data-severity="warning"] .rd__icon{color:var(--bo-color-warning-strong)}
+.rd__item[data-severity="pass"] .rd__icon{color:var(--bo-color-success-strong)}
+.rd__item[data-severity="blocker"]{background:var(--bo-color-danger-subtle)}
+.rd__item[data-severity="warning"]{background:var(--bo-color-warning-subtle)}
+.rd__what{font-weight:500}
+.rd__meta{font-size:var(--bo-font-size-xs);color:var(--bo-color-text-muted);margin-block-start:2px}
+.rd__fix{display:flex;gap:var(--bo-space-2);align-items:center;flex-wrap:wrap}
+.rd__item[data-severity="pass"]{color:var(--bo-color-text-muted)}
+.rd__item[data-severity="pass"] .rd__what{font-weight:400}
+.gate{display:flex;gap:var(--bo-space-3);align-items:center;flex-wrap:wrap;padding:var(--bo-space-4);border-block-start:1px solid var(--bo-color-border-subtle,var(--bo-color-border-default))}
+.gate__reason{font-size:var(--bo-font-size-sm);color:var(--bo-color-text-secondary)}
+</style>
+<script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+  <nav aria-label="Breadcrumb"><ol class="bo-breadcrumb">
+    <li><a href="/">Purchasing</a></li>
+    <li><a href="../../examples/static-list-report/index.html">Purchase orders</a></li>
+    <li><span aria-current="page">PO-88213</span></li>
+  </ol></nav>
+
+  <div class="bo-cluster bo-cluster--split">
+    <div class="bo-cluster">
+      <h1 style="margin:0;font-size:var(--bo-font-size-xl);font-weight:600;flex:0 0 auto;white-space:nowrap">PO-88213</h1>
+      <span class="bo-badge bo-badge--type">Purchase order</span>
+      <span class="bo-badge bo-badge--warning">Pending</span>
+    </div>
+  </div>
+
+  <dl class="bo-kv" style="margin-block:var(--bo-space-4)">
+    <div><dt>Vendor</dt><dd>Nobody Ltd</dd></div>
+    <div><dt>Requisition</dt><dd class="bo-u-mono">RQ-4471</dd></div>
+    <div><dt>Period</dt><dd>08/2026</dd></div>
+    <div><dt>Amount</dt><dd><span class="bo-amount"><span class="bo-amount__currency">$</span><span class="bo-amount__value">23,400<span class="bo-amount__fraction">.00</span></span></span></dd></div>
+  </dl>
+
+  <!-- The panel. Server-rendered, and this is the load-bearing constraint:
+       it must be produced by the SAME validator the post endpoint runs. A
+       readiness list computed anywhere else eventually disagrees with what
+       POST actually accepts, and a panel that says "ready" over a request
+       that 422s is worse than no panel at all. -->
+  <div id="readiness"></div>
+
+  <details style="margin-block-start:var(--bo-space-6)">
+    <summary style="cursor:pointer;font-size:var(--bo-font-size-sm);color:var(--bo-color-text-muted)">What this prototype is</summary>
+    <div class="bo-prose" style="font-size:var(--bo-font-size-sm)">
+      <p><strong>This pattern is not in <code>busy-office-ui</code>.</strong> It is a proposal, built
+      from the framework's real components and tokens so it can be judged in place. Everything it
+      renders — alerts, badges, widget, buttons, form fields, icons — is existing framework markup;
+      only the <code>.rd*</code> layout classes are new, and they use nothing but published tokens.</p>
+      <p>The problem it addresses: validation today answers one field at a time. A user learns that
+      the cost center is closed, fixes it, saves, and <em>then</em> learns the amount exceeds their
+      approval limit. Three round trips to discover three facts the server knew at the first
+      request.</p>
+      <p>Four decisions worth arguing with:</p>
+      <ul>
+        <li><strong>Passed checks stay visible</strong> (collapsed, quiet). A list of only failures
+        can't be trusted to be complete — showing what was checked is what makes the panel
+        authoritative rather than advisory.</li>
+        <li><strong>Blockers and warnings are separated by what they do</strong>, not by how bad they
+        feel. A blocker stops the post; a warning does not. Nothing in between, because "sort of
+        blocking" is what teaches users to ignore the panel.</li>
+        <li><strong>Every entry says who can resolve it.</strong> "You can fix this" and "Needs
+        Finance" are different user journeys, and conflating them is why approval chains stall —
+        the user stares at a field they have no authority over.</li>
+        <li><strong>The disabled action carries its reason inline.</strong> A greyed button with no
+        explanation is the single most common ERP dead end.</li>
+      </ul>
+      <p>Two-channel throughout, per the framework's rule: every severity carries a glyph and a word,
+      never the tint alone.</p>
+    </div>
+  </details>
+</div>
+
+<script>
+/* PREVIEW ONLY — stands in for the server, exactly like preview-shim.js in
+   this folder. In production every fragment below is a template response and
+   the check list comes from the domain validator. */
+
+const state = { cc: 'CC-9900', escalation: 'none', taxCode: 'V1' };
+
+const CCS = [
+  ['CC-9900', 'Legacy projects — closed for posting'],
+  ['CC-4021', 'Facilities — open'],
+  ['CC-1180', 'Manufacturing — open'],
+  ['CC-2205', 'Logistics — open']
+];
+
+const LIMIT = 15000;
+const AMOUNT = 23400;
+
+/* One validator. The panel and the post endpoint both read this — that is the
+   whole point of the pattern. */
+function checks() {
+  const out = [];
+
+  out.push(state.cc === 'CC-9900'
+    ? { id: 'cc', severity: 'blocker', what: 'Cost center ' + state.cc + ' is closed for posting.',
+        where: 'Header → Cost center', who: 'You can fix this', fix: 'cc' }
+    : { id: 'cc', severity: 'pass', what: 'Cost center ' + state.cc + ' is open for period 08/2026.' });
+
+  out.push(state.escalation === 'approved'
+    ? { id: 'limit', severity: 'pass', what: 'Escalation approved by Finance — the $15,000 limit no longer applies.' }
+    : state.escalation === 'requested'
+      ? { id: 'limit', severity: 'blocker', what: 'Escalation requested — waiting on Finance.',
+          where: 'Approval chain', who: 'Needs Finance · requested 2 minutes ago', fix: 'waiting' }
+      : { id: 'limit', severity: 'blocker',
+          what: '$23,400.00 exceeds your approval limit of $15,000.00.',
+          where: 'Approval chain', who: 'Needs Finance — you cannot clear this yourself', fix: 'escalate' });
+
+  out.push({ id: 'period', severity: 'warning',
+    what: 'Posting period 08/2026 closes in 4 hours.',
+    where: 'Posts after 18:00 land in 09/2026', who: 'Advisory — does not block' });
+
+  out.push({ id: 'tax', severity: 'pass', what: 'Tax code V1 (19% input tax) matches the vendor country.' });
+  out.push({ id: 'vendor', severity: 'pass', what: 'Nobody Ltd has no payment block.' });
+  out.push({ id: 'budget', severity: 'pass', what: 'Cost center budget has $91,200.00 remaining this period.' });
+
+  return out;
+}
+
+const GLYPH = { blocker: '&#10005;', warning: '&#9888;', pass: '&#10003;' };
+const WORD = { blocker: 'Blocker', warning: 'Warning', pass: 'Passed' };
+const TONE = { blocker: 'danger', warning: 'warning', pass: 'success' };
+
+function fixControl(c) {
+  if (c.fix === 'cc') {
+    return '<select class="bo-select" name="cc" aria-label="Cost center"'
+      + ' hx-post="/pos/PO-88213/readiness" hx-target="#readiness" hx-swap="innerHTML">'
+      + CCS.map(([code, label]) =>
+          '<option value="' + code + '"' + (code === state.cc ? ' selected' : '') + '>' + code + ' — ' + label + '</option>').join('')
+      + '</select>';
+  }
+  if (c.fix === 'escalate') {
+    return '<button class="bo-btn bo-btn--secondary bo-btn--sm" type="button"'
+      + ' hx-post="/pos/PO-88213/escalate" hx-target="#readiness" hx-swap="innerHTML">Request escalation</button>';
+  }
+  if (c.fix === 'waiting') {
+    /* Not a spinner: a named next actor with a way to nudge them. "Pending"
+       with no owner is how an approval chain quietly stalls for a week. */
+    return '<span class="bo-byline bo-byline--compact"><span class="bo-avatar bo-byline__avatar" aria-hidden="true">FT</span>F. Toft</span>'
+      + '<button class="bo-btn bo-btn--ghost bo-btn--sm" type="button"'
+      + ' hx-post="/pos/PO-88213/approve-escalation" hx-target="#readiness" hx-swap="innerHTML">Simulate approval</button>';
+  }
+  return '';
+}
+
+function render() {
+  const list = checks();
+  const blockers = list.filter((c) => c.severity === 'blocker');
+  const warnings = list.filter((c) => c.severity === 'warning');
+  const passed = list.filter((c) => c.severity === 'pass');
+  const ready = blockers.length === 0;
+
+  const row = (c) =>
+    '<li class="rd__item" data-severity="' + c.severity + '">'
+    + '<span class="rd__icon" aria-hidden="true">' + GLYPH[c.severity] + '</span>'
+    + '<div><div class="rd__what">'
+    + '<span class="bo-visually-hidden">' + WORD[c.severity] + ': </span>' + c.what + '</div>'
+    + (c.where || c.who
+        ? '<div class="rd__meta">' + [c.where, c.who].filter(Boolean).join(' · ') + '</div>'
+        : '')
+    + '</div>'
+    + '<div class="rd__fix">'
+    + (c.severity === 'pass' ? '' : '<span class="bo-badge bo-badge--' + TONE[c.severity] + '">' + WORD[c.severity] + '</span>')
+    + fixControl(c) + '</div></li>';
+
+  return ''
+  + '<section class="bo-widget">'
+  + '<header class="bo-widget__header">'
+  + '<h2 class="bo-widget__title">'
+  + (ready ? 'Ready to post' : blockers.length + (blockers.length === 1 ? ' blocker' : ' blockers') + ' before this can post')
+  + '</h2>'
+  + '<span class="bo-badge bo-badge--' + (ready ? 'success' : 'danger') + '">'
+  + (ready ? 'Ready' : 'Not ready') + '</span>'
+  + '</header>'
+
+  /* The live region announces the transition, not just the final state — a
+     screen-reader user resolving a blocker needs to hear the count fall. */
+  + '<div class="bo-visually-hidden" role="status" aria-live="polite">'
+  + (ready ? 'All checks passed. This purchase order can be posted.'
+           : blockers.length + ' blockers remaining, ' + warnings.length + ' warnings.')
+  + '</div>'
+
+  + '<div class="bo-widget__body bo-widget__body--flush">'
+  + '<ul class="rd">' + blockers.concat(warnings).map(row).join('') + '</ul>'
+
+  + '<details' + (ready ? ' open' : '') + ' style="border-block-start:1px solid var(--bo-color-border-subtle,var(--bo-color-border-default))">'
+  + '<summary style="cursor:pointer;padding:var(--bo-space-3) var(--bo-space-4);font-size:var(--bo-font-size-sm);color:var(--bo-color-text-secondary)">'
+  + passed.length + ' checks passed</summary>'
+  + '<ul class="rd">' + passed.map(row).join('') + '</ul>'
+  + '</details>'
+
+  + '<div class="gate">'
+  + '<button class="bo-btn" type="button"' + (ready ? '' : ' disabled') + '>Post to ledger</button>'
+  + '<button class="bo-btn bo-btn--secondary" type="button">Save draft</button>'
+  /* The reason travels WITH the disabled control. A greyed button that does
+     not say why is the most common dead end in this kind of screen. */
+  + '<span class="gate__reason">'
+  + (ready
+      ? 'Posts to period 08/2026. This cannot be reversed without a credit note.'
+      : 'Blocked by: ' + blockers.map((b) => b.where || b.id).join(', ') + '.')
+  + '</span>'
+  + '</div>'
+
+  + '</div></section>';
+}
+
+/* Request interception — same approach as preview-shim.js. */
+document.addEventListener('htmx:beforeRequest', (e) => {
+  const d = e.detail;
+  const path = String(d.pathInfo?.requestPath || d.requestConfig?.path || '');
+  const body = d.requestConfig?.parameters || {};
+
+  if (/\/readiness$/.test(path)) { if (body.cc) state.cc = body.cc; }
+  else if (/\/escalate$/.test(path)) state.escalation = 'requested';
+  else if (/\/approve-escalation$/.test(path)) state.escalation = 'approved';
+  else return;
+
+  e.preventDefault();
+  const target = d.target || document.getElementById('readiness');
+  target.innerHTML = render();
+  window.htmx?.process(target);
+});
+
+document.getElementById('readiness').innerHTML = render();
+window.addEventListener('DOMContentLoaded', () => {
+  if (window.htmx) {
+    /* HTMX evaluates <script> in swapped content by default — off, always,
+       anywhere user-supplied text can reach a fragment. */
+    htmx.config.allowScriptTags = false;
+    htmx.config.selfRequestsOnly = true;
+    htmx.process(document.body);
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1311 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "busy-office-ui",
+  "homepage": "https://github.com/Busy-Office/busy-office-ui",
+  "items": [
+    {
+      "name": "button",
+      "type": "registry:item",
+      "title": "Button",
+      "description": "The framework action control, in solid, secondary, ghost and danger settings.",
+      "categories": [
+        "actions",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/button/button.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/button/button.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<button class=\"bo-btn\" type=\"button\">Post invoice</button>\n<button class=\"bo-btn bo-btn--secondary\" type=\"button\">Cancel</button>\n<button class=\"bo-btn bo-btn--ghost\" type=\"button\">Views</button>\n<button class=\"bo-btn bo-btn--danger-ghost\" type=\"button\">Reject</button>\n<button class=\"bo-btn bo-btn--sm bo-btn--icon bo-btn--ghost\" type=\"button\" aria-label=\"Dismiss\">\n  <span class=\"bo-icon bo-icon--close\" aria-hidden=\"true\"></span>\n</button>\n\nNo JavaScript required.\nExact values live in components/button/button.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "button-group",
+      "type": "registry:item",
+      "title": "ButtonGroup",
+      "description": "Joins a row of buttons into one visually connected toolbar control.",
+      "categories": [
+        "actions",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/button/button.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/button/button.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-btn-group\">\n  <button class=\"bo-btn bo-btn--secondary\" type=\"button\">Copy</button>\n  <button class=\"bo-btn bo-btn--secondary\" type=\"button\">Branch</button>\n</div>\n<div class=\"bo-btn-group bo-btn-group--bar\">\n  <button class=\"bo-btn bo-btn--secondary\" type=\"button\">Back</button>\n  <button class=\"bo-btn\" type=\"button\">Confirm</button>\n</div>\n\nNo JavaScript required.\nExact values live in components/button/button.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "icon",
+      "type": "registry:item",
+      "title": "Icon",
+      "description": "A CSS mask icon that takes currentColor and scales with the surrounding font size.",
+      "categories": [
+        "actions",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/icon/icon.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/icon/icon.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<span class=\"bo-icon bo-icon--truck\" aria-hidden=\"true\"></span>\n<!-- Extend with the custom property, not a new class -->\n<span class=\"bo-icon\" role=\"img\" aria-label=\"Package\"\n      style=\"--bo-icon-src: url('/icons/package.svg')\"></span>\n\nNo JavaScript required.\nExact values live in components/icon/icon.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "kbd",
+      "type": "registry:item",
+      "title": "Kbd",
+      "description": "A single key or chord in a keyboard shortcut.",
+      "categories": [
+        "actions",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/kbd/kbd.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/kbd/kbd.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\nPress <kbd class=\"bo-kbd\">Ctrl</kbd> + <kbd class=\"bo-kbd\">S</kbd> to save.\n\nNo JavaScript required.\nExact values live in components/kbd/kbd.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "form-field",
+      "type": "registry:item",
+      "title": "FormField",
+      "description": "Label, control, hint and error message as one vertical unit.",
+      "categories": [
+        "forms",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/form/form-field.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/form/form-field.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-form-field\">\n  <label class=\"bo-form-field__label\" for=\"cc\">Cost center</label>\n  <input class=\"bo-input\" id=\"cc\" name=\"cc\" value=\"CC-9900\"\n         aria-invalid=\"true\" aria-describedby=\"cc-msg\">\n  <span class=\"bo-form-field__hint\">Closed cost centers cannot be posted to.</span>\n  <span class=\"bo-form-field__message\" id=\"cc-msg\" role=\"alert\">Cost center is closed for posting.</span>\n</div>\n\nNo JavaScript required.\nExact values live in components/form/form-field.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "input",
+      "type": "registry:item",
+      "title": "Input",
+      "description": "The text input, with numeric, code and seamless in-cell variants.",
+      "categories": [
+        "forms",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/form/input.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/form/input.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<input class=\"bo-input\" name=\"q\" placeholder=\"Search…\">\n<input class=\"bo-input bo-input--numeric\" name=\"amount\" value=\"17329.42\">\n<input class=\"bo-input bo-input--code\" name=\"id\" value=\"INV-10234\">\n<input class=\"bo-input bo-input--seamless\" name=\"cc\" value=\"CC-4021\">\n<textarea class=\"bo-input\" name=\"note\"></textarea>\n\nNo JavaScript required.\nExact values live in components/form/input.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "select",
+      "type": "registry:item",
+      "title": "Select",
+      "description": "The native select, restyled with a themed chevron.",
+      "categories": [
+        "forms",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/form/select.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/form/select.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<select class=\"bo-select\" name=\"status\">\n  <option>All statuses</option>\n  <option>Pending</option>\n</select>\n\nNo JavaScript required.\nExact values live in components/form/select.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "choice",
+      "type": "registry:item",
+      "title": "Choice",
+      "description": "A checkbox or radio with its label, as one clickable target.",
+      "categories": [
+        "forms",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/form/checkbox-radio.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/form/checkbox-radio.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<label class=\"bo-choice\">\n  <input type=\"checkbox\" class=\"bo-checkbox\" name=\"post\" checked> Post immediately\n</label>\n<label class=\"bo-choice\">\n  <input type=\"radio\" class=\"bo-radio\" name=\"terms\" value=\"net30\"> Net 30\n</label>\n\nNo JavaScript required.\nExact values live in components/form/checkbox-radio.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "form-section",
+      "type": "registry:item",
+      "title": "FormSection",
+      "description": "A bordered group of fields with an uppercase legend.",
+      "categories": [
+        "forms",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/form/form-section.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/form/form-section.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<fieldset class=\"bo-form-section bo-form-section--label-start\">\n  <legend class=\"bo-form-section__legend\">Header</legend>\n  <!-- .bo-form-field children; subgrid aligns every label column -->\n</fieldset>\n\nNo JavaScript required.\nExact values live in components/form/form-section.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "form-actions",
+      "type": "registry:item",
+      "title": "FormActions",
+      "description": "The sticky save/cancel strip at the bottom of a record.",
+      "categories": [
+        "forms",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/form/form-field.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/form/form-field.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-form-actions\">\n  <button class=\"bo-btn bo-btn--secondary\" type=\"button\">Cancel</button>\n  <button class=\"bo-btn\" type=\"submit\">Save</button>\n</div>\n\nNo JavaScript required.\nExact values live in components/form/form-field.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "combobox",
+      "type": "registry:item",
+      "title": "Combobox",
+      "description": "Type-ahead picker over a coded ERP list — code, name and a meta column per row.",
+      "categories": [
+        "forms",
+        "erp"
+      ],
+      "dependencies": [
+        "@busy-office/ui"
+      ],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/combobox/combobox.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/combobox/combobox.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-combobox\">\n  <input class=\"bo-input\" role=\"combobox\" aria-expanded=\"false\" aria-controls=\"cc-list\"\n         autocomplete=\"off\" name=\"cc\"\n         hx-get=\"/cost-centers\" hx-trigger=\"input changed delay:250ms, search\"\n         hx-target=\"#cc-list\" hx-swap=\"innerHTML\">\n  <ul class=\"bo-combobox__listbox\" id=\"cc-list\" role=\"listbox\" hidden>\n    <li class=\"bo-combobox__option\" role=\"option\" aria-selected=\"false\">\n      <span class=\"bo-combobox__option-code\">100042</span>\n      <span class=\"bo-combobox__option-label\">Acme Supply Co.</span>\n      <span class=\"bo-combobox__option-meta\">Net 30</span>\n    </li>\n  </ul>\n</div>\n<!-- Options come from the server. initCombobox() owns ARIA + keyboard. -->\n\nBehaviour: import { initCombobox } from '@busy-office/ui' and call it once per page; swapped-in content is picked up by delegation.\nExact values live in components/combobox/combobox.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "tag-input",
+      "type": "registry:item",
+      "title": "TagInput",
+      "description": "Free-text chips in one field — cost-center lists, approver sets, keywords.",
+      "categories": [
+        "forms",
+        "erp"
+      ],
+      "dependencies": [
+        "@busy-office/ui"
+      ],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/tag-input/tag-input.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/tag-input/tag-input.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-tag-input\">\n  <span class=\"bo-tag-input__tag\">CC-4021\n    <button class=\"bo-tag-input__remove\" type=\"button\" aria-label=\"Remove CC-4021\">&times;</button>\n  </span>\n  <input class=\"bo-tag-input__field\" placeholder=\"Add…\">\n</div>\n<!-- initTagInput() emits bo:tag-add / bo:tag-remove; your app owns the data. -->\n\nBehaviour: import { initTagInput } from '@busy-office/ui' and call it once per page; swapped-in content is picked up by delegation.\nExact values live in components/tag-input/tag-input.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "quantity",
+      "type": "registry:item",
+      "title": "Quantity",
+      "description": "A quantity with stepper buttons and a unit of measure.",
+      "categories": [
+        "forms",
+        "erp"
+      ],
+      "dependencies": [
+        "@busy-office/ui"
+      ],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/quantity/quantity.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/quantity/quantity.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-quantity\">\n  <button class=\"bo-btn bo-btn--secondary bo-quantity__step\" type=\"button\" aria-label=\"Decrease\">&minus;</button>\n  <input class=\"bo-quantity__input\" type=\"number\" name=\"qty\" value=\"12\" step=\"1\">\n  <button class=\"bo-btn bo-btn--secondary bo-quantity__step\" type=\"button\" aria-label=\"Increase\">+</button>\n  <span class=\"bo-quantity__unit\">PC</span>\n</div>\n\nBehaviour: import { initQuantity } from '@busy-office/ui' and call it once per page; swapped-in content is picked up by delegation.\nExact values live in components/quantity/quantity.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "money-input",
+      "type": "registry:item",
+      "title": "MoneyInput",
+      "description": "An amount and its currency as one joined control.",
+      "categories": [
+        "forms",
+        "erp"
+      ],
+      "dependencies": [
+        "@busy-office/ui"
+      ],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/money/money.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/money/money.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-money\">\n  <input class=\"bo-input bo-money__amount\" name=\"amount\" inputmode=\"decimal\" value=\"17329.42\">\n  <select class=\"bo-select bo-money__currency\" name=\"currency\" aria-label=\"Currency\">\n    <option>USD</option><option>EUR</option>\n  </select>\n</div>\n\nBehaviour: import { initMoneyField } from '@busy-office/ui' and call it once per page; swapped-in content is picked up by delegation.\nExact values live in components/money/money.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "file-upload",
+      "type": "registry:item",
+      "title": "FileUpload",
+      "description": "A dropzone plus the list of what has been attached.",
+      "categories": [
+        "forms",
+        "erp"
+      ],
+      "dependencies": [
+        "@busy-office/ui"
+      ],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/file-upload/file-upload.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/file-upload/file-upload.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-file-dropzone\">\n  <span class=\"bo-file-dropzone__hint\">Drop files here, or</span>\n  <input type=\"file\" class=\"bo-file-input\" name=\"files\" multiple>\n</div>\n<ul class=\"bo-file-list\">\n  <li class=\"bo-file-list__item\">\n    <span class=\"bo-icon bo-icon--doc\" aria-hidden=\"true\"></span>\n    <span class=\"bo-file-list__name\">invoice-10234.pdf</span>\n    <span class=\"bo-file-list__size\">412 kB</span>\n  </li>\n</ul>\n\nBehaviour: import { initFileDropzone } from '@busy-office/ui' and call it once per page; swapped-in content is picked up by delegation.\nExact values live in components/file-upload/file-upload.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "segmented",
+      "type": "registry:item",
+      "title": "Segmented",
+      "description": "A single-choice switch: density, view mode, period.",
+      "categories": [
+        "forms",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/segmented/segmented.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/segmented/segmented.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-segmented\" role=\"group\">\n  <label class=\"bo-segmented__option\">\n    <input class=\"bo-segmented__input\" type=\"radio\" name=\"density\" value=\"compact\" checked> Compact\n  </label>\n  <label class=\"bo-segmented__option\">\n    <input class=\"bo-segmented__input\" type=\"radio\" name=\"density\" value=\"comfortable\"> Comfortable\n  </label>\n</div>\n\nNo JavaScript required.\nExact values live in components/segmented/segmented.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "data-table",
+      "type": "registry:item",
+      "title": "DataTable",
+      "description": "The dense ERP table: sticky header, selection, sort, row states and auto-compaction.",
+      "categories": [
+        "data",
+        "erp"
+      ],
+      "dependencies": [
+        "@busy-office/ui"
+      ],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/data-table/data-table.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/data-table/data-table.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-data-table-container\" data-any-selected=\"false\">\n  <div class=\"bo-data-table__toolbar\">\n    <div class=\"bo-cluster\">312 invoices</div>\n    <div class=\"bo-data-table__bulk-actions\">\n      <span class=\"bo-data-table__selection-count\" aria-live=\"polite\"></span>\n      <button class=\"bo-btn bo-btn--sm bo-btn--secondary\" type=\"submit\">Approve</button>\n    </div>\n  </div>\n  <table class=\"bo-data-table bo-data-table--striped\">\n    <thead><tr>\n      <th scope=\"col\"><input type=\"checkbox\" class=\"bo-checkbox bo-data-table__select-all\" aria-label=\"Select all rows\"></th>\n      <th scope=\"col\" class=\"bo-data-table__col--code\" aria-sort=\"ascending\">\n        <button class=\"bo-data-table__sort-btn\" type=\"button\">Invoice #</button>\n      </th>\n      <th scope=\"col\" class=\"bo-data-table__col--numeric\">Amount</th>\n    </tr></thead>\n    <tbody>\n      <tr id=\"row-INV-10234\" data-row-id=\"INV-10234\">\n        <td><input type=\"checkbox\" class=\"bo-checkbox bo-data-table__row-select\" name=\"id\" value=\"INV-10234\" aria-label=\"Select INV-10234\"></td>\n        <td class=\"bo-data-table__col--code\">INV-10234</td>\n        <td class=\"bo-data-table__col--numeric\">17,329.42</td>\n      </tr>\n    </tbody>\n  </table>\n  <div class=\"bo-data-table__footer\"><!-- .bo-pagination --></div>\n</div>\n<!-- initDataTables() maintains data-any-selected and the live count.\n     Row states: data-row-state=\"dirty|error|warning\" on the <tr>. -->\n\nBehaviour: import { initDataTables } from '@busy-office/ui' and call it once per page; swapped-in content is picked up by delegation.\nExact values live in components/data-table/data-table.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "tree-table",
+      "type": "registry:item",
+      "title": "TreeTable",
+      "description": "A hierarchy inside a table — cost-center rollups, BOM explosions, org structures.",
+      "categories": [
+        "data",
+        "erp"
+      ],
+      "dependencies": [
+        "@busy-office/ui"
+      ],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/tree-table/tree-table.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/tree-table/tree-table.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<table class=\"bo-data-table bo-tree-table\">\n  <tbody>\n    <tr data-tree-level=\"1\" aria-expanded=\"true\">\n      <td><button class=\"bo-tree-table__toggle\" type=\"button\" aria-label=\"Collapse Operations\">&#9662;</button>Operations</td>\n    </tr>\n    <tr data-tree-level=\"2\">\n      <td><span class=\"bo-tree-table__spacer\" aria-hidden=\"true\"></span>Warehouse</td>\n    </tr>\n  </tbody>\n</table>\n\nBehaviour: import { initTreeTable } from '@busy-office/ui' and call it once per page; swapped-in content is picked up by delegation.\nExact values live in components/tree-table/tree-table.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "tree",
+      "type": "registry:item",
+      "title": "Tree",
+      "description": "A collapsible hierarchy for navigation — org units, catalogues, folders.",
+      "categories": [
+        "data",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/tree/tree.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/tree/tree.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<ul class=\"bo-tree\">\n  <li><details class=\"bo-tree__branch\" open>\n    <summary class=\"bo-tree__label\">Operations</summary>\n    <ul><li><a class=\"bo-tree__link\" href=\"/ou/warehouse\" aria-current=\"page\">Warehouse</a></li></ul>\n  </details></li>\n</ul>\n\nNo JavaScript required.\nExact values live in components/tree/tree.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "pagination",
+      "type": "registry:item",
+      "title": "Pagination",
+      "description": "Server-side paging for a list report — the framework’s answer instead of virtual scroll.",
+      "categories": [
+        "data",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/pagination/pagination.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/pagination/pagination.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<nav class=\"bo-pagination\" aria-label=\"Pagination\">\n  <a class=\"bo-pagination__btn\" href=\"?page=1\" aria-disabled=\"true\">Previous</a>\n  <span class=\"bo-pagination__info\">1–50 of 312</span>\n  <a class=\"bo-pagination__btn\" href=\"?page=2\">Next</a>\n</nav>\n\nNo JavaScript required.\nExact values live in components/pagination/pagination.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "filter-bar",
+      "type": "registry:item",
+      "title": "FilterBar",
+      "description": "The row of filter controls above a list report.",
+      "categories": [
+        "data",
+        "erp"
+      ],
+      "dependencies": [
+        "@busy-office/ui"
+      ],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/filters/filters.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/filters/filters.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<form class=\"bo-filter-bar\" action=\"/pos\" method=\"get\">\n  <div class=\"bo-form-field\">\n    <label class=\"bo-form-field__label\" for=\"q\">Query</label>\n    <input class=\"bo-input bo-input--code\" id=\"q\" name=\"q\" value=\"status:Pending\">\n  </div>\n  <button class=\"bo-btn\" type=\"submit\">Apply</button>\n  <a class=\"bo-btn bo-btn--ghost\" href=\"?q=\">Clear</a>\n</form>\n<!-- initSavedViews() populates these fields FROM the querystring. -->\n\nBehaviour: import { initSavedViews } from '@busy-office/ui' and call it once per page; swapped-in content is picked up by delegation.\nExact values live in components/filters/filters.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "chip",
+      "type": "registry:item",
+      "title": "Chip",
+      "description": "A saved view, an applied filter, or a removable token.",
+      "categories": [
+        "data",
+        "erp"
+      ],
+      "dependencies": [
+        "@busy-office/ui"
+      ],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/filters/filters.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/filters/filters.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<nav data-saved-views>\n  <a class=\"bo-chip\" href=\"?q=\" aria-current=\"page\">All open · 312</a>\n  <a class=\"bo-chip\" href=\"?q=status:Pending\">Pending · 18</a>\n</nav>\n<!-- An applied filter, removable with no JavaScript at all: -->\n<span class=\"bo-chip bo-chip--active\">vendor: Acme Supply Co.\n  <a class=\"bo-chip__remove\" href=\"?q=status:Pending\" aria-label=\"Remove filter vendor\">&times;</a>\n</span>\n\nBehaviour: import { initSavedViews } from '@busy-office/ui' and call it once per page; swapped-in content is picked up by delegation.\nExact values live in components/filters/filters.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "amount",
+      "type": "registry:item",
+      "title": "Amount",
+      "description": "A money or quantity figure with quiet currency, decimals and unit.",
+      "categories": [
+        "data",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/amount/amount.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/amount/amount.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<span class=\"bo-amount\">\n  <span class=\"bo-amount__currency\">$</span>\n  <span class=\"bo-amount__value\">17,329<span class=\"bo-amount__fraction\">.42</span></span>\n</span>\n<span class=\"bo-amount bo-amount--negative\">…</span>\n<span class=\"bo-amount bo-amount--strong\">…</span>\n<span class=\"bo-amount\"><span class=\"bo-amount__value\">1,240</span><span class=\"bo-amount__unit\">PC</span></span>\n\nNo JavaScript required.\nExact values live in components/amount/amount.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "key-value",
+      "type": "registry:item",
+      "title": "KeyValue",
+      "description": "Read-only record facts — the header block of an object page.",
+      "categories": [
+        "data",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/kv/kv.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/kv/kv.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<dl class=\"bo-kv\">\n  <div><dt>Vendor</dt><dd>Acme Supply Co.</dd></div>\n  <div><dt>Due</dt><dd>2026-08-12</dd></div>\n</dl>\n<!-- .bo-kv--rows aligns every label column with subgrid. -->\n\nNo JavaScript required.\nExact values live in components/kv/kv.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "ordered-list",
+      "type": "registry:item",
+      "title": "OrderedList",
+      "description": "A numbered sequence whose order is data — approval chains, routing steps, line items.",
+      "categories": [
+        "data",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/ordered-list/ordered-list.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/ordered-list/ordered-list.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<ol class=\"bo-ordered-list\">\n  <li>Cost-center owner\n    <span class=\"bo-ordered-list__actions\">\n      <button class=\"bo-btn bo-btn--sm bo-btn--ghost\" type=\"button\">Move up</button>\n    </span>\n  </li>\n</ol>\n\nNo JavaScript required.\nExact values live in components/ordered-list/ordered-list.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "calendar",
+      "type": "registry:item",
+      "title": "Calendar",
+      "description": "A month grid for factory calendars, posting periods and closing days.",
+      "categories": [
+        "data",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/calendar/calendar.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/calendar/calendar.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-calendar\">\n  <div class=\"bo-calendar__month\">August 2026</div>\n  <div class=\"bo-calendar__grid\" role=\"grid\">\n    <div class=\"bo-calendar__dow\" aria-hidden=\"true\">Mo</div>\n    <div class=\"bo-calendar__day\">1</div>\n    <div class=\"bo-calendar__day\" data-day=\"holiday\">15</div>\n    <div class=\"bo-calendar__day bo-calendar__day--outside\"></div>\n  </div>\n</div>\n\nNo JavaScript required.\nExact values live in components/calendar/calendar.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "alert",
+      "type": "registry:item",
+      "title": "Alert",
+      "description": "An inline message about the screen you are on.",
+      "categories": [
+        "feedback",
+        "erp"
+      ],
+      "dependencies": [
+        "@busy-office/ui"
+      ],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/alert/alert.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/alert/alert.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-alert bo-alert--warning\" role=\"status\">\n  <div><strong class=\"bo-alert__title\">Posting period closes today.</strong>\n       Invoices posted after 18:00 land in the next period.</div>\n  <button class=\"bo-btn bo-btn--ghost bo-btn--icon bo-btn--sm bo-alert__dismiss\" type=\"button\" aria-label=\"Dismiss\">\n    <span class=\"bo-icon bo-icon--close\" aria-hidden=\"true\"></span>\n  </button>\n</div>\n<!-- role=\"alert\" on danger, role=\"status\" otherwise. -->\n\nBehaviour: import { initAlerts } from '@busy-office/ui' and call it once per page; swapped-in content is picked up by delegation.\nExact values live in components/alert/alert.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "toast",
+      "type": "registry:item",
+      "title": "Toast",
+      "description": "The fixed, polite region for transient confirmations.",
+      "categories": [
+        "feedback",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/alert/alert.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/alert/alert.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-toast-region\" role=\"status\" aria-live=\"polite\">\n  <div class=\"bo-alert bo-alert--success bo-toast\">\n    <div><strong class=\"bo-alert__title\">Posted.</strong> INV-10234 posted to period 08/2026.</div>\n  </div>\n</div>\n<!-- A toast is an alert on a raised surface inside the fixed region.\n     Server-rendered swaps place it here with hx-swap-oob. -->\n\nNo JavaScript required.\nExact values live in components/alert/alert.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "badge",
+      "type": "registry:item",
+      "title": "Badge",
+      "description": "A status pill that always carries the word, not just the colour.",
+      "categories": [
+        "feedback",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/badge/badge.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/badge/badge.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<span class=\"bo-badge\">Draft</span>\n<span class=\"bo-badge bo-badge--warning\">Pending</span>\n<span class=\"bo-badge bo-badge--success\">Approved</span>\n<span class=\"bo-badge bo-badge--danger\">Rejected</span>\n<span class=\"bo-badge bo-badge--type\">Invoice</span>\n\nNo JavaScript required.\nExact values live in components/badge/badge.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "progress",
+      "type": "registry:item",
+      "title": "Progress",
+      "description": "A determinate bar for a long-running ERP job.",
+      "categories": [
+        "feedback",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/progress/progress.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/progress/progress.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<progress class=\"bo-progress\" value=\"62\" max=\"100\" aria-label=\"Import progress\">62%</progress>\n<progress class=\"bo-progress bo-progress--warning\" value=\"91\" max=\"100\" aria-label=\"Budget\">91%</progress>\n\nNo JavaScript required.\nExact values live in components/progress/progress.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "skeleton",
+      "type": "registry:item",
+      "title": "Skeleton",
+      "description": "A shimmering placeholder for content that has not arrived.",
+      "categories": [
+        "feedback",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/skeleton/skeleton.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/skeleton/skeleton.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<span class=\"bo-skeleton\" style=\"inline-size:12rem\" aria-hidden=\"true\"></span>\n<span class=\"bo-skeleton bo-skeleton--block\" style=\"block-size:6rem\" aria-hidden=\"true\"></span>\n<!-- aria-busy=\"true\" goes on the CONTAINER, not here. -->\n\nNo JavaScript required.\nExact values live in components/skeleton/skeleton.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "state-block",
+      "type": "registry:item",
+      "title": "StateBlock",
+      "description": "The empty, no-results and error state for a region or a whole screen.",
+      "categories": [
+        "feedback",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/state/state.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/state/state.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-state\">\n  <span class=\"bo-state__icon bo-icon bo-icon--invoice\" aria-hidden=\"true\"></span>\n  <h2 class=\"bo-state__title\">No invoices match these filters.</h2>\n  <p class=\"bo-state__description\">Clear the cost-center filter to widen the search.</p>\n  <div class=\"bo-state__actions\">\n    <a class=\"bo-btn bo-btn--secondary\" href=\"?q=\">Clear filters</a>\n  </div>\n</div>\n\nNo JavaScript required.\nExact values live in components/state/state.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "dialog",
+      "type": "registry:item",
+      "title": "Dialog",
+      "description": "A native modal dialog: header, body and a muted footer action band.",
+      "categories": [
+        "feedback",
+        "erp"
+      ],
+      "dependencies": [
+        "@busy-office/ui"
+      ],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/dialog/dialog.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/dialog/dialog.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<button class=\"bo-btn bo-btn--danger-ghost\" type=\"button\" popovertarget=\"reject-dlg\">Reject</button>\n\n<dialog class=\"bo-dialog\" id=\"reject-dlg\" popover>\n  <header class=\"bo-dialog__header\">\n    <h2 class=\"bo-dialog__title\">Reject invoice</h2>\n    <button class=\"bo-btn bo-btn--ghost bo-btn--icon bo-btn--sm\" type=\"button\"\n            popovertarget=\"reject-dlg\" popovertargetaction=\"hide\" aria-label=\"Close\">\n      <span class=\"bo-icon bo-icon--close\" aria-hidden=\"true\"></span>\n    </button>\n  </header>\n  <form hx-post=\"/pos/PO-88213/reject\" hx-target=\"#main\" hx-select=\"#main\">\n    <div class=\"bo-dialog__body\"><!-- fields --></div>\n    <footer class=\"bo-dialog__footer\">\n      <button class=\"bo-btn bo-btn--secondary\" type=\"button\" popovertarget=\"reject-dlg\" popovertargetaction=\"hide\">Cancel</button>\n      <button class=\"bo-btn bo-btn--danger\" type=\"submit\">Reject</button>\n    </footer>\n  </form>\n</dialog>\n<!-- initDialogs() adds showModal()/::backdrop where the popover attribute\n     alone isn't enough. Focus trap and Escape come from the platform. -->\n\nBehaviour: import { initDialogs } from '@busy-office/ui' and call it once per page; swapped-in content is picked up by delegation.\nExact values live in components/dialog/dialog.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "dropdown",
+      "type": "registry:item",
+      "title": "Dropdown",
+      "description": "A row of actions behind one trigger, using the native popover API.",
+      "categories": [
+        "feedback",
+        "erp"
+      ],
+      "dependencies": [
+        "@busy-office/ui"
+      ],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/dropdown/dropdown.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/dropdown/dropdown.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<span class=\"bo-dropdown\">\n  <button class=\"bo-btn bo-btn--secondary\" type=\"button\" popovertarget=\"views-menu\">Views</button>\n  <div class=\"bo-dropdown__menu\" id=\"views-menu\" popover>\n    <button class=\"bo-dropdown__item\" type=\"button\">\n      <span class=\"bo-icon bo-icon--save\" aria-hidden=\"true\"></span>Save this view\n    </button>\n    <hr class=\"bo-dropdown__separator\">\n    <button class=\"bo-dropdown__item bo-dropdown__item--danger\" type=\"button\">Delete view</button>\n  </div>\n</span>\n<!-- popover=\"auto\" gives light dismiss + top-layer stacking.\n     initDropdowns() adds positioning and multi-select trigger labels. -->\n\nBehaviour: import { initDropdowns } from '@busy-office/ui' and call it once per page; swapped-in content is picked up by delegation.\nExact values live in components/dropdown/dropdown.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "navbar",
+      "type": "registry:item",
+      "title": "Navbar",
+      "description": "The application top bar — brand, primary links and account actions.",
+      "categories": [
+        "navigation",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/navbar/navbar.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/navbar/navbar.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<header class=\"bo-navbar\">\n  <a class=\"bo-navbar__brand\" href=\"/\">Busy Office</a>\n  <span class=\"bo-navbar__spacer\"></span>\n  <span class=\"bo-avatar\">RK</span>\n</header>\n\nNo JavaScript required.\nExact values live in components/navbar/navbar.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "sidebar-nav",
+      "type": "registry:item",
+      "title": "SidebarNav",
+      "description": "The 14rem navigation rail, wide enough for a two-word ERP label on one line.",
+      "categories": [
+        "navigation",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/sidebar-nav/sidebar-nav.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/sidebar-nav/sidebar-nav.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<nav class=\"bo-sidebar-nav\" aria-label=\"Main\">\n  <div class=\"bo-sidebar-nav__section\">\n    <div class=\"bo-sidebar-nav__heading\">Purchasing</div>\n    <ul>\n      <li><a class=\"bo-sidebar-nav__link\" href=\"/pos\" aria-current=\"page\">\n        <span class=\"bo-sidebar-nav__icon bo-icon bo-icon--invoice\" aria-hidden=\"true\"></span>\n        <span class=\"bo-sidebar-nav__label\">Purchase orders</span>\n      </a></li>\n    </ul>\n  </div>\n</nav>\n\nNo JavaScript required.\nExact values live in components/sidebar-nav/sidebar-nav.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "breadcrumb",
+      "type": "registry:item",
+      "title": "Breadcrumb",
+      "description": "The trail back up an ERP object hierarchy.",
+      "categories": [
+        "navigation",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/breadcrumb/breadcrumb.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/breadcrumb/breadcrumb.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<nav aria-label=\"Breadcrumb\">\n  <ol class=\"bo-breadcrumb\">\n    <li><a href=\"/\">Purchasing</a></li>\n    <li><a href=\"/pos\">Purchase orders</a></li>\n    <li><span aria-current=\"page\">PO-88213</span></li>\n  </ol>\n</nav>\n\nNo JavaScript required.\nExact values live in components/breadcrumb/breadcrumb.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "tabs",
+      "type": "registry:item",
+      "title": "Tabs",
+      "description": "Roving-tabindex tab strip with an overflow edge fade instead of arrow buttons.",
+      "categories": [
+        "navigation",
+        "erp"
+      ],
+      "dependencies": [
+        "@busy-office/ui"
+      ],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/tabs/tabs.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/tabs/tabs.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-tabs__list\" role=\"tablist\">\n  <button class=\"bo-tabs__tab\" role=\"tab\" id=\"tab-items\" aria-selected=\"true\"\n          aria-controls=\"panel-items\" tabindex=\"0\">Items · 14</button>\n  <button class=\"bo-tabs__tab\" role=\"tab\" id=\"tab-audit\" aria-selected=\"false\"\n          aria-controls=\"panel-audit\" tabindex=\"-1\">Audit</button>\n</div>\n<div class=\"bo-tabs__panel\" role=\"tabpanel\" id=\"panel-items\" aria-labelledby=\"tab-items\">…</div>\n<!-- initTabs() owns the roving tabindex. Overflow is signalled by\n     data-overflow=\"start|end|both\" on the list — an edge fade, not arrows. -->\n\nBehaviour: import { initTabs } from '@busy-office/ui' and call it once per page; swapped-in content is picked up by delegation.\nExact values live in components/tabs/tabs.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "offcanvas",
+      "type": "registry:item",
+      "title": "Offcanvas",
+      "description": "A side drawer for nav on narrow screens or a record detail beside a list.",
+      "categories": [
+        "navigation",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/offcanvas/offcanvas.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/offcanvas/offcanvas.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<dialog class=\"bo-offcanvas bo-offcanvas--end\" id=\"detail-panel\">\n  <header class=\"bo-offcanvas__header\">\n    <h2 class=\"bo-dialog__title\">PO-88213</h2>\n    <button class=\"bo-btn bo-btn--ghost bo-btn--icon bo-btn--sm\" type=\"button\" aria-label=\"Close\">\n      <span class=\"bo-icon bo-icon--close\" aria-hidden=\"true\"></span>\n    </button>\n  </header>\n  <div class=\"bo-dialog__body\">…</div>\n</dialog>\n\nNo JavaScript required.\nExact values live in components/offcanvas/offcanvas.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "stepper",
+      "type": "registry:item",
+      "title": "Stepper",
+      "description": "Wizard progress across a multi-step ERP posting flow.",
+      "categories": [
+        "navigation",
+        "erp"
+      ],
+      "dependencies": [
+        "@busy-office/ui"
+      ],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/stepper/stepper.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/stepper/stepper.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<ol class=\"bo-stepper\">\n  <li class=\"bo-stepper__step\" data-state=\"done\">\n    <span class=\"bo-stepper__marker\" aria-hidden=\"true\">&check;</span>\n    <span class=\"bo-stepper__label\">Header<span class=\"bo-visually-hidden\"> (completed)</span></span>\n  </li>\n  <li class=\"bo-stepper__step\" aria-current=\"step\">\n    <span class=\"bo-stepper__marker\" aria-hidden=\"true\">2</span>\n    <span class=\"bo-stepper__label\">Items</span>\n  </li>\n</ol>\n\nBehaviour: import { initWizard } from '@busy-office/ui' and call it once per page; swapped-in content is picked up by delegation.\nExact values live in components/stepper/stepper.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "app-shell",
+      "type": "registry:item",
+      "title": "AppShell",
+      "description": "Fixed header + scrolling sidebar and main pane — the back-office chrome every screen sits in.",
+      "categories": [
+        "layout",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "primitives/sidebar-layout.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/primitives/sidebar-layout.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-app-shell\">\n  <div class=\"bo-app-shell__header\"><!-- .bo-navbar --></div>\n  <div class=\"bo-app-shell__sidebar\"><!-- .bo-sidebar-nav --></div>\n  <main class=\"bo-app-shell__main\" id=\"main\"><!-- the swap target --></main>\n</div>\n\nNo JavaScript required.\nExact values live in primitives/sidebar-layout.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "stack",
+      "type": "registry:item",
+      "title": "Stack",
+      "description": "Vertical rhythm primitive — owns the gap between stacked children.",
+      "categories": [
+        "layout",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "primitives/stack.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/primitives/stack.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-stack\">…</div>\n<div class=\"bo-stack bo-stack--tight\">…</div>\n\nNo JavaScript required.\nExact values live in primitives/stack.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "cluster",
+      "type": "registry:item",
+      "title": "Cluster",
+      "description": "Horizontal row primitive that wraps, with end and split distributions.",
+      "categories": [
+        "layout",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "primitives/cluster.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/primitives/cluster.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-cluster bo-cluster--split\">\n  <h1>Invoices</h1>\n  <a class=\"bo-btn\" href=\"/pos/new\">+ New invoice</a>\n</div>\n\nNo JavaScript required.\nExact values live in primitives/cluster.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "grid",
+      "type": "registry:item",
+      "title": "Grid",
+      "description": "Auto-fitting equal-width column grid.",
+      "categories": [
+        "layout",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "primitives/grid.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/primitives/grid.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-grid\" style=\"--bo-grid-min: 18rem\">…</div>\n\nNo JavaScript required.\nExact values live in primitives/grid.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "widget-grid",
+      "type": "registry:item",
+      "title": "WidgetGrid",
+      "description": "The dashboard canvas — a named container grid of widgets.",
+      "categories": [
+        "layout",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/dashboard/dashboard.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/dashboard/dashboard.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-widget-grid\" style=\"--bo-widget-min: 20rem\">\n  <!-- .bo-widget children; --span-2 collapses under 41rem of grid width -->\n</div>\n\nNo JavaScript required.\nExact values live in components/dashboard/dashboard.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "widget",
+      "type": "registry:item",
+      "title": "Widget",
+      "description": "A dashboard panel: bordered surface with an optional header, flush body and footer band.",
+      "categories": [
+        "layout",
+        "erp"
+      ],
+      "dependencies": [
+        "@busy-office/ui"
+      ],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/dashboard/dashboard.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/dashboard/dashboard.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<section class=\"bo-widget\">\n  <header class=\"bo-widget__header\">\n    <h3 class=\"bo-widget__title\">Approvals waiting</h3>\n    <a class=\"bo-btn bo-btn--sm bo-btn--ghost\" href=\"/pos\">View all</a>\n  </header>\n  <div class=\"bo-widget__body bo-widget__body--flush\"><!-- a table --></div>\n  <footer class=\"bo-widget__band bo-widget__band--msg\">Updated 4 minutes ago</footer>\n</section>\n\nBehaviour: import { initCollapsibleCards } from '@busy-office/ui' and call it once per page; swapped-in content is picked up by delegation.\nExact values live in components/dashboard/dashboard.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "stat",
+      "type": "registry:item",
+      "title": "Stat",
+      "description": "A single KPI figure with an optional two-channel delta.",
+      "categories": [
+        "layout",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/dashboard/dashboard.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/dashboard/dashboard.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-stat\">\n  <span class=\"bo-stat__label\">Awaiting approval</span>\n  <span class=\"bo-stat__value\">312</span>\n  <span class=\"bo-stat__delta bo-stat__delta--bad\">\n    <span aria-hidden=\"true\">&#9660;</span>18 more than last week\n  </span>\n</div>\n\nNo JavaScript required.\nExact values live in components/dashboard/dashboard.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "timeline",
+      "type": "registry:item",
+      "title": "Timeline",
+      "description": "The approval chain of a document — who has signed, who is next, who refused.",
+      "categories": [
+        "erp",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/approval-workflow/approval-workflow.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/approval-workflow/approval-workflow.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<ol class=\"bo-timeline\">\n  <li class=\"bo-timeline__step\" data-state=\"done\">\n    <span class=\"bo-timeline__marker\" aria-hidden=\"true\">&check;</span>\n    <div>\n      <div class=\"bo-timeline__title\">Cost-center owner<span class=\"bo-visually-hidden\"> — done</span></div>\n      <div class=\"bo-timeline__meta\">R. Køhler · 2026-08-11 09:14</div>\n    </div>\n  </li>\n</ol>\n\nNo JavaScript required.\nExact values live in components/approval-workflow/approval-workflow.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "audit-trail",
+      "type": "registry:item",
+      "title": "AuditTrail",
+      "description": "The immutable who-did-what-when log beneath a document.",
+      "categories": [
+        "erp",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/approval-workflow/approval-workflow.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/approval-workflow/approval-workflow.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<ol class=\"bo-audit\">\n  <li class=\"bo-audit__entry\">\n    <span class=\"bo-audit__actor\">R. Køhler</span>\n    <span class=\"bo-audit__detail\">changed cost center CC-4021 → CC-1180</span>\n    <time class=\"bo-audit__time\" datetime=\"2026-08-11T09:14\">09:14</time>\n  </li>\n</ol>\n\nNo JavaScript required.\nExact values live in components/approval-workflow/approval-workflow.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "byline",
+      "type": "registry:item",
+      "title": "Byline",
+      "description": "Actor plus context on one line — \"R. Køhler approved · 2 hours ago\".",
+      "categories": [
+        "erp",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/byline/byline.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/byline/byline.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<span class=\"bo-byline\">\n  <span class=\"bo-avatar bo-byline__avatar\" aria-hidden=\"true\">RK</span>\n  <strong>R. Køhler</strong> approved · 2 hours ago\n</span>\n\nNo JavaScript required.\nExact values live in components/byline/byline.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "avatar",
+      "type": "registry:item",
+      "title": "Avatar",
+      "description": "A person or organisation mark — initials, or an image when you have one.",
+      "categories": [
+        "erp",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/avatar/avatar.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/avatar/avatar.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<span class=\"bo-avatar\">RK</span>\n<span class=\"bo-avatar-stack\">\n  <span class=\"bo-avatar\">RK</span><span class=\"bo-avatar\">MB</span>\n</span>\n\nNo JavaScript required.\nExact values live in components/avatar/avatar.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "scan-input",
+      "type": "registry:item",
+      "title": "ScanInput",
+      "description": "A barcode capture field with a full-viewport flash the user can read in peripheral vision.",
+      "categories": [
+        "erp",
+        "erp"
+      ],
+      "dependencies": [
+        "@busy-office/ui"
+      ],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/scan/scan.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/scan/scan.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-form-field\">\n  <label class=\"bo-form-field__label\" for=\"scan\">Scan material</label>\n  <input class=\"bo-input bo-input--code\" id=\"scan\" name=\"code\" autocomplete=\"off\" inputmode=\"none\">\n</div>\n<p data-scan-status role=\"status\" aria-live=\"polite\">SKU-88213 accepted · 4 of 12</p>\n<!-- initScanInput() reads the scanner's Enter and calls flashScanResult().\n     Accepted vs rejected is carried by the frame's MASS (6px solid vs 18px\n     double), not the hue — peripheral vision reads mass before colour. -->\n\nBehaviour: import { initScanInput } from '@busy-office/ui' and call it once per page; swapped-in content is picked up by delegation.\nExact values live in components/scan/scan.css. Consume the semantic token tier only; never --bo-palette-*."
+    },
+    {
+      "name": "prose",
+      "type": "registry:item",
+      "title": "Prose",
+      "description": "Long-form documentation copy — the only place a reading measure applies.",
+      "categories": [
+        "erp",
+        "erp"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "styles.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/styles.css"
+        },
+        {
+          "path": "components/prose/prose.css",
+          "type": "registry:file",
+          "target": "styles/busy-office/components/prose/prose.css"
+        }
+      ],
+      "docs": "Server-rendered HTML + one class. No client framework. Link styles.css once, then use this markup:\n\n<div class=\"bo-prose\">\n  <h2>Posting rules</h2>\n  <p>An invoice posts to the period…</p>\n</div>\n<!-- Documentation only. ~70ch measure; never for application screens. -->\n\nNo JavaScript required.\nExact values live in components/prose/prose.css. Consume the semantic token tier only; never --bo-palette-*."
+    }
+  ]
+}

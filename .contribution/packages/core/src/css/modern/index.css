@@ -1,0 +1,27 @@
+/* ---------------------------------------------------------------------------
+   bo-modern — the 2026 platform layer.
+
+   OPT-IN. Everything here is additive: it declares its own cascade layer,
+   `bo-modern`, AFTER the framework's five, so it wins without touching a
+   single imported file and without one !important. Delete the import line in
+   styles.css and the project is byte-identical to upstream again.
+
+   Two rules every file here follows, so upstream sync stays clean:
+
+     1. Never edit a file under components/, tokens/, primitives/ or reset/.
+        Override from here instead.
+     2. Never take an explicit author decision away. Anything the app declares
+        — data-theme, data-density — must still win, so remaps are guarded
+        with :not([data-theme]) / :not([data-density]) rather than applied
+        unconditionally.
+
+   See modern/PR.md for these changes written as a patch against
+   Busy-Office/busy-office-ui.
+   --------------------------------------------------------------------------- */
+@layer bo-modern;
+
+@import "./color-oklch.css" layer(bo-modern);
+@import "./surface.css" layer(bo-modern);
+@import "./density-auto.css" layer(bo-modern);
+@import "./interactions.css" layer(bo-modern);
+@import "./view-transitions.css" layer(bo-modern);

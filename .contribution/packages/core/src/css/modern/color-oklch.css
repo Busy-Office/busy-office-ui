@@ -1,0 +1,178 @@
+/* Colour, restated in OKLCH + a wide-gamut upgrade + OS-following dark mode.
+
+   WHY OKLCH. The palette is generated sRGB hex. Hex is fine to *store* and
+   bad to *compute* with: every colour-mix(), every gradient stop and every
+   relative-colour derivation the framework does interpolates in a space where
+   equal numeric steps are not equal perceptual steps, which is why hand-tuned
+   ramps drift in the middle. OKLCH interpolates perceptually, so a ramp can be
+   generated instead of hand-corrected, and lightness is a real number you can
+   reason about — L is the contrast axis.
+
+   VALUE PROVENANCE — READ BEFORE MERGING UPSTREAM. The values below are the
+   published OKLCH equivalents of the existing hexes, not values I measured.
+   They round-trip to within ~1% per channel, which is invisible, but this
+   repository's standard is "measured, not rounded" and these are not yet
+   measured. Before this lands upstream, run the sRGB round-trip and re-assert
+   the contrast pairs the sign-off grill already covers — especially
+   text-muted on bg-muted (documented at exactly >= 4.5:1, so it has no
+   headroom to lose) and border-control on bg-surface (~4.8:1). If any pair
+   moves, the hex is right and this file is wrong. */
+
+:root {
+  /* Neutral ramp — surfaces, borders, every tier of ink. */
+  --bo-palette-gray-50: oklch(0.985 0.002 247.84);
+  --bo-palette-gray-100: oklch(0.967 0.003 264.54);
+  --bo-palette-gray-200: oklch(0.928 0.006 264.53);
+  --bo-palette-gray-300: oklch(0.872 0.01 258.34);
+  --bo-palette-gray-400: oklch(0.707 0.022 261.33);
+  --bo-palette-gray-500: oklch(0.551 0.027 264.36);
+  --bo-palette-gray-600: oklch(0.446 0.03 256.8);
+  --bo-palette-gray-700: oklch(0.373 0.034 259.73);
+  --bo-palette-gray-800: oklch(0.278 0.033 256.85);
+  --bo-palette-gray-900: oklch(0.21 0.034 264.67);
+
+  /* Teal — the Ledger accent. Hue is held in the 180-188 band on purpose:
+     it is what keeps the accent from reading as the reserved success green. */
+  --bo-palette-teal-50: oklch(0.984 0.014 180.72);
+  --bo-palette-teal-300: oklch(0.855 0.138 181.07);
+  --bo-palette-teal-400: oklch(0.777 0.152 181.91);
+  --bo-palette-teal-500: oklch(0.704 0.14 182.5);
+  --bo-palette-teal-600: oklch(0.6 0.118 184.7);
+  --bo-palette-teal-700: oklch(0.511 0.096 186.39);
+  --bo-palette-teal-800: oklch(0.437 0.078 188.22);
+  --bo-palette-teal-900: oklch(0.386 0.063 188.42);
+
+  --bo-palette-green-50: oklch(0.982 0.018 155.83);
+  --bo-palette-green-300: oklch(0.871 0.15 154.45);
+  --bo-palette-green-500: oklch(0.723 0.219 149.58);
+  --bo-palette-green-700: oklch(0.527 0.154 150.07);
+
+  --bo-palette-amber-50: oklch(0.987 0.022 95.28);
+  --bo-palette-amber-300: oklch(0.879 0.169 91.61);
+  --bo-palette-amber-500: oklch(0.769 0.188 70.08);
+  --bo-palette-amber-700: oklch(0.555 0.163 49);
+
+  --bo-palette-red-50: oklch(0.971 0.013 17.38);
+  --bo-palette-red-300: oklch(0.808 0.114 19.57);
+  --bo-palette-red-400: oklch(0.704 0.191 22.22);
+  --bo-palette-red-600: oklch(0.577 0.245 27.33);
+  --bo-palette-red-700: oklch(0.505 0.213 27.52);
+}
+
+/* Wide-gamut upgrade. Chroma is raised ONLY on the accent and the three status
+   hues, and ONLY where the display can actually show it — the neutral ramp is
+   left alone, because a wide-gamut grey is just a grey with a colour cast.
+
+   Lightness is not touched by a single step here, which is the whole safety
+   argument: L is the contrast axis, so every ratio the sign-off grill asserts
+   is mathematically unchanged. Raising C alone cannot move a contrast pair.
+
+   The @media gate matters as much as the @supports one. Safari reports
+   support for color(display-p3 …) on hardware that cannot display it, so
+   feature detection alone would push out-of-gamut chroma at an sRGB panel and
+   get it clipped — flat, posterised status fills. Both gates, or neither. */
+@supports (color: oklch(0.5 0.1 180)) {
+  @media (color-gamut: p3) {
+    :root {
+      --bo-palette-teal-400: oklch(0.777 0.176 181.91);
+      --bo-palette-teal-500: oklch(0.704 0.162 182.5);
+      --bo-palette-teal-600: oklch(0.6 0.137 184.7);
+      --bo-palette-teal-700: oklch(0.511 0.112 186.39);
+      --bo-palette-teal-800: oklch(0.437 0.091 188.22);
+
+      --bo-palette-green-500: oklch(0.723 0.248 149.58);
+      --bo-palette-amber-500: oklch(0.769 0.208 70.08);
+      --bo-palette-red-600: oklch(0.577 0.268 27.33);
+    }
+  }
+}
+
+/* OS-following dark mode.
+
+   The framework's default is color-scheme: light and tokens that only flip on
+   [data-theme="dark"], and the reasoning in tokens/color.css is sound: a
+   CSS-only consumer with no theme-setter JS would otherwise get a light page
+   wearing dark scrollbars and a dark date picker. That reasoning is about what
+   a LIBRARY may impose by default. This file is the app opting in, which the
+   same note names as the app's decision to make.
+
+   The guard is what makes it safe: :not([data-theme]) means the moment the app
+   writes an explicit theme, every rule here stops matching and the framework's
+   own [data-theme] blocks in bo-tokens take over untouched. So this is the
+   no-preference default, not an override of the user's choice — and the theme
+   toggle in the ERP kit keeps working exactly as before.
+
+   light-dark() also removes the pre-paint flash entirely for the default case:
+   there is no JS in the path at all, so there is no gap between the old
+   document unloading and the new one's first paint for the browser to fill
+   with its own default. */
+@supports (color: light-dark(white, black)) {
+  /* light-dark() resolves off the element's computed `color-scheme`, NOT off a
+     selector — which means these belong on plain :root and need no guard at
+     all. The framework already sets color-scheme on both theme attributes
+     ([data-theme="dark"] { color-scheme: dark }, likewise light), so all three
+     cases resolve correctly through one set of declarations:
+
+       no attribute      -> color-scheme: light dark (set below) -> follows OS
+       data-theme="light" -> color-scheme: light               -> light values
+       data-theme="dark"  -> color-scheme: dark                -> dark values
+
+     So the explicit theme still wins, and it wins through the platform rather
+     than through a cascade fight. The earlier draft of this file guarded every
+     token with :root:not([data-theme]); that worked but put 30-odd custom
+     properties on a compound selector where neither the compiler nor a reader
+     could see them as theme tokens. Only color-scheme needs the guard now. */
+  :root {
+    --bo-color-bg-canvas: light-dark(var(--bo-palette-gray-50), oklch(0.178 0.012 268));
+    --bo-color-bg-surface: light-dark(#ffffff, oklch(0.229 0.013 268));
+    --bo-color-bg-surface-raised: light-dark(#ffffff, oklch(0.271 0.014 268));
+    --bo-color-bg-muted: light-dark(var(--bo-palette-gray-100), oklch(0.3 0.014 268));
+    --bo-color-bg-selected: light-dark(var(--bo-palette-teal-50), oklch(0.34 0.055 186));
+    --bo-color-bg-hover: light-dark(var(--bo-palette-gray-100), oklch(0.3 0.014 268));
+    --bo-color-skeleton-highlight: light-dark(#ffffff, oklch(0.363 0.016 268));
+
+    --bo-color-border-default: light-dark(var(--bo-palette-gray-200), oklch(0.325 0.014 268));
+    --bo-color-border-strong: light-dark(var(--bo-palette-gray-300), oklch(0.385 0.016 268));
+    --bo-color-border-control: light-dark(var(--bo-palette-gray-500), var(--bo-palette-gray-400));
+
+    --bo-color-text-primary: light-dark(var(--bo-palette-gray-900), var(--bo-palette-gray-50));
+    --bo-color-text-secondary: light-dark(var(--bo-palette-gray-700), var(--bo-palette-gray-300));
+    --bo-color-text-muted: light-dark(var(--bo-palette-gray-600), var(--bo-palette-gray-400));
+    --bo-color-text-disabled: light-dark(var(--bo-palette-gray-400), var(--bo-palette-gray-600));
+
+    --bo-color-accent: light-dark(var(--bo-palette-teal-700), var(--bo-palette-teal-400));
+    --bo-color-accent-subtle: light-dark(var(--bo-palette-teal-50), oklch(0.34 0.055 186));
+    --bo-color-accent-text: light-dark(var(--bo-palette-teal-800), var(--bo-palette-teal-300));
+
+    --bo-color-danger: light-dark(var(--bo-palette-red-600), var(--bo-palette-red-400));
+    --bo-color-danger-subtle: light-dark(var(--bo-palette-red-50), oklch(0.288 0.058 25));
+    --bo-color-danger-text: light-dark(var(--bo-palette-red-700), var(--bo-palette-red-300));
+
+    --bo-color-warning-subtle: light-dark(var(--bo-palette-amber-50), oklch(0.297 0.055 70));
+    --bo-color-warning-strong: light-dark(var(--bo-palette-amber-700), var(--bo-palette-amber-500));
+    --bo-color-warning-text: light-dark(var(--bo-palette-amber-700), var(--bo-palette-amber-300));
+
+    --bo-color-success-subtle: light-dark(var(--bo-palette-green-50), oklch(0.283 0.052 152));
+    --bo-color-success-text: light-dark(var(--bo-palette-green-700), var(--bo-palette-green-300));
+
+    /* Interaction overlays invert; the scrim deliberately does not — its job
+       is to push the page back, and a white scrim in dark mode lifts the
+       background toward the panel instead of away from it. */
+    --bo-state-hover-overlay: light-dark(rgb(0 0 0 / 0.04), rgb(255 255 255 / 0.06));
+    --bo-state-active-overlay: light-dark(rgb(0 0 0 / 0.08), rgb(255 255 255 / 0.1));
+  }
+
+  /* The one guarded declaration: opt the DEFAULT (no explicit theme) into
+     following the OS. The framework ships `color-scheme: light` and the
+     reasoning in tokens/color.css is sound for a LIBRARY — a CSS-only consumer
+     with no theme-setter JS would otherwise get a light page wearing dark
+     scrollbars and a dark date picker. This is the APP opting in, which that
+     same note names as the app's decision to make.
+
+     It also removes the pre-paint flash for the default case: no JS is in the
+     path at all, so there is no gap between the old document unloading and the
+     new one's first paint for the browser to fill with its own default. */
+  :root:not([data-theme]) {
+    color-scheme: light dark;
+  }
+}
