@@ -320,6 +320,88 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 318 — `check:claims`'s calendar case raced a real navigation against a fixed 400ms wait, turned `main` red once, and recovered on the next run without a code change. It is the file's ONE navigation-gated assertion that was not already using the file's own deterministic pattern (2026-09-07)
+
+**Found by looking, not by a gate telling anyone.** Slice 317's wake checked CI
+after pushing and found run **807** (`8f1d43f`, the PREVIOUS wake's hand-off
+commit) red on `Claims + formatting`. That wake did not check, so `main` was red
+for an hour with nothing reporting it.
+
+```
+FAIL calendar: a day is a real submit button that puts its ISO date in the URL, with blocked days disabled
+     {"isForm":true,"dayCount":31,"blockedCount":11,"blockedAllMarked":true,
+      "allIso":true,"wanted":"2026-08-04","submitted":null}
+claims check FAILED — 1 of 169 documented behaviours do not hold
+```
+
+**Every field of the claim is true except `submitted`.** The case clicks a day,
+which submits a real form `GET`, then waits `setTimeout(400)` and reads
+`page.url()`. On a runner hosting six parallel headless-Chrome jobs the
+navigation outran the budget.
+
+**Not called a flake, because "flake" is not a root cause here — the mechanism
+was reproduced.** Measured, in this order:
+
+- **Base rate on CI:** 2 failures in the last 40 runs on `main`, and the other
+  one is Slice 311's already-documented `check:floor` failure. So this is the
+  first of its kind in at least 40 runs.
+- **Headroom locally:** the same click-to-navigation, polled at 10ms instead of
+  waited at 400, takes **42-70ms** across 6 runs. The budget is ~6-9x the real
+  cost in an idle container, which is exactly why no local run ever caught it.
+- **Recovery without a code change:** run **808** (`71c6adc2`, Slice 317) passed
+  the same case on the same calendar page. A defect that fixes itself on a
+  re-run with the input unchanged is a race, and that is the discriminating
+  observation rather than an assumption.
+- **The pattern already exists in this file.** Of the **2** assertions in
+  `check-claims.mjs` that gate on a full page navigation, the sibling one —
+  saved views, *"a saved view is a URL"* — has always used
+  `Promise.all([page.waitForNavigation(...), ...])`. This was the odd one out.
+  (`grep -c 'waitForNavigation'` → 1 before this slice; the 99 other
+  `setTimeout` waits gate on in-page DOM updates, which is a different and much
+  cheaper thing, and are not touched.)
+
+1. [x] **318.1 — DONE. The calendar claim waits for the navigation instead of
+       for 400ms.** `Promise.all([page.waitForNavigation({ waitUntil:
+       'domcontentloaded' }), target.click()])`, which is the file's own
+       existing pattern rather than a new one, with the history in a comment at
+       the site so the next reader does not re-derive it.
+
+       **Red-proved by injection, not by reasoning**, and the injection was
+       checked for discrimination before the result was believed — CLAUDE.md's
+       rule that a green red-proof is a defect in the injection until proven
+       otherwise. With the navigation delayed 800ms through request
+       interception, scoped to the one request whose URL carries `date=`:
+
+       | wait strategy | navigation delayed | `submitted` | verdict |
+       |---|---|---|---|
+       | `setTimeout(400)` | no | `2026-08-04` | pass |
+       | `waitForNavigation` | no | `2026-08-04` | pass |
+       | `setTimeout(400)` | **800ms** | **`null`** | **fail — reproduces CI 807 exactly** |
+       | `waitForNavigation` | **800ms** | `2026-08-04` | pass |
+
+       The undelayed pair is the control: both strategies pass there, so the
+       injection discriminates between the strategies rather than breaking the
+       page. And the failing cell does not merely go red — it reproduces run
+       807's **exact** reading, `submitted: null` with every other field true.
+
+       `check:claims` re-run after the fix: **rc 0, 169 verified live, 3 NOT
+       VERIFIED** (the container's `pointer: fine` property, `ENVIRONMENT.md`
+       §6b, unchanged).
+
+**Not filed as P0, deliberately, and the reason is the measurement.** `main` is
+**green** at `71c6adc2` — run 808 passed before this slice was written, so
+nothing is currently broken and a P0 label would be false by the time anyone
+read it. What was broken is the gate's determinism: a claim that can report a
+true behaviour as failed makes every one of its greens weaker. That is worth a
+slice and is not worth jumping the queue.
+
+**What this does NOT fix, said plainly.** The 99 other fixed waits in
+`check-claims.mjs` are untouched and unexamined here. They gate on in-page DOM
+updates rather than navigations, which is why they were not swept — but that is
+a reason to leave them, not evidence that they are all safe. A sweep of them is
+a Standardize lane, not this fix, and inventing one from a sample of one would
+be the widening this repo's rules refuse.
+
 ## Slice 317 — 300.2's spike: the board's announcement cannot be decided once — 4 of the 5 things one generic core could not know are announcement strings — and the framework's answer to this screen kind already ships, saying something about itself that is not true (2026-09-07)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again

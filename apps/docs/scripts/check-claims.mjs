@@ -1024,10 +1024,29 @@ const pickable = await page.evaluate(() => {
 const target = await page.$('form.bo-calendar button.bo-calendar__day:not([disabled])');
 let wanted = null;
 let submitted = null;
+/* WAIT FOR THE NAVIGATION, never for a fixed number of milliseconds (roadmap
+   318.1). This read `setTimeout(400)` and turned `main` red on CI run 807 with
+   `submitted: null` while every other field of the claim was true — the click
+   submits a real form GET, and on a runner hosting six parallel headless-Chrome
+   jobs that navigation outran the budget. It is not marginal in an idle
+   container, which is why no local run ever caught it: measured here at 42-70ms
+   against 400.
+
+   The pattern is not invented for this fix — it is the one the SIBLING
+   navigation-gated claim in this file (saved views, "a saved view is a URL")
+   has always used. Of the two assertions here that gate on a full page
+   navigation, that one waited deterministically and this one did not.
+
+   Red-proved by injection rather than by reasoning: with the navigation
+   delayed 800ms through request interception, the old fixed wait reproduces
+   CI's exact reading (`submitted: null`) and this one passes; with no delay
+   both pass, so the injection discriminates rather than breaking everything. */
 if (target) {
   wanted = await target.evaluate((el) => el.value);
-  await target.click();
-  await new Promise((r) => setTimeout(r, 400));
+  await Promise.all([
+    page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+    target.click(),
+  ]);
   submitted = new URL(page.url()).searchParams.get('date');
 }
 check(
