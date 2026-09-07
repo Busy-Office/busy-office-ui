@@ -320,6 +320,124 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 336 — Objective grill of Slices 315, 332, 333: 26 of 29 assertions reproduce, and all three defects are a number that is a faithful reading of a DIFFERENT population than the noun beside it names (2026-09-07)
+
+**Dispatched by rule 3**, `Objective 3 / 3 slices … OVERDUE [315, 332, 333]`,
+read from `dispatch_status.py` this wake rather than carried from the hand-off.
+Rule 1: no open P0 — `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0**
+across 29 open items. Rule 2: `Standardize 2 / 4 … ok`. Rule 5 was **evaluated
+and does not fire** — `0 wake-date(s) newer`, comparable set's only mover is
+`claims`, already day-paired `2026-09-06 169 → 2026-09-07 170`.
+
+Step 1 read **both** intakes with `ENVIRONMENT.md` §8's controls:
+`/issues?state=open` → `200 len 1` (issue #2, `updated_at`
+`2026-09-06T15:10:34Z` — the same value the previous hand-off recorded, which
+had already recorded it unmoved for a third time), `/discussions` → `200 len 0`,
+`/not-a-real-route` → `404`. **No new input; triage committed nothing.**
+
+**Scope per §6 step 0: nothing dropped.** None of the three is named by any
+grill in either roadmap file or in `.roundtable/`. Slice 315 is itself a grill;
+what is grilled here is its own three items. `315.3` was deferred out of it and
+**built by Slice 334**, so 334's text is read where it settles a 315.3 claim.
+
+**Full report:** `.roundtable/grill-objective-315-332-333-2026-09-07.md`.
+
+**26 of 29 re-run assertions reproduce exactly** — including every line number
+in 315.1 (`219` and `293` at `066d9878^`), all six of 315.2's hex spellings
+(`142, 142, 123, 141, 114, 134`), all three of 332's lane figures to the digit
+(`0 / 1,365 / 357`, `74 · 242 · 230 · 8`, `119 · 798 · 113,787 · 10`), and 333's
+built-page identity (md5 `f8886e3e9ee20f6464ae9545cd44d7aa`, **87,802** bytes,
+**139** pages) — which still matches **three** commits later
+(`git rev-list --count 422601c4..HEAD` → 3), a reproduction the instrument could
+not fake.
+
+**The three that do not share a mechanism.** In none of them is the measurement
+wrong; in each, the number faithfully reads a **different population or quantity
+than the noun next to it names**, and in all three the conclusion is unaffected
+— which is why review passed them.
+
+| | the noun | what was counted |
+|---|---|---|
+| A | "top-level **sections**" | headings, `^#`, which includes the H1 title |
+| B | "the 10 **flagged pages**" | the corpus half of a corpus-∪-family definition |
+| C | "the cost … **for twenty child processes**" | a superseded reading, of the total rather than the delta |
+
+Two of the three were inside their own commit's reach: C's correction was made
+in `ac4a9a0f` and not propagated, and A is one `grep -c` from the right answer.
+
+1. [x] **336.1 — the three numbers are corrected in place**, which is 315.2's
+       own precedent (236.2: live and archived text alike may be amended for a
+       correction). No gate is added for any of them — *"the noun matches the
+       population"* is semantic, which is 94.11's wall.
+
+       - **A — `332.1` says `ENVIRONMENT.md` has 18 top-level sections; it has
+         17.** `grep -c '^## '` → **17**; `grep -c '^#'` → **18**, the extra one
+         being the document's own title. It is load-bearing because `332.1` is
+         **open** and its Accept audits *each section*, one of which cannot move
+         because it is the title. Taken the same way at the last cut the figure
+         is **14**, so the growth is 14 → 17 sections.
+       - **B — Slice 332's lane 3 asserts cleanliness over 10 pages where the
+         lane is defined on 15.** `LOOPS.md` §3 lane 3 flags *"over 2x the
+         CORPUS median, **or** over 2x its FAMILY median"*. Re-run: corpus 10,
+         family 11, **union 15**; all 15 are in the 16-set enumeration, so **the
+         lane is genuinely clean** and only the population is misstated. The
+         five unchecked by 332 are `/base/motion/`, `/concepts/layouts/`,
+         `/concepts/js-behaviors/`, `/concepts/design-language/`,
+         `/concepts/scale/`. Slice **326**, the sweep immediately before it,
+         printed `union = 15` in its own entry — the definition was not obscure;
+         the report is what buried it, which is `336.2`.
+       - **C — `1.38 s` in 315.3's DONE bullet was superseded by its own
+         commit.** `git show ac4a9a0f -- ROADMAP.md | grep -nE '^\+.*(1\.38|1\.23|1355)'`
+         returns all three as ADDED lines of that one commit. Read as file
+         positions in `git show ac4a9a0f:ROADMAP.md`, Slice 334's readings are
+         at lines **411** and **414** and 315.3's `1.38 s` at line **2611** —
+         **2,200 lines apart, in one commit.** `RESUME.md` records the by-hand verifier
+         pass making exactly this correction. Both halves of the label were
+         wrong: the quantity 315.3's question wants is what the change **adds**,
+         and no whole-gate reading is 1.38 s either. Re-timing here reads
+         `2,649 / 2,258 / 2,032 ms` for the whole gate, which settles nothing
+         across containers and is *why* the delta is the right form.
+
+       - **Not filed, recorded:** 333's *"the 'In context' section carries no
+         copyable block, **alone** among the page's sections"* — **4 of the 8**
+         sections carry no `<pre>` (Motion intent, Quick reference, In context,
+         Related). True of the four demo sections, false as written, and nothing
+         rests on it.
+
+2. [ ] **336.2 — should `report:prose` print the flagged UNION, since that is
+       what its lane is defined on?** Today it prints the corpus flags under a
+       headline (*"over 2x the median — 10 page(s)"*) and the family flags
+       inside a per-family breakdown, and **never prints the union** — so the
+       report's most prominent number is half the population the lane asks a
+       sweep to verdict. That is how 336.1B happened, and it is an instrument
+       shape rather than a wake's oversight: the sweep read the number the tool
+       made prominent.
+
+       **Against, and it is not weak**: the union is derivable from what the
+       report already prints, this is one line of arithmetic a sweep can do, and
+       326 did do it. Adding a third list risks the report growing faster than
+       the thing it measures. **For**: the lane's own text is a two-clause
+       definition and the tool answers only the first clause; **2 of the last 2
+       sweeps mishandled lane 3** — 326 on a stale enumeration (recorded in its
+       own entry), 332 on the population. **n = 2**, said plainly: that is two
+       consecutive sweeps, not an established rate, and the wake that takes this
+       should re-measure it over however many sweeps exist by then.
+
+       - **Accept** — the property, not a predicted outcome: one wake records
+         which it is (print the union / leave the report alone / something
+         else) **with the two-sweep base rate re-measured at that revision**,
+         and says what the choice costs. **Refusing is a satisfying outcome**,
+         and so is finding that a third sweep handled the union correctly and
+         the base rate is 2 of 3.
+       - **Lane**: cloud-takeable — `report-prose.mjs` is node, and the base
+         rate is a read of two roadmap entries.
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. **None are owed by this slice**, and that is structural: it
+reads and re-measures, and its only writes are `ROADMAP.md` prose and a
+`.roundtable/` report. No `.astro`, `.css`, docs page or generated artefact is
+touched. The six visual debts carried forward are unchanged and unspent.
+
 ## Slice 335 — 297.1 answered: both issues landed in the right channel, and the router that was supposed to put them there was never used (2026-09-08)
 
 **Dispatched by rule 4** as the oldest item that is not owner-blocked. `297.1`
@@ -720,6 +838,20 @@ run.**
   words, 10 over 2x. Every one of the 10 flagged pages carries a verdict in
   `ROADMAP.md` or the archive — checked per page rather than assumed from the
   count.
+
+  **Amended 2026-09-07 by 336.1B — the flagged set is 15, not 10, and this
+  sweep checked the corpus half.** The lane flags *"over 2x the CORPUS median,
+  **or** over 2x its FAMILY median"*: corpus 10, family 11, **union 15** —
+  re-run at `6a009a4b`, not at this slice's own commit, and it reproduces this
+  sweep's corpus half exactly (`119 · 798 · 113,787 · 10`), which is what
+  licenses reading the family half back onto it. The
+  five never checked here are `/base/motion/`, `/concepts/layouts/`,
+  `/concepts/js-behaviors/`, `/concepts/design-language/` and
+  `/concepts/scale/`. **The verdict stands** — all 15 are in the 16-set
+  enumeration, so the lane is genuinely clean; what was wrong is the population
+  the cleanliness was asserted over, and the *"checked per page"* sentence is
+  what made the gap invisible. Slice 326 printed `union = 15` in its own entry.
+  Whether the report should print the union is `336.2`.
 - **Lane 4 — the ratchet: carried the finding**, via `ENVIRONMENT.md`.
 
 ### The finding: Step 1 mandates a command no cloud wake can execute
@@ -767,7 +899,11 @@ and `297.1` already carries the obligation to check on the day one appears.
 
 1. [ ] **332.1 — `ENVIRONMENT.md` doubled in 8 days and every wake reads all
        of it.** 391 → 731 lines, 3,130 → 6,316 words since its last cut, with
-       18 top-level sections. It is Step 0's first read, so its length is a
+       **17** top-level sections — **amended 2026-09-07 by 336.1A, which read
+       18**: `grep -c '^## '` → 17, `grep -c '^#'` → 18, the extra one being
+       the file's own H1 title, which cannot move. Taken the same way at the
+       last cut the figure is 14, so the growth is **14 → 17 sections**. It is
+       Step 0's first read, so its length is a
        tax on every wake, and 169.3 already split it out of `RESUME.md` for
        exactly this reason once.
        - **Accept** — the property, not a target size: each section either
@@ -2686,8 +2822,13 @@ element, `check-loop-vocab` genuinely clean).
          sweep was re-run as the Accept asks; both figures above had moved
          (**0 of 20** run zero cases, and the no-`dist` half no longer
          reproduces at all — all twenty are byte-identical without it). The
-         two costs that were expected to refuse this measure zero: 1.38 s for
-         twenty child processes, and only **3 of 20** gates needed an edit,
+         two costs that were expected to refuse this measure zero: **about
+         1.23 s added to `check:repo`** (whole gate `1355 / 1295 / 1300 ms`
+         against `69 / 68 / 65 ms` for the scan alone) — **amended 2026-09-07 by
+         336.1C, which read `1.38 s for twenty child processes`, a figure this
+         bullet's own commit `ac4a9a0f` had already corrected 2,200 lines away
+         in Slice 334 — lines 411/414 against this bullet's 2611, in that
+         commit's own `ROADMAP.md`** — and only **3 of 20** gates needed an edit,
          because the contract was written to accept both shapes already in the
          tree. Exit code alone was rejected for the reason this item states —
          it cannot see 315.1 — and the count is what an unreachable branch
