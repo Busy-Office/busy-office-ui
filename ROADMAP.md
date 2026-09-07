@@ -320,6 +320,149 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 340 — 319.3: the four-page "overlap" was never coverage. `check:target-size` cannot see a named pixel size by construction, so growing it is refused on a red-proof, and the six claims move to the gate that CAN see them (2026-09-08)
+
+**Dispatched by rule 4** on the oldest still-open item, cloud wake. Rule 1 no
+open P0 (`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0**); rule 2
+`Standardize 0 / 4 ok`; rule 3 `Objective 2 / 3 ok [316, 339]`; rule 5
+`SKEW, 0 wake-date(s) newer` — evaluable, and no name in the comparable set
+regresses on two consecutive runs. Step 0: `origin/main` arrived as a **forced
+update** again (`26447ba...273c7ae`) — `ENVIRONMENT.md` trap 1 — fixed with
+`git checkout -B main origin/main`, `git branch --show-current` re-read as
+`main` before committing. Trap 2 clean in one `--unshallow`, no `shallow.lock`,
+tags again arrived with it (`git tag | wc -l` → **8**, the seventh consecutive
+container to contradict the value §2 used to assert). Step 1 read **both**
+intakes in the REST form with its 404 control: `/discussions` **200 len 0**,
+`/not-a-real-route` **404**, `/issues?state=open` **200 len 1**. **No new
+untriaged input** — issue #2's `updated_at` unmoved at `2026-09-06T15:10:34Z`
+for a seventh consecutive hand-off — so **Step 1 committed nothing**. The nine
+older open items were re-derived from their own text as owner-blocked before
+rule 4 reached this one.
+
+**The item's own premise was re-run first, as its Accept requires, and it
+holds:** the vocabulary grep still finds **18** pages, the sweep is still
+**7**, and the overlap is still the same **4** (`button`, `data-table`, `form`,
+`quantity`).
+
+1. [x] **340.1 — the overlap of 4 is not coverage, and the sweep cannot be
+       grown into it.** `check-target-size.mjs`'s loop skips every target at or
+       above 24px (`if (t.w >= 24 && t.h >= 24) continue;`) and fails only when
+       an undersized one is crowded. Its predicate is SC 2.5.8 conformance;
+       a page's *named pixel value* is a different predicate, and no page list
+       converts one into the other.
+
+       **Red-proved by injection, with the injection asserted in the DOM before
+       the gate was believed.** `#main-content .bo-btn` on the swept
+       `/components/button/` was forced to `block-size: 30px` in the built page:
+
+       ```
+       injection landed?  styleTagInDom true · n=24 buttons · heights [30]
+                          at compact AND spacious (shipped: 28 and 44)
+       check:target-size  PASSED, rc 0 — byte-identical output, the same 9
+                          exempted control types and the same distances
+       ```
+
+       So a page may claim 44px, render 30px, and this gate stays green — and
+       `/components/button/`'s own *"`--sm` is a 24px control"* sits INSIDE the
+       sweep and was unverified by it. Coverage of the pixel claims was
+       **0 of 18**, not 4 of 18.
+
+       **The growth was costed anyway, because the Accept asks for it.** Adding
+       the seven claim-making pages, 7 → 14 pages × 3 densities:
+
+       ```
+       7 pages   real 0m10.4s    9 undersized control type(s)
+       14 pages  real 0m19.4s    the IDENTICAL 9, same distances
+       ```
+
+       **+9.0s, +86%, for zero new information.** Refused.
+
+2. [x] **340.2 — the six claims are now executable, in the gate whose own header
+       already said where they belong.** `check-claims.mjs` says *"add a case
+       whenever a page claims something a browser can check"*, and CLAUDE.md's
+       standing rule is that a claim asserting runtime behaviour must be
+       executable. Six cases added; `check:claims` reads **176** live (was 170),
+       3 NOT VERIFIED, which is `ENVIRONMENT.md` §6b's container fact.
+
+       **Every one was MEASURED TRUE before it was written down**, so none is a
+       speculative assertion — there was no lurking defect for the refused
+       growth to have caught:
+
+       | page | the sentence | measured |
+       |---|---|---|
+       | `/concepts/density`, `/concepts/layouts` | rows 30/40/48, controls 28/36/44 | 30/40/48 · 28/36/44 |
+       | `/components/button`, `/patterns/kanban` | `--sm` is 24px, in every tier | 24 in all three, n=4 and n=5 |
+       | `/components/filters` | chip remove: "24px hit area" | 24×24 in all three |
+       | `/components/richtext` | 28px compact → 44px spacious, above the 24 floor | 28/36/44, square, n=29 |
+       | `/components/segmented` | a badge is 24px tall inside a 24px segment | badge 24, option 24, at compact |
+       | `/components/money` | spacious is "44px controls" | every control 44 at spacious |
+
+       **The tokens are authored in `rem`, and the first version of the density
+       case went red on it** — `getPropertyValue` returns `1.875rem`, not the
+       `30px` the page promises a reader. It now applies each token to a real
+       box and measures it, resolving through the live root font size instead of
+       assuming 16px. That failure is kept here because it is the case's whole
+       point: the page names a pixel and the source names a ratio.
+
+       **Red-proof, six injections at once, each on a different page and a
+       different selector:** exactly **6 of 176** went red and they were exactly
+       the six new names — no collateral, and no case survived its own
+       injection. Because each injection sits on a page no other injection
+       touches, that pairs each case to its own subject rather than proving only
+       that something broke. Restored and re-run green (`rp3193` occurrences
+       back to 0 in all six files, checked rather than assumed), and the whole
+       proof was re-run against the FINAL code after the two corrections below,
+       not just the first draft.
+
+       **The by-hand verifier pass caught a real defect in this slice's own
+       diff, and it is the shape this repo keeps finding.** The `--sm` case was
+       named `button/kanban` and visited **only** `/components/button/` — a case
+       naming a page it never loads, which is a detector that cannot fail for
+       half of what its name claims. It now loops both pages and requires both.
+       Red-proved on the half that was missing: an injection into
+       `/patterns/kanban/` **alone** turns that case red, **1 of 176**, so the
+       kanban half is genuinely read.
+
+       **A second correction, to the plumbing rather than a claim.** The first
+       draft passed selectors by string-substituting into a stringified function
+       (`.replace(/SELECTOR/g, …)` fed to `new Function`). It worked and it is
+       exactly the kind of cleverness that fails silently later; it is now an
+       ordinary `page.evaluate(SIZES, sel)` argument. `check:claims` was re-run
+       green and the six-injection proof re-run red after the change, because a
+       refactor of how a value is OBTAINED invalidates a red-proof taken before
+       it.
+
+3. [x] **340.3 — what the 18 does NOT contain, which is the judgement the item
+       said the list was only an input to.** Of the 14 pages outside the sweep,
+       **seven** make a pixel claim (the six cases above plus `/concepts/layouts`
+       restating density's), and **seven do not**:
+
+       - `/patterns/goods-receipt`, `/patterns/rf-landing`, `/patterns/rf-list`,
+         `/patterns/rf-pick` — "gloved thumb", "glove-sized tap targets",
+         "big steppers". Qualitative; they name no pixel, so there is nothing to
+         falsify. `/patterns/rf-list` says outright its row tap target is *"not
+         in this demo"*.
+       - `/patterns/record-detail` — `124px`/`277px` are facts-strip **widths**,
+         not target sizes.
+       - `/patterns/inbox` — "nitrile gloves" is a line item in a receiving
+         demo. **Demo data, not a claim**, and the clearest evidence that the 18
+         is a vocabulary count.
+       - `/concepts/accessibility` — asserts the *verification* ("SC 2.5.8 …
+         verified in CI by the real spec test … met via the spacing exception,
+         NOT a 24px floor"), which is an accurate description of what
+         `check:target-size` does. Examined and left alone.
+
+       So the item's caution was right and the number it was right about is
+       **7 of 14**, not 14.
+
+4. [x] **340.4 — the assumption is written where it was made.**
+       `check-target-size.mjs`'s header now carries a "what this gate does not
+       check" block with the red-proof and the two timings, because the header
+       is what the next wake reads before reaching for the page list again.
+       Nothing else records it: the misreading is what made `319.3`'s Accept
+       offer "grow the sweep" as a live branch at all, and the header is the one
+       place a wake looks before reaching for that branch a second time.
+
 ## Slice 339 — Standardize sweep, 4 of 4 lanes: lanes 1-3 clean, and lane 4's regrowth is a THIRD case 308.1's fork does not name — the cut held perfectly and the charter behind it was never executed (2026-09-08)
 
 **Dispatched by rule 2** at `Standardize 4 / 4 Continue rounds OVERDUE`, cloud
@@ -2977,8 +3120,11 @@ about a keyboard path.
        injections discriminate between interaction paths rather than breaking
        the page.
 
-3. [ ] **319.3 — should a docs page be allowed to assert a target size at all
-       without a gate that can see it?** Filed, not built, with the base rate
+3. [x] **319.3 — should a docs page be allowed to assert a target size at all
+       without a gate that can see it? ANSWERED 2026-09-08 by Slice 340: no,
+       and the gate is `check:claims`, not `check:target-size` — the sweep's
+       growth is REFUSED on a red-proof, and the four-page "overlap" was never
+       coverage.** Filed, not built, with the base rate
        measured rather than promised: `grep -rlniE 'glove|tap target|touch
        target|24px|44px' apps/docs/src/pages` finds the vocabulary on **18**
        pages, while `check:target-size`'s sweep is **7** pages — chosen for CI

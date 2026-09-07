@@ -16,7 +16,22 @@
  *   FAIL  — undersized AND crowded: a real 2.5.8 violation.
  *   note  — undersized but adequately spaced: conformant via the exception,
  *           and the reason the docs may not claim a blanket 24px floor.
-  *
+ *
+ * WHAT THIS GATE DOES NOT CHECK, because it was assumed to (roadmap 319.3):
+ * a page's NAMED pixel value. Eighteen docs pages say things like "24px hit
+ * area", "44px controls", "28px at compact"; four of them are inside the sweep
+ * below, and that overlap was read as coverage. It is not. The loop above skips
+ * every target at or above 24px, so a page may name any size and this gate
+ * stays green. Red-proved 2026-09-08: `#main-content .bo-btn` on the swept
+ * `/components/button/` was forced to 30px in the built page — the injection
+ * landed (the style tag was in the DOM; all 24 buttons measured 30px at compact
+ * AND spacious, against the shipped 28 and 44) — and this gate passed with
+ * byte-identical output, the same 9 exempted types and distances.
+ * Growing PAGES is therefore not the fix: measured the same day, 7 -> 14 pages
+ * costs 10.4s -> 19.4s (+86%) and reports the identical exempted set.
+ * The pixel claims live in `check-claims.mjs` instead, where each is measured
+ * against the value its page names.
+ *
  * @exact — measures geometry in a real browser. Exempt from --self-test: there is no
  * judgement to get wrong, and ceremony around a lookup is noise.
 */

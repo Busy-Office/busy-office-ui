@@ -4594,6 +4594,148 @@ check(
   JSON.stringify(resetLayered),
 );
 
+/* ── Target-size PIXEL claims (roadmap 319.3) ────────────────────────────────
+   Eighteen docs pages name a pixel target size ("24px hit area", "44px
+   controls", "28px at compact"). `check:target-size` was assumed to cover the
+   seven of them inside its sweep; it does not, and cannot. That gate's
+   predicate is SC 2.5.8 conformance — it looks only at targets UNDER 24px and
+   fails only when one is crowded — so a page may name any size at all and the
+   gate stays green.
+
+   Red-proved rather than argued (2026-09-08): `#main-content .bo-btn` on the
+   swept `/components/button/` was forced to `block-size: 30px` in the built
+   page. The injection landed (the `<style>` was in the DOM and all 24 buttons
+   measured 30px, at compact AND spacious, where the shipped values are 28 and
+   44), and `check:target-size` passed with byte-identical output — the same 9
+   exempted control types, same distances. So growing that gate's page list is
+   not the fix: coverage of the pixel CLAIMS was 0 of 18, not 4 of 18.
+
+   This file is the gate that can see them — its own header says "add a case
+   whenever a page claims something a browser can check". The claims below were
+   each measured true before being written down, so none of them is a
+   speculative assertion. */
+const DENSITIES = ['compact', 'comfortable', 'spacious'];
+const atDensity = async (d) => {
+  await page.evaluate((x) => document.documentElement.setAttribute('data-density', x), d);
+  await new Promise((r) => setTimeout(r, 120));
+};
+const perDensity = async (fn, arg) => {
+  const out = {};
+  for (const d of DENSITIES) {
+    await atDensity(d);
+    out[d] = await page.evaluate(fn, arg);
+  }
+  return out;
+};
+/* DISTINCT rounded sizes of the live (non-sample) matches, so a claim about
+   "the control" cannot be satisfied by one element while its siblings differ —
+   a one-element reading is what lets a page name a size the rest of the demo
+   does not have. */
+const SIZES = (sel) => {
+  const els = [...document.querySelectorAll('#main-content ' + sel)].filter((e) => !e.closest('pre, code'));
+  const uniq = (f) => [...new Set(els.map((e) => Math.round(f(e.getBoundingClientRect()))))].sort((a, b) => a - b);
+  return { n: els.length, h: uniq((r) => r.height), w: uniq((r) => r.width) };
+};
+
+// /concepts/density: "rows 30 / 40 / 48px, controls 28 / 36 / 44px".
+// /concepts/layouts + /components/money say the spacious half of the same
+// sentence ("data-density=spacious gives 44px controls"). Neither concept page
+// RENDERS such a control — measured: `/concepts/layouts`'s main content has no
+// density-tracking control at all — so the claim is checked where it is
+// defined, on the tokens both pages are describing.
+await visit('/concepts/density/');
+/* Both tokens are authored in `rem`, so reading the custom property back gives
+   `1.875rem`, not the `30px` the page promises the reader. Resolve them the way
+   a control does — apply each to a real box and measure it — which converts
+   through the live root font size instead of assuming 16px. */
+const densityTokens = await perDensity(() => {
+  const probe = document.createElement('div');
+  probe.style.cssText = 'position:absolute;visibility:hidden;inline-size:1px';
+  document.body.appendChild(probe);
+  const px = (token) => {
+    probe.style.blockSize = `var(${token})`;
+    return Math.round(probe.getBoundingClientRect().height);
+  };
+  const out = { row: px('--bo-density-row-height'), control: px('--bo-density-control-height') };
+  probe.remove();
+  return out;
+});
+check(
+  'density/layouts: the density tiers really are rows 30/40/48px and controls 28/36/44px',
+  densityTokens.compact.row === 30 && densityTokens.comfortable.row === 40 &&
+    densityTokens.spacious.row === 48 && densityTokens.compact.control === 28 &&
+    densityTokens.comfortable.control === 36 && densityTokens.spacious.control === 44,
+  JSON.stringify(densityTokens),
+);
+
+// /components/button: "--sm is a 24px control".
+// /patterns/kanban: the same control "is 24px in EVERY density tier" — which is
+// the half a single-tier reading cannot see, and the sentence 319.1 had to
+// correct on that page.
+// BOTH pages are visited: kanban is where the "every density tier" wording
+// lives, so asserting it only on /components/button would name a page this
+// case never loads.
+const smButton = {};
+for (const path of ['/components/button/', '/patterns/kanban/']) {
+  await visit(path);
+  smButton[path] = await perDensity(SIZES, '.bo-btn--sm');
+}
+check(
+  'button/kanban: .bo-btn--sm is a 24px control, and stays 24px in every density tier, on both pages that say so',
+  Object.values(smButton).every((byDensity) =>
+    DENSITIES.every((d) => byDensity[d].n > 0 && byDensity[d].h.join() === '24')),
+  JSON.stringify(smButton),
+);
+
+// /components/filters (ApiTable note): chip remove buttons — "24px hit area is
+// built in". Both axes, because a hit AREA is not a height.
+await visit('/components/filters/');
+const chipRemove = await perDensity(SIZES, '.bo-chip__remove');
+check(
+  'filters: the chip remove button is a built-in 24x24 hit area in every density tier',
+  DENSITIES.every((d) => chipRemove[d].n > 0 && chipRemove[d].h.join() === '24' && chipRemove[d].w.join() === '24'),
+  JSON.stringify(chipRemove),
+);
+
+// /components/richtext: icon buttons "are square and track density (28px at
+// compact, 44px at spacious), and stay above the 24px target floor".
+await visit('/components/richtext/');
+const rtIcons = await perDensity(SIZES, '.bo-richtext__toolbar .bo-btn');
+check(
+  'richtext: icon buttons are square, track density 28px compact -> 44px spacious, and never fall below the 24px floor',
+  rtIcons.compact.h.join() === '28' && rtIcons.spacious.h.join() === '44' &&
+    DENSITIES.every((d) => rtIcons[d].n > 0 && rtIcons[d].h.join() === rtIcons[d].w.join() &&
+      Math.min(...rtIcons[d].h) >= 24),
+  JSON.stringify(rtIcons),
+);
+
+// /components/segmented: "at compact density a badge is 24px tall inside a 24px
+// segment — measured — so it fills the option edge to edge". That is the reason
+// the page gives for sending the reader to muted tabular text instead, so the
+// equality is the load-bearing part, not the 24.
+await visit('/components/segmented/');
+const segCompact = await perDensity(SIZES, '.bo-segmented__option');
+await atDensity('compact');
+const badgeCompact = await page.evaluate(SIZES, '.bo-badge');
+check(
+  'segmented: at compact a badge is exactly as tall as the option it would sit in, so it would fill it edge to edge',
+  segCompact.compact.h.join() === '24' && badgeCompact.n > 0 && badgeCompact.h.join() === '24',
+  JSON.stringify({ option: segCompact.compact, badge: badgeCompact }),
+);
+
+// /components/money: "data-density=spacious (44px controls) already meets the
+// WCAG 2.5.8 minimum target size". EVERY control in the money field, not the
+// tallest one — the claim is what a warehouse-floor screen gets.
+await visit('/components/money/');
+await atDensity('spacious');
+const moneySpacious = await page.evaluate(SIZES, '.bo-money > .bo-select, .bo-money > .bo-input, .bo-money > .bo-combobox > .bo-input');
+check(
+  'money: at spacious every control in the field is 44px, which clears the 24px SC 2.5.8 minimum it claims to meet',
+  moneySpacious.n > 0 && moneySpacious.h.join() === '44',
+  JSON.stringify(moneySpacious),
+);
+await page.evaluate(() => document.documentElement.removeAttribute('data-density'));
+
 await browser.close();
 server.close();
 
