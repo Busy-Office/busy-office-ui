@@ -320,6 +320,129 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 339 — Standardize sweep, 4 of 4 lanes: lanes 1-3 clean, and lane 4's regrowth is a THIRD case 308.1's fork does not name — the cut held perfectly and the charter behind it was never executed (2026-09-08)
+
+**Dispatched by rule 2** at `Standardize 4 / 4 Continue rounds OVERDUE`, cloud
+wake. Rule 1 no open P0 (`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0**).
+Step 0: `origin/main` arrived as a **forced update** again
+(`26447ba...c87fc52`) — `ENVIRONMENT.md` trap 1 — fixed with `git checkout -B
+main origin/main`; `git branch --show-current` re-read as `main` before
+committing. Trap 2 clean in one `--unshallow`, no `shallow.lock`, tags again
+arrived with it (`git tag | wc -l` → **8**). Step 1 read **both** intakes in the
+REST form with its 404 control: `/discussions` **200 len 0**,
+`/not-a-real-route` **404**, `/issues?state=open` **200 len 1**. **No new
+untriaged input** — issue #2's `updated_at` is unmoved at
+`2026-09-06T15:10:34Z` for a sixth consecutive hand-off — so **Step 1 committed
+nothing**.
+
+**Lanes 1-3 clean, and `n of 4` is said as the playbook requires.**
+
+```
+npm run scan:dead-style -w docs          # 0 dead of 1,365 attrs / 1,854 decls
+npm run report:css-repeats -w @busy-office/ui   # 74 files · 242 rules · 230 bodies · 8 repeats
+npm run report:prose -w docs             # 119 pages · median 798 · total 113,787
+python3 scripts/loops/report_loop_prose.py
+```
+
+Lane 1 ran green **with `CHROME_PATH` exported in the same command** and the
+workspace spelled `docs` — `337.1`'s live trap, avoided rather than met. Lane 2
+is the **fifth** consecutive reading of `74/242/230/8`; the finding is the delta
+and there is none. Lane 3's flagged union is **15** (10 over 2x the corpus
+median, 11 over a family median), every one inside the pinned 16-set —
+`158.1`'s twelve resolve to twelve page paths in the archive, `161.1`'s three,
+`178.3`'s `/concepts/scale/`; the unflagged member is `/patterns/output-form/`.
+Membership was checked against **the enumeration**, never the grep `326.1`
+red-proved dead.
+
+1. [x] **339.1 — lane 4: Step 0c regrew past its pre-cut size in one day, and
+       neither branch of 308.1's fork describes what happened.**
+
+       Lane 4 reports the dispatch region growing faster than the file (1,525 →
+       **7,532** words, 42.3% of it). `308.1` says a rising region number is not
+       a regrowth reading until it is attributed per section, so it was — on
+       headings only, which is what that clause asks for.
+
+       **Every per-section figure below is the SPLITTER's, and lane 4's 7,532 is
+       the report's**; the two differ because the report counts heading lines and
+       a body split does not. They reconcile at the constant the playbook names —
+       7,532 − 7,476 = **56** — so the deltas agree exactly and the totals do
+       not. Quoting one against the other would invent a delta that is not there:
+
+       ```
+       # per-section body words, dispatch region, at each revision since the cut
+       git show <rev>:LOOPS.md | awk '/^## Playbooks/{exit} {print}'   # split on ^#{2,4}
+       ```
+
+       **Every changed section grew and none shrank** since the last cut
+       (`8848ed55`, 274.2, 2026-09-05): Step 0c **+564**, Step 1 **+580**, Step 2
+       **+527**, Step 0 **+151**, and the loops table +52 net as *eight* became
+       *nine*. The largest is the section **274.2 cut**, which is 308.1's first
+       branch — *the fold did not hold, another cut is the answer*.
+
+       **The per-revision series says that verdict is wrong.** Step 0c held
+       **flat at 936 across 15 consecutive commits** over two days, then moved
+       twice on 2026-09-07: `534b097a` **+364** (collision 3's forensics) and
+       `86f034ce` **+200** (collision 4's). It reached **1,500** — **122 words
+       above the 1,378 it was cut from**.
+
+       ```
+       8848ed55  2026-09-05   936        274.2's cut: 1,378 -> 936
+       … 15 commits …         936    +0  through 2026-09-07 (Slice 327)
+       534b097a  2026-09-07  1300  +364  collision 3 written up in full
+       86f034ce  2026-09-07  1500  +200  collision 4 written up in full
+       ```
+
+       **So the cut held perfectly and the charter behind it was never
+       executed.** `LOOPS-archive.md`'s own Step 0c charter — written by 274.2 —
+       says the decision, the cost, the fetch rule, the conflict recipe and the
+       reopen condition stay inline and **the forensics move**. Collisions 3 and
+       4 wrote their forensics inline anyway. Nothing executes that charter when
+       the next incident is recorded, exactly like the polish re-queue rule that
+       "was a rule a human had to notice. It was not noticed."
+
+       **This is a third case, and the first two branches send a wake the wrong
+       way on it.** Branch 1 buys another 15 commits; branch 2 ("other sections
+       grew — do not reach for a cut") is false here. The distinguishing tell is
+       that the regrowth is **new material**, so it is invisible in the
+       endpoints and obvious in the series. Added to the lane-4 clause as a
+       third branch, with the general form: **check whether the section has a
+       GENERATOR** — a recurring event each instance of which writes a narrative
+       there — because no cut can hold against one.
+
+       **What was done about it: the charter applied, not a second cut.**
+       Collisions 3 and 4 keep a one-line record inline, in the shape 274.2 left
+       collisions 1 and 2 in; their forensics, the decision-time fixed-string
+       re-check and the "it has happened once" stale-snapshot incident moved to
+       `LOOPS-archive.md`. What CHANGES what a wake does stayed inline and is
+       named: the pre-commit `git fetch origin main`, the renumber mechanic, the
+       keep-both-rows recipe, "check the loser's output before discarding", and
+       the guaranteed-conflict refutation.
+
+       **Measured, and the first attempt did not work.** Applying the charter
+       moved Step 0c **1,500 → 1,487**, a 13-word reduction: the narrative that
+       came out was replaced by a paragraph explaining why it came out, which is
+       the same accretion by another name. Tightened to the instruction, and the
+       explanation put here and in the archive, it reads **1,322** — **178 below
+       where this wake found it and 56 below the pre-cut 1,378**, with the
+       dispatch region 7,476 → **7,298**. It is **still 386 above the 936 the cut
+       achieved**, and that is stated rather than rounded off: the residual is
+       instruction that landed after the cut (the renumber mechanic above all),
+       not narrative, and cutting to 936 would remove what a colliding wake
+       executes.
+
+       **Two stale counts fixed in passing, same defect class as lane 3's
+       "Verdicts to date" list**: `LOOPS.md` pointed at "the forensics of the
+       first two collisions" and `LOOPS-archive.md`'s heading read "The two
+       collisions" — both written when two was right, both stale from the moment
+       a third landed. Both now name the subject rather than a count.
+
+       *Accept was*: the region's rise is attributed per section before any
+       verdict; the verdict names which of 308.1's cases it is, or records that
+       none of them fits; and whatever is done leaves Step 0c's
+       behaviour-changing content inline, verified by naming it. Finding the
+       premise ("the fold did not hold") FALSE is a satisfying outcome and is
+       what happened.
+
 ## Slice 338 — 316.1 built: `check:print-tokens` ships red-proved, the exemption list it was expected to need is refused on a measurement, and the gap it CANNOT see is filed rather than quietly widened (2026-09-08)
 
 **Dispatched by rule 4**, cloud wake. Step 0: container **DETACHED** again

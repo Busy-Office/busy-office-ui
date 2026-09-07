@@ -133,15 +133,9 @@ to do.
 
 ### Step 0c — Two dispatchers share this queue, and collisions are ACCEPTED
 
-Decided 2026-08-28 (roadmap 162.1). Until then this file said nothing about
-concurrency at all — re-checked before deciding, with plain fixed strings:
-`concurrency`, `concurrent`, `parallel`, `simultane`, `collision`, `race`,
-`two wakes` and `two dispatchers` all returned **0**, and the 12 hits for
-`lock` were `block`/`blocked`/`blocks`/`blocking`/`unblock`/`lockfile`. That
-silence was correct when loops were session-scoped; promoting the routine to
-`/schedule` made a second dispatcher real without a rule changing, and rule 4
-is deterministic, so two dispatchers reading one `ROADMAP.md` always pick the
-same item.
+Decided 2026-08-28 (roadmap 162.1). Two dispatchers reading one `ROADMAP.md`
+always pick the same item, because rule 4 is deterministic — promoting the
+routine to `/schedule` made that real without a rule changing.
 
 **The decision: accept collisions.** Two dispatchers may take the same item; the
 one that pushes second loses its work and re-dispatches. Nothing partitions the
@@ -149,34 +143,29 @@ queue and nothing claims an item.
 
 **What it costs, named:** up to one wake's work, discarded. Nothing has been
 corrupted by one yet: the loser has always been rejected or has found out before
-committing, never merged. **Count them by re-reading this section's own record
-rather than trusting a number here** — the words "it has happened once" entered
-at `15ab347b` on 2026-08-28 and stood **unedited for ten days**, across a second
-collision this same section goes on to describe (`git log -S'It has happened
-once' -- LOOPS.md` returns exactly that one commit). That is the stale-snapshot
-failure this file records elsewhere, in the paragraph naming the cost.
-Four as of 2026-09-07:
+committing, never merged. **Count them by re-reading the list below rather than
+trusting a number in prose** — "it has happened once" stood here unedited for ten
+days, across a second collision this section already described (forensics in
+`LOOPS-archive.md`). Four as of 2026-09-07:
 
 1. **157.3** — the cloud routine and the local session both built it within an
    hour (Slice 162). `git push` rejected the loser.
 2. **169/170/172** — the loser's rebase merged **clean**, refuting the
    "guaranteed conflict" argument below (roadmap 175.4).
 3. **The Objective grill of 310/328/329** (2026-09-07) — both dispatchers were
-   armed by the same `Objective 3 / 3 OVERDUE`, ran the same grill, and reached
-   the **same primary finding** (Slice 329's miniature cost resting on an
-   unstable five-page sample). The loser was stopped by the pre-commit fetch
-   **before it had made any commit at all** — the mechanism below working
-   exactly as specified. Whether that is a first is NOT claimed: collision 2's
-   record credits the same fetch while also describing a rebase, so its loser
-   may well have committed, and `LOOPS-archive.md` does not settle it.
+   armed by the same `Objective 3 / 3 OVERDUE` and ran the same grill. The loser
+   was stopped by the pre-commit fetch **before it had made any commit at all**.
 4. **`297.1` (rule 4) against the Objective grill of 315/332/333 (rule 3)**,
-   2026-09-07. **The first collision in which the two dispatchers ran DIFFERENT
-   rules**, so nothing was duplicated and nothing was discarded. What they
-   collided on is the one shared resource this section never names: **the slice
-   NUMBER.** Both wrote `## Slice 335`. The loser's pre-commit fetch saw
-   `6a009a4b..9c7bac19`, read the winner's commit, renumbered its own slice to
-   336, rebased — one conflict, both hunks kept, `ROADMAP.md` ordered 336 / 335 /
-   334 — and landed intact.
+   2026-09-07 — **the first collision in which the two dispatchers ran DIFFERENT
+   rules**, so nothing was duplicated. They collided on the one shared resource
+   this section had never named, **the slice NUMBER**; the loser renumbered
+   `## Slice 335` to 336, rebased, and landed intact.
+
+**A new collision adds a LINE here and its forensics to `LOOPS-archive.md`** —
+274.2's charter, which collisions 3 and 4 did not follow, and applying it late is
+roadmap 339.1. The list above is the record a count is read from; what a wake
+DOES about a collision is the fetch rule, the renumber mechanic and
+keep-both-rows, all below.
 
 **So the cost model has a fourth point and it is the cheapest: a renumber, not a
 wake.** Three of the four now cost less than the "up to one wake's work"
@@ -187,20 +176,15 @@ mechanical and easy to get wrong in one specific way: `sed 's/335/336/g'` over
 file today), so match `335\.` and the `^## Slice 335` heading, and count the hits
 before and after. That is CLAUDE.md's bulk-edit rule in its smallest form.
 
-**Collision 3 says something the first two do not: rule 3 collides harder than
-rule 4.** Rule 4 picks the oldest open item, so two dispatchers duplicate one
-item; rule 3 hands both of them the *same arming set*, so they duplicate a whole
-wake. It is recorded, **not fixed** — the loser here did not re-dispatch to a
-different loop; it discarded the duplicated 95%, kept the one finding the winner
-had not made, and amended it into the winner's slice (roadmap 330). So the cost
-was a fraction of a wake rather than the whole one this section budgets for, and
-partitioning the queue is already refused below on starvation.
+**Rule 3 collides harder than rule 4**, which collision 3 is the evidence for:
+rule 4 picks the oldest open item, so two dispatchers duplicate one *item*; rule
+3 hands both of them the same arming set, so they duplicate a whole *wake*.
+Recorded, **not fixed** — partitioning the queue is already refused below on
+starvation.
 
 **And the loser's output is not automatically the worse one — check before
-discarding.** Here it mostly was: the losing wake's census enumerated
-`readdir(dist/components)` and swallowed two non-component directories, and it
-scored a heading count as a category count. Both are recorded in Slice 330,
-because a superseded wake's *errors* are as much evidence as its findings.
+discarding.** A superseded wake's *errors* are as much evidence as its findings;
+collision 3's loser produced both, in `LOOPS-archive.md`.
 
 **⚠ THE COLLISION IS NOT CAUGHT BY A GUARANTEED CONFLICT. That argument was
 made here, and the second collision refuted it** (Objective grill of
@@ -222,8 +206,9 @@ Resolving such a conflict: **keep BOTH row sets**, then regenerate the mirrors
 rather than hand-merging them, and check the parser against a raw
 `grep -c "^- "` before committing.
 
-The forensics of the first two collisions, and the refuted "safe by construction"
-argument with its 5-of-5 measurement, are in **`LOOPS-archive.md`**.
+The per-collision forensics, and the refuted "safe by construction" argument with
+its 5-of-5 measurement, are in **`LOOPS-archive.md`**. (This named "the first two
+collisions" until 339.1 — a count in a pointer, stale the moment a third landed.)
 
 **The one thing that changes, and it costs no push:** `git fetch origin main` at
 Step 0 **and again immediately before the wake's first commit**. If
@@ -993,6 +978,17 @@ surfaced more:
    - **Other sections grew** → a second cut would remove instruction rather
      than narrative, which is what this playbook's refusals are about. Say so
      and file the structural question; do not reach for a cut.
+   - **The cut section regrew on NEW material** → a third case, and the first
+     two branches send a wake the wrong way on it (roadmap 339.1, 2026-09-08).
+     The tell is the per-revision series, not the endpoints: 274.2 folded Step
+     0c **1,378 → 936** and it held **flat across the next 15 commits**, then two
+     collision write-ups took it to **1,500** in one day — past its pre-cut size,
+     on material that did not exist when the cut ran. **The cut held; the charter
+     behind it did not**, because nothing executes "forensics go to the archive"
+     when the next incident is written up. A second cut buys another 15 commits.
+     The answer is to apply the charter on the incident, and to check whether the
+     section has a GENERATOR — a recurring event each instance of which writes a
+     narrative here — because no cut can hold against one.
 
    **Reconcile the two instruments before comparing readings.** The report's
    row and the `awk … | wc -w` form sweeps quote both COUNT HEADING LINES; a

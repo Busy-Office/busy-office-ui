@@ -139,11 +139,17 @@ Moved from `LOOPS.md` Step 0c by roadmap item **274.2 (2026-09-05)**, on the
 same charter as the two sections above: the *decision* (accept collisions), the
 *cost*, the executed `git fetch origin main` rule, the conflict-resolution
 recipe and the reopen condition all stay inline in `LOOPS.md`. What moves is the
-forensics of the two collisions, the refuted "safe by construction" argument,
+forensics of each collision, the refuted "safe by construction" argument,
 and the measurements behind the three refused alternatives — history a wake
 needs when it ARGUES about the concurrency decision, never when it dispatches.
 
-### The two collisions, and the argument they refuted
+**The headings below carried the count "two" until roadmap 339.1 (2026-09-08),
+by which time there were four** — and the two that landed in between wrote their
+forensics into `LOOPS.md` rather than here, because nothing executes this
+charter. Collisions 3 and 4 were moved here by that item; a count in a heading
+goes stale on the next incident, so these name the subject instead.
+
+### The collision forensics, and the argument they refuted
 
 **⚠ THE "SAFE BY CONSTRUCTION" ARGUMENT BELOW IS FALSE, AND THE SECOND
 COLLISION IS WHAT SHOWED IT** (Objective grill of 169/170/172, 2026-08-28;
@@ -189,6 +195,50 @@ one, `c073c36`, 2026-08-27 17:57:55Z — **5 of 5 same-clock commit runs touched
 both files**. n is five, and the 100% is expected by construction rather than
 surprising: at COMMIT level only **705 of 1,464 (48%)** touch the log, because a
 wake commits several times and records once. The claim is about wakes.
+
+**What the concurrency decision was checked against, 2026-08-28 (roadmap
+162.1).** Until then `LOOPS.md` said nothing about concurrency at all — re-checked
+before deciding, with plain fixed strings: `concurrency`, `concurrent`,
+`parallel`, `simultane`, `collision`, `race`, `two wakes` and `two dispatchers`
+all returned **0**, and the 12 hits for `lock` were
+`block`/`blocked`/`blocks`/`blocking`/`unblock`/`lockfile`. That silence was
+correct when loops were session-scoped; promoting the routine to `/schedule` made
+a second dispatcher real without a rule changing.
+
+**The stale-snapshot incident in the cost paragraph.** The words "it has happened
+once" entered `LOOPS.md` at `15ab347b` on 2026-08-28 and stood **unedited for ten
+days**, across a second collision the same section went on to describe
+(`git log -S'It has happened once' -- LOOPS.md` returns exactly that one commit).
+It is why the inline paragraph now says to count from the list rather than from
+prose.
+
+**Collision 3 — the Objective grill of 310/328/329 (2026-09-07).** Both
+dispatchers were armed by the same `Objective 3 / 3 OVERDUE`, ran the same grill,
+and reached the **same primary finding** (Slice 329's miniature cost resting on
+an unstable five-page sample). The loser was stopped by the pre-commit fetch
+**before it had made any commit at all** — the mandated mechanism working exactly
+as specified. Whether that is a first is NOT claimed: collision 2's record above
+credits the same fetch while also describing a rebase, so its loser may well have
+committed, and nothing here settles it.
+
+It cost a fraction of a wake rather than the whole one `LOOPS.md` budgets for:
+the loser did not re-dispatch to a different loop; it discarded the duplicated
+95%, kept the one finding the winner had not made, and amended it into the
+winner's slice (roadmap 330). **And its output was not uniformly the worse
+one** — the losing wake's census enumerated `readdir(dist/components)` and
+swallowed two non-component directories, and it scored a heading count as a
+category count. Both are recorded in Slice 330, which is why `LOOPS.md` says to
+check a loser's output before discarding it.
+
+**Collision 4 — `297.1` (rule 4) against the Objective grill of 315/332/333
+(rule 3), 2026-09-07.** The first collision in which the two dispatchers ran
+DIFFERENT rules, so nothing was duplicated and nothing was discarded. What they
+collided on is the one shared resource the section had never named: **the slice
+NUMBER.** Both wrote `## Slice 335`. The loser's pre-commit fetch saw
+`6a009a4b..9c7bac19`, read the winner's commit, renumbered its own slice to 336,
+rebased — one conflict, both hunks kept, `ROADMAP.md` ordered 336 / 335 / 334 —
+and landed intact. The renumber mechanic that makes this cheap stays inline in
+`LOOPS.md`, because it is what a wake in this position DOES.
 
 ### The three refused alternatives, with the measurement behind each
 
