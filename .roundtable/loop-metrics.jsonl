@@ -133,3 +133,5 @@
 {"ts": "2026-09-07 12:59", "name": "claims", "value": 170.0, "unit": "count"}
 {"ts": "2026-09-07 19:53", "name": "gates", "value": 55.0, "unit": "count"}
 {"ts": "2026-09-07 21:52", "name": "dispatch-region-words", "value": 7298.0, "unit": "words"}
+{"ts": "2026-09-07 23:29", "name": "claims", "value": 176.0, "unit": "count"}
+{"ts": "2026-09-07 23:29", "name": "target-size-pages", "value": 7.0, "unit": "pages"}
