@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-07 02:00 UTC
+Generated at: 2026-09-07 03:02 UTC
 
 ## Open items by slice
 
@@ -45,16 +45,17 @@ Generated at: 2026-09-07 02:00 UTC
   - 315.3 — should `check:selftests` EXECUTE each self-test rather than grep for the branch? Filed with its base rate, deliberately not built inside a grill.
 - **Slice 316** (1 open)
   - 316.1 — should a gate forbid a theme token in a `@media print` colour declaration?
+- **Slice 319** (1 open)
+  - 319.3 — should a docs page be allowed to assert a target size at all without a gate that can see it?
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1565 iterations logged)
+dispatch status — counter-triggered rules (1567 iterations logged)
   Standardize   3 / 4 Continue rounds since 2026-09-06 22:53   ok
-  Objective     3 / 3 slices          since 2026-09-06 23:47   OVERDUE  [298, 300, 318]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-09-07 03:02   ok
   Optimize      1 wake-date(s) newer   since 2026-09-06 16:56   STALE   [newest pair: axe-violations; 132 sample(s), 13 of 44 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-06, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-06 (2026-09-07), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -76,8 +77,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-06 21:54 · Meta · refusal · making the three gates stop reading .roundtable/** and STATUS.md — that reverses 256.2, the standing product-name instruction, and check:slice-refs' reason for existing · refused · 024445f5
-- 2026-09-06 22:53 · Standardize · sweep · Slice 314 — Standardize sweep 4 of 4 lanes clean; step 4's re-scan found 292.8's scope excluded the 24 shared components/layouts, and 314.1 tokenises the two font-size literals there · landed · f5c6ecd1
 - 2026-09-06 22:53 · Meta · refusal · 314.2 — widening the sweep to spacing/font-weight inline literals: a different property with no verdict; base rates measured (8.6% pages / 21.9% shared), filed not built, and no gate added · refused · f5c6ecd1
 - 2026-09-06 23:47 · Objective · grill · Slice 315 — grill of 294/312/314: check:ci-ignores' --self-test unreachable since 312.2 (0 of 18 cases), fixed; 294's 139-hex base rate unreproducible, amended · landed · 066d9878
 - 2026-09-06 23:47 · Meta · refusal · executing each self-test inside check:selftests — base rate 1 of 20 and no single parseable output shape across the heuristic gates; filed as 315.3 instead · refused · 066d9878
@@ -86,6 +85,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-07 01:50 · Continue · build · 300.2 — board/kanban spike: refuse the component (4 of 5 params are announcement strings); fix /patterns/kanban's unexecutable screen-reader-announcement claim · refused · 0c24d13e
 - 2026-09-07 01:50 · Meta · refusal · lifting data-grid.ts's roving-tabindex navigation out of <table> — one candidate consumer (a board that does not exist); bo-calendar, the only other non-table grid, deliberately refuses the model · refused · 0c24d13e
 - 2026-09-07 02:00 · Continue · bug · 318.1 — check:claims's calendar case raced a real form-GET navigation against a fixed 400ms wait (red on CI run 807, green on 808 with no code change); waits for the navigation now, red-proved by an 800ms delay injection · landed · 168269ac
+- 2026-09-07 03:02 · Objective · grill · Slice 319 — grill of 298/300/318: 23 of 25 assertions reproduce; 318's "99 other fixed waits" is 98 (a removal counted against raw text its own comment names), and /patterns/kanban's glove-target claim is false at 24px — corrected, and its keyboard claim made executable and red-proved twice · landed · 6e5724bb
+- 2026-09-07 03:02 · Meta · refusal · adding /patterns/kanban to check:target-size's 7-page sweep — the menu items measure 0x0 while the popover is closed, so the sweep could not see the claim it would exist to check; filed as 319.3 with its base rate (18 vocabulary pages / 7 swept / 4 overlap) instead · refused · 6e5724bb
 
 ## Sunset test
 
