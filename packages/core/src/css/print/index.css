@@ -70,9 +70,12 @@
        `--bo-color-text-muted` resolves to `rgb(156,163,175)` when the page is
        in the dark theme, which is **2.54:1 on white paper** — below AA for
        body text. This literal reads **7.46:1 in both themes**. Every colour
-       inside `@media print` in the shipped CSS is a literal for this reason
-       (11 of 11, 6 files); "tidying" one into a token is a contrast
-       regression, and nothing gates it yet. */
+       inside `@media print` in the shipped CSS is a literal for this reason;
+       "tidying" one into a token is a contrast regression, and since roadmap
+       316.1 `check:print-tokens` fails the core build on it — red-proved by
+       injecting `var(--bo-color-text-muted)` at THIS site. The count that
+       used to be hand-typed here is printed by that gate on every run, so it
+       cannot go stale in a comment. */
     .bo-print-report a[href^="http"]::after {
       content: " (" attr(href) ")" / "";
       font-size: 0.85em;

@@ -320,6 +320,118 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 338 — 316.1 built: `check:print-tokens` ships red-proved, the exemption list it was expected to need is refused on a measurement, and the gap it CANNOT see is filed rather than quietly widened (2026-09-08)
+
+**Dispatched by rule 4**, cloud wake. Step 0: container **DETACHED** again
+(`git branch --show-current` empty), `ENVIRONMENT.md` trap 1, fixed with
+`git checkout -B main origin/main` before any commit; `origin/main` again
+arrived as a **forced update** (`26447ba...0ba54ba`), carrying Slice 337, which
+the previous hand-off predates. Trap 2 clean in one `--unshallow`, no
+`shallow.lock`, and it again brought the tags; `git tag | wc -l` → **8**.
+
+Rule 1: no open P0 — `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` reads **0**
+across the 31 open items. Step 1 read **both** intakes with `ENVIRONMENT.md`
+§8's controls in one run — `/discussions` → 200 len **0**; `/not-a-real-route`
+→ **404**, so the zero is a served zero; `/issues?state=open` → 200 len **1**,
+issue #2, `updated_at` still `2026-09-06T15:10:34Z` and already triaged as
+`300.2` — and triaged nothing: no new input, so Step 1 committed nothing.
+Rule 2 `Standardize 3 / 4 … ok`; rule 3 `Objective 0 / 3 … ok`, spent by 337.
+Rule 5 reports **STALE** (`1 wake-date(s) newer`), so per `LOOPS.md` it **could
+not be evaluated** and is not reported clear. **Rule 4 dispatched Continue,
+build mode**, on `316.1` — the oldest still-open item that any wake can take.
+Everything older was re-derived from its own item text rather than carried from
+the hand-off: Slice 15 (owner hardware), `112.3`/`112.4` (owner briefs),
+`249.7` (its own text holds it for `249.10`, owner vocabulary),
+`249.10`–`249.13`, `273.2`, `296.3` — all **OWNER CALL**.
+
+### The base rate reproduced, and the denominator did not
+
+`316.1`'s own text says *"Re-run the base rate first; it is a snapshot."* Under
+its stated narrow property list (`color|background|background-color|
+border-color|fill|stroke|outline-color`) it reproduces **exactly**: **11
+literal, 0 token**, across **6** files, with the per-file tally matching to the
+digit — `approval-workflow` 1, `badge` 2, `data-table` 2, `stepper` 3,
+`print/index.css` 1, `reset/index.css` 2.
+
+**The shipped gate counts 14, and that is a different population, not a
+disagreement.** Adding the `border` shorthand finds three more —
+`badge.css:115`, `data-table.css:815`, `stepper.css:95`, every one a `border:
+… solid <literal>`. The wide list is the right denominator for the gate,
+because `border: 1px solid var(--bo-color-border)` inside `@media print` is
+exactly the regression and the narrow list cannot see it. Both numbers, and
+which is which, are in the gate's header — Slice 336's three defects were every
+one of them a number faithfully reading a different population than the noun
+beside it named, and this is that lesson applied on the next wake rather than
+discovered by the next grill. **Neither number is the verdict**; the verdict is
+the **0**, and it is identical under both lists.
+
+### The anticipated exemption list is REFUSED, on a measurement
+
+`316.1` named the likeliest reason to refuse the gate: *"a blanket ban is wrong
+for a fill whose colour IS content (`print-color-adjust: exact` markers), which
+would need the exemption list this repo's other gates carry."* All three such
+rules were read:
+
+| rule | file | declares |
+|---|---|---|
+| `.bo-icon` | `icon.css:296` | `-webkit-print-color-adjust`, `print-color-adjust` |
+| `.bo-timeline__marker, .bo-stepper__marker` | `print/index.css:91` | `print-color-adjust` |
+| `.bo-u-print-exact` | `print/index.css:113` | `-webkit-print-color-adjust`, `print-color-adjust` |
+
+**None of them restates a colour inside `@media print` at all**, and that is
+structural rather than lucky: the entire point of `print-color-adjust: exact`
+is to preserve the colour the ordinary cascade already gave the element, so an
+exact-fill rule has no reason to name a colour a second time. So the exemption
+is not needed, and shipping an empty exemption map "just in case" would be the
+ceremony 94.11 refuses. If a real case ever arrives the gate goes red and the
+exemption is argued deliberately — the right way for that decision to be made,
+rather than silently exercised.
+
+### The predicate is the token reference, not a property allowlist
+
+The first draft keyed on a list of colour-bearing properties. That list is an
+escape hatch with a live example one hop away: `approval-workflow.css:69` sets
+`--bo-timeline-marker-fg: var(--bo-color-text-muted)`, a **custom property** no
+such list names. Written inside `@media print` it is the identical regression
+and the identical 2.54:1, and the allowlist would have passed it. `--bo-color-*`
+is a colour family by definition, so keying on the token reference loses nothing
+and closes the door. It is red-proved in both places — self-test case 3, and a
+live injection into a real component file (below).
+
+1. [ ] **338.1 — the gap `check:print-tokens` cannot see: a theme token that
+       reaches paper through the ORDINARY CASCADE.** FILED, not built. The
+       gate catches a token *restated* inside `@media print`. The mechanism it
+       misses is specificity, not any print property:
+       `reset/index.css:96` ships
+       `@media print { body { background: #fff; color: #000 } }`, which covers
+       everything that INHERITS its colour — most text, which is why this is a
+       narrow gap and not a framework-wide one. It does not cover an element
+       that sets its own colour, because `body { color: #000 }` loses to any
+       more specific rule. `.bo-timeline__marker` is such an element:
+       `approval-workflow.css:106` sets `color: var(--bo-timeline-marker-fg)`,
+       and `:69` defines that as `var(--bo-color-text-muted)` — the token
+       298.1 measured at **2.54:1 on white paper**. Nothing inside
+       `@media print` overrides it.
+
+       **The source path above is grepped. The printed contrast is NOT
+       measured** — saying so rather than letting a source trace imply a
+       rendered result, and it is why this is filed rather than folded into
+       the gate: a source scan is the wrong instrument, a computed-style
+       reading under print emulation is the right one, and a cloud wake can
+       take that (`ENVIRONMENT.md`'s "can run" list).
+       - **Accept — the property, and finding the premise FALSE is a
+         satisfying outcome.** Re-measure first, under print emulation on the
+         built site in the dark theme, exactly as 298.1 did: read the computed
+         `color` of a rendered `.bo-timeline__marker` and its contrast against
+         the printed background. Then EITHER the reading is a real
+         below-AA value and this closes with the fix plus its base rate — how
+         many elements set their own colour from a `--bo-color-*` token and
+         are not overridden in print — OR the reading is benign (the UA, the
+         reset, or the marker's own background rescues it) and this closes as
+         **refused with the measurement**, and the gate header's "what this
+         does not see" paragraph is corrected to say so. Do not widen
+         `check:print-tokens` on the strength of the source trace alone.
+
 ## Slice 337 — Objective grill of Slice 297: `config.yml` is the router, not a third template, and the slice counted the escape hatch as an enforcer (2026-09-08)
 
 **Dispatched by rule 3**, `Objective 4 / 3 … OVERDUE [297, 315, 332, 333]`.
@@ -2769,7 +2881,53 @@ read would be inventing verdicts. So `294.2` is **input-blocked**, the same
 fourth kind as `297.1` and not one of `LOOPS.md` 186.2's three; the next
 oldest takeable item is `298.1`, which is what ran.
 
-1. [ ] **316.1 — should a gate forbid a theme token in a `@media print` colour
+1. [x] **316.1 — DONE 2026-09-08 (cloud wake, Slice 338). Closed by the FIRST
+       branch: the gate ships, red-proved twice.** `check:print-tokens`
+       (`packages/core/scripts/check-print-tokens.mjs`) is in the core build
+       between `check:sticky-layers` and `build:acr`. Tagged **`@heuristic`**
+       — not `@exact` as this item forecast, and the divergence is one step:
+       the token half IS an exact membership test, but deciding whether a
+       media query list SELECTS print is recognition, and it can be wrong in
+       the direction that accuses correct code (`@media not print` contains
+       the word `print` and means the opposite). It ships **12** self-test
+       cases carrying that one, plus `only print`, a comma list, `print and
+       (min-width: 5in)`, a token in a comment, and a token outside print.
+       `check:selftests` now reports **55 gates, 21 heuristic, 172 cases
+       actually run** (was 54/20), so the cases are reachable, not merely
+       present — 315.3's third rung. The README's two `stat:gates` stamps
+       moved with it.
+
+       **Red-proved twice, injection verified BEFORE the gate was believed**
+       (CLAUDE.md: a green red-proof is a defect in the injection until proven
+       otherwise; here both went red, and the injections were still checked).
+       (1) The injection this item names — `color: var(--bo-color-text-muted)`
+       at the `#555` site — asserted exactly one replacement site before
+       replacing, then confirmed via `postcss.walkDecls` that it parsed as a
+       **declaration** rather than landing in the surrounding comment; gate
+       exit **1**, naming `print/index.css:82` — **82 at the committed tree,
+       and it read 79 when the proof was first taken**, because this slice's
+       own comment edit added three lines above it. That is `ENVIRONMENT.md`'s
+       figure rule biting inside the wake that quotes it: the number a later
+       wake re-derives is the one the commit carries. One offender, not a broad
+       parse failure. (2) A custom property, `--bo-timeline-marker-fg:
+       var(--bo-color-text-muted)`, injected into `approval-workflow`'s real
+       print block: exit **1** naming `:285` — **while the byte-identical
+       pre-existing declaration at `:69`, outside any print block, was NOT
+       flagged.** That second one is a discrimination proof: the detector is
+       reading position, not just the token string.
+
+       **The exemption list this item anticipated is refused on a
+       measurement**, and the base rate reproduced — both in Slice 338.
+
+       **What the gate does NOT see is filed as `338.1`** rather than quietly
+       widened: a token reaching paper through the ordinary cascade.
+
+       **Original item text, kept verbatim below** so the Accept this was
+       judged against stays readable — including the `@exact` forecast the
+       build diverged from, which is this file's own rule about a criterion
+       naming a property rather than predicting a value.
+
+       > **316.1 — should a gate forbid a theme token in a `@media print` colour
        declaration?** Filed, not built, and the base rate is measured rather
        than promised: the predicate "a colour declaration inside `@media print`
        references `var(--bo-color-*)`" is true of **0 of 11** such declarations
