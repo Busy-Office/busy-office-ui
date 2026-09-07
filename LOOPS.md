@@ -837,6 +837,18 @@ surfaced more:
    apply, because the property is not checkable; a wake following that rule
    alone reaches for the grep and ships the dead detector.
 
+   **Those control figures are pinned at `7c6f7ecd` and cannot be reproduced at
+   any later revision, because recording them changed what they measure**
+   (roadmap `327.2`, 2026-09-07). `/components/tooltip` was the one control
+   reading **0**, and its only occurrence in the two roadmap files is now the
+   line in `326.1` that records the zero — so at `e1f5a12f` the same command
+   reads **7 of 7**, every control up by exactly one. The conclusion is
+   untouched (a detector that hits everything is more dead, not less), but a
+   wake re-running the published command and getting 7 of 7 cannot tell a
+   worsening detector from a record that ate its own control. **Name the
+   revision beside any negative control whose subject is a string this repo will
+   then write down.**
+
    **This clause has gone stale four times, and the fourth took twelve hours.**
    The list was written at **07:42:07Z on 2026-08-28** (`87bf0f54`); **178.3
    added the sixteenth verdict at 19:46:14Z the same day** (`e5edf61f`) and did

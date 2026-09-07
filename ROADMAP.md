@@ -320,6 +320,174 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 327 — Objective grill of Slices 309, 323, 326: 74 of 75 published assertions reproduce, and both defects are in prose sitting BESIDE a measurement that is correct — one route claim nobody ran a command for, and a negative control whose own record destroyed it (2026-09-07)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again (trap 1;
+`git branch --show-current` empty, local `main` stale at the pre-rebase
+`26447ba9` while `HEAD` sat on `48e181a3`), fixed with `git checkout -B main
+origin/main` before any commit. `origin/main` again a **forced update**
+(`26447ba...48e181a`). **This entry first said the trap had NOT bitten**, on the
+strength of `git rev-parse HEAD origin/main` agreeing at Step 0 — which is
+`ENVIRONMENT.md` §1's named false comfort, published inside a grill about
+unmeasured sentences and caught by re-running the one command that answers it.
+Trap 2 clean in one
+`--unshallow` (**2,013** commits, no `shallow.lock`), tags again arrived with it;
+`git tag | wc -l` → **8**. Working tree clean, `RESUME.md` reporting nothing in
+flight. Step 1: both intakes read via `ENVIRONMENT.md` §8's REST substitute with
+both controls in the same run — `/discussions` **200 len 0**,
+`/not-a-real-route` **404**, `/issues?state=open` **200 len 1**. Issue #2's
+`updated_at` unmoved at `2026-09-06T15:10:34Z`; **no new input, so Step 1
+committed nothing.** Step 2: rule 1 **0** open P0
+(`grep -cE '^\s*[0-9]+\. \[ \].*P0'`); rule 2 `Standardize 0 / 4 ok`; **rule 3
+matched at `Objective 4 / 3 OVERDUE [307, 309, 323, 326]`**.
+
+**Scope narrowed per §6 step 0.** **307 is dropped** — grilled in full by Slice
+309, which is itself in this arming set (`grep -hoE '^## Slice [0-9]+ — Objective
+grill of Slices [0-9, -]+'` over both roadmap files names it). Grilled here:
+**309, 323 and 326**. That leaves a grill inside the set, which is legitimate —
+its published findings are claims like any other — and 309 is where the one
+false assertion is.
+
+**What was re-derived, and how much of it.** Every figure below was run, not
+read off the slice: **75 published assertions**, 49 in Slice 326, 9 in Slice 323,
+17 in Slice 309. **74 reproduce.** The commands are in
+`.roundtable/grill-objective-309-323-326-2026-09-07.md`.
+
+Two of the three slices are clean:
+
+- **Slice 326 — 49 of 49.** `report:prose` still reads 118 pages of 127 · median
+  792 · mean 953 · total 112,395; 10 over 2x the corpus median (1,584), 11 over
+  a family median, **union 15**, and all 15 sit inside the 16-set the fixed
+  clause enumerates (`158.1`'s twelve resolve to twelve page paths in the
+  archive; `161.1`'s three; `178.3`'s `/concepts/scale/`). The commit forensics
+  reproduce to the second (`87bf0f54` 07:42:07Z, `e5edf61f` 19:46:14Z, ancestor
+  true). Lane 1 `0` dead of **1,272** attributes / 1,677 declarations / 273
+  multi; lane 2 74 files · 242 rules · 230 bodies · **8** repeats in the shape
+  one x4, two x3, five x2, the x4 group still money ×2 + quantity ×2. Lane 4's
+  per-section table reproduces **row for row** against an independently written
+  splitter — Step 1 300→671, rule 3 660→963, rule 5 349→573, Step 0 563→714, the
+  loops table 214→266, and **Step 0c flat at 936**, which is the row the whole
+  "not regrowth" verdict rests on. The region reads **6,759** words, `+1,101`
+  since `8848ed55` (confirmed to BE 274.2's cut), and — checked because
+  `ENVIRONMENT.md`'s figure rule predicts the opposite — **6,759 at the slice's
+  own commit as well as at its parent**, because 326's `LOOPS.md` edit landed
+  below `## Playbooks`.
+- **Slice 323 — 9 of 9.** The commit-granularity replay run against the slice's
+  own commit reads `958 revisions -> 581 STALE, 323 ok, 51 SKEW` exactly, and
+  the 51 resolve to the **seven** occasions the script's header names, dates and
+  metric names matching. The as-of-DATE replay it refused reads **26 wake-dates,
+  13 ok / 13 STALE, zero SKEW** — so the "the obvious replay says refuse this"
+  claim is reproducible, which is the part that made the finding.
+
+1. [x] **327.1 — Slice 309 published a three-route claim that is true of one
+       route, and no command was ever run for it. Corrected in place.**
+
+       The blast-radius table above it is right and reproduces: exactly **two**
+       routes carry a `.bo-data-table__select-all` (`/pos` at
+       `server.mjs:458`, `/stress` at `1462`), and `grep -rc 'bo-alert__dismiss'`
+       over `examples/po-app/` still reads **0**, so `initAlerts` was inert. The
+       sentence beside it is not:
+
+       > `/movements`, `/inbox` and `/receive` were unaffected: each runs its own
+       > inline `initDataTables()`.
+
+       ```
+       grep -n 'initDataTables()' examples/po-app/server.mjs
+       #  158   the shared page() template (the line 1f75dab4 broke, since fixed)
+       #  1006  movementsScreen — the ONLY inline call in the file
+       ```
+
+       `/receive` and `/inbox` run none. Worse for the stated reason: counted
+       inside each screen's own source span, **each renders exactly one
+       `.bo-data-table-container`** — precisely the element `initDataTables`
+       binds (`packages/core/src/js/behaviors/data-table.ts:98-101`,
+       `querySelectorAll('.bo-data-table-container')`). Both were **unbound for
+       the same 15 days**, which is the opposite of what the sentence says.
+
+       **The conclusion survives, and that is the whole shape of the defect.**
+       Neither screen carries a `.bo-data-table__select-all` or a
+       `.bo-data-table__row-select` (measured: 0 and 0 on both), so
+       `bindContainer`'s two listeners had no surface — they were unaffected for
+       the same reason `initAlerts` was inert, one row up in the same table.
+
+       This is **192.1** landing again, in the slice that itself found a
+       measurement of nothing: the table was probed live over all 10 GET routes
+       and is exact; the sentence next to it was read off the code and is wrong
+       about two thirds of its subject. The instrument for the number was named;
+       the instrument for the sentence was *"I read it"*, which is the answer
+       CLAUDE.md says predicts the defect.
+
+       Corrected in Slice 309's own text (archived text may be amended for a
+       correction — 236.2), naming what is wrong, what replaces it, and why
+       `check:po-app`'s 19-behaviours-green line is unaffected.
+
+2. [x] **327.2 — `326.1`'s negative control names its own subject, so it reads
+       `7 of 7` from its own commit onward. The revision is now pinned.**
+
+       Found by reproducing it rather than by reading it. At **`7c6f7ecd`**, the
+       revision the wake actually measured, all seven controls reproduce to the
+       digit:
+
+       ```
+       git show <rev>:ROADMAP.md; git show <rev>:ROADMAP-archive.md
+       grep -Fc -- "<page path>"      # summed over the two files
+                                7c6f7ecd   e1f5a12f
+         /patterns/kanban             13         14
+         /components/badge             8          9
+         /getting-started/install      6          7
+         /components/breadcrumb        5          6
+         /base/tokens                  2          3
+         /components/skeleton          1          2
+         /components/tooltip           0          1   ← the control
+       ```
+
+       Every control is up by exactly one, and the reason is in the corpus:
+       `grep -Fn -- "/components/tooltip" ROADMAP.md ROADMAP-archive.md` returns
+       **one line**, and it is `326.1`'s own record of the zero. The one page
+       that proved the detector *could* report an absence can no longer do it.
+
+       **The conclusion is untouched — a detector that now hits 7 of 7 is more
+       dead, not less** — so this is a defect in the record's re-runnability, not
+       in the finding. It matters because the finding's whole weight is that a
+       grep cannot discriminate, and the evidence for that is a table a later
+       wake re-runs and gets a different answer from, with nothing in the text
+       saying why.
+
+       Fixed where it is read: `LOOPS.md`'s lane 3 now pins the figures to
+       `7c6f7ecd`, states that re-running at `e1f5a12f` gives 7 of 7 and why, and
+       carries the transferable rule — **name the revision beside any negative
+       control whose subject is a string this repo will then write down.** Ten
+       lines, added below `## Playbooks`, so the dispatch region `326.3` is open
+       about does not move.
+
+       **Refused here, deliberately, and recorded so it is not re-proposed:** a
+       new `CLAUDE.md` section for this shape. That file already carries the
+       mirror image of it — *"an assertion that can be tripped by its own
+       explanation is a detector that cannot pass"* — under the removal rule, and
+       `326.3` is open precisely on the loop's prose growing because rules keep
+       being added. One pinned revision and one sentence in the lane that uses it
+       is the smaller fix.
+
+3. [ ] **327.3 — the one instrument gap this grill could not close: nothing
+       distinguishes a claim that was MEASURED from one that was read off the
+       code, inside a slice whose other claims were measured.**
+       Both defects here, and both in `322`, `319` and `291` before them, are the
+       same shape: correct measured number, wrong unmeasured sentence beside it,
+       shipped under the credibility of the number. CLAUDE.md already states the
+       rule (*"list the other claims a change is carrying and name the instrument
+       for each"* — 192.1) and it did not fire in any of the four.
+       - **Accept** — the property, not a mechanism: a recorded answer to
+         *why an existing written rule is not being executed*, resting on a count
+         of how many slices since 192.1 landed actually carry a per-claim
+         instrument line, taken from the slices themselves. **Concluding that the
+         rule is fine and the practice is the gap — and that nothing should be
+         built — is a satisfying outcome** if the count is recorded with the
+         command that produced it. Do not propose a gate before the base rate is
+         measured: *"this claim names its instrument"* is semantic, which is
+         94.11's rule, and the checkable shape (a slice contains the word
+         "instrument") would be true of nearly every slice this loop writes.
+       - **Lane:** cloud-takeable — git history and text, no browser.
+
 ## Slice 326 — Standardize sweep, 4 of 4 lanes: the lane that warns against stale name lists carried one, and following it produced a false finding on a page verdicted ten days earlier (2026-09-07)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again (trap 1;
@@ -1775,11 +1943,21 @@ direction — the instrument was fine and the *subject* was dead.
 | `initDropdowns` | not initialised on load on the 5 routes with a dropdown surface and no own init |
 | `initAlerts` | **inert** — `grep -c 'bo-alert__dismiss'` over the app reads **0**, so it had no surface to lose |
 
-`/movements`, `/inbox` and `/receive` were unaffected: each runs its own inline
-`initDataTables()`. That is also exactly why `check:po-app` reported **19
-behaviours green** throughout — every browser assertion it makes lives on a page
-that self-inits or on htmx-swapped content, which the template re-inits on a
-separate line. The gate was real and structurally blind to this one line.
+`/movements`, `/inbox` and `/receive` were unaffected — **but not for the reason
+published here, corrected 2026-09-07 by `327.1`.** This sentence read *"each
+runs its own inline `initDataTables()`"*, and only `/movements` does
+(`examples/po-app/server.mjs:1006`). `/receive` and `/inbox` run none, and each
+renders exactly one `.bo-data-table-container` — the element `initDataTables`
+binds (`packages/core/src/js/behaviors/data-table.ts:98-101`) — so both were
+UNBOUND for the same 15 days. They were unaffected anyway, because neither
+carries a `.bo-data-table__select-all` or a `.bo-data-table__row-select`, so
+`bindContainer`'s two listeners had no surface: the same reason `initAlerts` is
+inert one row above, not a self-init. The blast-radius table is unchanged and
+reproduces. `check:po-app` reporting **19 behaviours green** throughout is
+unchanged too — every browser assertion it makes lives on a page that
+self-inits, on a container the dead calls would have bound to no effect, or on
+htmx-swapped content, which the template re-inits on a separate line. The gate
+was real and structurally blind to this one line.
 
 **A first dropdown reading of `0` in this grill was wrong and was caught by the
 same discipline** — the probe used `[data-dropdown], .bo-dropdown`, and the
