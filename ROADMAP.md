@@ -320,6 +320,182 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 317 — 300.2's spike: the board's announcement cannot be decided once — 4 of the 5 things one generic core could not know are announcement strings — and the framework's answer to this screen kind already ships, saying something about itself that is not true (2026-09-07)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty), `ENVIRONMENT.md` trap 1, fixed with
+`git checkout -B main origin/main` before any commit; `origin/main` again
+arrived as a **forced update** (`26447ba...8f1d43f`). Trap 2 clean in one
+`--unshallow` (**1,987** commits, no `shallow.lock`), and it again brought the
+tags — the **thirtieth** consecutive container to do so; `git tag | wc -l` →
+**8**.
+
+Rule 1: no open P0 (`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0**).
+Step 1 read both intakes with `ENVIRONMENT.md` §8's controls and triaged
+nothing: issues **1** open (#2, already triaged as `300.2`), discussions **0**
+open, `/not-a-real-route` → 404, so the zero is a served zero. Rule 2
+`1 / 4 … ok`; rule 3 `1 / 3 … ok [298]`. Rule 5 read **STALE**
+(`1 wake-date(s) newer`), so per its own text it **could not be evaluated** and
+is not reported clear. **Rule 4 dispatched Continue, build mode**, on `300.2` —
+the oldest item this container can take, the older ones being owner-, input- or
+screenshot-blocked exactly as the hand-off classified them.
+
+The full spike record — method, the probe's core, every reading, the control —
+is `.roundtable/explore-board-kanban-2026-09-07.md`. What follows is the
+verdict and the two things it changed.
+
+### The premise reproduces, and the first instrument that checked it did not
+
+`api.json` ships **40** components and the only board-ish name is `dashboard`
+(a widget grid). Command beside the claim, per CLAUDE.md:
+
+```
+node -e "const a=require('./packages/core/dist/api.json'); const n=Object.keys(a.components);
+         console.log(n.length, n.filter(x=>/board|column|kanban|swim/i.test(x)))"
+  # 40 [ 'dashboard' ]
+```
+
+**`Object.keys(api.json)` reads 10** — the file's top-level keys, not its
+components. Caught by the number being too tidy against a hand count of 40 CSS
+directories, not by review. The base rate arriving on schedule, in the first
+thirty seconds of the wake.
+
+### The spike: one generic core, two boards, count what it could not know
+
+One keyboard-move-plus-announcer core, applied **unchanged** to an approval
+queue (forward-only, position meaningless) and a service-job board (free
+movement, position **is** priority), both built only from `bo-widget-grid` /
+`bo-widget` / `role="list"` — the composition issue #2 reports having written.
+Driven with real `page.keyboard` events, never `el.click()`
+(`ENVIRONMENT.md`'s trusted-dispatch trap), and **paired with a control run in
+which the core is loaded but never initialised**, so a probe that drove nothing
+would report no difference.
+
+`Object.keys(opts)` came back identical for both boards:
+
+| parameter | kind | why it cannot be decided once |
+|---|---|---|
+| `canMove(card, from, to)` | policy | which transitions are legal is the screen's workflow |
+| `announceMove` | policy | the domain noun, **and which facts matter** — A announces the destination, B announces destination *and* position |
+| `announceRefusal` | policy | the refusal reason is the workflow rule, in the screen's words |
+| `announceReorder` | policy | same, for the within-column axis |
+| `positionMeaningful` | policy, **and it changes the key map** | `Ctrl+ArrowUp/Down` is live on B and inert on A |
+
+**So: 4 of 5 are announcement strings, and the 5th moves the keys the user has
+to learn.** What the core kept with no parameter at all is the roving tabindex,
+arrow traversal between columns, the reparent, focus following the moved card,
+and writing into a status node.
+
+Readings, live against control (full table in the roundtable file): the two
+legal moves land `approved[REQ-1]` live and `submitted[REQ-1,REQ-2]` in the
+control; the illegal backwards move leaves the DOM untouched **and** writes a
+refusal string; `Ctrl+ArrowDown` reorders `backlog` to `[JOB-3,JOB-2]`; every
+status node reads `""` in the control. No page errors in either run.
+
+### Verdict: refuse the component
+
+- **Principle 3, refuse test** — *"Refuse when it embeds app/domain decisions —
+  data, workflow, policy stay with the consumer."* Four of five parameters are
+  workflow or domain vocabulary. A component owning them fails outright; a
+  component not owning them is not what the issue asks for.
+- **Principle 2, refuse test** — *"any second way to do something that already
+  works."* The reporter's own composition renders today.
+- The half of the issue's proposal that **cannot** be delivered is named
+  precisely: *"the keyboard contract and the live-region announcement decided
+  once."* The framework can own the plumbing of an announcement; never its
+  content, which is the whole accessibility value.
+
+**One generalisation was considered and refused on a measured base rate.** The
+residue — two-axis roving navigation over something that is not a `<table>` —
+is real, and `data-grid.ts` already implements it welded to `<table>`
+(`.bo-data-table[data-grid-nav]`, matrix built from `querySelectorAll('tr')`).
+Extracting it serves **one** candidate consumer, a board that does not exist.
+The obvious second was checked and is the opposite of one: `bo-calendar` ships
+no behavior at all and its docs page **deliberately refuses** the model —
+*"No roving `tabindex`, no `aria-*` from us, no widget: real buttons in a real
+table already give keyboard operation"*. Principle 3's *"nothing ships for one
+screen"* refuses it. Reopen condition: a second **real** non-table surface that
+wants two-axis roving navigation.
+
+### The correction the spike actually bought — and it is not about a component
+
+**Issue #2's framing is wrong in a way worth writing down: this screen kind is
+not undocumented.** `/patterns/kanban` ships — 257 lines, full pattern shape
+(opener with who/how-often/done and two `Not for` clauses, live board, Markup,
+Anatomy, Data contract, States, Components used). The reporter looked for a
+component, and this framework answers a *screen kind* with a pattern.
+
+More than that, the page reached the spike's central conclusion first and
+independently, in its Data contract: *"the SERVER decides which 'Move to…'
+items a card's menu offers — the client never guesses the workflow"*. That is
+`canMove` being refused as framework-ownable, already shipped. The spike
+reconciles against an artifact it had not read, which is the check CLAUDE.md
+asks for before quoting a measurement.
+
+**And the one gap issue #2 named that survives all of this is real, and it is a
+false claim on that shipped page.** `/patterns/kanban` asserted that the Move
+menu *"already gives every card a keyboard path, a screen-reader-announced
+result, and a touch target that works with gloves."* Measured:
+
+```
+grep -cE 'aria-live|role="status"|bo-visually-hidden' apps/docs/src/pages/patterns/kanban.astro
+  # 0   — before this slice
+grep -n 'kanban' apps/docs/scripts/check-claims.mjs
+  # one case, and it covers the popover opening and auto-closing, not any announcement
+```
+
+The page has **no live region anywhere**, so its demo cannot produce the result
+it claims, and the `check:claims` case that exists asserts something else. That
+is CLAUDE.md's own rule — *claims that assert runtime behavior must be
+executable* — failing on an accessibility claim, which is the worst place for
+it: a reader copying the Markup section gets a menu that is operable and
+silent.
+
+1. [x] **317.1 — DONE. `/patterns/kanban` stops claiming an announcement it
+       does not make, and its contract gains the channel it was missing.**
+       Three prose edits, no CSS, no component:
+
+       - the false clause is **corrected rather than deleted**, and says so in
+         place — the menu gives a keyboard path and a glove-friendly touch
+         target; the announcement is the one thing it does not give, with the
+         spike's 4-of-5 measurement as the reason it cannot be handed over.
+       - **Data contract** gains a `move announcement` row: the screen owns a
+         visually-hidden `role="status" aria-live="polite"` node and writes
+         every move result into it, accepted and 409 alike. It sits beside
+         `legal transitions` deliberately — the two are the same kind of thing,
+         and the page already got the other one right.
+       - **States** gains `Move accepted`, and the `Move rejected (409)` row now
+         names the channel: a refusal a keyboard user cannot hear reads as the
+         menu item having done nothing.
+
+       **No `check:claims` case is added, and that is the point rather than an
+       omission.** The fix *removes* an unexecutable runtime claim and replaces
+       it with a consumer obligation; adding a gate would mean asserting the
+       demo announces, which it deliberately does not — the page's own `No JS`
+       row already records that the "Move to…" items have no click handler in
+       this static demo.
+
+**`300.2` is CLOSED as a refusal** — its Accept names that as a satisfying
+outcome — and its checkbox is ticked in Slice 300 where it lives, not restated
+as a second checkbox here. The component is refused on principles 2 and 3, the spike's
+measurements are recorded in `.roundtable/explore-board-kanban-2026-09-07.md`,
+and the reporter's one surviving valid finding is fixed above rather than
+filed. Issue #2 is answerable now: the screen kind is documented, the move
+affordance is a menu and not a drag by an earlier grill's verdict, the
+drop-target styling is deliberately absent because there is no drag, and the
+announcement was genuinely missing from the contract — **it is the one of the
+three named gaps that was real.**
+
+**NOT VERIFIED, said plainly.** No 1440/390 light-and-dark screenshots — a
+cloud wake has no Podman. The change is prose inside two existing tables and one
+existing `<p>`; it adds no class, no style attribute and no element with its own
+box beyond two table rows and two paragraphs. `check:layout`, `check:scroll` and
+`test:axe` sweep the page at both widths and are green, which asserts *no
+overflow, every scroll region reachable, no axe violation* — not that it looks
+right. A local wake with the container should glance at `/patterns/kanban` at
+390px, where the two new table rows are the only plausible place for a wrap to
+look wrong.
+
 ## Slice 316 — 298.1: the second fixed-medium artifact was already here and PREDATES the first by 25 days. The two agree, and the half nobody wrote down is the load-bearing one — a theme token in `@media print` prints at 2.54:1 on white paper (2026-09-07)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
@@ -2080,7 +2256,10 @@ documented contract moved.
 1. [x] **300.1 — DONE.** Issue #1 fixed. It reaches consumers on the next
        release; the fix is in `main` now.
 
-2. [ ] **300.2 — Issue #2: no board/kanban component, triaged, NOT built.**
+2. [x] **300.2 — CLOSED 2026-09-07 by Slice 317's spike, as a refusal.**
+       Original text kept below.
+
+       **Issue #2: no board/kanban component, triaged, NOT built.**
        Premise verified before accepting it: `api.json` ships **40** components,
        the only board-ish name is `dashboard` (a widget grid, not a board), and
        the class vocabulary's single hit is `bo-icon--keyboard` — the false
@@ -2109,6 +2288,19 @@ documented contract moved.
          this, provided it records what the spike measured. If it graduates, it
          graduates as a roadmap item with its own Accept criteria, per the
          Explore playbook.
+
+       - **DONE — the spike ran; see Slice 317 and
+         `.roundtable/explore-board-kanban-2026-09-07.md`.** The component is
+         **refused**. One generic keyboard-move core was applied unchanged to
+         two boards with different workflows; all five things it had to be told
+         were policy, and **four of the five were announcement strings**. So the
+         announcement half of the issue's proposal cannot be decided once at
+         all, and the key map itself moves with the data model. The framework's
+         answer to this screen kind already ships as `/patterns/kanban`, which
+         had independently reached the same verdict about legal transitions —
+         and was claiming a screen-reader announcement its demo has no live
+         region to make. That claim is corrected in `317.1`; it is the one of
+         the issue's three named gaps that was real.
 
 ## Slice 299 — The SAME Objective grill, run twice by two dispatchers: this one lost the race and re-dispatched, and the re-dispatch is what caught the two things the winner did not — a metadata baseline that matches no revision of its gate, and the count Slice 298 diagnosed and left uncorrected (2026-09-06)
 

@@ -2107,8 +2107,12 @@
               "the DIFFERENT empty — every lane shows nothing because nothing exists yet, distinct from a filter excluding everything"
             ],
             [
+              "Move accepted",
+              "the card re-renders in its new lane and both counts change — that is the whole visible signal, and a screen-reader user gets none of it unless the move result is written into the status node the Data contract names"
+            ],
+            [
               "Move rejected (409)",
-              "the card stays in its lane, states why (\"Cannot skip Blocked — resolve the shortage first\")"
+              "the card stays in its lane, states why (\"Cannot skip Blocked — resolve the shortage first\") — in the status node, not only as a visual toast: a refusal a keyboard user cannot hear reads as the menu item having done nothing"
             ],
             [
               "Card aged past a threshold",
@@ -2135,6 +2139,10 @@
             [
               "legal transitions",
               "the SERVER decides which \"Move to…\" items a card's menu offers — the client never guesses the workflow, it renders what it was sent"
+            ],
+            [
+              "move announcement",
+              "the screen owns a role=\"status\" aria-live=\"polite\" node (visually hidden) beside the board, and writes the result of every move into it — both the accepted move and the 409. The framework does not supply the sentence: it is the domain noun, your workflow's words for a refusal, and which facts matter on THIS board (destination alone, or destination and position where position is priority)"
             ]
           ],
           "wrongChoice": {

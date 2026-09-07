@@ -29,9 +29,22 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     deprecated in ARIA 1.1 for being unreliably implemented, so a real drag
     implementation means hand-rolling a second interaction model (pick up /
     move / drop + live-region narration) and maintaining it forever
-    alongside this one. The menu already gives every card a keyboard path,
-    a screen-reader-announced result, and a touch target that works with
-    gloves. <a href={base + '/patterns/staging'}>Slice 110.7</a> re-grills
+    alongside this one. The menu already gives every card a keyboard path
+    and a touch target that works with gloves.</p>
+    <p><strong>The announcement is the one thing the menu does NOT give
+    you</strong> — corrected here in Slice 317, because this paragraph used
+    to claim it did. A native button in a popover is operable and silent:
+    nothing tells a screen-reader user that the card moved. That channel is
+    yours to wire, and the reason it cannot be handed to you is measured
+    rather than asserted — a spike (roadmap 300.2) drove one generic
+    keyboard-move core against two boards with different workflows and
+    found that <strong>four of the five things it could not know were
+    announcement strings</strong>: the domain noun, the workflow vocabulary
+    of a refusal, and which facts even matter (a destination alone, or a
+    destination and a position, where position is priority). The Data
+    contract below names the channel; what it says is the screen's call,
+    the same way the legal transitions are.</p>
+    <p><a href={base + '/patterns/staging'}>Slice 110.7</a> re-grills
     whether drag earns its cost specifically for this screen — this page
     ships the accessible baseline first, and gains drag only if that grill
     says so.</p>
@@ -206,6 +219,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           <tr><td class="bo-data-table__col--code">GET /board</td><td>every lane's cards + counts in one response — an agent reads board state the same way the human sees it, no separate API</td></tr>
           <tr><td class="bo-data-table__col--code">POST /cards/:id/move</td><td><code>{'{'} to: "in_progress" {'}'}</code> — the card re-rendered in its new lane, both counts updated; 409 if the target stage is not legal from the current one (re-render the card where it is, with the reason)</td></tr>
           <tr><td class="bo-data-table__col--code">legal transitions</td><td>the SERVER decides which "Move to…" items a card's menu offers — the client never guesses the workflow, it renders what it was sent</td></tr>
+          <tr><td class="bo-data-table__col--code">move announcement</td><td>the screen owns a <code>role="status" aria-live="polite"</code> node (visually hidden) beside the board, and writes the result of every move into it — both the accepted move and the 409. The framework does not supply the sentence: it is the domain noun, your workflow's words for a refusal, and which facts matter on THIS board (destination alone, or destination and position where position is priority)</td></tr>
         </tbody>
       </table>
     </div>
@@ -227,7 +241,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         <tbody>
           <tr><td>Empty lane</td><td>"No orders queued" text inside the lane — an empty widget body reads as broken, not empty</td></tr>
           <tr><td>Empty board</td><td>the DIFFERENT empty — every lane shows nothing because nothing exists yet, distinct from a filter excluding everything</td></tr>
-          <tr><td>Move rejected (409)</td><td>the card stays in its lane, states why ("Cannot skip Blocked — resolve the shortage first")</td></tr>
+          <tr><td>Move accepted</td><td>the card re-renders in its new lane and both counts change — that is the whole visible signal, and a screen-reader user gets none of it unless the move result is written into the status node the Data contract names</td></tr>
+          <tr><td>Move rejected (409)</td><td>the card stays in its lane, states why ("Cannot skip Blocked — resolve the shortage first") — in the status node, not only as a visual toast: a refusal a keyboard user cannot hear reads as the menu item having done nothing</td></tr>
           <tr><td>Card aged past a threshold</td><td>the byline gains a warning word ("Blocked 6h") — two-channel, same as the job monitor's stalled state</td></tr>
           <tr><td>Very long lane</td><td>the lane scrolls internally past a height, never grows the whole board vertically past the viewport</td></tr>
           <tr><td>No JS</td><td>the Move menu still opens — <code>popovertarget</code> is the native HTML Popover API, so a card's menu button works with no script at all. Without <code>initDropdowns()</code> the menu just isn't anchored to its button (no positioning at our browser floor, so it opens in the popover's default top-layer position rather than under the trigger) and it stays open after a click instead of auto-closing on selection. The "Move to…" items themselves have no click handler in this static demo either way — a real build would need a form/link per item for the move to complete without JS</td></tr>
