@@ -1576,3 +1576,8 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-07 03:49 · Continue · build · 304.1 — roadmap_scope.py's header names the tree its figures describe; base rate 7 of 11 published ratios describe the parent, not the commit · landed · 8beee329
 - 2026-09-07 03:49 · Meta · refusal · attributing a published bare percentage by git log -S — the needle collides with the tail of a longer percentage (79.5% contains 9.5%) · refused · 8beee329
 - 2026-09-07 03:49 · Meta · refusal · matching an 'N lines' figure — it cannot tell the denominator from the numerator, a subset, or the trigger threshold · refused · 8beee329
+- 2026-09-07 05:14 · Standardize · sweep · Slice 320 — 4 of 4 lanes; the last two inline spellings of .docs-list/.docs-list-bare lived in the shared components; closes 314.2; lane 1's headline number counts attributes while saying declarations · landed · 7dacd80b
+- 2026-09-07 05:14 · Meta · refusal · base/primitives.astro's four margin-block-start: 1.5rem — inside copyable samples, out of 292.8's live-markup scope · refused · 7dacd80b
+- 2026-09-07 05:14 · Meta · refusal · ClassRef.astro:44's off-scale .4rem — unifying it with ApiTable's 0.5rem is a rendered change a cloud wake cannot judge; filed as 320.3 · refused · 7dacd80b
+- 2026-09-07 05:14 · Meta · refusal · --bo-space-0 as the spelling of a zero — refused on evidence, it has never been used anywhere · refused · 7dacd80b
+- 2026-09-07 05:14 · Meta · refusal · fixing scan:dead-style's per-declaration detection inside this round — it moves a number five write-ups quoted; filed as 320.2 · refused · 7dacd80b

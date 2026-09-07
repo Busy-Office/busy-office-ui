@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-07 03:49 UTC
+Generated at: 2026-09-07 05:14 UTC
 
 ## Open items by slice
 
@@ -37,24 +37,24 @@ Generated at: 2026-09-07 03:49 UTC
 - **Slice 310** (2 open)
   - 310.1 — `examples/erp-suite` and `examples/po-app` render deprecated glyphs, and whether that is a defect is undecided.
   - 310.2 — `/base/motion` declares five copyable markup samples the template never renders.
-- **Slice 314** (1 open)
-  - 314.2 — the same scope gap exists for SPACING and `font-weight` literals, and it is a different property with no verdict — filed, not built.
 - **Slice 315** (1 open)
   - 315.3 — should `check:selftests` EXECUTE each self-test rather than grep for the branch? Filed with its base rate, deliberately not built inside a grill.
 - **Slice 316** (1 open)
   - 316.1 — should a gate forbid a theme token in a `@media print` colour declaration?
 - **Slice 319** (1 open)
   - 319.3 — should a docs page be allowed to assert a target size at all without a gate that can see it?
+- **Slice 320** (2 open)
+  - 320.2 — judge each declaration separately, so a dead one cannot hide behind a live sibling.
+  - 320.3 — the same idiom, two values, in two shared components.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1570 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-09-06 22:53   OVERDUE
-  Objective     1 / 3 slice           since 2026-09-07 03:02   ok  [304]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+dispatch status — counter-triggered rules (1575 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-09-07 05:14   ok
+  Objective     2 / 3 slices          since 2026-09-07 03:02   ok  [304, 320]
   Optimize      1 wake-date(s) newer   since 2026-09-06 16:56   STALE   [newest pair: axe-violations; 132 sample(s), 13 of 44 name(s) sampled twice]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-06, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-06 (2026-09-07), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -76,16 +76,16 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-07 00:48 · Continue · build · 298.1 — fixed-medium artifact convention: the second precedent predates the first by 25 days; a theme token in @media print prints at 2.54:1 on white paper · landed · 810e37fa
-- 2026-09-07 00:48 · Meta · refusal · building the @media-print token gate in the same round — filed as 316.1 with its base rate measured (0 of 11) rather than manufactured alongside the convention · refused · 810e37fa
-- 2026-09-07 01:50 · Continue · build · 300.2 — board/kanban spike: refuse the component (4 of 5 params are announcement strings); fix /patterns/kanban's unexecutable screen-reader-announcement claim · refused · 0c24d13e
-- 2026-09-07 01:50 · Meta · refusal · lifting data-grid.ts's roving-tabindex navigation out of <table> — one candidate consumer (a board that does not exist); bo-calendar, the only other non-table grid, deliberately refuses the model · refused · 0c24d13e
-- 2026-09-07 02:00 · Continue · bug · 318.1 — check:claims's calendar case raced a real form-GET navigation against a fixed 400ms wait (red on CI run 807, green on 808 with no code change); waits for the navigation now, red-proved by an 800ms delay injection · landed · 168269ac
 - 2026-09-07 03:02 · Objective · grill · Slice 319 — grill of 298/300/318: 23 of 25 assertions reproduce; 318's "99 other fixed waits" is 98 (a removal counted against raw text its own comment names), and /patterns/kanban's glove-target claim is false at 24px — corrected, and its keyboard claim made executable and red-proved twice · landed · 6e5724bb
 - 2026-09-07 03:02 · Meta · refusal · adding /patterns/kanban to check:target-size's 7-page sweep — the menu items measure 0x0 while the popover is closed, so the sweep could not see the claim it would exist to check; filed as 319.3 with its base rate (18 vocabulary pages / 7 swept / 4 overlap) instead · refused · 6e5724bb
 - 2026-09-07 03:49 · Continue · build · 304.1 — roadmap_scope.py's header names the tree its figures describe; base rate 7 of 11 published ratios describe the parent, not the commit · landed · 8beee329
 - 2026-09-07 03:49 · Meta · refusal · attributing a published bare percentage by git log -S — the needle collides with the tail of a longer percentage (79.5% contains 9.5%) · refused · 8beee329
 - 2026-09-07 03:49 · Meta · refusal · matching an 'N lines' figure — it cannot tell the denominator from the numerator, a subset, or the trigger threshold · refused · 8beee329
+- 2026-09-07 05:14 · Standardize · sweep · Slice 320 — 4 of 4 lanes; the last two inline spellings of .docs-list/.docs-list-bare lived in the shared components; closes 314.2; lane 1's headline number counts attributes while saying declarations · landed · 7dacd80b
+- 2026-09-07 05:14 · Meta · refusal · base/primitives.astro's four margin-block-start: 1.5rem — inside copyable samples, out of 292.8's live-markup scope · refused · 7dacd80b
+- 2026-09-07 05:14 · Meta · refusal · ClassRef.astro:44's off-scale .4rem — unifying it with ApiTable's 0.5rem is a rendered change a cloud wake cannot judge; filed as 320.3 · refused · 7dacd80b
+- 2026-09-07 05:14 · Meta · refusal · --bo-space-0 as the spelling of a zero — refused on evidence, it has never been used anywhere · refused · 7dacd80b
+- 2026-09-07 05:14 · Meta · refusal · fixing scan:dead-style's per-declaration detection inside this round — it moves a number five write-ups quoted; filed as 320.2 · refused · 7dacd80b
 
 ## Sunset test
 
