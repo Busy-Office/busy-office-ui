@@ -45,7 +45,7 @@ export const render = () =>
       <div class="bo-cluster">
         <button class="bo-btn" type="button">+ New production order</button>
         <button class="bo-btn bo-btn--secondary" type="button">Export</button>
-        <button class="bo-btn bo-btn--secondary bo-btn--icon" type="button" aria-label="Refresh"><span class="bo-icon bo-icon--settings" aria-hidden="true"></span></button>
+        <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" aria-label="Refresh capacity">⟳</button>
       </div>
     </div>
     <p class="bo-u-text-muted">Load per work centre per week, as a percentage

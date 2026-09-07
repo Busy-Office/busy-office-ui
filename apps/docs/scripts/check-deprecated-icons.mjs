@@ -70,12 +70,54 @@
  * SCOPE, and what it deliberately leaves uncovered:
  *   - `apps/docs/versions/**` is frozen published snapshots — excluded from the
  *     source walk by `SOURCE_SKIP_DIRS`, and not built into `dist/`.
- *   - `examples/erp-suite` and `examples/po-app` are OUT of scope as SOURCE and
- *     are NOT clean (4 literal + 2 interpolated sites on 2026-09-07). They are
- *     consumer applications, not pages that teach, and whether that distinction
- *     holds is a separate question — filed rather than decided here. The suite
- *     is copied into `dist/suite/`, so it is exempted by name in phase 2 rather
- *     than silently passing.
+ *   - `examples/erp-suite` and `examples/po-app` are OUT of scope as SOURCE,
+ *     and the question of whether that distinction holds is now DECIDED rather
+ *     than open (roadmap 310.1, 2026-09-07). The suite is copied into
+ *     `dist/suite/`, so it is exempted by name in phase 2 rather than silently
+ *     passing.
+ *
+ *     The six sites this section used to report — 4 literal + 2 interpolated —
+ *     were each decided on their own facts, and the split is what settled the
+ *     general question:
+ *
+ *       • THREE went away, and the deprecation was the smaller half of why.
+ *         All three were `bo-icon--settings` inside `<button aria-label=
+ *         "Refresh">` on the `prod/` screens — a sliders glyph standing in for
+ *         an action the framework ships no glyph for. The suite already had a
+ *         Refresh convention and these three were the only screens off it,
+ *         diverging on three axes at once (`--secondary` vs `--ghost`, a glyph
+ *         vs the `⟳` character, `"Refresh"` vs `"Refresh <thing>"`). Measured
+ *         in a browser over the built suite, before and after: 10 Refresh
+ *         icon-buttons across 28 screens, 7 + 3 on two class strings, every one
+ *         36x36; afterwards 10 of 10 on one class string, still 36x36. No
+ *         geometry moved, so the change is takeable without a screenshot.
+ *
+ *       • THREE STAY, with the reason written where the code is — `_shell.mjs`
+ *         above `MODULES` for the two interpolated identities (Production's
+ *         `settings`, CRM's `user`) and `server.mjs` above `page()` for
+ *         po-app's `barcode` on Receive. All three are nav identities on
+ *         rendered screens; the deprecation's ground is that the framework
+ *         should not grow into an icon library, not that these glyphs are
+ *         wrong, and its own text says existing renders keep working. Each
+ *         comment counts the free alternatives rather than asserting there are
+ *         none — 17 for the suite rail, 16 for po-app's, 12 of each being the
+ *         richtext-toolbar set — and labels the "none is better" half as the
+ *         judgement it is.
+ *
+ *     NO GATE OVER `examples/**`, REFUSED WITH THE MEASUREMENT. After the
+ *     above, the population is three sites and this wake has just decided all
+ *     three may keep their glyph — an exemption map that IS the population,
+ *     which is the ceremony 94.11's base-rate rule refuses. The obvious
+ *     counter-argument is assertion 4 in `check-erp-suite.mjs`, which earned a
+ *     gate at a 100% base rate because its population had held a violation one
+ *     day earlier; this population held three at the start of the wake that
+ *     wrote this, which is a stronger version of the same fact. What separates them
+ *     is that its property admits no legitimate exception, so an empty
+ *     exemption map is that gate's correct steady state — whereas this property
+ *     is negotiable by construction, because the deprecation says a render may
+ *     stay. REOPEN IT if `examples/**` ever carries a deprecated glyph nobody
+ *     is willing to write a reason for; then the map stops being the
+ *     population and the gate has something to say.
  */
 import { readFile } from 'node:fs/promises';
 import { collectSource, byExt, stripComments } from './source-files.mjs';

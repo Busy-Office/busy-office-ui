@@ -15,7 +15,30 @@
  * writing-it-down half is judgement.
  */
 
-/** The six modules, in the order they appear on the rail. */
+/**
+ * The rail, in the order it renders: Home plus the six business modules — SEVEN
+ * entries, not six. The old wording counted the modules and described the array,
+ * and the two are not the same list; measured against the built page rather than
+ * the source, `bo-sidebar-nav__label` occurs 7 times in `dist/index.html`.
+ *
+ * TWO IDENTITIES KEEP A DEPRECATED GLYPH, DELIBERATELY (roadmap 310.1).
+ * `icon.css` marks `settings` and `user` DEPRECATED — along with `barcode` and
+ * `building` — on the ground that the framework should not grow into an icon
+ * library, not that the glyphs are wrong: each was only ever one example value
+ * of `--bo-icon-src`, and the deprecation's own text says existing renders keep
+ * working. These are nav identities on rendered screens, and both are apt: a
+ * sliders glyph for Production's work centres, a person for CRM.
+ *
+ * The alternatives were counted rather than waved off. Of the 26 shipped
+ * glyphs, 4 are deprecated and 5 are already on this rail, leaving 17 free —
+ * but 12 of those are the richtext-toolbar set 137.1 added, and the other five
+ * are `chart`, `check-circle`, `close`, `doc` and `save`. That none of the five
+ * is a better Production or CRM mark than the two in place is a JUDGEMENT, said
+ * as one; the count is the measured part. Composing instead would mean this
+ * example hand-authoring an SVG — see the no-CSS rule above — so they stay, and
+ * `check-deprecated-icons.mjs`'s SCOPE section records the same decision from
+ * the gate's side.
+ */
 export const MODULES = [
   { id: 'home', label: 'Home', icon: 'grid', href: '/index.html' },
   { id: 'o2c', label: 'Order to cash', icon: 'cart', href: '/o2c/sales-orders.html' },

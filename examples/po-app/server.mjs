@@ -103,6 +103,30 @@ const densityFromCookie = (req) => {
   return m && DENSITIES.includes(m[1]) ? m[1] : 'compact';
 };
 
+/*
+ * The whole page. Its sidebar carries seven nav identities, ONE of which keeps
+ * a DEPRECATED glyph deliberately (roadmap 310.1).
+ *
+ * `icon.css` marks `barcode` deprecated — along with `settings`, `user` and
+ * `building` — on the ground that the framework should not grow into an icon
+ * library, not that the glyph is wrong: each was only ever one example value of
+ * the `--bo-icon-src` mechanism, and the deprecation's own text says existing
+ * renders keep working. Receive is a scanned goods receipt, so a barcode is the
+ * glyph that depicts it.
+ *
+ * The alternatives were counted rather than waved off. Of the 26 shipped
+ * glyphs, 4 are deprecated and 6 are already on this rail (grid, check-circle,
+ * invoice, chart, truck, box), leaving 16 free — but 12 of those are the
+ * richtext-toolbar set 137.1 added, and the other four are `cart`, `close`,
+ * `doc` and `save`. That none of the four depicts a goods receipt is a
+ * JUDGEMENT, said as one; the count is the measured part. Composing instead
+ * would mean this reference app hand-authoring an SVG.
+ *
+ * Written as a JS comment rather than an HTML one on purpose: this template is
+ * served, so an HTML comment here would reach every page a reader views.
+ * `check-deprecated-icons.mjs`'s SCOPE section records the same decision from
+ * the gate's side.
+ */
 const page = (title, current, main, density = 'compact') => `<!doctype html>
 <html lang="en" data-density="${density}">
 <head>

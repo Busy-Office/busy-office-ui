@@ -23,7 +23,7 @@ export const render = () =>
       <h1>Production orders</h1>
       <div class="bo-cluster">
         <button class="bo-btn" type="button">+ New production order</button>
-        <button class="bo-btn bo-btn--secondary bo-btn--icon" type="button" aria-label="Refresh"><span class="bo-icon bo-icon--settings" aria-hidden="true"></span></button>
+        <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" aria-label="Refresh production orders">⟳</button>
       </div>
     </div>
 

@@ -35,7 +35,7 @@ export const render = () =>
       <h1>BOM — PMP-4400 · Pump assembly</h1>
       <div class="bo-cluster">
         <button class="bo-btn" type="button">+ New BOM</button>
-        <button class="bo-btn bo-btn--secondary bo-btn--icon" type="button" aria-label="Refresh"><span class="bo-icon bo-icon--settings" aria-hidden="true"></span></button>
+        <button class="bo-btn bo-btn--ghost bo-btn--icon" type="button" aria-label="Refresh bill of materials">⟳</button>
       </div>
     </div>
     <p class="bo-u-text-muted">Quantities multiply down the tree. <strong>Per

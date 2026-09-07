@@ -697,6 +697,21 @@ broadly wrong. When declining an item, say which of the two lists it needs.
   working red-proof if you only check that the gate failed. Replace with
   something well-formed (`void 0` for a dropped branch), assert the replacement
   count is exactly 1, and re-read the artifact afterwards.
+- **`waitUntil: 'load'` is not settled enough for a COMPUTED-STYLE reading in
+  this harness, and the unsettled answer looks like a cascade finding.**
+  Measured 2026-09-07 (roadmap 310.1) over the built erp-suite: a probe reading
+  `getComputedStyle(button).backgroundColor` on the suite's seven
+  `.bo-btn--ghost` Refresh buttons reported a 4/3 split — some `rgba(0, 0, 0, 0)`
+  as the variant defines, some `rgb(239, 239, 239)`, which is Chrome's UA
+  `buttonface`. That reads exactly like "the ghost variant loses somewhere", the
+  kind of thing worth filing. It is the probe: **two runs under `load` disagreed
+  with each other about WHICH pages**, and two runs under
+  `waitUntil: 'networkidle0'` plus `await two nested requestAnimationFrame`s
+  agreed exactly (7 transparent, 3 white-with-border). Geometry was stable
+  either way — 36x36 in every run that recorded it, three of the four, the
+  fourth having printed only colours — so the tell is that only the *painted*
+  values moved. Use `networkidle0` + 2 rAF whenever the reading is a computed
+  colour, and run it twice before believing a split.
 - **A presence probe is not a fidelity probe.** Asking whether a heading still
   appears in 53 revisions answers whether it was deleted, not whether what sits
   under it decayed. 169.3's first pass read "zero shrinks" off a subset of

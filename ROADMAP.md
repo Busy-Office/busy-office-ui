@@ -1805,8 +1805,11 @@ Both were measured while building `check:deprecated-icons` and are outside
 292.9's Accept, which scopes the property to `apps/docs/src`. Filed rather than
 folded in, because each turns on a judgement 292.9 did not make.
 
-1. [ ] **310.1 — `examples/erp-suite` and `examples/po-app` render deprecated
-       glyphs, and whether that is a defect is undecided.** 292.9's whole
+1. [x] **310.1 — DONE (2026-09-07, cloud wake). Three of the six sites went
+       away, and the deprecation was the smaller half of why; three stay, with
+       the reason written beside the code.** As filed: `examples/erp-suite` and
+       `examples/po-app` render deprecated glyphs, and whether that was a defect
+       was undecided. 292.9's whole
        argument for treating a docs page differently from a consumer screen is
        that *a reader copies from it*. These two are the reference applications
        the docs point adopters at, which is the same argument one step over —
@@ -1839,6 +1842,122 @@ folded in, because each turns on a judgement 292.9 did not make.
          `check:po-app`, both of which already run in a cloud wake.
        - **Lane**: cloud-takeable. Glyph choice is editorial and the mask box is
          `1em` either way, so no geometry moves; say which glyph and why.
+
+       ### What was done, and the premise re-checked first
+
+       **The premise reproduces exactly** — both commands above, re-run at
+       `9a4be080` before anything was touched: the same four literal lines, and
+       `settings` and `user` among the interpolated identities. 4 + 2 = 6.
+
+       **The three `prod/` sites were a Standardize one-off wearing a
+       deprecation's clothes, and only the wider measurement showed it.** The
+       item's own frame — "is a deprecated glyph on a reference screen a
+       defect?" — is answerable per site, so the first question asked was what
+       the suite does ELSEWHERE for the same control:
+
+       ```
+       grep -rn "bo-btn--icon" examples/erp-suite --include='*.mjs'
+       # 11 lines: 7 `bo-btn--ghost bo-btn--icon` Refresh buttons carrying `⟳`,
+       #           3 `bo-btn--secondary bo-btn--icon` in prod/ carrying
+       #             `bo-icon bo-icon--settings`,
+       #           1 in audit.mjs — a querySelectorAll STRING, not a button.
+       ```
+
+       That eleventh line is why the rendered artefact is the authority and not
+       the grep: **the built suite carries 10 Refresh icon-buttons across its 28
+       screens**, and a source count read 11. So the three `prod/` screens were
+       the only ones off the suite's own convention, diverging on three axes at
+       once — variant (`--secondary` vs `--ghost`), content (a glyph span vs the
+       `⟳` character) and label (`"Refresh"` against `"Refresh <thing>"`). The
+       glyph was also simply wrong for the action: `--settings` is a sliders
+       mark, the framework ships no refresh glyph, and the suite's own charter
+       says a need the framework has not got is written into
+       `erp-suite-gaps.md`, never papered over. All three now read
+       `<button class="bo-btn bo-btn--ghost bo-btn--icon" type="button"
+       aria-label="Refresh production orders">⟳</button>` and its two siblings.
+
+       **The geometry claim is measured, not inferred from `1em`.** A throwaway
+       probe (`serve.mjs` + `browser-harness.mjs`, 1440px, the built suite)
+       read every `button[aria-label^="Refresh"]` on all 28 screens:
+
+       ```
+       before:  10 buttons, 2 distinct class strings (7 ghost + 3 secondary),
+                distinct boxes: 36x36
+       after:   10 buttons, 1 distinct class string, distinct boxes: 36x36
+       ```
+
+       **The probe's first output was wrong, and it is recorded because the
+       trap is transferable.** Under `waitUntil: 'load'` the computed
+       background split 4/3 *within* the seven ghost buttons — some
+       `rgba(0,0,0,0)`, some Chrome's UA `rgb(239,239,239)` — which reads as a
+       real cascade finding. It is not: two runs under `load` disagreed with
+       each other, and two runs under `networkidle0` plus two rAFs agreed
+       exactly (7 transparent, 3 white-with-border). An instrument's first
+       output is not evidence; the bullet is now in `ENVIRONMENT.md`.
+
+       **The remaining three stay, and the reason is at the code.**
+       `_shell.mjs` above `MODULES` (Production's `settings`, CRM's `user`) and
+       `server.mjs` above `page()` (po-app's `barcode` on Receive). The ground
+       is the deprecation's own: it exists because the framework should not grow
+       into an icon library, not because these glyphs are wrong — each was one
+       example value of `--bo-icon-src` — and its text says existing renders
+       keep working. All three are nav identities on rendered screens, and all
+       three are apt. Composing an SVG instead would have these examples
+       hand-author artwork no cloud wake can look at.
+
+       **The "no alternative was free" half was written first and was FALSE, so
+       it is recorded rather than quietly corrected** — 327.3's shape exactly,
+       an unmeasured sentence riding beside a measured one, caught on the
+       adversarial re-read of this wake's own diff. Counted:
+
+       ```
+       26 shipped glyphs − 4 deprecated − 5 already on the suite rail = 17 free
+       26 shipped glyphs − 4 deprecated − 6 already on po-app's rail = 16 free
+       of each, 12 are the richtext-toolbar set 137.1 added; the rest are
+         suite:  chart, check-circle, close, doc, save
+         po-app: cart, close, doc, save
+       ```
+
+       Both comments now carry that count, and label the remaining half — that
+       none of those depicts a production module, a customer or a goods receipt
+       better than the glyph in place — as the JUDGEMENT it is rather than as a
+       measurement.
+
+       **Re-measured after the change**: 1 literal site (po-app's `barcode`) + 2
+       interpolated, all three carrying a written reason. `check-markup` over
+       the built suite moved `4235 -> 4229` bo-* class uses, which reconciles
+       exactly: three `bo-icon` + three `bo-icon--settings` removed, and
+       `--secondary -> --ghost` is a swap.
+
+       **Gates**: `npm run suite` green before and after (28 screens, zero CSS
+       of its own, zero axe violations at both widths), and `check:po-app`.
+
+       - **REFUSED in this item: a gate over `examples/**`.** Post-change the
+         population is three sites and this wake has just decided all three may
+         keep their glyph, so the exemption map would BE the population — the
+         ceremony 94.11's base-rate rule refuses. The counter-argument was taken
+         seriously rather than waved off: `check-erp-suite.mjs`'s assertion 4
+         earned a gate at a 100% base rate because its population had held a
+         violation one day earlier, and this population held three at the start
+         of this wake, which is a stronger version of the same fact. What
+         separates them is that its property admits no legitimate exception, so
+         an empty exemption map is that gate's correct steady state, whereas
+         this property is negotiable by construction. The reopen condition — a
+         deprecated glyph in `examples/**` that nobody will write a reason for —
+         is in `check-deprecated-icons.mjs`'s SCOPE section, not only here.
+       - **Found in passing and fixed, because it was in the lines being
+         edited**: `_shell.mjs`'s `MODULES` was headed *"The six modules"* over
+         **seven** entries. Reconciled against the rendered page rather than the
+         array — `bo-sidebar-nav__label` occurs 7 times in `dist/index.html`,
+         and `MODULES.length` is 7. Home plus six business modules; the comment
+         had counted the modules and described the array.
+       - **NOT VERIFIED, said plainly**: no screenshots — a cloud wake has no
+         Podman. The three buttons change their painted look (a bordered white
+         `--secondary` box becomes a transparent `--ghost` one), and that is a
+         rendered-image judgement no measurement here replaces. What IS measured
+         is that they now match the seven the suite already shipped, byte for
+         byte in class and content, at an unchanged 36x36. **A local wake should
+         glance at `/prod/production-orders`, `/prod/capacity` and `/prod/bom`.**
 
 2. [ ] **310.2 — `/base/motion` declares five copyable markup samples the
        template never renders.** Found by checking the built page for a string
