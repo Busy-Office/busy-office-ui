@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-07 10:47 UTC
+Generated at: 2026-09-07 11:48 UTC
 
 ## Open items by slice
 
@@ -49,16 +49,17 @@ Generated at: 2026-09-07 10:47 UTC
   - 325.2 — `measure:stress`'s render columns have no counterpart in the published table, and the published table's method is unrecoverable.
 - **Slice 326** (1 open)
   - 326.3 — the dispatch region has grown +1,101 words in two days with no narrative left in it to cut. What is the answer when the region a wake must read grows because the RULES grew?
+- **Slice 327** (1 open)
+  - 327.3 — the one instrument gap this grill could not close: nothing distinguishes a claim that was MEASURED from one that was read off the code, inside a slice whose other claims were measured.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1594 iterations logged)
+dispatch status — counter-triggered rules (1597 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-09-07 10:47   ok
-  Objective     4 / 3 slices          since 2026-09-07 06:57   OVERDUE  [307, 309, 323, 326]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-09-07 11:48   ok
   Optimize      1 wake-date(s) newer   since 2026-09-06 16:56   STALE   [newest pair: axe-violations; 132 sample(s), 7 of 44 name(s) paired across days]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-06, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-06 (2026-09-07), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -89,9 +90,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-07 08:49 · Continue · build · 307.1 rule 5 re-scoped: the pairing unit is DISTINCT DAYS, not sample count — 44 names, 13 count-paired, 7 day-paired, 1 actionable · landed · 25b9fdd3
-- 2026-09-07 08:49 · Meta · refusal · retiring rule 5, which the item pre-authorised — its input is not absent, it is one name nobody records, and retiring would delete 184.2's size-budget clause before it has ever fired · refused · 25b9fdd3
-- 2026-09-07 08:49 · Meta · refusal · recording a bundle-gz-kb sample to un-STALE the line — the 2026-09-04 refusal's stated reason is now known false, but the convention and the 0.3 kB cross-environment floor are unwritten, so sampling would still be guessing · refused · 25b9fdd3
 - 2026-09-07 08:56 · Roadmap · sweep · 324.3 archive sweep — 249.12's trigger crossed both halves for the first time (8,188 lines / 41.5%); 15 slices moved, 8,188 -> 6,476 lines, share 41.5% -> 24.6% · landed · 3cb2381a
 - 2026-09-07 08:56 · Meta · refusal · the sweep's own first attempt — a mover that read any '## ' line as a heading truncated Slice 308 at a fenced '## the loops table' row; reverted whole rather than patched, because its byte-identity check reused the same splitter and could not fail · refused · 3cb2381a
 - 2026-09-07 09:54 · Continue · build · 309.5 — commit the /stress re-measurement probe with its own control, and correct its style-flush column, which shipped as a dead detector reading ~0 across a 20-fold input range · landed · 82dc60e6
@@ -99,6 +97,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-07 10:47 · Standardize · sweep · 326.1 — lane 3's 'Verdicts to date' list was stale 12h after it was written (178.3 added the 16th verdict the same day); fixed as an enumeration + amend-in-same-commit obligation, with the grep alternative red-proved dead via negative controls · landed · e1f5a12f
 - 2026-09-07 10:47 · Meta · refusal · replacing the verdict list with a per-path grep — 6 of 7 unverdicted control pages hit, so the detector cannot discriminate (94.11: no gate on a semantic property) · refused · e1f5a12f
 - 2026-09-07 10:47 · Meta · refusal · cutting the LOOPS.md dispatch region — 308.1's per-section attribution shows the cut section did not regrow and all four risers are rules that changed; filed as 326.3 instead · refused · e1f5a12f
+- 2026-09-07 11:48 · Objective · grill · Objective grill of Slices 309, 323, 326 (Slice 327): 74 of 75 assertions reproduce; 309's three-route init claim false for 2 of 3, 326.1's negative control self-destroying · landed · ac0fc752
+- 2026-09-07 11:48 · Meta · refusal · a new CLAUDE.md section for the self-destroying-control shape — the file already carries its mirror image and 326.3 is open on prose growth; a pinned revision plus one sentence in the lane that uses it is smaller · refused · ac0fc752
+- 2026-09-07 11:48 · Meta · refusal · a gate over 'this claim names its instrument' (327.3) — semantic, 94.11's rule, and the checkable shape would be true of nearly every slice · refused · ac0fc752
 
 ## Sunset test
 
