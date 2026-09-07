@@ -49,8 +49,18 @@
  *      into a page a reader copies from", which is the distinction that makes a
  *      deprecated glyph a defect rather than a surviving render.
  *      That phase reads SOURCE, so it also covers a copyable string a page
- *      declares but does not render — `/base/motion`'s `savingMarkup` is one,
- *      and phase 2 cannot see it because nothing puts it in the HTML.
+ *      declares but does not render, which phase 2 cannot see because nothing
+ *      puts it in the HTML. **The worked example this used to name —
+ *      `/base/motion`'s `savingMarkup` — no longer exists**: roadmap 310.2
+ *      deleted all five of that page's never-rendered markup consts, and the
+ *      scan that found them (a frontmatter const declaration whose identifier
+ *      occurs exactly once in its own file, i.e. never used) reports
+ *      **0 never-used consts across 152 `.astro` files** after
+ *      the delete, against 5 on one file before it. So the coverage claim is
+ *      now PROSPECTIVE rather than illustrated — the shape can recur and phase
+ *      1 is what would catch it, but no live instance demonstrates it. Do not
+ *      read the empty population as evidence phase 1 is redundant; re-run the
+ *      scan before concluding either way.
  *   2. DIST — every built page. Exact for anything the build emits, whatever
  *      route the glyph name took. Exemptions are per-page and carry a reason,
  *      because a deprecation's own text says existing renders keep working.

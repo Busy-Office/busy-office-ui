@@ -40,42 +40,28 @@ const collapseMarkup = `<button class="bo-btn bo-btn--secondary" id="collapse-to
 const pulseMarkup = `<button class="bo-btn bo-btn--secondary" id="pulse-trigger">Simulate update</button>
 <div class="bo-motion-pulse-once" id="pulse-demo">Row total: $12,400.00</div>`;
 const spinMarkup = `<span class="bo-motion-spin" aria-hidden="true">⟳</span> <span aria-live="polite">Loading…</span>`;
-/* Showcases (137.18). Every demo above animates an abstract box, which shows
-   WHAT each class does but not WHEN to reach for it — and the page's own
-   framing is that you pick by intent. These are the same eight classes in the
-   place an ERP actually uses them. `fade-out` appears here because it is the
-   one documented class that had no demo at all. */
-const toastMarkup = `<!-- Entrance: a toast arrives from the top edge -->
-<div class="bo-alert bo-alert--success bo-motion-slide-in-block-start" role="status">
-  <p class="bo-alert__title">Purchase order PO-88213 approved</p>
-</div>`;
-const menuMarkup = `<!-- Entrance: a menu grows from its trigger, 0.96 -> 1 -->
-<div class="bo-motion-scale-in">
-  <div class="bo-card">Duplicate · Export · Cancel line</div>
-</div>`;
-const rowMarkup = `<!-- Attention: a row the server just repriced -->
-<tr class="bo-motion-pulse-once">
-  <td>MRN-2255</td><td class="bo-data-table__col--numeric">1,284.00</td>
-</tr>`;
-/* --grid, not --settings (roadmap 292.9). Two reasons, in order: --settings is
-   one of icon.css's four DEPRECATED glyphs, and this const is written as a
-   copyable sample — though measured while fixing it, this one is NOT rendered
-   anywhere on the page today (it is one of five markup consts here that the
-   template never uses; filed separately). It is still fixed, because the next
-   wake to wire it up would ship the deprecated class, and because a maintainer
-   copies from source. The live spinner below carries the same change and IS
-   rendered. And the replacement is not arbitrary — --grid's four
-   7x7 rects at (4,4) (13,4) (4,13) (13,13) map onto themselves under a 90°
-   rotation about the 24x24 viewBox centre (12,12), so it reads continuous under
-   bo-motion-spin; --settings' three offset lines do not. A geometric property of
-   the shipped path data, not a look this cloud wake could screenshot. */
-const savingMarkup = `<!-- Progress: the spinner lives INSIDE the button that is busy -->
-<button class="bo-btn" type="button" aria-busy="true">
-  <span class="bo-motion-spin bo-icon bo-icon--grid" aria-hidden="true"></span>
-  Saving…
-</button>`;
-const removeMarkup = `<!-- Exit: the line leaves before the DOM node does -->
-<tr class="bo-motion-fade-out">…</tr>`;
+/* The "In context" section below (137.18) used to be accompanied by five
+   markup consts — toastMarkup, menuMarkup, rowMarkup, savingMarkup,
+   removeMarkup — that the template never rendered. Deleted (roadmap 310.2)
+   rather than wired up, and the reason is measured rather than tidiness: they
+   were a SECOND, hand-maintained copy of markup this page already renders
+   live, which is the shape CLAUDE.md's "Demo renders a preview AND its
+   copyable code from ONE string — never write the preview and code twice"
+   exists to prevent. Compared against the built page's own DOM, 3 of the 5 had
+   already drifted from the showcase each described:
+
+     menuMarkup    <div class="bo-motion-scale-in">        page: + bo-alert, role=group
+     rowMarkup     <tr class="bo-motion-pulse-once">       page: <tr class="">, the class
+                                                           is applied by data-motion-class
+     removeMarkup  <tr class="bo-motion-fade-out">…</tr>   page: <div class="bo-alert
+                                                           bo-motion-fade-out">
+
+   Rendering them would have shipped three samples contradicting the live
+   showcase standing beside them. toastMarkup and savingMarkup still agreed.
+
+   So this section carries no copyable block, deliberately, unlike every other
+   section on the page. Restoring one means rendering preview and code from one
+   string — not re-adding a hand-copy. */
 ---
 <Gallery title="Motion" description="Opt-in functional animation, imported separately from the default bundle. Every duration comes from a token and is zeroed under prefers-reduced-motion.">
   <p class="demo-note">
@@ -304,7 +290,16 @@ const removeMarkup = `<!-- Exit: the line leaves before the DOM node does -->
 
   /* The Save showcase swaps the button into its busy state for real, rather
      than animating a decoration next to it — aria-busy is the half a screen
-     reader gets, so it moves with the spinner. */
+     reader gets, so it moves with the spinner.
+
+     --grid, not --settings (roadmap 292.9). Two reasons, in order: --settings
+     is one of icon.css's four DEPRECATED glyphs, and the replacement is not
+     arbitrary — --grid's four 7x7 rects at (4,4) (13,4) (4,13) (13,13) map onto
+     themselves under a 90° rotation about the 24x24 viewBox centre (12,12), so
+     it reads continuous under bo-motion-spin; --settings' three offset lines do
+     not. A geometric property of the shipped path data, not a look a cloud wake
+     could screenshot. This is now the ONLY site carrying that choice — 292.9
+     also fixed a savingMarkup const, which 310.2 deleted as never-rendered. */
   const save = document.getElementById('sc-save');
   save?.addEventListener('click', () => {
     if (save.getAttribute('aria-busy') === 'true') return;

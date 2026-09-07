@@ -320,6 +320,164 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 333 — 310.2: the five unrendered markup consts are deleted, and the reason is not tidiness — 3 of the 5 had already drifted from the showcase they describe (2026-09-07)
+
+**Dispatched by rule 4**, on the oldest genuinely dispatchable open item.
+Rule 1 no open P0 (`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0**);
+rule 2 `Standardize 0 / 4 ok` — Slice 332 reset it at `14:24:44Z`, roughly six
+minutes before this wake's first fetch, so the hand-off this wake read (written
+at `534b097a`, two commits back) telling it *"the next wake dispatches rule 2"*
+was already out of date; the counters were re-read rather than trusted. Rule 3
+`Objective 1 / 3 ok`; rule 5 `Optimize 0 wake-date(s) newer — ok`, so it was
+EVALUATED and does not fire. Rule 4's oldest open item is Slice 15, and
+everything from there to `310.2` is owner- or input-blocked, re-derived from
+each item's own text rather than carried from the hand-off: **15** NEEDS-RUNTIME
+(owner hardware), **112.3** "BLOCKED ON OWNER BRIEFS", **112.4** blocked on
+112.3's verdict, **249.7** holds its remaining rows for 249.10 (owner
+vocabulary) with its first Accept clause already executed, **249.10-13** each
+`OWNER CALL`, **273.2** `OWNER CALL` in its own heading, **296.3**
+`OWNER CALL`, **297.1** waits on a filer who is not the owner. `310.2` is the
+oldest cloud-takeable one, and its own Lane line says it is cloud-takeable
+**in its delete form**.
+
+### The premise reproduces exactly
+
+```
+for c in toastMarkup menuMarkup rowMarkup savingMarkup removeMarkup; do
+  echo "$c $(grep -o "$c" apps/docs/src/pages/base/motion.astro | wc -l)"; done
+#  each 1 — the declaration itself
+```
+
+And in the built page, each const's own comment text — `Entrance: a toast
+arrives from the top edge`, and the four siblings — occurs **0** times in
+`dist/base/motion/index.html`. The page ships **4** `<pre><code>` blocks, all
+from the other four consts (entrance, collapse, pulse, spin).
+
+### The deciding measurement: they are a second copy, and it has already rotted
+
+The reason to delete rather than render is not that the code is dead. It is
+that these five were a **hand-maintained second copy of markup the page
+already renders live** in its "In context" section — the shape CLAUDE.md's
+recipe forbids in one sentence: *"`Demo` renders a preview **and** its copyable
+code from ONE string — never write the preview and code twice."* The predicted
+consequence of writing it twice is drift, and the drift is here. Measured
+against the BUILT page's own DOM, not the source diff:
+
+| const | source declares | the page renders | |
+|---|---|---|---|
+| `toastMarkup` | `<div class="bo-alert bo-alert--success bo-motion-slide-in-block-start">` | same | MATCHES |
+| `menuMarkup` | `<div class="bo-motion-scale-in">` | `<div class="bo-motion-scale-in bo-alert">` (+ `role="group"`, `<p>` not `<div class="bo-card">`) | **DIFFERS** |
+| `rowMarkup` | `<tr class="bo-motion-pulse-once">` | `<tr class="">` — the class is applied by JS via `data-motion-class`, which is the *point* of that showcase | **DIFFERS** |
+| `savingMarkup` | `<button class="bo-btn" … aria-busy="true">` + spinner span | identical after driving the click; inner markup equal after whitespace collapse | MATCHES |
+| `removeMarkup` | `<tr class="bo-motion-fade-out">…</tr>` | `<div class="bo-alert bo-motion-fade-out">Line 30 — Anode kit</div>` | **DIFFERS** |
+
+**3 of 5.** Rendering them — the other half of the Accept — would have shipped
+three copyable samples that contradict the live showcase standing beside them.
+That is worse than shipping nothing, and it is the answer to the item's own
+"either rendered or deleted".
+
+**The probe was wrong on its first run, and the failure is the one this repo
+names.** v1's claim table was hand-transcribed, and its `removeMarkup` row
+carried the *rendered* value in the "const claims" column — so it reported
+`MATCHES` for a pair that differs. The instrument agreed with itself because
+both columns came from the same side. v2 parses the const out of the source
+with a regex whose failure throws, so the left column cannot be typed wrong,
+and it carries a **control**: `entranceMarkup` IS rendered and must come back
+`MATCHES`, which it does. 3-of-5 with a passing control discriminates; 5-of-5
+would not have.
+
+### Is this a class of defect? Measured: no — one page, and now zero
+
+```
+# frontmatter `const <name> = ` whose identifier occurs once in its own file
+5 never-used const(s) across 152 .astro files   (before — all five on motion.astro)
+0 never-used const(s) across 152 .astro files   (after)
+```
+
+So it is a one-page problem, not a pattern. **No gate was built** — see 333.1.
+
+### Verifying the removal: the raw grep is the WRONG check here
+
+The Accept says *"re-run the count above afterwards; it must read 0 for every
+name that remains"*. Run literally it reads **2, 2, 2, 3, 2** — because the
+comment this edit wrote to explain the deletion legitimately names all five
+consts. That is CLAUDE.md's *"verifying a removal: assert on structure, never
+on raw text"*, arriving in the criterion itself rather than in a script. The
+structural forms both read clean:
+
+- **comment-stripped identifier count** on the page: `0` for each of the five,
+  and `2` for each of the four that legitimately remain (declared + rendered)
+  — the controls are what make the zeros mean something.
+- **the frontmatter's own declaration list**: `base, classes, DESC, INTENT,
+  entranceMarkup, collapseMarkup, pulseMarkup, spinMarkup`.
+
+### NOT VERIFIED does not apply to this one, and that is measured rather than argued
+
+A cloud wake has no Podman, so no 1440/390 light-and-dark screenshots were
+taken. **They are not owed here**: the built page is **byte-identical** before
+and after — `md5sum` `f8886e3e9ee20f6464ae9545cd44d7aa` on both, 87,802 bytes
+each, from a fresh `rm -rf apps/docs/dist && npm run docs:build` (all 139
+built pages rewritten, mtimes 14:34:21-24Z). Which is the expected consequence
+of deleting strings that reached the HTML zero times, and the two facts
+corroborate each other.
+
+Byte-identical is a suspiciously tidy number, so the comparison was
+red-proved: `diff` of the same saved page against a *different* built page
+reports a difference, so the instrument discriminates.
+
+### Two things kept rather than deleted with the consts
+
+- **The `--grid`-not-`--settings` reasoning (roadmap 292.9)** sat in a comment
+  above `savingMarkup`. The live "Saving…" swap in the page's own `<script>`
+  makes the identical choice, so deleting the const would have deleted the only
+  record of why. Re-homed onto that handler, trimmed to the half that is still
+  true, and it now says outright that it is the last site carrying the choice.
+- **`check-deprecated-icons.mjs`'s header** used `savingMarkup` as its worked
+  example of why phase 1 (SOURCE) is not redundant with phase 2 (DIST) — "a
+  copyable string a page declares but does not render". That example no longer
+  exists. The header now says the coverage claim is **prospective**, gives the
+  before/after base rate, and warns against reading the empty population as
+  evidence the phase is redundant. Found by grepping the const names repo-wide
+  before editing, which is the step that keeps a snapshot in a comment from
+  going stale silently.
+
+### The gap this leaves, stated rather than left to be rediscovered
+
+The "In context" section now carries **no copyable block**, alone among the
+page's sections. That is recorded in a template-adjacent comment in
+`motion.astro` itself, with the condition for closing it: render preview and
+code from one string, never re-add a hand-copy. Doing that adds `<pre>` blocks
+to a built page — the half `310.2`'s own Lane line assigns to a local wake.
+
+1. [ ] **333.1 — should a gate forbid a never-used frontmatter `const` in an
+       `.astro` page?** Not built in this item, and the reason is that the
+       evidence points both ways and neither direction is this item's to
+       settle. **For**: the predicate is *exact*, not semantic — an identifier
+       occurring once in its own file — so 94.11's wall does not apply, the
+       failure took roughly a month to notice, and it produced three drifted
+       samples. `310.1`'s own precedent is the strongest argument: a gate there
+       earned its place at a clean base rate *because the population had held a
+       violation a day earlier*, which is exactly this population. **Against**:
+       the base rate after this fix is **0 of 152**, so an empty exemption map
+       would be the gate's steady state from birth, and the ordinary tool for
+       it is `noUnusedLocals`, which nothing here sets. **Say precisely what
+       the tsconfig situation is, because a first pass here got it wrong and
+       the correction changes the argument**: `tsconfig.base.json` and
+       `packages/core/tsconfig.json` both exist (`strict: true`, no
+       `noUnusedLocals`), but the core one's `include` is `src/js/**/*.ts`, and
+       `apps/docs/` has **no `tsconfig.json`** and no `astro check` step — so
+       no TypeScript configuration in this repo has ever looked at a docs
+       `.astro` file. The cheaper fix may still be a compiler flag plus the
+       config that would make it apply, rather than a 54th gate; that is more
+       than a one-line change, which is part of what this item weighs.
+       - **Accept** — the property, not a predicted outcome: one wake records
+         which of the three it is (gate / `tsconfig` / neither) **with the
+         base rate re-measured at that revision**, and says what the choice
+         costs. **Deciding to build nothing is a satisfying outcome**, and so
+         is finding the base rate has moved off zero.
+       - **Lane**: cloud-takeable — the scan, the `tsconfig` spike and the
+         decision are all text and node.
+
 ## Slice 332 — Standardize sweep, 4 of 4 lanes: three clean, and lane 4 led to a mandated intake command that CANNOT RUN where most wakes run (2026-09-07)
 
 **Dispatched by rule 2**, OVERDUE at `4 / 4`. Say `n of 4`: **4 of 4 lanes
@@ -2483,7 +2641,7 @@ folded in, because each turns on a judgement 292.9 did not make.
          byte in class and content, at an unchanged 36x36. **A local wake should
          glance at `/prod/production-orders`, `/prod/capacity` and `/prod/bom`.**
 
-2. [ ] **310.2 — `/base/motion` declares five copyable markup samples the
+2. [x] **310.2 — `/base/motion` declares five copyable markup samples the
        template never renders.** Found by checking the built page for a string
        the source clearly contains: `savingMarkup`'s `bo-icon--grid` appears in
        `dist/base/motion/index.html` exactly once, from the inline script, and
@@ -2511,6 +2669,21 @@ folded in, because each turns on a judgement 292.9 did not make.
          built page, which the whole-tree gates sweep but nobody would have
          LOOKED at — so that half wants a local wake, or an explicit
          NOT VERIFIED.
+
+       **DONE 2026-09-07, Slice 333 — all five DELETED.** The premise
+       reproduced exactly (each const occurring once; each one's text occurring
+       **0** times in `dist/base/motion/index.html`). The deciding measurement
+       is not deadness but **drift**: they were a hand-maintained second copy of
+       markup the "In context" section already renders live, and **3 of the 5**
+       (`menuMarkup`, `rowMarkup`, `removeMarkup`) had already diverged from the
+       element the built page renders — so the *render* branch of this Accept
+       would have shipped three samples contradicting the showcase beside them.
+       The built page is **byte-identical** before and after
+       (`f8886e3e9ee20f6464ae9545cd44d7aa`), which is why no screenshot is owed.
+       The Accept's own re-run command is the one thing that does NOT apply:
+       run literally it reads 2-3, because the comment explaining the deletion
+       names all five — CLAUDE.md's structure-not-raw-text rule landing in a
+       criterion. Full record, controls and the follow-up (`333.1`) in Slice 333.
 
 ## Slice 309 — Objective grill of Slices 307, 308: Slice 308 reproduces to the word, and underneath Slice 307's re-measurement is a P0 — the reference app's shared init has been swallowed by a trailing comment since 2026-08-23, so the select-all it timed did nothing (2026-09-06)
 
