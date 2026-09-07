@@ -25,8 +25,9 @@ survives none.
 Last updated 2026-09-08 (**cloud** wake, scheduled routine). Working tree clean
 at hand-off. **One iteration recorded** — `Standardize · sweep` (outcome
 `landed`, no refusals) — **and one metric**, `dispatch-region-words=7298`, which
-starts a series rather than moving anything today. The work landed as
-**`f9e0f17d`**, followed by this hand-off's own commit.
+starts a series rather than moving anything today. The sweep landed as
+**`f9e0f17d`**, the recording as **`c7ea5617`**, and `339.2` — the finding the
+sweep's own re-scan produced — in this hand-off's commit.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -36,9 +37,13 @@ node apps/docs/scripts/check-resume-slice-ids.mjs # names any stale closed ids
 python3 scripts/loops/roadmap_scope.py            # OPEN set + sweep scope
 ```
 
-Every figure below was taken at **`f9e0f17d`**, the slice commit — **not** the
-working tree and **not** `HEAD` once this hand-off commits, which is
-`ENVIRONMENT.md`'s figure rule.
+**Figure provenance, per `ENVIRONMENT.md`'s rule that a figure describing a
+commit is read from THAT commit.** The lane readings, the Step 0c series and
+the word counts were taken at **`f9e0f17d`**, the sweep commit. **The open-set
+and archive-share figures are NOT** — filing `339.2` moved them, so they are
+read at this hand-off's own commit and are marked where they appear. Neither is
+the working tree: `roadmap_scope.py` refuses to print figures for an
+uncommitted tree, which is what caught them mid-edit.
 
 ## THE COUNTERS, READ AFTER RECORDING — rule 2 is SPENT, rule 3 is one slice away
 
@@ -129,6 +134,24 @@ to date" list: a pointer naming "the first two collisions" and an archive
 heading reading "The two collisions", both written when two was right and both
 stale from the moment a third landed. Both now name the subject.
 
+## ⚠ THE SWEEP DID NOT EXIT CLEAN — `339.2` is open and says so
+
+§3's re-scan applied 339.1's own general question to the other sections that
+grew, and **rule 3 has the identical signature**: one **+303** step (Slice
+279.4, 2026-09-05) then **flat for 18 commits**, under a section whose charter
+already sends recurrence narratives — *"what each parser did, the replay
+figures"* — to `LOOPS-archive.md`. The replay figures are duplicated inline
+against a home the text itself names (`dispatch_status.py` beside
+`CLOSES_A_SLICE`).
+
+**Not fixed this wake, deliberately, and by 339.1's own third branch**: 279.4
+**argues explicitly** for its inline placement (different mechanism, *"no
+widening of any regex could have found it"*). Overriding a stated argument is
+its own decision, not a tail-end tidy in a sweep — that is precisely how
+instruction gets cut. `339.2` carries the series, the command to re-measure it,
+and an Accept under which **finding the whole +303 to be instruction closes the
+item**.
+
 ## NOT VERIFIED, said plainly — and this wake adds NO visual debt
 
 **No 1440/390 light-and-dark screenshots — a cloud wake has no Podman.**
@@ -161,18 +184,18 @@ have invented a 56-word delta); a grep for stale references to the moved text,
 which returned only the slice's own description of the fix; and a re-read of the
 whole of Step 0c to confirm no sentence was left pointing at text that had moved.
 
-## The open set is 31 — no P0, and 20 are cloud-takeable
+## The open set is 32 — no P0, and 21 are cloud-takeable
 
-`roadmap_scope.py` at `f9e0f17d` reports **31 open / 69 closed**, OPEN slices
+`roadmap_scope.py` reports **32 open / 69 closed**, OPEN slices
 `[15, 112, 249, 273, 296, 319, 320, 322, 323, 324, 325, 326, 327, 328, 330,
-331, 332, 333, 334, 335, 336, 337, 338]`. **Slice 339 opened and closed inside
-this wake**, so it never joins the OPEN list. The raw counts reconcile: `grep -c`
-reads 31 open / **71** closed, and 71 = 69 attributed + the 2 `[x]` under the
-non-slice `## STATE` heading.
+331, 332, 333, 334, 335, 336, 337, 338, 339]`. **Slice 339 joins the OPEN list**
+on `339.2`, the finding its own re-scan produced; `339.1` is closed. Re-run the
+script rather than quoting this — it **refuses to print figures for an
+uncommitted tree**, which is how these were caught mid-edit.
 
-- **cloud-takeable: 20** — `319.3`, `320.2`, `322.3`, `323.1`, `324.1`,
+- **cloud-takeable: 21** — `319.3`, `320.2`, `322.3`, `323.1`, `324.1`,
   `324.2`, `325.1`, `325.2`, `326.3`, `327.3`, `328.1`, `330.1`, `331.1`,
-  `332.1`, `333.1`, `334.1`, `335.1`, `336.2`, `337.1`, `338.1`.
+  `332.1`, `333.1`, `334.1`, `335.1`, `336.2`, `337.1`, `338.1`, `339.2`.
   **`319.3` is the oldest of these** and is what rule 4 reaches for now that
   rule 2 is spent — a gate question about docs pages asserting a target size,
   no browser needed, and its Accept makes refusing a satisfying outcome.
@@ -187,7 +210,7 @@ non-slice `## STATE` heading.
   **Re-derived from each item's own text this wake**, not carried forward.
 - **browser-blocked in the SCREENSHOT sense (1):** `320.3`.
 
-20 + 10 + 1 = 31, asserted rather than left to the reader. **The fifth kind,
+21 + 10 + 1 = 32, asserted rather than left to the reader. **The fifth kind,
 `artifact-lost`, is empty — checked rather than assumed.**
 
 ## The archive sweep is NOT due, and the two halves disagree for the TENTH wake
@@ -277,7 +300,9 @@ consecutive wake where the two halves of the archival trigger DISAGREE, and the
 share took its largest single-wake step of the run (31.1 → 32.1) because this
 slice is itself a large closed one. Still two readings from the threshold.
 
-**What the next wake should reach for: rule 4 on `319.3`.** Rule 2 is spent at
+**What the next wake should reach for: rule 4 on `319.3`.** `339.2` is the
+NEWEST open item, so rule 4 — which picks the OLDEST — does not reach it; it
+waits its turn deliberately, and the Objective grill may reach it first. Rule 2 is spent at
 `0 / 4` and rule 3 sits at `2 / 3` — **one more closed slice arms the Objective
 grill**, which outranks rule 4, so a wake that closes anything should expect to
 grill on the wake after. `319.3` is cloud-takeable, needs no browser, and its

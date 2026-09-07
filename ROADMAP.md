@@ -443,6 +443,57 @@ red-proved dead.
        premise ("the fold did not hold") FALSE is a satisfying outcome and is
        what happened.
 
+2. [ ] **339.2 — the sweep's re-scan found a SECOND section with the same
+       unexecuted charter, and this item is deliberately not the fix.**
+
+       `LOOPS.md` §3 step 4 says a round re-scans for another instance of the
+       same drift. Applying 339.1's own general question — *does this section
+       have a generator?* — to the other sections that grew since `8848ed55`
+       finds one, with the identical signature:
+
+       ```
+       # rule 3's body words, per revision since 274.2's cut
+       8848ed55  2026-09-05   660
+       632bfc46  2026-09-05   963  +303   Slice 279.4
+       … 18 commits …         963    +0   through 339 (2026-09-07)
+       ```
+
+       **One step, then flat for 18 commits** — the same series Step 0c showed,
+       one narrative instead of two. Rule 3 carries an archive charter of its own
+       (*"The five recurrence narratives — what each parser did, the replay
+       figures, the counts that were snapshots — are in `LOOPS-archive.md`"*),
+       and 279.4's +303 is a sixth blind spot written inline, replay figures
+       included (`18 Polish rows naming 17 slices`, `crossings 51 → 52`, the
+       12-slice list). Those figures already have a home the text itself names —
+       *"in `dispatch_status.py` beside `CLOSES_A_SLICE`; re-run them, they are
+       snapshots"* — so they are duplicated, not merely inline.
+
+       **Why this is filed rather than cut in the same wake, which is 339.1's
+       own third branch applied to itself.** That branch says: when other
+       sections grew, *"a second cut would remove instruction rather than
+       narrative … say so and file the structural question; do not reach for a
+       cut."* And 279.4 **argues explicitly for its inline placement** — that its
+       mechanism is the loop SET rather than a parser, that *"no widening of any
+       regex could have found it"*, and that this is "the point". Overriding a
+       stated argument is its own decision with its own reasoning; it is not a
+       tidy-up at the tail of a sweep, and making it at speed is how instruction
+       gets cut.
+
+       **So the sweep exits with a KNOWN open item, and does not claim a clean
+       pass.** `LOOPS.md` §3's exit is *"a clean pass finds nothing to
+       consolidate"*; this pass found something and left it, which is stated here
+       rather than implied by silence.
+
+       *Accept*: the item names, sentence by sentence, which of rule 3's +303 is
+       instruction (a lesson that changes what the next wake does) and which is
+       forensics under its own charter, and either moves the forensics or records
+       why 279.4's inline argument beats the charter. **Finding that the whole
+       +303 is instruction is a satisfying outcome** and closes this item — the
+       premise is that some of it is not, and that premise is checkable against
+       the charter's own wording rather than against a word count. Re-measure the
+       series first (the numbers above are snapshots, and the command is the
+       block above them).
+
 ## Slice 338 — 316.1 built: `check:print-tokens` ships red-proved, the exemption list it was expected to need is refused on a measurement, and the gap it CANNOT see is filed rather than quietly widened (2026-09-08)
 
 **Dispatched by rule 4**, cloud wake. Step 0: container **DETACHED** again
