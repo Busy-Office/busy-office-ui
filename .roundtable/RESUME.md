@@ -186,23 +186,25 @@ an uncommitted tree**.
 
 ## The archive sweep is NOT due, and the two halves disagree for the ELEVENTH wake
 
-Measured at the pre-`340` tip **`273c7ae3`**: **8,643 lines**, closed-history
-share **30.5%** (2,632 lines across 11 closed slices). The standing trigger is
-*past 5,450 lines **and/or** 40.6%*: lines are past, **share is not**. That is
-precisely the AND-vs-OR case `249.12` is open on, and it decides it here —
-under AND, no sweep. **Eleventh consecutive wake where the two halves
-disagree.**
+**Read at this wake's own recording commit `dafadfcc`, not carried forward**:
+**8,789 lines**, closed-history share **33.5%** (2,946 lines across 13 closed
+slices). The standing trigger is *past 5,450 lines **and/or** 40.6%*: lines are
+past, **share is not**. That is precisely the AND-vs-OR case `249.12` is open
+on, and it decides it here — under AND, no sweep. **Eleventh consecutive wake
+where the two halves disagree.**
 
-**Re-read at THIS wake's own commit before quoting it** — `340` adds a large
-closed slice, which moves both halves, and `ENVIRONMENT.md`'s rule is that a
-figure describing a commit is read from that commit. A wake reaching for a
-sweep should read `roadmap_scope.py`'s pin line first: **9 targets are named by
-a still-open item**.
+Both halves moved because `340` closes wholly, which is `ENVIRONMENT.md`'s rule
+about reading a figure from the commit it describes doing real work: at the
+pre-`340` tip `273c7ae3` the same script read **8,643 lines / 30.5%**. A wake
+reaching for a sweep should read `roadmap_scope.py`'s pin line first — **9
+targets are named by a still-open item**.
 
-Trend, **nine** readings (the previous hand-off's 32.1% was taken at
-`f9e0f17d`, when `339` was briefly wholly closed; filing `339.2` reopened it,
-which is why the series steps back rather than an instrument disagreeing):
-26.4% → 27.8% → 29.5% → 30.7% → 30.7% → 30.5% → 31.1% → 32.1% → **30.5%**.
+Trend, **nine** readings, and **it is not monotone**: the previous hand-off's
+32.1% was taken at `f9e0f17d`, when `339` was briefly wholly closed, and filing
+`339.2` reopened it — so the series steps back for a reason, not because an
+instrument disagreed. 26.4% → 27.8% → 29.5% → 30.7% → 30.7% → 30.5% → 31.1% →
+32.1% → **33.5%** (the 30.5% above is the intermediate reading at `273c7ae3`,
+not a ninth point).
 
 ## Step 1 — both intakes read, with the controls ENVIRONMENT.md §8 names
 
@@ -265,11 +267,12 @@ actions:**
    never reached, so `polish_requeue.py --apply` was correctly not run.
 
 **`249.12` stays a live question, sharper for the eleventh time** — the two
-halves of the archival trigger DISAGREE again, and the share moved **down**
-(32.1 → 30.5) because `339` reopened on `339.2`. That is worth the owner
-seeing: under the OR reading the sweep has been due for eleven wakes; under AND
-it has never been due, and the share is not monotone, so "it will get there" is
-not a safe assumption either.
+halves of the archival trigger DISAGREE again, and the share is **not
+monotone**: it read 32.1% two wakes ago, 30.5% once `339.2` reopened Slice 339,
+and **33.5%** now that `340` closes wholly. That is worth the owner seeing:
+under the OR reading the sweep has been due for eleven wakes; under AND it has
+never been due, and a share that can go DOWN when an item is filed means "it
+will get there on its own" is not a safe assumption either.
 
 **What the next wake should reach for: rule 3, the Objective grill of Slices
 316, 319 and 339.** It is OVERDUE at `3 / 3` and outranks rule 4. Rule 4's next
