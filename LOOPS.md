@@ -155,7 +155,7 @@ at `15ab347b` on 2026-08-28 and stood **unedited for ten days**, across a second
 collision this same section goes on to describe (`git log -S'It has happened
 once' -- LOOPS.md` returns exactly that one commit). That is the stale-snapshot
 failure this file records elsewhere, in the paragraph naming the cost.
-Three as of 2026-09-07:
+Four as of 2026-09-07:
 
 1. **157.3** — the cloud routine and the local session both built it within an
    hour (Slice 162). `git push` rejected the loser.
@@ -169,6 +169,23 @@ Three as of 2026-09-07:
    exactly as specified. Whether that is a first is NOT claimed: collision 2's
    record credits the same fetch while also describing a rebase, so its loser
    may well have committed, and `LOOPS-archive.md` does not settle it.
+4. **`297.1` (rule 4) against the Objective grill of 315/332/333 (rule 3)**,
+   2026-09-07. **The first collision in which the two dispatchers ran DIFFERENT
+   rules**, so nothing was duplicated and nothing was discarded. What they
+   collided on is the one shared resource this section never names: **the slice
+   NUMBER.** Both wrote `## Slice 335`. The loser's pre-commit fetch saw
+   `6a009a4b..9c7bac19`, read the winner's commit, renumbered its own slice to
+   336, rebased — one conflict, both hunks kept, `ROADMAP.md` ordered 336 / 335 /
+   334 — and landed intact.
+
+**So the cost model has a fourth point and it is the cheapest: a renumber, not a
+wake.** Three of the four now cost less than the "up to one wake's work"
+budgeted above, which is worth knowing before anyone re-argues partitioning —
+but the sample is four, and collision 1 did cost a whole wake. The renumber is
+mechanical and easy to get wrong in one specific way: `sed 's/335/336/g'` over
+`ROADMAP.md` also rewrites unrelated arithmetic (`396 − 61 = 335` is live in the
+file today), so match `335\.` and the `^## Slice 335` heading, and count the hits
+before and after. That is CLAUDE.md's bulk-edit rule in its smallest form.
 
 **Collision 3 says something the first two do not: rule 3 collides harder than
 rule 4.** Rule 4 picks the oldest open item, so two dispatchers duplicate one

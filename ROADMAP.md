@@ -342,6 +342,19 @@ what is grilled here is its own three items. `315.3` was deferred out of it and
 
 **Full report:** `.roundtable/grill-objective-315-332-333-2026-09-07.md`.
 
+**This wake collided, and it is `LOOPS.md` Step 0c's FOURTH — the first where
+the two dispatchers ran different rules.** The pre-commit fetch mandated there
+returned `6a009a4b..9c7bac19`: the other dispatcher had landed `297.1` under
+rule 4 while this one ran rule 3. **Nothing was duplicated and nothing was
+discarded** — the only shared resource they contended for was the slice
+*number*, which that section never names. Both wrote `## Slice 335`. This slice
+renumbered to **336**, rebased (one `ROADMAP.md` conflict, both hunks kept,
+ordered 336 / 335 / 334) and landed intact. Recorded in Step 0c with the one way
+the renumber goes wrong: a blind `sed 's/335/336/g'` also rewrites the live
+arithmetic `396 − 61 = 335` elsewhere in this file, so the replace was scoped to
+`335\.` plus the heading, with the hits counted before and after (8 + 1 here, 2
+in the report).
+
 **26 of 29 re-run assertions reproduce exactly** — including every line number
 in 315.1 (`219` and `293` at `066d9878^`), all six of 315.2's hex spellings
 (`142, 142, 123, 141, 114, 134`), all three of 332's lane figures to the digit
