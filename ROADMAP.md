@@ -320,6 +320,114 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 331 — 294.2: the input block is fixed rather than reported, and all six proposals carry a verdict (2026-09-07)
+
+**Dispatched by rule 4** as the oldest genuinely dispatchable item. `249.7`
+and everything between it and here is owner-blocked; `294.2` was the oldest
+that was not — except it was **INPUT-BLOCKED**, and had been for **eleven
+hand-offs** before Slice 316 diagnosed it.
+
+### The block was fixable, and reporting it a twelfth time was the wrong move
+
+`294.2` could not be worked because the six proposals live in an owner-supplied
+zip no wake in this repo could read; ranking them would have meant inventing
+verdicts. Slice 316 was right to refuse on that ground. What none of the twelve
+wakes did was **make the material readable**.
+
+**It is now on a branch**: `contribution/upstream-2026-09-06`, the zip's
+`upstream-contribution/` tree byte-for-byte under `.contribution/`, 31 files,
+416 kB, scanned for secrets first (the only `token` hits are *"semantic token
+tier"* in prose). **Not on `main`, and nothing is adopted** — that is this
+item's own first clause. Every verdict below cites a path a later reader can
+open, which is the whole point.
+
+**This is `321.1`'s defect fixed as a class rather than an instance.** That
+finding — a gauntlet verdict whose artifact lived in a session scratchpad and
+is now unreproducible at every revision — is the same shape: evidence a later
+wake cannot re-read. Landing the folder is the general fix.
+
+### The six verdicts
+
+| # | Proposal | Verdict |
+|---|---|---|
+| 1 | Brand mark | **OWNER CALL** — deferred, not refused |
+| 2 | `registry.json` + `install-prompts.md` | **SPLIT**: refuse the registry, adopt-with-changes the prompts |
+| 3 | Gauntlet bar | **ADOPTED WITH CHANGES** — already landed, Slice 296 |
+| 4 | Static reference consumer | **REFUSED** — duplicates a shipped capability |
+| 5 | Modern CSS layer | **SPLIT** — one part landed, one blocked by its own gate, one withdrawn by its author |
+| 6 | `proposals/` | **REFUSED as product**, kept as reference |
+
+**1. Brand mark — OWNER CALL, and the contribution is right that it is one.**
+It is the single decision in the folder with no traceable source; everything
+else can be checked against the repo. Nothing a wake measures can settle a
+mark's taste, so it is deferred rather than refused.
+
+**2. Registry + install prompts — the two halves get opposite verdicts.**
+`registry.json` carries `$schema: ui.shadcn.com/schema/registry.json`; publishing
+into that ecosystem advertises this framework to consumers expecting React
+components, which Slice 296 already refused and which nothing here reopens.
+**`install-prompts.md` is the transferable half and it survives inspection**:
+its 59 `bo-*` classes were checked against the shipped `api.json`, and
+`check-markup` over its 53 extracted markup blocks reports only placeholder
+syntax (`data-overflow="start|end|both"` — the prompt's "pick one" notation,
+not a claimed value). *(A first pass reported `bo-dropdown` and `bo-tabs` as
+missing; that was this wake's own extraction, not the prompts — both exist,
+in `data-table.css` and `tabs.css`. The instrument's first output was wrong,
+as usual.)* **The change it needs is that it must be GENERATED.** The
+contribution's own header says it is generated from `react/*/*.prompt.md`,
+sources deliberately excluded upstream — so as landed it would be a
+hand-maintained file duplicating `api.json`, which is the drift shape Slice
+244 and the `registry.ts` refusal both name. Adopt only when generated from
+`api.json`; filed as `331.1`.
+
+**3. Gauntlet bar — adopted with changes, and already shipped.** Slice 296
+landed `BAR.md` / `CRITIC.md` / `ROUNDS.md` adapted to references that exist
+here, and Slice 305 ran the full three-round budget through them. Recorded so
+the verdict table is complete.
+
+**4. Static reference consumer — REFUSED, on a measured duplication.**
+Its stated value is a no-server HTML+HTMX consumer. **`examples/erp-suite`
+already ships a static `dist/index.html`** openable with `file://` and has no
+`package.json` or server at all, so the no-server demonstration exists. A
+second consumer is coverage duplication — the "re-photographing" the pattern
+recipe refuses — and it would carry a hand-transcribed `behaviors.js` copy of
+three real behaviours, a second source for shipped code.
+
+**5. Modern CSS layer — three parts, three states**, and the contribution's
+own instructions are what decide two of them. Its `derive-floor` probes for
+`light-dark()` / `oklch()` / `scroll-state()` **landed as `294.1` in Slice
+311**. The **OKLCH PR stays blocked** on the ΔE00 round-trip its own `PR.md`
+requires — *"do not merge it on the promise of measuring later"*, which is
+this repo's rule too. **`surface.css` is withdrawn by its own author** as not
+proposed upstream, since it changes shipped visuals for every consumer. The
+live remainder is the guarded-feature edits, which must land as the seven-PR
+split rather than a `modern/` folder; not opened here.
+
+**6. `proposals/` — refused as product**, which is what its author says it is:
+`future-erp/` is two exploration screens and `DESIGN-md-additions.md` is prose
+distilled from this repo's own docs. Kept on the branch as reference.
+
+2. [x] **294.2 — DONE.** All six carry a recorded verdict with its reason, and
+       the refusals are as complete as the adoptions, which the Accept asked
+       for. The brand mark remains the one **OWNER CALL**, as the contribution
+       itself identified.
+
+1. [ ] **331.1 — `install-prompts.md`, generated from `api.json`.** The only
+       proposal that survives inspection and is not already landed, blocked,
+       or withdrawn. Its content checks out; its provenance does not — as
+       supplied it is hand-maintained and duplicates data `api.json` already
+       carries, which is the drift the `registry.ts` refusal names.
+       - **Accept** — the property: a prompt block is derived from `api.json`
+         for every component, so adding a component produces its prompt with
+         no hand edit, and `check-markup` passes over every emitted block.
+         **Measure the base rate first**: if the generated output would differ
+         materially from the 40 hand-written blocks, that difference is the
+         finding and is worth reading before shipping either. **Refusing on
+         the ground that the docs pages already carry copyable markup is a
+         satisfying outcome** — `Demo` renders preview and code from one
+         string today, and a second copyable surface may be the duplication
+         this item exists to avoid.
+
 ## Slice 330 — Objective grill of Slices 310, 328, 329: 23 of 25 reproduce, and the figure that does not is the one a design refusal rests on (2026-09-07)
 
 Dispatched by rule 3, OVERDUE at `3 / 3`. No prior grill names any of the
@@ -3270,7 +3378,7 @@ was the tell, and it is why the 1.30 figure above is trustworthy.
          guarded today, so finding the floor unchanged is a satisfying
          outcome and closes this.
 
-2. [ ] **294.2 — rank the six proposals against the Objective; adopt none on
+2. [x] **294.2 — DONE, Slice 331.** Rank the six proposals against the Objective; adopt none on
        arrival.** The guide's own ordering is sound engineering (independently
        revertable, taste-call first, blocked PR named as blocked) and is not
        in dispute. What has not happened is the Objective test — simplicity /

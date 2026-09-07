@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-07 13:41 UTC
+Generated at: 2026-09-07 13:49 UTC
 
 ## Open items by slice
 
@@ -17,8 +17,6 @@ Generated at: 2026-09-07 13:41 UTC
   - 249.13 — Reconsider demo-first/spec-last (the proposal's B1), explicitly, not as a ratification.
 - **Slice 273** (1 open)
   - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
-- **Slice 294** (1 open)
-  - 294.2 — rank the six proposals against the Objective; adopt none on arrival.
 - **Slice 296** (1 open)
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - **Slice 297** (1 open)
@@ -52,15 +50,18 @@ Generated at: 2026-09-07 13:41 UTC
   - 328.1 — The `Demo`-component detector has now produced a wrong count twice, a month apart, and nothing stops a third.
 - **Slice 330** (1 open)
   - 330.1 — Sampling is now a named failure mode here, twice.
+- **Slice 331** (1 open)
+  - 331.1 — `install-prompts.md`, generated from `api.json`.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1608 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-09-07 10:47   ok
-  Objective     0 / 3 slices          since 2026-09-07 21:41   ok
+dispatch status — counter-triggered rules (1611 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-09-07 10:47   OVERDUE
+  Objective     1 / 3 slice           since 2026-09-07 21:41   ok  [331]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-09-07 12:59   ok   [newest pair: claims; 133 sample(s), 7 of 44 name(s) paired across days]
      rule 5's comparable set — 7 name(s) sampled on 2+ distinct days (37 of 44 name(s) have only one day and are not an input to a rule that compares two runs):
        claims                      4d  2026-09-06 169 count -> 2026-09-07 170 count  +1
@@ -78,7 +79,6 @@ dispatch status — counter-triggered rules (1608 iterations logged)
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
 - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
-- 294.2 — rank the six proposals against the Objective; adopt none on arrival.
 - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
 - 249.10 — SAP/Fiori terminology column for 249.7.
 - 249.11 — "Migrate an existing admin UI" path.
@@ -89,9 +89,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-07 12:58 · Meta · refusal · a gate over examples/** for deprecated glyphs — post-change the exemption map would be the population (94.11 base rate); reopen condition recorded in the gate header · refused · 0879ec3d
-- 2026-09-07 21:01 · Continue · build · Slice 328 / closes 249.6 — shipped the six-row adoption-scenario router on index.astro (3+3 at 1440, 1 col at 390, all hrefs resolve). Its premise was FALSE: the three 'no rendered result' rows render 103, 11 and 8 live framework elements inside their demo sections, more than the page that passed (14) — the detector counted the Demo COMPONENT, which is CLAUDE.md's own recorded 1-of-18-vs-16-of-18 error repeating. The Accept's gate is refused on base rate: the honest predicate reads 30 of 30, uniformly true · landed · 9a4be080
-- 2026-09-07 21:01 · Meta · refusal · the check-learning-path arm the Accept asked for — the honest predicate is 30/30 uniformly true, and the anchored 17/31 alternative discriminates on WHICH mechanism a page uses to show a result rather than whether it shows one · refused · 9a4be080
 - 2026-09-07 21:01 · Meta · refusal · cutting three of the six rows, or padding those pages with a bare pattern link — nothing was missing, and padding would be fitting the page to the gate · refused · 9a4be080
 - 2026-09-07 21:16 · Continue · build · Slice 329 / closes 249.9 — the component catalogue at /components/: 42 cards, 8 groups, every field generated (tagline+category from api.json meta, JS status from behaviors.json byComponent, floor from floor.json perComponent, DSA from dsa-scores.json). Caught a defect in my own code before shipping: 2 of 6 'no tagline' cards were real components whose page slug differs from their CSS dir (alerts->alert, state-patterns->state) — CLAUDE.md's named trap; inverted api.json's pageSlug map rather than special-casing, 6 -> 0. Edited check-page-shape to stop treating a section front door as a component, red-proved with an orphan probe · landed · 623c98d9
 - 2026-09-07 21:16 · Meta · refusal · the build-time miniature 249.9 specified — measured 40s and 1.1MB for 40 components, ~12x the whole framework's minified size, to show a still picture of a demo that is live one click away; that is re-photographing, which the pattern recipe already refuses · refused · 623c98d9
@@ -99,6 +96,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-07 21:41 · Objective · grill · Slice 330 — grill of 310, 328, 329: 23 of 25 reproduce. The one that matters is mine: 329's miniature cost (29kB/PNG, ~1.1MB for 40) was extrapolated from five components and does not reproduce — an independent five-sample read 49kB/1.91MB, and a census over all 39 reads 0.89MB with a 2.2-60.7kB spread. Two samples landed either side of the truth. The refusal survives (0.89MB is ~10x the framework) but the wrong figure was written into the shipped page header. Corrected there and in the slice, with the command shape added · logged · 8ef9b944
 - 2026-09-07 21:41 · Meta · refusal · a gate over 'a published figure carries the command that produces it' — semantic predicate, 94.11's wall for the seventh time; the fix that works is putting the command next to the claim · refused · 8ef9b944
 - 2026-09-07 21:41 · Meta · refusal · re-filing 329's 8-vs-7 group count as a defect — wording only, the conclusion never depended on it · refused · 8ef9b944
+- 2026-09-07 21:49 · Continue · build · Slice 331 / closes 294.2 — fixed the input block instead of reporting it a twelfth time: landed the owner-supplied contribution on branch contribution/upstream-2026-09-06 (31 files, secret-scanned, NOT on main, nothing adopted) so every verdict cites a readable path — 321.1's defect fixed as a class. All six proposals ranked: brand mark OWNER CALL; registry refused / install-prompts adopt-with-changes (must be generated, filed 331.1); gauntlet already adopted Slice 296; static consumer REFUSED because erp-suite already ships a file-openable static dist; modern CSS split (probes landed 311, OKLCH blocked by its own PR.md gate, surface.css withdrawn by its author); proposals refused as product · landed · 19fc0045
+- 2026-09-07 21:49 · Meta · refusal · the shadcn registry.json — publishing into that ecosystem advertises this framework to consumers expecting React components; Slice 296's refusal stands · refused · 19fc0045
+- 2026-09-07 21:49 · Meta · refusal · examples/static-list-report — erp-suite already ships a static dist openable with file:// and has no server at all, so a second consumer is coverage duplication carrying a hand-transcribed copy of three shipped behaviours · refused · 19fc0045
 
 ## Sunset test
 
