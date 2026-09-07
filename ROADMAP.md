@@ -320,6 +320,96 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 328 — 249.6 built: the router lands, its "three rows have no rendered result" premise was FALSE, and the gate its Accept asks for cannot discriminate (2026-09-07)
+
+**Dispatched by rule 4** on the oldest open item. Counters clear
+(`Standardize 0/4`, `Objective 0/3`). `249.6` had been **declined twice by
+cloud wakes** as browser-blocked in the screenshot sense — a six-row block
+lands on the site's front door — and explicitly reserved for a local wake.
+This is that wake, so there was no collision to lose.
+
+### The premise was wrong, for the third time in this item's history
+
+`249.6` recorded, from a cloud measurement, that **three of six rows lack a
+qualifying terminal page** — `getting-started/scope`, `concepts/js-behaviors`
+and `concepts/theming` each reading 0 `Demo` and 0 `/patterns/` links. Re-run
+before building, per the item's own premise rule. The pages are **not** prose
+stubs. Measured in the DOM, inside `section.demo`, with docs-shell chrome and
+`<pre>` samples excluded:
+
+| page | demo sections | live framework elements |
+|---|---|---|
+| `concepts/js-behaviors` | 8 | **103** |
+| `concepts/theming` | 6 | **11** |
+| `getting-started/scope` | 4 | **8** |
+| `getting-started/installation` *(this one PASSED)* | 8 | **14** |
+
+**All three "✗" pages render more than one that passed.** `theming` renders a
+real shipped `brand-indigo` preset; the detector missed it because it looks
+for the `Demo` **component** and `/patterns/` hrefs, not for a page that shows
+something.
+
+**This is CLAUDE.md's own recorded error, repeating.** *"Only 1 of 18
+learning-path pages shows anything working"* — the true figure was **16 of
+18**, because the detector counted uses of the `Demo` component rather than
+pages that show anything. Same instrument, same mistake, one item later. It is
+the third wrong measurement inside `249.6` specifically: first the CTA count
+(refuted by Slice 253), then *"the theming row has none"*, now this.
+
+### The Accept's gate is refused, on a base rate
+
+The Accept asks for a `check-learning-path`-style arm asserting each row's
+terminal page shows a result. Measured before writing anything, per 94.11 —
+the predicate *"renders ≥1 live framework element inside a demo section"*,
+across every `getting-started`, `concepts` and `base` page:
+
+```
+pages checked: 30 | renders something: 30 | renders nothing: 0
+```
+
+**30 of 30. Uniformly true, so it distinguishes nothing** — a detector that
+cannot fail, which is the shape this repo refuses. And the anchored predicate
+the item banked (17 of 31, which *does* discriminate) discriminates on the
+wrong thing: it separates pages by **which mechanism** they use to show a
+result, not by **whether** they show one. It would fail `js-behaviors` at 103
+live elements while passing a page that renders nothing and carries a single
+pattern link. Gating that would be fitting the pages to the gate, which the
+item itself names as the thing not to do.
+
+**So: no gate, and no new demos.** The property the Accept wanted is already
+true of all six rows; it was the measurement that said otherwise.
+
+### What shipped
+
+A six-row **adoption-scenario router** on `index.astro`, headed *"Start from
+where you are"*. Every other router on the site — nav, sidebar, task tiles —
+sorts by component category, which answers *"where is the thing called X"*.
+None answered *"I am in situation Y, where do I start"*, which is the question
+someone arriving from npm has. No rows cut.
+
+Verified live at both mandated widths: **3 columns at 1440px** (a clean 3+3,
+after `--bo-widget-min` was raised from 17rem where 4+2 left two orphans) and
+**1 column at 390px**. All six hrefs resolve — `check:links` verifies 14,458
+internal links against `dist`. Full docs build green.
+
+6. [x] **249.6 — DONE.** The router ships with all six rows. The Accept's gate
+       is **refused** with the base rate that decided it (30/30 uniformly
+       true), and the three-✗ premise it rested on is refuted with the DOM
+       measurement above. Its open question — *"or three of the six rows
+       cut"* — is answered: nothing is cut, because nothing was missing.
+
+1. [ ] **328.1 — The `Demo`-component detector has now produced a wrong count
+       twice, a month apart, and nothing stops a third.** Once as *"1 of 18
+       learning-path pages"* (true figure 16 of 18) and once as `249.6`'s
+       three-✗ table. Both times the fix was local to the item; the detector
+       shape survives.
+       - **Accept** — measure before building: count how many live instruments
+         still ask *"does this page use `Demo`"* when the question they are
+         answering is *"does this page show a result"*. **If the answer is one,
+         close this as not-a-pattern with the count** — two occurrences a month
+         apart in the same item family may be one habit rather than a
+         systematic gap, and a gate over it would be the ceremony 94.11 names.
+
 ## Slice 327 — Objective grill of Slices 309, 323, 326: 74 of 75 published assertions reproduce, and both defects are in prose sitting BESIDE a measurement that is correct — one route claim nobody ran a command for, and a negative control whose own record destroyed it (2026-09-07)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again (trap 1;
@@ -5159,7 +5249,7 @@ claimed.
          at 1440 and 390. All **17** CI entry points, re-derived from
          `ci.yml`, ran green here.
 
-6. [ ] **249.6 — "Choose your path" router, corrected from the proposal's
+6. [x] **249.6 — DONE, Slice 328.** "Choose your path" router, corrected from the proposal's
        own undercount.** The proposal's evidence ("index.astro:118, one
        CTA") undercounted: the page has 2 CTA buttons, 4 nav links and 6
        task-tiles.

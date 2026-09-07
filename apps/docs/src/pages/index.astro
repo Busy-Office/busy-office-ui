@@ -194,6 +194,46 @@ const socialDescription = 'CSS-first UI framework for ERP and back-office: seman
         </div>
       </section>
 
+      <!-- ============ ROUTER: by adoption scenario, not by component ======
+           Roadmap 249.6. Every other router on this site — the nav, the
+           sidebar, the task tiles below — sorts by COMPONENT CATEGORY, which
+           answers "where is the thing called X". None answered "I am in
+           situation Y, where do I start", and that is the question someone
+           arriving from npm actually has.
+
+           All six rows were verified to end somewhere that renders a working
+           result, measured in the DOM inside `section.demo` with shell chrome
+           and `<pre>` samples excluded: 8 / 14 / 103 / 11 / 5 / 8 live
+           framework elements respectively. Three of these rows were previously
+           recorded as having no rendered result; that was an instrument error,
+           corrected in Slice 328. -->
+      <section class="why">
+        <h2>Start from where you are</h2>
+        <p class="bo-u-text-muted">Every other list here sorts by component.
+        This one sorts by situation — each row ends on a page that shows the
+        thing working, not one that only describes it.</p>
+        <div class="bo-widget-grid" style="--bo-widget-min: 21rem">
+          <div class="bo-widget"><div class="bo-widget__header"><span class="bo-widget__title">
+            <a href={base + '/getting-started/installation'}>Adding it to an app that exists →</a></span></div>
+            <div class="bo-widget__body"><p class="bo-u-text-muted">One stylesheet, no build step. The cascade contract means your own CSS still wins.</p></div></div>
+          <div class="bo-widget"><div class="bo-widget__header"><span class="bo-widget__title">
+            <a href={base + '/getting-started/first-screen'}>Starting something new →</a></span></div>
+            <div class="bo-widget__body"><p class="bo-u-text-muted">A whole back-office screen, built up from the primitives in order.</p></div></div>
+          <div class="bo-widget"><div class="bo-widget__header"><span class="bo-widget__title">
+            <a href={base + '/getting-started/scope'}>CSS only, no JavaScript →</a></span></div>
+            <div class="bo-widget__body"><p class="bo-u-text-muted">What works with zero JS, and what is deliberately not in the box.</p></div></div>
+          <div class="bo-widget"><div class="bo-widget__header"><span class="bo-widget__title">
+            <a href={base + '/concepts/js-behaviors'}>Adding the optional behaviours →</a></span></div>
+            <div class="bo-widget__body"><p class="bo-u-text-muted">Call-once, delegation-based, swap-proof — they survive any DOM replacement.</p></div></div>
+          <div class="bo-widget"><div class="bo-widget__header"><span class="bo-widget__title">
+            <a href={base + '/getting-started/htmx'}>Driving it with HTMX →</a></span></div>
+            <div class="bo-widget__body"><p class="bo-u-text-muted">Server-rendered swaps, and what a 4xx must return for the screen to stay honest.</p></div></div>
+          <div class="bo-widget"><div class="bo-widget__header"><span class="bo-widget__title">
+            <a href={base + '/concepts/theming'}>Making it look like your product →</a></span></div>
+            <div class="bo-widget__body"><p class="bo-u-text-muted">Remap the semantic token tier. A shipped preset is rendered there to copy.</p></div></div>
+        </div>
+      </section>
+
       <!-- ============ CONTENTS: route into each sidebar group ============ -->
       <section class="why">
         <h2>Find it by task</h2>

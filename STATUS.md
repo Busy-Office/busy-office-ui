@@ -2,15 +2,14 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-07 12:58 UTC
+Generated at: 2026-09-07 13:02 UTC
 
 ## Open items by slice
 
 - **Slice 112** (2 open)
   - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS + FOUR ANSWERS (grilled 2026-08-29 at the owner's request; full report `.roundtable/grill-112.3-pilot-still-worth-it-2026-08-29.md`).
   - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
-- **Slice 249** (7 open)
-  - 249.6 — "Choose your path" router, corrected from the proposal's own undercount.
+- **Slice 249** (6 open)
   - 249.7 — Terminology table, re-scoped after its own worked example failed verification.
   - 249.9 — Visual component catalogue.
   - 249.10 — SAP/Fiori terminology column for 249.7.
@@ -50,21 +49,21 @@ Generated at: 2026-09-07 12:58 UTC
   - 326.3 — the dispatch region has grown +1,101 words in two days with no narrative left in it to cut. What is the answer when the region a wake must read grows because the RULES grew?
 - **Slice 327** (1 open)
   - 327.3 — the one instrument gap this grill could not close: nothing distinguishes a claim that was MEASURED from one that was read off the code, inside a slice whose other claims were measured.
+- **Slice 328** (1 open)
+  - 328.1 — The `Demo`-component detector has now produced a wrong count twice, a month apart, and nothing stops a third.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1599 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-09-07 10:47   ok
-  Objective     1 / 3 slice           since 2026-09-07 11:48   ok  [310]
-  Optimize      1 wake-date(s) newer   since 2026-09-06 16:56   STALE   [newest pair: axe-violations; 132 sample(s), 7 of 44 name(s) paired across days]
-  -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-06, not this one — record a metric or say the rule could not be evaluated.
-     the unit is DISTINCT LOG DATES after 2026-09-06 (2026-09-07), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
+dispatch status — counter-triggered rules (1602 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-09-07 10:47   ok
+  Objective     2 / 3 slices          since 2026-09-07 11:48   ok  [310, 328]
+  Optimize      0 wake-date(s) newer   since 2026-09-07 12:59   ok   [newest pair: claims; 133 sample(s), 7 of 44 name(s) paired across days]
      rule 5's comparable set — 7 name(s) sampled on 2+ distinct days (37 of 44 name(s) have only one day and are not an input to a rule that compares two runs):
+       claims                      4d  2026-09-06 169 count -> 2026-09-07 170 count  +1
        axe-violations              8d  2026-09-03 0 count -> 2026-09-06 0 count  +0   NEVER MOVED
-       claims                      3d  2026-08-19 82 count -> 2026-09-06 169 count  +87
        bundle-gz-kb                5d  2026-08-17 11.7 kB -> 2026-09-03 15.1 kB  +3.4
        gates                       2d  2026-08-18 19 count -> 2026-08-19 27 count  +8
        ci-gates                    2d  2026-08-17 14 gates -> 2026-08-18 15 gates  +1
@@ -89,9 +88,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-07 09:54 · Continue · build · 309.5 — commit the /stress re-measurement probe with its own control, and correct its style-flush column, which shipped as a dead detector reading ~0 across a 20-fold input range · landed · 82dc60e6
-- 2026-09-07 09:54 · Meta · refusal · a gate over npm-run commands cited in docs pages — base rate is 4 occurrences on 2 pages, 4 of 4 valid; filed as 325.1 rather than built unasked · refused · 82dc60e6
-- 2026-09-07 10:47 · Standardize · sweep · 326.1 — lane 3's 'Verdicts to date' list was stale 12h after it was written (178.3 added the 16th verdict the same day); fixed as an enumeration + amend-in-same-commit obligation, with the grep alternative red-proved dead via negative controls · landed · e1f5a12f
 - 2026-09-07 10:47 · Meta · refusal · replacing the verdict list with a per-path grep — 6 of 7 unverdicted control pages hit, so the detector cannot discriminate (94.11: no gate on a semantic property) · refused · e1f5a12f
 - 2026-09-07 10:47 · Meta · refusal · cutting the LOOPS.md dispatch region — 308.1's per-section attribution shows the cut section did not regrow and all four risers are rules that changed; filed as 326.3 instead · refused · e1f5a12f
 - 2026-09-07 11:48 · Objective · grill · Objective grill of Slices 309, 323, 326 (Slice 327): 74 of 75 assertions reproduce; 309's three-route init claim false for 2 of 3, 326.1's negative control self-destroying · landed · ac0fc752
@@ -99,6 +95,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-07 11:48 · Meta · refusal · a gate over 'this claim names its instrument' (327.3) — semantic, 94.11's rule, and the checkable shape would be true of nearly every slice · refused · ac0fc752
 - 2026-09-07 12:58 · Continue · build · 310.1 — deprecated glyphs in the two reference apps: 3 sites replaced onto the suite's own Refresh convention, 3 kept with the reason at the code · landed · 0879ec3d
 - 2026-09-07 12:58 · Meta · refusal · a gate over examples/** for deprecated glyphs — post-change the exemption map would be the population (94.11 base rate); reopen condition recorded in the gate header · refused · 0879ec3d
+- 2026-09-07 21:01 · Continue · build · Slice 328 / closes 249.6 — shipped the six-row adoption-scenario router on index.astro (3+3 at 1440, 1 col at 390, all hrefs resolve). Its premise was FALSE: the three 'no rendered result' rows render 103, 11 and 8 live framework elements inside their demo sections, more than the page that passed (14) — the detector counted the Demo COMPONENT, which is CLAUDE.md's own recorded 1-of-18-vs-16-of-18 error repeating. The Accept's gate is refused on base rate: the honest predicate reads 30 of 30, uniformly true · landed · 9a4be080
+- 2026-09-07 21:01 · Meta · refusal · the check-learning-path arm the Accept asked for — the honest predicate is 30/30 uniformly true, and the anchored 17/31 alternative discriminates on WHICH mechanism a page uses to show a result rather than whether it shows one · refused · 9a4be080
+- 2026-09-07 21:01 · Meta · refusal · cutting three of the six rows, or padding those pages with a bare pattern link — nothing was missing, and padding would be fitting the page to the gate · refused · 9a4be080
 
 ## Sunset test
 
