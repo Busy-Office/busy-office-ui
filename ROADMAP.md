@@ -320,6 +320,125 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 321 — rule 4's oldest item asked a wake to re-measure an artifact that exists in no commit: the Gauntlet's bar protected the REFERENCE and never the graded thing, so three blind critic rounds bought findings nobody can check (2026-09-07)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again (trap 1;
+`git branch --show-current` empty), fixed with `git checkout -B main
+origin/main` before any commit. `origin/main` again a **forced update**
+(`26447ba...84f6ae2`). Trap 2 clean in one `--unshallow` (**2,000** commits, no
+`shallow.lock`) and it again brought the tags — the **thirty-fourth**
+consecutive container to do so; `git tag | wc -l` → **8**. `origin/main` was
+`84f6ae2b` at Step 0 and `84f6ae2b` again immediately before the first commit,
+so no collision. Step 1: both intakes read via the REST substitute with
+`ENVIRONMENT.md` §8's two controls — **issues 1 open** (#2, already triaged as
+`300.2` and answered in-thread), **discussions 0 open**, `/not-a-real-route`
+**404**. No new input, so Step 1 committed nothing.
+
+Rule 1: no open P0 — `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` reads
+**0**. Rule 2: `Standardize 0 / 4`. Rule 3: `Objective 2 / 3 [304, 320]`. Rule
+4: the oldest still-open item no other rule blocks is **`305.1`**, so
+**Continue, build mode**.
+
+### The finding: the item's premise was false, and the premise was the artifact
+
+`305.1`'s Accept asks a later wake to close four defects *"verified by
+re-measuring the ink extents and inter-block gaps the round-3 critic named"*.
+That is geometry, squarely in `ENVIRONMENT.md`'s *can* list for a cloud wake —
+which is why it sat at the head of the cloud-takeable queue for two hand-offs.
+It is not takeable by anyone. **The thing to measure does not exist:**
+
+```
+git log --all --oneline -- '*gauntlet-a*'            # (empty) — no commit, no branch
+git show --stat 8d07a9ed                             # 4 files, all markdown
+git log --all --name-only --format='' -- '.roundtable/**' | grep -i 'html$'   # (empty)
+grep -rn 'gauntlet-a' --exclude-dir=node_modules .   # 1 hit: the round-1 cell of ROUNDS.md
+```
+
+Slice 305 committed `ROUNDS.md`, `loop-log.md`, `ROADMAP.md` and `STATUS.md`.
+The artifact three fresh blind critics graded over three rounds lived in the
+building session's scratchpad and went with it. Every number those rounds
+bought — the 4px stack offset found by pixel-offset search, the 61→66px and
+47→53px ink extents, the 126×36 button — is **unreproducible**, and the item
+carrying them was unsatisfiable from the moment it was filed.
+
+### Base rate first (94.11), and the first instrument was wrong
+
+Before treating this as a class of defect rather than one accident: **do other
+open items cite paths that resolve to nothing?** The first probe said **10 of
+12**, which is the tidy-number tell CLAUDE.md names — and it was the
+instrument. It read `292.4/292.5` (a slice-id pair) as a path, and it demanded
+that repo-relative *fragments* (`print/index.css`, `concepts/theming.astro`)
+resolve from the repo root. Corrected to resolve a token if any tracked path
+ends with it, and red-proved on three controls whose answers are known
+(`LOOPS.md/x.md` → unresolvable; `packages/core/media/list-report-compact.png`
+→ exact; `src/css/components/badge/badge.css` → suffix-match):
+
+```
+open items parsed: 26   (reconciles with grep -cE '^\s*[0-9]+\. \[ \]' → 26)
+path-like tokens checked: 10   unresolvable: 2
+  310.2  dist/base/motion/index.html   — a BUILD OUTPUT; dist/ is git-ignored
+  249.7  src/data/terminology.mjs      — a file the item PROPOSES TO CREATE
+```
+
+So **0 of 26 open items cite a lost work artifact**; the two absences are both
+legitimate. The gauntlet case is unique — and, tellingly, **this probe cannot
+see it at all**, because `305.1`'s body names no path. The only mention of the
+artifact anywhere in the tree is a bare, directory-less filename in one table
+cell of a file whose own header says it is never rewritten.
+
+**That is why this ships as a playbook clause and not as a gate.** A checker
+over "cited paths resolve" is red on a healthy tree (2 of 10 above), which is
+94.11's refusal exactly; and it would not have caught this one anyway.
+
+### `305.2` is the same root cause seen from the other end
+
+`305.2` proposed adding "run the repo's gates before spending a critic round"
+to §7 step 1. Its own Accept sets the test — *"if round 1 is the only round in
+the log whose findings a repo gate would have caught, one instance is not a
+pattern"*. Classified against the 12 findings the three rows record (a
+classification of recorded text, **not** a live gate run — the artifact is
+gone, so no gate can be run against it now):
+
+| round | findings | a repo gate would have caught |
+|---|---|---|
+| 1 | 6 | **1** — the two invented classes, and `check:markup` did in fact catch them independently |
+| 2 | 2 | 0 |
+| 3 | 4 | 0 |
+
+**1 of 12 findings, and round 1 is the only round.** The reason is structural
+rather than an accident of these three: the gates validate what IS present
+(every `bo-*` used exists; every framework `data-*` value is one the CSS
+switches on). A Class A recreation fails on what is **ABSENT** — a class not
+used, a `value` not set, a `bo-pagination` footer not built — and **no gate can
+demand a class you did not use.** 11 of 12 are omissions or design judgements.
+
+And the instruction already exists: §7 step 1 reads *"Build. Ordinary work:
+framework classes only, semantic tokens only, **the repo's gates green.**"* The
+defect was compliance, not the playbook, and a second copy of an instruction is
+not a fix. What was genuinely missing is a path a later wake can point a gate
+at — `check-markup` takes a directory or an unquoted glob, so it runs against
+anything on disk, and nothing was left on disk. That is `321.1`'s clause, and
+it is the half `305.2` was reaching for.
+
+1. [x] **321.1 — DONE. §7 step 0 requires a committed path under
+       `.roundtable/gauntlet/`; step 3 requires the `ROUNDS.md` artifact cell to
+       carry it.** `ROUNDS.md` gains an appended correction section — the three
+       rows are left exactly as written, per its own never-rewritten rule — so
+       the next reader of that table learns the artifact is gone at the same
+       moment they read what it was graded on. **The edit is in the Playbooks
+       region, not the dispatch region lane 4 tracks** (274.1): everything a
+       dispatcher reads to DECIDE is above `## Playbooks` and is untouched.
+       **No gate** — see the base rate above.
+
+**NOT VERIFIED, said plainly:** nothing rendered changed this wake — the diff
+is three markdown files and no CSS, no `.astro`, no script. The gate suite was
+run for regression only, not as evidence of a visual claim, and no
+1440/390 light-and-dark screenshots were taken (a cloud wake has no Podman).
+**The visual debts carried forward are unchanged and unspent**: `292.4/292.5`'s
+screenshot lane on `/components/icon`, the withdrawn-claim paragraph on
+`/components/data-table`, Slice 319's paragraph on `/patterns/kanban` at 390px,
+and `320.3`'s `0.5rem`-vs-`.4rem` pair. A local wake should glance at all five.
+
 ## Slice 320 — Standardize sweep, 4 of 4 lanes: two shared components carried the LAST inline spellings of two classes a 2026-08-17 sweep created to replace them, and lane 1's own headline number counts attributes while saying "declarations" (2026-09-07)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
@@ -2353,10 +2472,24 @@ would have caught.
        occurred — no round was graded by the builder, and the bar was not
        edited at any point.
 
-2. [ ] **305.1 — The four defects round 3 left standing.** Carried rather than
-       fixed, because fixing them after the budget is exactly the bar-moving
-       the playbook forbids — a fourth round is a new dispatch, not a
-       continuation.
+2. [x] **305.1 — CLOSED 2026-09-07 by Slice 321, on a premise that is false:
+       the artifact is not in this repo.** `git log --all -- '*gauntlet-a*'`
+       returns nothing and `git show --stat 8d07a9ed` is four markdown files,
+       so *"re-measuring the ink extents and inter-block gaps the round-3
+       critic named"* is impossible for any wake, cloud or local — not
+       browser-blocked, **artifact-lost**. It sat two hand-offs at the head of
+       the cloud-takeable queue on that mis-reading. Two grounds for closing
+       rather than reopening it against a rebuilt artifact: a rebuild produces
+       different numbers, so nothing the round-3 critic measured is
+       recoverable by re-doing the work; and this Accept already names *"finding
+       that one of the four is not worth fixing is a satisfying outcome
+       provided the reason is recorded"* — which extends to all four with a
+       stronger reason than it anticipated, since **this slice's own conclusion
+       is that not one of the four is a gap in the framework's expressive
+       range**. They are defects in a throwaway recreation; fixing them ships
+       nothing to a consumer. A future Class A round starts fresh from
+       `BAR.md`, at a committed path, with the four rows above as its opening
+       checklist. **Original text kept below.**
        - **Accept:** a later round (or an ordinary Continue) closes each of the
          four against the reference — the code-column class, the non-uniform
          stack rhythm, the radio `value`s, the pagination footer — verified by
@@ -2366,10 +2499,19 @@ would have caught.
          recorded; a 4px gap in a demo recreation may be below the threshold
          that justifies its own item.
 
-3. [ ] **305.2 — Run the repo's own gates on a gauntlet artifact BEFORE
-       spending a critic round.** Round 1 burned a full round on two invented
-       classes that `check-markup` names in seconds, with the right
-       replacements. Candidate for `LOOPS.md` §7 step 1.
+3. [x] **305.2 — CLOSED 2026-09-07 by Slice 321: the step is REFUSED on this
+       item's own test, and the thing actually missing was fixed instead.**
+       Measured as the Accept demands: **1 of 12** recorded findings across the
+       three rounds is one a repo gate would have caught, and round 1 is the
+       only round — which is exactly the "one instance is not a pattern"
+       condition this item wrote for itself. The reason is structural, not an
+       accident of three rounds: the gates validate what IS present, and a
+       Class A recreation fails on what is ABSENT; no gate can demand a class
+       you did not use. Second, independent ground: §7 step 1 **already** reads
+       *"the repo's gates green"*, so the defect was compliance and a second
+       copy of an instruction is not a fix. What was genuinely absent is a path
+       a later wake can point a gate at, and `321.1` supplies it. Full table
+       and caveat in Slice 321. **Original text kept below.**
        - **Accept:** either §7 step 1 gains the instruction, or this closes as
          refused with the reason. **Measure first**: if round 1 is the only
          round in the log whose findings a repo gate would have caught, one

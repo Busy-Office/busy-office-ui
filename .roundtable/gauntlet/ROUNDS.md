@@ -47,3 +47,30 @@ classes and even suggested the right names. **The builder had not run it before
 submitting** — the gate existed and would have caught both in seconds. Worth
 carrying: run the repo's own gates on a gauntlet artifact *before* spending a
 critic round on it.
+
+## ⚠ The artifact rounds 1-3 graded is NOT in this repo, at any revision
+
+Appended 2026-09-07 (roadmap 321.1). The table above is kept exactly as
+written — this file is appended and never rewritten — so this section is the
+correction rather than an edit to the rows.
+
+`gauntlet-a/index.html` is a bare filename with no directory, and it resolves
+to nothing:
+
+```
+git log --all --oneline -- '*gauntlet-a*'       # (empty)
+git show --stat 8d07a9ed                        # ROUNDS.md, loop-log.md, ROADMAP.md, STATUS.md
+grep -rn 'gauntlet-a' --exclude-dir=node_modules .   # one hit: the round-1 cell above
+```
+
+It lived in the building session's scratchpad and went with it. **Everything
+the three rounds measured is therefore unreproducible** — the 4px stack
+offset, the 61→66px and 47→53px ink extents, the 126×36 button — and `305.1`,
+which asked a later wake to close four defects *by re-measuring* exactly those,
+was unsatisfiable from the moment it was filed. It is closed on that ground
+rather than left open forever; the reasoning is in ROADMAP Slice 321.
+
+**The findings themselves survive, in words, in the rows above.** What does not
+survive is the ability to check them, which is the half a gauntlet round is
+expensive to buy. `LOOPS.md` §7 step 0 now requires a committed path under
+`.roundtable/gauntlet/`, and step 3 requires this cell to carry it.

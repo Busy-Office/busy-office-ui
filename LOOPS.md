@@ -1233,6 +1233,20 @@ overlap is real and a loop that duplicates one of these should be refused:
 0. **Name the artifact, its class and its reference** in the roadmap item, from
    `.roundtable/gauntlet/BAR.md`. A gauntlet item with no reference cannot be
    graded and is not dispatchable.
+
+   **The artifact lives at a COMMITTED path under `.roundtable/gauntlet/`, and
+   every mention of it is repo-relative** (roadmap 321.1, 2026-09-07). Not a
+   scratchpad: a scratchpad dies with the session, and every measurement the
+   rounds took dies with it. This clause was missing, and Slice 305 is what it
+   cost. Three blind critics graded `gauntlet-a/index.html` over three rounds;
+   `305.1` then asked a later wake to close four defects *"by re-measuring the
+   ink extents and inter-block gaps the round-3 critic named"*; and that file
+   exists in **no commit on any branch** — `git log --all -- '*gauntlet-a*'`
+   returns nothing, and `git show --stat` on the slice commit is four markdown
+   files. The item was unsatisfiable by any wake, cloud or local, and nothing
+   in the tree said so. **The bar protected the reference and not the
+   artifact**, which is the asymmetry to remember: a bar citing a file nobody
+   can open was already refused here, and the graded thing needs the same rule.
 1. **Build.** Ordinary work: framework classes only, semantic tokens only, the
    repo's gates green.
 2. **Grade with a critic that has NOT seen the build.** Spawn a fresh-context
@@ -1243,6 +1257,9 @@ overlap is real and a loop that duplicates one of these should be refused:
    own doctrine already says an instrument's first output is not evidence.
 3. **Record the round** in `.roundtable/gauntlet/ROUNDS.md` — artifact, class,
    critic, verdict, fixes taken. One row per round, appended, never rewritten.
+   **The artifact cell carries step 0's repo-relative path**, so a reader can
+   open what was graded. A bare filename is what `305.1` was left holding, in
+   the only cell in the tree that named the artifact at all.
 4. **Verdict.**
    - **PASS** → commit, record the iteration, close the item.
    - **FAIL** → take the fixes and run another round.
