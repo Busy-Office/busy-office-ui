@@ -23,9 +23,12 @@ survives none.
 ## In flight: nothing
 
 Last updated 2026-09-07 (**cloud** wake, scheduled routine). Working tree clean
-at hand-off. **Two commits this wake** — Slice 319 and this rewrite — and **one
-iteration recorded**: `Objective · grill` (outcome `landed`, one additional
-refusal).
+at hand-off. **One iteration recorded**: `Objective · grill` (outcome `landed`,
+one additional refusal). The work landed as **`6e5724bb`** (Slice 319), followed
+by this hand-off's own commit and a correction to the grill report — **the count
+is deliberately not stated**, because a commit total written inside a commit is
+wrong the moment a follow-up lands, which is this wake's own Finding A pointing
+at the hand-off. Read `git log 6e5724bb~1..` instead.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
