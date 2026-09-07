@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-07 08:56 UTC
+Generated at: 2026-09-07 09:54 UTC
 
 ## Open items by slice
 
@@ -25,8 +25,6 @@ Generated at: 2026-09-07 08:56 UTC
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - **Slice 297** (1 open)
   - 297.1 — The first real intake run is the test of this, not the config.
-- **Slice 309** (1 open)
-  - 309.5 — The `/stress` harness is half a harness: the rows are kept, the measurement is not.
 - **Slice 310** (2 open)
   - 310.1 — `examples/erp-suite` and `examples/po-app` render deprecated glyphs, and whether that is a defect is undecided.
   - 310.2 — `/base/motion` declares five copyable markup samples the template never renders.
@@ -46,15 +44,19 @@ Generated at: 2026-09-07 08:56 UTC
 - **Slice 324** (2 open)
   - 324.1 — a sample records no DIRECTION, so even a fresh, well-paired metric cannot yield a verdict.
   - 324.2 — `bundle-gz-kb` is the only metric rule 5 can act on, its generator exists, and its noise floor is wider than three of its four historical moves.
+- **Slice 325** (2 open)
+  - 325.1 — a docs page can name an `npm run` command and nothing checks the command exists.
+  - 325.2 — `measure:stress`'s render columns have no counterpart in the published table, and the published table's method is unrecoverable.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1589 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-09-07 05:14   ok
-  Objective     2 / 3 slices          since 2026-09-07 06:57   ok  [307, 323]
+dispatch status — counter-triggered rules (1591 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-09-07 05:14   OVERDUE
+  Objective     3 / 3 slices          since 2026-09-07 06:57   OVERDUE  [307, 309, 323]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      1 wake-date(s) newer   since 2026-09-06 16:56   STALE   [newest pair: axe-violations; 132 sample(s), 7 of 44 name(s) paired across days]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-06, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-06 (2026-09-07), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -85,8 +87,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-07 06:57 · Meta · refusal · a gate over 'this count was taken correctly' — not a checkable shape; it would have to re-run every count in the corpus against an instrument nobody wrote down (94.11) · refused · ccb7d3ce
-- 2026-09-07 06:57 · Meta · refusal · adjudicating 304's '3 of 11 name a revision' half — the verdict depends on how wide a window counts as surrounding text (a ±3-line window returns 4 of 9), so it is reported undecidable rather than scored · refused · ccb7d3ce
 - 2026-09-07 07:48 · Continue · build · Slice 323 — 306.1: rule 5's staleness line compared naive stamps from two clocks, so a calendar boundary read as missing input. Takes the Accept's second branch and STATES the skew: skew_split() splits newer log dates into skew-explained and provably-newer, flag is ok/SKEW/STALE, softening is one-directional by construction. The 8h envelope is git-blame-measured (+0000/+0800) and reconciled every run by observed_skew(), red-proved by narrowing it to 1h. Base rate: an as-of-DATE replay said ZERO SKEW verdicts and would have refused this as ceremony; replayed at the granularity a wake actually reads (both files AT each commit) it is 958 revisions -> 581 STALE / 323 ok / 51 SKEW, seven distinct occasions, the last being 306's own. Today's live reading is unchanged and now earned. 323.1 filed open · landed · a6e7fff6
 - 2026-09-07 07:48 · Meta · refusal · converting both stamps to a shared UTC basis via git blame per row — a metric's own offset is only recoverable once committed, and 164.2 already refused both %z and a backfill; the envelope states what is knowable without inventing a clock the files do not carry · refused · a6e7fff6
 - 2026-09-07 07:48 · Meta · refusal · a gate over 'the right replay granularity was chosen' — not a checkable shape (94.11); it is filed as 323.1 for a human to answer instead · refused · a6e7fff6
@@ -95,6 +95,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-07 08:49 · Meta · refusal · recording a bundle-gz-kb sample to un-STALE the line — the 2026-09-04 refusal's stated reason is now known false, but the convention and the 0.3 kB cross-environment floor are unwritten, so sampling would still be guessing · refused · 25b9fdd3
 - 2026-09-07 08:56 · Roadmap · sweep · 324.3 archive sweep — 249.12's trigger crossed both halves for the first time (8,188 lines / 41.5%); 15 slices moved, 8,188 -> 6,476 lines, share 41.5% -> 24.6% · landed · 3cb2381a
 - 2026-09-07 08:56 · Meta · refusal · the sweep's own first attempt — a mover that read any '## ' line as a heading truncated Slice 308 at a fenced '## the loops table' row; reverted whole rather than patched, because its byte-identity check reused the same splitter and could not fail · refused · 3cb2381a
+- 2026-09-07 09:54 · Continue · build · 309.5 — commit the /stress re-measurement probe with its own control, and correct its style-flush column, which shipped as a dead detector reading ~0 across a 20-fold input range · landed · 82dc60e6
+- 2026-09-07 09:54 · Meta · refusal · a gate over npm-run commands cited in docs pages — base rate is 4 occurrences on 2 pages, 4 of 4 valid; filed as 325.1 rather than built unasked · refused · 82dc60e6
 
 ## Sunset test
 
