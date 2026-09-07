@@ -2673,6 +2673,37 @@ check(
   JSON.stringify({ kanbanOpen, kanbanClosed }),
 );
 
+/* The same page's OTHER runtime claim, which had no case at all (roadmap
+   319.2). "Why no drag" tells the reader the menu gives every card a
+   keyboard path — the case above proves nothing about that, because it
+   drives page.click. Slice 317 audited that very sentence, removed the
+   announcement third of it as false, and left this third standing
+   unexecuted. Driven with real key events, never el.click(): the trusted
+   dispatch path is the one a keyboard user actually takes. */
+await visit('/patterns/kanban/', { width: DESKTOP_WIDTH });
+const kbKeyboard = await (async () => {
+  await page.evaluate(() => document.querySelector('[popovertarget="kb-menu-1"]').focus());
+  const focused = await page.evaluate(
+    () => document.activeElement === document.querySelector('[popovertarget="kb-menu-1"]'),
+  );
+  const before = await page.evaluate(() => document.getElementById('kb-menu-1').matches(':popover-open'));
+  await page.keyboard.press('Enter');
+  await new Promise((r) => setTimeout(r, 120));
+  const after = await page.evaluate(() => document.getElementById('kb-menu-1').matches(':popover-open'));
+  await page.keyboard.press('Tab');
+  await new Promise((r) => setTimeout(r, 60));
+  const tabbedInto = await page.evaluate(() => !!document.activeElement.closest('#kb-menu-1'));
+  return { focused, before, after, tabbedInto };
+})();
+check(
+  'kanban: Enter on a card’s Move button opens the menu and Tab reaches its items',
+  kbKeyboard.focused === true &&
+    kbKeyboard.before === false &&
+    kbKeyboard.after === true &&
+    kbKeyboard.tabbedInto === true,
+  JSON.stringify(kbKeyboard),
+);
+
 /* /components/richtext Advanced demo (roadmap 113.1): formatBlock produces
    a real semantic heading, and the three justify buttons are a mutually
    exclusive group — clicking one clears aria-pressed on the other two, not

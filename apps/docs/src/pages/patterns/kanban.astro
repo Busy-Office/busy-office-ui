@@ -29,8 +29,21 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     deprecated in ARIA 1.1 for being unreliably implemented, so a real drag
     implementation means hand-rolling a second interaction model (pick up /
     move / drop + live-region narration) and maintaining it forever
-    alongside this one. The menu already gives every card a keyboard path
-    and a touch target that works with gloves.</p>
+    alongside this one. The menu already gives every card a keyboard path:
+    <kbd>Enter</kbd> on a card's <strong>Move&nbsp;▾</strong> button opens
+    the popover and <kbd>Tab</kbd> walks its items, which is more than a
+    drag has ever offered.</p>
+    <p><strong>It is not a glove-sized target, and this page claimed it
+    was</strong> — corrected in Slice 319 after the clause was measured on
+    the built page rather than reasoned about. Each trigger here is
+    <code>bo-btn--sm</code>, whose <code>--bo-btn-height</code> is a fixed
+    <code>1.5rem</code>: it is 24px in <em>every</em> density tier,
+    <code>spacious</code> included, so no density setting grows it. That is
+    the WCAG 2.5.8 minimum met through the spacing exception
+    (<a href={base + '/concepts/density'}>density</a> explains the test),
+    not the 44px control this framework calls the glove tier. A board that
+    really is worked in gloves drops <code>--sm</code> on the trigger; the
+    menu items themselves are already 37px tall.</p>
     <p><strong>The announcement is the one thing the menu does NOT give
     you</strong> — corrected here in Slice 317, because this paragraph used
     to claim it did. A native button in a popover is operable and silent:

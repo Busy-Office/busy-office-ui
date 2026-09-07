@@ -320,6 +320,173 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 319 — Objective grill of Slices 298, 300, 318: 23 of 25 published assertions reproduce, and both defects are in what shipped BESIDE the number. Slice 317 audited a three-part runtime claim, removed the false third, and re-published the other two unmeasured — one of them is also false (2026-09-07)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty), `ENVIRONMENT.md` trap 1, fixed with
+`git checkout -B main origin/main` before any commit; `origin/main` again
+arrived as a **forced update** (`26447ba...d6a6f60`). Trap 2 clean in one
+`--unshallow` (**1,991** commits, no `shallow.lock`), and it again brought the
+tags — the **thirty-first** consecutive container to do so; `git tag | wc -l`
+→ **8**. Trap 1c did not bite.
+
+Rule 1: no open P0 (`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0**
+across 25 open items). Step 1 read **both** intakes with `ENVIRONMENT.md` §8's
+controls in one run (`/discussions` → 200 len **0**; `/not-a-real-route` →
+**404**, so the zero is a served zero; `/issues?state=open` → 200 len **1**,
+issue #2, already triaged as `300.2` and closed by Slice 317) and triaged
+nothing. Rule 2 did not match (`Standardize 3 / 4 … ok`). **Rule 3 matched —
+`Objective 3 / 3 slices … OVERDUE [298, 300, 318]`.** Rules 4-8 not reached.
+Rule 5 reads **STALE** (`1 wake-date(s) newer`), so per its own text it **could
+not be evaluated** and is not reported clear.
+
+**Scope, per §6 step 0.** All three are grilled, and the arming is not
+over-arming even though two of the numbers have appeared in a grill before:
+what armed **298** is the *build* of `298.1` (Slice 316), not Slice 298's own
+findings; what armed **300** is the *build* of `300.2` (Slice 317), and Slice
+304's earlier grill of 300 covered its P0 half, which is different material.
+**318** is named by no grill. Both builds are hours old and were done by this
+same loop, which `LOOPS.md` says goes first rather than last, because a
+self-grill is the one most likely to go soft.
+
+**Full report:** `.roundtable/grill-objective-298-300-318-2026-09-07.md`.
+**23 of 25 re-run assertions reproduce exactly** — including every one of Slice
+316's (the 6-file image enumeration, the single `screenshot(` renderer, the
+25-day gap `4ef554fa` 2026-08-12 → `605829ca` 2026-09-06, the 274-byte favicon,
+DESIGN.md rule 7, and all three contrast ratios recomputed from the token hexes:
+**7.56 / 2.54 / 7.46 on white**), the `@media print` base rate re-derived by an
+independent brace-matching parser (**11 literal / 0 token across 6 files**, with
+every per-file count matching), Slice 317's `40` components and `10` top-level
+keys, and Slice 318's CI base rate (**2 failures in the last 40 runs on `main`**,
+the other being run 802 = Slice 311's `check:floor`).
+
+### Finding A — a removal verified against raw text, in a slice about determinism
+
+Slice 318 published *"the 99 other fixed waits"* three times (roadmap, commit
+message, hand-off). **It is 98.** The slice removed one real `setTimeout` wait
+and its own explanatory comment then names `setTimeout(400)`, so a raw grep
+reads **99 before and 99 after** — an identical value across two inputs that
+must differ, which CLAUDE.md says is a defect in the instrument until proven
+otherwise. Amended in place at the end of Slice 318, with both instruments.
+
+Worth naming precisely because the repo already has the rule and the rule did
+not fire: *"when verifying that something is gone, check the parsed or
+structural form — the prose explaining a removal is supposed to mention it."*
+The slice applied that discipline to its own red-proof, rigorously, and not to
+the sentence beside it. **That is 192.1's pattern — the defect lands in what
+shipped beside the number the work was about — for the fourth recorded time.**
+
+### Finding B — the surviving two thirds of a corrected claim, one of them false
+
+Slice 317's whole finding was that `/patterns/kanban` asserted something its
+demo cannot do. The sentence it audited makes **three** claims:
+
+| claim | status after Slice 317 | measured here |
+|---|---|---|
+| a screen-reader-announced result | removed as false | — |
+| a keyboard path | re-published, unmeasured | **true**, and now executable |
+| a touch target that works with gloves | re-published, unmeasured | **false** |
+
+Measured on the built page with real key events and a control run that drives
+nothing (`page.keyboard`, never `el.click()`):
+
+```
+trigger focused, popover closed         before: false
+Enter on the trigger                    after:  true      ← keyboard path holds
+Tab                                     lands on "Move to In progress" (inMenu)
+menu item box                           182 x 37
+per-card trigger box                    60 x 24   at 1440px AND at 390px
+control (no keys pressed)               popover open: false; items measure 0x0
+```
+
+**24px is not a glove target by this framework's own scale**, measured on the
+built site rather than quoted from prose: `bo-btn` is **28 / 36 / 44px** across
+compact / comfortable / spacious, which reproduces `/concepts/density`'s
+published figures — and all five per-card triggers are `bo-btn--sm`, whose
+`--bo-btn-height` is a fixed `1.5rem`. **It reads 24px at `spacious` too**, so
+no density setting reaches the glove tier; the source agrees
+(`button.css:121-125`). `/concepts/density` is explicit that 24px is the WCAG
+2.5.8 minimum met through the *spacing* exception, and `/components/button`
+calls spacious "the glove tier, as everywhere".
+
+**And nothing gates either claim.** `check:target-size` sweeps **7** pages and
+kanban is not among them — and adding it would not help, because the menu items
+measure `0x0` while the popover is closed. The one existing `check:claims`
+kanban case drives `page.click` and asserts popover open/close: it says nothing
+about a keyboard path.
+
+1. [x] **319.1 — DONE. `/patterns/kanban` stops claiming a glove-sized target
+       and says what it measures instead.** Prose only, in the same paragraph
+       Slice 317 corrected: the keyboard path is stated as the concrete thing a
+       user does (<kbd>Enter</kbd> opens, <kbd>Tab</kbd> walks the items), and a
+       new clause names the trigger as `bo-btn--sm` / `1.5rem` / 24px in every
+       tier, links `/concepts/density` for the 2.5.8 spacing test, and tells a
+       board that really is worked in gloves to drop `--sm`. The figure is
+       written as the **tier** rather than as a bare pixel count, so it stays
+       true by construction if the scale moves.
+
+2. [x] **319.2 — DONE. The keyboard claim is executable now.** A second
+       `check:claims` case on `/patterns/kanban`, driven with real key events:
+       the trigger takes focus, the popover is closed before, `Enter` opens it,
+       and `Tab` lands inside the menu.
+
+       **Red-proved by injection twice, once per half, each with the
+       discrimination control CLAUDE.md requires** — the built page was edited,
+       the injection's presence asserted in the artefact by an occurrence count
+       (not a line count: `grep -c` read **1** for **2** replacements), and the
+       page restored between runs:
+
+       | injection | new case | the existing click case | reading |
+       |---|---|---|---|
+       | none | pass | pass | 170 verified live, rc 0 |
+       | `tabindex="-1"` on both `.bo-dropdown__item` in `#kb-menu-1` | **FAIL** | pass | `tabbedInto: false`, rest true |
+       | capture-phase `preventDefault()` on Enter at that trigger | **FAIL** | pass | `after: false` |
+
+       Each injection turns **exactly 1 of 170** red, and the sibling case that
+       drives the same popover with the mouse stays green in both — so the
+       injections discriminate between interaction paths rather than breaking
+       the page.
+
+3. [ ] **319.3 — should a docs page be allowed to assert a target size at all
+       without a gate that can see it?** Filed, not built, with the base rate
+       measured rather than promised: `grep -rlniE 'glove|tap target|touch
+       target|24px|44px' apps/docs/src/pages` finds the vocabulary on **18**
+       pages, while `check:target-size`'s sweep is **7** pages — chosen for CI
+       cost, and stated as such in its own header. The overlap is **4**
+       (`button`, `data-table`, `form`, `quantity`), leaving **14** pages that
+       use the vocabulary and are swept by nothing, `/patterns/kanban` among
+       them until this slice. **What the 18 does not cover, said plainly:** it
+       counts pages *containing* the vocabulary, not pages making a checkable
+       target-size claim — the list is the input to that judgement, not the
+       judgement.
+       - **Accept:** either the sweep grows to cover the pages that make the
+         claim (with the CI cost measured before and after, since that is the
+         stated reason it is small), or this closes as **refused with the
+         reason** — the likeliest being that the honest fix is the one 319.1
+         used, naming the *tier* instead of a pixel count, which needs no gate
+         because the tier is the thing the CSS defines. **Refusing is a
+         satisfying outcome.** Re-run the two counts first; they are snapshots,
+         and the second one is a page list, not a number, so read it rather than
+         diffing it.
+       - **Lane:** cloud-takeable. Geometry in a headless browser, no
+         screenshot.
+
+**NOT VERIFIED, said plainly.** No 1440/390 light-and-dark screenshots — a
+cloud wake has no Podman. `319.1` is prose inside an existing `<section>`: it
+adds one `<p>`, two `<kbd>` elements, three `<code>` spans and one link, all
+inside the page's normal flow. It was verified against the **rendered artefact**
+rather than the diff — `check:layout`, `check:scroll` and `test:axe` sweep the
+page at 1440 and 390 and are green, which asserts *nothing overflows, nothing is
+unreachable, no axe violation*, not that it looks right. **A local wake should
+glance at `/patterns/kanban` at 390px**, where the new paragraph is the only
+plausible place for a wrap to look wrong. `292.4/292.5`'s screenshot lane on
+`/components/icon` remains unspent, now ten wakes back.
+
+**One thing this grill did NOT re-measure, said rather than left silent.** Slice
+318's *"42-70ms across 6 runs"* headroom figure is a property of the container
+that took it. Re-running it here would produce a different number in a different
+container and could not falsify the original, so it is carried, not confirmed.
+
 ## Slice 318 — `check:claims`'s calendar case raced a real navigation against a fixed 400ms wait, turned `main` red once, and recovered on the next run without a code change. It is the file's ONE navigation-gated assertion that was not already using the file's own deterministic pattern (2026-09-07)
 
 **Found by looking, not by a gate telling anyone.** Slice 317's wake checked CI
@@ -356,9 +523,10 @@ was reproduced.** Measured, in this order:
   `check-claims.mjs` that gate on a full page navigation, the sibling one —
   saved views, *"a saved view is a URL"* — has always used
   `Promise.all([page.waitForNavigation(...), ...])`. This was the odd one out.
-  (`grep -c 'waitForNavigation'` → 1 before this slice; the 99 other
+  (`grep -c 'waitForNavigation'` → 1 before this slice; the **98** other
   `setTimeout` waits gate on in-page DOM updates, which is a different and much
-  cheaper thing, and are not touched.)
+  cheaper thing, and are not touched. **Corrected from 99 by the grill in Slice
+  319** — see the amendment at the end of this slice.)
 
 1. [x] **318.1 — DONE. The calendar claim waits for the navigation instead of
        for 400ms.** `Promise.all([page.waitForNavigation({ waitUntil:
@@ -395,12 +563,35 @@ read it. What was broken is the gate's determinism: a claim that can report a
 true behaviour as failed makes every one of its greens weaker. That is worth a
 slice and is not worth jumping the queue.
 
-**What this does NOT fix, said plainly.** The 99 other fixed waits in
+**What this does NOT fix, said plainly.** The 98 other fixed waits in
 `check-claims.mjs` are untouched and unexamined here. They gate on in-page DOM
 updates rather than navigations, which is why they were not swept — but that is
 a reason to leave them, not evidence that they are all safe. A sweep of them is
 a Standardize lane, not this fix, and inventing one from a sample of one would
 be the widening this repo's rules refuse.
+
+**AMENDED 2026-09-07 by the Objective grill in Slice 319: the figure was 99 and
+is 98.** This slice removed one real `setTimeout` wait and its own comment then
+named `setTimeout(400)` in prose, so a raw `grep` reads the same 99 before and
+after — the identical-value-across-inputs tell, and exactly the failure CLAUDE.md's
+*"verifying a removal: assert on structure, never on raw text"* section describes
+(*"the comment written by that same edit legitimately names the thing removed"*).
+Two independent instruments agree on 98, and neither needs the other:
+
+```
+# comment-stripped source, both revisions
+python3 -c "import re,subprocess;
+ s=lambda r: re.sub(r'^\s*//.*$','',re.sub(r'/\*.*?\*/','',subprocess.run(['git','show',r+':apps/docs/scripts/check-claims.mjs'],capture_output=True,text=True).stdout,flags=re.S),flags=re.M);
+ print([len(re.findall(r'setTimeout\(', s(r))) for r in ('71c6adc2','HEAD')])"
+  # [99, 98]   ← 99 at the parent INCLUDING the calendar's own wait
+
+# the wait IDIOM, which needs no comment-stripping at all
+grep -oE 'new Promise\(\(r\) => setTimeout' apps/docs/scripts/check-claims.mjs | wc -l   # 98
+git show 71c6adc2:apps/docs/scripts/check-claims.mjs | grep -oE 'new Promise\(\(r\) => setTimeout' | wc -l   # 99
+```
+
+The conclusion — *leave them, a sweep is a Standardize lane* — is unchanged at
+98 or 99. The defect is the audit trail, which is the half a later wake re-runs.
 
 ## Slice 317 — 300.2's spike: the board's announcement cannot be decided once — 4 of the 5 things one generic core could not know are announcement strings — and the framework's answer to this screen kind already ships, saying something about itself that is not true (2026-09-07)
 
@@ -502,7 +693,10 @@ wants two-axis roving navigation.
 ### The correction the spike actually bought — and it is not about a component
 
 **Issue #2's framing is wrong in a way worth writing down: this screen kind is
-not undocumented.** `/patterns/kanban` ships — 257 lines, full pattern shape
+not undocumented.** `/patterns/kanban` ships — 257 lines **at `8f1d43f6`, the
+tree this slice found it on** (272 at `0c24d13e`, this slice's own commit, which
+added 15 lines to the page; amended by Slice 319, because a figure with no
+revision beside it is read as current — `ENVIRONMENT.md`) — full pattern shape
 (opener with who/how-often/done and two `Not for` clauses, live board, Markup,
 Anatomy, Data contract, States, Components used). The reporter looked for a
 component, and this framework answers a *screen kind* with a pattern.
