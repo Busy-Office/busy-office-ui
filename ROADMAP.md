@@ -320,6 +320,89 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 324 — rule 5's pairing test counted SAMPLES, so a 26-sample afternoon read as a series; re-scoped to distinct days its actionable input set is one metric, and the reason nobody records that one was a premise this wake refuted (2026-09-07)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again (trap 1;
+`git branch --show-current` empty, fixed with `git checkout -B main
+origin/main` before any commit). `origin/main` again arrived as a **forced
+update** (`26447ba...97a3137`). Trap 2 clean in one `--unshallow` (**2,006**
+commits, no `shallow.lock`), and it again brought the tags — the
+**thirty-seventh** consecutive container to do so; `git tag | wc -l` → **8**.
+Step 0b counters read `Standardize 2/4`, `Objective 1/3 [323]`, `Optimize 1
+wake-date newer STALE`. Step 1: both intakes read with `ENVIRONMENT.md` §8's
+controls (`/discussions` 200 len 0, `/not-a-real-route` 404, `/issues?state=open`
+200 len 1) — **issues 1 open, discussions 0 open**, issue #2's `updated_at`
+unmoved at `2026-09-06T15:10:34Z`, so **no new input and Step 1 committed
+nothing**. Step 2: rule 1 no P0, rule 2 `2/4`, rule 3 `1/3`, **rule 4** on the
+oldest still-open item no other kind of block covers — `307.1`, every older
+open item being owner-, browser- or input-blocked (re-checked in the file, not
+carried from the hand-off).
+
+**Rule 5 was the subject of this wake and could not be evaluated as a rule** —
+its line reads a genuine `STALE`, which is no input. That is the item, not an
+obstacle to it.
+
+### The narrowing, and each step is a different mechanism
+
+`44 names → 7 day-paired → 3 alive → 1 actionable.` The full measurement, the
+command that reproduces it, the base-rate replay and the red-proof are in
+`307.1` above, closed by this slice. **A fifth step was drafted — `→ 0
+samplable`, on a refusal row's "no generator anywhere" — and refuted inside
+this wake**: the generator exists, it simply does not carry the metric's name,
+so a grep for the name could never find it. The two findings that outlive the
+re-scoping are filed below; neither is fixed by it, and both are what stop
+rule 5 from firing once its input is honest.
+
+1. [ ] **324.1 — a sample records no DIRECTION, so even a fresh, well-paired
+       metric cannot yield a verdict.** `record_metric.py` writes `{ts, name,
+       value, unit}`. On this tree `claims` rises 35 → 169 (the goal) and
+       `bundle-gz-kb` rises 7.2 → 15.1 kB (the regression) and both are a
+       positive delta on a number. `dispatch_status.py` now prints the movement
+       and says outright that the verdict is the wake's, which is honest and is
+       not the same as rule 5 being answerable by the dispatcher.
+       - **Accept** — the property: either a sample carries which direction is
+         a regression and the line states a verdict where it can, or the
+         reason a direction cannot be recorded is written down where the next
+         wake reads it. **Concluding that the reader supplies the direction and
+         that the printed movement is the right stopping point is a satisfying
+         outcome** — 132 existing samples carry none, and a field only future
+         samples fill leaves the three live names undirected either way.
+       - Measure before building: how many of the day-paired names have a
+         direction that is *obvious from the unit alone* (`kB`, `ms` — lower
+         better) versus one that needs a per-name declaration. If the answer is
+         "all of them from the unit", the field is ceremony and the fix is a
+         unit convention.
+
+2. [ ] **324.2 — `bundle-gz-kb` is the only metric rule 5 can act on, its
+       generator exists, and its noise floor is wider than three of its four
+       historical moves.** The "no generator" premise died in `307.1` above:
+       `check:size` prints `css/index.min.css … 15.10 kB gz` and
+       `stamp-readme.mjs` stamps the same figure into both READMEs, matching
+       the newest hand-recorded sample (15.1, 2026-09-03). What remains is the
+       part a grep never reached — `GZIP_TOLERANCE_KB = 0.3` exists because the
+       same bytes gzip differently across Node builds, and the two dispatchers
+       run different containers.
+       - **Accept** — the property: the metric's definition is written down
+         where a wake recording it will read it (which artifact, which command,
+         which environment), AND the record says what delta is large enough to
+         mean anything against the 0.3 kB cross-environment floor. **Concluding
+         that a gzip-byte series cannot support a cross-environment
+         two-consecutive verdict, and re-pointing the name at the minified byte
+         count (`93 kB`, deterministic) or retiring it, is a satisfying
+         outcome** — the reason to keep gzip is that gzip is what users
+         download, and that reason is about the BUDGET, which `check:size`
+         already gates, not about rule 5.
+       - **Do not re-baseline the existing 11 samples**, and do not record a
+         sample to un-STALE the line before the convention is written down —
+         that is what 2026-09-04 refused, and its stated reason being wrong
+         does not make the action right.
+       - Measure first: which of the 11 samples were taken on which
+         dispatcher's clock (`git blame --line-porcelain` on
+         `loop-metrics.jsonl` gives the author offset per line, the method
+         164.2 established). A series taken entirely at one offset has no
+         cross-environment problem at all, and that would shrink this item to
+         one sentence.
+
 ## Slice 323 — rule 5's staleness line compared naive stamps from two clocks, so a calendar boundary read as missing input; the fix states the skew rather than removing it, and the base rate that justifies it is invisible at date granularity (2026-09-07)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again (trap 1;
@@ -2666,29 +2749,140 @@ than another one-off sample.
        existed already, and what it needed was not a gate but an honest
        statement of what a millisecond means without its machine.
 
-2. [ ] **307.1 — Rule 5 starves structurally: 42 metric names, 130 samples,
-       13 names sampled twice.** A rule that needs two consecutive readings of
-       one name cannot fire on a corpus where most names are sampled once.
-       Recording another one-off sample does not fix it, which is why this is
-       filed rather than papered over with today's two.
-       - **Accept** — the property: either a small fixed set of names is
-         sampled on a stated cadence so pairs actually accumulate, or rule 5 is
-         re-scoped to the metrics that **actually pair**, or the rule is retired
-         with the count that justified it. **Retiring it is a satisfying
-         outcome** — a dispatcher rule that has fired 3 times in 1,500
-         iterations and reads STALE for four days is a rule the loop is
-         carrying, not using.
+2. [x] **307.1 — DONE 2026-09-07 (Slice 324, cloud wake). The Accept's second
+       branch: rule 5 is RE-SCOPED to the metrics that actually pair, and the
+       pairing unit is DISTINCT DAYS.** Retiring was left on the table and is
+       not taken — the count below says why, and it is not the count this item
+       predicted.
 
-         **Derive the pairing set from the log at execution time and record the
-         command** — do not take it from this item. This clause named
-         `axe-violations`, `bundle-gz-kb` and `ci-wall-time` as *"the only three
-         with real history"*, and Slice 309 measured two of those three claims
-         false on the day after they were written: `ci-wall-time`'s 26 samples
-         all fall inside 17 hours of **one day** (2026-08-18, nothing since),
-         while `claims` — 11 samples, newest 2026-09-06 — was omitted. Sample
-         count alone is the wrong test; **distinct days** is the one that
-         answers "can rule 5 compare two runs". CLAUDE.md's criterion rule: name
-         the property, never the value it will have.
+       **The pairing set, derived at execution time. The command is here so the
+       next wake re-runs it rather than re-deriving it** (`python3
+       scripts/loops/dispatch_status.py` now prints all of this; the raw form):
+
+       ```
+       python3 - <<'PY'
+       import collections, json
+       m=[json.loads(l) for l in open('.roundtable/loop-metrics.jsonl') if l.strip()]
+       d=collections.defaultdict(set); c=collections.Counter(x['name'] for x in m)
+       [d[x['name']].add(x['ts'][:10]) for x in m]
+       print(len(m),'samples',len(d),'names',
+             sum(1 for n in c if c[n]>=2),'count-paired',
+             sum(1 for n in d if len(d[n])>=2),'day-paired')
+       PY
+       # 2026-09-07: 132 samples · 44 names · 13 count-paired · 7 day-paired
+       ```
+
+       **44 names → 7 day-paired → 3 alive → 1 actionable.** Each narrowing is
+       a different mechanism, and the last two are the ones that make this
+       structural rather than a matter of recording more:
+
+       - **7 of 44 pair across days**, against 13 by raw sample count. The gap
+         is six single-day bursts, `ci-wall-time`'s 26 samples among them.
+       - **4 of the 7 are dead** — `components`, `ci-gates`, `behaviors_frozen`
+         and `gates` were last sampled 2026-08-16 to 2026-08-19.
+       - **`axe-violations` is 0 on all 8 of its days, and cannot be anything
+         else.** `axe-audit.mjs` `process.exit(1)`s on any violation, so a tree
+         that builds records a zero. Rule 5's *freshest* input is pinned by a
+         gate and can never regress. (CLAUDE.md's identical-value doctrine,
+         proven otherwise rather than filed as an instrument defect.)
+       - **`claims` rises 35 → 169 and rising is the GOAL.** Nothing in a
+         sample records a direction — `record_metric.py` writes name, value,
+         unit — so a direction-blind rule reads that growth as a regression.
+       - **`bundle-gz-kb` is the one metric rule 5 could genuinely fire on.**
+         Its per-day series rose on **4 of 4** day-boundaries, 7.2 → 15.1 kB,
+         and exactly one Optimize row names it — 2026-08-15, on the first of
+         those four.
+
+       **AND THE CLAIM THIS SLICE STARTED FROM ABOUT IT IS FALSE, refuted by
+       the reconciliation step inside this same wake.** The narrowing above was
+       drafted as `… → 1 actionable → 0 samplable`, on the strength of
+       2026-09-04's `Meta · refusal` row (`e6631a88`): *"the name has no
+       generator anywhere (only `record_metric.py`'s docstring example), so any
+       value would be a guessed convention"*. A `grep -rn 'bundle-gz-kb'`
+       reproduces that exactly — and it is the wrong question, because **the
+       generator does not carry the metric's name**:
+
+       ```
+       npm run build -w @busy-office/ui && npm run check:size -w @busy-office/ui
+       #   css/index.min.css   1 file(s)   15.10 /  16.7 kB gz
+       grep -n gzipped README.md
+       #   <!-- stat:size -->93 kB minified (15.0 kB gzipped)<!-- /stat -->
+       ```
+
+       `packages/core/scripts/stamp-readme.mjs` computes
+       `gzipSync(minCss).length / 1024` and stamps it into both READMEs;
+       `check-size.mjs` prints the same figure every run as the
+       `css/index.min.css` bucket. The newest hand-recorded `bundle-gz-kb`
+       sample is **15.1 on 2026-09-03**, against **15.10** measured here — so
+       the convention was never guessed, it just had no name in common with the
+       metric. A grep for a metric NAME cannot find a generator that computes
+       the VALUE, and this is the second time in three wakes that a premise
+       carried forward in a refusal row turned out to be re-runnable and wrong.
+
+       **What actually blocks a series is smaller and sharper than "no
+       generator": the noise floor.** `stamp-readme.mjs` carries
+       `GZIP_TOLERANCE_KB = 0.3` because Node's zlib backend compresses the
+       same bytes differently across builds — a real CI failure on 2026-08-16,
+       identical source, Node 26 local against Node 22 CI. Three of the four
+       historical rises are **inside** that floor (7.0 → 7.2, 9.93 → 10.0,
+       11.6 → 11.7), and the two dispatchers run different containers. So a
+       cross-environment `bundle-gz-kb` series cannot support a two-consecutive
+       verdict on deltas under 0.3 kB, whoever records it. That is `324.2`.
+
+       **What shipped** in `dispatch_status.py`:
+
+       - The pairing test is `len(distinct dates) >= 2`, not `count >= 2`.
+       - A **comparable-set block** prints every day-paired name, its day count,
+         its last two per-day readings and the delta. Rule 5 has never been
+         answerable from this line before — it reported how stale the input was
+         and never what the input SAID, which is a second starvation mechanism
+         underneath the first.
+       - The block reports **movement, never a verdict**, and says so: no
+         direction is recorded, and a `NEVER MOVED` marker names a constant
+         without deciding whether it is health or a gate.
+       - `PAIRING_SELF_TEST`, five cases; `--self-test` now reports 14 + 6 + 5.
+
+       **Base rate measured before shipping** (94.11 — a predicate already true
+       of everything cannot fail). Replayed at every revision of
+       `loop-metrics.jsonl` with `loop-log.md` taken AT that commit, which is
+       306.1's granularity lesson: **108 revisions → the flag differs on 9, the
+       reported name on 42, the paired-name count on 94.** The flag differs in
+       both directions, and that is the half that matters: on **5 of the 9** the
+       old test read **`ok`** — rule 5 has live input — where the honest reading
+       is STALE, its only "pairs" being single-day bursts. That is the same
+       defect Slice 183 published as `ci-wall-time` "flat at 275s".
+
+       **Red-proved by injection, with the injection confirmed to land.**
+       Reverting `by_name_dates` to timestamp keys (one replacement, asserted,
+       and grepped in the file afterwards) fails exactly the two self-test cases
+       that separate a burst from a series and leaves the other three passing —
+       a red-proof that went red too broadly would certify nothing either.
+
+       **Today's live line is UNCHANGED — `1 wake-date(s) newer STALE`, newest
+       pair `axe-violations`** — because both scopings pick the same name on this
+       tree. A re-scoping that also flipped the reading it was built from would
+       be the suspicious outcome. What changed on the live line is the honest
+       denominator: `13 of 44 sampled twice` → **`7 of 44 paired across days`**.
+
+       **Why not retire it.** The item pre-authorised retiring, and the count
+       does not support it: the rule's input is not absent, it is one name
+       (`bundle-gz-kb`) that nobody records for a reason that turned out to be
+       wrong. Retiring would also delete the size-budget clause 184.2 added to
+       revive the rule, which has never had a chance to fire. Two follow-ups
+       are filed instead (`324.1`, `324.2`), and either one makes the rule live
+       rather than carried.
+
+       **The Accept it was measured against**, kept verbatim because the
+       satisfying-outcome clause is what licensed refusing the retirement
+       branch: *"either a small fixed set of names is sampled on a stated
+       cadence so pairs actually accumulate, or rule 5 is re-scoped to the
+       metrics that actually pair, or the rule is retired with the count that
+       justified it. Retiring it is a satisfying outcome … Derive the pairing
+       set from the log at execution time and record the command — do not take
+       it from this item."* The first branch was refused on the record rather
+       than on taste: **28.1 already adopted a stated cadence** (`ci-wall-time`
+       recorded every wake) **and it held for one day** — 26 samples on
+       2026-08-18 and nothing in the 20 days since.
 
 ## Slice 306 — Rule 5's staleness line cannot reach `ok` from a cloud wake while the other dispatcher is a calendar day ahead (2026-09-06, triaged from inside a Continue round)
 

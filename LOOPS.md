@@ -539,6 +539,18 @@ match to its full playbook below:
    be evaluated rather than reporting it clear.** A rule answered from a dead
    instrument reports "nothing to do" exactly as convincingly as a healthy one.
 
+   **The pairing unit is DISTINCT DAYS, and the line now prints what the input
+   SAYS as well as how stale it is** (roadmap 307.1, 2026-09-07). A name
+   sampled repeatedly inside one wake is not two runs — `ci-wall-time`'s 26
+   samples all fall in 17 hours of 2026-08-18 — and counting samples read 13 of
+   44 names as inputs where 7 qualify. Under the line's staleness verdict is a
+   `comparable set` block: every day-paired name, its last two per-day readings
+   and the delta. It reports **movement, not a verdict**, because no direction
+   is recorded with a sample — `claims` rising is the goal, `bundle-gz-kb`
+   rising is the regression, and both are a positive delta. **A name marked
+   `NEVER MOVED` cannot fire this rule**: `axe-violations` is 0 on all 8 of its
+   days because `test:axe` exits non-zero above 0.
+
    **A third flag, `SKEW`, means the opposite of STALE and is not a milder
    version of it** (roadmap 306.1, 2026-09-07). Both files carry naive local
    stamps from two dispatchers eight hours apart, so a log date can be newer

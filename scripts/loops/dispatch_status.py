@@ -589,6 +589,116 @@ def metric_samples():
     return out
 
 
+# RULE 5's PAIRING UNIT IS DISTINCT DAYS, NOT SAMPLE COUNT (roadmap 307.1,
+# 2026-09-07). Rule 5 asks whether a metric "regressed on TWO CONSECUTIVE runs",
+# and a run is a wake, not a line in the file. Until this changed, `counts[n] >=
+# 2` admitted a name recorded repeatedly inside ONE wake: `ci-wall-time` has 26
+# samples and they all fall inside 17 hours of 2026-08-18, and Slice 183's
+# dispatch record published `ci-wall-time` "flat at 275s" as a current reading
+# off exactly that burst.
+#
+# NOT ceremony, measured before shipping — a predicate that changes nothing
+# cannot fail (94.11). Replayed at every revision of `loop-metrics.jsonl` with
+# `loop-log.md` taken AT THAT COMMIT (306.1's granularity lesson: a daily
+# sampler cannot see a state that lives four hours):
+#
+#   108 revisions -> the FLAG differs on 9, the reported name on 42,
+#                    the paired-name count on 94
+#
+# and the flag differs in BOTH directions, which is the half that matters: on 5
+# of the 9 the old test read **ok** — rule 5 has live input — where the honest
+# reading is STALE, because its only "pairs" were single-day bursts. The other 4
+# are `NO LIVE INPUT` against an ok/STALE. Re-run it; the figures are snapshots:
+#
+#   for r in $(git log --format=%H -- .roundtable/loop-metrics.jsonl); do
+#     git show $r:.roundtable/loop-metrics.jsonl | python3 -c '
+#   import collections,json,sys
+#   s=[json.loads(l) for l in sys.stdin if l.strip()]
+#   c=collections.Counter(x["name"] for x in s)
+#   d=collections.defaultdict(set)
+#   [d[x["name"]].add(x["ts"][:10]) for x in s]
+#   print(sum(1 for n in c if c[n]>=2), sum(1 for n in d if len(d[n])>=2))'
+#   done | sort | uniq -c        # count-paired vs day-paired, per revision
+#
+# @exact — a date string either differs from another or it does not; there is no
+# recognition step, so this needs no `--self-test` under the heuristic/exact
+# rule. It has one anyway (`PAIRING_SELF_TEST`), because the whole item is that
+# a burst must be told APART from a series, and a fixture showing only one of
+# the two would certify nothing.
+def by_name_dates(samples):
+    """name -> the sorted DISTINCT dates it was sampled on."""
+    out = {}
+    for s in samples:
+        out.setdefault(s["name"], set()).add(s["ts"][:10])
+    return {n: sorted(v) for n, v in out.items()}
+
+
+def per_day_last(samples, name):
+    """The last value recorded for `name` on each day, oldest day first.
+
+    The last and not the first: a wake that samples twice in one day is
+    correcting itself, and rule 5 compares what each run concluded.
+    """
+    seen = {}
+    for s in sorted((x for x in samples if x["name"] == name), key=lambda s: s["ts"]):
+        seen[s["ts"][:10]] = (s.get("value"), s.get("unit"))
+    return [(d, *seen[d]) for d in sorted(seen)]
+
+
+def report_comparable(samples, dates):
+    """Print rule 5's ACTUAL input set — every day-paired name and its movement.
+
+    Rule 5 has never been answerable from this line: it reported how stale the
+    input was and never what the input SAID, so a wake reading `ok` still had to
+    go and derive the trend by hand, which is the second starvation mechanism
+    underneath the first (roadmap 307.1).
+
+    No DIRECTION is recorded with a sample — `record_metric.py` writes name,
+    value and unit — so this prints the MOVEMENT and never a verdict. The
+    direction is not inferable from the data either way round: `claims` rising
+    35 -> 169 is the goal, `bundle-gz-kb` rising 7.2 -> 15.1 is the regression,
+    and both are a positive delta on a number.
+    """
+    paired = sorted(
+        (n for n in dates if len(dates[n]) >= 2),
+        key=lambda n: dates[n][-1],
+        reverse=True,
+    )
+    if not paired:
+        return
+    once = sum(1 for n in dates if len(dates[n]) == 1)
+    print(
+        f"     rule 5's comparable set — {len(paired)} name(s) sampled on 2+ distinct "
+        f"days ({once} of {len(dates)} name(s) have only one day and are not an input "
+        f"to a rule that compares two runs):"
+    )
+    for name in paired:
+        series = per_day_last(samples, name)
+        (d0, v0, _), (d1, v1, unit) = series[-2], series[-1]
+        unit = unit or ""
+        constant = len({s[1] for s in series}) == 1
+        # A sample is only required to carry `ts` and `name` — `metric_samples`
+        # says so — so a value may be missing or non-numeric. Print what is
+        # there and drop the delta rather than raising: a report that dies on a
+        # malformed row takes the two counters above down with it.
+        num = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool)
+        delta = v1 - v0 if num(v0) and num(v1) else None
+        shown = f"{delta:+g}" if delta is not None else "?"
+        fmt = lambda v: f"{v:g}" if num(v) else str(v)
+        print(
+            f"       {name:<26} {len(dates[name]):>2}d  {d0} {fmt(v0)} {unit} -> "
+            f"{d1} {fmt(v1)} {unit}  {shown}"
+            + ("   NEVER MOVED" if constant else "")
+        )
+    print(
+        "     no direction is recorded with a sample, so the movement above is a "
+        "reading and the regression verdict is the wake's. A name that has NEVER "
+        "MOVED is either healthy or pinned by a gate — rule 5 cannot fire on it "
+        "either way (`axe-violations` is 0 on every day because `test:axe` fails "
+        "the build above 0)."
+    )
+
+
 def report_metrics(all_rows):
     """Rule 5's input: how stale is the newest pair it could actually compare?"""
     samples = metric_samples()
@@ -602,11 +712,17 @@ def report_metrics(all_rows):
     # input to it however recent it is. All three samples recorded since
     # 2026-08-20 are exactly that, which is why "3 recent samples" is not the
     # reassurance it looks like.
-    pairs = [s for s in samples if counts[s["name"]] >= 2]
+    #
+    # ...and neither is a name sampled twenty-six times in one afternoon, which
+    # is what this test read as an input until 2026-09-07 (roadmap 307.1). The
+    # unit is DISTINCT DAYS, not sample count — see `by_name_dates` for the
+    # replay that measured the difference.
+    dates = by_name_dates(samples)
+    pairs = [s for s in samples if len(dates[s["name"]]) >= 2]
     if not pairs:
         print(
             f"  Optimize     {len(samples)} sample(s) over {len(counts)} name(s), none "
-            f"sampled twice   NO LIVE INPUT"
+            f"sampled on two distinct days   NO LIVE INPUT"
         )
         return True
     newest = max(pairs, key=lambda s: s["ts"])
@@ -629,7 +745,8 @@ def report_metrics(all_rows):
         f"  {'Optimize':<12} {len(provable):>2} wake-date(s) newer   "
         f"since {newest['ts']}   {flag}   "
         f"[newest pair: {newest['name']}; {len(samples)} sample(s), "
-        f"{sum(1 for n in counts if counts[n] >= 2)} of {len(counts)} name(s) sampled twice]"
+        f"{sum(1 for n in dates if len(dates[n]) >= 2)} of {len(counts)} name(s) "
+        f"paired across days]"
     )
     if provable:
         print(
@@ -666,6 +783,7 @@ def report_metrics(all_rows):
             f"at a new offset has appeared and the split above under-reports the "
             f"undetermined dates. Widen MAX_CLOCK_SKEW."
         )
+    report_comparable(samples, dates)
     return bool(provable)
 
 
@@ -739,6 +857,46 @@ SKEW_SELF_TEST = [
 ]
 
 
+# 307.1's discrimination test. `by_name_dates` is @exact, and a self-test made
+# only of things it already passes cannot fail — so every case here is one the
+# OLD sample-count test got wrong, or one both tests must keep refusing.
+PAIRING_SELF_TEST = [
+    # (samples as (ts, name), expected day-paired names)
+    # the case the item is about: a burst inside one wake is NOT two runs.
+    # `ci-wall-time`'s 26 samples are exactly this shape, all on 2026-08-18.
+    ([("2026-08-18 09:00", "ci-wall-time"),
+      ("2026-08-18 17:40", "ci-wall-time"),
+      ("2026-08-18 21:10", "ci-wall-time")], set()),
+    # two days is a pair however few samples
+    ([("2026-08-18 09:00", "bundle-gz-kb"),
+      ("2026-09-03 09:54", "bundle-gz-kb")], {"bundle-gz-kb"}),
+    # one sample is not a pair — true under both tests, kept so the fixture
+    # cannot be satisfied by a detector that answers "paired" to everything
+    ([("2026-09-07 01:24", "select-all-1k-ms")], set()),
+    # a burst and a series in one file: only the series is an input
+    ([("2026-08-18 09:00", "ci-wall-time"),
+      ("2026-08-18 17:40", "ci-wall-time"),
+      ("2026-08-18 09:05", "claims"),
+      ("2026-08-19 02:00", "claims")], {"claims"}),
+    # midnight is a date boundary and 23:59 -> 00:01 is two days. Reported
+    # rather than special-cased: the log's stamps are naive and 164.2 refused to
+    # add an offset, so this is the same undetermined-ordering window `skew_split`
+    # names. It over-counts by at most one pair and never invents a name.
+    ([("2026-08-18 23:59", "gates"), ("2026-08-19 00:01", "gates")], {"gates"}),
+]
+
+
+def pairing_self_test():
+    bad = []
+    for rows_in, want in PAIRING_SELF_TEST:
+        samples = [{"ts": ts, "name": n} for ts, n in rows_in]
+        dates = by_name_dates(samples)
+        got = {n for n in dates if len(dates[n]) >= 2}
+        if got != want:
+            bad.append(f"    {rows_in} -> {sorted(got)}, expected {sorted(want)}")
+    return bad
+
+
 def skew_self_test():
     bad = []
     for metric_ts, row_stamps, want in SKEW_SELF_TEST:
@@ -754,14 +912,15 @@ def self_test():
         for item, want in SELF_TEST
         for got in [slice_of(item)]
         if got != want
-    ] + skew_self_test()
+    ] + skew_self_test() + pairing_self_test()
     if bad:
         print("dispatch_status --self-test FAILED:", file=sys.stderr)
         print("\n".join(bad), file=sys.stderr)
         return 1
     print(
-        f"dispatch_status --self-test: {len(SELF_TEST)} slice-reference case(s) and "
-        f"{len(SKEW_SELF_TEST)} clock-skew case(s) classified correctly"
+        f"dispatch_status --self-test: {len(SELF_TEST)} slice-reference case(s), "
+        f"{len(SKEW_SELF_TEST)} clock-skew case(s) and {len(PAIRING_SELF_TEST)} "
+        f"metric-pairing case(s) classified correctly"
     )
     return 0
 
