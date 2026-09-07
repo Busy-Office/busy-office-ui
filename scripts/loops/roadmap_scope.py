@@ -295,11 +295,39 @@ def reconcile(path, text, boxes, stray):
                  f'{seen[0]} / {seen[1]}. A marker shape is going unseen.')
 
 
+def reconcile_sections(path, text, body):
+    """The same doctrine one level up: assert the SECTION count, not just the
+    markers (roadmap 324.3, 2026-09-07).
+
+    The checkbox reconciliation above cannot see this, because a slice cut in
+    half loses no markers — its items simply move from attributed to stray, and
+    both lanes still sum to raw. An archive sweep did exactly that: a mover that
+    took any `## ` line as a heading cut Slice 308 at a
+    `## the loops table  214  214` row quoted inside a code fence, and this
+    script then reported **17** slice sections against a raw 306 while
+    reconciling perfectly and printing a headline count of 12 open — seven
+    slices, the whole owner-blocked tail, gone from the OPEN set rule 4 reads.
+
+    Safe as a raw grep because it is measured, not assumed: `## Slice ` occurs
+    **0** times inside a fence in either file (306 / 306 live, 286 / 286
+    archive, 2026-09-07). If a fenced example of one ever lands, this refuses
+    and the fix is to count it fence-aware — not to drop the assertion.
+    """
+    raw = sum(1 for l in text.splitlines() if l.startswith('## Slice '))
+    if raw != len(body):
+        sys.exit(f'REFUSING to report: {path} has {raw} raw `## Slice ` line(s) but the '
+                 f'parse found {len(body)} section(s). A section boundary is being read '
+                 f'in the wrong place — see roadmap 324.3.')
+
+
 def report(read, min_lines, rev):
     live_text = read(LIVE)
     body, opened, boxes, stray, open_items = scan(live_text)
     reconcile(LIVE, live_text, boxes, stray)
-    arch = scan(read(ARCHIVE))[0]
+    reconcile_sections(LIVE, live_text, body)
+    arch_text = read(ARCHIVE)
+    arch = scan(arch_text)[0]
+    reconcile_sections(ARCHIVE, arch_text, arch)
 
     targets = {s: n for s, n in body.items() if s not in opened and n > min_lines}
     carried = sum(targets.values())
@@ -498,6 +526,28 @@ def self_test():
                  f'cannot tell a fenced row from a real heading, so it proves '
                  f'nothing.')
 
+    # H — the SECTION reconciliation (324.3). The checkbox lanes above cannot
+    # see a slice cut in half: its items move from attributed to stray and both
+    # lanes still sum to raw, which is exactly what happened when an archive
+    # sweep truncated Slice 308 at a fenced `## the loops table` row. Only a
+    # count of the raw `## Slice ` lines against the parsed sections catches it.
+    # Discrimination, not ceremony: the healthy fixture must PASS the same check
+    # that the truncated one fails.
+    healthy = '## Slice 4 — a\n1. [x] **4.1 — closed.**\n## Slice 5 — b\n'
+    reconcile_sections('fixture', healthy, scan(healthy)[0])
+    truncated = healthy + '```\n## Slice 6 — quoted inside a fence, never parsed\n```\n'
+    if truncated.count('## Slice ') != 3:
+        sys.exit('SELF-TEST FAILED: case H injection did not land.')
+    try:
+        reconcile_sections('fixture', truncated, scan(truncated)[0])
+    except SystemExit as exc:
+        if 'REFUSING to report' not in str(exc):
+            sys.exit(f'SELF-TEST FAILED (H): wrong refusal message: {exc}')
+    else:
+        sys.exit('SELF-TEST FAILED (H): 3 raw `## Slice ` lines against 2 parsed '
+                 'sections still reconciled — a truncated slice would be reported '
+                 'as a smaller file rather than as a defect.')
+
     # G — provenance (304.1) DISCRIMINATES the three trees a figure can describe.
     # The git calls are injected, so the case does not depend on the tree the
     # suite happens to run in — which is the only way a "clean" and a "dirty"
@@ -560,7 +610,8 @@ def self_test():
           'accounting for a marker (D), a citation is\n  charged to an OPEN '
           'item and not to a closed one (E), a `## ` row\n  inside a ``` '
           'fence is not read as a heading (F), and the header tells a\n  '
-          'revision, a clean HEAD and an uncommitted tree apart (G).')
+          'revision, a clean HEAD and an uncommitted tree apart (G), and the section\n'
+          '  count is reconciled against the raw `## Slice ` lines (H).')
 
 
 def main():
