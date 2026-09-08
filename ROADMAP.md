@@ -320,6 +320,179 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 360 — `331.1` REFUSED on the base rate its own Accept demanded first: `api.json` contains **0** HTML start tags, so the half a prompt block exists for — **378 of 749** lines — has no source in the mandated provenance, and the fallback source carries only **61 of 263** substantive markup lines (2026-09-08)
+
+Dispatched by **rule 4** — no open P0 (0 of 30), `Standardize 1 / 4`,
+`Objective 0 / 3`. The oldest open item overall is Slice 15 (owner hardware);
+`112.3`/`112.4`, `249.10`-`249.13`, `273.2` and `296.3` are owner-blocked;
+`320.3` names screenshots in its own Accept; `249.7` is **both** — it holds its
+SAP/Fiori rows for `249.10`, and its first consumer is a visible "Also called"
+line under every `<h1>`, which is a rendered change a cloud wake cannot judge.
+`331.1` is the oldest item a cloud wake can take.
+
+**The Accept named refusing as a satisfying outcome and named the measurement
+that would decide it** — *"measure the base rate first: if the generated output
+would differ materially from the 40 hand-written blocks, that difference is the
+finding"*. It differs materially. Every figure below is re-runnable; the two
+throwaway scripts are reproduced verbatim in the `.roundtable` report named at
+the end, and neither is shipped as tooling.
+
+### The item's own premise number does not reproduce: **53** blocks, not 40
+
+```
+git show origin/contribution/upstream-2026-09-06:.contribution/install-prompts.md > /tmp/p.md
+grep -c '^## ' /tmp/p.md             # 53   headings
+grep -c '^[`][`][`]' /tmp/p.md       # 106  fence lines -> 53 fenced regions
+```
+
+**40 is the number of components in `api.json`**, not the number of hand-written
+blocks — Slice 331's own parent text says *"`check-markup` over its **53**
+extracted markup blocks"*, so the two numbers were already both on record and the
+Accept carried the wrong one. Re-checking a premise is part of the criterion
+(CLAUDE.md), and here it is the first half of the finding: **the block set is not
+the `api.json` key set, so "adding a component produces its prompt" cannot hold
+by construction.**
+
+Exact, by string equality against `api.json`'s keys plus its `pageSlug` aliases —
+no heuristic:
+
+| | count |
+|---|---|
+| `api.json` records (40 components + 5 primitives) | **45** |
+| headings whose slug IS a record key | **33 / 53** |
+| headings naming no record at all | **20** |
+| records no heading names | **12** |
+
+The 20 are concept names the contribution chose (`FormField`, `Input`, `Select`,
+`Choice`, `FormSection`, `FormActions`, `ButtonGroup`, `Widget`, `Stat`,
+`WidgetGrid`, `Timeline`, `AuditTrail`, `AppShell`, `Chip`, `FilterBar`,
+`KeyValue`, `MoneyInput`, `ScanInput`, `StateBlock`, `Toast`). And two shipped
+components have **no prompt coverage whatsoever** — `grep -c bo-date` and
+`grep -c bo-richtext` over the file both read **0**, against controls
+`bo-btn` **29** and `bo-zzz-not-real` **0**.
+
+### The mandated provenance does not carry markup — structurally, not by omission
+
+```
+python3 -c "import json;d=json.load(open('packages/core/dist/api.json'));..."
+  distinct keys anywhere in api.json:                368   (no markup field among them)
+  substrings matching /<[a-z]+[ >]/ in the whole file: 0
+  prompt markup lines appearing verbatim in api.json:  0
+    control  'bo-btn--secondary'          in api.json -> True   (expected True)
+    control  'bo-data-table__row-select'  in api.json -> True   (expected True)
+    control  'bo-not-a-real-class-xyz'    in api.json -> False  (expected False)
+```
+
+A **0** is a defect until proven otherwise, so it carries three controls: the
+same `in` test says True on strings `api.json` does hold and False on one it does
+not. The zero is real.
+
+**`llms.txt`, generated from `api.json`, is the same shape — said precisely,
+because the flat version of this sentence is wrong.** Its per-component section
+is `tagline / category / classes / data attrs / aria styled`, with no markup
+block. `grep -cE '<[a-z]+[ >]'` over the built file reads **7**, not 0, against a
+control of **54** on `dist/index.html`; all seven are element names inside prose
+(`<html>`, `<dialog class="bo-dialog">`, `<select>` twice, `<th>`, `<img>`,
+`<svg>`), none a copyable block. That distinction is the whole of 192.1: the
+measured claim above is right, and the sentence shipped beside it would have been
+wrong.
+
+**And markup is the half the prompt exists for.** Over all 53 blocks, counting
+non-blank lines inside the fences:
+
+| | lines | share |
+|---|---|---|
+| markup (between step 2 and step 3) | **378** | 50.5% |
+| everything else | 371 | 49.5% |
+| **total** | **749** | |
+
+### The fallback source does not carry it either — and the naive number here was wrong
+
+A generator could in principle read the docs pages' canonical markup instead of
+`api.json`. Measured against `apps/docs/src/pages/components/*.astro` +
+`base/*.astro`, the naive answer is **168 of 378 (44.4%)** verbatim. **That number
+is an artefact of line length**: 107 of the 168 hits are under 25 characters —
+`</div>` **31** times, `</span>` 8, `</li>` 7 — closing tags that match almost any
+HTML. Restricted to substantive lines (≥ 25 chars) it is **61 of 263, 23.2%**.
+
+So roughly **three quarters of the substantive markup in this file exists nowhere
+in this repo**. It was written for the contribution, which is exactly the
+hand-maintenance `331.1` was filed to remove.
+
+### The prototype, and the two attributions that failed their own control
+
+A throwaway generator emitting the contribution's block shape from `api.json`
+fills 8 parts per record over 45 records = 360 slots and **cannot fill 66
+(18.3%)** — but the flat percentage understates it, because the unfillable slot
+is the markup in **45 of 45** records, the tagline in the 5 primitives (`meta` is
+components-only), and the behaviour call in **16 of the 45**.
+
+Of the 53 description lines, **0 of 30** comparable ones equal `meta.tagline`;
+**27 of 30** differ by more than punctuation (word-level similarity median
+**0.24**, max 0.93). Control: the comparator called a tagline identical to itself.
+So the one field `api.json` genuinely carries would replace all 53 lines with
+different prose.
+
+**Two attempts to attribute a block to a record BY ITS CLASSES both failed a
+discrimination control, and neither figure is used above.** Most-frequent owned
+class put `Alert`, `Dialog`, `Offcanvas` and `OrderedList` under `button` (their
+markup is full of `bo-btn*`); first-owned-class put `Dialog` under `button` and
+`ScanInput` under `data-table`. Recorded rather than quietly dropped, because it
+is itself the point: **the record→block mapping a generator needs is not
+recoverable even in reverse, from finished markup.** Every table above uses only
+the exact heading/key equality.
+
+### What already ships, generated, for this exact job
+
+`/getting-started/ai-assistants` emits a paste-into-your-instructions block built
+from `DESIGN.md`'s two tables and the shared `MARKUP_RULES`, and **throws at build
+time if those tables do not parse**. It points at `llms.txt` (generated from
+`api.json`) for the surface and at `npx bo-check-markup` — a real shipped bin,
+`packages/core/package.json` `bin` — for verification. Its own recorded
+measurement: building a realistic screen from `llms.txt` alone produced exactly
+one machine-detectable error.
+
+The 53 blocks would be a **second** generated assistant-facing surface from the
+same source. Their non-markup half is not 371 distinct lines but **171**: three
+sentences repeat **53 times each** and `3. No JavaScript required.` 37 more — **196
+of 371 (52.8%)** is four sentences, which `llms.txt` already states once under
+*"Rules your markup must follow"*.
+
+### Verdict — refused, against the Objective
+
+- **Simplicity** — refuse: a consumer would carry two assistant-facing surfaces
+  saying the same rules, one of which cannot be regenerated.
+- **Less for more** — refuse: 53 blocks and 196 repeated lines to restate what one
+  generated file says once.
+- **Reusability** — refuse, and the split matters: the **23.2%** that IS in the
+  docs pages would be a third copy of strings already held twice, and the other
+  **76.8%** would be markup with no source in this repo at all — hand-maintained
+  by definition. That is the drift the `registry.ts` refusal and Slice 244
+  (`cssFiles` hand-copied four times, one already diverged) both name.
+
+The proposal's content still checks out, as Slice 331 found; **its provenance
+cannot be fixed by the source `331.1` names**, and the surface it would duplicate
+already ships generated. The contribution branch keeps the file as reference.
+
+Raw output, the two failed attributions and both scripts verbatim are in
+`.roundtable/measure-331.1-install-prompts-base-rate-2026-09-08.md` — landed
+rather than left in a scratchpad, which is `321.1`'s lesson.
+
+1. [x] **360.1 — `331.1` closed as REFUSED on the base rate its Accept asked
+       for first.** The generated output differs materially: 50.5% of the file
+       has no source in `api.json` (0 HTML start tags in it), the block set is
+       not the key set (33 of 53 headings name a record, 12 records unnamed, 2
+       components uncovered), 0 of 30 taglines survive, and the fallback source
+       carries 61 of 263 substantive markup lines. Refusing because a generated
+       assistant-facing surface already ships — `/getting-started/ai-assistants`
+       + `llms.txt` + `bo-check-markup` — is the outcome the Accept names as
+       satisfying, and it is a stronger ground than the one the Accept
+       anticipated. `331.1` is ticked in place under Slice 331 with its original
+       text kept. **Nothing new filed**, deliberately: the two failed
+       attributions are recorded above as a finding, not as an item, and no gate
+       is proposed — *"this prompt block is derivable"* is `94.11`'s semantic
+       wall.
+
 ## Slice 359 — Objective grill of Slices 356, 357, 358: **60 of 64** published assertions reproduce, every red-proved headline figure to the digit — and all four defects are in a sentence that CHARACTERISES a measurement rather than in the measurement, which is 192.1's shape three slices running (2026-09-08)
 
 **Dispatched by rule 3** at `Objective 3 / 3 slices OVERDUE [330, 356, 357]`,
@@ -4554,7 +4727,24 @@ distilled from this repo's own docs. Kept on the branch as reference.
        for. The brand mark remains the one **OWNER CALL**, as the contribution
        itself identified.
 
-1. [ ] **331.1 — `install-prompts.md`, generated from `api.json`.** The only
+1. [x] **331.1 — CLOSED 2026-09-08 by Slice 360 (cloud wake, rule 4) as
+       REFUSED, on the Accept's stated satisfying branch.** The base rate the
+       Accept demanded first says the generated output differs materially:
+       `api.json` holds **0** HTML start tags and no markup field among its 368
+       distinct keys, so the **378 of 749** prompt lines that are markup (50.5%)
+       have no source in the mandated provenance; the block set is not the key
+       set (**33 of 53** headings name an `api.json` record, **12** of 45
+       records are named by none, `bo-date` and `bo-richtext` appear **0**
+       times); **0 of 30** description lines equal `meta.tagline`, 27 of them
+       differing by more than punctuation; and the fallback source — the docs
+       pages — carries only **61 of 263** substantive markup lines (23.2%; the
+       naive 44.4% counts 107 hits under 25 characters, `</div>` 31 of them). Refused also
+       because a *generated* assistant-facing surface already ships —
+       `/getting-started/ai-assistants` + `llms.txt` + `bo-check-markup` — and
+       196 of the file's 371 non-markup lines are four sentences repeated.
+       Commands and controls are in Slice 360. Original text below.
+
+       **331.1 — `install-prompts.md`, generated from `api.json`.** The only
        proposal that survives inspection and is not already landed, blocked,
        or withdrawn. Its content checks out; its provenance does not — as
        supplied it is hand-maintained and duplicates data `api.json` already
