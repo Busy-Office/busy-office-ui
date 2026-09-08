@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-08 12:02 UTC
+Generated at: 2026-09-08 12:52 UTC
 
 ## Open items by slice
 
@@ -21,8 +21,6 @@ Generated at: 2026-09-08 12:02 UTC
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - **Slice 320** (1 open)
   - 320.3 — the same idiom, two values, in two shared components.
-- **Slice 326** (1 open)
-  - 326.3 — the dispatch region has grown +1,101 words in two days with no narrative left in it to cut. What is the answer when the region a wake must read grows because the RULES grew?
 - **Slice 327** (1 open)
   - 327.3 — the one instrument gap this grill could not close: nothing distinguishes a claim that was MEASURED from one that was read off the code, inside a slice whose other claims were measured.
 - **Slice 328** (1 open)
@@ -64,15 +62,17 @@ Generated at: 2026-09-08 12:02 UTC
 - **Slice 352** (2 open)
   - 352.1 — a missing `packages/core/dist` is reported as an application defect, in the exact words of a defect this repo has actually had.
   - 352.2 — the two KEPT columns have no recorded method either, and the machine gap they imply is not one machine gap.
+- **Slice 353** (1 open)
+  - 353.2 — `dispatch-region-words` is sampled by hand, under a convention the instrument does not use, and no sample records the commit it describes.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1664 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-09-08 09:54   ok
-  Objective     1 / 3 slice           since 2026-09-08 10:59   ok  [325]
+dispatch status — counter-triggered rules (1668 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-09-08 09:54   ok
+  Objective     2 / 3 slices          since 2026-09-08 10:59   ok  [325, 353]
   Optimize      0 wake-date(s) newer   since 2026-09-08 00:17   ok   [newest pair: dispatch-region-words; 140 sample(s), 8 of 47 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (39 of 47 name(s) have only one day and are not an input to a rule that compares two runs):
        dispatch-region-words       2d  2026-09-07 7298 words -> 2026-09-08 7492 words  +194
@@ -102,16 +102,16 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-08 07:46 · Meta · refusal · retiring bundle-gz-kb, and re-pointing it at the deterministic minified byte count — both offered by the Accept, both refused because the series is not noise-limited · refused · fee79dc0
-- 2026-09-08 07:46 · Meta · refusal · extending dispatch_status.py's rule-5 note a second time — 326.3 is open on the dispatch region's growth and the reader who needs this is recording, not dispatching · refused · fee79dc0
-- 2026-09-08 07:49 · Roadmap · plan · 348.1 filed — check:resume-slice-ids reports a backticked kB figure as a slice id and files it under 'normally archived', the one bucket that cannot verify its own claim; no shape fix exists because 15.10 is a well-formed id for the still-open Slice 15 · triaged · fee79dc0
-- 2026-09-08 08:46 · Continue · build · 325.1 — refuse a gate over docs-page `npm run` citations: 1 of 5 is a command this repo owns, and the obvious gate reports 5 of 5 by name collision · refused · f4da2fe8
 - 2026-09-08 08:46 · Meta · refusal · the item's own 4-on-2 base rate — it is the parent commit's reading; the true census at the commit that wrote it is 5 on 3 · refused · f4da2fe8
 - 2026-09-08 08:50 · Roadmap · plan · Slice 349 filed — rule 3's text says slices CLOSED, its counter means slices NAMED by a building row; 258 named, 12 (4.7%) still open, 1 of 3 in the live arming set · triaged · 074c3da2
 - 2026-09-08 09:54 · Standardize · sweep · Slice 350 — Standardize sweep 4 of 4 lanes, all clean (0 dead attrs of 1,365 / 11 dead declarations on 9 pages = 345's exact refusal set, page for page; css-repeats 74/242/230/8 a 6th time; 15 flagged prose pages all inside the pinned 16-set; no accumulate-class change, and CLAUDE.md's 167.1 reopen condition executed — 7 of 16 sections, no eighth). The finding is the dispatch itself: rule 2 counts Continue ROUNDS while lanes 1-3 measure ARTEFACTS, and this window touched zero lane inputs — 14 of 138 windows (10.1%) over the whole log, 13 (9.4%) once the instruments are included, reconciled at 1,994 = 1,994 and discriminating on 124. Filed as 350.1, not decided; no gate, because classifying this window needed the diff read · landed · 6996a39f
 - 2026-09-08 10:59 · Objective · grill · Slice 351 — grill of 324/325/347/350: 63 of 65 assertions reproduce to the digit; every verdict survives. Finding: 350.1's base-rate predicate windows as a..b, so a sweep's OWN conversions count as lane input it had to read — 20/139 (14.4%) on a..b^ against the published 15/139 (10.8%), disagreeing on 5 windows including the one 350 names in prose. And 350.1's 'this commit does not move them' is false of the wake: its own record_iteration row added a no-input window, 138/14 -> 139/15. Filed 351.1; both amended into 350.1 per 236.2. · landed · 0ad6e903
 - 2026-09-08 12:02 · Continue · build · 325.2 — the published Initial render column WITHDRAWN: its method is unrecoverable across four independent history searches, and select-all reconciling at ~1x while render reads 4.2x/11.9x/7.3x is what shows a method gap rather than a machine gap · landed · 3d2816a2
 - 2026-09-08 12:02 · Meta · refusal · the Accept's third branch — a shape-only column kept undefined — refused, because the shape is not checkable without the window and the one probe the page points at produces a different one · refused · 3d2816a2
+- 2026-09-08 12:52 · Continue · build · 353.1 — 326.3 answered: the dispatch region has two kinds of growth (a rule changing vs a GENERATOR section) and the whole-region ratio cannot tell them apart; report_loop_prose.py now prints per-section body deltas since the last commit that REDUCED the region, red-proved by injection after the first draft's residual reconciliation passed it, and reproducing 339.1's published series 3 of 3 and its deltas 5 of 5 · landed · 1310b81a
+- 2026-09-08 12:52 · Meta · refusal · a per-rule word ceiling for the dispatch region — a ceiling low enough to bind fails the sections 326.2 attributed to rules that changed, one above 980 binds nothing, and 'the decision content is short' is semantic (94.11) · refused · 1310b81a
+- 2026-09-08 12:52 · Meta · refusal · a rules-file/rationale-file split of Step 2 — the repo's one precedent (169.3) moved RESUME.md's Step-0 read 3,150 -> 3,349 the same day and 9,310 at HEAD, 2.96x, because Step 0 names both files · refused · 1310b81a
+- 2026-09-08 12:52 · Meta · refusal · cutting the dispatch region this wake — 274.2's and 339.1's cuts between them measure that a cut without a mechanism holds about 15 commits · refused · 1310b81a
 
 ## Sunset test
 

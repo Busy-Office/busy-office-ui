@@ -477,8 +477,13 @@ this one** — 308.1 (*"+877 is five new rules, Step 0c holds at 936"*) and 339.
        **What this does NOT claim.** It does not claim the region is too large,
        or that 7,548 is the right size, or that Step 0c should shrink. It
        measures where the growth is and hands the sweep the two branches; the
-       branch that applies to Step 0c is 339.1's, already written, and the next
-       lane-4 round will now see it named rather than having to derive it.
+       branch that applies to Step 0c is **`341.1`, open** — which measured the
+       identical series independently (`### Step 0c` .. `### Step 1` bounds
+       rather than generic section bounds, and the same 1,378 / 936 / 1,300 /
+       1,500 / 1,322 / 1,516), and found that the charter throttles only one of
+       the generator's two outputs. **Nothing here re-decides that**; what
+       changes is that the next lane-4 round is handed the section by name
+       instead of deriving it.
 
 2. [ ] **353.2 — `dispatch-region-words` is sampled by hand, under a convention
        the instrument does not use, and no sample records the commit it
