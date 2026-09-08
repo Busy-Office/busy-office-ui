@@ -1646,3 +1646,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-08 00:53 · Meta · refusal · a depth-aware declaration splitter — base rate 0 of 30,483 style attributes in dist carry a ';' inside a value, so it distinguishes nothing today (94.11) · refused · cdfcb129
 - 2026-09-08 00:53 · Meta · refusal · fixing the 52 dead declarations inside this round — it mixes an instrument change with a corpus change and needs per-site judgement; filed as 342.1 · refused · cdfcb129
 - 2026-09-08 00:53 · Meta · refusal · a thirteenth archive sweep — closed-history share 33.1%, below every measured trigger (55.1%, 56.7%, and the 40.6% at which 279.3 declined); sweeping would pre-empt the open owner call 249.12 · refused · cdfcb129
+- 2026-09-08 02:49 · Continue · build · 322.3 — whitespace-normalised phrase-counts over the roadmap corpus · refused · a5c2ef0a
+- 2026-09-08 02:49 · Meta · refusal · a shared normaliser in scripts/loops/ — base rate 1 of 14, and the caller count is zero · refused · a5c2ef0a

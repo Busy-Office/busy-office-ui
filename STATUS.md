@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-08 00:53 UTC
+Generated at: 2026-09-08 02:49 UTC
 
 ## Open items by slice
 
@@ -21,8 +21,6 @@ Generated at: 2026-09-08 00:53 UTC
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - **Slice 320** (1 open)
   - 320.3 — the same idiom, two values, in two shared components.
-- **Slice 322** (1 open)
-  - 322.3 — should a phrase-count over `ROADMAP.md` / `ROADMAP-archive.md` be taken whitespace-normalised by default?
 - **Slice 323** (1 open)
   - 323.1 — the script's existing base-rate command, the one quoted above `metric_samples`, is an as-of-DATE replay and is now known to be blind to states that live less than a day.
 - **Slice 324** (2 open)
@@ -67,11 +65,11 @@ Generated at: 2026-09-08 00:53 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1640 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-09-07 21:52   ok
-  Objective     1 / 3 slice           since 2026-09-08 00:17   ok  [320]
-  Optimize      0 wake-date(s) newer   since 2026-09-08 00:17   ok   [newest pair: dispatch-region-words; 138 sample(s), 8 of 46 name(s) paired across days]
-     rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (38 of 46 name(s) have only one day and are not an input to a rule that compares two runs):
+dispatch status — counter-triggered rules (1642 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-09-07 21:52   ok
+  Objective     2 / 3 slices          since 2026-09-08 00:17   ok  [320, 322]
+  Optimize      0 wake-date(s) newer   since 2026-09-08 00:17   ok   [newest pair: dispatch-region-words; 139 sample(s), 8 of 47 name(s) paired across days]
+     rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (39 of 47 name(s) have only one day and are not an input to a rule that compares two runs):
        dispatch-region-words       2d  2026-09-07 7298 words -> 2026-09-08 7492 words  +194
        claims                      4d  2026-09-06 169 count -> 2026-09-07 176 count  +7
        gates                       3d  2026-08-19 27 count -> 2026-09-07 55 count  +28
@@ -98,8 +96,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-07 21:52 · Standardize · sweep · Slice 339 — Standardize sweep 4 of 4 lanes: lanes 1-3 clean (0 dead of 1,365 attrs; css-repeats 74/242/230/8 a 5th time; 15 flagged prose pages all inside the pinned 16-set). Lane 4's finding is a THIRD case 308.1's fork does not name: Step 0c held FLAT at 936 across 15 commits after 274.2's cut, then two collision write-ups took it to 1,500 — past its pre-cut 1,378. The cut held; the charter behind it was never executed. Applied the charter (forensics to LOOPS-archive.md, instruction inline) rather than cutting again; 1,322 net, and the first attempt moving only 13 words is recorded · landed · f9e0f17d
-- 2026-09-07 23:29 · Continue · build · 319.3 — check:target-size cannot see a named pixel size (red-proved); growth refused on cost+blindness, six pixel claims moved to check:claims · landed · 0d8cc85f
 - 2026-09-07 23:29 · Meta · refusal · growing check:target-size's page list 7 -> 14: +86% CI time, identical exempted set, and the gate's predicate cannot see a pixel claim at all · refused · 0d8cc85f
 - 2026-09-08 00:17 · Meta · collision · collision 5 recorded per 274.2's charter — both dispatchers ran rule 4 on 319.3, same verdict, same slice number; loser discarded after all 17 gates green · logged · aac39366
 - 2026-09-08 00:17 · Meta · refusal · re-running the rule-4 dispatch on 319.3 — the winner's analysis strictly dominated, so the loser's output was checked and discarded · refused · aac39366
@@ -108,6 +104,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-08 00:53 · Meta · refusal · a depth-aware declaration splitter — base rate 0 of 30,483 style attributes in dist carry a ';' inside a value, so it distinguishes nothing today (94.11) · refused · cdfcb129
 - 2026-09-08 00:53 · Meta · refusal · fixing the 52 dead declarations inside this round — it mixes an instrument change with a corpus change and needs per-site judgement; filed as 342.1 · refused · cdfcb129
 - 2026-09-08 00:53 · Meta · refusal · a thirteenth archive sweep — closed-history share 33.1%, below every measured trigger (55.1%, 56.7%, and the 40.6% at which 279.3 declined); sweeping would pre-empt the open owner call 249.12 · refused · cdfcb129
+- 2026-09-08 02:49 · Continue · build · 322.3 — whitespace-normalised phrase-counts over the roadmap corpus · refused · a5c2ef0a
+- 2026-09-08 02:49 · Meta · refusal · a shared normaliser in scripts/loops/ — base rate 1 of 14, and the caller count is zero · refused · a5c2ef0a
 
 ## Sunset test
 
