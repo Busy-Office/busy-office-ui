@@ -980,14 +980,12 @@ surfaced more:
    *what was cut came back* — which is a different state from *new rules landed
    where nothing was cut*, and the two want opposite answers. Both produce the
    same rising number, and three consecutive sweeps described the region from
-   that number alone. Split the region on its own headings at each revision
-   since the last cut and diff the sections before concluding:
-
-   ```
-   # per-section body words of the dispatch region at one revision
-   git show <rev>:LOOPS.md | awk '/^## Playbooks/{exit} {print}'
-   #   then split on ^#{2,4} and on ^[0-9]+\. \*\* (the rules), and sum each
-   ```
+   that number alone. **The block now prints that attribution itself** (roadmap
+   353.1, 2026-09-08) — per-section body words and their delta since the last
+   commit that REDUCED the region, so read those lines, not the ratio, before
+   concluding. It was a hand-rolled `awk … | split on ^#{2,4}` recipe here for
+   one day; the recipe is gone because a rule a wake has to remember to run is
+   the thing this playbook keeps paying for.
 
    - **The section that was cut regrew** → the fold did not hold, and another
      cut is the answer.
@@ -1011,7 +1009,11 @@ surfaced more:
    per-section body split does not. On 2026-09-07 they differed by a constant
    **56** at all eight revisions checked, so the deltas agree exactly and the
    totals do not — quoting one against the other invents a delta that is not
-   there.
+   there. **The block prints both and asserts `body + headings = region`**
+   (353.1), counting the headings from the text rather than as
+   `region − body`, which is a residual that agrees with itself. The one
+   reading still taken by hand under the other convention is the
+   `dispatch-region-words` metric — roadmap `353.2`.
 2. For a wide sweep, `Workflow` fan-out — one agent per component, report drift.
 3. Consolidate to the shared pattern; never widen public API to do it.
 4. **Round check** — gates must stay green (stylelint naming is the enforcer);

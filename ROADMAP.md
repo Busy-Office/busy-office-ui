@@ -320,6 +320,185 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 353 — `326.3` answered: the question has no single answer because the region has two KINDS of growth, and the whole-region ratio that raised it cannot tell them apart — 73.5% of the growth since the item was filed is one generator section, and every one of the eight rules is flat (2026-09-08)
+
+**Dispatched by rule 4**, cloud wake, on the oldest still-open item no other
+kind of block covers. Every open item older than `326.3` was re-read in the file
+rather than carried from the hand-off: Slice 15, `112.3`, `112.4`, `249.7`
+(*"still waiting on 249.10"*, itself an OWNER CALL), `249.10`-`249.13`, `273.2`,
+`296.3` owner-blocked; `320.3` browser-blocked in the screenshot sense, which
+its own Accept says in as many words.
+
+### The premise was re-measured first, and it has moved off the item
+
+`326.3` states the region at **6,759 words**. At `HEAD` it reads **7,548**
+(7,492 body + 56 heading words), **+789** since the item was filed at
+`e1f5a12f`. The commands are the shipped instrument, so they re-run:
+
+```
+python3 scripts/loops/report_loop_prose.py     # the by-region block, and now per section
+```
+
+| section | at `e1f5a12f` | at `HEAD` | delta |
+|---|---|---|---|
+| `### Step 0c — …collisions are ACCEPTED` | 936 | **1,516** | **+580** |
+| `### Step 1 — Triage new input` | 671 | 880 | +209 |
+| all 14 other sections, the **eight rules included** | — | — | **0** |
+
+**73.5% of the growth is one section and 26.5% is one other; nothing else moved
+by a word.** So the item's own framing — *the region grows because the RULES
+grew* — described `e1f5a12f`, where 326.2 measured it correctly, and does not
+describe `HEAD`. That is not a correction to 326.2; it is the thing 326.3 was
+filed to notice, arriving one day later in a different section.
+
+### The answer: two kinds of growth, one number, and the number cannot separate them
+
+- **A rule that changed** — rule 3 gaining 279.4's Polish amendment, rule 5
+  gaining the comparable-set and `SKEW` blocks. 326.2 attributed the four
+  2026-09-07 risers this way and refused a cut on it. **Accepted**: this is
+  instruction, and cutting it removes what a wake executes.
+- **A generator section** — 339.1's term: a recurring event, each instance of
+  which writes a narrative inline. Step 0c is the worked case, and its series
+  is the argument:
+
+  ```
+  aa550d2c  1,378   before 274.2's cut
+  8848ed55    936   274.2 folds the collision forensics into LOOPS-archive.md
+  86f034ce  1,500   collisions 3 and 4 written up in full
+  f9e0f17d  1,322   339.1 applies the charter by hand
+  299f7063  1,516   collision 5 written up in full   ← 138 ABOVE the pre-cut size
+  ```
+
+  Two cuts and a hand-applied charter in four days, and the section is now
+  **larger than before either**. The charter's own sentence — *"A new collision
+  adds a LINE here and its forensics to `LOOPS-archive.md`"* — sits inside the
+  section that was growing while it was being written.
+
+**Neither kind is a defect, and that is the point.** They want opposite answers,
+they produce the same rising number, and the block a sweep reads printed only
+the number.
+
+### Both structural candidates the item named are REFUSED, each on a measurement
+
+**A per-rule word ceiling — refused on base rate (94.11).** The eight Step-2
+rules read **9 / 119 / 975 / 980 / 585 / 631 / 226 / 190** body words at `HEAD`.
+A ceiling low enough to constrain the largest fails rules 3 and 4 at once, and
+one set anywhere below 585 fails 5 and 6 as well — precisely the four sections
+326.2 attributed to *rules that changed*, so it forces the cut 326.2 refused.
+A ceiling above 980 binds nothing today, and the first thing to cross it would
+be Step 0c at **1,516**, which is not a rule at all. And *"the decision content
+is short"* is semantic: a ceiling counts bytes, not what they carry.
+
+**A rules-file / rationale-file split — refused on this repo's only precedent,
+measured rather than argued.**
+
+```
+git log --diff-filter=A --format='%H %cs' -- .roundtable/ENVIRONMENT.md   # f52f2597 2026-08-28
+git show <rev>:.roundtable/RESUME.md | wc -w      # and ENVIRONMENT.md, at each rev
+```
+
+| | `RESUME.md` | `ENVIRONMENT.md` | Step-0 total |
+|---|---|---|---|
+| commit before the split (`c6eeb667`) | 3,150 | — | **3,150** |
+| the split itself (`f52f2597`) | 1,683 | 1,666 | **3,349** |
+| `HEAD` | 2,728 | 6,582 | **9,310** |
+
+The split cost **+199 words the same day** (a pointer and a charter at both
+ends) and the pair is now **2.96x** the pre-split file, the moved half at
+**17 up / last cut 2026-08-30**. Step 0 names both files, so a wake reads both:
+**the split moved the number and not the read.** That is 274.1's refusal in a
+second instance, and 167.2's *"a pointer is read less than a paragraph"* is why
+the only version that would reduce the read — telling the dispatcher not to open
+the rationale half — is deletion wearing a filename.
+
+### What the whole-region verdict has actually been saying
+
+Over all **72** revisions of `LOOPS.md` since the 2026-08-20 base, the block's
+verdict reads `FASTER` on **56** and `SLOWER` on **16** — and the last `SLOWER`
+is `69cadcbb`, the revision before the share stepped 33.0% → 38.6% on
+2026-08-28. The block landed at `aa550d2c` on 2026-09-05, **56 revisions and 12
+Standardize sweeps after that step**, so every reading it has ever produced was
+already fixed. It is not a dead detector — the share does move: 34.8% at the
+base, 27.3% at its floor, 46.9% at its peak, 42.0% now. But it has not
+discriminated once in its own lifetime, and **both times a sweep reached a
+correct verdict on the region it came from a per-section reading that overturned
+this one** — 308.1 (*"+877 is five new rules, Step 0c holds at 936"*) and 339.1
+(*"the per-revision series says that verdict is wrong"*).
+
+1. [x] **353.1 — the attribution 308.1 mandates is now the instrument's output,
+       not a recipe a wake re-derives.** `report_loop_prose.py`'s by-region
+       block gains per-section **body-word deltas since the last commit that
+       REDUCED the region**, and `last_region_cut()` finds that anchor from the
+       tip backwards, so no window can hide or manufacture it. At `HEAD` it
+       prints **one line — Step 0c, +194** — where the ratio above it prints
+       `FASTER`, as it has on every reading in its lifetime. Lane 4's hand-rolled
+       `awk … | split on ^#{2,4}` recipe is replaced by the block that runs it.
+
+       **The reconciliation's first draft could not fail, and the injection is
+       what showed it.** It took the heading total as `region − body`, a
+       residual that agrees with itself by construction: under an injection that
+       drops a section from the split it printed `7,302 + 246 = 7,548` and
+       **passed**. `dispatch_heading_words()` now counts the heading lines from
+       the text, independently; the same injection then prints
+       `7,302 + 56 = 7,358`, names the gap and exits **1**. The injection was
+       confirmed to have landed before either result was believed — 16 sections
+       became 15, body 7,492 → 7,302.
+
+       **Validated against an independent source as well as by injection**,
+       because an instrument's first output is not evidence. 339.1 published a
+       Step 0c series derived by a different wake with a different `awk` method:
+       **936 / 1,300 / 1,500** at `8848ed55` / `534b097a` / `86f034ce`. This
+       parser reproduces **3 of 3 exactly**, and 339.1's five per-section deltas
+       reproduce **5 of 5** — Step 0c +564, Step 1 +580, Step 2 +527 (rule 3's
+       +303 plus rule 5's +224), Step 0 +151, and the loops table's +52 net,
+       which the block reports as an explicit NEW/GONE pair because *eight*
+       became *nine* in the heading.
+
+       **Discrimination on real data, not only on fixtures:** over
+       `8848ed55 → 632bfc46` the block names **rule 3, +303, and nothing else** —
+       a different section on a different input, which is the property a
+       per-section report has to have and the whole-region ratio does not.
+
+       **Six new paired self-test cases** (19 total). The load-bearing pair is a
+       `N. **` line inside Step 2, which is a section, against the identical
+       line inside Step 0c, which is not — Step 0c carries a numbered list of
+       collisions, and splitting on it would attribute the section's growth to
+       whichever incident was written last. The section-dropping injection turns
+       **6 of 6** of them red.
+
+       - *Accept was*: a recorded decision or a recorded refusal with its
+         reason, with "cut something" not the default. **Decided**: growth that
+         is a rule changing is accepted; growth from a generator is the
+         charter's business; and the instrument now says which is which, so the
+         question is answered by a reading rather than re-argued every sweep.
+         **No cut was made** — 274.2's and 339.1's between them are the evidence
+         that a cut without a mechanism buys about fifteen commits.
+
+       **What this does NOT claim.** It does not claim the region is too large,
+       or that 7,548 is the right size, or that Step 0c should shrink. It
+       measures where the growth is and hands the sweep the two branches; the
+       branch that applies to Step 0c is 339.1's, already written, and the next
+       lane-4 round will now see it named rather than having to derive it.
+
+2. [ ] **353.2 — `dispatch-region-words` is sampled by hand, under a convention
+       the instrument does not use, and no sample records the commit it
+       describes.** 339.1's own text publishes the pair **7,476 → 7,298** while
+       `report_loop_prose.py` prints **7,532 → 7,354** for those two commits —
+       the constant 56, which lane 4 already documents so a wake comparing
+       readings is not fooled. The part that is not documented is that the
+       *metric* is the hand-rolled side: `loop-metrics.jsonl` records only
+       `{ts, name, value, unit}`, so the newest sample (**7,492**, 2026-09-08
+       00:17) cannot be attributed to a commit without re-deriving it, which is
+       exactly ENVIRONMENT.md's *"a figure with no revision beside it is read as
+       current"*. Rule 5 reads this name.
+       - **Accept** — the property, not a predicted fix: the sample rule 5 reads
+         is traceable to the command and the revision that produced it. Either
+         this name's value comes from the instrument, **or** a recorded reason it
+         should not — measuring that the hand-rolled convention is the one rule 5
+         wants, and writing that down, closes it just as well. Finding that the
+         two conventions should stay separate is a satisfying outcome, not an
+         off-plan one.
+
 ## Slice 352 — `325.2` closed by WITHDRAWAL: the *Initial render* column's method is unrecoverable, and the measurement that decides it needs no knowledge of the missing machine — a machine gap is a roughly CONSTANT multiple, and this column's is 4.2x / 11.9x / 7.3x while its own neighbour's is 0.93x / 0.72x / 1.19x (2026-09-08)
 
 **Dispatched by rule 4**, cloud wake, on the oldest still-open item no other
@@ -3959,7 +4138,18 @@ three — is why the count is stated: **4 of 4**.
        here**, and the structural question is filed as `326.3`. First execution
        of 308.1's attribution step since it landed.
 
-3. [ ] **326.3 — the dispatch region has grown +1,101 words in two days with no
+3. [x] **326.3 — ANSWERED 2026-09-08 (cloud wake, Slice 353): the question has
+       no single answer, because the region has two kinds of growth and the
+       whole-region ratio that raised it cannot tell them apart.** Growth that
+       is a rule changing is accepted; growth from a *generator* section is its
+       charter's business; both structural candidates below are refused on
+       measurement, and `report_loop_prose.py` now prints the per-section
+       attribution that says which is which. At `HEAD` **73.5%** of the growth
+       since this item was filed is Step 0c and **every one of the eight rules
+       is flat** — so this item's own premise described `e1f5a12f` and not the
+       tree that closed it. Original item text kept verbatim from here on.
+
+       **the dispatch region has grown +1,101 words in two days with no
        narrative left in it to cut. What is the answer when the region a wake
        must read grows because the RULES grew?**
 

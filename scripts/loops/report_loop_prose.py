@@ -174,6 +174,112 @@ REGION_END = re.compile(r"^5\. \*\*")
 # known direction beats a boundary that pretends to be exact.
 REGION_SPLIT = re.compile(r"^## Playbooks\b")
 
+# THE WHOLE-REGION VERDICT ABOVE HAS NEVER READ ANYTHING BUT `FASTER` SINCE IT
+# WAS WRITTEN, AND TWICE THE ANSWER IT POINTED AT WAS WRONG (roadmap 326.3).
+# Measured over every revision of LOOPS.md since the 2026-08-20 base: 56 of 72
+# read FASTER and every one of the 16 SLOWER readings predates 2026-08-28, so
+# the block landed (`aa550d2c`, 2026-09-05) into a stretch where its verdict was
+# already pinned. It is not a dead detector — the share does move, 34.8% at the
+# base, 27.3% at its floor, 46.9% at its peak, 42.0% at HEAD — but a wake reads
+# it as a finding about the LAST commit and it is a ratio against a fixed base.
+#
+# Both times a sweep acted correctly on the region, the action came from a
+# PER-SECTION reading a wake derived by hand, and both times that reading
+# overturned this verdict: 308.1 (`+877 is five new rules, Step 0c holds at
+# 936`) and 339.1 (`the per-revision series says that verdict is wrong`). So the
+# attribution 308.1 mandates is produced here instead of re-derived every sweep.
+#
+# BODY WORDS, HEADINGS EXCLUDED — 339.1's convention, and the reason the
+# convention is named rather than chosen freshly: the `dispatch-region-words`
+# metric in `loop-metrics.jsonl` was recorded by hand with it (7,298 at
+# `f9e0f17d`, 7,492 at `299f7063`) while this script printed 7,354 and 7,548 for
+# the same two commits. One metric name, two live conventions, differing by
+# exactly the 56 words of the section headings, and nothing reconciled them. The
+# block below prints `body + headings = region` so the two can never drift
+# silently again, and refuses to print if they do not add up.
+SECTION_HEAD = re.compile(r"^#{2,4} ")
+STEP2_RULE = re.compile(r"^[0-9]+\. \*\*")
+STEP2_HEAD = "### Step 2"
+
+
+def dispatch_sections(text):
+    """[(name, body_words)] for the dispatch region, or (None, why).
+
+    A section is a `##`-`####` heading, plus — inside Step 2 only — each
+    top-level `N. **` rule, because the rules are the units 308.1's attribution
+    step names. The Step-2 restriction is load-bearing rather than tidy: Step 0c
+    carries a numbered list of collisions in the same shape, and splitting on it
+    would attribute a section's growth to whichever incident happened to be
+    written last.
+
+    @exact — `str.split()` on lines between two anchors, and a `<` on the
+    result. The names are read from the file rather than recognised.
+    """
+    lines = text.split("\n")
+    at = next((i for i, l in enumerate(lines) if REGION_SPLIT.match(l)), None)
+    if at is None:
+        return None, "no `## Playbooks` heading — the region anchor moved"
+    out, name, buf, in_step2 = [], "(preamble)", [], False
+    for line in lines[:at]:
+        is_head = bool(SECTION_HEAD.match(line))
+        if is_head or (in_step2 and STEP2_RULE.match(line)):
+            out.append((name, sum(len(x.split()) for x in buf)))
+            name, buf = line.strip(), ([] if is_head else [line])
+            if is_head:
+                in_step2 = line.startswith(STEP2_HEAD)
+        else:
+            buf.append(line)
+    out.append((name, sum(len(x.split()) for x in buf)))
+    return out, None
+
+
+def dispatch_heading_words(text):
+    """Words in the dispatch region's own `##`-`####` heading lines, counted
+    straight from the text.
+
+    Derived INDEPENDENTLY of `dispatch_sections`, and that is the whole point:
+    the first draft of the reconciliation below took this as
+    `region - body`, which is self-consistent by construction. Red-proved by
+    dropping a section from the split — the residual form reported
+    `7,302 + 246 = 7,548` and passed; this form goes red.
+    """
+    lines = text.split("\n")
+    at = next((i for i, l in enumerate(lines) if REGION_SPLIT.match(l)), None)
+    if at is None:
+        return None
+    return sum(len(l.split()) for l in lines[:at] if SECTION_HEAD.match(l))
+
+
+_REGION_CACHE = {}
+
+
+def region_words_at(rev):
+    """Dispatch-region words at `rev` (headings included — `loops_regions`'s
+    convention, so this pairs with the row above), or None."""
+    if rev not in _REGION_CACHE:
+        t = text_at(rev, "LOOPS.md")
+        r = loops_regions(t)[0] if t is not None else None
+        _REGION_CACHE[rev] = r[0] if r else None
+    return _REGION_CACHE[rev]
+
+
+def last_region_cut():
+    """(sha, day) of the newest commit that REDUCED the dispatch region.
+
+    The anchor for the per-section block: a delta since the last cut is what
+    tells a sweep whether the previous cut held, which is the question 308.1's
+    three branches turn on. `(None, None)` when the region has never shrunk.
+    """
+    out = git("log", "--format=%x00%H %ad", "--date=format:%Y-%m-%d", "--", "LOOPS.md").stdout
+    recs = [r.strip().split()[:2] for r in out.split("\x00") if r.strip()]  # newest first
+    for (sha, day), (prev_sha, _) in zip(recs, recs[1:]):
+        cur, prev = region_words_at(sha), region_words_at(prev_sha)
+        if cur is None or prev is None:
+            return None, None
+        if cur < prev:
+            return sha, day
+    return None, None
+
 
 def dispatcher_md_paths(loops_text):
     """The .md files LOOPS.md's dispatcher region tells a wake to read.
@@ -327,6 +433,32 @@ SPLIT_SELF_TEST = [
     ("a b\n### Playbooks stuff\nc\n## Playbooks\nd\n", (6, 3)),
 ]
 
+# The SECTION split gets its own paired cases, built the same way: every case
+# has a near-twin that must land differently, so a parser that stopped
+# discriminating fails at least one. The pair that matters most is the last
+# two — a numbered rule inside Step 2 is a section, the identical line inside
+# Step 0c is not.
+SECTION_SELF_TEST = [
+    # (text, expected [(name, body_words)])
+    ("alpha beta\n## One\nx y z\n## Playbooks\nignored words here\n",
+     [("(preamble)", 2), ("## One", 3)]),
+    # near-twin: the heading's OWN words are body words of nothing
+    ("## One two three four\nx\n## Playbooks\ny\n",
+     [("(preamble)", 0), ("## One two three four", 1)]),
+    # a `####` heading splits; a `#####` one does not
+    ("## A\np\n#### B\nq r\n## Playbooks\nz\n",
+     [("(preamble)", 0), ("## A", 1), ("#### B", 2)]),
+    ("## A\np\n##### B\nq r\n## Playbooks\nz\n",
+     [("(preamble)", 0), ("## A", 5)]),   # 1 + the 2-word `#####` line + 2
+    # inside Step 2 a top-level rule is its own section...
+    ("### Step 2 — Decide\nlead\n1. **rule one** a\n2. **rule two** b c\n## Playbooks\nz\n",
+     [("(preamble)", 0), ("### Step 2 — Decide", 1),
+      ("1. **rule one** a", 4), ("2. **rule two** b c", 5)]),
+    # ...and its near-twin: the identical line under another heading is NOT
+    ("### Step 0c — Collisions\nlead\n1. **rule one** a\n2. **rule two** b c\n## Playbooks\nz\n",
+     [("(preamble)", 0), ("### Step 0c — Collisions", 10)]),
+]
+
 
 def self_test():
     bad = []
@@ -349,12 +481,22 @@ def self_test():
     if got is not None or not why:
         bad.append("    a missing `## Playbooks` anchor returned a pair instead of a reason")
 
+    for text, expected in SECTION_SELF_TEST:
+        got, why = dispatch_sections(text)
+        if why or got != expected:
+            bad.append(f"    sections {text.splitlines()[0]!r}\n      expected {expected}, "
+                       f"got {got if got is not None else why}")
+    got, why = dispatch_sections("no anchor here at all\n")
+    if got is not None or not why:
+        bad.append("    a missing `## Playbooks` anchor returned sections instead of a reason")
+
     if bad:
         print("report_loop_prose --self-test FAILED:", file=sys.stderr)
         print("\n".join(bad), file=sys.stderr)
         return 1
     print(f"report_loop_prose --self-test: "
-          f"{len(SELF_TEST) + len(SPLIT_SELF_TEST) + 2} cases classified correctly")
+          f"{len(SELF_TEST) + len(SPLIT_SELF_TEST) + len(SECTION_SELF_TEST) + 3} "
+          f"cases classified correctly")
     return 0
 
 
@@ -457,6 +599,50 @@ def main():
         print(f"    -> the dispatch region grew {verdict}.")
         print("    `## Operating rules` and the dispatched playbook sit BELOW the anchor,\n"
               "    so the dispatch figure is a LOWER bound on what a wake reads.")
+
+        # PER SECTION, SINCE THE LAST CUT — the ratio above is a growth rate
+        # against a fixed base and cannot say WHERE the region grew, which is
+        # the only thing 308.1's branches turn on. See the SECTION_HEAD comment.
+        cut_sha, cut_day = last_region_cut()
+        now_secs, s_why = dispatch_sections(text_at("HEAD", "LOOPS.md"))
+        was_secs, w_why = ((None, "the region has never been cut") if cut_sha is None
+                           else dispatch_sections(text_at(cut_sha, "LOOPS.md")))
+        if s_why or w_why:
+            print(f"    NO PER-SECTION ATTRIBUTION — {s_why or w_why}")
+            if s_why:
+                fatal.append(f"LOOPS.md section split unavailable — {s_why}")
+        else:
+            was = dict(was_secs)
+            body = sum(w for _, w in now_secs)
+            heads = dispatch_heading_words(text_at("HEAD", "LOOPS.md"))
+            print(f"\n    per-section BODY words (headings excluded — 339.1's convention),\n"
+                  f"    since the last commit that REDUCED the region ({cut_sha[:8]}, {cut_day}):")
+            moved = 0
+            for name, w in now_secs:
+                d = w - was.get(name, 0)
+                if d == 0:
+                    continue
+                moved += 1
+                tag = " NEW" if name not in was else ""
+                print(f"      {w:6,} {d:+6}{tag:4}  {name[:64]}")
+            for name in (n for n, _ in was_secs if n not in dict(now_secs)):
+                moved += 1
+                print(f"      {'—':>6} {-was[name]:+6} GONE  {name[:64]}")
+            net = body - sum(w for _, w in was_secs)
+            print(f"    -> {moved} of {len(now_secs)} section(s) moved, {net:+,} body words net."
+                  + ("  Nothing moved." if not moved else ""))
+            # RECONCILE against the region figure printed above, and refuse
+            # rather than print a total that does not add up (CLAUDE.md: assert
+            # the count, not just the content). The gap IS the headings, and it
+            # is printed because two live conventions for this number differed
+            # by exactly it and nothing caught them.
+            print(f"       body {body:,} + {heads:,} heading word(s) = {body + heads:,}, "
+                  f"the dispatch figure above.")
+            if body + heads != now_r[0]:
+                fatal.append(
+                    f"per-section body words ({body:,}) + headings ({heads:,}) != the "
+                    f"dispatch region ({now_r[0]:,}) — the section split lost content"
+                )
 
     # THE OTHER DIRECTION (179.1): a file the dispatcher is told to read that
     # this list does not measure. See the header for why this is the half that
