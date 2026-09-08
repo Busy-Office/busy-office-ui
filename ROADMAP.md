@@ -591,6 +591,17 @@ previous hand-off predicted: *"closing anything in a slice other than 324 or
          would have read historically under the other reading. A change that
          moves the live count must say what it moves it to and why that is
          right, not merely that it is now consistent.
+       - **REPRODUCED UNPROMPTED on the very next wake (Slice 350,
+         2026-09-08).** Recording that sweep took the counter to
+         `Objective 4 / 3 OVERDUE [324, 325, 347, **350**]` — and Slice 350's
+         only item, `350.1`, is **open**. So the arming set is now **2 of 4**
+         open (325 and 350) where this item measured 1 of 3, and the newest
+         member was armed by the row that filed an open question. Nothing was
+         staged to produce it: the sweep was dispatched by rule 2 and read the
+         counter afterwards, which is `LOOPS.md`'s standing instruction. It
+         does not decide the item — a *touched* reading would count 350 too,
+         and correctly — but it does show the divergence is live and growing,
+         not a historical artefact of the 4.7% base rate.
 
 ## Slice 348 — `check:resume-slice-ids` reports a backticked DECIMAL FIGURE as a slice id, and files it under a heading that asserts an interpretation it cannot have earned (2026-09-08)
 
