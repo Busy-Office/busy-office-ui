@@ -118,7 +118,14 @@ recovered before it agreed — sections bound at **any** `^## ` heading,
 quoted phrase — after which it reproduces **53 of Slice 354's 54 figures**,
 four of them exact **id lists**. That is the discrimination control.
 
-## This wake's own two instrument errors — both published
+## CI on this wake's push: BOTH RUNS GREEN
+
+`81fc42cbe8` — `CI` **success** 14:59:27Z, `Deploy docs to Pages` **success**
+14:57:31Z, roughly three minutes after the push. Read from the plain
+`?branch=main&per_page=6` listing with the sha matched in code, per
+`ENVIRONMENT.md` §6d.
+
+## This wake's own THREE instrument errors — all published
 
 - **`git rev-parse --short origin/main HEAD` exited 128** at the pre-commit
   collision check. `ENVIRONMENT.md` §1 documents this verbatim, *including* the
@@ -131,7 +138,20 @@ four of them exact **id lists**. That is the discrimination control.
   for the survivors. CLAUDE.md's removal rule, inside a grill about numbers
   that are right at one revision and wrong at another.
 
-Neither reached a published number.
+- **The CI poll filtered on a sha that does not exist**, and it cost 20
+  minutes. `ENVIRONMENT.md` §6d's two rules were both followed — the plain
+  listing, and a loop that emits on the empty case — but the sha itself was
+  *assembled*: `81fc42cb` (the new commit's prefix) concatenated with
+  `b1da20c7`'s tail. **The emit-on-empty branch is what contained it**: the loop
+  printed *"ZERO runs match this sha — not the same as still running"* forty
+  times rather than reporting a timeout, so the diagnosis took one command
+  instead of a false alarm. **§6d now carries a third rule** — take the full sha
+  from `git rev-parse HEAD`, never by extending a short one already on screen.
+
+None reached a published number. **Three in one wake is the base rate, not bad
+luck** — CLAUDE.md says an instrument's first output is not evidence, and this
+wake's own grill verdict rests on detectors that were checked before they were
+quoted.
 
 ## No metric was recorded this wake, and here is the reason for each candidate
 

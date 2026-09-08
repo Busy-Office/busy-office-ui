@@ -431,6 +431,20 @@ Two rules, both cheap:
   runs are still going"* are different states and a loop that only breaks on
   completion cannot tell them apart — CLAUDE.md's *could this detector go red on
   anything at all?* applied to a wait rather than to a gate.
+- **Take the full sha from `git rev-parse HEAD`, never by extending a short one
+  you already have on screen.** Both rules above were followed on 2026-09-08
+  (Slice 355) and the poll still matched nothing for 40 iterations, because the
+  sha it filtered on was *assembled*: the new commit's short prefix
+  `81fc42cb` concatenated with the **previous** commit's tail
+  (`b1da20c` **75c6baf0ac2882c1c18a618c33bd19083**), producing
+  `81fc42cb75c6…` against a real `81fc42cbe8b6…`. Two adjacent shas share a
+  screen, share nothing else, and the fabrication is invisible at a glance
+  because the prefix is right. **The emit-on-empty rule is what contained it** —
+  the loop printed *"ZERO runs match this sha — not the same as still running"*
+  forty times instead of reporting a timeout, so the diagnosis took one command
+  rather than a second false alarm to the owner. It still cost 20 minutes: the
+  runs had both finished `success` about three minutes after the push. So the
+  empty branch is the containment and `git rev-parse HEAD` is the fix.
 
 `updated_at` on the run is the completion time to read (`06:56:57Z → 07:00:16Z`
 here); §6's warning about it not ticking per step is about mid-flight polling,
