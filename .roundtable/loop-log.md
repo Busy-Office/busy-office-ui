@@ -1653,3 +1653,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-08 03:49 · Meta · refusal · restating timedelta(hours=8) inside the recorded snippet — a constant copied into prose is the drift observed_skew() exists to catch; it imports the module's own instead · refused · b1ce1263
 - 2026-09-08 04:59 · Standardize · sweep · 342.1 — lane 1 verdict per site: 41 dead declarations converted, 11 refused, re-run lands on the refusal set · landed · 161ede68
 - 2026-09-08 04:59 · Meta · refusal · PatternPreview / inline-size:100% / combobox listbox margin / state-patterns Demo literal / motion spinner / AppTile BOX height / zero spacing swatch — 11 dead declarations kept, each dead only in the docs container · refused · 161ede68
+- 2026-09-08 05:54 · Objective · grill · 322/342 — 20 of 22 reproduce; both defects recur what 322 filed: a number with no command, and a correction missed because the phrase wraps · logged · 6cfe380c
