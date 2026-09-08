@@ -3464,7 +3464,98 @@ rule 5 from firing once its input is honest.
          "all of them from the unit", the field is ceremony and the fix is a
          unit convention.
 
-2. [ ] **324.2 — `bundle-gz-kb` is the only metric rule 5 can act on, its
+2. [x] **324.2 — DONE. The definition is written where a wake recording a
+       sample reads it, and the item's own headline is refuted: the 0.3 kB band
+       is narrower than EVERY move rule 5 reads, by 3x to 11.3x.** Both of the
+       Accept's escape hatches — re-pointing the name at the deterministic
+       minified byte count, or retiring it — are **refused on the measurement**,
+       not preferred against. The series is not noise-limited.
+
+       **The measure-first step ran first, and it killed the item's own shrink
+       branch.** *"A series taken entirely at one offset has no cross-environment
+       problem at all, and that would shrink this item to one sentence."* It is
+       not one offset. `git blame --line-porcelain -- .roundtable/loop-metrics.jsonl`
+       (164.2's method) resolves all 140 lines, and the 11 `bundle-gz-kb`
+       samples are **9 at `+0800` and 2 at `+0000`** — the last two, 2026-09-03,
+       are the cloud lane. The series is genuinely cross-environment, so the
+       item had to be answered rather than shrunk.
+
+       **The headline premise does not reproduce under any pairing.** Rule 5
+       pairs the LAST reading of each distinct day (307.1), so the moves it
+       reads are the day-pair ones:
+
+       | pairing | moves | below the 0.3 kB band |
+       |---|---|---|
+       | **day-pair — what rule 5 actually reads** | +2.4, +1.2, +0.9, +3.4 kB | **0 of 4** (3.0x, 4.0x, 8.0x, 11.3x the band) |
+       | first-of-day | +2.6, +0.33, +1.67, +3.5 | 0 of 4 |
+       | sample-to-sample | ten moves | 5 of 10 |
+       | within-day only | six moves | 5 of 6 |
+
+       Nothing here is "three of four". The two readings that *are* mostly
+       sub-band are within-day and sample-to-sample noise — moves rule 5 never
+       reads. The likely origin of the wrong figure is reading one of those two
+       and reporting it as the day-pair count; the enumeration is in the wake's
+       transcript command, re-runnable against the jsonl.
+
+       **Cross-environment gzip drift measured for the first time here, and it
+       is UNDER 0.1 kB.** The repo has always asserted this drift exists — one
+       real CI failure, 2026-08-16 — and has never measured its magnitude, so
+       "the 0.3 kB cross-environment floor" in this item's own Accept was a
+       chosen band read back as a measurement. The reading:
+
+       - `a9403f42` (2026-08-29) was stamped `92 kB minified (15.0 kB gzipped)`
+         by a wake whose author-tz is `+0800`.
+       - The same tree rebuilt in a cloud container (`+0000`, node 22.22.2,
+         zlib 1.3.1) gives **93,785 minified bytes** and **15,334 gzip bytes =
+         14.975 kB**, printing the same `15.0`.
+       - **The minifier is not a confound**: every CSS toolchain package is
+         version-identical to that commit's own `package-lock.json` — cssnano
+         7.1.9, postcss 8.5.26, autoprefixer 10.5.4, postcss-nesting 13.0.2,
+         postcss-import 16.1.1, postcss-custom-media 11.0.6 — compared one by
+         one rather than assumed. gzip is the only variable left.
+       - **Stated as a BOUND, not a value.** The other environment's exact byte
+         count is unrecoverable; only the tenth-of-a-kB stamp survives. So the
+         claim is `|drift| < 0.1 kB` at **n = 1** — under a third of the band —
+         and explicitly not "drift is zero".
+
+       **A second thing fell out, and it is the part of the Accept that had no
+       obvious answer: WHICH ARTIFACT.** Two published figures for this exact
+       quantity disagree right now. `check:size` prints `15.10`; both READMEs
+       publish `15.0`. Neither is wrong — `stamp-readme.mjs` keeps an existing
+       in-tolerance string rather than re-stamping, precisely so a rebuild
+       elsewhere makes no no-op diff — but it means **the README lags the
+       artifact by up to the full 0.3 kB band, and lags it by 98 bytes today.**
+       A wake that recorded the README's number would be recording a stale
+       sample with no way to tell. That trap is now written down beside the
+       command that avoids it.
+
+       **Where it is written: `record_metric.py`'s docstring, and nowhere
+       else.** That is the file a wake recording a sample opens, which is
+       exactly what the Accept names. **`dispatch_status.py` was deliberately
+       NOT extended** — `326.3` is open on the dispatch region's growth
+       (+1,101 words in two days), and 324.1's note already stands there; a
+       second copy would grow the region this loop is currently worried about,
+       to serve a reader who is not recording anything.
+
+       **Why gzip stays.** The reason the Accept gave for keeping it — gzip is
+       what users download — is about the BUDGET, and that reason survives
+       intact: `check:size` gates `css/index.min.css` at 16.7 kB gz against
+       15.10 live and prints its tightest headroom in bytes every run. What
+       `bundle-gz-kb` lacks for rule 5 is not resolution, it is a
+       **denominator**, which is `324.1` immediately above and already settled
+       there. Switching the name to minified bytes would trade the
+       consumer-facing meaning for a precision the measurement above says was
+       never the problem.
+
+       **Not verified visually, and none is owed:** the diff is `ROADMAP.md`,
+       `scripts/loops/record_metric.py` (a docstring) and the hand-off. No CSS,
+       no docs page and no component changed, so nothing rendered can move.
+       `record_metric.py` is a CLI, not a build step or a gate.
+
+       *Original text, kept verbatim per 236.2 — the Accept below is what this
+       item was judged against:*
+
+       **`bundle-gz-kb` is the only metric rule 5 can act on, its
        generator exists, and its noise floor is wider than three of its four
        historical moves.** The "no generator" premise died in `307.1` above:
        `check:size` prints `css/index.min.css … 15.10 kB gz` and
