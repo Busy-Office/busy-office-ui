@@ -320,6 +320,135 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 343 — 322.3: a whitespace-normalising helper is REFUSED on the base rate and on a caller count of zero — 1 of 14 published phrase-counts changes, and the two consumers that could have needed it were already safe (2026-09-08)
+
+**Dispatched by rule 4** on `322.3`, the oldest still-open cloud-takeable item,
+cloud wake. Rule 1: no open P0 — `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md`
+reads **0** across the 32 open items. Step 1 read **both** intakes with
+`ENVIRONMENT.md` §8's controls in one run (`/issues?state=open` -> 200 len **1**,
+issue #2, `updated_at` unmoved at `2026-09-06T15:10:34Z` for a **ninth**
+consecutive hand-off; `/discussions` -> 200 len **0**; `/not-a-real-route` ->
+**404**) and triaged nothing: no new input, so Step 1 committed nothing. Rule 2
+`Standardize 2 / 4` did not match; rule 3 `Objective 1 / 3 [320]` did not match.
+Rules 5-8 not reached. Pre-commit `git fetch origin main` found `origin/main`
+unmoved at `dd69b3e5` — **no collision this wake**.
+
+### The answer: REFUSE, on three measurements rather than one
+
+322.3's Accept set the fork on the base rate — *if few change, a helper is
+ceremony and recording the refusal with the number is a satisfying outcome; if
+many do, ship one shared normaliser in `scripts/loops/` and name its callers.*
+Few change, and the second half of that sentence turns out to be the stronger
+refusal: **there are no callers to name.**
+
+**1 — the base rate. 1 of 14 re-derivable published phrase-counts changes, and
+it is the known defect the item was filed for.**
+
+**Read at `dd69b3e5`, the parent of this commit, and the revision is named
+because `327.2`'s effect fires here too**: writing the table below adds two
+fresh occurrences of its own lane-C phrase, so the same run against this commit
+reads **5 / 10** rather than 3 / 8. **The Δ is unchanged at +5 and so is every
+verdict** — but a wake re-running the command and getting 5 / 10 cannot
+otherwise tell a moved corpus from a mistake.
+
+| lane | line | ws | Δ | phrase |
+|---|---|---|---|---|
+| A recorded-command | 10 | 10 | +0 | `without folding` |
+| A recorded-command | 9 | 9 | +0 | `RECURRENCE HISTORY` |
+| A recorded-command | 7 | 7 | +0 | `closed slices carrying` |
+| A recorded-command | 1 | 1 | +0 | `5 of 6` |
+| B prose page-path | 18 / 10 / 8 / 7 / 4 / 3 / 3 / 37 / 11 | = | +0 | the nine page paths Slices 326/327/339 count |
+| C known defect | 3 | **8** | **+5** | `1,433 live inline declarations` |
+
+- **9 of the 14 count an identifier with no whitespace** — a page path — and
+  therefore *provably* cannot differ. Measured rather than asserted from the
+  property, which is why they are in the table.
+- **5 could differ; 1 does.** The four lane-A phrases are also 0-of-4 when
+  re-run at their own publishing revisions (`git blame` -> `83192cd1`,
+  `7e861867` x3), not only at `HEAD`.
+
+**2 — the caller count is zero, and that is what settles it.** Twenty files
+name the corpus; the ones that actually count over it are all safe already:
+
+- every other consumer is a **line-anchored structural parse**
+  (`generate_status.py`, `roadmap_scope.py`, the rule-1 P0 check — **41 of the
+  62** recorded grep sites at `dd69b3e5`; this slice's own dispatcher trace
+  makes it 42 of 63, same self-contamination as the table), where line-based
+  *is* the correct semantics, because it is counting lines;
+- `check-slice-refs.mjs` matches `/\broadmap\s+(\d{1,3}…)/gi` against
+  **whole-file text**, and `\s` spans a newline. It is not accidentally safe —
+  it demonstrably catches the **7 of 149** citations a per-line form misses
+  (`ROADMAP-archive.md` 66 -> 68, `LOOPS.md` 48 -> 53);
+- `report_reopen_conditions.py`'s needle is four **single words**
+  (`reopen|re-open|re-raise|revisit`), which cannot straddle anything.
+
+A shared normaliser in `scripts/loops/` would be a module with no importers,
+which is 94.11's ceremony test failing on the first question it asks.
+
+**3 — the failure is RARE but SEVERE, and saying only "rare" would be the
+misleading half.** On the one case that does change, an independently-shaped
+re-derivation (120-character window, attributed to the containing `## Slice`)
+reads **12 slices line-based against 19 whitespace-normalised** — the per-line
+form misses **7, i.e. 37%**. That is why the answer is a practice note and not
+a shrug. The membership differs from Slice 322's published 17 because the
+window is wider and now includes the corrective slices themselves; **322's
+figure is not contradicted here**, and it cannot be, for exactly the reason
+`327.2` names — recording a count changes what it measures.
+
+### The reusable half: this wake's own harvester had the bug
+
+Third instance in three days, and found the same way `LOOPS.md` says this class
+always is — an instrument disagreeing with something already written down. The
+first harvest was a per-line scan for recorded greps and read **58** sites; the
+same regex over the whitespace-normalised text reads **62**. It missed **4 of
+62 (6.5%)** — named rather than counted, since a line number here goes stale
+the moment this slice is inserted: the two `^## Slice … Objective grill of …`
+heading greps (one per file, both wrapping between the pattern and its target
+list) and two rule-1 P0 greps in the same shape. Corrected before any figure
+above was taken.
+
+**The instrument is red-proved by discrimination**, not by a bare pass: it
+reports `DIFFERS +5` on the known positive (`1,433 live inline declarations`),
+and `same` on two negatives — a wrappable phrase that happens not to wrap
+(`closed slices carrying`, 7/7) and a phrase with no whitespace at all
+(`ROADMAP-archive.md`, 409/409). A comparator that returned "same" everywhere
+would have been indistinguishable from a passing run.
+
+### The command, which is the thing both defects lacked
+
+```
+# count a literal phrase over the corpus both ways; Δ≠0 means the phrase wraps
+python3 - "$PHRASE" <<'EOF'
+import re, sys
+p = sys.argv[1]
+for f in ("ROADMAP.md", "ROADMAP-archive.md"):
+    t = open(f, encoding="utf-8").read()
+    lb = sum(l.count(p) for l in t.split("\n"))
+    wn = re.sub(r"\s+", " ", t).count(re.sub(r"\s+", " ", p).strip())
+    print(f"{f:20} line={lb:4} ws={wn:4} {'DIFFERS' if lb != wn else 'same'}")
+EOF
+```
+
+**Take any multi-word phrase-count this way.** The rule that falls out of the
+table is sharper than "normalise everything": a count of an **identifier**
+(a page path, a class, a slice id) is safe per-line and 9 of 14 published
+counts are of exactly that; a count of a **phrase with a space in it** is not,
+and is the only case worth the second reading.
+
+1. [x] **343.1 — 322.3 answered: refused, with the base rate (1 of 14; 1 of 5
+       wrappable), the caller count (0), and the severity on the one case that
+       changes (12 vs 19, 37% missed).** The command is recorded above and is
+       re-runnable in seconds, which is the omission both motivating defects
+       shared.
+
+**Gates: all 17 cloud-runnable entry points green** on the committed tree.
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. **None are owed by this slice**, and that is structural
+rather than a judgement call: the diff is **markdown only** — `ROADMAP.md` and
+the hand-off. No CSS, no `.astro`, no script and no docs page changed, so no
+rendering can move. The visual debts carried forward are unchanged and unspent.
+
 ## Slice 342 — 320.2: `scan:dead-style` judges each declaration on its own, and the blind spot was not empty — **52 dead declarations** were hiding behind live siblings, invisible to every sweep that has ever read this instrument (2026-09-08)
 
 **Dispatched by rule 4** on the oldest still-open cloud-takeable item, cloud
@@ -3006,8 +3135,9 @@ used.
 2. [x] **322.2 — Slice 304's base rate re-measured in place** and marked NOT
        REPRODUCIBLE rather than replaced, since this grill can show the figure
        cannot be re-run but not which split is right. Both commands recorded.
-3. [ ] **322.3 — should a phrase-count over `ROADMAP.md` / `ROADMAP-archive.md`
-       be taken whitespace-normalised by default?** Two instruments made the
+3. [x] **322.3 — should a phrase-count over `ROADMAP.md` / `ROADMAP-archive.md`
+       be taken whitespace-normalised by default?** REFUSED with the number,
+       2026-09-08 — see Slice 343. Two instruments made the
        same wrapped-phrase mistake in two days — 320's published 5 and this
        grill's own first scan — and the mechanism is mechanical, not a lapse:
        the corpus is hand-wrapped at ~78 columns, so any phrase longer than a
