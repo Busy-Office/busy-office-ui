@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-08 06:55 UTC
+Generated at: 2026-09-08 07:20 UTC
 
 ## Open items by slice
 
@@ -64,7 +64,7 @@ Generated at: 2026-09-08 06:55 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1652 iterations logged)
+dispatch status — counter-triggered rules (1653 iterations logged)
   Standardize   2 / 4 Continue rounds since 2026-09-08 04:59   ok
   Objective     2 / 3 slices          since 2026-09-08 05:54   ok  [324, 347]
   Optimize      0 wake-date(s) newer   since 2026-09-08 00:17   ok   [newest pair: dispatch-region-words; 140 sample(s), 8 of 47 name(s) paired across days]
@@ -96,7 +96,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-08 03:49 · Continue · build · 323.1 — the two base-rate replays keep their different units; the date replay reports SKEW on 0 of 9 occasions and STALE on two of them · landed · b1ce1263
 - 2026-09-08 03:49 · Meta · refusal · reconciling the two base-rate replays into one — measured: the liveness question reads 335 live / 645 not live at commit granularity against 15 of 27 wake-dates, so the unit changes no conclusion · refused · b1ce1263
 - 2026-09-08 03:49 · Meta · refusal · restating timedelta(hours=8) inside the recorded snippet — a constant copied into prose is the drift observed_skew() exists to catch; it imports the module's own instead · refused · b1ce1263
 - 2026-09-08 04:59 · Standardize · sweep · 342.1 — lane 1 verdict per site: 41 dead declarations converted, 11 refused, re-run lands on the refusal set · landed · 161ede68
@@ -106,6 +105,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-08 06:50 · Meta · refusal · a per-NAME direction registry in dispatch_status.py — base rate: it would cover 8 names, of which one can satisfy 'two consecutive', and that one (bundle-gz-kb) is already better served by check:size's 16.7 kB gz budget, which is rule 5's other clause · refused · 5b78e4f
 - 2026-09-08 06:50 · Meta · refusal · recording a bundle-kb-per-component metric — 324.2 forbids sampling to un-STALE the line, and a 48th single-day name is the shape this slice just refused · refused · 5b78e4f
 - 2026-09-08 06:55 · Continue · bug · 347.1 — polish_requeue.py --verify-stamps, the third advisory check LOOPS.md Step 0 says REPORTS, died with an unhandled traceback on a shallow clone; its docstring claimed that case landed in 'unknown' and it never could. Fourth verdict 'absent' added, red-proved by injection with a control · landed · f1e7eed3
+- 2026-09-08 07:20 · Roadmap · trap · ENVIRONMENT.md 6d — actions/runs?head_sha= needs the FULL sha; a 9-char prefix answers 200 with an empty workflow_runs, which a poll loop reads as 'not started'. Cost this wake 20 minutes on runs that were already green. Trap 2's shape a third time · landed · c93ee1de
 
 ## Sunset test
 
