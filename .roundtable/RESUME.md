@@ -39,10 +39,18 @@ python3 scripts/loops/roadmap_scope.py            # OPEN set + sweep scope
 **`check:resume-slice-ids` REPORTED at recording time, and that report described
 the PREVIOUS version of this file** — the recording runs before the rewrite. It
 named 4 archived ids (`94.11`, `312.2`, `192.1`, `321.1`, every one a *rule*
-cited by number) and 9 recorded `[x]` closed. Against the file **as it now
-stands**, every closed id named below — `333.1`, `334.1`'s figures, `310.1`,
-`324.3` — is described as closed or as a precedent, never as open work. **Re-run
-it against this file rather than trusting that sentence.**
+cited by number) and 9 recorded `[x]` closed.
+
+**So it was re-run against this file as it now stands**, and the report was read
+rather than deferred: 4 archived ids again, and **7** recorded `[x]` closed —
+`333.1` (closed by this wake and named below as exactly that), `332.1` and
+`297.1` (each said here to be closed), `324.3` (named only as the last sweep
+anyone took), `355.3` and `359.4` (named only as precedent for not filing a
+sixth parser item), and `310.1` (named as a clean-base-rate precedent and as an
+unspent *visual debt*, not as open work). **Nothing here claims an open item
+that is not.** `334.1` is OPEN and is named as rule 4's next item; what this
+wake changed there is its stale figures, not its state. Re-run the check against
+this file rather than trusting this paragraph.
 
 ## ⚠ RULE 2 FIRES NEXT — `Standardize` IS OVERDUE AT `4 / 4`, AND RULE 3 IS ALSO OVERDUE
 
