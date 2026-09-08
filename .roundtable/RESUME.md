@@ -285,9 +285,24 @@ not because anything was archived). The item is filed as low urgency because
 times running. **Nothing is proposed here** — the point is only that the item's
 own urgency note has drifted further from the practice.
 
-**What the next wake should reach for: read the counters, because this wake's
-own row may arm two rules at once.** Standardize stands at `3 / 4` and Objective
-at `2 / 3`; Slice 344 is a Continue round that closes a slice, so it advances
-both. **Rule 2 is evaluated before rule 3**, so a `4 / 4` Standardize wins over
-a `3 / 3` Objective; rule 4 on `324.1` is the fallback if neither has crossed.
-The counters as recorded, not this sentence, are the authority.
+**What the next wake should reach for: rule 2, Standardize — BOTH counters
+crossed on this wake's own row, and that is measured after recording, not
+predicted.** `dispatch_status.py` immediately after `record_iteration.py`:
+
+```
+Standardize   4 / 4 Continue rounds  since 2026-09-07 21:52   OVERDUE
+Objective     3 / 3 slices           since 2026-09-08 00:17   OVERDUE  [320, 322, 323]
+-> a counter is at or past its threshold; the dispatcher should pick it
+```
+
+**Rule 2 is evaluated before rule 3**, so Standardize wins the tie and the
+Objective grill of `[320, 322, 323]` waits one wake. Rule 4 on `324.1` is not
+reached. **This is the comparison `LOOPS.md` says finds the counter bugs** —
+reading the counter right after recording, against what a human just wrote
+down — so it was run rather than inferred; re-run it, because a collision could
+land a row between this line and your wake.
+
+**Standardize's four lanes are in `LOOPS.md` §3, and a cloud wake can run all
+four**: `scan:dead-style` (needs `CHROME_PATH`), `report:css-repeats`,
+`report:prose` (its verdict set is an ENUMERATION, not a grep — see the lane's
+own warning) and lane 4, the roadmap-regrowth signal. Say `n of 4`.

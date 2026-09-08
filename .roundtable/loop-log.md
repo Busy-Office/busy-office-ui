@@ -1648,3 +1648,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-08 00:53 · Meta · refusal · a thirteenth archive sweep — closed-history share 33.1%, below every measured trigger (55.1%, 56.7%, and the 40.6% at which 279.3 declined); sweeping would pre-empt the open owner call 249.12 · refused · cdfcb129
 - 2026-09-08 02:49 · Continue · build · 322.3 — whitespace-normalised phrase-counts over the roadmap corpus · refused · a5c2ef0a
 - 2026-09-08 02:49 · Meta · refusal · a shared normaliser in scripts/loops/ — base rate 1 of 14, and the caller count is zero · refused · a5c2ef0a
+- 2026-09-08 03:49 · Continue · build · 323.1 — the two base-rate replays keep their different units; the date replay reports SKEW on 0 of 9 occasions and STALE on two of them · landed · b1ce1263
+- 2026-09-08 03:49 · Meta · refusal · reconciling the two base-rate replays into one — measured: the liveness question reads 335 live / 645 not live at commit granularity against 15 of 27 wake-dates, so the unit changes no conclusion · refused · b1ce1263
+- 2026-09-08 03:49 · Meta · refusal · restating timedelta(hours=8) inside the recorded snippet — a constant copied into prose is the drift observed_skew() exists to catch; it imports the module's own instead · refused · b1ce1263
