@@ -26,16 +26,41 @@
  * sweep write-ups. Both numbers are printed now, so the historical series stays
  * comparable and the missing one is available rather than inferred.
  *
- * THE UNIT IS ALSO A DETECTION GAP, and it is red-proved rather than reasoned:
- * the verdict joins every property the attribute names into ONE string, so an
- * attribute is dead only if ALL of its declarations are. Running this probe's
- * own logic over three injected elements returns `margin: 40px` live,
- * `margin: 0` DEAD, and `margin: 40px; padding: 0` **live** — the `padding: 0`
- * being exactly the case the paragraph above calls the canonical dead one.
- * **273 of 1,272 attributes (21.5%) carry more than one declaration** and are
- * therefore in that blind spot. Closing it is roadmap 320.2, filed rather than
- * built: it moves a headline number five write-ups have quoted, so it owes its
- * own red-proof and self-test cases.
+ * THE UNIT WAS ALSO A DETECTION GAP — CLOSED BY ROADMAP 320.2. The old verdict
+ * joined every property an attribute names into ONE string, so an attribute was
+ * dead only if ALL of its declarations were, and **273 of 1,272 attributes
+ * (21.5%)** carried more than one and sat in that blind spot. That pair is
+ * Slice 320's, on 2026-09-07; the run below prints the CURRENT one, and it had
+ * already moved to 357 of 1,365 by the time this landed. **The blind spot was
+ * not empty: 52 dead declarations on 13 pages**, all of them inside attributes
+ * the attribute verdict calls live. There are now two verdicts per attribute,
+ * both reported:
+ *
+ *   - the ATTRIBUTE verdict, unchanged, so the historical series stays
+ *     comparable — remove the whole `style=` and see whether anything moved;
+ *   - the DECLARATION verdict, new — drop ONE declaration, leave its siblings
+ *     in place, and read back only the properties that declaration names. A
+ *     dead one can no longer hide behind a live one.
+ *
+ * The self-test carries a MIXED control for exactly this
+ * (`padding: 40px; margin: 0`): its attribute must read live, its
+ * `padding: 40px` live and its `margin: 0` DEAD. Judged as a whole that last
+ * assertion is false, so the self-test fails — red-proved by injection, not
+ * reasoned: replacing the per-declaration verdict with the attribute one exits
+ * non-zero naming that control.
+ *
+ * WHAT IT DOES NOT SEE, said plainly, because the finer unit invites the
+ * assumption that it does. A custom property is read by its own name, so
+ * `--bo-cluster-gap: var(--bo-space-2)` on an element whose rule already falls
+ * back to `--bo-space-2` reads LIVE — the declared value genuinely changes when
+ * it is removed, even though nothing rendered moves. Slice 320 found six of
+ * those with a different instrument, and this one still cannot.
+ *
+ * A DECLARATION IS SPLIT ON A BARE `;`, which would break on a `;` inside a
+ * `url()` or a quoted value. A depth-aware splitter was written and **refused**
+ * on base rate (94.11): **0 of 30,483** style attributes in the built site carry
+ * one, so it distinguishes nothing today and would move a headline number for a
+ * case that does not exist. Re-measure before assuming it still holds.
  *
  * SELF-RED-PROOF, run before every sweep. The whole verdict is "removing this
  * changed no computed value", which is exactly the shape of a detector that
@@ -76,9 +101,14 @@ import { distPages } from './dist-pages.mjs';
 import { DIST } from './paths.mjs';
 import { DESKTOP_WIDTH } from './viewports.mjs';
 
-/** Runs in the page. Returns one row per element carrying a style attribute. */
+/**
+ * Runs in the page. One row per element carrying a style attribute, holding
+ * BOTH verdicts: `dead` for the whole attribute, and `parts[k].dead` for each
+ * declaration judged on its own (roadmap 320.2).
+ */
 const PROBE = () => {
-  const named = (s) => s.split(';').map((d) => d.split(':')[0].trim()).filter(Boolean);
+  const split = (s) => s.split(';').map((d) => d.trim()).filter(Boolean);
+  const nameOf = (d) => d.split(':')[0].trim();
   const read = (el, names) => {
     const cs = getComputedStyle(el);
     return names.map((n) => n + '=' + cs.getPropertyValue(n)).join('|');
@@ -88,13 +118,29 @@ const PROBE = () => {
     const saved = el.getAttribute('style');
     if (!saved.trim()) continue;
     if (el.closest('pre, code')) continue; // a code sample is text, not markup
-    const names = named(saved);
+    const parts = split(saved);
+    const names = parts.map(nameOf);
     const before = read(el, names);
     el.removeAttribute('style');
     void el.offsetHeight; // force a restyle before reading back
     const after = read(el, names);
     el.setAttribute('style', saved); // restore EXACTLY what was there
-    out.push({ decl: saved, dead: before === after, n: names.length });
+    void el.offsetHeight;
+    /* Drop ONE declaration and leave the siblings in place, reading back only
+       the properties that declaration names. This is the whole of 320.2: with
+       the attribute as the unit, `margin: 40px; padding: 0` reports live and
+       the `padding: 0` is invisible. */
+    const perDecl = parts.map((text, i) => {
+      const own = [nameOf(text)];
+      const was = read(el, own);
+      el.setAttribute('style', parts.filter((_, j) => j !== i).join('; '));
+      void el.offsetHeight;
+      const now = read(el, own);
+      el.setAttribute('style', saved);
+      void el.offsetHeight;
+      return { text, dead: was === now };
+    });
+    out.push({ decl: saved, dead: before === after, n: parts.length, parts: perDecl });
   }
   return out;
 };
@@ -108,17 +154,29 @@ const run = () => page.evaluate((fn) => eval('(' + fn + ')')(), PROBE.toString()
 /* ---- self-red-proof ---- */
 const first = (await distPages(DIST))[0];
 await page.goto(`http://localhost:${port}${base}${first.url}`, { waitUntil: 'networkidle0', timeout: 20000 });
-const proof = await page.evaluate((fn) => {
+const MIXED = 'padding: 40px; margin: 0';
+const proof = await page.evaluate((fn, mixedDecl) => {
   const mk = (s) => { const e = document.createElement('p'); e.setAttribute('style', s); document.body.append(e); return e; };
   const live = mk('margin: 40px');
   const dead = mk('margin: 0');
+  /* The MIXED control (320.2): one live declaration and one dead one in ONE
+     attribute. `padding: 40px` moves the box; `margin: 0` restates the reset's
+     own `* { margin: 0 }`, which is what the dead control above already
+     proves. Judged as a whole, this attribute reads live and the `margin: 0`
+     is invisible — so the assertion on it is what fails if the per-declaration
+     verdict is ever replaced by the attribute one. */
+  const mixed = mk(mixedDecl);
   const res = eval('(' + fn + ')')();
-  live.remove(); dead.remove();
+  live.remove(); dead.remove(); mixed.remove();
+  const m = res.find((r) => r.decl === mixedDecl);
   return {
     live: res.find((r) => r.decl === 'margin: 40px')?.dead,
     dead: res.find((r) => r.decl === 'margin: 0')?.dead,
+    mixedAttr: m?.dead,
+    mixedLive: m?.parts?.find((d) => d.text === 'padding: 40px')?.dead,
+    mixedDead: m?.parts?.find((d) => d.text === 'margin: 0')?.dead,
   };
-}, PROBE.toString());
+}, PROBE.toString(), MIXED);
 /* The print branch reports 0, which is the shape of a branch that never runs.
    Prove the emulation actually takes effect before believing that zero. */
 await page.emulateMediaType('print');
@@ -133,25 +191,44 @@ if (!printReally || !screenReally) {
   process.exit(1);
 }
 
-if (proof.live !== false || proof.dead !== true) {
+const failures = [];
+if (proof.live !== false) failures.push(`live control read dead — 'margin: 40px' → dead=${proof.live}`);
+if (proof.dead !== true) failures.push(`dead control read live — 'margin: 0' → dead=${proof.dead}`);
+if (proof.mixedAttr !== false) failures.push(`mixed control's ATTRIBUTE read dead — '${MIXED}' → dead=${proof.mixedAttr}`);
+if (proof.mixedLive !== false) failures.push(`mixed control's live declaration read dead — 'padding: 40px' → dead=${proof.mixedLive}`);
+if (proof.mixedDead !== true) {
+  failures.push(
+    `mixed control's dead declaration read live — 'margin: 0' inside '${MIXED}' → dead=${proof.mixedDead}` +
+      '. This is exactly what judging the attribute AS A WHOLE produces (roadmap 320.2)',
+  );
+}
+if (failures.length) {
   console.error('dead-style scan: SELF-TEST FAILED — the probe cannot tell a live');
-  console.error(`  declaration from a dead one (live→dead=${proof.live}, dead→dead=${proof.dead}).`);
+  console.error('  declaration from a dead one:');
+  for (const f of failures) console.error(`    - ${f}`);
   console.error('  Every "clean" result below would be meaningless. Not reporting one.');
   await browser.close(); server.close();
   process.exit(1);
 }
 
 /* ---- the sweep ---- */
-const byDecl = new Map();
 const byPage = new Map();
+const byDeadDecl = new Map();
+const byDeclPage = new Map();
 let dead = 0;
 let live = 0;
 let printOnlyLive = 0;
-/* The verdict unit is one style ATTRIBUTE, so these track the declarations
-   inside them — see the "WHAT THE COUNT COUNTS" note in the header. */
-let liveDecls = 0;
-let deadDecls = 0;
+let totalDecls = 0;
 let multi = 0;
+/* The per-declaration tallies (320.2). `hiddenDead` is the number this slice
+   exists to make visible: dead declarations inside an attribute the ATTRIBUTE
+   verdict calls live. `deadAttrLiveDecl` is the same disagreement pointing the
+   other way, reported rather than assumed away. */
+let deadDecls = 0;
+let printOnlyLiveDecls = 0;
+let hiddenDead = 0;
+let hiddenAttrs = 0;
+let deadAttrLiveDecl = 0;
 for (const p of await distPages(DIST)) {
   await page.goto(`http://localhost:${port}${base}${p.url}`, { waitUntil: 'networkidle0', timeout: 20000 });
   await page.emulateMediaType('screen');
@@ -162,16 +239,39 @@ for (const p of await distPages(DIST)) {
   for (let i = 0; i < onScreen.length; i += 1) {
     const r = onScreen[i];
     const inPrint = onPaper[i];
+    totalDecls += r.n;
     if (r.n > 1) multi += 1;
-    if (!r.dead) { live += 1; liveDecls += r.n; continue; }
-    // Dead on screen, live on paper: the declaration is doing its job where it
-    // matters. Counted separately so the number is visible rather than folded
-    // into "live" as if nothing interesting happened.
-    if (inPrint && !inPrint.dead) { live += 1; liveDecls += r.n; printOnlyLive += 1; continue; }
-    dead += 1;
-    deadDecls += r.n;
-    byDecl.set(r.decl, (byDecl.get(r.decl) ?? 0) + 1);
-    byPage.set(p.url, (byPage.get(p.url) ?? 0) + 1);
+
+    /* Declaration pass — independent of the attribute verdict, which is the
+       point. Same both-media rule: dead here only if dead on screen AND paper. */
+    let hidden = 0;
+    let liveHere = 0;
+    for (let k = 0; k < r.parts.length; k += 1) {
+      const d = r.parts[k];
+      const onPaperDecl = inPrint?.parts?.[k];
+      if (!d.dead) { liveHere += 1; continue; }
+      if (onPaperDecl && !onPaperDecl.dead) { liveHere += 1; printOnlyLiveDecls += 1; continue; }
+      deadDecls += 1;
+      hidden += 1;
+      byDeadDecl.set(d.text, (byDeadDecl.get(d.text) ?? 0) + 1);
+      byDeclPage.set(p.url, (byDeclPage.get(p.url) ?? 0) + 1);
+    }
+
+    /* Attribute pass — the historical unit, unchanged, so the series printed by
+       17 earlier sweeps stays comparable. Dead on screen but live on paper means
+       the declaration is doing its job where it matters; counted separately so
+       the number is visible rather than folded into "live". */
+    const attrLive = !r.dead || (inPrint && !inPrint.dead);
+    if (attrLive) {
+      live += 1;
+      if (r.dead) printOnlyLive += 1;
+      hiddenDead += hidden;
+      if (hidden) hiddenAttrs += 1;
+    } else {
+      dead += 1;
+      byPage.set(p.url, (byPage.get(p.url) ?? 0) + 1);
+      if (liveHere) deadAttrLiveDecl += 1;
+    }
   }
 }
 
@@ -186,15 +286,26 @@ console.log(
     `${live} live inline style attribute(s) in total`,
 );
 console.log(
-  `  (${liveDecls + deadDecls} declaration(s) inside them; ` +
-    `${multi} attribute(s) carry more than one, which this scan cannot judge separately)`,
+  `  (${totalDecls} declaration(s) inside them; ${multi} attribute(s) carry more than one)`,
 );
-console.log(`  (screen + print measured; ${printOnlyLive} attribute(s) are dead on screen but LIVE in print)`);
-if (dead) {
-  console.log('\n  by declaration:');
-  for (const [d, n] of [...byDecl].sort((a, b) => b[1] - a[1])) console.log(`    ${String(n).padStart(3)}x  ${d}`);
+console.log(
+  `  per declaration — ${deadDecls} dead declaration(s) on ${byDeclPage.size} page(s), each judged ` +
+    'on its own so a dead one cannot hide behind a live sibling (roadmap 320.2)',
+);
+console.log(
+  `  reconciliation — ${hiddenDead} of those sit in ${hiddenAttrs} attribute(s) the attribute verdict ` +
+    `calls LIVE, out of ${multi} multi-declaration attribute(s); ` +
+    `${deadAttrLiveDecl} dead attribute(s) hold a declaration that reads live alone`,
+);
+console.log(
+  `  (screen + print measured; ${printOnlyLive} attribute(s) and ${printOnlyLiveDecls} declaration(s) ` +
+    'are dead on screen but LIVE in print)',
+);
+if (deadDecls) {
+  console.log('\n  by dead declaration:');
+  for (const [d, n] of [...byDeadDecl].sort((a, b) => b[1] - a[1])) console.log(`    ${String(n).padStart(3)}x  ${d}`);
   console.log('\n  by page:');
-  for (const [u, n] of [...byPage].sort((a, b) => b[1] - a[1])) console.log(`    ${String(n).padStart(3)}x  ${u}`);
+  for (const [u, n] of [...byDeclPage].sort((a, b) => b[1] - a[1])) console.log(`    ${String(n).padStart(3)}x  ${u}`);
   console.log('\n  Each removes cleanly: "dead" means the computed value of every property');
   console.log('  it names is identical without it. Check for a code sample before a bulk edit.');
 }

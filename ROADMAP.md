@@ -320,6 +320,171 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 342 — 320.2: `scan:dead-style` judges each declaration on its own, and the blind spot was not empty — **52 dead declarations** were hiding behind live siblings, invisible to every sweep that has ever read this instrument (2026-09-08)
+
+**Dispatched by rule 4** on the oldest still-open cloud-takeable item, cloud
+wake. Step 0: container **DETACHED** again (`git branch --show-current` empty),
+`ENVIRONMENT.md` trap 1, fixed with `git checkout -B main origin/main` before
+any commit; `origin/main` again arrived as a **forced update**
+(`26447ba...e214bd7`). Trap 2 clean in one `--unshallow`, no `shallow.lock`,
+and it again brought the tags — `git tag | wc -l` -> **8**, §2's mandated count,
+run rather than assumed. Trap 1c respected: `CHROME_PATH` exported in the same
+command as every browser-driven gate.
+
+Rule 1: no open P0 — `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` -> **0**.
+Step 1 read **both** intakes with `ENVIRONMENT.md` §8's controls
+(`/discussions` -> 200 len **0**; `/not-a-real-route` -> **404**;
+`/issues?state=open` -> 200 len **1**, issue #2, `updated_at` unmoved at
+2026-09-06T15:10:34Z, already triaged) and triaged nothing: no new input.
+Rule 2 `Standardize 1 / 4` did not match. Rule 3 `Objective 0 / 3` did not
+match — spent by Slice 341. **Rule 4 matched.** Rule 5 was not reached, and its
+line reads `ok` rather than STALE for the first time in a while: the comparable
+set carries `dispatch-region-words 7298 -> 7492`, a **single** pair, and one
+pair cannot fire a rule that needs two consecutive.
+
+**The archive sweep was evaluated and declined, on the trigger the last two
+sweeps actually used.** `roadmap_scope.py` at `e214bd7d` reports closed-history
+share **2,946 / 8,908 = 33.1%** with 13 eligible targets. 252.1 dispatched the
+tenth sweep at **55.1%** and 272.1 the eleventh at **56.7%**; 279.3 declined the
+twelfth at **40.6%**. 33.1% is below every one of those, so sweeping here would
+be a wake lowering the threshold by its own initiative — which is precisely what
+`249.12`, the open **OWNER OR ARCHITECTURE CALL** on the archival trigger,
+exists to prevent. Re-run the script; these are snapshots and this commit moves
+them.
+
+### What 320.2 asked for, and what it turned out to be worth
+
+The scan's verdict joined every property an attribute names into ONE string, so
+an attribute was dead only if **all** of its declarations were. Slice 320
+red-proved the gap on injected controls and filed it rather than building it,
+because closing it moves a headline number that (per Slice 322's correction)
+**17 sweeps had quoted** — 208 through 314, none of them correctly. There are
+now two verdicts per attribute:
+
+- the **attribute** verdict, byte-for-byte the old logic, so the series stays
+  comparable;
+- the **declaration** verdict — drop one declaration, leave the siblings in
+  place, and read back only the properties that declaration names.
+
+**The finding is that the blind spot was not empty.** 320.2's Accept says
+outright that *"finding that the gap yields zero real dead declarations is a
+satisfying outcome"*. It does not:
+
+```
+before   0 dead style attribute(s) on 0 page(s); 1365 live; 1854 declaration(s); 357 multi
+after    0 dead style attribute(s) on 0 page(s); 1365 live; 1854 declaration(s); 357 multi
+         per declaration — 52 dead declaration(s) on 13 page(s)
+         reconciliation — 52 of those sit in 50 attribute(s) the attribute verdict
+                          calls LIVE, out of 357 multi-declaration attribute(s);
+                          0 dead attribute(s) hold a declaration that reads live alone
+```
+
+**The reconciliation is against the re-measured corpus, not against the number
+this item was handed.** 320.2 cites *"the 273 attributes named above"*; 273 was
+Slice 320's reading on 2026-09-07 against 1,272 attributes, and the tree has
+moved since — today it is **357 of 1,365**, which Slice 332's grill independently
+recorded as `0 dead / 1,365 live / 357 multi` on the same corpus. Reconciling
+against the stale 273 would have been the *"reconciles against its own caller"*
+failure CLAUDE.md's storage doctrine names.
+
+Two internal checks hold, and both could have failed:
+
+- **All 52 sit inside live attributes.** They must, and it is checked rather
+  than assumed: a dead declaration in a *single*-declaration attribute would
+  make that attribute dead, and the attribute count is still **0**.
+- **`deadAttrLiveDecl` is 0** — no attribute that reads dead as a whole holds a
+  declaration that reads live alone. That disagreement is possible in principle
+  and is now reported rather than waved away.
+
+**Reconciled against an independent count before quoting** (CLAUDE.md), and the
+first instrument for it was wrong, which is the base rate arriving on schedule:
+a per-page grep was written that conflated the *global* `by dead declaration`
+tally with the *per-page* list, and reported `raw=0` against `scan said 10`.
+Corrected to a whole-`dist` declaration census, every dead count is bounded above
+by what is actually present:
+
+| declaration | present in `dist` | called dead |
+|---|---|---|
+| `display:inline-block` | 10 | 10 |
+| `color: var(--bo-color-accent)` | 19 | **17** |
+| `margin: 0` | 12 | 12 |
+| `display: block` | 7 | **4** |
+| `inline-size: 100%` | 6 | **3** |
+| `inline-size:var(--bo-space-0)` | 1 | 1 |
+| `display: inline-block` | 1 | 1 |
+
+**The three splits are the discriminating evidence, not the three matches.** The
+same declaration text is dead in some places and live in others, which is what a
+per-*element* verdict must produce; had every row read `dead == present`, that
+would be the "identical value across many inputs" tell this repo treats as a
+defect until proven otherwise.
+
+**The print branch also stopped reading as a branch that never runs.** At the
+attribute unit it reports **0** dead-on-screen-but-live-in-print, every sweep,
+forever. At the declaration unit it reports **6** — the same both-media rule,
+finer input, and the first non-zero this instrument has produced there.
+
+### The red-proof, and it is precise rather than broad
+
+Per the standing rule that a green red-proof is a defect in the injection, the
+injection was verified before the result was believed: a throwaway copy of the
+script in `apps/docs/scripts/` had its per-declaration verdict replaced by the
+attribute one, with the target's occurrence count asserted as exactly **1**
+before the replace and the marker asserted present after.
+
+```
+- mixed control's dead declaration read live — 'margin: 0' inside
+  'padding: 40px; margin: 0' → dead=false. This is exactly what judging the
+  attribute AS A WHOLE produces (roadmap 320.2)                          rc=1
+```
+
+**Exactly one of the five controls failed** — the live control, the dead
+control, the mixed attribute and the mixed live declaration all still passed.
+That matters because `ENVIRONMENT.md` already carries the sibling trap: *a
+red-proof that goes red TOO BROADLY certifies nothing either*. The probe file
+was deleted and its absence confirmed (`ls apps/docs/scripts | grep -c redproof`
+-> **0**, `git status --short` showing only the one modified file).
+
+The mixed control is `padding: 40px; margin: 0` rather than Slice 320's
+`margin: 40px; padding: 0`, deliberately: `margin: 0` is dead for a reason this
+script's **existing** dead control already proves (the reset's `* { margin: 0 }`),
+whereas a `<p>`'s zero padding is an assumption about the docs cascade that
+nothing here had tested.
+
+1. [ ] **342.1 — the 52 are a lane-1 finding, not this item's to spend.**
+       `scan:dead-style` is a report the Standardize sweep consumes; 320.2 was
+       scoped to the instrument, and fixing 13 pages inside it would mix an
+       instrument change with a corpus change in one commit and widen the item.
+       The 52 need judgement per site, not a regex: `/reference/tokens/` and
+       `/reference/events/` are generated swatch/table pages, and 292.8's rule
+       puts a declaration inside a copyable template literal out of scope.
+       - **Accept:** lane 1 of the next Standardize sweep records a verdict for
+         every dead declaration the scan reports — converted, or refused with a
+         reason — and the re-run count is reconciled against the count it
+         started from. **Finding that most are out of scope is a satisfying
+         outcome** if it carries the per-site reasons.
+
+**Refused inside this round, measured rather than argued:** a depth-aware
+declaration splitter, so a `;` inside a `url()` or a quoted value cannot break
+the parse. Base rate first, per 94.11: **0 of 30,483** style attributes in the
+built site carry one, so the predicate distinguishes nothing today, and shipping
+it would move a headline number for a case that does not exist. The refusal and
+the command are in the script's header so the next wake re-measures instead of
+rebuilding it.
+
+**Gates: all 17 cloud-runnable entry points green** on the committed tree.
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. **None are owed**, and that is structural rather than a
+judgement call: the diff is one `.mjs` scan script that is not a build step, not
+a gate, and not imported anywhere. Checked rather than asserted —
+`grep -rln scan-dead-style` finds it in `apps/docs/package.json` (its own entry)
+and, as **prose in a header comment**, in `check-viewport-forks.mjs` and
+`viewports.mjs`; neither imports it, and `check:viewport-forks` passes on the
+edited tree (76 docs scripts, no literal spelling of 390/1440 outside
+`viewports.mjs` — this script's one `DESKTOP_WIDTH` use is untouched). No CSS
+rule, no docs page and no component changed, so no rendering can move.
+
 ## Slice 341 — Objective grill of Slices 316, 319, 339: 17 of 17 published assertions reproduce, and the finding is that Slice 339's generator thesis was confirmed by the very NEXT commit — Step 0c's cut lasted one wake, with the charter followed exactly (2026-09-08)
 
 **Dispatched by rule 3** at `Objective 3 / 3 OVERDUE [316, 319, 339]`, cloud
@@ -3043,8 +3208,14 @@ canonical dead one (25 of the first sweep's 29). **273 of 1,272 attributes
        into it. The corrected line reproduces an independent probe exactly —
        `1272 / 1677 / 273` from both — which is the reconciliation against
        something independent that CLAUDE.md asks for before a number is quoted.
-2. [ ] **320.2 — judge each declaration separately, so a dead one cannot hide
-       behind a live sibling.** Filed rather than built: it moves a headline
+2. [x] **320.2 — judge each declaration separately, so a dead one cannot hide
+       behind a live sibling. DONE 2026-09-08, Slice 342 — and the gap was NOT
+       empty: 52 dead declarations in 50 of the 357 multi-declaration
+       attributes, on 13 pages, invisible to every sweep that has read this
+       instrument — the 17 Slice 322 enumerated (208 through 314) among them.
+       The self-test's mixed control red-proves it, failing on
+       exactly one of five assertions when the verdict is put back to the
+       whole attribute.** Filed rather than built: it moves a headline
        number five write-ups have quoted, and the scan is `@exact`, so it owes
        its own red-proof and new self-test cases discriminating a mixed
        attribute — which the current self-test, two single-declaration controls,
