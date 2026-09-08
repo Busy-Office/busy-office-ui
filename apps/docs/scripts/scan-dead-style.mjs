@@ -62,6 +62,30 @@
  * one, so it distinguishes nothing today and would move a headline number for a
  * case that does not exist. Re-measure before assuming it still holds.
  *
+ * THE COMMAND FOR THAT BASE RATE, added 2026-09-08 by Slice 346's grill —
+ * roadmap 342 said it was already here and it was not, which is the omission
+ * Slice 322's Defect B had filed one slice earlier. **Decode the entities
+ * first.** A raw-text scan reports 1 rather than 0: `/components/icon/` carries
+ * a `--bo-icon-src: url('data:image/svg+xml,<svg xmlns=&quot;…')`, and the
+ * `;` that terminates `&quot;` sits inside the `url()` in the FILE while the
+ * browser — which is what this script splits — never sees it. That wrong 1 was
+ * this instrument's first output (CLAUDE.md's base rate, on schedule).
+ *
+ *   python3 - <<'PY'
+ *   import re, pathlib, html
+ *   pat = re.compile(r'style\s*=\s*"([^"]*)"|style\s*=\s*\'([^\']*)\'')
+ *   tot = bad = 0
+ *   for p in sorted(pathlib.Path('apps/docs/dist').rglob('*.html')):
+ *       for m in pat.finditer(p.read_text(encoding='utf-8', errors='replace')):
+ *           v = html.unescape(m.group(1) if m.group(1) is not None else m.group(2))
+ *           tot += 1
+ *           if re.search(r'url\([^)]*;[^)]*\)', v) or re.search(r'["\'][^"\']*;[^"\']*["\']', v):
+ *               bad += 1
+ *   print(bad, 'of', tot)
+ *   PY
+ *   # 2026-09-07 (roadmap 342): 0 of 30,483
+ *   # 2026-09-08 (roadmap 346): 0 of 30,485   — re-run, the figure is a snapshot
+ *
  * SELF-RED-PROOF, run before every sweep. The whole verdict is "removing this
  * changed no computed value", which is exactly the shape of a detector that
  * reports a clean tree because it can no longer see. So each run first injects

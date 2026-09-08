@@ -320,6 +320,136 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 346 — Objective grill of Slices 322, 342: 20 of 22 assertions reproduce, and **both defects are a recurrence of something Slice 322 had just filed** — the next slice published a load-bearing number with no command, and the round closing its item missed the third copy of a correction because the phrase wraps (2026-09-08)
+
+**Dispatched by rule 3**, cloud wake, at `Objective 4 / 3 slices OVERDUE
+[320, 322, 323, 342]`. Step 0: container **DETACHED** again
+(`git branch --show-current` empty), `ENVIRONMENT.md` trap 1, fixed with
+`git checkout -B main origin/main` before any commit; `origin/main` again a
+**forced update** (`26447ba...6d6f5af`). Trap 2 clean in one `--unshallow`, no
+`shallow.lock`, and it again brought the tags — `git tag | wc -l` → **8**, §2's
+mandated count, run rather than assumed. Trap 1c respected: `CHROME_PATH`
+exported in the same command as `scan:dead-style` and every browser-driven gate.
+
+Rule 1: no open P0 — `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0**
+across the 30 open items. Step 1 read **both** intakes in the REST form with
+`ENVIRONMENT.md` §8's controls (`/issues?state=open` → 200 len **1**, issue #2,
+`updated_at` unmoved at `2026-09-06T15:10:34Z` for a **twelfth** consecutive
+hand-off; `/discussions` → 200 len **0**; `/not-a-real-route` → **404**, the
+control that makes the `200 []` mean *served and empty*) and triaged nothing, so
+Step 1 committed nothing. Rule 2 `Standardize 0 / 4` did not match. **Rule 3
+matched.** Rules 4-8 not reached; rule 5's line read `ok`, and no name in its
+comparable set regresses on two consecutive day-pairs.
+
+**Scope, per §6 step 0 — two of the four, and the drop is named.** Slices
+**320** and **323** are each already the named subject of a 2026-09-07 grill
+report, so they were dropped rather than re-grilled; **322** and **342** were
+kept. Slice 322 is itself a grill, so this is a grill of a grill. Slice **345**
+is in scope only as `342.1`'s closure — the round that met or missed the Accept
+342 filed. Full report:
+`.roundtable/grill-objective-322-342-2026-09-08.md`.
+
+### The through-line: Slice 322 filed two rules about writing numbers down, and the two slices after it broke both
+
+Neither defect touches a verdict — 342's refusal is right, 345's conversion is
+right, and every number either turns on reproduces. What failed is the audit
+trail, in the two specific ways the immediately preceding grill had named.
+
+- **Defect A — the wrapped correction.** `161ede68` says **FOUR** in its
+  subject, in Slice 345's heading and in its body, and **five** in the closing
+  annotation the same commit wrote on `342.1`. Five is wrong under both readings
+  345's own table supports (`14 + 10 + 10 + 4` from four lines, **plus three
+  one-offs** = four idiom lines, or seven in total); the nearest true *five*
+  counts **files**. The hand-off records two of the three sites being corrected —
+  the third survived because `grep 'five source lines'` returns **0** on a
+  phrase that wraps as `five source` / `lines`. That is `322.3`'s mechanism, one
+  wake after Slice 343 refused a shared normaliser for it.
+- **Defect B — the missing command.** Slice 342 wrote *"The refusal and the
+  command are in the script's header"*; the header held the refusal, the number
+  and *"Re-measure before assuming it still holds"*, and **no command**. So it
+  asserted the fix for 322's Defect B in the same sentence that committed it.
+  Re-measuring took a fresh instrument whose **first output was wrong** — a
+  raw-text scan reads `1 of 30,485` on an HTML-entity `;` inside `url()` that
+  the browser never sees. Decoded: **0 of 30,485** against the published 0 of
+  30,483, so the refusal stands. Both corrected in place at Slice 342 per 236.2,
+  originals struck, and the command has been **added** to the header and
+  red-proved by injection (0 → 1).
+
+**Five of this grill's own instruments were wrong on their first output, by
+THREE different mechanisms** — and the split is stated because *"all of them the
+same way"* was the first thing written and is false. **Two by the wrap**: the
+greps used to find Defect A and to locate Defect B's text, which is the
+strongest evidence `346.1`'s population is real. **One by a token boundary**:
+`\bdocs-list\b` matches inside `docs-list-bare`, the exact bug 322's own report
+names. **One by HTML entities**: Defect B's base rate. And **one merely scoped
+differently** — a hand-written re-derivation of the `1,433` blast radius
+returned 11 against the published 17, and what settled it in one run was that
+Slice 322 *had recorded its command*, which returns the seventeen exactly. That
+is the counterfactual Defect B destroys. Each was caught by reconciling against
+a differently-shaped second reading before the number was used.
+
+### What held — 20 of 22
+
+**Slice 322 — 9 of 9**, several exact. The recorded blast-radius command returns
+precisely the published seventeen; Defect B's corpus re-reads `2 + 8 + 0 = 10`
+figures on 9 lines at `8beee329`; `322.2`'s correction survived the archive move
+with both commands; `.docs-list` 59 / `.docs-list-bare` 40 at `7dacd80b~1` and
+60 / 41 at `7dacd80b` reproduce exactly under a class-token matcher; `<Related`
+116, `<ApiTable` 40, `data-api-notes` on 39 built pages; Slice 305's five named
+classes ship and the two invented ones do not; `*gauntlet-a*` is still 0
+commits; `--bo-space-0` still has no use but its definition. The 161
+decomposition is verified in two terms of three — the `5 page-level sites` term
+was not re-derived and is reported as such.
+
+**Slice 342 — 6 of 8** (A and B are the failures): two verdicts per attribute,
+`deadAttrLiveDecl` 0, the print branch still **6** at the declaration unit and
+correctly unmoved by 345, the base rate, no importer of the scan, and the
+red-proof probe absent.
+
+**Slice 345 as `342.1`'s closure — 5 of 5, exact.** The re-run reads
+`11 dead declarations on 9 pages`, `1,854 → 1,813` (−41), `357 → 345` (−12),
+attributes `1,365 → 1,365`, and the eleven it names are the eleven refused, item
+for item — the check 345 said was stronger than the arithmetic, and it is. Its
+lane-3 claim holds too: `/patterns/output-form/` **is** one of 158.1's twelve, so
+`LOOPS.md`'s enumeration was owed no amendment and correctly received none.
+
+1. [ ] **346.1 — Slice 343 refused a whitespace normaliser on a caller census of
+       counting INSTRUMENTS. The failure recurred the next wake in a population
+       that census did not measure: a wake's own grep checking that a correction
+       it just made landed everywhere.** 343's refusal stands on its own terms
+       and is **not reopened** — 1 of 14 published phrase-counts changes, and a
+       helper module still has no importer. What is unmeasured is the *other*
+       use: Defect A above, plus three of this grill's own four instruments,
+       are all a hand-check rather than a published count, and all four missed a
+       wrapped phrase. n = 4 in one wake is a rate, not a base rate.
+       - **Accept** — the property, not a prediction: **measure the base rate
+         first** (94.11), over the record rather than over this wake. For each
+         commit that strikes or supersedes a number in `ROADMAP.md`, check
+         whether the superseded spelling still occurs elsewhere in that file **at
+         that commit**, whitespace-normalised. Report the count with the command
+         beside it. **If it has happened once or twice, recording the refusal
+         with the number is a satisfying outcome** and nothing is built; if it is
+         common, the cheap thing is a `scripts/loops/` check a wake runs before
+         committing a correction — not a gate.
+       - **Not a gate, decided rather than deferred.** *"This correction was
+         applied everywhere it should be"* is semantic in the general case
+         (94.11), and 343 already refused the shared-normaliser shape. The only
+         checkable form is the narrow one above: a struck spelling that still
+         occurs in the same file at the same commit.
+
+**Gates: all 17 cloud-runnable entry points green** on the committed tree, the
+list re-derived from `ci.yml` rather than read off a snapshot.
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. **None are owed by this slice**, and that is structural
+rather than a judgement call: the diff is `ROADMAP.md`, the grill report, the
+hand-off, and a **comment-only** change to `apps/docs/scripts/scan-dead-style.mjs`
+— a script that is not a build step, not a gate and not imported anywhere,
+re-verified this wake by the same command Slice 342 used. No CSS rule, no docs
+page and no component changed, so nothing rendered can move. **Slice 345's two
+visual debts are still owed** — `/patterns/output-form` in print, and the RF tile
+grid on `/patterns/rf/rf-landing-rf/` at both widths — as are the six older ones.
+
 ## Slice 345 — Standardize sweep, 4 of 4 lanes. 342.1 closed with a verdict per SITE: **38 of the 52 dead declarations came from FOUR source lines**, and the eleven that remain are the eleven that were refused — the re-run lands on exactly the refusal set, not merely on the arithmetic (2026-09-08)
 
 **Dispatched by rule 2** at `Standardize 4 / 4 Continue rounds OVERDUE` — the
@@ -855,9 +985,48 @@ script's **existing** dead control already proves (the reset's `* { margin: 0 }`
 whereas a `<p>`'s zero padding is an assumption about the docs cascade that
 nothing here had tested.
 
-1. [x] **342.1 — DONE 2026-09-08 (Slice 345). 41 converted from five source
-       lines, 11 refused per site, and the re-run lands on exactly the refusal
-       set. The 52 are a lane-1 finding, not this item's to spend.**
+1. [x] **342.1 — DONE 2026-09-08 (Slice 345). 41 converted from ~~five source
+       lines~~ FOUR source lines plus three one-offs, 11 refused per site, and
+       the re-run lands on exactly the refusal set. The 52 are a lane-1
+       finding, not this item's to spend.**
+
+       > **CORRECTED 2026-09-08 by Slice 346 (Objective grill): "five source
+       > lines" is wrong under both readings Slice 345's own body supports**,
+       > and it was written by the same commit (`161ede68`) whose subject,
+       > heading and body all say **FOUR**. 345's table decomposes the 41 as
+       > `14 + 10 + 10 + 4` from four lines, **plus three one-off lines** on
+       > `/patterns/output-form` — so the honest count is four idiom lines, or
+       > seven lines in total. Neither is five. The nearest true "five" in that
+       > slice counts **files**, not lines (its NOT-VERIFIED block), which is
+       > what makes this read as a conflation that outlived the correction.
+       >
+       > **Why the hand-check that fixed the other two sites missed this one:**
+       > the phrase wraps here as `five source` / `lines`, so a line-based
+       > `grep 'five source lines'` over `ROADMAP.md` returns **0** while the
+       > text is plainly there. That is `322.3`'s mechanism exactly, one wake
+       > after Slice 343 refused a shared normaliser for it — correctly, on a
+       > caller census of counting *instruments*, which is a population this
+       > use is not in. Filed as `346.1`; **343's refusal is not reopened.**
+       >
+       > **Read at `6d6f5af`, the parent of this commit — and NO figure for
+       > *this* commit is published, deliberately.** `327.2`'s effect fires
+       > here in its strongest form: this correction, and Slice 346's entry
+       > about it, both contain the phrases they count, so every attempt to
+       > state the current value changes it. Two were written and both were
+       > stale before the edit finished (`3 4` → `5 5` → `6 5`), which is the
+       > regress, not three mistakes. **The property is stable and the value is
+       > not:** whitespace-normalised sees every occurrence, line-based misses
+       > exactly the wrapped one — at `6d6f5af` that is the *only* occurrence,
+       > so it sees **0 of 1**. Re-run against a named revision, never the tree.
+       >
+       > ```
+       > git show 6d6f5af:ROADMAP.md > /tmp/r.md
+       > python3 -c "import re; s=re.sub(r'\s+',' ',open('/tmp/r.md').read()); \
+       >   print(s.count('five source lines'), s.count('FOUR source lines'))"
+       > #  1 2        whitespace-normalised
+       > grep -c 'five source lines' /tmp/r.md   #  0   <- the miss
+       > grep -c 'FOUR source lines' /tmp/r.md   #  2
+       > ```
        `scan:dead-style` is a report the Standardize sweep consumes; 320.2 was
        scoped to the instrument, and fixing 13 pages inside it would mix an
        instrument change with a corpus change in one commit and widen the item.
@@ -874,9 +1043,33 @@ nothing here had tested.
 declaration splitter, so a `;` inside a `url()` or a quoted value cannot break
 the parse. Base rate first, per 94.11: **0 of 30,483** style attributes in the
 built site carry one, so the predicate distinguishes nothing today, and shipping
-it would move a headline number for a case that does not exist. The refusal and
+it would move a headline number for a case that does not exist. ~~The refusal and
 the command are in the script's header so the next wake re-measures instead of
-rebuilding it.
+rebuilding it.~~
+
+> **CORRECTED 2026-09-08 by Slice 346 (Objective grill): the refusal was in the
+> header; the COMMAND was not.** What `scan-dead-style.mjs` carried was the
+> number and the sentence *"Re-measure before assuming it still holds"* —
+> `grep -nE '30,?483|python3|node -e|grep -r' apps/docs/scripts/scan-dead-style.mjs`
+> returns the one line holding the figure and nothing else. So this slice
+> asserted the fix for Slice 322's **Defect B** — *a load-bearing number with no
+> command beside it* — in the same sentence that committed the defect, one
+> slice after that grill filed it.
+>
+> **The cost is demonstrated rather than argued.** Re-measuring needed an
+> instrument written from scratch, and its first output was **wrong**: a
+> raw-text scan reports **1 of 30,485**, because `/components/icon/` carries
+> `--bo-icon-src: url('data:image/svg+xml,<svg xmlns=&quot;…')` and the `;`
+> closing `&quot;` sits inside the `url()` in the file text, while the browser —
+> the unit this script actually splits — never sees it. Decoded, the figure is
+> **0 of 30,485** against the published 0 of 30,483. **The refusal itself
+> stands**; only the claim about where to find its command does not.
+>
+> **Fixed rather than only recorded:** the command is now in that header, with
+> the entity trap named, and it was red-proved by injection before being written
+> down — injecting `url(data:image/svg+xml;base64,…)` into one built page takes
+> it from 0 to 1, so it is a detector that can fail rather than one that reports
+> a clean tree because it cannot see.
 
 **Gates: all 17 cloud-runnable entry points green** on the committed tree.
 
