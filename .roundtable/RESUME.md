@@ -126,10 +126,20 @@ is a satisfying outcome.
 
 `check:resume-slice-ids` again printed `15.0`, `15.10`, `312.2` as "named ids
 not in `ROADMAP.md`". Two of the three were the previous hand-off's gzip
-figures; this file no longer carries them, so **the next recording is a natural
-discrimination test** — if the ABSENT bucket shrinks to `312.2` alone, the
-match really was the backticked figures and `348.1`'s reproducer is confirmed
-by removal rather than by argument. Nothing was reworded to suppress it.
+figures.
+
+**A discrimination test was proposed here and then refuted by its own run —
+recorded rather than quietly deleted, because the failure is the useful part.**
+The draft of this section said the two figures were gone from this file, so the
+next recording would shrink the ABSENT bucket to `312.2` alone and confirm
+`348.1` by removal. **It did not shrink**: this very paragraph names `15.0` and
+`15.10` in backticks to describe them, which is the same match. That is
+`348.1`'s point arriving one level up — **the prose explaining the defect is
+indistinguishable from the defect**, which is CLAUDE.md's *an assertion that can
+be tripped by its own explanation* in the one place it cannot be written around.
+
+So the test is only runnable from a hand-off that does not discuss `348.1` at
+all, and this one cannot be that. Nothing was reworded to suppress the symptom.
 
 ## No metric was recorded this wake, and that is deliberate
 
