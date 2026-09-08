@@ -320,6 +320,224 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 352 — `325.2` closed by WITHDRAWAL: the *Initial render* column's method is unrecoverable, and the measurement that decides it needs no knowledge of the missing machine — a machine gap is a roughly CONSTANT multiple, and this column's is 4.2x / 11.9x / 7.3x while its own neighbour's is 0.93x / 0.72x / 1.19x (2026-09-08)
+
+**Dispatched by rule 4**, cloud wake, on the oldest still-open item no other
+kind of block covers. Step 0: container **DETACHED** again (trap 1;
+`git branch --show-current` **empty**, fixed with `git checkout -B main
+origin/main` before any commit), and `origin/main` again arrived as a **forced
+update** (`26447ba...2caaa16`). `HEAD` equalled `origin/main` at **`2caaa16f`**,
+which is the previous wake's own recording commit, so **no other dispatcher had
+landed anything between the two wakes**. Trap 2: the clone was shallow and this
+item's verdict is a history search, so it was unshallowed before any figure was
+taken — **2,070** commits at `HEAD`, no `shallow.lock`, and the unshallow again
+brought the tags (`git tag | wc -l` → **8**, run rather than assumed). Step 0b:
+`Standardize 0 / 4`, `Objective 0 / 3`, `Optimize 0 wake-date(s) newer` — all
+three `ok`, over 1,662 logged iterations. Step 1: both intakes read with
+`ENVIRONMENT.md` §8's controls (`/issues?state=open` **200 len 1**,
+`/discussions` **200 len 0**, `/not-a-real-route` **404**) — **no new input, so
+Step 1 committed nothing**; issue #2's `updated_at` is unmoved at
+`2026-09-06T15:10:34Z` for an **eighteenth** consecutive hand-off. Step 2: rule
+1 `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0** across 32 open items,
+rule 2 `0 / 4`, rule 3 `0 / 3`, rule 5 `ok` (not `STALE`), so **rule 4** — and
+every open item older than `325.2` was re-checked in the file rather than
+carried from the hand-off: Slice 15 (AT runtime evidence, owner hardware),
+`112.3`, `112.4`, `249.7`, `249.10`-`249.13`, `273.2`, `296.3` all
+owner-blocked, and `320.3` browser-blocked **in the screenshot sense** (its own
+Accept says so in as many words).
+
+### The search: four independent passes, and the method is not there
+
+`325.2`'s Accept makes *"the original method is recoverable"* and *"it is not"*
+equally satisfying, so the search is the work. Each pass covers something the
+others cannot, and every command is written next to its claim:
+
+```
+git log --all --oneline -S'85 ms'   -S'558 ms'   -S'3,783'      # where the figures enter
+git log --all --diff-filter=AD --name-only -- '*stress*'        # was a probe ever kept?
+git log --all --format='%h|%s|%b' | grep -in 'forced.layout\|performance.now\|domContentLoaded'
+grep -rn 'forced-layout\|forced layout\|hidden-tab' ROADMAP.md ROADMAP-archive.md .roundtable/*.md
+```
+
+- **The figures enter at `4fbe1afe`** (2026-08-15 12:11 +0800, *"Long-term item:
+  virtualization hooks — measured, closed as won't-build"*), and the two
+  throttled rows at **`961fd043`** (13:01 +0800, the decisions grill). Both
+  commits record the numbers. **Neither records a window**, in the message or
+  in the diff — and `4fbe1afe`'s entire diff is three files: `ROADMAP.md`, the
+  docs section, and the `/stress` route in `examples/po-app/server.mjs`, which
+  contains **no timing code at all**.
+- **No probe was ever kept beside them.** `--diff-filter=AD` over every ref
+  returns exactly one file in the repository's history — this repo's *current*
+  `apps/docs/scripts/measure-stress.mjs`, added by `82dc60e6` on **2026-09-07**,
+  three weeks later.
+- **Over all 2,070 commits, the grep finds two hits**, one about an unrelated
+  sweep. The one that is about this measurement is the whole surviving record:
+  *"the first measurement pass misread a 45s 'renderer freeze' at 5k rows — it
+  was a hidden-tab artifact (background tabs never fire rAF and don't run
+  layout), not the page; re-measured with synchronous forced-layout reads."*
+- **In tracked prose it survives once**, archived at `ROADMAP-archive.md:16244`,
+  identical text.
+
+**That fragment is a diagnostic aside, not a definition, and the distinction is
+the item.** It says how one artefact was ruled out and hints that the reading
+ended in a forced layout. It names **no start point, no end point and no
+machine** — so no later run can know whether it is measuring the same thing.
+Recoverable: **no**.
+
+### The measurement that decides it needs no knowledge of the missing machine
+
+The obvious objection to withdrawing is that the docs page already carries a
+caveat — *"read the shape rather than the absolute figures"* — and a shape is
+supposed to survive an unknown machine. **It does not survive an unknown
+window**, and one re-run shows it without ever needing to know what machine the
+2026-08-15 sitting used.
+
+`npm run measure:stress -w docs -- --rows 1000,5000,20000 --repeat 5`, medians
+over 5 runs, controls **1000/1000, 5000/5000, 20000/20000 checked**, machine
+recorded by the probe (Intel Xeon @ 2.80GHz, 4 cores, 15.7 GB, linux x64,
+node v22.22.2, `Chrome/141.0.7390.37`, throttle 1, viewport 1440):
+
+| n | published (2026-08-15) | this run | ratio |
+|---|---|---|---|
+| render 1,000 | 85 ms | `render-dcl` 357.1 ms | **4.20x** |
+| render 5,000 | 174 ms | 2,073.1 ms | **11.91x** |
+| render 20,000 | 558 ms | 4,092.9 ms | **7.33x** |
+| select-all 1,000 | 4 ms | 3.7 ms | **0.93x** |
+| select-all 5,000 | 18 ms | 12.9 ms | **0.72x** |
+| select-all 20,000 | 49 ms | 58.4 ms | **1.19x** |
+
+**A machine gap is a roughly constant multiple; a method gap is not.** The
+select-all column — measured on the same page, in the same run, on the same two
+machines — reproduces at **0.93x / 0.72x / 1.19x**, which is what "a different
+machine" looks like. The render column reads **4.20x / 11.91x / 7.33x**, which
+is not a multiple at all. Stated at the strength the evidence carries: this does
+**not** prove the 2026-08-15 render figures were wrong. It proves the
+disagreement is **undiagnosable** — the two windows differ (the probe's spans
+`responseEnd`→`domContentLoadedEventEnd`, so it carries parsing the response and
+the reference app's own subresources), the two machines differ, and with no
+method recorded nothing can separate them. The shapes disagree too — published
+**1 : 2.05 : 6.57**, probe **1 : 5.81 : 11.46** — so *"read the shape"* is a
+fallback that cannot be checked either.
+
+**And the page shipped a contradiction, which is checkable without any
+judgement.** `/components/data-table` said *"the harness is kept precisely so
+you can get figures for **your** hardware"* directly above a column that
+`measure-stress.mjs`'s own header says its render figures are **NOT** comparable
+to. Two shipped documents in this repository, pointing opposite ways about one
+column, and the reader is the one who pays.
+
+### The verdict, and the third branch refused with its reason
+
+`325.2`'s Accept admits a third reading — *a shape-only column kept undefined,
+admissible only if it says what a reader is supposed to do with it*. **Refused**,
+because the reader cannot do the thing the page told them to: the shape is not
+checkable, and the one instrument the page points at produces a different one.
+So the second branch, **withdrawal, the way the 2026-09 re-run was withdrawn** —
+called out on the page rather than deleted, because the lesson is the reusable
+part.
+
+What changed:
+
+- **`/components/data-table`** — the *Initial render* column is out of the
+  table; a withdrawal paragraph carries the five figures it held
+  (85 / 174 / 558 ms, and 1,625 / 3,783 ms throttled), why they are withdrawn,
+  and the re-measurement above. The guidance sentence that rested on the
+  withdrawn `~3.8 s` is **re-based on a figure anyone can re-derive**: the
+  probe's defined render window at 20k reads **~4.1 s** on the recorded
+  four-core container, larger there than every other cost measured beside it, so
+  *"the genuine pain point is initial render at 20k on slow hardware"* survives
+  on evidence rather than on the withdrawn number. `Render and scroll scale
+  linearly with no cliff` is softened to what both sittings actually show —
+  cost grows with row count and nothing steps — because the linearity claim
+  rested on the withdrawn column.
+- **`/concepts/scale`** — the same column removed from the duplicate table, with
+  a note pointing at the full withdrawal.
+- **`measure-stress.mjs`** — the header paragraph that existed to say *"not
+  comparable to the Initial render column"* now records the withdrawal and the
+  `--diff-filter=AD` search behind it, instead of pointing at a column that is
+  gone.
+
+**The two kept columns are kept on the evidence above, not by default** —
+select-all reconciles. The style flush is the one loose end and it is filed
+below rather than waved through.
+
+### This wake's own instrument was wrong first, on schedule — and it cost a false P0
+
+The **first** `measure:stress` run failed its own control on **6 of 6** runs
+(`0/1000 checked`, `0/5000 checked`), and `check:po-app` then failed **3 of 20
+behaviours**, including *"the shared page template inits data-tables: select-all
+on /pos checks every row"*. That is the **exact signature** of the real
+2026-08-23 → 2026-09-07 defect Slice 309 found, in the same words, on a gate CI
+runs — which reads as a P0 that preempts the whole dispatch.
+
+**It was neither.** `packages/core/dist` did not exist, because the wake had not
+yet run `npm run build -w @busy-office/ui`, so `npm pack -w @busy-office/ui`
+shipped the reference app a tarball with **no behaviour bundle in it**. The
+cross-check that settled it before any diagnosis was written: **CI on this exact
+commit `2caaa16f` was green at `2026-09-08T11:04:54Z`**, and CI runs
+`check:po-app`. After `npm run build -w @busy-office/ui` and
+`rm -rf examples/po-app/node_modules examples/po-app/busy-office-ui.tgz`:
+`check:po-app` **20 / 20**, and the probe's controls **1000/1000, 5000/5000,
+20000/20000**. Filed as `352.1`.
+
+1. [ ] **352.1 — a missing `packages/core/dist` is reported as an application
+       defect, in the exact words of a defect this repo has actually had.**
+       `check:po-app` and `measure:stress` both boot the reference app from a
+       freshly packed tarball, and neither asks whether that tarball contains
+       the behaviour bundle. When it does not, the failure text is *"the
+       select-all did not select the rows"* — indistinguishable from the real
+       break, and the wrong half of the system to go looking in. It cost this
+       wake a false P0 and was settled only by a green CI run on the same
+       commit.
+       - **Accept** — the property, not a predicted fix: a wake that boots the
+         reference app with an unbuilt `packages/core` is told **which** of the
+         two it is. Either `po-app-harness.mjs` asserts the packed tarball
+         carries the behaviour bundle before booting and names that when it
+         does not, **or** a recorded reason it should not — measuring that the
+         precondition cannot occur in any environment a wake actually runs in
+         is a satisfying outcome and closes it by writing that down.
+         Red-proving it means `rm -rf packages/core/dist` and watching the new
+         message appear, not watching the old one fail.
+
+2. [ ] **352.2 — the two KEPT columns have no recorded method either, and the
+       machine gap they imply is not one machine gap.** Slice 352 kept
+       *Select-all* and *Post-bulk-check style flush* because select-all
+       reconciles against the probe at 0.93x / 0.72x / 1.19x. The style flush
+       does not reconcile the same way: published `negligible` / 231 ms / 610 ms
+       against the probe's **89.2 / 345.1 / 2,206.7 ms** — **1.49x at 5k and
+       3.62x at 20k**, on the same run, from the same sitting, where select-all
+       read ~1x. Layout-bound work legitimately scaling differently from
+       JS-bound work across two machines is a live explanation and is not
+       measured; so is the same missing-window problem the render column was
+       withdrawn for.
+       - **Accept** — the property: whichever it is, it is recorded with the
+         command that shows it. Finding that the two workloads legitimately
+         scale apart by that much across these machines is a satisfying outcome
+         and closes it by writing that down beside the column; finding they do
+         not is equally satisfying and closes it by withdrawing the style-flush
+         column the way the render one went. Note the probe's own n=20,000
+         style-flush spread is **1,384.9-2,930.4 ms over 5 runs**, so any
+         verdict here needs more than one sitting on each side.
+
+**The archive sweep was evaluated and declined on the measured trigger.**
+`roadmap_scope.py` read closed-history share **4,129 / 10,606 = 38.9%** at
+`2caaa16f`, with 20 eligible targets, **11** of them named by a still-open item
+(236.2's report, read before concluding). Below every trigger the last sweeps
+used — the tenth dispatched at 55.1%, the eleventh at 56.7%, the twelfth
+declined at 40.6%, the thirteenth taken at 41.5%. **`249.12` is named for a
+TWELFTH consecutive wake**; nothing is proposed here. Re-run the script at your
+own commit — this wake's own text raises the denominator, not the ratio's
+numerator, because every line it adds lands under an **open** heading.
+
+**NOT VERIFIED, said plainly — and this wake DOES add visual debt.** No
+1440/390 light-and-dark screenshots: a cloud wake has no Podman. Two docs tables
+lose a column (`/components/data-table` 4 → 3, `/concepts/scale` 3 → 2) and four
+paragraphs change, so **"does it look right" is genuinely unchecked** — column
+widths redistribute, and the `4x CPU throttle` badge now sits in a two-column
+table on `/concepts/scale`. What IS checked is every structural property the
+whole-tree gates assert, listed in the commit. A local wake should look at both
+pages at 1440 and 390 in both themes; until then this is debt, not verification.
+
 ## Slice 351 — Objective grill of Slices 324, 325, 347, 350: 63 of 65 assertions reproduce to the digit, and the finding is that the base rate `350.1` tells a later wake to re-run counts a sweep's OWN conversions as inputs it had to read (2026-09-08)
 
 **Dispatched by rule 3**, cloud wake, at `Objective 4 / 3 slices OVERDUE [324,
@@ -3951,8 +4169,13 @@ The two things that outlive it are below.
        today drops a missing script silently via `if (body)`), so this is a
        refusal on corpus size alone and reverses cheaply if that count grows.
 
-2. [ ] **325.2 — `measure:stress`'s render columns have no counterpart in the
-       published table, and the published table's method is unrecoverable.**
+2. [x] **325.2 — WITHDRAWN, on the Accept's second branch: the method is not
+       recoverable and the shape does not survive without it.** Done 2026-09-08
+       (cloud wake, Slice 352); the forensics are in Slice 352 below. Original
+       item text kept verbatim from here on.
+
+       `measure:stress`'s render columns have no counterpart in the published
+       table, and the published table's method is unrecoverable.
        `render-dcl` / `render-load` are `domContentLoadedEventEnd` and
        `loadEventEnd` minus `responseEnd`; the 2026-08-15 *Initial render*
        column is 85 / 174 / 558 ms with no definition written anywhere. The

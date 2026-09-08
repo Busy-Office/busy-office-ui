@@ -272,11 +272,11 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     checkboxes, badges, container query, <code>initDataTables()</code>) in the
     <a href={poAppHref}><code>examples/po-app</code></a> stress harness (<code>/stress?n=…</code>):</p>
     <p class="bo-u-text-muted"><strong>These are one machine's milliseconds, and
-    the machine is not recorded</strong> — so read the <em>shape</em> (roughly
-    linear to 20k, select-all cheap, the style flush the real cost) rather than
-    the absolute figures. The harness is kept precisely so you can get figures
-    for <em>your</em> hardware; a wall-clock millisecond published without its
-    machine is not a number anyone else can reproduce.</p>
+    the machine is not recorded</strong> — so read the <em>shape</em> (select-all
+    cheap, the style flush the real cost) rather than the absolute figures. The
+    harness is kept precisely so you can get figures for <em>your</em> hardware;
+    a wall-clock millisecond published without its machine is not a number anyone
+    else can reproduce.</p>
     <p class="bo-u-text-muted"><strong>A 2026-09 re-run was published here and
     is withdrawn.</strong> It reported select-all at 3 ms / 1k and 7 ms / 5k and
     concluded &ldquo;not slower&rdquo;. It was timing a control that was not
@@ -297,28 +297,50 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     disagree, so it cannot produce the withdrawn numbers above; it records the
     machine, the Chrome build and the CPU throttle factor; and it keeps the
     style flush in its own column rather than folding it into select-all. Its
-    render figures are comparable across its own runs, not to the
-    <em>Initial render</em> column below — that column's method was never
-    written down.</p>
+    render figures are comparable across its own runs and to nothing else — see
+    the withdrawal directly below.</p>
+    <p class="bo-u-text-muted"><strong>The <em>Initial render</em> column that
+    stood in the table below is withdrawn (2026-09-08)</strong> — it read 85 ms
+    at 1k, 174 ms at 5k, 558 ms at 20k, and 1,625 ms and 3,783 ms on the two
+    throttled rows. Its measurement window was never written down and is not
+    recoverable: neither the commit that published it nor the review that added
+    the throttled rows records one, no probe was kept beside it, and the single
+    surviving sentence about how it was taken is a diagnostic aside, not a
+    definition. <strong>The shape does not survive the missing method either</strong>,
+    which is why the caveat above was not enough on its own: re-measured with the
+    kept probe on a recorded machine, the defined render window traces a
+    1 : 5.8 : 11.5 curve across those same three row counts against the withdrawn
+    column's 1 : 2.0 : 6.6. That does not show the old figures were wrong — it
+    shows the disagreement cannot be diagnosed, because the two windows and the
+    two machines both differ and no method was recorded to tell them apart. The
+    interaction columns are kept, because they <em>do</em> reconcile against that
+    probe: select-all re-measures at 3.7 / 12.9 / 58.4 ms against the published
+    4 / 18 / 49 ms. For render figures on your own hardware, run
+    <code>npm run measure:stress -w docs</code>.</p>
     <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table" data-density="compact">
-        <thead><tr><th scope="col" class="bo-data-table__col--numeric">Rows</th><th scope="col" class="bo-data-table__col--numeric">Initial render</th><th scope="col" class="bo-data-table__col--numeric">Select-all</th><th scope="col" class="bo-data-table__col--numeric">Post-bulk-check style flush</th></tr></thead>
+        <thead><tr><th scope="col" class="bo-data-table__col--numeric">Rows</th><th scope="col" class="bo-data-table__col--numeric">Select-all</th><th scope="col" class="bo-data-table__col--numeric">Post-bulk-check style flush</th></tr></thead>
         <tbody>
-          <tr><td class="bo-data-table__col--numeric">1,000</td><td class="bo-data-table__col--numeric">85 ms</td><td class="bo-data-table__col--numeric">4 ms</td><td class="bo-data-table__col--numeric">negligible</td></tr>
-          <tr><td class="bo-data-table__col--numeric">5,000</td><td class="bo-data-table__col--numeric">174 ms</td><td class="bo-data-table__col--numeric">18 ms</td><td class="bo-data-table__col--numeric">231 ms</td></tr>
-          <tr><td class="bo-data-table__col--numeric">20,000</td><td class="bo-data-table__col--numeric">558 ms</td><td class="bo-data-table__col--numeric">49 ms</td><td class="bo-data-table__col--numeric">610 ms</td></tr>
-          <tr><td class="bo-data-table__col--numeric">5,000 <span class="bo-badge">4× CPU throttle</span></td><td class="bo-data-table__col--numeric">1,625 ms</td><td class="bo-data-table__col--numeric">15 ms</td><td class="bo-data-table__col--numeric">174 ms</td></tr>
-          <tr><td class="bo-data-table__col--numeric">20,000 <span class="bo-badge">4× CPU throttle</span></td><td class="bo-data-table__col--numeric">3,783 ms</td><td class="bo-data-table__col--numeric">60 ms</td><td class="bo-data-table__col--numeric">686 ms</td></tr>
+          <tr><td class="bo-data-table__col--numeric">1,000</td><td class="bo-data-table__col--numeric">4 ms</td><td class="bo-data-table__col--numeric">negligible</td></tr>
+          <tr><td class="bo-data-table__col--numeric">5,000</td><td class="bo-data-table__col--numeric">18 ms</td><td class="bo-data-table__col--numeric">231 ms</td></tr>
+          <tr><td class="bo-data-table__col--numeric">20,000</td><td class="bo-data-table__col--numeric">49 ms</td><td class="bo-data-table__col--numeric">610 ms</td></tr>
+          <tr><td class="bo-data-table__col--numeric">5,000 <span class="bo-badge">4× CPU throttle</span></td><td class="bo-data-table__col--numeric">15 ms</td><td class="bo-data-table__col--numeric">174 ms</td></tr>
+          <tr><td class="bo-data-table__col--numeric">20,000 <span class="bo-badge">4× CPU throttle</span></td><td class="bo-data-table__col--numeric">60 ms</td><td class="bo-data-table__col--numeric">686 ms</td></tr>
         </tbody>
       </table>
     </div>
     <p class="bo-u-text-muted">The 4×-throttle rows approximate older corporate
     hardware (added after the decisions grill challenged the single-machine
-    evidence). Render and scroll scale linearly with no cliff; the recurring cost
-    is the <em>bulk-select style recalculation</em> (the selected-row tint
-    re-evaluating per row) — it repeats on EVERY bulk toggle, staying under 700 ms
-    even throttled. The genuine pain point is initial render at 20k rows on slow
-    hardware (~3.8 s). Practical guidance: a few thousand rows are fine as-is;
+    evidence). Nothing steps: cost grows with row count and no cliff showed up in
+    either sitting. The recurring cost is the <em>bulk-select style
+    recalculation</em> (the selected-row tint re-evaluating per row) — it repeats
+    on EVERY bulk toggle, staying under 700 ms even throttled. The genuine pain
+    point is initial render at 20k rows on slow hardware, and with the column
+    above withdrawn the figure to quote is the probe's own: a defined render
+    window of <strong>~4.1 s</strong> at 20k on a recorded four-core container,
+    larger there than every other cost measured beside it, and re-derivable with
+    <code>npm run measure:stress -w docs -- --rows 20000</code>. Practical
+    guidance: a few thousand rows are fine as-is;
     beyond that, paginate server-side (<a href={base + '/components/pagination'}>page
     numbers or load-more</a>) — which dense ERP screens want anyway for
     findability. <strong>There are no virtualization hooks</strong>: windowing

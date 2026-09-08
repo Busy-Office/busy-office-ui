@@ -66,12 +66,18 @@
  *                 taken at the END of that dispatch, in the same task, so it
  *                 is the first flush that pays for the mutation.
  *
- * **`render-dcl` and `render-load` are comparable across runs of THIS probe
- * and NOT to the 2026-08-15 "Initial render" column**, which is said plainly
- * rather than glossed: that column's method was never recorded, and these two
- * windows include the reference app's own subresources (htmx is a deferred
- * script inside them). Comparing them to it would repeat the error Slice 309
- * corrected — publishing a number whose definition nobody can check.
+ * **`render-dcl` and `render-load` are comparable across runs of THIS probe and
+ * to nothing else.** They include the reference app's own subresources (htmx is
+ * a deferred script inside them), so they are not a general "time to render N
+ * rows" — they are this probe's window, stated so two of its runs mean the same
+ * thing.
+ *
+ * The 2026-08-15 "Initial render" column they used to sit beside was
+ * **withdrawn on 2026-09-08** (roadmap 325.2). Its window was never recorded
+ * and is not recoverable from this repository's history; searched exhaustively
+ * — `git log --all --diff-filter=AD -- '*stress*'` returns this file and
+ * nothing earlier, so no probe was ever kept beside it. Run this probe rather
+ * than comparing anything to those figures.
  *
  * The `change` event is what is bracketed, not `click`: `data-table.ts` binds
  * `change` on the container, and for a checkbox the activation behaviour fires
