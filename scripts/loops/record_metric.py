@@ -4,6 +4,22 @@ loops.db. The jsonl file is the source of truth; the DB is the mirror.
 
 Usage:
   python3 scripts/loops/record_metric.py --name bundle-gz-kb --value 7.0 --unit kB
+
+THERE IS DELIBERATELY NO `--direction`, AND DO NOT ADD ONE (roadmap 324.1,
+2026-09-08). Two reasons, both measured. Shape: direction is constant per NAME,
+so a per-sample field is one fact stored in every sample and free to disagree
+with itself, and no sample already recorded could ever carry it. Substance:
+supplying it makes rule 5 fire on `bundle-gz-kb` -- four consecutive day-pair
+rises, 7.2 -> 15.1 kB -- and that verdict is wrong, because the same wakes
+recorded `components` at the SAME timestamps and per-component cost FELL
+(0.400 -> 0.384 -> 0.355 kB; 0.378 live). A rise with no denominator is growth.
+Nor can the unit stand in: `count` is carried by 14 names spanning both
+directions, and `axe-violations` changed unit mid-series (`pages` -> `count`).
+
+So: the reader supplies the direction, and `dispatch_status.py` prints movement
+rather than a verdict. When a name has a real threshold, gate it -- `check:size`
+budgets the bundle at 16.7 kB gz, which is rule 5's budget clause and the
+instrument that actually answers "is this a problem?".
 """
 import argparse
 import datetime

@@ -320,6 +320,59 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 347 — rule 5's missing DIRECTION is refused, and the reason is not that it is hard to record: supplying it makes rule 5 fire on the one metric it can act on, and the log's own same-timestamp companion samples refute that verdict. `324.1` closed on its Accept's second branch (2026-09-08)
+
+**Dispatched by rule 4**, cloud wake. Step 0: container **DETACHED** again (trap
+1; `git branch --show-current` empty, fixed with `git checkout -B main
+origin/main` before any commit), and `origin/main` again arrived as a **forced
+update** (`26447ba...5543979`). Step 0b: `Standardize 0 / 4`, `Objective 0 / 3`,
+`Optimize ok`. Step 1: both intakes read with `ENVIRONMENT.md` §8's controls —
+`/issues?state=open` **200 len 1**, `/discussions` **200 len 0**,
+`/not-a-real-route` **404** — issue #2's `updated_at` unmoved at
+`2026-09-06T15:10:34Z` for a **thirteenth** consecutive hand-off, so no new
+input and Step 1 committed nothing. Step 2: rule 1 no P0 (`grep -cE '^\s*[0-9]+\.
+\[ \].*P0' ROADMAP.md` → **0** across 31 open items), rule 2 `0/4`, rule 3
+`0/3`, **rule 4** on the oldest still-open item no other kind of block covers —
+`324.1`. Everything older was re-checked in the file rather than carried from
+the hand-off: Slice 15, `112.3`, `112.4`, `249.7`, `249.10`-`249.13`, `273.2`
+and `296.3` are owner-blocked, and `320.3` is browser-blocked in the screenshot
+sense by its own Accept.
+
+**No collision.** `origin/main` read `5543979` at Step 0 and `5543979` again
+immediately before the first commit.
+
+**The whole write-up, the commands and the controls are in `324.1` above,
+closed by this slice.** Three things are worth carrying out of it:
+
+- **The measure-first branch the item wrote for itself returned the answer that
+  keeps the item alive**, which is why it was worth writing that way: 1 of 8
+  day-paired names is directional from its unit, not "all of them", so the
+  cheap unit-convention fix is dead and the question was still open.
+- **What closed it was not the direction question at all.** Supplying a
+  direction makes rule 5 fire on `bundle-gz-kb` — four consecutive day-pair
+  rises, satisfiable since 2026-08-16 — and the same wakes recorded
+  `components` at the **same timestamps**, where per-component cost falls
+  0.400 → 0.384 → 0.355 kB (0.378 live). A rise with no denominator is growth.
+  The item asked whether a verdict could be *stated*; the answer is that the
+  verdict would have been **wrong**, which is a stronger refusal than the one
+  the Accept anticipated.
+- **The instrument that already answers it is rule 5's own other clause.**
+  `check:size` gates `css/index.min.css` at 16.7 kB gz and reads 15.10 today.
+  A budget knows the threshold; a delta does not. Where a trend clause and a
+  budget clause compete over one name, the budget is the mechanical one.
+
+**Prose cost, declared because `326.3` is open on exactly this.** This wake adds
+**one** printed line to `dispatch_status.py`'s Step 0b output (six in source,
+one `print`) and prose to two docstrings;
+`326.3`'s subject is the dispatch REGION of `LOOPS.md`, which this commit does
+not touch at all.
+
+**NOT VERIFIED VISUALLY, and none is owed.** No 1440/390 light-and-dark
+screenshots — a cloud wake has no Podman. The diff is `ROADMAP.md`, two
+`scripts/loops/*.py` files and the hand-off; no CSS, no docs page and no
+component changed, so nothing rendered can move. Slice 345's two visual debts
+and the six older ones are unchanged and unspent.
+
 ## Slice 346 — Objective grill of Slices 322, 342: 20 of 22 assertions reproduce, and **both defects are a recurrence of something Slice 322 had just filed** — the next slice published a load-bearing number with no command, and the round closing its item missed the third copy of a correction because the phrase wraps (2026-09-08)
 
 **Dispatched by rule 3**, cloud wake, at `Objective 4 / 3 slices OVERDUE
@@ -3251,7 +3304,91 @@ so a grep for the name could never find it. The two findings that outlive the
 re-scoping are filed below; neither is fixed by it, and both are what stop
 rule 5 from firing once its input is honest.
 
-1. [ ] **324.1 — a sample records no DIRECTION, so even a fresh, well-paired
+1. [x] **324.1 — DONE, on the Accept's SECOND branch. No direction is recorded,
+       and the reason is not that it is hard: supplying it would make rule 5
+       fire on the one metric it can act on, and that verdict is wrong.**
+       Measured 2026-09-08 (cloud wake, Slice 347) at `5543979`.
+
+       **The measure-first answer is 1 of 8, so the unit-convention escape
+       hatch is dead.** Of the eight day-paired names only `bundle-gz-kb` (`kB`)
+       is directional from its unit. `count` is carried by **14** names,
+       including `axe-violations` (lower-better, pinned at 0 because `test:axe`
+       fails the build above 0 — mechanical, not judged) and `claims`
+       (higher-better — the original text below calls its rise *"the goal"*).
+       One unit, both directions, both anchors mechanical. And the unit is not
+       even stable per name: `axe-violations` was recorded as `pages` through
+       2026-08-30 and as `count` from 2026-08-31.
+
+       ```
+       python3 - <<'PY'
+       import json, collections
+       S=[json.loads(l) for l in open('.roundtable/loop-metrics.jsonl') if l.strip()]
+       days=collections.defaultdict(set); u2n=collections.defaultdict(set)
+       for s in S: days[s['name']].add(s['ts'][:10]); u2n[s['unit']].add(s['name'])
+       print(sum(1 for n in days if len(days[n])>=2), 'day-paired'); print(sorted(u2n['count']))
+       PY
+       ```
+
+       **A per-sample field is also the wrong SHAPE.** Direction is constant per
+       name, so a field on the sample is one fact stored in every sample and
+       free to disagree with itself — 140 of them at `5543979`, none of which
+       could ever carry it.
+
+       **What settles it: rule 5 has been satisfiable since 2026-08-16 and only
+       the missing direction hid that.** Four day-paired names already carry two
+       or more consecutive same-direction day-pairs — `bundle-gz-kb` (4),
+       `claims` (3), `components` (2), `gates` (2). Apply directions and exactly
+       one reads as a regression: `bundle-gz-kb`, 7.2 → 9.6 → 10.8 → 11.7 →
+       15.1 kB, four consecutive rises.
+
+       It is not a regression. The log co-recorded `components` at the **same
+       timestamp** as `bundle-gz-kb` three times — the recording wake's own
+       pairing, not this one's:
+
+       ```
+       2026-08-13 23:06    7.20 kB / 18 = 0.400 kB per component
+       2026-08-15 19:05    9.60 kB / 25 = 0.384
+       2026-08-16 02:24    9.93 kB / 28 = 0.355
+       2026-09-08 live    15.10 kB / 40 = 0.378   check:size at HEAD
+       ```
+
+       Absolute **+110%**; normalised **−5.6%**, and not monotone. Today's 40 is
+       two independent instruments agreeing (`ls packages/core/src/css/components`
+       and `api.json`'s `components` key). **Robustness control:** taking
+       2026-08-16's LAST values instead of the co-located ones (10.8 kB / 30 =
+       0.360) leaves the fall intact, so it is not an artifact of which same-day
+       sample was picked. **Denominator caveat, said plainly:** `index.min.css`
+       also carries primitives, utilities and tokens, so 0.378 is a rough
+       per-component cost — a control on the trend's direction, not a budget.
+
+       **And rule 5's OTHER clause already covers this name, better.** *"or a
+       size budget breached outright"* is mechanical: `check:size` gates
+       `css/index.min.css` at 16.7 kB gz, reads **15.10** today, and prints
+       per-bucket headroom (tightest 110 bytes, `css/brand-navy.min.css`). A
+       budget knows the threshold; a delta does not.
+
+       **Verdict: no `--direction` flag and no per-name registry.** Base rate —
+       a registry would cover 8 names, of which one can currently satisfy "two
+       consecutive", and that one is better served by a budget that already
+       exists. That is 94.11's ceremony test answered with a number. The reason
+       is written where the two wakes who need it read it: `report_comparable`'s
+       closing note (printed at Step 0b every wake) and `record_metric.py`'s
+       docstring (read by a wake recording a sample).
+
+       **What would reopen it:** a day-paired name with two or more consecutive
+       same-direction pairs, a lower-better direction, and **no budget gate
+       covering it**. `dispatch-region-words` is the live candidate — `326.3`
+       treats its growth as the concern — and it has one day-pair, so a third
+       day of sampling would make it the first such name.
+
+       **Not verified visually, and none is owed:** the diff is `ROADMAP.md`,
+       two `scripts/loops/*.py` files and the hand-off. No CSS, no docs page and
+       no component changed, so nothing rendered can move.
+
+       *Original text, kept verbatim per 236.2 — the Accept below is what this
+       item was judged against:*
+
+       **a sample records no DIRECTION, so even a fresh, well-paired
        metric cannot yield a verdict.** `record_metric.py` writes `{ts, name,
        value, unit}`. On this tree `claims` rises 35 → 169 (the goal) and
        `bundle-gz-kb` rises 7.2 → 15.1 kB (the regression) and both are a

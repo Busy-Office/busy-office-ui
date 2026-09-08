@@ -704,6 +704,20 @@ def report_comparable(samples, dates):
     direction is not inferable from the data either way round: `claims` rising
     35 -> 169 is the goal, `bundle-gz-kb` rising 7.2 -> 15.1 is the regression,
     and both are a positive delta on a number.
+
+    THAT IS DELIBERATE AND WAS MEASURED, not a gap left open (roadmap 324.1,
+    2026-09-08). The unit cannot carry it: `count` is used by 14 names spanning
+    both directions, and `axe-violations` alone changed unit mid-series
+    (`pages` -> `count`). The stronger reason is that supplying a direction
+    makes rule 5 FIRE, wrongly. Four day-paired names already hold two or more
+    consecutive same-direction pairs -- `bundle-gz-kb` (4), `claims` (3),
+    `components` (2), `gates` (2) -- and with directions applied exactly one
+    reads as a regression: `bundle-gz-kb`, 7.2 -> 15.1 kB. The log's own
+    same-timestamp `components` companions say otherwise: 0.400 -> 0.384 ->
+    0.355 kB per component over that window, 0.378 live. A rise with no
+    denominator is growth, not a regression, and rule 5's OTHER clause -- a
+    budget breached outright -- already covers this name better, because
+    `check:size` knows the threshold (16.7 kB gz) and a delta does not.
     """
     paired = sorted(
         (n for n in dates if len(dates[n]) >= 2),
@@ -742,6 +756,14 @@ def report_comparable(samples, dates):
         "MOVED is either healthy or pinned by a gate — rule 5 cannot fire on it "
         "either way (`axe-violations` is 0 on every day because `test:axe` fails "
         "the build above 0)."
+    )
+    print(
+        "     a direction is NOT recorded on purpose (roadmap 324.1): adding one "
+        "makes rule 5 fire on `bundle-gz-kb`'s four consecutive rises, which the "
+        "log's own same-timestamp `components` samples refute (0.400 -> 0.355 kB "
+        "per component over that window). A rise with no denominator is growth. "
+        "Where a name has a real threshold, use it — `check:size` gates the "
+        "bundle at 16.7 kB gz, which is rule 5's budget clause, not its trend one."
     )
 
 
