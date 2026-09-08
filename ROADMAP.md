@@ -462,11 +462,13 @@ found by Part 2's census, not by review — widening the set moved it 134 → 15
 adding **5** real sample lines against **12** more false positives. The bounded
 census caught the filter, not the other way round.
 
-1. [x] **330.1** — closed by this measurement, on its own Accept's branch:
-       *"finding that this is two instances and not a pattern closes it."* It is
-       **one** instance in the live file and **zero** load-bearing for an open
-       decision. **Nothing is proposed**, per the item's own instruction to
-       measure before proposing and its already-Refused gate.
+1. [x] **358.1 — `330.1` answered on its Accept's stated satisfying branch:
+       *"finding that this is two instances and not a pattern closes it."***
+       It is **one** instance in the live file — zero still resting on a sample
+       — and **zero** load-bearing for an open decision. **Nothing is
+       proposed**, per the item's own instruction to measure before proposing
+       and its already-Refused gate. `330.1` is ticked in place under Slice 330
+       with the pointer back here.
 
 ### NOT VERIFIED, said plainly — and this wake adds NO visual debt
 
