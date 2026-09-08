@@ -368,10 +368,66 @@ one `print`) and prose to two docstrings;
 not touch at all.
 
 **NOT VERIFIED VISUALLY, and none is owed.** No 1440/390 light-and-dark
-screenshots — a cloud wake has no Podman. The diff is `ROADMAP.md`, two
+screenshots — a cloud wake has no Podman. The diff is `ROADMAP.md`, three
 `scripts/loops/*.py` files and the hand-off; no CSS, no docs page and no
 component changed, so nothing rendered can move. Slice 345's two visual debts
 and the six older ones are unchanged and unspent.
+
+### And the wake's own recording step crashed, which is `347.1`
+
+1. [x] **347.1 — DONE. `polish_requeue.py --verify-stamps`, the third advisory
+       check `LOOPS.md` Step 0 says REPORTS, died with an unhandled traceback on
+       a shallow clone — and its own docstring claimed that case was handled.**
+       Found by running it, not by reading it: `record_iteration.py` invoked it
+       after this wake's commit and it raised `CalledProcessError` out of
+       `git ls-tree -r 4beb4b86 -- apps/docs/src/pages/components/alerts.astro`.
+
+       **The docstring is the claim and the traceback is the refutation.** It
+       reads *"`unknown` — the digest appears in no commit of the ledger…
+       **A shallow clone reaches this**"*. It does not: `unknown` is only
+       reachable when the stamp carries **no** revision, and every stamp
+       `--stamp` writes carries one, so the `if at:` branch reads at that
+       revision first and every read there goes through `git(…, check=True)`.
+
+       **Diagnosed by discrimination, not by inference.** The clone was shallow
+       (`git rev-parse --is-shallow-repository` → `true`, **51** commits) and
+       `git cat-file -e 4beb4b86` failed. After `git fetch --unshallow origin`
+       — **2,056** commits, no `shallow.lock` — the *same tree* and the *same
+       command* reported `21 row(s), every stamp describes a real tree`, exit 0.
+       One variable changed, and the verdict flipped.
+
+       **Why it matters beyond one traceback:** a fresh cloud container is
+       shallow by default, and this wake needed no history measurement, so it
+       had no reason to unshallow. Every such wake gets a traceback out of its
+       recording step. Nothing was lost here — the check runs *after* the log
+       append, and the three rows and `STATUS.md` all landed — but a traceback
+       is not a report, and `report_loop_prose.py` already has the right shape
+       for this: it **refuses** on a shallow clone rather than printing figures
+       it cannot stand behind.
+
+       **Fixed with a fourth verdict, `absent`**, returned before any read at
+       the stamp's revision: *this clone does not hold it, so the row is
+       UNVERIFIED here rather than broken*, naming `git fetch --unshallow
+       origin` as the remedy. The `--verify-stamps` report counts them
+       separately from the genuinely broken stamps, because reporting a shallow
+       clone as a bad stamp is exactly the false signal this check exists to
+       avoid.
+
+       **Red-proved by injection, with the control the injection needs.** Same
+       row, same digest, only the revision replaced by one no clone holds —
+       and the substitution, the unchanged digest, the changed revision and the
+       bogus revision's absence were each asserted before the call, so a green
+       result could not come from an injection that never landed:
+
+       ```
+       component/alerts  577cb919@4beb4b86            -> reproducible
+       component/alerts  577cb919@0123…4567 (absent)  -> absent, no traceback
+       ```
+
+       The control is the first line: the real stamp does not read `absent`, so
+       the new branch discriminates rather than swallowing every row. And
+       `rev_present` was checked both ways (`HEAD` → `True`, `deadbeef1` →
+       `False`) rather than assumed.
 
 ## Slice 346 — Objective grill of Slices 322, 342: 20 of 22 assertions reproduce, and **both defects are a recurrence of something Slice 322 had just filed** — the next slice published a load-bearing number with no command, and the round closing its item missed the third copy of a correction because the phrase wraps (2026-09-08)
 

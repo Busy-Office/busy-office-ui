@@ -153,6 +153,27 @@ def git(*args: str, tree: str | None = None) -> str:
     ).stdout
 
 
+def rev_present(rev: str) -> bool:
+    """Is `rev` an object THIS clone holds?
+
+    A fresh cloud container is shallow -- 51 commits on 2026-09-08 against
+    2,056 after `--unshallow` (ENVIRONMENT.md trap 2) -- so a stamp written by
+    an earlier wake routinely names a revision that is simply absent here.
+    Every read below goes through `git(..., check=True)`, so an absent
+    revision RAISES rather than classifying, and this check is advisory: it is
+    run by `record_iteration.py` after the commit and must report, never crash.
+    """
+    return (
+        subprocess.run(
+            ["git", "cat-file", "-e", f"{rev}^{{commit}}"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+        ).returncode
+        == 0
+    )
+
+
 def slug_to_css_dirs() -> dict[str, list[str]]:
     """Reverse api.json's generated pageSlug map. Never guess this."""
     if not API.exists():
@@ -438,8 +459,18 @@ def stamp_provenance(surface: str, stamp: str) -> tuple[str, str, str]:
       can be afforded at step 0 every wake, and `--audit-stamps` settles any
       row it names.
     - ``unknown`` -- the digest appears in no commit of the ledger, so there is
-      nothing to compare against. A shallow clone reaches this; so does a
-      hand-edited row.
+      nothing to compare against. A hand-edited row reaches this.
+    - ``absent`` -- the stamp names a revision this CLONE does not hold, so no
+      verdict is available here at all. **This is the shallow-clone case, and
+      the line above used to claim it landed in `unknown`** (roadmap 347.1,
+      2026-09-08). It did not: `unknown` is only reachable when the stamp
+      carries no revision, and every stamp `--stamp` writes carries one, so a
+      shallow clone raised `CalledProcessError` out of `git ls-tree` instead --
+      an unhandled traceback out of a check LOOPS.md Step 0 says REPORTS.
+      Observed for real on a fresh cloud container and confirmed by
+      discrimination: the same tree, same command, after
+      `git fetch --unshallow origin`, reports `21 row(s), every stamp describes
+      a real tree` and exits 0.
 
     `narrow` and both `orphan` kinds mean the same thing operationally: the
     re-queue carries no information about source movement. None is suppressed --
@@ -449,6 +480,17 @@ def stamp_provenance(surface: str, stamp: str) -> tuple[str, str, str]:
     """
     stamp, at = parse_stamp(stamp)
     wide = source_paths(surface)
+
+    if at and not rev_present(at):
+        # Before any read AT that revision -- `digest_paths` would raise.
+        return (
+            "absent",
+            f"the stamp names {at}, which this clone does not hold — a shallow "
+            "clone (`git rev-parse --is-shallow-repository`) carries only the "
+            "recent commits, so this row is UNVERIFIED here rather than broken; "
+            "`git fetch --unshallow origin` and re-run to get a verdict",
+            "",
+        )
 
     if at:
         # The lookup the search cannot do. A stamp carrying its revision is
@@ -799,13 +841,24 @@ def main() -> int:
                 "describes a real tree"
             )
             return 0
+        absent = [s for s, kind, _ in broken if kind == "absent"]
         print(
             f"stamp verification: {len(broken)} of {len(recorded)} stamp(s) "
-            "describe no tree any commit carries, so their re-queue cannot "
-            "mean 'the source moved':"
+            "could not be confirmed to describe a tree any commit carries, so "
+            "their re-queue cannot be read as 'the source moved':"
         )
         for s, kind, why in broken:
             print(f"  {s:34s} {kind}: {why}")
+        if absent:
+            # Distinguish "unverifiable here" from "broken" — reporting a
+            # shallow clone as a bad stamp is the false signal this check
+            # exists to avoid (roadmap 347.1).
+            print(
+                f"  {len(absent)} of these is the `absent` kind and says nothing "
+                "about the stamp: this clone is shallow, so the revision the "
+                "stamp names is not here. `git fetch --unshallow origin` and "
+                "re-run before treating any of them as a finding."
+            )
         healable = [s for s, kind, _ in broken if kind == "orphan-midround"]
         if healable:
             # Say what happens next, so the report is not a standing request

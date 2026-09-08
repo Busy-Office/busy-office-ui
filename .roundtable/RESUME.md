@@ -86,6 +86,38 @@ lower-better direction, and **no budget gate covering it**.
 concern — and it has one day-pair, so a third day of sampling makes it the
 first such name.
 
+## Second thing that landed: `347.1` — the wake's own recording step crashed
+
+`record_iteration.py` ran the three advisory checks after the commit and the
+**third** one, `polish_requeue.py --verify-stamps`, died with an unhandled
+`CalledProcessError` out of `git ls-tree -r 4beb4b86 -- …/alerts.astro`.
+Nothing was lost — the check runs *after* the log append, and the three rows
+and `STATUS.md` all landed — but `LOOPS.md` Step 0 says all three REPORT, and a
+traceback is not a report.
+
+**The cause is the shallow clone, and its own docstring claimed that case was
+handled.** `unknown` is only reachable when a stamp carries no revision; every
+stamp `--stamp` writes carries one, so the `if at:` branch reads at that
+revision through `git(…, check=True)` and raises. **Diagnosed by
+discrimination:** shallow (`true`, 51 commits) → traceback; after
+`git fetch --unshallow origin` (2,056 commits, no `shallow.lock`) the *same
+tree* and *same command* → `21 row(s), every stamp describes a real tree`,
+exit 0.
+
+**Fixed with a fourth verdict, `absent`** — returned before any read at the
+stamp's revision, counted separately from genuinely broken stamps, and naming
+the remedy. **Red-proved by injection with a control**, per CLAUDE.md: same row,
+same digest, revision swapped for one no clone holds, and the substitution,
+the unchanged digest, the changed revision and the bogus revision's absence
+each asserted *before* the call so a green result could not come from an
+injection that never landed. `component/alerts` reads `reproducible` on its
+real stamp and `absent` on the bogus one — it discriminates, and neither
+raises.
+
+**Every wake on a fresh cloud container hits this** unless it happens to
+unshallow for other reasons. This one did not need history, which is why it was
+the wake that found it.
+
 ## No metric was recorded this wake, and that is deliberate
 
 `324.2` says outright *"do not record a sample to un-STALE the line before the
@@ -98,10 +130,11 @@ is the shape this slice just refused.
 
 **No 1440/390 light-and-dark screenshots — a cloud wake has no Podman.** **None
 are owed**, structurally rather than by judgement: the diff is `ROADMAP.md`,
-`scripts/loops/dispatch_status.py`, `scripts/loops/record_metric.py` and this
-file. No CSS rule, no docs page and no component changed, so nothing rendered
-can move. Neither script is a build step or a gate — `dispatch_status.py` is run
-by hand at Step 0b and by `record_iteration.py`; `record_metric.py` is a CLI.
+`scripts/loops/dispatch_status.py`, `scripts/loops/record_metric.py`,
+`scripts/loops/polish_requeue.py` and this file. No CSS rule, no docs page and no component changed, so nothing rendered
+can move. None of the three scripts is a build step or a gate — `dispatch_status.py` is run
+by hand at Step 0b and by `record_iteration.py`; `record_metric.py` is a CLI;
+`polish_requeue.py` is advisory and run from the recorder.
 
 **Slice 345's two visual debts are still owed and unspent:**
 `/patterns/output-form` **in print** (the figure, the barcode quiet zone), and
@@ -135,10 +168,10 @@ is one printed line from six source lines.
 
 ## The open set is 30 — no P0, and 19 are cloud-takeable
 
-`roadmap_scope.py` reports **30 open / 80 closed**, and the raw checkbox count
-agrees (`30` open; `82` raw `[x]` = 80 + the 2 under the non-slice `## STATE`
-heading, which the script reports separately). This commit closed `324.1` and
-opened nothing, so the total moved 31 → 30. **Re-run the script** rather than
+`roadmap_scope.py` reports **30 open / 81 closed**, and the raw checkbox count
+agrees (`30` open; `83` raw `[x]` = 81 + the 2 under the non-slice `## STATE`
+heading, which the script reports separately). This wake closed `324.1` and
+filed `347.1` already closed, so open moved 31 → 30 and closed 79 → 81. **Re-run the script** rather than
 quoting this.
 
 - **cloud-takeable: 19** — `324.2`, `325.1`, `325.2`, `326.3`, `327.3`,
@@ -242,9 +275,12 @@ with *"Needed a single revision"* mid-way through the pre-commit collision
 check, exactly as `ENVIRONMENT.md` §1 says it does on every container; the
 two-argument form without `--short` answered immediately. Trap 1c was respected:
 `CHROME_PATH` was exported **in the same command** as every browser gate. No
-`git stash` at any point. **Trap 2 was NOT exercised** — no history measurement
-was needed this wake, so the clone was left shallow and `git tag` was not read;
-say so rather than reporting a count that was never taken.
+`git stash` at any point. **Trap 2 was exercised for real, and by a
+crash rather than a measurement** — the clone was left shallow (no history
+measurement was needed) until `polish_requeue.py --verify-stamps` died on it,
+which is `347.1`. The unshallow then ran clean in one go (**2,056** commits, no
+`shallow.lock`) and again brought the tags; `git tag | wc -l` → **8**, run
+rather than assumed.
 
 ## Direction
 
