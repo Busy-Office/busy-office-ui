@@ -320,6 +320,235 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 354 — `327.3` answered: 192.1 entered this loop's vocabulary as a NAME FOR A DEFECT, not as a step in a write-up — **11 of 21** citations quote its observation half, **1 of 21** its instruction half (and that one a restatement, not an application), and **1 of 161** slices since it landed carries the inventory it prescribes (2026-09-08)
+
+**Dispatched by rule 4**, cloud wake, on the oldest still-open item no other kind
+of block covers. Every open item older than `327.3` was re-read in the file
+rather than carried from the hand-off: the Slice 15 AT-runtime item (owner
+hardware), `112.3` (**BLOCKED ON OWNER BRIEFS**), `112.4` (blocked on 112.3's
+verdict), `249.7` (its own closing text: *"still waiting on 249.10"*),
+`249.10`-`249.13` (**OWNER CALL** in each), `273.2` (**OWNER CALL**), `296.3`
+(**OWNER CALL**), `320.3` (browser-blocked in the screenshot sense — its own
+Accept says *"a **rendered** change a cloud wake cannot judge"*).
+
+**Verdict: the rule is fine and the practice is the gap. Nothing is built, and
+no gate is proposed** — which is the branch `327.3`'s Accept names as a
+satisfying outcome, conditional on the count carrying the command that produced
+it. Every command below is re-runnable at this commit.
+
+### The population, and its reconciliation
+
+192.1 landed in `CLAUDE.md` at **`c75d721e`, 2026-08-29**. The population is
+every slice numbered above 192 across `ROADMAP.md` + `ROADMAP-archive.md`:
+**161 slices, 193 → 353, 268,072 words**, median 1,506. **Every figure in this
+slice describes the tree at `d8767657`**, the wake's Step 0 tip, before this
+slice existed — it is not read from the working tree, and re-running any command
+below at a later commit adds Slice 354 itself to the corpus.
+
+```
+git log --format='%H %ad %s' --date=short -S'instrument for each' -- CLAUDE.md
+  # c75d721e 2026-08-29 docs(192.1): the defect lands in what shipped BESIDE the number
+```
+
+The number cut is not an assumption: **0** population slices carry a heading
+date before 2026-08-29 and **0** slices ≤ 192 carry one after it, so slice
+number and landing date agree across the whole corpus (2 slices, 251 and 306,
+carry no heading date and were classified by number alone). The extractor finds
+**335** slice sections, which is what `roadmap_scope.py` independently reports
+for `ROADMAP.md` — the reconciliation, since 286 of the 335 exist in both files
+and a pointer stub that was counted as a body would have inflated every figure
+below.
+
+### The count `327.3` asks for: **1 of 161 (0.6%)**
+
+*"Carries a per-claim instrument line"* was fixed as a definition **before**
+reading anything, because the read is a judgement: **the slice inventories the
+claims it is shipping BESIDE its headline measurement and attributes an
+instrument — or an explicit "none" — to each.**
+
+| reading | count | slices |
+|---|---|---|
+| the inventory the rule prescribes | **1 / 161 (0.6%)** | `278` |
+| widest: the rule applied forward to ≥1 non-headline claim | **3 / 161 (1.9%)** | `227`, `239`, `278` |
+| collective, not per-claim, attribution (marginal — counted in neither) | 3 | `256`, `258`, `294` |
+
+Slice 278 is the only one that writes the inventory out: *"**The other claims
+this change carries, with the instrument for each**, per CLAUDE.md's rule that
+the defect lands beside the red-proved number"*, then names an instrument for
+each of them. `227` and `239` each check exactly one claim standing beside a
+number they are correcting — forward application, but of one claim, and in the
+artefact being fixed rather than in the slice's own outgoing text. `256`/`258`
+attribute an instrument **kind** to all their claims at once (*"every claim
+above is a count, a byte size, a computed style or a layout geometry"*); `294`
+tables an instrument per claim, but of the **input it is triaging**, not of what
+it ships — that is the premise rule, not this one.
+
+### Why it is not executed: the citations select the paragraph's OBSERVATION half and drop its INSTRUCTION half
+
+192.1's `CLAUDE.md` paragraph is an observation followed by an instruction. The
+corpus quotes one and not the other:
+
+```
+observation half   "the defect lands in what shipped BESIDE the number"
+instruction half   "list the other claims a change is carrying and name the instrument for each"
+```
+
+| | non-self citations of 192.1 (n=21) | all 161 population slices | control: 174 slices ≤ 192 |
+|---|---|---|---|
+| observation half quoted | **11** | 12 (7.5%) | **0** |
+| instruction half quoted | **1** | 5 → **2** after hand-read | 1 (a false positive) |
+
+The one citation reaching the instruction half is **193** — a synthesis *table*
+of `CLAUDE.md`'s sections restating the rule, not an application of it. Of the
+5 population hits for the widened instruction needle, hand-reading leaves 2
+genuine (`193` restates it, `278` executes it); `290` and `342` say *"the
+instrument for a latent difference"* / *"the first instrument for it was
+wrong"* about a **detector**, and `327` is `327.3` itself.
+
+**Where the citations live says the same thing from a second direction.** 22
+population slices cite `192.1`; **17 of the 22 are Objective grills**:
+
+```
+Objective grills citing 192.1   17 / 39   43.6%
+everything else citing 192.1     5 / 122    4.1%      -> 10.6x concentration
+```
+
+Read together with the halves table: **19 of the 21 non-self citations are
+retrospective diagnoses of a claim already shipped** — *"192.1's shape again"*,
+*"192.1's rule landing again"*, *"192.1's shape a fourth time"* — issued by the
+lane whose job is to look backwards. 2 apply it forward (`227`, `239`).
+
+**And the tell that citation tracks diagnosis rather than practice: the one
+slice that executed the inventory, `278`, never cites the item number at all.**
+It was found by a needle on the rule's own words, not by `grep 192.1`. So the
+citation count over-reports diagnosis and under-reports execution, and both
+errors point the same way.
+
+**So the answer to "why is a written rule not being executed" is not that it is
+unknown — it is the most-cited measurement rule in the corpus.** It is that the
+half of it that got quoted is a *category for naming a defect after the fact*,
+and the half that is a *step in a write-up* has been quoted once in 161 slices,
+by a table restating it. A grill can only ever apply it backwards; the write-up
+step it prescribes falls at the end of a wake, in the same position as the
+claims it is meant to police.
+
+### The base rate, measured BEFORE any gate could be proposed — and it kills the checkable shape
+
+`327.3` forbids proposing a gate before this is measured, and names the shape it
+expects to be dead. It is:
+
+| checkable needle | population (n=161) | control: slices ≤ 192 (n=174) |
+|---|---|---|
+| contains `instrument` | 105 (**65.2%**) | 55 (**31.6%**) |
+| contains `measur*` | 152 (**94.4%**) | 128 (**73.6%**) |
+| contains `asserted` | 71 (44.1%) | 45 (25.9%) |
+
+The predicate a gate would test is a third true of slices written **before the
+rule existed**, and nearly universally true after. That is roadmap 94.11's case
+exactly — *"this claim names its instrument"* is semantic, the checkable shape
+distinguishes nothing, and there is no shape to require instead, because the
+rule's output is an enumeration whose completeness only a reader can judge.
+**No gate. No mechanism. The finding is the count.**
+
+By contrast the observation-half needle fires **0 / 174** on the pre-rule
+control against 12 / 161 after — so the instrument used for the halves table
+does discriminate, which is what licenses reading its zero. The control's single
+instruction-half hit was **read, not assumed to be noise**: Slice 176, *"…
+instrument for a re-entered surface…"*, about a detector rather than a claim —
+the same false positive shape as `290` and `342` above.
+
+### Instrument notes — three of this wake's own detectors were wrong first
+
+- **`git log -S` returned NOTHING for the rule's own sentence.** The first
+  search for 192.1's landing commit used the full quoted phrase and printed a
+  silent empty result, which reads as *"this never landed"*. The phrase spans a
+  line break in `CLAUDE.md` (`…carrying and name the` / `instrument for each.`)
+  and `-S` matches the raw blob. `-S'instrument for each'` returns `c75d721e`
+  immediately. **This is `ENVIRONMENT.md` trap 2's shape a fourth time** (after
+  `git tag`, `/discussions` and `actions/runs?head_sha=`): an empty answer that
+  means *wrong query*, not *nothing there*.
+- **The instruction-half needle read `0 of 21` before it was widened.** It
+  required the literal `instrument for each`; Slice 193's line says *"name the
+  instrument for every other **claim** the change carries"* — singular, and no
+  `each`. Widening to `instrument for` moves the citation count 0 → 1 and the
+  population count 0 → 5, of which hand-reading keeps 2. **Both readings are
+  published above** rather than only the corrected one, because the 0 was
+  briefly the more striking number and would have been the one quoted — this
+  slice's heading carried it for one draft.
+- **A context-window regex reported an ABSENCE in the one slice this finding
+  rests on.** Checking that `278` really carries the inventory,
+  `re.findall(r'.{60}instrument for.{40}', text)` returned **`[]`** — while the
+  same corpus entry answers **1** to a plain `text.count('instrument for')`.
+  The match begins at character **56** of a **78**-character line, so neither
+  window fits — 56 < 60 before it, 8 < 40 after. `.` does not cross a newline,
+  so both are **position filters**, not context. CLAUDE.md names
+  this exactly (*"a context-window regex is secretly a POSITION filter, and it
+  fails silently"*) and prescribes the control that caught it here: **grep with
+  a plain fixed string first, add context only after you know the count.** It
+  is the worst of the three because it reported a confident absence about the
+  single slice the count `1 of 161` names.
+
+### What this count does NOT cover, said rather than left to the reader
+
+- **It counts SLICES, not claims.** A slice carrying one claim cannot fail this
+  rule, and how many population slices ship more than one claim was **not
+  measured**. `1 of 161` is not *"160 slices shipped an unattributed claim"*.
+- **The pre-rule control is contaminated upward.** Archived text may be amended
+  (236.2), so a slice ≤ 192 can carry wording added after 2026-08-29. The
+  control figures are an upper bound on pre-rule usage, which weakens the
+  `65.2%` vs `31.6%` contrast in the safe direction and leaves the `0 / 174`
+  observation-half reading unaffected in the unsafe one.
+- **False negatives are bounded by a sample, not eliminated.** All 24
+  needle-flagged slices were read in context; the 137 unflagged were swept with
+  6 further needles (`instrument for`, `with the instrument`, `each/every
+  claim`, `claims this change`, `names its instrument`, `claim-inventory`)
+  producing 8 candidates, all read, **0** clean; and a 20-slice random sample of
+  the unflagged remainder (`random.seed(327)` → `198 209 211 230 231 233 234 242
+  245 248 250 253 257 260 262 294 329 334 342 349`) was read for every
+  `claim`/`assertion` line, **0** inventories found. A slice using wording no
+  needle covers would still be missed.
+
+### The other claims this change carries, with the instrument for each
+
+Written because a slice measuring how rarely this is done, and not doing it,
+would be the fourth instance of the shape it is describing. It is also the
+second execution of 192.1's instruction half in the corpus, and the first
+outside `278`.
+
+| claim shipped in this slice | instrument |
+|---|---|
+| population is 161 slices, 193 → 353 | the throwaway extractor, reconciled against `roadmap_scope.py`'s independently-reported **335** slice sections |
+| 0 heading dates cross the 2026-08-29 boundary in either direction | a regex over each slice's first line, both directions printed, 2 undated slices named |
+| the counts 1 / 3 / 3 in the count table | **hand-read** of all 24 needle-flagged slices plus the 8 candidates the second sweep raised — a judgement against a definition fixed in advance, not a grep |
+| 11 / 21 and 1 / 21, the halves table | two fixed-string needles, both published in their pre- and post-widening form, the instruction one hand-corrected from 5 hits to 2 |
+| 17 / 39 grills vs 5 / 122 non-grills | `Objective grill` in the slice heading — a **heuristic**: a grill that does not say so in its heading is miscounted, and none was checked for |
+| 65.2% / 31.6% / 94.4% base rates | plain `re.search` counts over the two corpora, no hand-reading |
+| *"19 of the 21 citations are retrospective diagnoses"* | **hand-read of all 21**, after a regex classifier disagreed with the read on 6 of them — the read is what is published and the regex is not the evidence |
+| *"278 never cites the item number"* | `re.search(r'192\.1')` over 278's text — a single negative grep, the weakest instrument in this table |
+| the three instrument defects in the section below | observed while running them, not sought — a base-rate expectation met, not a measurement |
+
+**Read off the code with no instrument, and named as such:** the claim that
+192.1's paragraph *"is an observation followed by an instruction"* is a reading
+of `CLAUDE.md`'s prose, not a measurement of it; and the closing suggestion that
+the write-up step *"falls at the end of a wake, in the same position as the
+claims it is meant to police"* is an interpretation with nothing behind it. Both
+are the sentences this slice's own finding predicts would be wrong.
+
+1. [x] **354.1 — `327.3` answered: the rule is fine, the practice is the gap,
+       and nothing is built.** The count is **1 of 161 (0.6%)** under the
+       definition fixed before reading, **3 of 161 (1.9%)** at the widest, with
+       the diagnosis that 192.1's *observation* half is what entered the
+       vocabulary (11 of 21 citations, against 1 of 21 for its instruction half,
+       and that one a restatement in a table). Commands are in the sections
+       above and re-runnable at this commit; the corpus extractor was a
+       throwaway in the scratchpad, not added to the repo, because `327.3`
+       forbids building before the base rate is measured and the base rate says
+       there is nothing to build.
+       - **NOT proposed, deliberately:** a gate, on the measured base rate
+         (65.2% / 31.6%); moving or re-bolding 192.1's paragraph in `CLAUDE.md`,
+         because that is a prose change whose effect on a later wake this slice
+         has no instrument for, and `158.2` has the loop's prose growth open.
+
 ## Slice 353 — `326.3` answered: the question has no single answer because the region has two KINDS of growth, and the whole-region ratio that raised it cannot tell them apart — 73.5% of the growth since the item was filed is one generator section, and every one of the eight rules is flat (2026-09-08)
 
 **Dispatched by rule 4**, cloud wake, on the oldest still-open item no other
@@ -3962,7 +4191,21 @@ Two of the three slices are clean:
        being added. One pinned revision and one sentence in the lane that uses it
        is the smaller fix.
 
-3. [ ] **327.3 — the one instrument gap this grill could not close: nothing
+3. [x] **327.3 — CLOSED 2026-09-08 by Slice 354 (cloud wake, rule 4) on the
+       Accept's stated satisfying branch: the rule is fine, the practice is the
+       gap, nothing built and no gate proposed.** The count is **1 of 161
+       slices (0.6%)** since 192.1 landed at `c75d721e`, **3 of 161 (1.9%)** at
+       the widest reading; the diagnosis is that the paragraph's *observation*
+       half is what the loop adopted — quoted by **11 of 21** non-self
+       citations against **1 of 21** for its instruction half, and **17 of the
+       22** citing slices are Objective grills (43.6% of grills vs 4.1% of
+       everything else). Base rate measured first and it kills the checkable
+       shape, exactly as this item predicted: *instrument* is present in 65.2%
+       of the population **and 31.6% of slices written before the rule
+       existed**. Commands and the three instrument defects this wake's own
+       detectors carried are in Slice 354. Original text below.
+
+       **327.3 — the one instrument gap this grill could not close: nothing
        distinguishes a claim that was MEASURED from one that was read off the
        code, inside a slice whose other claims were measured.**
        Both defects here, and both in `322`, `319` and `291` before them, are the
