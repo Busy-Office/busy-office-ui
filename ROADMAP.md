@@ -320,6 +320,161 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 351 — Objective grill of Slices 324, 325, 347, 350: 63 of 65 assertions reproduce to the digit, and the finding is that the base rate `350.1` tells a later wake to re-run counts a sweep's OWN conversions as inputs it had to read (2026-09-08)
+
+**Dispatched by rule 3**, cloud wake, at `Objective 4 / 3 slices OVERDUE [324,
+325, 347, 350]`. Step 0: container **DETACHED** again (trap 1;
+`git branch --show-current` empty, fixed with `git checkout -B main
+origin/main` before any commit), and `origin/main` again arrived as a **forced
+update** (`26447ba...0ab8a56`) — `0ab8a56` being the previous wake's own tip, so
+no other dispatcher had landed anything between the two wakes. Trap 2 clean in
+one `--unshallow` (**2,068** commits, no `shallow.lock`), and it again brought
+the tags (`git tag | wc -l` → **8**, run rather than assumed) — the finding here
+is a history measurement over 139 commit windows, so the clone was deepened
+before any figure was taken. Step 1: both intakes read with `ENVIRONMENT.md`
+§8's controls — `/issues?state=open` **200 len 1**, `/discussions` **200 len
+0**, `/not-a-real-route` **404** — issue #2's `updated_at` unmoved at
+`2026-09-06T15:10:34Z` for a **seventeenth** consecutive hand-off, so no new
+input and Step 1 committed nothing. Step 2: rule 1 no P0
+(`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0** across 31 open items),
+rule 2 `0 / 4` (spent by Slice 350), **rule 3** OVERDUE. Rules 4-8 not reached.
+**Rule 5 was not reached and would not have fired** — its line reads `ok`, not
+`STALE`: 0 wake-dates newer than the newest pair, 8 of 47 names paired across
+days.
+
+**Scope, per `LOOPS.md` §6 step 0: four of four, nothing dropped.** No earlier
+grill names 324, 325, 347 or 350 —
+`grep -hoE '^## Slice [0-9]+ — Objective grill of [^:—]*' ROADMAP.md ROADMAP-archive.md`
+returns 346→{322,342}, 341→{316,319,339}, 337→{297}, 336→{315,332,333} and back;
+none names any of these four. `.roundtable/INDEX.md` reports **4 repeated
+subject(s)** across 200 files at dispatch, and this grill adds no repeat. Two of
+the armed four are still **open** (325 via `325.2`, 350 via `350.1`) — the same
+2-of-4 divergence the previous hand-off measured on this same arming set, which
+is what `349.1` is open about and is not a reason to skip them: their closed
+items were audited and the open items' Accepts were read, not judged. Slice 347
+is audited **with** Slice 324, its body being almost entirely `324.1`'s closure.
+
+**Every verdict in all four slices survives.** `324.1`'s refusal of a rule-5
+direction, `324.2`'s refusal of both its escape hatches, `324.3`'s archive
+sweep, `325.1`'s refusal of the citation gate and `347.1`'s `absent` fix are
+each correct, and each measurement they turn on reproduces — including
+`324.2`'s **98-byte** README lag, which still reads 98 at this tree. The full
+65-row table, the two smaller defects and this grill's own two wrong instruments
+are in `.roundtable/grill-objective-324-325-347-350-2026-09-08.md`.
+
+### The finding: the predicate, not the number
+
+Slice 350's probe windows the log's Standardize commits as `a..b` and asks
+whether any commit in the window touched `packages/core/src/css/**` or
+`apps/docs/src/**`. **`b` is the sweep's own commit.** A sweep that converts a
+dead style lands its conversion inside its own window, so the window is
+classified *has lane input* on the strength of the sweep's OUTPUT rather than on
+anything the sweep had to read.
+
+The slice says exactly this in prose, about the one window it checked by hand —
+*"exactly one of its 16 commits touching a lane input — `161ede68`, **the
+sweep's own conversions**"* — and does not carry it back into the command.
+Re-run with the window a sweep could actually see when it started (`a..b^`),
+same log, same input paths:
+
+```
+windows=139
+  published predicate (a..b, INCLUDES the sweep commit): no-input=15 (10.8%)
+  what the sweep could SEE (a..b^, excludes its own commit): no-input=20 (14.4%)
+  windows classified has-input ONLY by the sweep's own commit: 5
+  those sweeps: 15f9bbc1 91677655 cdd7c07e 0768f09f 161ede68
+```
+
+**Discriminated by hand on two of the five** — in each, the only lane-input
+commit in the window is the sweep's own (`cdd7c07e` 1 file, `161ede68` 6). So
+the rate `350.1` is a decision about is **14.4%, not 10.1%**, understated by a
+third and in the direction that weakens the item's own case.
+
+**And the wake's own recording moved the published number before the wake
+ended.** `350.1`'s Accept says *"the figures are snapshots and **this commit
+does not move them** (it touches no lane input), but a later one will."* Read at
+each revision rather than from the working tree:
+
+```
+81f6281c  138 windows  14 no-input (10.1%)  13 no-both  span 1994   <- Step 0 tip
+6996a39   138          14 (10.1%)           13          1994        <- the slice's OWN commit
+65de70c   139          15 (10.8%)           13          2008        <- the SAME WAKE's recording
+0ab8a56   139          15 (10.8%)           13          2008        <- HEAD
+```
+
+True of the commit, false of the wake, and the parenthesis has the reason
+backwards: `record_iteration.py` appends a row carrying the sweep's sha, which
+**adds one window** — and that window is a no-input one exactly when the sweep is
+the kind `350.1` is about. Touching no lane input is what makes the wake move the
+numerator, not what stops it. `no-both` stays 13 because that window did touch an
+instrument (`6cfe380c`, comment-only) — the slice's own classification arriving
+as a control. The general form: **a figure published from inside a sweep is
+always one window short of the sweep publishing it**, because the window only
+exists once the wake records. `ENVIRONMENT.md` says where to *read* a figure;
+nothing said a wake's own last mandated step can move one it published three
+commits earlier.
+
+1. [ ] **351.1 — the base-rate command `350.1` hands forward should window on
+       what the sweep could SEE, or say why it does not.** `a..b` includes the
+       sweep's own commit; `a..b^` is what the sweep had to read. The two
+       disagree on **5 of 139** windows and on the headline rate (10.8% vs
+       14.4%). This does not decide `350.1` — that item is still filed, not
+       decided — it decides which number `350.1` is decided on.
+       - **Accept — the property, not a predicted outcome:** the command
+         published in `350.1` is amended in place (236.2 permits amending, and
+         the slice is live) so that a later wake re-running it gets the
+         see-able window, **or** the reason for keeping `a..b` is written beside
+         it. **Refusing the change is a satisfying outcome** if the reason is
+         stated — an argument that a sweep's own conversions ARE evidence the
+         window had lane material is admissible, and would then have to say what
+         `350.1` is measuring, since it is no longer *"could three of the four
+         lanes have moved"*.
+       - **Re-measure both predicates at execution time rather than quoting the
+         figures above** — they are snapshots, and by construction the next
+         Standardize row moves the denominator. The probe is in the grill report;
+         it needs the clone unshallowed first (`git rev-parse
+         --is-shallow-repository` must read `false`) or the window walk silently
+         truncates at 50 commits.
+       - **No gate is proposed and the reason is the same one `350.1` gives:**
+         classifying this very window needed a diff read, so *"this change could
+         move a lane's reading"* is semantic (94.11). What is checkable is which
+         commit range the command uses, and that is a one-line edit, not a gate.
+       - **Finding the base rate has MOVED is a satisfying outcome**, not an
+         off-plan one — the premise is a measurement, so re-checking it is part
+         of the criterion (`LOOPS.md`'s rule on premises).
+
+**Two smaller things are recorded in the grill report and neither carries an
+item, each for a stated reason.** `325.1`'s `git grep measure:stress` census
+names **five of the six** paths that command returns at the commit publishing it
+(`f4da2fe8`) — the omitted one is a `.roundtable/` grill report, the same kind as
+the roadmap prose it does name, so the refusal it supports is untouched; the
+remedy is to paste `git grep -l` output rather than a prose list, which is a
+habit and not a mechanism. And `324.3` cited two revisions correctly and
+**`67fc6659` no longer resolves** on an unshallowed clone — the sha did not
+survive into `main`, which is Step 0c's known shape rather than an error in the
+slice — while its figures all reproduce at `3cb2381a` (closed 67→52, archive
+714→730, open 26→26, headings 306→306, lines 8,188→6,476). That was nearly
+filed as an item on a census reporting **9** dead sha citations in `ROADMAP.md`;
+reading the context of each showed **eight are blob digests or deliberately
+bogus values written into red-proofs**, so the real corpus is **one** and a gate
+would be ceremony whose discriminator — *is this 8-hex token a revision or a
+digest?* — is `348.1`'s open problem one token-shape over.
+
+**This grill's own two instruments were wrong first, on schedule.** The sha
+census over-counted **5x** by matching on token shape, which is what turned that
+observation from an item into a refusal; and the `absent` red-proof came back
+**green** on its first run because the worktree it ran in had no
+`packages/core/dist`, so `--verify-stamps` bails at *"api.json is missing"*
+before reading a stamp — the injection landed in the file and the gate never
+reached it. Re-run in the built tree it goes red exactly once, on exactly the
+injected row, with the unmodified control passing either side.
+
+**NOT VERIFIED VISUALLY, and none is owed.** No 1440/390 light-and-dark
+screenshots — a cloud wake has no Podman. The diff is `ROADMAP.md`, one new
+`.roundtable/` report and the hand-off: no CSS, no docs page, no component and
+no script changed, so nothing rendered can move. Slice 345's two visual debts
+and the six older ones are unchanged and unspent.
+
 ## Slice 350 — Standardize sweep, 4 of 4 lanes, all clean — and the sweep's own dispatch is the finding: rule 2's counter counts ROUNDS, lanes 1-3 measure ARTEFACTS, and **10.1% of windows can move neither** (2026-09-08)
 
 **Dispatched by rule 2** at `Standardize 4 / 4 Continue rounds OVERDUE`, exactly
@@ -521,6 +676,28 @@ lanes 1-3.
          semantic — roadmap 94.11's rule — and the checkable shape is the wrong
          one here, so the honest options are a decision in `LOOPS.md`'s text or a
          **report**, never a build gate.
+       - **AMENDED 2026-09-08 by the Slice 351 grill (236.2), on two counts.
+         The figures above reproduce exactly at the revision they name; the
+         predicate behind them and the stability forecast beside them do not.**
+         - **The base rate is 14.4%, not 10.1%, on what a sweep could SEE.** The
+           command windows as `a..b`, and `b` is the sweep's own commit — so a
+           sweep that converts a dead style is classified *has lane input* on its
+           own OUTPUT. Windowed as `a..b^`: **20 of 139 no-input (14.4%)** against
+           the published predicate's 15 of 139 (10.8%), disagreeing on **5**
+           windows (`15f9bbc1`, `91677655`, `cdd7c07e`, `0768f09f`, `161ede68`),
+           two of them discriminated by hand. `161ede68` is the window the
+           paragraph above already names as *"the sweep's own conversions"* — the
+           confound was seen in prose and left in the command. Which predicate
+           this item is decided on is **`351.1`**.
+         - **"This commit does not move them" is true of the commit and false of
+           the wake.** `record_iteration.py` appends a row carrying this sweep's
+           sha, which adds one window — a **no-input** one, precisely because the
+           sweep touched no lane input. Read at each revision: `81f6281c` and
+           `6996a39` both 138 / 14 / 13 / span 1994; `65de70c`, this wake's own
+           recording commit, 139 / **15** / 13 / span 2008; HEAD the same. The
+           parenthesised reason is backwards, and the general form is that **a
+           figure published from inside a sweep is always one window short of the
+           sweep publishing it.**
 
 ## Slice 349 — rule 3's text says "slices CLOSED"; its counter means "slices NAMED by a building row", and nothing has ever compared the two (2026-09-08)
 
