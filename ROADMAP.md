@@ -320,6 +320,125 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 341 — Objective grill of Slices 316, 319, 339: 17 of 17 published assertions reproduce, and the finding is that Slice 339's generator thesis was confirmed by the very NEXT commit — Step 0c's cut lasted one wake, with the charter followed exactly (2026-09-08)
+
+**Dispatched by rule 3** at `Objective 3 / 3 OVERDUE [316, 319, 339]`, cloud
+wake — **on the second dispatch of this wake.** The first was rule 4 on
+`319.3` and it was **lost to collision 5** (`LOOPS.md` Step 0c): the other
+dispatcher ran the same rule on the same item, reached the same verdict, and
+also numbered it Slice 340. The loser's pre-commit `git fetch origin main` saw
+`273c7ae3..1a973395` after the analysis was complete and all 17 gates were
+green; it discarded, recorded the collision per 274.2's charter, and
+re-dispatched. Closing 319.3 moved rule 3 from `2 / 3` to `3 / 3`, so **the
+collision is what armed this grill.**
+
+Step 0: container **DETACHED** again (`git branch --show-current` empty),
+`ENVIRONMENT.md` trap 1, fixed with `git checkout -B main origin/main` before
+any commit; `origin/main` arrived as a **forced update** (`26447ba...273c7ae`).
+Trap 2 clean in one `--unshallow`, no `shallow.lock`, tags arrived with it
+(`git tag | wc -l` → **8**, §2's mandated count). Step 1 read **both** intakes
+in the REST form with its 404 control — `/discussions` **200 len 0**,
+`/not-a-real-route` **404**, `/issues?state=open` **200 len 1** (#2,
+`updated_at` unmoved at `2026-09-06T15:10:34Z`) — so **Step 1 committed
+nothing**. Rule 5 read `SKEW, 0 wake-date(s) newer`: evaluable, and no name in
+the comparable set regresses on two consecutive runs.
+
+**Scope, per §6 step 0: nothing dropped.** None of 316, 319 or 339 is named by
+an existing grill heading. Slice 319 is itself a grill (of 298/300/318);
+auditing a grill's own numbers is in scope. Full report:
+`.roundtable/grill-objective-316-319-339-2026-09-08.md`.
+
+**The result is 17 of 17 reproducing and NO defect**, which is unusual here and
+is the first thing the report distrusts about itself — the scope is narrow by
+selection (only mechanically re-runnable assertions), and what was not re-run is
+named there rather than left implied.
+
+1. [ ] **341.1 — Step 0c's generator has TWO outputs and its charter throttles
+       only one. The cut lasted exactly one commit.** 339.1 concluded that Step
+       0c has a *generator* — a recurring event each instance of which writes a
+       narrative there — and that *"no cut can hold against one"*. **The next
+       revision of `LOOPS.md` after 339's fix confirmed it**, and this grill is
+       the evidence rather than a prediction.
+
+       The per-revision series re-derived over the last 22 revisions of
+       `LOOPS.md` (Step 0c, `### Step 0c` .. `### Step 1`, Python `str.split()`
+       per `ENVIRONMENT.md` §7, **heading line excluded — 339's own convention,
+       which is what makes its figures reproduce**; including it reads 13 more,
+       and 13 is exactly the heading's length):
+
+       ```
+       aa550d2c 2026-09-05  1378
+       8848ed55 2026-09-05   936  -442   ← 274.2's cut
+       632bfc46 … ac0fc752         +0    ← FLAT at 936, 15 consecutive commits
+       534b097a 2026-09-07  1300  +364   ← collision 3's forensics
+       86f034ce 2026-09-07  1500  +200   ← collision 4's
+       f9e0f17d 2026-09-07  1322  -178   ← Slice 339's fix
+       7e2c61c0 2026-09-08  1516  +194   ← collision 5, this wake
+       ```
+
+       **Every figure Slice 339 published is in that column** — 936, the 15 flat
+       commits, +364, +200, 1,500, 1,322 — nothing off by anything. The new
+       point puts Step 0c **16 words above the 1,500 that made 339 diagnose the
+       problem** and **138 above the 1,378 it was originally cut from**, one
+       wake later.
+
+       **And the charter was followed exactly, which is the whole point.** The
+       easy reading — "the wake was undisciplined" — is false and would send the
+       next wake to the wrong fix. `LOOPS-archive.md` took the 40 lines of
+       forensics as 274.2 requires; only what the charter says stays inline
+       stayed. The **+194 splits two ways**:
+
+       | what | words | mandated by |
+       |---|---|---|
+       | the one-line list entry for collision 5 | **115** | Step 0c's *"a new collision adds a LINE here"* |
+       | correcting the counts the incident falsified | **79** net (36 replaced) | **nothing — this half is unnamed** |
+
+       **The unnamed half is the contribution.** An incident does not merely add
+       a line; it **falsifies the prose around the line**. Collision 5 made
+       *"Four as of 2026-09-07"* wrong, *"Three of the four now cost less
+       than…"* wrong, and *"the sample is four, and collision 1 did cost a whole
+       wake"* wrong. Correcting each is required by this repo's standing rule
+       against stale counts — the same rule Slice 339 itself applied twice — so
+       the 79 is not slack that discipline removes.
+
+       **The tension is real in both directions, which is why this is filed and
+       not fixed:** replacing the per-incident list with a count plus a pointer
+       is what Step 0c **already refuses in its own words** (*"Count them by
+       re-reading the list below rather than trusting a number in prose"* —
+       written because *"it has happened once"* stood stale for ten days);
+       keeping the list costs ~115 words per collision plus whatever the
+       incident falsifies, forever.
+       - **Accept:** either a shape is found that keeps the list re-readable
+         while removing the per-incident cost from the section every wake reads
+         (a generated line? the list itself in `LOOPS-archive.md` with the
+         *decision* inline?), or this closes as **refused with the reason** —
+         the likeliest being that Step 0c is read by every wake and 1,516 words
+         of it is not waste, so the growth is the price of a record that is
+         never stale. **Refusing is a satisfying outcome.**
+       - **Re-measure first, do not quote:** re-run the series above; these are
+         snapshots, and a sixth collision moves them.
+       - **Related, not duplicate:** `339.2` is the same *signature* (one step,
+         then flat) on **rule 3's** section and turns on whether that +303 is
+         instruction. This item is about a section with a live generator and a
+         charter that already governs it.
+       - **Lane:** cloud-takeable. A git-history word count, no browser.
+
+**NOT VERIFIED, said plainly.** No 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. **This slice owes none, and that is structural rather than a
+judgement call:** the diff is **`ROADMAP.md`, `LOOPS.md`, `LOOPS-archive.md` and
+one new `.roundtable/` report**. No CSS rule, no docs page and no script
+changed, so no rendering can move; `git diff --stat` was read to confirm that,
+not assumed. The wake's throwaway probes (a 21-page copy of
+`check-target-size.mjs`, two style injections into built pages) were reverted
+and confirmed gone before any commit.
+
+**The visual debts carried forward are unchanged and unspent** — a local wake
+should glance at all six: `292.4/292.5`'s screenshot lane on `/components/icon`;
+the withdrawn-claim paragraph and Slice 325's performance paragraph on
+`/components/data-table`; Slice 319's paragraph on `/patterns/kanban` at 390px;
+`320.3`'s `ApiTable.astro` `0.5rem` against `ClassRef.astro` `.4rem`; and Slice
+`310.1`'s three `prod/` Refresh buttons.
+
 ## Slice 340 — 319.3: the four-page "overlap" was never coverage. `check:target-size` cannot see a named pixel size by construction, so growing it is refused on a red-proof, and the six claims move to the gate that CAN see them (2026-09-08)
 
 **Dispatched by rule 4** on the oldest still-open item, cloud wake. Rule 1 no
