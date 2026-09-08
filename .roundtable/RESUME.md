@@ -23,9 +23,9 @@ survives none.
 ## In flight: nothing
 
 Last updated 2026-09-08 (**cloud** wake, scheduled routine). Working tree clean
-at hand-off. **No collision this wake** — `origin/main` read `ada0f384` at Step
-0 and `ada0f384` again immediately before the first commit, and it arrived as a
-plain fast-forward.
+at hand-off. **No collision this wake** — `origin/main` read `c4a18b67` at Step 0
+and `c4a18b67` again immediately before the first commit, and it arrived as a
+plain fast-forward (`d876765..c4a18b6`), not a forced update.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -35,193 +35,192 @@ node apps/docs/scripts/check-resume-slice-ids.mjs # names any stale closed ids
 python3 scripts/loops/roadmap_scope.py            # OPEN set + sweep scope
 ```
 
-**`check:resume-slice-ids` REPORTED against the PREVIOUS revision of this file
-and the report was read, not deferred.** It named `312.2` as absent and `330.1`,
-`324.3`, `310.1`, `297.1` as closed — every one a historical reference in the
-previous hand-off, and `330.1` is closed *by this wake*. Every id below is
-either named as OPEN with its blocking kind, or cited as closed precedent and
-said to be closed. **Nothing here claims an open item that is not.** Re-run the
-check against this file rather than trusting that sentence.
+**`check:resume-slice-ids` REPORTED against this file and the report was read,
+not deferred.** It named `94.11`, `312.2`, `192.1` as archived (rules cited by
+number, not items) and **9** ids recorded `[x]` closed: `330.1` (closed by Slice
+358 and named here as filed-and-closed), `359.1`-`359.4` (this wake's own, all
+closed, each with its disposition in the table below), `355.3` and `324.3` and
+`297.1` (cited as precedent and said to be closed), and `310.1` (named only as an
+unspent *visual debt*, not as an open item). **Nothing here claims an open item
+that is not.** Re-run the check against this file rather than trusting that
+sentence.
 
-## ⚠ RULE 3 IS OVERDUE. EXPECT AN OBJECTIVE GRILL of **330, 356, 357**
+## ⚠ RULE 4 IS NEXT, AND ITS CLOUD-TAKEABLE ITEM IS `331.1`
 
-`dispatch_status.py`, read immediately after this wake's recording (LOOPS.md
-asks for exactly that comparison; it has found two of the five parser bugs):
+`dispatch_status.py`, read immediately after this wake's recording (LOOPS.md asks
+for exactly that comparison; it has found two of the five parser bugs):
 
 ```
 Standardize   1 / 4 Continue round    ok
-Objective     3 / 3 slices  OVERDUE   [330, 356, 357]
+Objective     0 / 3 slices            ok
 Optimize      0 wake-date(s) newer    ok
 ```
 
-Rule 1 has no open P0, rule 2 is 1 of 4. **So rule 3 matches**, and rules 4-8
-are not reached. **Re-run the script** — a collision could land a row between
-this line and your wake.
+**Re-run it** — a collision could land a row between this line and your wake.
 
-**A clean data point for the open `349.1`, recorded because it is the item's own
-question:** rule 3's counter armed on `330` because this wake's Continue row
-*names* it, which is the "touched" reading 349.1 says the counter actually
-implements. Here touched and closed **agree** — Slice 330 now has 0 open and 1
-closed item, so it really did close. That is one observation on the side 349.1
-is missing, not a resolution of it.
+Rule 1 has no open P0. Rule 2 is 1 of 4 — **an Objective row is not a Continue
+round, so this wake's recording did not advance it**. Rule 3 **reset to 0 / 3**
+when that row landed. **So rule 4 matches**, and its oldest cloud-takeable item is
+`331.1`; the oldest open item overall is Slice 15, owner-blocked (a human
+listening to a screen reader).
 
-## What landed: Slice 358 — `330.1` closed by the census it asked for
+## What landed: Slice 359 — the Objective grill of 356, 357, 358
 
-**Dispatched by rule 4**, whose oldest cloud-takeable item was `330.1` exactly
-as the previous hand-off predicted — re-derived this wake rather than trusted.
+**Dispatched by rule 3** at `Objective 3 / 3 OVERDUE [330, 356, 357]`, exactly as
+the previous hand-off predicted. **The counter says 330 and the material is 358**:
+Slice 330 is itself an Objective grill (of 310, 328, 329) and no Continue row
+built it — what armed the counter is Slice 358's row naming the *item* `330.1`
+that grill filed. None of 356/357/358 had been covered before.
 
-`330.1` asks one count over two populations, and only one is censusable:
+**60 of 64 published assertions reproduce**, counting **one assertion per row** of
+the grill report's three tables (several rows carry more than one figure, so a
+figure-level count is higher and depends on how they are split — the rule is
+stated because this entry's own first draft published `84 / 80` from a
+figure-level tally that did not survive a recount).
 
-| population | size | method |
+**Every figure each slice red-proved reproduces to the digit.** The strongest is
+358's: the 153 line numbers in its census report are *exactly* the set its
+published filter selects — 0 unverdicted, 0 verdicts for a non-candidate — and
+all eight verdict counts, the 32, the 57 (37.3%), the base rate, the 31 open
+items and the 1,155 body lines re-run at `ada0f384`. 357's base-rate command
+returned `139 windows, span 1,869, 20/7/38/74` and the `a..b` control
+`139 / 15 / 2,008`, both as published.
+
+**All four failures are one sentence each, and none is in a measurement** — a
+composition summary, an attribution, a per-page range. That is **192.1's shape**,
+three slices running, in the window where Slice 354 measured 192.1 as applied in
+**1 of 161** slices.
+
+| item | the defect | disposition |
 |---|---|---|
-| the whole live `ROADMAP.md` | **8,573** numeric tokens on **4,000** of 11,809 lines | candidate filter + a hand verdict on every hit |
-| the open set | **31** items, **1,155** body lines | read **whole** — an item about sampling is not answered by a sample |
+| `359.1` | 358's widening summary drops 2 `CENSUS` verdicts: `134 + 5 + 12 = 151` against its own 153 | corrected in place |
+| `359.2` | 357's *"nearly 3x the rate `350.1` records"* is `351.1`'s amended 14.4% under `350.1`'s name (against 350.1's own 10.1% it is **4.1x**, i.e. larger) | corrected in place |
+| `359.3` | 356's `other=1 … other=99` range names no instrument; re-measured the three pages read **4 / 5 / 103** — the ordinal reproduces, the values do not | amended in place |
+| `359.4` | nothing proposed — a fifth loop-mechanics item refused on `355.3`'s precedent, a gate refused on `94.11` | refusal recorded |
 
-- **Whole file: 153 candidates (3.8% of figure-carrying lines). 32 rest on a
-  sample or an extrapolation; 57 (37.3%) are the instrument's own noise.**
-  Reconciled by the generator: 0 candidates unverdicted, 0 verdicts for
-  non-candidates.
-- **The named failure mode is not "a sample was used" but "a sample quoted AS a
-  population", and on that predicate the live file holds ONE** — 329's,
-  published there as its own correction, so the number still *resting* on one is
-  **zero**. **The second motivating instance has left the population**: Slice
-  301's body is **82** lines in `ROADMAP-archive.md`, and `ROADMAP.md` keeps a
-  **4-line** pointer.
-- **Open set: 7 of 31 carry a sample-derived figure, all 7 name their n**, and
-  four put the caution or a re-measure instruction *inside the Accept*. **Zero
-  open decisions rest on an undisclosed sample.** `249.7` looked worst and is
-  not one: it reads as a *spot-check* but greps **all five** declared seed rows,
-  i.e. a census of the seed.
+All four are `[x]`; the open set does not grow.
 
-Closed on the Accept's own stated branch, by a route the item could not have
-foreseen (an instance leaving the file). Per-line verdicts, the controls and the
-instrument's defects are in
-`.roundtable/measure-330.1-sampling-census-2026-09-08.md`.
+## The probe was red-proved BEFORE its 100% reading was quoted
 
-## The controls, and the four instrument defects
+356's refusal rests on *"renders `bo-*` outside a `<pre>`"* being true of **24 of
+24**, and a 100% reading is a defect until shown otherwise. Two synthetic pages
+were written into the git-ignored `apps/docs/dist`, each asserted to carry what it
+was supposed to carry *before* the probe ran, and both deleted in the same
+command:
 
-Base rate **3.8%** — not 0, not 100. Recall confirmed on 329's instance. Three
-injections into a **copy**, each asserted to land exactly once and outside every
-fenced block *before* the result was read, and the file on disk asserted
-unchanged afterwards:
-
-| injected | delta | expected |
+| control | contains | probe reads |
 |---|---|---|
-| a sample **with** sampling vocabulary | +1 | +1 |
-| a **census** with the SAME vocabulary | +1 | +1 |
-| a real sample with **no** vocabulary | **+0** | +0 |
+| negative | `bo-*` markup **only inside `<pre>`** | **0** |
+| positive | one visible `bo-*` outside any `<pre>` | **1** |
+| a real page (`/concepts/container-queries/`) | — | 4 |
 
-**Rows 2 and 3 are the limits, demonstrated rather than asserted** — row 2 is
-why this is a candidate filter and never a verdict (94.11's wall, which is the
-item's own **Refused** block measured instead of argued), and row 3 is the
-recall gap the open-set census exists to bound.
+So the probe can report zero. **Slice 356's refusal stands.**
 
-Four defects, on schedule: `~\d` matched git revision syntax; `\bmean\b` matched
-the **English verb** (the largest FP class, and it fires on the intake-control
-sentence every wake copies forward); *"sample"* has **three** unrelated senses
-here and only one is statistical; and the first marker set **missed
-`over N runs`**, which `352.2`'s own figure uses — found by the bounded census,
-not by review.
+## This wake's own output was wrong first, and it was caught before the push
 
-## Two of this wake's own outputs were wrong first, and both were caught before the push
+**The headline read `84 / 80`.** It was a figure-level tally — individual numbers,
+counted once by hand — and a recount of the same tables gave a different total,
+because rows like lane 2's `74 / 242 / 230 / 8` are one assertion and four
+figures. Caught by the by-hand verifier pass, corrected to `60 / 64` with the
+counting rule stated in the entry rather than quietly fixed. It is the grill's own
+subject arriving in the grill: a sentence characterising a measurement, shipped
+beside measurements that were all correct.
 
-1. **The new slice's item was numbered `330.1`, not `358.1`** — a duplicate id
-   under a second heading. Caught by `record_iteration.py`'s advisory
-   `check:resume-slice-ids`, which reported the closed-id count moving by two
-   where one was expected. Read the advisory output; it is not decoration.
-2. **"One live instance" over-claimed.** The one instance is *already
-   corrected*, so the count of figures still resting on a sample is **zero**;
-   the entry now says both readings rather than the flattering one. Caught by
-   the by-hand verifier pass.
+## ⚠ The archive sweep: 49.6%, the highest reading on record
 
-## ⚠ The archive sweep: 48.9%, the highest reading since the last taken sweep
+```
+python3 scripts/loops/roadmap_scope.py --rev <sha>
+  ada0f384  5,531 / 11,808 = 46.8%     (previous wake's Step 0 tip)
+  c4a18b67  5,858 / 11,990 = 48.9%     (this wake's Step 0 tip)
+  2bb15e7d  6,033 / 12,166 = 49.6%     (this wake's slice commit — see the caveat)
+```
 
-`roadmap_scope.py` read **5,531 / 11,808 = 46.8%** at `ada0f384` (Step 0) and
-**5,858 / 11,990 = 48.9%** at this wake's slice commit — the rise comes from
-Slice 358 closing its only item in the same commit, so all its lines are closed
-history.
+**Read the caveat before quoting the third row.** Slice 359 closes all four of its
+items in the same commit, so every one of its **182** new `ROADMAP.md` lines
+(`git show --numstat --format='' 2bb15e7d -- ROADMAP.md` → `182 / 6`) lands as
+*closed history* and pushes the ratio up by construction. That is the same
+mechanic Slice 357 recorded after its own forecast went the wrong way — re-run the
+script at the commit rather than quoting a number from prose.
 
-**The empirical record, re-read rather than carried:** 252.1 dispatched the
-tenth sweep at **55.1%**, 272.1 the eleventh at **56.7%**, 279.3 *declined* the
-twelfth at **40.6%**, `324.3` *took* the thirteenth at **41.5%**. **48.9% is
-7.4pp above the last taken sweep** and above every declined reading on record.
+**The empirical record, re-read rather than carried:** 252.1 dispatched the tenth
+sweep at **55.1%**, 272.1 the eleventh at **56.7%**, 279.3 *declined* the twelfth
+at **40.6%**, `324.3` *took* the thirteenth at **41.5%**. The current reading is
+**~8pp above the last taken sweep** and above every declined reading on record.
 
-**Not dispatched by this wake, and the reason is scope, not the number**: a
-sweep is a hand-checked bulk edit one slice at a time (CLAUDE.md), and this wake
-was rule 4's item end to end. `249.12` is named for an **EIGHTEENTH**
-consecutive wake. It is a live candidate — but next wake is **rule 3**, an
-Objective grill.
+**Not dispatched by this wake, and the reason is scope, not the number**: a sweep
+is a hand-checked bulk edit one slice at a time (CLAUDE.md), and this wake was
+rule 3's grill end to end. **`249.12` is named for a NINETEENTH consecutive
+wake** — it is the open **OWNER OR ARCHITECTURE CALL** on the archival trigger,
+and it is a live candidate for rule 4 whenever that rule is reached.
 
 ## NOT VERIFIED, said plainly — and this wake adds NO visual debt
 
-**No 1440/390 light-and-dark screenshots — a cloud wake has no Podman.** This
-wake owes none, structurally: the diff is `ROADMAP.md`, one new `.roundtable/`
-report, this hand-off and the recorder's own files. No `.astro`, no CSS, no
-script and no generated artefact changed — `git diff --stat` was read to confirm
-that rather than assumed, and `docs:build` ran green on the same **128** pages.
+**No 1440/390 light-and-dark screenshots — a cloud wake has no Podman.** This wake
+owes none, structurally: the diff is `ROADMAP.md`, one new `.roundtable/` report,
+this hand-off and the recorder's own files. No `.astro`, no CSS, no script and no
+generated artefact changed — `git diff --stat` was read to confirm that rather
+than assumed. The two synthetic control pages above were written into
+`apps/docs/dist`, which is a build output and git-ignored, and deleted in the same
+command that ran the probe (`ls apps/docs/dist/concepts | grep -c __probe` → 0).
 
-**The eight older debts are unchanged and unspent**, and nothing since has
-touched their surfaces: Slice 352's two (`/components/data-table`'s performance
-table and `/concepts/scale`'s scaling table, both at 1440 and 390 in both
-themes); Slice 345's two (`/patterns/output-form` **in print** — the figure, the
-barcode quiet zone — and the RF tile grid on `/patterns/rf/rf-landing-rf/` at
-both widths); and the four older ones — `292.4/292.5`'s screenshot lane on
-`/components/icon`; Slice 319's paragraph on `/patterns/kanban` at 390px;
-`320.3`'s `ApiTable.astro` `0.5rem` against `ClassRef.astro` `.4rem`; and Slice
-`310.1`'s three `prod/` Refresh buttons.
+**The eight older debts are unchanged and unspent**, and nothing since has touched
+their surfaces: Slice 352's two (`/components/data-table`'s performance table and
+`/concepts/scale`'s scaling table, both at 1440 and 390 in both themes); Slice
+345's two (`/patterns/output-form` **in print** — the figure, the barcode quiet
+zone — and the RF tile grid on `/patterns/rf/rf-landing-rf/` at both widths); and
+the four older ones — `292.4/292.5`'s screenshot lane on `/components/icon`; Slice
+319's paragraph on `/patterns/kanban` at 390px; `320.3`'s `ApiTable.astro`
+`0.5rem` against `ClassRef.astro` `.4rem`; and Slice `310.1`'s three `prod/`
+Refresh buttons.
 
 **Gates: ALL 17 CI-runnable entry points were run green in this container**, in
-`ENVIRONMENT.md`'s own order: core `build` (incl. `lint:css`, `check:size`
-**139** files / **382.7 kB** gz, `check:readme-facts`, `check:package` **185**
-files), core `test` (**165** passed), `lint:css`, `docs:build` (carrying
-`check:slice-refs` **1,003** assertions / **379** citations / **340** slice
-numbers, `check:floor` **596** files, `check:vendor-names` **617**,
-`check:imports`, `check:selftests`, `check:page-shape`, `check:wrong-choice`
-**158**, `check:metadata` **1,159**), `check:claims` (**176** live · 3 NOT
-VERIFIED, which is `ENVIRONMENT.md` §6b's container fact, not a regression),
-`check:formatting`, `check:scroll` (**914** containers / 118 pages),
-`check:layout` (**128** pages), `check:forced-colors`, `test:axe` (128 × 2, zero
-violations), `check:target-size`, `check:search`, `check:pseudo`,
-`check:quickstart`, `check:po-app` (**20** behaviours), `check -w create-ui`,
-`npm run suite` (**28** screens × 2 widths).
+`ENVIRONMENT.md`'s own order: core `build` (incl. `lint:css`, `check:size`,
+`check:readme-facts`, `check:package` **185** files), core `test`, `lint:css`,
+`docs:build` (carrying `check:slice-refs` **1,004** assertions / **379**
+citations / **341** slice numbers, `check:floor` **597** files,
+`check:vendor-names` **619**, `check:imports`, `check:selftests`,
+`check:page-shape`, `check:wrong-choice`, `check:metadata` **1,159**),
+`check:claims` (**176** live · 3 NOT VERIFIED, which is `ENVIRONMENT.md` §6b's
+container fact, not a regression), `check:formatting`, `check:scroll` (**914**
+containers / 118 pages), `check:layout` (**128** pages), `check:forced-colors`,
+`test:axe` (128 × 2, zero violations), `check:target-size`, `check:search`,
+`check:pseudo`, `check:quickstart`, `check:po-app` (**20** behaviours),
+`check -w create-ui`, `npm run suite` (**28** screens × 2 widths).
 
-**Said precisely.** `docs:build` was re-run to exit 0 after the last
-`ROADMAP.md` edit, and again after this file was written, per `ENVIRONMENT.md`
-§3b, before the push.
+**Said precisely.** `docs:build` was re-run to exit 0 after the last `ROADMAP.md`
+edit, and again after this file was written, per `ENVIRONMENT.md` §3b, before the
+push.
 
 **The `verifier` agent is not available in this session**, so `LOOPS.md` §2 step
 6's verifier pass was done by hand: the staged diff re-read adversarially, every
-number re-checked against the command that produced it. It earned its keep —
-correction 2 above was made by that re-read, before the push.
+number re-checked against the command that produced it. **It earned its keep** —
+the `84 / 80` correction above was made by that re-read, before the push.
 
 ## No metric was recorded this wake, and here is the reason for each candidate
 
-- **`dispatch-region-words`** — not sampled. `LOOPS.md` is byte-for-byte
-  unchanged this wake, so a second sample of the same region moves nothing;
-  `353.2` is open about exactly this name and its convention.
-- **`claims` = 176** (`check:claims`). **Identical** to the previous three wakes.
-- **`bundle-gz-kb`** — nothing this wake touched the bundle; `check:size` read
-  **139** payload files / **382.7 kB** gz, tightest headroom 110 bytes,
-  unchanged.
+- **`dispatch-region-words`** — not sampled. `LOOPS.md` is byte-for-byte unchanged
+  this wake, so a second sample of the same region moves nothing; `353.2` is open
+  about exactly this name and its convention.
+- **`claims` = 176** (`check:claims`). **Identical** to the previous four wakes.
+- **`bundle-gz-kb`** — nothing this wake touched the bundle.
 
 ## The open set is 30 — no P0
 
-`roadmap_scope.py` reports **30 open** at the slice commit; the raw checkbox
-count agrees. Slice 358 closed `330.1` and filed `358.1` closed in the same
-commit, so the open set fell **31 → 30** and Slice 330 is now fully closed
-(0 open / 1 closed item).
+`roadmap_scope.py` reports **30 open** at the slice commit; the raw checkbox count
+agrees. Slice 359 filed four items and closed all four in the same commit, so the
+open set is **unchanged at 30**.
 
-- **cloud-takeable: 19** — `331.1`, `332.1`, `333.1`, `334.1`, `335.1`,
-  `336.2`, `337.1`, `338.1`, `339.2`, `341.1`, `345.1`, `346.1`, `348.1`,
-  `349.1`, `350.1`, `351.1`, `352.1`, `352.2`, `353.2`.
+- **cloud-takeable: 19** — `331.1`, `332.1`, `333.1`, `334.1`, `335.1`, `336.2`,
+  `337.1`, `338.1`, `339.2`, `341.1`, `345.1`, `346.1`, `348.1`, `349.1`,
+  `350.1`, `351.1`, `352.1`, `352.2`, `353.2`.
   **`331.1` is the oldest of these**, so it is rule 4's item whenever rule 4 is
   next reached. `335.1` still carries its caveat — settling it may mean filing a
   throwaway Q&A discussion, an outward-facing write to a public repo whose
   permission has **not** been tested.
-- **owner-blocked (10):** Slice 15 (AT runtime evidence, owner hardware),
-  `112.3` (**BLOCKED ON OWNER BRIEFS**), `112.4` (blocked on 112.3's verdict),
-  `249.7` (its own text holds it for `249.10`), `249.10`, `249.11`, `249.12`,
-  `249.13`, `273.2` (**OWNER CALL**), `296.3` (**OWNER CALL**).
+- **owner-blocked (10):** Slice 15 (AT runtime evidence, owner hardware), `112.3`
+  (**BLOCKED ON OWNER BRIEFS**), `112.4` (blocked on 112.3's verdict), `249.7`
+  (its own text holds it for `249.10`), `249.10`, `249.11`, `249.12`, `249.13`,
+  `273.2` (**OWNER CALL**), `296.3` (**OWNER CALL**).
 - **browser-blocked in the SCREENSHOT sense (1):** `320.3`.
 
 19 + 10 + 1 = 30, asserted rather than left to the reader. **The fifth kind,
@@ -235,29 +234,25 @@ commit, so the open set fell **31 → 30** and Slice 330 is now fully closed
 /not-a-real-route   -> HTTP 404            an unserved route does NOT answer 200 []
 ```
 
-**Readings: issues 1 open, discussions 0 open. No new untriaged input**, so
-Step 1 committed nothing. **Issue #2's `updated_at` has not moved for a
-TWENTY-FOURTH consecutive hand-off.** See Direction.
+**Readings: issues 1 open, discussions 0 open. No new untriaged input**, so Step 1
+committed nothing. **Issue #2's `updated_at` has not moved for a TWENTY-FIFTH
+consecutive hand-off.** See Direction.
 
 ## Rule-by-rule dispatch trace
 
 Rule 1: no open P0 — `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0**
-across 31 open items at dispatch. Rule 2 read `Standardize 0 / 4 ok`. Rule 3
-read `Objective 2 / 3 ok [356, 357]` — one slice short at dispatch, and
-**OVERDUE after this wake's recording**. **Rule 4 matched**: the oldest open
-item is Slice 15, owner-blocked (a human listening to a screen reader), so the
-oldest a cloud wake can take was `330.1`. Rules 5-8 not reached.
-
-**Rule 5 would not have fired.** Its line read `ok`, not `STALE` and not `SKEW`:
-**0** wake-dates newer than the newest pair, 8 of 47 names paired across days,
-and no name in the comparable set regresses on two consecutive runs.
+across 30 open items at dispatch. Rule 2 read `Standardize 1 / 4 ok`. **Rule 3
+read `Objective 3 / 3 OVERDUE [330, 356, 357]` and matched.** Rules 4-8 not
+reached. **Rule 5 would not have fired** — its line read `ok`, not `STALE` and not
+`SKEW`: **0** wake-dates newer than the newest pair, 8 of 47 names paired across
+days, and no name in the comparable set regresses on two consecutive runs.
 
 ## The standing environment fact: CI HAS NO `paths-ignore`
 
-`312.2` removed it entirely. **A push that touches only `.roundtable/**` runs
-the full suite.** The consequence a wake feels directly is `ENVIRONMENT.md` §3b
-— *re-run `npm run docs:build` after writing this file, before pushing* — and it
-was executed this wake, after this file was written, before the push.
+`312.2` removed it entirely. **A push that touches only `.roundtable/**` runs the
+full suite.** The consequence a wake feels directly is `ENVIRONMENT.md` §3b —
+*re-run `npm run docs:build` after writing this file, before pushing* — and it was
+executed this wake, after this file was written, before the push.
 
 ## CHECK CI AFTER PUSHING — and filter the run list yourself
 
@@ -273,53 +268,52 @@ curl -sS -H "Authorization: bearer $GITHUB_TOKEN" \
 ## Step 0 traps
 
 **Trap 1 bit in its first form.** `git branch --show-current` answered **EMPTY**
-at Step 0 — the container arrived detached at `ada0f384` — and was fixed with
+at Step 0 — the container arrived detached at `c4a18b67` — and was fixed with
 `git fetch origin main && git checkout -B main origin/main` before any commit.
 
-**Trap 2: the clone was shallow (50 commits) and was unshallowed before any
-figure was taken** — **2,083** commits at `HEAD`, no `shallow.lock`, and the
-unshallow again brought the tags (`git tag | wc -l` → **8**, run rather than
-assumed). **It was load-bearing, not precautionary**: the census reads Slice
-301's archived body against its live pointer, which a 50-commit clone's
-`ROADMAP-archive.md` history cannot support.
+**Trap 2: the clone was shallow (50 commits) and was unshallowed before any figure
+was taken** — **2,085** commits at `HEAD`, no `shallow.lock`, and the unshallow
+again brought the tags (`git tag | wc -l` → **8**, run rather than assumed).
+**It was load-bearing, and not for the reason a wake first reaches for**: the
+three revisions this grill's figures name sit **4, 3 and 2** first-parent commits
+behind `HEAD`, well inside a shallow clone's reach. What needs the full history is
+the base-rate script, whose 139 windows span **1,869** commits — on a truncated
+history it would have classified quietly rather than failed.
 
 **No `git worktree` and no `git stash` were used this wake.** Every figure names
-either `ada0f384` (the Step 0 tip) or the slice commit.
+either `c4a18b67` (the Step 0 tip), the revision the grilled slice itself named,
+or this wake's slice commit.
 
 ## Direction
 
-Nothing new from the owner reached this wake to triage. **Both intakes were
-read** (issues **1** open, discussions **0** open).
+Nothing new from the owner reached this wake to triage. **Both intakes were read**
+(issues **1** open, discussions **0** open).
 
 **Three things want the owner's attention, all unchanged, all thirty-second
 actions:**
 
-1. **Issue #2 is open and carries only the triage comment.** Slice 317 refuses
-   the component with the measurement; Slice 319 corrected a second false claim
-   on the same page the reporter was pointing at. **Replying and closing the
-   issue is an owner action.** Whether a *wake* should post that comment was
-   `297.1`, closed by Slice 335 — read it before re-raising.
-2. **`273.2`** — whether a Polish round whose score does not move should
-   increment `dry`. Not touched this wake; rule 6 was never reached, so
-   `polish_requeue.py --apply` was correctly not run. **This wake's census adds
-   one input to it**: 273.2's own `8 of 10` tally is one of the seven
-   sample-derived figures in the open set, and the item already says to re-run
-   the command before quoting it to the owner. It goes stale every Polish round,
-   which is itself an argument for deciding it.
+1. **Issue #2 is open and carries only the triage comment.** Slice 317 refuses the
+   component with the measurement; Slice 319 corrected a second false claim on the
+   same page the reporter was pointing at. **Replying and closing the issue is an
+   owner action.** Whether a *wake* should post that comment was `297.1`, closed
+   by Slice 335 — read it before re-raising.
+2. **`273.2`** — whether a Polish round whose score does not move should increment
+   `dry`. Not touched this wake; rule 6 was never reached, so `polish_requeue.py
+   --apply` was correctly not run. It goes stale every Polish round, which is
+   itself an argument for deciding it.
 3. **`249.12`** — the stated-trigger question for the archive sweep, an explicit
-   **OWNER OR ARCHITECTURE CALL**. The share it governs is now **7.4pp above the
-   last sweep anyone actually took**, and eighteen consecutive wakes have
-   declined a sweep for want of the trigger this item would supply. It is filed
-   *low urgency* on the grounds that "the sweep keeps happening regardless" —
-   that premise is what has weakened.
+   **OWNER OR ARCHITECTURE CALL**. The share it governs is now **~8pp above the
+   last sweep anyone actually took**, and nineteen consecutive wakes have declined
+   a sweep for want of the trigger this item would supply. It is filed *low
+   urgency* on the grounds that "the sweep keeps happening regardless" — that
+   premise is what has weakened.
 
 **The loop-mechanics question is still FIVE items deep** — `341.1`, `349.1`,
-`350.1`, `351.1` plus `353.2`. This wake answered none and added none. `349.1`
-DID reproduce this wake, cleanly and on its agreeing side: see the ⚠ block
-above.
+`350.1`, `351.1` plus `353.2`. This wake answered none and **deliberately added
+none**: `359.4` records the refusal of a sixth, on `355.3`'s precedent and on
+Slice 354's measurement that `192.1` is applied in 1 of 161 slices.
 
 **Nothing this wake did is outward-facing or hard to reverse.** The diff is
 `ROADMAP.md`, one new `.roundtable/` report, and `.roundtable/**`. `LOOPS.md`,
 `CLAUDE.md` and the dispatch region are **byte-for-byte unchanged** —
-deliberately: the item's Accept asked to measure before proposing anything, and
-nothing is proposed.
+deliberately: the grill's own finding is that no mechanism is warranted.

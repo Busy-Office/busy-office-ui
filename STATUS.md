@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-08 17:52 UTC
+Generated at: 2026-09-08 18:58 UTC
 
 ## Open items by slice
 
@@ -64,10 +64,9 @@ Generated at: 2026-09-08 17:52 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1679 iterations logged)
+dispatch status — counter-triggered rules (1682 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-09-08 16:51   ok
-  Objective     3 / 3 slices          since 2026-09-08 14:52   OVERDUE  [330, 356, 357]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-09-08 18:58   ok
   Optimize      0 wake-date(s) newer   since 2026-09-08 00:17   ok   [newest pair: dispatch-region-words; 140 sample(s), 8 of 47 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (39 of 47 name(s) have only one day and are not an input to a rule that compares two runs):
        dispatch-region-words       2d  2026-09-07 7298 words -> 2026-09-08 7492 words  +194
@@ -97,9 +96,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-08 13:46 · Meta · refusal · a gate over 'this claim names its instrument' — base rate 65.2% of the population and 31.6% of pre-rule slices, so the checkable shape distinguishes nothing (94.11) · refused · 95d4aca9
-- 2026-09-08 13:46 · Meta · refusal · moving or re-bolding 192.1's paragraph in CLAUDE.md — a prose change this slice has no instrument for, with 158.2's prose growth open · refused · 95d4aca9
-- 2026-09-08 14:52 · Objective · grill · 355 — Objective grill of Slices 353, 354: 103 of 107 figures reproduce; 354's halves table mixes two conventions (11 -> 12 of 21), 353's verdict series reads the pre-commit tip · logged · b1da20c7
 - 2026-09-08 14:52 · Meta · refusal · a gate or prose change on the unanchored 'at HEAD' shape — base rate is 14/161 population and the string is correct wherever the commit does not move the figure (94.11) · refused · b1da20c7
 - 2026-09-08 15:49 · Continue · build · 356.1 — 328.1 answered: 1 of 8 Demo-signal scripts (of 160) answers 'does this page show a result' with it, so it closes as not-a-pattern; the survivor's pass message corrected from 24 to the real 3/21/24 split, red-proved by injection · landed · 78e96150
 - 2026-09-08 15:49 · Meta · refusal · widening check-learning-path's result-before-code half to every page — the predicate 'renders bo-* outside a <pre>' is true of 24 of 24, uniformly true of the tree (94.11) · refused · 78e96150
@@ -107,6 +103,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-08 16:51 · Meta · refusal · a gate on 'this window could move this lane' — the verdict needs a diff read (350.1's own comment-only instrument change), and 94.11 forbids gating a semantic property · refused · 919d55d5
 - 2026-09-08 16:51 · Meta · refusal · the fourteenth archive sweep at 45.9% — declined on scope, not the number: a sweep is a hand-checked bulk edit one slice at a time · refused · 919d55d5
 - 2026-09-08 17:52 · Continue · build · 330.1 — the sampling census: 32 of 153 candidate figures rest on a sample or extrapolation, but the named failure mode (a sample quoted AS a population) has ONE live instance and 0 of 31 open items rest on an undisclosed sample · landed · 54636e74
+- 2026-09-08 18:58 · Objective · grill · Slice 359 — Objective grill of Slices 356, 357, 358: 60 of 64 published assertions reproduce (one per table row, stated because this wake's own first draft published 84/80 from a figure-level tally that did not survive a recount), every red-proved headline figure to the digit; all four defects are a sentence CHARACTERISING a measurement — 358's widening summary sums to 151 not 153, 357's 'nearly 3x the rate 350.1 records' is 351.1's amended 14.4% under 350.1's name, and 356's other=1..99 range names no instrument and re-measures 4/5/103. All corrected in place; nothing proposed · landed · 2bb15e7d
+- 2026-09-08 18:58 · Meta · refusal · a fifth loop-mechanics item restating 192.1 — refused on 355.3's precedent and on Slice 354's measurement that 192.1 is applied in 1 of 161 slices · refused · 2bb15e7d
+- 2026-09-08 18:58 · Meta · refusal · a gate over 'this sentence characterises the measurement correctly' — semantic, 94.11 · refused · 2bb15e7d
 
 ## Sunset test
 
