@@ -320,6 +320,126 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 361 — `332.1` closed by auditing all 18 `ENVIRONMENT.md` sections against this container: **17 live** (four of them BIT this wake), **1 dead** — and the dead one's territory holds a live hazard pointing the opposite way (2026-09-08)
+
+Dispatched by **rule 4** — no open P0 (**0** of 29 open),
+`Standardize 2 / 4`, `Objective 1 / 3`, so rules 1-3 did not match and
+`332.1` was the oldest cloud-takeable open item. Cloud wake: no Podman, no
+screenshots, and this item needs none — every reading below is a command's
+output, a DOM measurement or a file that does or does not exist.
+
+Full evidence, every command beside its figure:
+`.roundtable/measure-332.1-environment-md-section-audit-2026-09-08.md`.
+
+### The premise was re-checked before it was used, and it reproduces
+
+`332.1`'s numbers are an earlier wake's measurement, so re-running them is part
+of the criterion. Walking all **28** revisions of the file and sizing each *at
+its own revision*: `1005d1db` (the "last cut") is **391** lines / **3,130**
+words / **14** `^## ` sections and `0879ec3d` (the item's own reading) is
+**731** / **6,316** / **17** — both exact. It has kept growing since the item
+was filed: **789 / 6,861 / 18** at this wake's Step 0, i.e. **+58 lines and +1
+section in one day**, and **229 → 789 lines, 3.4x in 11 days** since the 169.3
+split. The section added in that day is **§6d**, itself a trap that cost Slice
+347 twenty minutes — the growth is the environment being hostile, which is the
+answer this item was posed to test.
+
+### 17 of 18 live — four of them fired on this very wake
+
+**BIT this wake:** §1 detached HEAD (`git branch --show-current` → EMPTY;
+the container arrived detached at `d8767657`); §1b the bash cwd persisting
+(call A `cd apps/docs`, call B with no `cd` started there, and the harness
+printed its own notice); §2 the shallow clone (`true` at **50** commits →
+`false` at **2,089**, 8 tags); §5 no `loops.db` in a fresh container.
+
+**LIVE, reproduced on demand:** §2b red-proved on a throwaway `--depth 1`
+clone — an injected 0-byte `shallow.lock` makes the deepening fetch refuse
+while `is-shallow` still reads `true`, and the documented one-line recovery
+restores 2,089 commits. §6c reproduced **to the pixel**: `1216 − 1201 = 15`
+at 1440 and `390 − 375 = 15` at 390, with the usual page-scrollbar check
+reading **0** and `.bo-data-table-container` at **913 × 384**. §6d: a 9-char
+sha answers HTTP **200** with **0** runs where the full sha answers **2**.
+§6b: `176 live · 3 NOT VERIFIED`, the gate naming the pointer-device reason
+itself. §3b: **0** active `paths-ignore` keys across all three workflows.
+Plus §1c, §4, §6, §7, §8, the toolchain list and the owner instruction.
+
+**The method was controlled, because "18 of 18" would have been a 100%.**
+Run against two claims already known dead, it returns DEAD for both
+(`check-boost.mjs` does not exist; `check:resume-charter` is not in
+`check:repo` and appears in `ci.yml` only inside comments) and LIVE for a
+live one. Stated precisely: those controls discriminate at the level of a
+*claim inside* a section, not a whole section — no whole section is
+known-dead, so no section-level control exists. The better evidence that the
+method is not a rubber stamp is that it found **three stale things inside
+sections it ruled live**.
+
+### §3 is the one dead section, and its ground is not empty
+
+*"`astro build` does not clear `dist`"* is **false at astro 5.18.2**. A
+sentinel file **and** a sentinel directory planted in `apps/docs/dist` were
+both removed — **isolated to a bare `npx astro build`**, not to the 30-step
+chain around it, since attributing it to the wrong step would be the defect:
+no `rm -rf`/`rimraf` exists in any docs script, and `astro.config.mjs` sets
+no `outDir` or clean option. **The declared range never moved** (`^5.1.0`
+across all 40 commits touching `apps/docs/package.json`), so if the behaviour
+changed it changed under the repo through a floating minor with no commit to
+point at. **Whether the claim was true when written is left unresolved**
+deliberately — proving it needs an old astro installed, which is not what the
+Accept asked.
+
+**The live hazard is the inverse, and nothing described it.** Because
+`astro build` empties `dist`, running one alone silently discards everything
+the chain adds after it: measured on this wake's own dist, **224 files where a
+full build leaves 529**, **0** pagefind artefacts, no `llms.txt`. A
+dist-reading gate then measures an incomplete site that *looks* built —
+fail-open, the exact failure `serve-dist.mjs`'s header says it exists to
+prevent. So §3 was **rewritten** to say that, with the superseded text moved
+to `LOOPS-archive.md` with a pointer, per the Accept's own wording.
+
+### Two more corrections, both inside sections that stay
+
+- **§1c's consumer count read 15 and returns 17.** The 15 reproduces exactly
+  at `605829ca`, so the entry was right and drifted — the third consecutive
+  time (14 → 15 → 17), so **no value is pinned there any more**. One arrival
+  of each kind: `measure-stress.mjs` is a new **npm-script entry point**
+  (`measure:stress`, absent from `ci.yml`, so run-by-hand and needing the
+  export), and `po-app-harness.mjs` is a **false positive** — it matches only
+  a prose comment naming `browser-harness.mjs` and launches nothing.
+  **The grep/closure agreement is no longer a set equality**: closure-only is
+  `resolve-chrome.mjs` (the resolver has 0 self-mentions, so the grep can
+  never list it), grep-only is that false positive — two opposite errors
+  cancelling into a coincidental `17 = 17`, the same shape the toolchain
+  section already warns about with its own two 17s.
+- **A carried trap pinned "31 pathnames are exactly 40 characters"**;
+  `git ls-files | awk 'length($0)==40' | wc -l` returns **30**. The parse
+  lesson is untouched; the pinned number is now the command, as Slice 360 did
+  for §2's `git tag | wc -l`.
+
+### This wake's own first outputs were wrong twice, both caught before the commit
+
+`grep -c 'paths-ignore' .github/workflows/ci.yml` returned **2**, which reads
+as *"paths-ignore is back"* and would have filed a false defect against §3b —
+both hits are inside the comment block explaining its removal, and the
+structural check `grep -E '^\s*paths-ignore\s*:'` returns **0**. That is this
+repo's *assert on structure, never on raw text* rule catching a substring
+count answering a structural question. And the §6c probe crashed on a guessed
+`serveDist` return shape; it returns `{ server, port, base }`, as
+`check-layout.mjs:112` shows. The same suspicion was then applied to the
+control that also returned 2 — likewise all comments, checked rather than
+assumed.
+
+1. [x] **332.1 — CLOSED 2026-09-08 by Slice 361.** Audited all 18 sections
+       against this container: **17 live, 1 dead**, with four firing on the
+       wake itself. The Accept's anticipated outcome ("finding that all still
+       bite is satisfying") is **very nearly** what happened, and the one
+       exception is precisely the kind it licensed — a trap fixed in the
+       toolchain, not an untidy section. §3 rewritten with the superseded text
+       archived; §1c's and one carried trap's pinned values replaced by their
+       commands. **The file is long because the environment is hostile**, and
+       that is now measured rather than asserted: it grew again *during* the
+       audit, by a section documenting a trap that had just cost a wake 20
+       minutes.
+
 ## Slice 360 — `331.1` REFUSED on the base rate its own Accept demanded first: `api.json` contains **0** HTML start tags, so the half a prompt block exists for — **378 of 749** lines — has no source in the mandated provenance, and the fallback source carries only **61 of 263** substantive markup lines (2026-09-08)
 
 Dispatched by **rule 4** — no open P0 (0 of 30), `Standardize 1 / 4`,
@@ -4617,7 +4737,11 @@ repo's Discussions, so the route has never been seen returning a non-empty
 list. The controls are the strongest evidence available without filing one,
 and `297.1` already carries the obligation to check on the day one appears.
 
-1. [ ] **332.1 — `ENVIRONMENT.md` doubled in 8 days and every wake reads all
+1. [x] **332.1 — CLOSED 2026-09-08 by Slice 361: 17 of 18 sections live (four
+       BIT that wake), 1 dead (§3, rewritten — its trap is fixed in the
+       toolchain and a live hazard points the other way). Evidence:
+       `.roundtable/measure-332.1-environment-md-section-audit-2026-09-08.md`.
+       Original text kept below.** `ENVIRONMENT.md` doubled in 8 days and every wake reads all
        of it.** 391 → 731 lines, 3,130 → 6,316 words since its last cut, with
        **17** top-level sections — **amended 2026-09-07 by 336.1A, which read
        18**: `grep -c '^## '` → 17, `grep -c '^#'` → 18, the extra one being

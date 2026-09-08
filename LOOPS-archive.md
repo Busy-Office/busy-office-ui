@@ -331,3 +331,38 @@ than an Accept. **The fourth recurrence, 326.1, is what qualified it**: for this
 particular list the property is not checkable, so the names are unavoidable and
 the obligation to amend them is the mechanism. The general lesson survives; what
 died is the assumption that every stale list has a command behind it.
+
+---
+
+## `ENVIRONMENT.md` §3 — "`astro build` does not clear `dist`" (moved 2026-09-08, roadmap 332.1)
+
+The superseded text, verbatim, as it stood from the 169.3 split (`f52f2597`,
+2026-08-28) until `332.1` measured it:
+
+> ## 3. `astro build` does not clear `dist`
+>
+> `rm -rf apps/docs/dist` first. Skipping it has produced a real failure rather
+> than a stale number once — `report:prose` died with `ENOENT … apps/docs/dist`
+> before the build — but that is luck, not a guard.
+
+**Why it moved.** `332.1` asked whether every section of `ENVIRONMENT.md` still
+describes a trap that can bite today, and named "a section whose trap is fixed in
+the toolchain" as the only safe cut. This was the one — **17 of 18 sections were
+live, this one was not**. A sentinel file *and* a sentinel directory planted in
+`apps/docs/dist` were both removed by a bare `npx astro build` (v5.18.2),
+isolated from the 30-step docs chain: no `rm -rf`/`rimraf` exists in any docs
+script and `astro.config.mjs` sets no `outDir` or clean option.
+
+**What is not established, deliberately:** whether the claim was true when
+written. `apps/docs/package.json` declares `^5.1.0` and that value never moved
+across all 40 commits touching the file, so any change came through a floating
+minor with no commit to point at; proving the old behaviour would need an old
+astro installed, which is not what the Accept asked for.
+
+**It did not become an empty slot.** The live hazard in the same territory is
+the inverse — a bare `astro build` silently discards everything the chain adds
+after it (`copy-suite`, `highlight-code`, `scope-search-index`, `pagefind`,
+`gen-llms`, `stamp-build-id`), leaving 224 files where a full build leaves 529,
+with zero pagefind artefacts and no `llms.txt`. A dist-reading gate then measures
+an incomplete site that looks built. §3 now describes that instead, which is why
+this is an archived *correction* rather than a deletion.

@@ -121,12 +121,40 @@ Every consumer imports the resolver directly, so one grep is exact — measured,
 ```
 grep -rl 'browser-harness\.mjs\|resolve-chrome\.mjs' \
     apps/docs/scripts/*.mjs examples/erp-suite/*.mjs
-  # 15 files on 2026-09-06 (late) = 12 npm-script entry points, plus THREE
-  # files that are not npm scripts: browser-harness.mjs (the module itself),
-  # score.mjs, and gen-og-card.mjs (run by hand to regenerate the OG card).
+  # RUN IT. No value is pinned here any more — see below for why the last
+  # three (14, 15, 17) each went stale within a day or two of being written.
 ```
 
 Re-run it; the count is the reconciliation, not the list.
+
+**It read 15 here and returned 17 on 2026-09-08** (roadmap 332.1). The 15
+reproduces exactly at `605829ca`, the commit it described, so the entry was
+right and drifted — which is the third consecutive time (14 → 15 → 17), and the
+reason no number is pinned above. The two arrivals are **one of each kind**, and
+only one of them changes what a wake must do:
+
+- **`measure-stress.mjs`** — a new **npm-script entry point** (`measure:stress`),
+  so the gate list grew. It is **not** in `ci.yml`, so it is a run-by-hand
+  consumer that needs the export in this container.
+- **`po-app-harness.mjs`** — **a false positive of this grep**. It matches only
+  because a prose comment on its line 4 names `browser-harness.mjs`; it imports
+  no browser module and launches nothing.
+
+**And the grep/closure equality that licenses the one-level shortcut is no
+longer a SET equality, though the counts still agree** — believe the closure, as
+this section already says:
+
+```
+one-level grep : 17
+reach closure  : 17
+closure-only   : resolve-chrome.mjs   # the resolver itself: 0 self-mentions,
+                                      # so this grep can never list it
+grep-only      : po-app-harness.mjs   # the comment match above
+```
+
+Two opposite errors cancelling into a coincidental `17 = 17` — the same shape
+the toolchain section below warns about with its own two 17s. **Compare the
+sets, not the counts**, in both places.
 
 **The count moved within a day of being written, and the comment stayed at 14
 for one more wake** (roadmap 299.2). 293.1's **14** was exact at its own commit
@@ -237,11 +265,47 @@ So: **the fetch's own output is not the check.** Run `git rev-parse
 --is-shallow-repository` after it every time, and if it still reads `true`,
 re-run the fetch with no `tail` and read the FIRST line.
 
-## 3. `astro build` does not clear `dist`
+## 3. `astro build` CLEARS `dist` — and the hazard runs the other way
 
-`rm -rf apps/docs/dist` first. Skipping it has produced a real failure rather
-than a stale number once — `report:prose` died with `ENOENT … apps/docs/dist`
-before the build — but that is luck, not a guard.
+**This section said the opposite until 2026-09-08, and the old claim is dead**
+(roadmap 332.1, which audited every section here for exactly this). Superseded
+text and the reasoning are in `LOOPS-archive.md`. Measured, isolated to a bare
+`astro build` rather than to the 30-step chain around it:
+
+```
+echo x > apps/docs/dist/__sent-A.txt
+mkdir -p apps/docs/dist/__sentdir && echo x > apps/docs/dist/__sentdir/__sent-B.txt
+npx astro build                 # in apps/docs
+  -> both the stray FILE and the stray DIRECTORY are REMOVED
+npx astro --version -> astro v5.18.2
+```
+
+No `rm -rf`/`rimraf` exists in any docs script and `astro.config.mjs` sets no
+`outDir` or clean option, so it is astro doing it. **The declared range never
+moved** — `^5.1.0` across all 40 commits touching `apps/docs/package.json` — so
+if this behaviour changed it changed under the repo via a floating minor, with
+no commit to point at. Re-measure rather than trusting this paragraph; that is
+how it came to be wrong.
+
+`rm -rf apps/docs/dist` first is still harmless and still in the toolchain
+block below — it is simply no longer load-bearing.
+
+**The live hazard is the inverse: never run a bare `astro build` to iterate.**
+Because it empties `dist`, it silently discards everything the chain adds
+*after* it — `copy-suite`, `highlight-code`, `scope-search-index`,
+`pagefind --site dist`, `gen-llms`, `stamp-build-id`. Measured immediately after
+one on 2026-09-08:
+
+```
+files in dist   224     (a full `npm run docs:build` leaves 529)
+pagefind          0
+llms.txt          0
+```
+
+A dist-reading gate or probe then measures an **incomplete site that looks
+built** — fail-open, which is the failure `serve-dist.mjs`'s own header says it
+exists to prevent. If you have run a bare `astro build`, run the full
+`npm run docs:build` before believing any dist reading.
 
 ## 3b. THE HAND-OFF IS GATED CONTENT, AND THE WAKE'S OWN ORDER LEAVES IT UNGATED
 
@@ -695,8 +759,11 @@ broadly wrong. When declining an item, say which of the two lists it needs.
   logs. Extract the old version to a probe file *in the same directory*, run
   both against the one live log, then delete the probe.
 - **Parse `git log --name-only` with `--format=%x00%H` and NUL-split records.**
-  31 pathnames in this repo are exactly 40 characters, so "any 40-char line is a
-  sha" overcounts commits by 8%.
+  Enough pathnames in this repo are exactly 40 characters that "any 40-char line
+  is a sha" overcounts commits by several percent — `git ls-files | awk
+  'length($0)==40' | wc -l` is the count, and **run it rather than quoting one**:
+  this bullet said 31 and returned **30** on 2026-09-08 (roadmap 332.1). The
+  trap is the parse, not the number.
 - **A parser change that reports MORE is not self-evidently a fix.** 166.5's
   first draft would have read `4-tick sweep` as slice 4 across 18 rows.
 - **A figure describing a commit is read from THAT COMMIT, never from the
