@@ -320,6 +320,225 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 357 — Standardize sweep, 4 of 4 lanes, all clean — and the finding is that `350.1`'s "does this window have lane input" predicate is **not per-lane**: lanes 1 and 3 read the docs tree, lane 2 reads only the core stylesheets, so ORing the two inputs credits lane 2 with **41.7%** of windows it is structurally blind to (2026-09-08)
+
+**Dispatched by rule 2** at `Standardize 4 / 4 Continue rounds OVERDUE`, exactly
+as the previous hand-off's ⚠ block predicted — re-read this wake rather than
+trusted. Cloud wake. Rule 1 found no P0
+(`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0** across 31 open items).
+Rule 3 read `Objective 1 / 3 ok [356]` and sits **below** rule 2 anyway. Rules
+4-8 not reached. Rule 5's line read `ok` — **0** wake-dates newer than the
+newest pair, 8 of 47 names paired across days, and no name in the comparable
+set regresses on two consecutive runs.
+
+Step 0: container **DETACHED** again (`git branch --show-current` empty), trap
+1, fixed with `git checkout -B main origin/main` before any commit. Trap 2 clean
+in one `--unshallow` — **2,081** commits, no `shallow.lock`, and it again
+brought the tags (`git tag | wc -l` → **8**, run rather than assumed). Unlike
+the last several wakes `origin/main` arrived **not** as a forced update:
+`d876765..30d94cc`, a fast-forward onto the previous wake's own tip.
+
+**Step 1 — both intakes read, with the controls `ENVIRONMENT.md` §8 names:**
+`/issues?state=open` → HTTP 200 len **1**; `/discussions` → HTTP 200 len **0**;
+`/not-a-real-route` → **404**, the control that makes the `200 []` mean *served
+and empty*. Issue #2's `updated_at` is still `2026-09-06T15:10:34Z` — a
+**twenty-third** consecutive hand-off with no movement. Nothing new to triage,
+so Step 1 committed nothing.
+
+**The archive sweep was evaluated and declined, and the number is now the
+argument for taking it.** `roadmap_scope.py` at `30d94cc7` reports
+**5,307 / 11,564 = 45.9%**, 27 eligible targets, 13 named by a still-open item
+(236.2's report, read before concluding). That equals the previous hand-off's
+reading taken one commit earlier at `78e96150`, which is **expected rather than
+informative**: `30d94cc7` is that wake's recording commit and does not touch
+`ROADMAP.md`, so the four-wake rise (41.1 → 43.9 → 44.5 → 45.9) has had no
+opportunity to continue — it has not paused, it has not been sampled again. The
+revision is named because **this commit moves it**: every line of this slice
+lands under an open heading, so the closed share falls. Re-run
+`python3 scripts/loops/roadmap_scope.py` at the commit rather than quoting this.
+It remains **4.4pp above `324.3`'s thirteenth sweep at 41.5%** and above
+every declined reading on record. Declined here for **scope, not the number**: a
+sweep is a hand-checked bulk edit one slice at a time (CLAUDE.md), and this
+wake's finding is a measurement with two red-proofs. `249.12`, the open
+**OWNER OR ARCHITECTURE CALL** on the archival trigger, is named for a
+**seventeenth** consecutive wake.
+
+### The four lanes — every reading measured this wake, none cited
+
+- **Lane 1 of 4 — `scan:dead-style`: on the refusal set, page for page, a
+  second time.** **0** dead attributes on **0** pages; **1,365** live
+  attributes, **1,813** declarations, **345** multi-declaration. Per
+  declaration: **11 dead on 9 pages** — `/patterns/` ×3, `amount` / `byline` /
+  `progress` (`inline-size: 100%`), `combobox` (`margin-block-start`),
+  `state-patterns` (`align-items`), `/base/motion/` (`display: inline-block`),
+  `/patterns/app-launch/` (`block-size: 2rem`), `/reference/tokens/`
+  (`inline-size:var(--bo-space-0)`). Byte-identical to Slice 350's reading,
+  **and this time that means something**: this window DID change lane 1's input
+  (two `apps/docs/src/` pages), so the reading is unchanged on inputs that
+  moved, not unchanged by construction. Every one is refused with its
+  measurement in Slice 345; `345.1` stays open and untouched.
+- **Lane 2 of 4 — `report:css-repeats`: no delta, and the delta could not have
+  existed.** **74** source files · **242** rules with 3+ declarations · **230**
+  distinct bodies · **8** bodies repeating — byte-identical to Slice 345's and
+  Slice 350's `74 / 242 / 230 / 8`. Checked against `LOOPS.md`'s settled table
+  **member for member**, not by the count. **This is the finding below**: lane
+  2's only input is `packages/core/src/css/`, last touched by `e4742fd4`
+  (2026-09-07, Slice 338) — **47** first-parent commits ago. That single commit
+  predates all three of the sweeps reading `74 / 242 / 230 / 8` (345, 350, 357),
+  so this third consecutive identical tuple was never available to be anything
+  else. (Slice 350's *"sixth consecutive identical reading"* is the run of
+  **8 repeating bodies**, a longer and different series — 345's own text records
+  the tuple moving `237 / 225 / 8` → `242 / 230 / 8` at that sweep.)
+- **Lane 3 of 4 — `report:prose`: every flagged page carries a verdict, and it
+  is the one lane that MOVED.** 119 documentation pages of 128 built · median
+  **798** · mean **959** · total **114,124** words, against Slice 350's
+  `798 / 956 / 113,787` — **+337 words**, from the two `apps/docs/src/` pages
+  this window touched (`data-table.astro`, `scale.astro`, both Slice 352's
+  withdrawal). The flagged union is **15** pages: the 10 over the corpus 2x
+  (1,596) plus `/base/motion/`, `/concepts/layouts/`, `/concepts/js-behaviors/`,
+  `/concepts/design-language/` and `/concepts/scale/` over a family 2x. Checked
+  against the ENUMERATION the lane mandates — **158.1's twelve**
+  (`data-table`, `richtext`, `which-pattern`, `form`, `editable-grid`,
+  `list-report`, `calendar`, `money`, `combobox`, `tabs`, `layouts`,
+  `output-form`), **161.1's three**, **178.3's `/concepts/scale/`** — all 15 are
+  members, and `/patterns/output-form/` is again the one non-flagged member.
+  **No page carries no verdict**, so nothing to record.
+- **Lane 4 of 4 — `report_loop_prose.py`: no file changed accumulate class, the
+  region is FLAT, and its RATIO fell without the region losing one word.** The
+  dispatch region reads **7,548** words at **41.8%** of the file. Slice 350
+  published **7,548 at 42.0%**, and the ratio moved on the **denominator**:
+  `1310b81a` (Slice 353) is the one commit in this window touching `LOOPS.md`,
+  and it took the file **17,980 → 18,046 (+66)** while leaving the region at
+  **7,548 exactly** — every word of it landed below `## Playbooks`, which is
+  where 353.1 replaced the hand-rolled recipe. Measured with
+  `git show <rev>:LOOPS.md` split on `## Playbooks` at both revisions, rather
+  than inferred from "the file looks unchanged": it is not unchanged, and the
+  *reading a wake acts on* is the one that is. This is the playbook's own
+  warning about reading the ratio arriving as a live case — a falling
+  percentage here is the file growing elsewhere, not the region shrinking. The
+  per-section attribution 353.1 added now prints
+  itself, and it **reproduces `341.1`'s series exactly** — `### Step 0c` at
+  **1,516** body words, **+194** since the last commit that reduced the region
+  (`f9e0f17d`), **1 of 16** sections moved, and the block's own assertion
+  `body 7,492 + 56 heading = 7,548` holds. That is two independently written
+  instruments agreeing: `341.1`'s figure was a hand-run per-revision series, the
+  block's is generated. **`341.1` is open and owns that question**; nothing is
+  proposed here.
+
+### The finding: `350.1`'s predicate is one predicate for three lanes that do not share an input set
+
+`350.1` asks whether rule 2's counter should know if lanes 1-3 have anything to
+read, and its base-rate command classifies a window by
+`packages/core/src/css/ OR apps/docs/src/`. **That is right for lanes 1 and 3
+and wrong for lane 2**, and this wake is the demonstration rather than a
+prediction: the window changed `apps/docs/src/` and not
+`packages/core/src/css/`, so the OR calls it *has lane input* — while lane 2
+could not have moved by a single number.
+
+**Which lane reads which tree is read off the code, not the header prose.**
+`report-css-repeats.mjs` imports `srcCssFiles, srcCssRoot as CSS` from
+`src-css-files.mjs`, whose `srcCssRoot` resolves to `packages/core/src/css`;
+`report-prose.mjs` and `scan-dead-style.mjs` both import `distPages(DIST)` and
+read built pages, whose text and computed values depend on **both** trees (the
+generated half of a docs page derives from the core CSS — `/concepts/which-pattern/`
+is 310 authored + 2,015 generated).
+
+**Red-proved by injection, with both controls, and the injections checked
+before the results were believed** (CLAUDE.md: a green red-proof is a defect in
+the injection until proven otherwise). The *same* three-declaration body —
+`list-style: none; margin: 0; padding: 0`, the x3 group already in the report —
+was injected once into each tree, each time asserted to be present exactly once
+in the file and outside any comment, and reverted with the count re-asserted at
+zero:
+
+| injected into | rules | repeats | that group |
+|---|---|---|---|
+| (baseline) | 242 | 8 | x3 |
+| `packages/core/src/css/components/badge/badge.css` | **243** | 8 | **x4**, listing the probe selector |
+| `apps/docs/src/pages/components/badge.astro` | 242 | 8 | x3 — **unmoved** |
+| (after both reverts) | 242 | 8 | x3 |
+
+The positive control moves the number and the negative control does not, on the
+identical declaration list — so the discrimination is the TREE, not the content.
+
+**The base rate, re-measured at execution time as `350.1`'s Accept requires**,
+by 350.1's own command at `30d94cc7`, extended to bucket the two trees
+separately instead of ORing them. 157 Standardize rows resolve to **140**
+distinct first-parent commits → 139 windows, windowed `a..b^` per `351.1`'s
+correction:
+
+```
+python3 - <<'PY'
+import re, subprocess
+def sh(*a): return subprocess.run(a, capture_output=True, text=True).stdout
+order = sh('git','rev-list','--first-parent','HEAD').split()
+pos = {c: i for i, c in enumerate(order)}
+full = {c[:n]: c for c in order for n in (7,8,9,10,40)}
+std, seen = [], set()
+for line in open('.roundtable/loop-log.md'):
+    if line.startswith('- ') and ' · Standardize · ' in line:
+        m = re.search(r' · ([0-9a-f]{7,40})\s*$', line.rstrip())
+        if m and full.get(m.group(1)) and full[m.group(1)] not in seen:
+            seen.add(full[m.group(1)]); std.append(full[m.group(1)])
+std.sort(key=lambda c: -pos[c])
+CORE, DOCS = 'packages/core/src/css/', 'apps/docs/src/'
+cnt = {'neither':0,'core_only':0,'docs_only':0,'both':0}; span = 0
+for a,b in zip(std, std[1:]):
+    commits = sh('git','rev-list','--first-parent',f'{a}..{b}^').split(); span += len(commits)
+    files = {f for c in commits for f in sh('git','show','--name-only','--format=',c).split('\n') if f}
+    hc = any(f.startswith(CORE) for f in files); hd = any(f.startswith(DOCS) for f in files)
+    cnt['both' if (hc and hd) else 'core_only' if hc else 'docs_only' if hd else 'neither'] += 1
+print(len(std)-1, 'windows, span', span, cnt)
+PY
+# 2026-09-08 at 30d94cc7: 139 windows, span 1869
+#   neither 20 (14.4%) · core_only 7 (5.0%) · docs_only 38 (27.3%) · both 74 (53.2%)
+```
+
+- **Lanes 1 and 3 are blind on `neither` = 20 of 139 (14.4%)** — which
+  reproduces `351.1`'s amended figure to the window, at a later commit.
+- **Lane 2 is blind on `neither + docs_only` = 58 of 139 (41.7%)** — nearly
+  **3x** the rate `350.1` records, and the gap is entirely the 38 `docs_only`
+  windows the OR hands it.
+
+**Reconciled and discriminated before quoting** (CLAUDE.md). The four buckets
+partition — 20 + 7 + 38 + 74 = 139, asserted in the script rather than added by
+eye. The predicate is not uniformly true or false: all four buckets are
+non-empty and the largest is 53.2%, so this is not the *identical value across
+many inputs* tell. And the `a..b` form of the same command still returns
+`139 / 15 / 13 / span 2008` with an independent `git rev-list` span of **2008**
+— unmoved from what `351.1` published, so **the base rate has not drifted**;
+what changed is only that it is now split per lane.
+
+**What this does NOT say**, because the temptation is to over-read it: it is not
+a claim that 41.7% of lane-2 passes were wasted. Lane 2 is the cheapest of the
+four (a file walk, no browser, against the **123s** Slice 350 measured for lane
+1 in this container — cited, not re-timed here), and its
+step also re-checks the settled table member-for-member, which is a reading of
+the table and not of the tree. The claim is narrower and is about **evidence**:
+on those 58 windows *"no delta, a Nth consecutive identical reading"* is not a
+statement about the stylesheets.
+
+**Fixed where it is read, and nothing else was built.** `report-css-repeats.mjs`
+now closes with the tree it walked, derived from `srcCssRoot` rather than
+hand-typed, so the sweep reading the output is told what an unchanged reading
+can and cannot mean. **No gate** — *"this window could move this lane"* needs a
+diff read to answer (`350.1` measured that itself: a file-level predicate
+reported an instrument change on `scan-dead-style.mjs` that turned out to be
+comment-only), and roadmap 94.11 forbids gating a semantic property. **No new
+instrument, and no fourth lane** — the finding is a sentence of output on an
+existing report and an amendment to the open item that owns the decision.
+
+1. [x] **357.1 — DONE 2026-09-08. `350.1`'s Accept gains a third requirement,
+       and lane 2's report says what its own silence means.** Two changes, both
+       above: the per-lane base rate is recorded as an amendment on `350.1`
+       (which stays **open** — the decision is still unmade, and making it is
+       rule 4's, not a sweep's), and `report-css-repeats.mjs`'s closing note
+       names `packages/core/src/css` as the only tree that can move its numbers.
+       - **Verified:** the report's new line renders the path **derived** from
+         `srcCssRoot` (`packages/core/src/css`), not typed; both injections
+         above land and revert with their counts asserted; all 17 CI-runnable
+         entry points green.
+
 ## Slice 356 — `328.1` answered and closed as NOT-A-PATTERN: exactly **1** live instrument answers *"does this page show a result"* with a Demo-shaped signal — and measuring it found the surviving instance reporting the population where it means an eighth of it, 24 where the honest number is 3 (2026-09-08)
 
 **Dispatched by rule 4**, cloud wake. Step 0b read `Standardize 3 / 4 ok`,
@@ -1612,6 +1831,25 @@ lanes 1-3.
            parenthesised reason is backwards, and the general form is that **a
            figure published from inside a sweep is always one window short of the
            sweep publishing it.**
+       - **AMENDED 2026-09-08 by the Slice 357 sweep, on a third count: the
+         predicate is not per-lane, and lane 2 is the one it mis-serves.** The
+         command ORs `packages/core/src/css/` with `apps/docs/src/`, but
+         `report-css-repeats.mjs` reads **only** the first (`srcCssRoot`), while
+         lanes 1 and 3 read built pages and so depend on both. Bucketed
+         separately at `30d94cc7`, `a..b^`: `neither` **20** · `core_only`
+         **7** · `docs_only` **38** · `both` **74**, summing to 139. So lanes 1
+         and 3 are blind on **20 of 139 (14.4%)** — this item's figure,
+         reproduced — and **lane 2 on 58 of 139 (41.7%)**, the 38 `docs_only`
+         windows being ones the OR credits it with. Red-proved by injecting the
+         *same* three-declaration body into each tree: core moves the report
+         242 → 243 and the group x3 → x4, docs moves nothing. Slice 357 carries
+         the command, the controls and the partition assertion.
+       - **So if rule 2 gains an input test it must name THREE things, not
+         two** — the inputs, the lane's own instrument, and **which lane**;
+         a single window-level verdict cannot be right for all three lanes at
+         once. If it is refused instead, the reason now has to cover a lane
+         whose reading was unmovable on **two in five** windows, which is a
+         different question from the 14.4% this item was filed on.
 
 ## Slice 349 — rule 3's text says "slices CLOSED"; its counter means "slices NAMED by a building row", and nothing has ever compared the two (2026-09-08)
 

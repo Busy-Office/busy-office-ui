@@ -123,3 +123,9 @@ console.log(
     `each carry them. LOOPS.md carries the standing verdicts; what to look at is the DELTA — a new ` +
     `group, or an existing one that grew.`,
 );
+console.log(
+  `  Nothing but \`${relative(join(ROOT, '..', '..'), CSS)}\` can move these numbers — no docs page ` +
+    `is read. So an unchanged reading is evidence of a clean tree only when the window since the ` +
+    `last run TOUCHED that path; otherwise it is unchanged by construction and says nothing. ` +
+    `\`git log --first-parent -1 -- ${relative(join(ROOT, '..', '..'), CSS)}\` is the check.`,
+);
