@@ -320,6 +320,208 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 350 — Standardize sweep, 4 of 4 lanes, all clean — and the sweep's own dispatch is the finding: rule 2's counter counts ROUNDS, lanes 1-3 measure ARTEFACTS, and **10.1% of windows can move neither** (2026-09-08)
+
+**Dispatched by rule 2** at `Standardize 4 / 4 Continue rounds OVERDUE`, exactly
+as the previous hand-off's ⚠ block predicted — re-read this wake rather than
+trusted. Cloud wake. Rule 1 found no P0
+(`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0** across 30 open items).
+Rule 3 was `Objective 3 / 3 OVERDUE [324, 325, 347]` and is evaluated **below**
+rule 2, so the grill waits one more wake. Rules 4-8 not reached. Rule 5's line
+read `ok`, not STALE — **0** wake-dates newer than the newest pair, 8 of 47
+names paired across days.
+
+Step 0: container **DETACHED** again (`git branch --show-current` empty), trap 1,
+fixed with `git checkout -B main origin/main` before any commit; `origin/main`
+again arrived as a **forced update** (`26447ba...81f6281`). Trap 2 clean in one
+`--unshallow` — **2,065** commits, no `shallow.lock`, and it again brought the
+tags (`git tag | wc -l` → **8**, run rather than assumed). **No collision** — the
+pre-commit `git fetch origin main` found `origin/main` unmoved at `81f6281c`,
+which is the previous wake's own tip.
+
+**Step 1 — both intakes read, with the controls `ENVIRONMENT.md` §8 names:**
+`/issues?state=open` → HTTP 200 len **1**; `/discussions` → HTTP 200 len **0**;
+`/not-a-real-route` → **404**, the control that makes the `200 []` mean *served
+and empty*. Issue #2's `updated_at` is still `2026-09-06T15:10:34Z` — a
+**sixteenth** consecutive hand-off with no movement. Nothing new to triage, so
+Step 1 committed nothing.
+
+**The archive sweep was evaluated and declined on the measured trigger.**
+`roadmap_scope.py` at `81f6281c` reports closed-history share
+**4,129 / 10,216 = 40.4%**, 20 eligible targets, 10 of them named by a still-open
+item (236.2's report, read before concluding). 252.1 dispatched the tenth sweep
+at **55.1%**, 272.1 the eleventh at **56.7%**, 279.3 declined the twelfth at
+**40.6%**, `324.3` took the thirteenth at **41.5%**. 40.4% is below every one of
+those. The revision is named because this commit moves it: every line of this
+slice lands under an **open** heading, so the closed share falls further — the
+deliberate absence of a line count here is `ENVIRONMENT.md`'s rule applied to
+the one figure an edit invalidates as it writes it. Re-run
+`python3 scripts/loops/roadmap_scope.py` at the commit. `249.12`, the open **OWNER OR ARCHITECTURE CALL** on the archival
+trigger, is now named for a **tenth** consecutive wake; nothing is proposed here.
+
+### The four lanes, all clean — measured, not cited
+
+- **Lane 1 of 4 — `scan:dead-style`: on the refusal set, page for page.**
+  **0** dead attributes on **0** pages; **1,365** live attributes, **1,813**
+  declarations, **345** multi-declaration. Per declaration: **11 dead on 9
+  pages**. Slice 345 reconciled its re-run against the eleven refusals it had
+  just written; this run reconciles the same eleven *and* their page
+  distribution, which 345 did not publish: `/patterns/` ×3 (PatternPreview's
+  accent), `amount` / `byline` / `progress` (`inline-size: 100%`), `combobox`
+  (`margin-block-start`), `state-patterns` (`align-items`), `/base/motion/`
+  (`display: inline-block`), `/patterns/app-launch/` (`block-size: 2rem`),
+  `/reference/tokens/` (`inline-size:var(--bo-space-0)`) — 3 + 8 across 9 pages.
+  Every one is refused with its measurement in Slice 345. **Nothing converted
+  this wake**, and `345.1` (should `.bo-motion-spin` own its `display:
+  inline-block`?) stays open and untouched — a component CSS change is not a
+  Standardize-sweep edit, which is why 345 filed it rather than building it.
+- **Lane 2 of 4 — `report:css-repeats`: no delta, a sixth consecutive identical
+  reading.** 74 source files · **242** rules with 3+ declarations · **230**
+  distinct bodies · **8** bodies repeating — byte-identical to Slice 345's
+  `74 / 242 / 230 / 8`. Checked against `LOOPS.md`'s settled table **member for
+  member**, not by the count: the x4 joined-control radius reset is still two
+  components spelling one decision twice each, and no group is new or grew.
+- **Lane 3 of 4 — `report:prose`: every flagged page carries a verdict.** 119
+  documentation pages of 128 built · median **798** · mean **956** · total
+  **113,787** words. The flagged union is **15** pages — the 10 over the corpus
+  2x (1,596) plus `/base/motion/`, `/concepts/layouts/`,
+  `/concepts/js-behaviors/`, `/concepts/design-language/` and `/concepts/scale/`
+  over a family 2x. Checked against the ENUMERATION the lane mandates, read out
+  of the archive rather than assumed: **158.1's twelve** are `data-table`,
+  `richtext`, `which-pattern`, `form`, `editable-grid`, `list-report`,
+  `calendar`, `money`, `combobox`, `tabs`, `layouts`, `output-form`; **161.1's
+  three** and **178.3's `/concepts/scale/`** make sixteen. All 15 flagged pages
+  are members, and the one non-flagged member is `/patterns/output-form/`, as in
+  345. **No page carries no verdict**, so nothing to record.
+- **Lane 4 of 4 — `report_loop_prose.py`: no file changed accumulate class.**
+  The `ratchet` block reads `LOOPS.md 1 up, last cut f9e0f17d (2026-09-07)`; the
+  dispatch region is **7,548** words at **42.0%** of the file — *flat* against
+  Slice 345's 7,548, which is expected, since no commit since has touched
+  `LOOPS.md`. Not attributed per section (308.1/339.1), and it does not need to
+  be: a flat number is not a regrowth reading either.
+
+  **`CLAUDE.md`'s ratchet reads `33 up / 0 down, never cut`, and that is the one
+  row with a stated reopen condition — so it was executed rather than waved at.**
+  167.1's condition is *"reopen if an eighth [`can this detector fail`] section
+  is added without folding"*. Split on `^## `, `CLAUDE.md` holds **16** sections
+  at `81f6281c` and **7** of them are that subject (red-proving/injection,
+  first output, reported number, heuristic self-test, base rate, CI-only,
+  structural assertion) — **2,414 of 5,687 body words, 42.4%**. **No eighth.**
+  The share is reported at HEAD only and is deliberately NOT compared to 167.1's
+  `1,893 / 4,600`, which was not re-derived at its own commit
+  (`ENVIRONMENT.md`'s *a figure describing a commit is read from THAT commit*) —
+  the condition is a COUNT of sections, and the count is what was checked.
+  The watch itself was retired by **193.1** ("fold nothing, retire the watch")
+  and the question re-raised and re-verdicted **HONEST** by **284.2**, which put
+  the file's entire removable surface at **181 words (3.1%)** on two red-proved
+  instruments. Settled; not re-raised.
+
+### The finding: the sweep was dispatched onto a window three of its lanes could not see
+
+All four lanes reading identically to a sweep four hours old is not a
+coincidence, and asking *what would make this wrong* is what produced the item
+below. **No commit between the last Standardize and this one touched anything
+lanes 1-3 read.** The window `161ede68..HEAD` is 13 commits and 12 distinct
+files; `packages/core/src/css/**` and `apps/docs/src/**` contribute **zero** of
+them.
+
+**The obvious objection is real and has a live example one window back**, which
+is why the predicate is not "inputs changed": a lane's reading can also move
+because its **instrument** changed. `cdfcb129` (320.2) rewrote
+`scan-dead-style.mjs`'s verdict from per-attribute to per-declaration, and Slice
+345's lane 1 duly opened at **52 dead on unchanged inputs**. This window *does*
+touch that same file — `6cfe380c`, Slice 346's grill — so the file-level test
+cannot classify it, and the diff had to be read: **24 lines added, 0 of them
+outside the header block comment, 0 deleted.** The executable code is identical,
+so lanes 1-3 could not have moved.
+
+**The base rate, over the whole log** — `.roundtable/loop-log.md`'s 156
+Standardize rows resolve to **139 distinct commits on first-parent `main`**
+(1,660 of 1,660 rows parsed; 0 shas unresolvable), giving 138 windows:
+
+```
+python3 - <<'PY'
+import re, subprocess
+def sh(*a): return subprocess.run(a, capture_output=True, text=True).stdout
+order = sh('git','rev-list','--first-parent','HEAD').split()
+pos = {c: i for i, c in enumerate(order)}
+full = {c[:n]: c for c in order for n in (7, 8, 9, 10, 40)}
+std, seen = [], set()
+for line in open('.roundtable/loop-log.md'):
+    if line.startswith('- ') and ' · Standardize · ' in line:
+        m = re.search(r' · ([0-9a-f]{7,40})\s*$', line.rstrip())
+        if m and full.get(m.group(1)) and full[m.group(1)] not in seen:
+            seen.add(full[m.group(1)]); std.append(full[m.group(1)])
+std.sort(key=lambda c: -pos[c])
+INPUTS = ('packages/core/src/css/', 'apps/docs/src/')
+INSTR = ('apps/docs/scripts/scan-dead-style.mjs',
+         'apps/docs/scripts/report-prose.mjs',
+         'packages/core/scripts/report-css-repeats.mjs')
+noin = noboth = span = 0
+for a, b in zip(std, std[1:]):
+    files = {f for c in sh('git','rev-list','--first-parent',f'{a}..{b}').split()
+               for f in sh('git','show','--name-only','--format=',c).split('\n') if f}
+    span += len(sh('git','rev-list','--first-parent',f'{a}..{b}').split())
+    hi = any(f.startswith(INPUTS) for f in files)
+    noin += not hi
+    noboth += not hi and not any(f in INSTR for f in files)
+print(len(std)-1, 'windows;', noin, 'with no lane input change;', noboth,
+      'with no input AND no instrument change; span', span)
+PY
+# 2026-09-08 at 81f6281c: 138 windows; 14 no-input (10.1%); 13 also no-instrument (9.4%); span 1994
+```
+
+**Reconciled against an independent count before quoting** (CLAUDE.md): the 138
+window sizes sum to **1,994**, and `git rev-list --first-parent <oldest
+Standardize>..<newest>` is **1,994** — equal, so no window is double-counted or
+dropped. **The instrument discriminates**: 124 of 138 windows *do* carry an
+input change, up to 16 commits' worth, so this is not the "identical value
+across many inputs" tell. A hand spot-check of the newest closed window
+(`f9e0f17d..161ede68`) shows exactly one of its 16 commits touching a lane
+input — `161ede68`, the sweep's own conversions.
+
+**The cost is measured, not asserted**: lane 1 alone is **123s** of wall clock in
+this container (`date`-bracketed re-run of `npm run scan:dead-style -w docs`),
+on top of the docs build from a cleared `dist` that it requires.
+
+**Lane 4 is not affected and that is what keeps this a question rather than a
+defect.** It reads the loop-machinery markdown, and every one of this window's 13
+commits changed some of it. A rule-2 firing on a no-input window still buys a
+lane-4 read and the archive-sweep evaluation above; what it does not buy is
+lanes 1-3.
+
+1. [ ] **350.1 — should rule 2's counter know whether its first three lanes have
+       anything to read?** Rule 2 counts **Continue rounds**; lanes 1-3 measure
+       **artefacts**. The two are independent, and this wake is the demonstration:
+       a full sweep dispatched onto a window in which `packages/core/src/css/**`
+       and `apps/docs/src/**` were untouched and the one instrument that moved
+       moved only its comments. This is `349.1`'s shape one rule up and it is
+       **not the same defect** — 349.1 is a counter that counts something other
+       than what its rule's text says; here the counter counts exactly what the
+       text says, and the text's unit simply does not predict whether three of
+       the four lanes have input. Filed by the sweep it describes.
+       - **Accept:** a decision recorded either way, with the base rate
+         **re-measured at execution time** by the command above rather than
+         quoted from here — the figures are snapshots and this commit does not
+         move them (it touches no lane input), but a later one will.
+         - If rule 2 gains an input test, it must name **both** things that make
+           a lane's reading movable — the inputs and the lane's own instrument —
+           and `cdfcb129`/Slice 345 is the case it must still dispatch, since
+           that window's lane 1 went 0 → 52 with no input change at all.
+         - If it is refused, the reason names what a lane-1/2/3 pass buys on a
+           window that cannot move it, and says whether lane 4 plus the
+           archive-sweep evaluation carry the cadence on their own.
+         - **Refusing is a satisfying outcome, and so is finding the base rate
+           has moved** — the premise here is a measurement, so re-checking it is
+           part of the criterion (`LOOPS.md`'s rule on premises), not a courtesy.
+       - **No gate is proposed, and the reason is measured rather than stylistic.**
+         A file-level predicate could not classify this very window: it reports an
+         instrument change that turned out to be comment-only, so the verdict
+         needed the diff read. *"This change can move a lane's reading"* is
+         semantic — roadmap 94.11's rule — and the checkable shape is the wrong
+         one here, so the honest options are a decision in `LOOPS.md`'s text or a
+         **report**, never a build gate.
+
 ## Slice 349 — rule 3's text says "slices CLOSED"; its counter means "slices NAMED by a building row", and nothing has ever compared the two (2026-09-08)
 
 **Found the way `LOOPS.md` says this counter is always found** — by a number
