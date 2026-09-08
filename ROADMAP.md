@@ -320,6 +320,168 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 358 — `330.1` closed by the census it asked for: the named failure mode has **one** live instance, not two (the second left `ROADMAP.md` when Slice 301 was archived), and **0 of 31** open items rest on an undisclosed sample (2026-09-08)
+
+**Dispatched by rule 4.** Cloud wake. Rule 1 found no P0
+(`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0** across 31 open items);
+rule 2 read `Standardize 0 / 4 ok`, rule 3 `Objective 2 / 3 ok [356, 357]`, rule
+5 `ok` (**0** wake-dates newer than the newest pair, 8 of 47 names paired across
+days). Rule 4's oldest open item is **Slice 15**, owner-blocked — it needs a
+human listening to a screen reader — so the oldest a cloud wake can take is
+**`330.1`**, as the hand-off predicted; re-derived this wake rather than trusted.
+
+Step 0: container **DETACHED** again (`git branch --show-current` empty), trap 1,
+fixed with `git checkout -B main origin/main` before any commit. Trap 2 clean in
+one `--unshallow` — **2,083** commits, no `shallow.lock`, and it again brought
+the tags (`git tag | wc -l` → **8**, run rather than assumed); it was
+load-bearing, not precautionary, since Part 1 walks the whole file's history of
+archived text. Both intakes read with `ENVIRONMENT.md` §8's controls in one run
+(`/issues?state=open` → 200 len **1**; `/discussions` → 200 len **0**;
+`/not-a-real-route` → **404**, the control that makes the `200 []` mean *served
+and empty*). No new input, so Step 1 committed nothing. `origin/main` was
+**unmoved at `ada0f384`** on the pre-commit re-fetch: no collision this wake.
+
+### The Accept names one count over two populations, and only one is censusable
+
+`330.1` asks how many published figures in the live `ROADMAP.md` rest on a
+sample or an extrapolation, **and** whether any is load-bearing for a still-open
+decision. Those are different populations:
+
+- **the whole file** — **8,573** numeric tokens on **4,000** of 11,809 lines. No
+  wake reads that by hand, so this half is a *candidate filter plus a hand
+  verdict*, and its recall limit is measured below rather than asserted.
+- **the open set** — **31** items, **1,155** body lines. That is readable whole,
+  and was read whole rather than filtered. An item about sampling is not
+  answered by a sample.
+
+Every figure below is at **`ada0f384`**, the Step 0 tip, before this slice's own
+commit — which moves the line numbers and the denominator. The per-line verdict
+table, the controls and the instrument's own defects are in
+`.roundtable/measure-330.1-sampling-census-2026-09-08.md`.
+
+### Part 1 — 32 of 153 candidate lines, and 57 of them are the instrument's own noise
+
+The filter is *a sampling/extrapolation marker on a line that also carries a
+numeric token*, then a hand verdict on every hit. Regenerate the candidate set:
+
+```
+python3 - <<'PY'
+import re
+L=open('ROADMAP.md',encoding='utf-8').read().split('\n')
+fig=re.compile(r'(?<![\w.$/-])\d[\d,]*(?:\.\d+)?(?![\w])')
+rx=re.compile(r'\bsampl|\bmean\b|\bmedian\b|\baverage\b|\bavg\b|\bextrapolat|\bestimat'
+  r'|\bproject(?:ed|ion)\b|spot-?check|\bapprox|\broughly\b|(?:^|[\s(*_])~\d|\bfirst \d+\b'
+  r'|\bn\s*=\s*\d|\bsubset\b|\bper[- ](?:PNG|page|commit|component|row|file|slice)\b'
+  r'|\bover \d+ runs?\b|\b\d+ runs?\b|\bone run\b|\bone sitting\b|\bsitting\b',re.I)
+c=[(i+1,l) for i,l in enumerate(L) if rx.search(l) and fig.search(l)]
+print(len(c)); [print(n,l.strip()) for n,l in c]
+PY
+```
+
+| verdict | lines |
+|---|---|
+| false positive — `mean` the English **verb** | 7 |
+| false positive — "sample" = a **copyable code** sample | 7 |
+| false positive — "sample" = a datum in `loop-metrics.jsonl` | 7 |
+| false positive — other (a threshold, a wrap width, a design allowance, a heading, `330.1`'s own text) | 36 |
+| **census** or a statistic taken over a full enumerated population | 64 |
+| **sample** — a figure from a proper subset | 13 |
+| **sample** — a timing/benchmark reading over n runs | 15 |
+| **extrapolation** | 4 |
+| **total** | **153** |
+
+**32 of 153 rest on a sample or an extrapolation. 57 (37.3%) are the
+instrument's noise**, and the count reconciles: 0 candidates unverdicted, 0
+verdicts for non-candidates, asserted by the generator rather than by addition.
+
+**But `330.1`'s failure mode is not "a sample was used" — it is a sample quoted
+AS a population.** On that predicate the live file holds **one** instance:
+`329`'s *"29 kB per PNG · ~1.1 MB for 40"*, and it is published there as its own
+correction — so the number of live figures still *resting* on a sample quoted
+as a population is **zero**, and one is the count only if a published correction
+counts as an instance. **The other has left the population entirely.** Slice
+301's body is **82** lines in `ROADMAP-archive.md`; `ROADMAP.md` carries a
+**4-line** pointer. One of the two occurrences the item generalises from is no
+longer in the file the item asks about — the strongest form of *not a pattern*
+available, and one not foreseeable when the item was written.
+
+**The one place a sample stands behind a STANDING RULE with its n unstated** is
+the CI-strategy preamble: `~12.4 min` of serial steps and `184s` after sharding
+name no run count (the neighbouring `~3 min wall / ~14.7 machine-minutes` does
+say *one run*). It is **not** load-bearing for a still-open decision — that
+section is a closed 2026-08-24 owner call — and the conclusion survives its own
+noise band by a wide margin: `LOOPS.md` rule 5 separately records CI wall time
+reading **290 / 267 / 265** on a shared runner (±9%), against a **4.0x** effect.
+Recorded, not filed.
+
+### Part 2 — the open set, read whole: 7 of 31 carry a sample, all 7 name their n
+
+| item | the sample-derived figure | how it is disclosed |
+|---|---|---|
+| `353.2` | `7,492` words, hand-sampled | the sample IS the subject — the defect it files is that no sample records its commit |
+| `352.2` | `1,384.9-2,930.4 ms over 5 runs` | the Accept says outright *"any verdict here needs more than one sitting on each side"* |
+| `346.1` | `n = 4 in one wake` | *"is a rate, not a base rate"*, and the Accept's first clause is **measure the base rate first** |
+| `336.2` | `2 of the last 2 sweeps` | *"**n = 2**, said plainly: … not an established rate"* |
+| `273.2` | `8 of 10` NO-OP rounds | amended in place twice, with *"re-run the command before quoting it to the owner"* |
+| `112.3` | bar `≥2` wrong picks over `5` briefs | the owner decision argues the n — *"the bar is an absolute count, not a rate"* |
+| `249.7` | reads as a **spot-check** | it is not a sample — **all five** declared seed rows were grepped, a census of the seed |
+
+**Zero open decisions rest on an undisclosed sample**, and four of the seven put
+the caution or a re-measure instruction *inside the Accept*, which is stronger
+than disclosure. `249.7` is the one that looked worst and is not: sampling
+vocabulary over a census.
+
+### The controls, and the instrument being wrong first
+
+**Base rate** 153 of 4,000 figure-carrying lines = **3.8%** — not 0%, not 100%.
+**Recall** on the two motivating instances: `329`'s is caught; `301`'s is absent
+from the population, as above. **Discrimination by injection into a copy**, each
+asserted to land exactly once and outside every fenced block *before* the result
+was read, the file on disk asserted unchanged afterwards:
+
+| injected line | delta | expected |
+|---|---|---|
+| `mean … extrapolated from a five-page sample` | **+1** | +1 |
+| `mean … taken over all 128 built pages` (census, same vocabulary) | **+1** | +1 |
+| `41.2 kB on the three pages that were opened` (a sample, **no** vocabulary) | **+0** | +0 |
+
+**Rows 2 and 3 are the two limits, demonstrated rather than asserted.** Row 2:
+census and sample share the vocabulary, so this is a candidate filter and never a
+verdict — `94.11`'s semantic wall exactly where `330.1` predicted it, which is
+why no gate is proposed and the item's own **Refused** block already covers it.
+Row 3: **a sample whose prose never says so is invisible here.** Part 2 is what
+bounds that for the half that matters, by reading the whole open set.
+
+**Four instrument defects, on schedule** (*an instrument's first output is not
+evidence*): `~\d` matched git revision syntax (`7dacd80b~1`, 6 lines); `\bmean\b`
+matched the English verb — the largest false-positive class, and it fires on the
+intake-control sentence every wake copies forward; "sample" has **three**
+unrelated senses here and only one is statistical; and the first marker set
+**missed `over N runs`**, which `352.2`'s own figure uses. That last one was
+found by Part 2's census, not by review — widening the set moved it 134 → 153,
+adding **5** real sample lines against **12** more false positives. The bounded
+census caught the filter, not the other way round.
+
+1. [x] **330.1** — closed by this measurement, on its own Accept's branch:
+       *"finding that this is two instances and not a pattern closes it."* It is
+       **one** instance in the live file and **zero** load-bearing for an open
+       decision. **Nothing is proposed**, per the item's own instruction to
+       measure before proposing and its already-Refused gate.
+
+### NOT VERIFIED, said plainly — and this wake adds NO visual debt
+
+**No 1440/390 light-and-dark screenshots: a cloud wake has no Podman.** This
+slice owes none, structurally: the diff is `ROADMAP.md`, one new `.roundtable/`
+report, the hand-off and the recorder's own files. No CSS, no `.astro`, no docs
+page, no script and no generated artefact changed, so nothing rendered can move — `git diff --stat` was
+read to confirm that rather than assumed. The **eight** older debts are unchanged
+and unspent: Slice 352's two (`/components/data-table`, `/concepts/scale`),
+Slice 345's two (`/patterns/output-form` in print, the RF tile grid on
+`/patterns/rf/rf-landing-rf/`), and the four older ones — `292.4/292.5`'s
+screenshot lane on `/components/icon`, Slice 319's paragraph on
+`/patterns/kanban` at 390px, `320.3`'s `ApiTable.astro` `0.5rem` against
+`ClassRef.astro` `.4rem`, and Slice `310.1`'s three `prod/` Refresh buttons.
+
 ## Slice 357 — Standardize sweep, 4 of 4 lanes, all clean — and the finding is that `350.1`'s "does this window have lane input" predicate is **not per-lane**: lanes 1 and 3 read the docs tree, lane 2 reads only the core stylesheets, so ORing the two inputs credits lane 2 with **41.7%** of windows it is structurally blind to (2026-09-08)
 
 **Dispatched by rule 2** at `Standardize 4 / 4 Continue rounds OVERDUE`, exactly
@@ -4300,7 +4462,25 @@ returned green at *40 component pages … 41 reachable* after removal.
 - **Re-filing 329's group count as a defect.** It is wording; the conclusion
   (every field generated) never depended on it.
 
-1. [ ] **330.1 — Sampling is now a named failure mode here, twice.** 301 quoted
+1. [x] **330.1 — CLOSED 2026-09-08 by Slice 358 (cloud wake, rule 4) on the
+       Accept's stated satisfying branch: the named failure mode has ONE live
+       instance, not two, and NOTHING open rests on an undisclosed sample.**
+       Over the whole live file, **32 of 153** candidate lines carry a figure
+       resting on a sample or an extrapolation — but *"a sample quoted AS a
+       population"* holds **one**, `329`'s, published there as its own
+       correction. The second left the population: Slice 301's body is **82**
+       lines in `ROADMAP-archive.md` and `ROADMAP.md` keeps a **4-line**
+       pointer. Over the open set — read whole, **31** items and **1,155** body
+       lines, because an item about sampling is not answered by a sample —
+       **7 of 31** carry a sample-derived figure, **all 7** name their n and
+       four put the caution inside the Accept itself. No gate: the injection
+       control shows a census and a sample share the vocabulary, which is this
+       item's own **Refused** block measured rather than argued. Commands, the
+       per-line verdicts and the three injection controls are in Slice 358 and
+       `.roundtable/measure-330.1-sampling-census-2026-09-08.md`. Original text
+       below.
+
+       **330.1 — Sampling is now a named failure mode here, twice.** 301 quoted
        a working tree as a commit's state; 329 quoted a five-sample mean as a
        population. Both were caught by re-measurement, neither by review, and
        both were figures that justified a decision rather than described one.
