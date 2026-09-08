@@ -320,6 +320,127 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 344 — 323.1: the two base-rate replays keep their different units, because the unit follows the LIFETIME of the state counted, not the unit the predicate compares — and the date replay reports the one verdict SKEW exists to soften on 2 of the 8 dates it is blind on (2026-09-08)
+
+**Dispatched by rule 4** on `323.1`, the oldest still-open cloud-takeable item —
+exactly what the previous hand-off predicted. Cloud wake. Step 0: container
+**DETACHED** again (trap 1; `git branch --show-current` empty), fixed with
+`git checkout -B main origin/main` before any commit. `origin/main` again a
+**forced update** (`26447ba...c03835e`). Trap 2 clean in one `--unshallow`, no
+`shallow.lock`, and it again brought the tags; `git tag | wc -l` → **8**, run
+rather than assumed. Step 1 read **both** intakes with `ENVIRONMENT.md` §8's
+controls — issues **1** open (#2, `updated_at` **2026-09-06T15:10:34Z**, a
+**tenth** consecutive hand-off unmoved), discussions **200 len 0**,
+`/not-a-real-route` **404**. No new input, so Step 1 committed nothing.
+
+Rule 1: no open P0 — `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0**
+across the 31 open items. Rule 2 `Standardize 3 / 4` no. Rule 3
+`Objective 2 / 3 [320, 322]` no. **Rule 4 matched** on `323.1`; everything older
+is owner-blocked (Slice 15, `112.3`, `112.4`, `249.7`, `249.10`-`249.13`,
+`273.2`, `296.3`) or browser-blocked in the screenshot sense (`320.3`). Rules
+5-8 not reached.
+
+### The Accept named the satisfying outcome, and the measurement it demanded confirms it
+
+`323.1` asked whether the file's two base-rate replays — one at **wake-date**
+granularity beside rule 5's liveness line, one at **revision** granularity
+beside the SKEW envelope three screens below — should be reconciled, and it
+required the date replay to be measured on the seven SKEW occasions before
+anything larger was proposed. Both replays were re-run at `c03835ea` rather
+than quoted:
+
+```
+commit replay (the recorded command B)   980 revisions -> 589 STALE, 335 ok,
+                                          54 SKEW, 2 NO LIVE INPUT (+1 skipped)
+  the recorded seven occasions REPRODUCE EXACTLY — same dates, same metric
+  names, 51 of the 54 revisions:
+    2026-08-13 bundle-gz-kb 8 · 2026-08-15 bundle-gz-kb 10 · 2026-08-16
+    bundle-gz-kb 4 · 2026-08-17 ci-gates 1 · 2026-08-18 ci-wall-time 4 ·
+    2026-08-19 framework_classes 23 · 2026-09-06 axe-violations 1
+  two NEW occasions since:  2026-09-07 claims 1 · 2026-09-07 gates 2
+
+date replay, SAME discrimination     SKEW on 0 of the 9 occasions
+                                     ok on six of the eight wake-dates they
+                                     land on, STALE on two (2026-08-14, 08-20)
+```
+
+**The sharper half is the two STALEs.** "An as-of-DATE replay reports zero of
+them" was already in the file and it reproduces; what it does not say is what
+the date replay reports *instead*. On six of the eight dates the occasion has
+resolved to `ok` by end of day, which is merely invisible. On the other two it
+reports **`STALE`** — the one verdict the SKEW envelope exists to soften — and
+the remedy a wake reads off a STALE is *record another metric*, which is
+precisely what cannot help when the residual is the clock. That is Slice 306's
+original failure, reproduced by the coarser instrument.
+
+### Why the units stay different, stated as the property rather than as a preference
+
+Both predicates compare **dates**. The replays differ because the unit each
+needs follows **the lifetime of the state being counted**, not the unit the
+predicate compares. The liveness question is satisfied by both verdicts
+occurring at all, and an as-of-date replay can only OVER-report liveness (it
+sees samples recorded after the wake read the line), so it cannot delete the
+stale half — the conclusion is robust to the coarser unit. The SKEW question
+counts a state that exists for hours, which a daily sampler cannot see however
+many days it sweeps.
+
+**Measured, not asserted, because "the conclusion survives the unit" is exactly
+the kind of claim this repo keeps paying for.** The liveness question replayed
+at commit granularity reads **335 live / 645 not live over 980 revisions**
+against the date replay's **15 of 27** wake-dates. Both discriminate, so
+reconciling the two commands into one would change no conclusion — **refused on
+that measurement.** Per 94.11 no gate is added: *"the right granularity was
+chosen"* is not a checkable shape, and the fix is a sentence in each block
+naming its own question and unit.
+
+### The recorded command did not run, and that is the doctrine failing inside its own worked example
+
+Command B is the file's evidence for the whole SKEW envelope, and pasted
+verbatim it dies:
+
+```
+NameError: name 'MAX_CLOCK_SKEW' is not defined     ← the module constant, defined
+                                                      120 lines BELOW the snippet
+```
+
+`LOOPS.md` and CLAUDE.md both require the command to sit next to the claim so a
+later wake can re-run it in seconds instead of re-deriving it — and re-deriving
+is where the second, different mistake comes from. A snippet that NameErrors
+reads as re-runnable and is not. The snippet now **imports** the constant from
+its own module rather than restating `timedelta(hours=8)` — a constant copied
+into prose is exactly the drift `observed_skew()` twelve lines below exists to
+catch, so the first fix (a literal in the snippet) was withdrawn for this one.
+**Red-proved by discrimination, not by a bare
+pass:** the snippet was extracted from the file by a script that strips the
+`#   ` prefix and executed, before → `NameError`, after → exit 0 reporting
+`Counter({'STALE': 589, 'ok': 335, 'SKEW': 54, 'NO LIVE INPUT': 2})`, which
+reconciles with the independent probe to the revision (980 = 589+335+54+2, the
+981st skipped by the snippet's own `continue`).
+
+### The instrument was wrong first — the occasion keying, and it was caught by disagreeing with the record
+
+The first harvest keyed each SKEW occasion by **the log's newest date at that
+revision** and reported eight dates: `2026-08-14/16/17/18/19/20`, `09-07`,
+`09-08`. The file's recorded seven are keyed by **the newest metric's date and
+name** (`bundle-gz-kb`, `ci-gates`, `ci-wall-time`, `framework_classes`,
+`axe-violations`). Neither keying is wrong — they are one day apart by
+construction, because the SKEW state is a log row that is naive-later than the
+metric — but quoting the first against the file's list would have published a
+disagreement that does not exist. **What caught it was the recorded list**,
+which is the case for keeping a figure's derivation beside it: the re-derivation
+had nothing to reconcile against except the record, and the record won.
+
+The `0 of 9` figure above is therefore reported on the **log-newest** dates —
+the date a wake actually read the line — since that is the date the date-replay
+indexes. The nine occasions land on eight such dates because both 2026-09-07
+occasions resolve to the same one.
+
+**No follow-up item is filed, and that is deliberate.** The Accept named *"a
+sentence naming the difference is the whole fix"* as a satisfying outcome and
+the measurement supports it. Recorded so a later wake does not read the absence
+as an oversight: the two commands stay separate, no gate was added (94.11), and
+the only change is prose plus one line making a recorded command runnable.
+
 ## Slice 343 — 322.3: a whitespace-normalising helper is REFUSED on the base rate and on a caller count of zero — 1 of 14 published phrase-counts changes, and the two consumers that could have needed it were already safe (2026-09-08)
 
 **Dispatched by rule 4** on `322.3`, the oldest still-open cloud-takeable item,
@@ -2948,7 +3069,7 @@ rather than at the predicate. Had the tell been absent, refusing would have been
 correct on that evidence; what licensed looking again was a recorded observation
 the instrument could not see, not a preference for shipping.
 
-1. [ ] **323.1 — the script's existing base-rate command, the one quoted above
+1. [x] **323.1 — the script's existing base-rate command, the one quoted above
        `metric_samples`, is an as-of-DATE replay and is now known to be blind to
        states that live less than a day.** It was written for rule 5's own
        liveness question, where a date is arguably the right unit, so this is

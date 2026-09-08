@@ -410,8 +410,24 @@ def report(all_rows, loop, threshold, unit):
 #       asof = [m for m in mets if m['ts'][:10] <= d]
 #       c = collections.Counter(m['name'] for m in asof)
 #       live += any(c[m['name']] >= 2 for m in asof if m['ts'][:10] == d)
-#   print(live, 'of', len(dates))          # 6 of 17 (2026-08-29)
+#   print(live, 'of', len(dates))          # 6 of 17 (2026-08-29); 15 of 27 (c03835ea)
 #   PY
+#
+# THIS REPLAY'S UNIT IS THE WAKE-DATE; the SKEW replay three screens below is at
+# COMMIT granularity, and until roadmap 323.1 nothing here said why they differ.
+# They differ because they ask different questions, and the unit each needs
+# follows from THE LIFETIME OF THE STATE BEING COUNTED, not from the unit the
+# predicate compares — both predicates compare dates. This one asks whether the
+# live/stale verdict discriminates over the history at all, which is satisfied
+# by both verdicts occurring. An as-of-date replay sees the whole of each day,
+# including samples recorded after the wake read the line, so it can only
+# OVER-report liveness — it cannot manufacture the stale half, and the
+# conclusion is therefore robust to the coarser unit. Measured rather than
+# argued: the same question replayed at commit granularity, on the log's newest
+# date at each revision, reads **335 live / 645 not live over 980 revisions**
+# against this command's 15 of 27 wake-dates (`c03835ea`). Both discriminate,
+# so the answer does not turn on the unit and reconciling the two replays into
+# one would be churn — refused on that measurement, not on preference.
 #
 # @exact — the verdict rests on equality and comparison of timestamps, names and
 # counts, with no recognition step: a sample either carries a date newer than
@@ -466,10 +482,40 @@ def report(all_rows, loop, threshold, unit):
 # the wake read the line, so every occasion resolves to provably-newer by the
 # end of its day. The granularity of the replay was the finding.
 #
+# THIS REPLAY'S UNIT IS THE REVISION, and the block above says why the two
+# differ: the unit follows the lifetime of the state being counted. That block's
+# question survives a coarser unit because over-reporting liveness cannot delete
+# the stale half; THIS question does not, because the state it counts exists for
+# hours and a daily sampler cannot see it however many days it sweeps.
+#
+# MEASURED, which is what 323.1 asked for before anything larger was proposed
+# (`c03835ea`, both replays re-run rather than quoted). The commit replay now
+# finds **54 SKEW revisions over 9 occasions**; the seven recorded above
+# reproduce exactly — same dates, same metric names, 51 of the 54 revisions —
+# and the two new ones are 2026-09-07 `claims` (1) and `gates` (2). Run the
+# DATE replay of the SAME discrimination over those nine and it reports SKEW on
+# **0 of 9**: `ok` on six of the eight wake-dates they land on and `STALE` on
+# two (2026-08-14, 2026-08-20). So the blindness is not that the date replay
+# reports a milder verdict — on those two it reports the one verdict SKEW
+# exists to soften, and the remedy a wake reads off it (record another metric)
+# is the one that cannot help.
+#
+# THE FIX IS THIS SENTENCE, deliberately: both units are correct for their own
+# question. No gate — "the right granularity was chosen" is not a checkable
+# shape (94.11), and the two commands are not reconciled into one because the
+# measurement above says that would change no conclusion.
+#
 #   python3 - <<'PY'   # re-run; the figures are snapshots
 #   import json, re, collections, datetime, subprocess
 #   ROW = re.compile(r"^- (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) · ")
 #   M = lambda t: datetime.datetime.strptime(t, "%Y-%m-%d %H:%M")
+#   import sys; sys.path.insert(0, 'scripts/loops')       # run from the repo root
+#   from dispatch_status import MAX_CLOCK_SKEW            # the module's own, not a copy
+#   #   Without these two lines the snippet dies with `NameError: MAX_CLOCK_SKEW`
+#   #   — it read as re-runnable and was not, which is the "write the command
+#   #   next to the claim" rule failing in its own worked example (323.1). It
+#   #   IMPORTS rather than restating `timedelta(hours=8)`, because a constant
+#   #   copied into prose is the drift `observed_skew` below exists to catch.
 #   shas = subprocess.run(["git", "log", "--format=%H", "--", ".roundtable/loop-log.md"],
 #                         capture_output=True, text=True).stdout.split()
 #   blob = lambda s, p: subprocess.run(["git", "show", f"{s}:{p}"],
