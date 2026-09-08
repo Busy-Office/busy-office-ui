@@ -23,12 +23,12 @@ survives none.
 ## In flight: nothing
 
 Last updated 2026-09-08 (**cloud** wake, scheduled routine). Working tree clean
-at hand-off. **One iteration recorded** — `Continue · build` on `319.3`
-(outcome `landed`, **one refusal**) — and **two metrics**, `claims=176` (which
-joins rule 5's comparable set, since `claims` already has other days) and
-`target-size-pages=7` (a new single-day name, not yet an input). The slice
-landed as **`0d8cc85f`**, the recording and this hand-off in the commits after
-it.
+at hand-off. **This wake dispatched TWICE**, because the first dispatch was lost
+to a collision. Two iterations recorded — `Meta · collision` (`logged`, one
+refusal) and `Objective · grill` (`landed`) — and one metric,
+`dispatch-region-words=7492`, which **joins rule 5's comparable set** as its
+second distinct day. Two commits: **`7e2c61c0`** (the collision record) and
+**`aac39366`** (Slice 341).
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -38,109 +38,119 @@ node apps/docs/scripts/check-resume-slice-ids.mjs # names any stale closed ids
 python3 scripts/loops/roadmap_scope.py            # OPEN set + sweep scope
 ```
 
-## ⚠ THE COUNTERS, READ AFTER RECORDING — RULE 3 IS **OVERDUE**
+## ⚠ COLLISION 5 — THIS WAKE LOST A FULL RULE-4 DISPATCH, AND THAT IS WHAT ARMED THE GRILL
+
+**Read `LOOPS.md` Step 0c; the line is item 5 and the forensics are in
+`LOOPS-archive.md`.** The short version, because it changes how the next wake
+reads the queue:
+
+- This wake dispatched **rule 4 on `319.3`**, ran it to a verdict (**refuse**),
+  wrote the slice, and ran all 17 gates green. The **pre-commit
+  `git fetch origin main`** then saw `273c7ae3..1a973395` — the other dispatcher
+  had run **the same rule on the same item**, reached **the same verdict**, and
+  independently numbered it **`## Slice 340`**.
+- Nothing was committed. The tree was reset and rebased. **The winner's analysis
+  strictly dominated** and is what shipped: it red-proved that the 4-page
+  "overlap" was never coverage either (**0 of 18, not 4 of 18**), via a claim on
+  the *swept* `/components/button` page, and it moved **six** claims into
+  `check:claims` (**170 → 176** live).
+- **"Check the loser's output before discarding" ran and returned NOTHING** —
+  the loser's one distinctive finding (two of the 18 are grep artefacts) was
+  already `340.3`. Recorded as a negative result for that instruction, not a
+  reason to drop it.
+- **Closing `319.3` moved rule 3 from `2 / 3` to `3 / 3`**, so the collision is
+  what armed the Objective grill this wake then ran.
+
+**The charter was applied contemporaneously** — a first. `LOOPS.md` gained the
+one mandated line; `LOOPS-archive.md` took the 40 lines of forensics. 339.1 had
+to apply it retroactively for collisions 3 and 4.
+
+## THE COUNTERS, READ AFTER RECORDING — rule 3 is SPENT, rule 5 is live again
 
 ```
-Standardize   1 / 4 Continue rounds  since 2026-09-07 21:52   ok
-Objective     3 / 3 slices           since 2026-09-08 03:15   OVERDUE  [316, 319, 339]
-Optimize      0 wake-date(s) newer   since 2026-09-07 23:29   SKEW
+Standardize   1 / 4 Continue rounds   since 2026-09-07 21:52   ok
+Objective     0 / 3 slices            since 2026-09-08 00:17   ok
+Optimize      0 wake-date(s) newer    since 2026-09-08 00:17   ok
 ```
 
-**Rule 3 crossed on this wake's own recording** — 2 → 3, and
-`dispatch_status.py` says outright *"a counter is at or past its threshold; the
-dispatcher should pick it"*. **The next wake dispatches the Objective grill of
-Slices 316, 319 and 339**, and rule 3 sits above rule 4, so it wins over any
-build item.
+**This wake spent rule 3** — it dispatched at `3 / 3 OVERDUE [316, 319, 339]`
+and the counter reset to `0 / 3`. Rule 2 sits at `1 / 4`.
 
-**Note WHICH slice the counter credited: `319`, not `340`.** The Continue row
-names `319.3`, and the parser reads the slice from the item id — that is the
-`SLICE_TOP` convention working as designed, not a miscount. One slice's worth
-of work closed and the counter moved by one; do not "fix" it.
+**Rule 5's line is no longer `SKEW` — it reads `ok`**, because
+`dispatch-region-words` now has two distinct days and is the newest pair.
+**Read `dispatch_status.py` rather than trusting this block**; it is read AFTER
+recording, which is `LOOPS.md`'s own instruction, and doing so this wake is what
+confirmed rule 3 saw the grill row.
 
-Read `dispatch_status.py` rather than trusting this block. Reading it
-immediately after recording is `LOOPS.md`'s own instruction and is the
-comparison that has caught two of the five parser recurrences — it agreed
-again this wake.
+## Rule 5 evaluated, and it does not fire — but ONE NAME NOW NEEDS WATCHING
 
-## Rule 5 evaluated, and it does not fire
+**No name regresses on two consecutive runs**, so the rule does not fire:
+`claims` `169 → 176` and `gates` `27 → 55` are growth in the healthy direction,
+`axe-violations` reads `NEVER MOVED` (pinned by its own gate), and
+`bundle-gz-kb`'s `+3.4` is a single old pair (2026-08-17 → 2026-09-03).
 
-The line reads **`SKEW, 0 wake-date(s) newer`** — 306.1's third flag, so the
-remaining newer date sits inside the two dispatchers' 8h clock envelope and the
-rule IS evaluable. **No name in the comparable set regresses on two consecutive
-runs**: `claims` `169 → 170` (and `176` recorded today) and `gates` `27 → 55`
-are growth in the healthy direction, `axe-violations` reads `NEVER MOVED` and
-is pinned by its own gate, and `bundle-gz-kb`'s `+3.4` is a single old pair
-(2026-08-17 → 2026-09-03), not two consecutive runs. Note the line's own
-warning: recording another metric does not move `SKEW`.
+**`dispatch-region-words` `7298 → 7492` (+194) is the one to watch, and its
+direction is the UNHEALTHY one** — it measures the prose a wake must read in
+order to dispatch, so rising is the regression. **One pair cannot fire rule 5**,
+which needs two consecutive. If the next reading rises again, rule 5 fires and
+Optimize is the dispatch. The cause is not mysterious and is filed as `341.1`.
 
-**No size budget breached** — not re-run this wake, and said rather than
-carried silently: the diff is two gate scripts and `ROADMAP.md`, so no shipped
-byte moved. The previous wake's `check:size` reading (139 files, 382.7 kB gz,
-tightest headroom 110 bytes on `css/brand-navy.min.css`) is the last live one.
+**Convention warning, or the series will be corrupted:** `7492` is measured
+**heading-line-excluded**, which is the convention 339's `7298` used.
+`report_loop_prose.py` prints the heading-INCLUDED figure (**7548** at
+`aac39366`); the constant between them is **56**, and 339 named it. Subtract 56
+before recording, or the next sample jumps 56 for no reason.
 
-## What landed: Slice 340 — `319.3` answered, and the answer is that the item was aimed at the wrong gate
+**No size budget breached** — not carried forward; the core build's own
+`check:size` ran green inside `npm run build -w @busy-office/ui` this wake.
 
-**The premise was re-run first, as the Accept demands, and it holds**: the
-vocabulary grep still finds **18** pages, the sweep is still **7**, the overlap
-is still the same **4** (`button`, `data-table`, `form`, `quantity`).
+## What landed: Slice 341 — the Objective grill of 316, 319, 339
 
-**`340.1` — the overlap of 4 was never coverage.** `check-target-size.mjs`
-skips every target at or above 24px and fails only when an undersized one is
-crowded; its predicate is SC 2.5.8 conformance, and a page's *named pixel
-value* is a different predicate that no page list converts into. Red-proved:
-`.bo-btn` forced to `30px` on the swept `/components/button/`, injection
-asserted **in the DOM** (24 buttons, `[30]`, at compact AND spacious, against
-the shipped 28 and 44), and the gate **passed with byte-identical output** —
-the same 9 exempted types, the same distances. So coverage of the pixel CLAIMS
-was **0 of 18**, not 4 of 18, and `/components/button/`'s own *"`--sm` is a
-24px control"* sat inside the sweep unverified. **The growth was costed anyway**
-because the Accept asks for it: 7 → 14 pages is **10.4s → 19.4s (+86%)** for the
-**identical** exempted set. **Refused.**
+**17 of 17 re-runnable published assertions reproduce. No defect found.** That
+is unusual here, and the report distrusts it first: the scope is **narrow by
+selection** (mechanically re-runnable assertions only), and what was *not*
+re-run is named there rather than left implied. **The 17 is enumerated in the
+report**, not asserted — a bare count is what this loop keeps catching
+elsewhere. Report:
+`.roundtable/grill-objective-316-319-339-2026-09-08.md`.
 
-**`340.2` — the six claims are now executable**, in `check:claims`, whose own
-header already said *"add a case whenever a page claims something a browser can
-check"*. **170 → 176 verified live** (3 NOT VERIFIED is `ENVIRONMENT.md` §6b's
-container fact). Every claim was **measured true before it was written down**,
-so the refusal is not hiding a defect. The density tokens are authored in
-`rem`, and the first draft of that case went red on it — it now applies each
-token to a real box instead of assuming a 16px root.
+**The finding is not a defect in the slices grilled — it is that Slice 339's
+central conclusion was confirmed by the very next commit.** 339.1 said Step 0c
+has a **generator** and *"no cut can hold against one"*:
 
-**`340.3`** records the judgement the item said the 18 was only an input to:
-**7 of the 14** unswept pages make a pixel claim, **7 do not** — four are
-qualitative glove prose, one is a facts-strip width, `/patterns/inbox`'s
-"nitrile gloves" is **demo data**, and `/concepts/accessibility` asserts the
-*verification* accurately. **`340.4`** puts the assumption in
-`check-target-size.mjs`'s header, where a wake reads before reaching for the
-page list again.
+```
+f9e0f17d  1322  -178   Slice 339's fix
+7e2c61c0  1516  +194   collision 5, this wake
+```
 
-## The by-hand verifier caught two defects in this slice's own diff
+**16 words above the 1,500 that made 339 diagnose the problem, 138 above the
+1,378 it was cut from — one wake later, with the charter followed exactly.**
+Every figure 339 published reproduces to the word once its stated convention is
+applied (heading excluded; the heading is exactly 13 words).
 
-**The `verifier` agent is not available in this session**, so `LOOPS.md` §2 step
-6's pass was the staged diff re-read adversarially. It found:
-
-1. **A case named for a page it never loaded.** `button/kanban` visited only
-   `/components/button/` — a detector that cannot fail for half of what its name
-   claims. It now loops both pages, and an injection into `/patterns/kanban/`
-   **alone** turns it red (**1 of 176**), which is what proves the second half is
-   really read.
-2. **Selector plumbing that string-substituted into a stringified function**
-   (`.replace(/SELECTOR/g, …)` into `new Function`). Replaced with an ordinary
-   `page.evaluate(SIZES, sel)` argument.
-
-**The six-injection red-proof was re-run against the FINAL code** after both
-corrections — exactly **6 of 176** red, exactly the six new names, each
-injection on a page no other injection touches, so each case is paired to its
-own subject. Restored and re-run green; `rp3193`/`rpk` occurrences checked back
-to **0** across `apps/docs/dist`, not assumed.
+**`341.1` is the contribution: the generator has TWO outputs and the charter
+throttles only one.** The +194 splits **115** (the mandated inline list entry)
+and **79** (correcting the counts the incident falsified — *"Four as of
+2026-09-07"*, *"Three of the four…"*). **The 79 is mandated by nothing and is
+not slack that discipline removes**: correcting a falsified count is required by
+the standing rule against stale prose counts. Filed, not fixed, because Step 0c
+**already refuses** the obvious alternative — a count plus a pointer — in its
+own words.
 
 ## NOT VERIFIED, said plainly — and this wake adds NO visual debt
 
 **No 1440/390 light-and-dark screenshots — a cloud wake has no Podman.**
-**None are owed by this slice**, and that is structural rather than a judgement
-call: the diff is `ROADMAP.md` and two **gate scripts**
-(`check-claims.mjs`, `check-target-size.mjs`). No CSS rule, no docs page, no
-component and no shipped byte changed, so no rendering can move —
-`git diff --stat` was read to confirm it.
+**None are owed by either commit**, and that is structural rather than a
+judgement call: the two diffs are **`ROADMAP.md`, `LOOPS.md`,
+`LOOPS-archive.md` and one new `.roundtable/` report**. No CSS rule, no docs
+page and no script changed, so no rendering can move. `git diff --stat` was read
+to confirm that, not assumed.
+
+**The wake's throwaway probes were reverted before any commit and confirmed
+gone**: a 21-page copy of `check-target-size.mjs` in `apps/docs/scripts/`
+(deleted) and two `<style>` injections into built pages under `apps/docs/dist/`
+(restored; `grep -c 'probe-319-3'` → **0**). `git status` was clean at commit
+time.
 
 **The visual debts carried forward are unchanged and unspent** — a local wake
 should glance at all six: `292.4/292.5`'s screenshot lane on `/components/icon`;
@@ -149,62 +159,50 @@ the withdrawn-claim paragraph and Slice 325's performance paragraph on
 `320.3`'s `ApiTable.astro` `0.5rem` against `ClassRef.astro` `.4rem`; and Slice
 `310.1`'s three `prod/` Refresh buttons.
 
-**Gates green:** all **17** CI-runnable entry points run on the pre-commit tree
-— core `build`, core `test`, `lint:css`, `docs:build`, `check:claims`
-(**176** live · 3 NOT VERIFIED), `check:formatting`, `check:scroll` (914
-containers / 118 pages × 2), `check:layout` (**128** pages),
-`check:forced-colors`, `test:axe` (**128 × 2**, zero violations),
-`check:target-size` (7 × 3), `check:search`, `check:pseudo`,
-`check:quickstart`, `check:po-app`, `check -w create-ui`, `npm run suite`.
-**`docs:build` was re-run after this file was written**, per `ENVIRONMENT.md`
-§3b.
+**Gates green:** all **17** CI-runnable entry points were run on the pre-commit
+tree for Slice 341 — core `build`, core `test`, `lint:css`, `docs:build`,
+`check:claims` (**176** live · 3 NOT VERIFIED, which is `ENVIRONMENT.md` §6b's
+container fact, not a regression), `check:formatting`, `check:scroll`,
+`check:layout`, `check:forced-colors`, `test:axe` (128 × 2, zero violations),
+`check:target-size`, `check:search`, `check:pseudo`, `check:quickstart`,
+`check:po-app`, `check -w create-ui`, `npm run suite`. The collision-record
+commit was gated by the four that read these files (`check:loop-vocab`,
+`check:slice-refs`, `check:floor`, `check:vendor-names`), per `ENVIRONMENT.md`
+§3b. **`docs:build` was re-run after this file was written**, per §3b.
 
-## The open set is 31 — no P0, and 20 are cloud-takeable
+**The `verifier` agent is not available in this session**, so `LOOPS.md` §2 step
+6's verifier pass was done by hand — the staged diff re-read adversarially. What
+it caught, both in this wake's own output: a **"six failures"** count taken from
+a `tail -6` (the position-filter mistake CLAUDE.md records under *"a
+context-window regex is secretly a POSITION filter"*) — removed, with `rc=1`
+kept as the exact reading; and a bare **"17 of 17"** with no enumeration — the
+enumeration was added so the count can be counted back.
 
-`roadmap_scope.py` reports **31 open**, and `319.3` has left the OPEN set.
-Re-run the script rather than quoting this — it **refuses to print figures for
-an uncommitted tree**.
+## The open set is 32 — no P0, and 21 are cloud-takeable
 
-- **cloud-takeable: 20** — `320.2`, `322.3`, `323.1`, `324.1`, `324.2`,
+`roadmap_scope.py` reports **32 open**, and the raw checkbox count agrees.
+**Slice 341 joins the OPEN list** on `341.1`. Re-run the script rather than
+quoting this — it **refuses to print figures for an uncommitted tree**.
+
+- **cloud-takeable: 21** — `320.2`, `322.3`, `323.1`, `324.1`, `324.2`,
   `325.1`, `325.2`, `326.3`, `327.3`, `328.1`, `330.1`, `331.1`, `332.1`,
-  `333.1`, `334.1`, `335.1`, `336.2`, `337.1`, `338.1`, `339.2`.
-  **`320.2` is now the oldest of these** and is what rule 4 would reach for —
-  **but rule 3 outranks rule 4 and is OVERDUE**, so the next wake grills first.
-  **`335.1` still carries its caveat**: settling it may mean filing a throwaway
-  Q&A discussion, an outward-facing write to a public repo whose permission has
-  **not been tested**.
+  `333.1`, `334.1`, `335.1`, `336.2`, `337.1`, `338.1`, `339.2`, `341.1`.
+  **`320.2` is the oldest of these** and is what rule 4 reaches for next —
+  judging each declaration separately so a dead one cannot hide behind a live
+  one. **`335.1` still carries its caveat**: settling it may mean filing a
+  throwaway Q&A discussion, an outward-facing write to a public repo whose
+  permission has **not been tested**.
 - **owner-blocked (10):** Slice 15 (AT runtime evidence, owner hardware —
   *"needs a human listening to a screen reader"*), `112.3` (**BLOCKED ON OWNER
   BRIEFS**), `112.4` (blocked on 112.3's verdict), `249.7` (its own text holds
   it for `249.10`, owner vocabulary), `249.10`, `249.11`, `249.12`, `249.13`,
-  `273.2` (**OWNER CALL** in its own heading), `296.3` (**OWNER CALL**).
-  **Re-derived from each item's own text this wake**, not carried forward.
+  `273.2` (**OWNER CALL**), `296.3` (**OWNER CALL**). **Re-derived from each
+  item's own text this wake**, not carried forward — `249.7` was re-read in
+  full before being classified.
 - **browser-blocked in the SCREENSHOT sense (1):** `320.3`.
 
-20 + 10 + 1 = 31, asserted rather than left to the reader. **The fifth kind,
+21 + 10 + 1 = 32, asserted rather than left to the reader. **The fifth kind,
 `artifact-lost`, is empty — checked rather than assumed.**
-
-## The archive sweep is NOT due, and the two halves disagree for the ELEVENTH wake
-
-**Read at this wake's own recording commit `dafadfcc`, not carried forward**:
-**8,789 lines**, closed-history share **33.5%** (2,946 lines across 13 closed
-slices). The standing trigger is *past 5,450 lines **and/or** 40.6%*: lines are
-past, **share is not**. That is precisely the AND-vs-OR case `249.12` is open
-on, and it decides it here — under AND, no sweep. **Eleventh consecutive wake
-where the two halves disagree.**
-
-Both halves moved because `340` closes wholly, which is `ENVIRONMENT.md`'s rule
-about reading a figure from the commit it describes doing real work: at the
-pre-`340` tip `273c7ae3` the same script read **8,643 lines / 30.5%**. A wake
-reaching for a sweep should read `roadmap_scope.py`'s pin line first — **9
-targets are named by a still-open item**.
-
-Trend, **nine** readings, and **it is not monotone**: the previous hand-off's
-32.1% was taken at `f9e0f17d`, when `339` was briefly wholly closed, and filing
-`339.2` reopened it — so the series steps back for a reason, not because an
-instrument disagreed. 26.4% → 27.8% → 29.5% → 30.7% → 30.7% → 30.5% → 31.1% →
-32.1% → **33.5%** (the 30.5% above is the intermediate reading at `273c7ae3`,
-not a ninth point).
 
 ## Step 1 — both intakes read, with the controls ENVIRONMENT.md §8 names
 
@@ -218,35 +216,46 @@ not a ninth point).
 Step 1 committed nothing. **Issue #2's `updated_at` has not moved for a seventh
 consecutive hand-off.** See Direction.
 
+## The archive sweep was NOT evaluated this wake — read it fresh
+
+`roadmap_scope.py` was run for the open set only. Rule 3 matched before rule 4,
+so no sweep was dispatched and **no sweep-trigger figures were taken**. **Do not
+carry the previous hand-off's numbers** — they were read at `f9e0f17d`, two
+slices back, and two slices have closed into the numerator since. `249.12`
+(whether the trigger's two halves are AND or OR) stays a live owner question and
+is untouched.
+
 ## The standing environment fact: CI HAS NO `paths-ignore`
 
 `312.2` removed it entirely. **A push that touches only `.roundtable/**` runs
 the full suite.** The consequence a wake feels directly is `ENVIRONMENT.md` §3b
 — *re-run `npm run docs:build` after writing this file, before pushing* — and it
-was executed this wake, after this file was written.
+was executed this wake, after this file was written, before the push.
 
 ## CHECK CI AFTER PUSHING
 
-`main` was green at the start of this wake (`273c7ae3`). Read the runs after
-your push; one `actions/runs?branch=main` read costs nothing and is the only
-thing standing between a red `main` and the next wake.
+Read the runs after your push; one `actions/runs?branch=main` read costs nothing
+and is the only thing standing between a red `main` and the next wake.
 
 ## Step 0 traps
 
 Trap 1 bit again — the fetch reported a forced update `26447ba...273c7ae` and
-the container started on a stale ref; fixed with `git checkout -B main
-origin/main` before any commit, and `git branch --show-current` was re-read as
-`main` immediately before committing. Trap 2 was clean in one `--unshallow` (no
-`shallow.lock`) and again brought the tags: `git tag | wc -l` → **8**, §2's
-mandated count — the **seventh** consecutive container to contradict the value
-that section used to assert, which is why the count is the check.
+the container started **detached** (`git branch --show-current` empty); fixed
+with `git checkout -B main origin/main` before any commit, and re-read as `main`
+immediately before committing. Trap 2 was clean in one `--unshallow` (no
+`shallow.lock`) and again brought the tags (`v0.1.1`..`v0.8.0`), the follow-up
+`git fetch --tags origin` adding nothing: `git tag | wc -l` → **8**, §2's
+mandated count. **No ordinal is claimed for that streak** — two incompatible
+counters for it are in circulation (Slice 319's trace says "thirty-first", the
+hand-off series says "sixth"), and running the count is the check §2 asks for.
 
 Trap 1c was respected rather than met: `CHROME_PATH` was exported **in the same
-command** as every browser gate and every throwaway probe. No `git stash` was
-used at any point.
+command** as every browser gate, and lane commands were spelled `-w docs`
+(`337.1`'s live trap). No `git stash` was used at any point.
 
-**The pre-commit `git fetch origin main` found NO collision** — `origin/main`
-unmoved at `273c7ae3`, `rev-list --left-right --count` reading `0 0`.
+**The pre-commit `git fetch origin main` FOUND A COLLISION** on the first
+dispatch (see above) and found none on the second — `origin/main` unmoved at
+`1a973395`, `rev-list --left-right --count` reading `0 1`.
 
 ## Direction
 
@@ -264,16 +273,21 @@ actions:**
    by Slice 335 — read it before re-raising.
 2. **`273.2` is still worth their attention** — whether a Polish round whose
    score does not move should increment `dry`. Not touched this wake; rule 6 was
-   never reached, so `polish_requeue.py --apply` was correctly not run.
+   never reached, so `polish_requeue.py --apply` was correctly not run (§3b
+   step 0 is owed only once rule 6 is reached, and rules 3 and 4 matched first).
 
-**`249.12` stays a live question, sharper for the eleventh time** — the two
-halves of the archival trigger DISAGREE again, and the share is **not
-monotone**: it read 32.1% two wakes ago, 30.5% once `339.2` reopened Slice 339,
-and **33.5%** now that `340` closes wholly. That is worth the owner seeing:
-under the OR reading the sweep has been due for eleven wakes; under AND it has
-never been due, and a share that can go DOWN when an item is filed means "it
-will get there on its own" is not a safe assumption either.
+**A third thing is now worth naming, because it cost a wake's work today.**
+Collision 5 is the **second** collision to spend a full wake (collision 1 was
+the first) and the most expensive of the five: a complete measurement, a
+red-proof, a discrimination control and all 17 gates, discarded. Step 0c's
+decision to **accept** collisions is the owner's to revisit or leave; the
+measured cost model now reads *three of five cheap, two expensive*, and the
+cheap ones are the ones caught EARLY — which argues for the pre-commit fetch,
+not for partitioning (already refused on starvation). **Nothing is proposed
+here**; the point is only that the sample is no longer one.
 
-**What the next wake should reach for: rule 3, the Objective grill of Slices
-316, 319 and 339.** It is OVERDUE at `3 / 3` and outranks rule 4. Rule 4's next
-item behind it is `320.2`, cloud-takeable.
+**What the next wake should reach for: rule 4 on `320.2`**, unless rule 2
+(`1 / 4`) or rule 5 has moved. Rule 3 is spent at `0 / 3`, so a grill is three
+closed slices away. **Watch `dispatch-region-words`** — a second consecutive
+rise fires rule 5 and dispatches Optimize, and `341.1` is the item that explains
+the first one.
