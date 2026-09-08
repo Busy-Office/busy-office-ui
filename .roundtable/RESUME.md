@@ -158,6 +158,16 @@ heuristic, 34 exact), `check:viewport-forks` (76 docs scripts) and
 6 clock-skew and 5 metric-pairing cases. **`docs:build` was re-run after this
 file was written**, per `ENVIRONMENT.md` §3b.
 
+**Said precisely, because the wake landed in two commits.** The 17 were run
+green on the tree of the FIRST commit (`5b78e4f`). The second (`f1e7eed3`)
+changes exactly one file, `scripts/loops/polish_requeue.py`, which no gate in
+that suite reads — `check:imports` walks `.mjs/.js/.ts`, not `.py`. What WAS
+re-run after it, and after every later edit to this file: `docs:build` (carrying
+`check:slice-refs` **987** assertions / **374** citations, `check:floor`,
+`check:vendor-names`, `check:imports`, `check:loop-vocab`, `check:selftests`),
+`polish_requeue.py --verify-stamps` itself, and `dispatch_status.py
+--self-test`. Nothing in the second commit can reach the browser gates.
+
 **The `verifier` agent is not available in this session**, so `LOOPS.md` §2 step
 6's verifier pass was done by hand — the staged diff re-read adversarially. What
 it caught: the write-up had carried the item's own *"132 existing samples"*
@@ -223,17 +233,19 @@ and the one name whose movement would read as a regression under a direction is
 ## What the next wake should reach for: rule 4 on `324.2`
 
 Measured immediately after `record_iteration.py`, which is the comparison
-`LOOPS.md` says finds the counter bugs — not predicted:
+`LOOPS.md` says finds the counter bugs — and it paid off here: the figure
+written before the reading said `1 / 4` and `1 / 3`, and it is wrong, because
+this wake ran **two** Continue rounds and the second closed a slice of its own:
 
 ```
-Standardize   1 / 4 Continue rounds  since 2026-09-08 06:5x   ok
-Objective     1 / 3 slices           since 2026-09-08 05:54   ok
+Standardize   2 / 4 Continue rounds  since 2026-09-08 04:59   ok
+Objective     2 / 3 slices           since 2026-09-08 05:54   ok  [324, 347]
 ```
 
-This wake was a Continue round and closed a slice, so it advances **both** rule
-2 and rule 3 by one. Neither reaches its threshold, so **rule 4 is the first
-match** again, on `324.2`. Re-run the counters — a collision could land a row
-between this line and your wake.
+Neither reaches its threshold, so **rule 4 is the first match** again, on
+`324.2`. But rule 3 is now **one closed slice away**: the next wake that closes
+anything arms the Objective grill, and rule 3 sits above rule 4. Re-run the
+counters — a collision could land a row between this line and your wake.
 
 ## The archive sweep was evaluated this wake and declined on the measured trigger
 

@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-08 05:54 UTC
+Generated at: 2026-09-08 06:55 UTC
 
 ## Open items by slice
 
@@ -21,8 +21,7 @@ Generated at: 2026-09-08 05:54 UTC
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - **Slice 320** (1 open)
   - 320.3 — the same idiom, two values, in two shared components.
-- **Slice 324** (2 open)
-  - 324.1 — a sample records no DIRECTION, so even a fresh, well-paired metric cannot yield a verdict.
+- **Slice 324** (1 open)
   - 324.2 — `bundle-gz-kb` is the only metric rule 5 can act on, its generator exists, and its noise floor is wider than three of its four historical moves.
 - **Slice 325** (2 open)
   - 325.1 — a docs page can name an `npm run` command and nothing checks the command exists.
@@ -65,9 +64,9 @@ Generated at: 2026-09-08 05:54 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1648 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-09-08 04:59   ok
-  Objective     0 / 3 slices          since 2026-09-08 05:54   ok
+dispatch status — counter-triggered rules (1652 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-09-08 04:59   ok
+  Objective     2 / 3 slices          since 2026-09-08 05:54   ok  [324, 347]
   Optimize      0 wake-date(s) newer   since 2026-09-08 00:17   ok   [newest pair: dispatch-region-words; 140 sample(s), 8 of 47 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (39 of 47 name(s) have only one day and are not an input to a rule that compares two runs):
        dispatch-region-words       2d  2026-09-07 7298 words -> 2026-09-08 7492 words  +194
@@ -79,6 +78,7 @@ dispatch status — counter-triggered rules (1648 iterations logged)
        components                  3d  2026-08-15 25 count -> 2026-08-16 30 count  +5
        behaviors_frozen            2d  2026-08-15 16 count -> 2026-08-16 18 count  +2
      no direction is recorded with a sample, so the movement above is a reading and the regression verdict is the wake's. A name that has NEVER MOVED is either healthy or pinned by a gate — rule 5 cannot fire on it either way (`axe-violations` is 0 on every day because `test:axe` fails the build above 0).
+     a direction is NOT recorded on purpose (roadmap 324.1): adding one makes rule 5 fire on `bundle-gz-kb`'s four consecutive rises, which the log's own same-timestamp `components` samples refute (0.400 -> 0.355 kB per component over that window). A rise with no denominator is growth. Where a name has a real threshold, use it — `check:size` gates the bundle at 16.7 kB gz, which is rule 5's budget clause, not its trend one.
 ```
 
 ## Owner-blocked
@@ -96,16 +96,16 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-08 00:53 · Meta · refusal · fixing the 52 dead declarations inside this round — it mixes an instrument change with a corpus change and needs per-site judgement; filed as 342.1 · refused · cdfcb129
-- 2026-09-08 00:53 · Meta · refusal · a thirteenth archive sweep — closed-history share 33.1%, below every measured trigger (55.1%, 56.7%, and the 40.6% at which 279.3 declined); sweeping would pre-empt the open owner call 249.12 · refused · cdfcb129
-- 2026-09-08 02:49 · Continue · build · 322.3 — whitespace-normalised phrase-counts over the roadmap corpus · refused · a5c2ef0a
-- 2026-09-08 02:49 · Meta · refusal · a shared normaliser in scripts/loops/ — base rate 1 of 14, and the caller count is zero · refused · a5c2ef0a
 - 2026-09-08 03:49 · Continue · build · 323.1 — the two base-rate replays keep their different units; the date replay reports SKEW on 0 of 9 occasions and STALE on two of them · landed · b1ce1263
 - 2026-09-08 03:49 · Meta · refusal · reconciling the two base-rate replays into one — measured: the liveness question reads 335 live / 645 not live at commit granularity against 15 of 27 wake-dates, so the unit changes no conclusion · refused · b1ce1263
 - 2026-09-08 03:49 · Meta · refusal · restating timedelta(hours=8) inside the recorded snippet — a constant copied into prose is the drift observed_skew() exists to catch; it imports the module's own instead · refused · b1ce1263
 - 2026-09-08 04:59 · Standardize · sweep · 342.1 — lane 1 verdict per site: 41 dead declarations converted, 11 refused, re-run lands on the refusal set · landed · 161ede68
 - 2026-09-08 04:59 · Meta · refusal · PatternPreview / inline-size:100% / combobox listbox margin / state-patterns Demo literal / motion spinner / AppTile BOX height / zero spacing swatch — 11 dead declarations kept, each dead only in the docs container · refused · 161ede68
 - 2026-09-08 05:54 · Objective · grill · 322/342 — 20 of 22 reproduce; both defects recur what 322 filed: a number with no command, and a correction missed because the phrase wraps · logged · 6cfe380c
+- 2026-09-08 06:50 · Continue · build · 324.1 — a DIRECTION field on a metric sample: 1 of 8 day-paired names is directional from its unit, and supplying a direction makes rule 5 fire on bundle-gz-kb's four consecutive rises, which the log's own same-timestamp components samples refute (0.400 -> 0.355 kB per component) · refused · 5b78e4f
+- 2026-09-08 06:50 · Meta · refusal · a per-NAME direction registry in dispatch_status.py — base rate: it would cover 8 names, of which one can satisfy 'two consecutive', and that one (bundle-gz-kb) is already better served by check:size's 16.7 kB gz budget, which is rule 5's other clause · refused · 5b78e4f
+- 2026-09-08 06:50 · Meta · refusal · recording a bundle-kb-per-component metric — 324.2 forbids sampling to un-STALE the line, and a 48th single-day name is the shape this slice just refused · refused · 5b78e4f
+- 2026-09-08 06:55 · Continue · bug · 347.1 — polish_requeue.py --verify-stamps, the third advisory check LOOPS.md Step 0 says REPORTS, died with an unhandled traceback on a shallow clone; its docstring claimed that case landed in 'unknown' and it never could. Fourth verdict 'absent' added, red-proved by injection with a control · landed · f1e7eed3
 
 ## Sunset test
 
