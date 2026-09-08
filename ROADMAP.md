@@ -320,6 +320,76 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 349 — rule 3's text says "slices CLOSED"; its counter means "slices NAMED by a building row", and nothing has ever compared the two (2026-09-08)
+
+**Found the way `LOOPS.md` says this counter is always found** — by a number
+disagreeing with something a human had just written down, read immediately
+after recording an iteration, which is that file's standing instruction. The
+previous hand-off predicted: *"closing anything in a slice other than 324 or
+347 does it"*. This wake closed **`325.1`, an ITEM**; Slice 325 stayed open on
+`325.2`. The counter armed anyway, to `Objective 3 / 3 OVERDUE [324, 325, 347]`
+— and **one of the three armed slices is open right now.**
+
+1. [ ] **349.1 — rule 3 counts slices a building loop TOUCHED, not slices that
+       closed, and the two have never been reconciled.** Step 2's rule 3 reads
+       *"THREE OR MORE slices closed since the last Objective"*.
+       `dispatch_status.py` never opens `ROADMAP.md`: it collects distinct
+       slice numbers named by `CLOSES_A_SLICE` rows
+       (`Continue`/`Standardize`/`Polish`) in `loop-log.md` since the last
+       `Objective` row. A slice with one item closed and three still open
+       counts exactly like a slice that finished.
+
+       **Base rate measured before filing, per CLAUDE.md — it is not a
+       hypothetical and it is not epidemic either:**
+
+       ```
+       python3 - <<'PY'
+       import re,sys; sys.path.insert(0,'scripts/loops')
+       from dispatch_status import ROW, slice_of, CLOSES_A_SLICE
+       rows=[m.groups() for m in (ROW.match(l.rstrip()) for l in open('.roundtable/loop-log.md')) if m]
+       named={slice_of(it) for _,lp,_,it in rows if lp in CLOSES_A_SLICE and slice_of(it)}
+       cur=None; op=set()
+       for l in open('ROADMAP.md'):
+           h=re.match(r'^## Slice (\d+)',l)
+           if h: cur=h.group(1)
+           if re.match(r'^\s*\d+\. \[ \]',l) and cur: op.add(cur)
+       print(len(named), len(named&op), sorted(named&op,key=int))
+       PY
+         #  258 distinct slices named by a building row
+         #   12 of them (4.7%) are STILL OPEN in ROADMAP.md today
+         #   -> 15, 112, 249, 273, 320, 325, 326, 328, 331, 332, 333, 339
+       ```
+
+       4.7% over the whole log, and **1 of 3 in the arming set live at this
+       commit** — the rate that matters is the second one, because a rule with
+       a threshold of three is decided by the marginal member.
+
+       **This is the SIXTH shape of a rule-3 counter defect and the first that
+       is not the parser.** The five in `LOOPS-archive.md` are all log
+       conventions a regex missed; 279.4's is the loop SET. This one is the
+       PREDICATE: every row parses correctly, every loop is the right loop, and
+       the number still does not mean what the rule says. No widening of
+       anything finds it — only comparing the counter against `ROADMAP.md`,
+       which nothing does.
+
+       **Which side is wrong is deliberately NOT decided here**, per CLAUDE.md's
+       rule that a criterion names the property and never the verdict. Both
+       readings are defensible: *closed* is what the rule says, and a grill
+       wants finished material to find a pattern in; *touched* may be the
+       better trigger, since three slices with work landed in them is arguably
+       the same "enough material", and it is what every rule-3 dispatch to date
+       has actually run on. **Finding that the counter is right and the TEXT should change
+       is a fully satisfying outcome** — this item is not a bug report with a
+       foregone fix.
+       - **Accept:** the two are reconciled — either `dispatch_status.py` reads
+         `ROADMAP.md` and counts closed slices, or rule 3's text in `LOOPS.md`
+         is rewritten to say what the counter measures — **and whichever is
+         chosen, the base rate above is re-measured at execution time** (the
+         figures here are snapshots) and the decision records what the counter
+         would have read historically under the other reading. A change that
+         moves the live count must say what it moves it to and why that is
+         right, not merely that it is now consistent.
+
 ## Slice 348 — `check:resume-slice-ids` reports a backticked DECIMAL FIGURE as a slice id, and files it under a heading that asserts an interpretation it cannot have earned (2026-09-08)
 
 **Dispatched by rule 4** on `324.2` (Slice 324 above); this section carries the
