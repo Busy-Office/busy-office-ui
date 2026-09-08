@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-08 10:59 UTC
+Generated at: 2026-09-08 12:02 UTC
 
 ## Open items by slice
 
@@ -21,8 +21,6 @@ Generated at: 2026-09-08 10:59 UTC
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - **Slice 320** (1 open)
   - 320.3 — the same idiom, two values, in two shared components.
-- **Slice 325** (1 open)
-  - 325.2 — `measure:stress`'s render columns have no counterpart in the published table, and the published table's method is unrecoverable.
 - **Slice 326** (1 open)
   - 326.3 — the dispatch region has grown +1,101 words in two days with no narrative left in it to cut. What is the answer when the region a wake must read grows because the RULES grew?
 - **Slice 327** (1 open)
@@ -63,15 +61,18 @@ Generated at: 2026-09-08 10:59 UTC
   - 350.1 — should rule 2's counter know whether its first three lanes have anything to read?
 - **Slice 351** (1 open)
   - 351.1 — the base-rate command `350.1` hands forward should window on what the sweep could SEE, or say why it does not.
+- **Slice 352** (2 open)
+  - 352.1 — a missing `packages/core/dist` is reported as an application defect, in the exact words of a defect this repo has actually had.
+  - 352.2 — the two KEPT columns have no recorded method either, and the machine gap they imply is not one machine gap.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1662 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-09-08 09:54   ok
-  Objective     0 / 3 slices          since 2026-09-08 10:59   ok
+dispatch status — counter-triggered rules (1664 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-09-08 09:54   ok
+  Objective     1 / 3 slice           since 2026-09-08 10:59   ok  [325]
   Optimize      0 wake-date(s) newer   since 2026-09-08 00:17   ok   [newest pair: dispatch-region-words; 140 sample(s), 8 of 47 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (39 of 47 name(s) have only one day and are not an input to a rule that compares two runs):
        dispatch-region-words       2d  2026-09-07 7298 words -> 2026-09-08 7492 words  +194
@@ -101,8 +102,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-08 07:20 · Roadmap · trap · ENVIRONMENT.md 6d — actions/runs?head_sha= needs the FULL sha; a 9-char prefix answers 200 with an empty workflow_runs, which a poll loop reads as 'not started'. Cost this wake 20 minutes on runs that were already green. Trap 2's shape a third time · landed · c93ee1de
-- 2026-09-08 07:46 · Continue · build · 324.2 — bundle-gz-kb's definition written into record_metric.py; the 0.3 kB band measured NARROWER than all four day-pair moves rule 5 reads, and cross-environment gzip drift bounded under 0.1 kB for the first time · landed · fee79dc0
 - 2026-09-08 07:46 · Meta · refusal · retiring bundle-gz-kb, and re-pointing it at the deterministic minified byte count — both offered by the Accept, both refused because the series is not noise-limited · refused · fee79dc0
 - 2026-09-08 07:46 · Meta · refusal · extending dispatch_status.py's rule-5 note a second time — 326.3 is open on the dispatch region's growth and the reader who needs this is recording, not dispatching · refused · fee79dc0
 - 2026-09-08 07:49 · Roadmap · plan · 348.1 filed — check:resume-slice-ids reports a backticked kB figure as a slice id and files it under 'normally archived', the one bucket that cannot verify its own claim; no shape fix exists because 15.10 is a well-formed id for the still-open Slice 15 · triaged · fee79dc0
@@ -111,6 +110,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-08 08:50 · Roadmap · plan · Slice 349 filed — rule 3's text says slices CLOSED, its counter means slices NAMED by a building row; 258 named, 12 (4.7%) still open, 1 of 3 in the live arming set · triaged · 074c3da2
 - 2026-09-08 09:54 · Standardize · sweep · Slice 350 — Standardize sweep 4 of 4 lanes, all clean (0 dead attrs of 1,365 / 11 dead declarations on 9 pages = 345's exact refusal set, page for page; css-repeats 74/242/230/8 a 6th time; 15 flagged prose pages all inside the pinned 16-set; no accumulate-class change, and CLAUDE.md's 167.1 reopen condition executed — 7 of 16 sections, no eighth). The finding is the dispatch itself: rule 2 counts Continue ROUNDS while lanes 1-3 measure ARTEFACTS, and this window touched zero lane inputs — 14 of 138 windows (10.1%) over the whole log, 13 (9.4%) once the instruments are included, reconciled at 1,994 = 1,994 and discriminating on 124. Filed as 350.1, not decided; no gate, because classifying this window needed the diff read · landed · 6996a39f
 - 2026-09-08 10:59 · Objective · grill · Slice 351 — grill of 324/325/347/350: 63 of 65 assertions reproduce to the digit; every verdict survives. Finding: 350.1's base-rate predicate windows as a..b, so a sweep's OWN conversions count as lane input it had to read — 20/139 (14.4%) on a..b^ against the published 15/139 (10.8%), disagreeing on 5 windows including the one 350 names in prose. And 350.1's 'this commit does not move them' is false of the wake: its own record_iteration row added a no-input window, 138/14 -> 139/15. Filed 351.1; both amended into 350.1 per 236.2. · landed · 0ad6e903
+- 2026-09-08 12:02 · Continue · build · 325.2 — the published Initial render column WITHDRAWN: its method is unrecoverable across four independent history searches, and select-all reconciling at ~1x while render reads 4.2x/11.9x/7.3x is what shows a method gap rather than a machine gap · landed · 3d2816a2
+- 2026-09-08 12:02 · Meta · refusal · the Accept's third branch — a shape-only column kept undefined — refused, because the shape is not checkable without the window and the one probe the page points at produces a different one · refused · 3d2816a2
 
 ## Sunset test
 
