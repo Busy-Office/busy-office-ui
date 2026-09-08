@@ -320,6 +320,156 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 359 — Objective grill of Slices 356, 357, 358: **60 of 64** published assertions reproduce, every red-proved headline figure to the digit — and all four defects are in a sentence that CHARACTERISES a measurement rather than in the measurement, which is 192.1's shape three slices running (2026-09-08)
+
+**Dispatched by rule 3** at `Objective 3 / 3 slices OVERDUE [330, 356, 357]`,
+exactly as the previous hand-off's ⚠ block predicted — re-read this wake rather
+than trusted. Cloud wake. Rule 1 found no P0
+(`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0** across **30** open
+items); rule 2 read `Standardize 1 / 4 ok`. Rules 4-8 not reached.
+
+Step 0: container **DETACHED** again (`git branch --show-current` empty), trap 1,
+fixed with `git checkout -B main origin/main` before any commit. Trap 2 clean in
+one `--unshallow` — **2,085** commits, no `shallow.lock`, and it again brought
+the tags (`git tag | wc -l` → **8**, run rather than assumed). **Step 1 — both
+intakes read with `ENVIRONMENT.md` §8's controls in one run:**
+`/issues?state=open` → HTTP 200 len **1**; `/discussions` → HTTP 200 len **0**;
+`/not-a-real-route` → **404**, the control that makes the `200 []` mean *served
+and empty*. Issue #2's `updated_at` is still `2026-09-06T15:10:34Z`, a
+**twenty-fifth** consecutive hand-off with no movement. Nothing new, so Step 1
+committed nothing.
+
+### Scope — the counter says 330, and the material is 358
+
+**Slice 330 is itself an Objective grill** (of 310, 328, 329), and no
+Continue/Standardize row built it. What armed the counter on `330` is Slice 358's
+row, which names the *item* `330.1` that grill filed — so the slice under grill
+wherever the counter says 330 is **358**. None of 356, 357, 358 has been covered
+by an earlier grill (`grep -hoE '^## Slice [0-9]+ — Objective grill of Slices?'`
+over both roadmap files). `.roundtable/INDEX.md` was read first per the
+playbook's step 0: **203 files, 147 cited, 4 repeated subject(s)**.
+
+### 60 of 64, and the four failures share a shape
+
+| slice | assertions | reproduce | fail |
+|---|---|---|---|
+| 358 — the sampling census | 26 | 25 | 1 |
+| 357 — the sweep and the per-lane base rate | 27 | 26 | 1 |
+| 356 — the Demo-signal count | 11 | 9 | 2 |
+| **total** | **64** | **60** | **4** |
+
+**One assertion = one row of the grill report's three tables**, stated so the
+number is re-countable: several rows carry more than one figure (lane 2's
+`74 / 242 / 230 / 8` is one row and four numbers), so a figure-level count is
+higher and depends on how the grouped rows are split. **The first draft of this
+entry published 84 / 80 from a figure-level tally that did not survive a
+recount** — corrected by the by-hand verifier pass before the commit, and
+recorded here rather than quietly fixed, since it is this grill's own subject.
+
+**Every figure each slice red-proved reproduces to the digit** — 358's whole
+verdict table by *set equality* against the published filter (0 unverdicted, 0
+verdicts for a non-candidate), 357's base-rate buckets and both spans at the
+revision it names, 356's `3 / 21 / 24` split from two independent instruments.
+The full per-assertion tables, the controls and what was deliberately not
+re-derived are in
+`.roundtable/grill-objective-356-357-358-2026-09-08.md`.
+
+**All four failures are one sentence each, and none is in a measurement.** A
+composition summary that drops two verdicts; an attribution to the wrong item; a
+per-page range with no instrument recorded. That is **192.1** — *the defect lands
+in what shipped BESIDE the number* — landing three slices in a row, in the same
+window in which Slice 354 measured 192.1 as a name for a defect that **1 of 161**
+slices executes.
+
+### The probe was red-proved before its 100% reading was quoted
+
+356's refusal rests on *"renders `bo-*` outside a `<pre>`"* being true of **24 of
+24**, and a 100% reading is a defect until shown otherwise. Two synthetic pages
+were written into `dist`, each asserted to carry what it was supposed to carry
+*before* the probe ran, and both deleted afterwards:
+
+| control | contains | probe reads |
+|---|---|---|
+| negative | `bo-*` markup **only inside `<pre>`** | **other = 0** |
+| positive | one visible `bo-*` outside any `<pre>` | **other = 1** |
+| a real page (`/concepts/container-queries/`) | — | other = 4 |
+
+The probe can report zero, so the 24-of-24 is a property of the tree and not of
+the detector. **Slice 356's refusal stands.**
+
+1. [x] **359.1 — Slice 358's widening summary drops two `CENSUS` verdicts:
+       `134 + 5 + 12 = 151` against its own stated 153.** The delta is **19**
+       and the census report's per-line verdicts on those 19 are 5
+       `SAMPLE-timing`, 12 `FP-other` and **2 `CENSUS`** (`6052`, `6404`).
+       Corrected in place under Slice 358 with both lines named.
+       - **The census itself is untouched and is the strongest reproduction in
+         this grill:** the 153 line numbers in
+         `measure-330.1-sampling-census-2026-09-08.md` are *exactly* the set the
+         published filter selects, and all eight verdict counts, the 32, the 57
+         (37.3%), the base rate (3.8%), the 31 open items and the 1,155 body
+         lines re-run to the digit at `ada0f384`.
+
+2. [x] **359.2 — Slice 357's "nearly 3x the rate `350.1` records" is `351.1`'s
+       amended figure under `350.1`'s name.** 41.7% is **2.9x** the **14.4%**
+       `351.1` amended to and **4.1x** the **10.1%** `350.1` publishes; the
+       sentence sits one bullet after the line that credits 14.4% to `351.1`
+       correctly, so the slice is inconsistent with itself one bullet apart.
+       Corrected in place with both multiples stated.
+       - **Nothing downstream moves** — against `350.1`'s own rate the gap is
+         **larger**, so the finding (lane 2 does not share lanes 1 and 3's input
+         set) is strengthened rather than weakened by the correction.
+       - The command was re-run at the revision the slice names and returned its
+         published values exactly: `30d94cc7` → **139 windows, span 1,869,
+         neither 20 / core_only 7 / docs_only 38 / both 74**, and the `a..b`
+         control **139 / 15 / span 2,008**. `350.1`'s third quantity,
+         `no-both = 13`, is **not** computed by this grill's variant and is not
+         re-derived.
+
+3. [x] **359.3 — Slice 356's `other=1 … other=99` per-page range names no
+       instrument, and an independent re-measurement disagrees by 4x at the low
+       end.** `grep -rn 'other=99'` finds the `ROADMAP.md` prose and nothing
+       else — no script, no `.roundtable/` report; the probe was a scratchpad
+       file and is gone. Re-measured with the exclusion rule stated, the three
+       named pages read **4**, **5** and **103**. **The ordinal reproduces, the
+       values do not.** Amended in place rather than deleted.
+       - **This is not a claim the published numbers were wrong when taken** —
+         it is that nothing recorded makes them checkable, which is CLAUDE.md's
+         *write the command next to the claim* in the same window `353.2` filed
+         the identical complaint about a metric.
+
+4. [x] **359.4 — nothing is proposed, and the refusal is the finding's other
+       half.** No new item, no gate, no instrument; all four defects are one
+       sentence each and are corrected in place (236.2 permits amending, and all
+       three slices are live).
+       - **Refused: a fifth loop-mechanics item** of the form *"a characterising
+         sentence beside a measured number is unverified prose"*. `355.3`
+         refused exactly that shape ten slices ago; `341.1`, `349.1`, `350.1`,
+         `351.1` and `353.2` are already open on loop mechanics; and Slice 354
+         measured that **192.1 — the rule that already covers this — is cited as
+         a name 12 of 21 times and applied in 1 of 161 slices**. A sixth
+         statement of a rule with a 1-in-161 execution rate does not raise the
+         rate.
+       - **Refused: a gate.** *"This sentence characterises the measurement
+         correctly"* is semantic (94.11). The checkable shape — *a summary whose
+         numbers sum to the delta* — reaches only one of the four, and would
+         fire on correct sentences besides.
+
+### NOT VERIFIED, said plainly — and this grill adds NO visual debt
+
+**No 1440/390 light-and-dark screenshots: a cloud wake has no Podman.** This
+slice owes none, structurally: the diff is `ROADMAP.md`, one new `.roundtable/`
+report, the hand-off and the recorder's own files. No CSS, no `.astro`, no docs
+page, no script and no generated artefact changed — `git diff --stat` was read to
+confirm that rather than assumed. The two synthetic control pages above were
+written into `apps/docs/dist` (a build output, git-ignored) and deleted in the
+same command that ran the probe. The **eight** older debts are unchanged and
+unspent: Slice 352's two (`/components/data-table`, `/concepts/scale`), Slice
+345's two (`/patterns/output-form` in print, the RF tile grid on
+`/patterns/rf/rf-landing-rf/`), and the four older ones — `292.4/292.5`'s
+screenshot lane on `/components/icon`, Slice 319's paragraph on
+`/patterns/kanban` at 390px, `320.3`'s `ApiTable.astro` `0.5rem` against
+`ClassRef.astro` `.4rem`, and Slice `310.1`'s three `prod/` Refresh buttons.
+
 ## Slice 358 — `330.1` closed by the census it asked for: the named failure mode has **one** live instance, not two (the second left `ROADMAP.md` when Slice 301 was archived), and **0 of 31** open items rest on an undisclosed sample (2026-09-08)
 
 **Dispatched by rule 4.** Cloud wake. Rule 1 found no P0
@@ -458,9 +608,17 @@ matched the English verb — the largest false-positive class, and it fires on t
 intake-control sentence every wake copies forward; "sample" has **three**
 unrelated senses here and only one is statistical; and the first marker set
 **missed `over N runs`**, which `352.2`'s own figure uses. That last one was
-found by Part 2's census, not by review — widening the set moved it 134 → 153,
-adding **5** real sample lines against **12** more false positives. The bounded
-census caught the filter, not the other way round.
+found by Part 2's census, not by review — widening the set moved it 134 → 153:
+**+5** real sample lines, **+12** false positives **and +2 `CENSUS` lines**
+(`6052`, *"2 failures in the last 40 runs"*; `6404`, *"8 of 20 run zero cases"*).
+The bounded census caught the filter, not the other way round.
+
+> **Amended 2026-09-08 (roadmap 359.1).** This sentence read *"adding 5 real
+> sample lines against 12 more false positives"* and summed to **17** against a
+> stated delta of **19** — the two `CENSUS` verdicts were dropped from the
+> summary, not from the census. Nothing else moves: the 32 / 57 / 64 verdicts,
+> the base rate and the open-set reading are all taken over the full 153 and all
+> reproduce.
 
 1. [x] **358.1 — `330.1` answered on its Accept's stated satisfying branch:
        *"finding that this is two instances and not a pattern closes it."***
@@ -666,9 +824,15 @@ PY
 
 - **Lanes 1 and 3 are blind on `neither` = 20 of 139 (14.4%)** — which
   reproduces `351.1`'s amended figure to the window, at a later commit.
-- **Lane 2 is blind on `neither + docs_only` = 58 of 139 (41.7%)** — nearly
-  **3x** the rate `350.1` records, and the gap is entirely the 38 `docs_only`
-  windows the OR hands it.
+- **Lane 2 is blind on `neither + docs_only` = 58 of 139 (41.7%)** — **2.9x** the
+  **14.4%** `351.1` amended that rate to, and **4.1x** the **10.1%** `350.1`
+  itself records. The gap is entirely the 38 `docs_only` windows the OR hands it.
+
+  > **Amended 2026-09-08 (roadmap 359.2).** This read *"nearly **3x** the rate
+  > `350.1` records"* — which is `351.1`'s amended figure carrying `350.1`'s
+  > name, one bullet after the line that credits 14.4% to `351.1` correctly. The
+  > multiple was right and the attribution was not; against `350.1`'s own
+  > published rate the gap is **larger**, so nothing downstream moves.
 
 **Reconciled and discriminated before quoting** (CLAUDE.md). The four buckets
 partition — 20 + 7 + 38 + 74 = 139, asserted in the script rather than added by
@@ -794,6 +958,18 @@ readings at 1440px after `networkidle0` + 2 rAF):
   any preview and outside any `<pre>`, ranging from `other=1`
   (`/concepts/container-queries/`, `/getting-started/versioning/`) to
   `other=99` (`/concepts/js-behaviors/`).
+
+  > **Amended 2026-09-08 (roadmap 359.3): those per-page numbers name no
+  > instrument and are not re-derivable.** The probe was a scratchpad file, is
+  > gone, and `grep -rn 'other=99'` finds this line and nothing else — no
+  > script, no `.roundtable/` report. Re-measured this wake under the nearest
+  > reasonable reading of the same words (every visible element carrying a
+  > `bo-*` class inside `.docs-content`, excluding anything inside a `<pre>`, a
+  > `.demo-pair__preview`, or shell chrome; 1440px, `networkidle0` + 2 rAF), the
+  > same three pages read **4**, **5** and **103**. **The ordinal reproduces and
+  > the values do not** — those two pages are still the minimum of the 24 and
+  > that page still the maximum. The `3 / 21 / 24` split above is unaffected:
+  > the gate carries it, and two independent instruments agree on it.
 
 So the message quoted the **population** for a check that judges an **eighth** of
 it, and the 21 it had no opinion about were reported as pages that "show a
