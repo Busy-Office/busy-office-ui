@@ -131,8 +131,9 @@ is the shape this slice just refused.
 **No 1440/390 light-and-dark screenshots — a cloud wake has no Podman.** **None
 are owed**, structurally rather than by judgement: the diff is `ROADMAP.md`,
 `scripts/loops/dispatch_status.py`, `scripts/loops/record_metric.py`,
-`scripts/loops/polish_requeue.py` and this file. No CSS rule, no docs page and no component changed, so nothing rendered
-can move. None of the three scripts is a build step or a gate — `dispatch_status.py` is run
+`scripts/loops/polish_requeue.py`, `ENVIRONMENT.md` and this file. No CSS rule,
+no docs page and no component changed, so nothing rendered can move. None of the
+three scripts is a build step or a gate — `dispatch_status.py` is run
 by hand at Step 0b and by `record_iteration.py`; `record_metric.py` is a CLI;
 `polish_requeue.py` is advisory and run from the recorder.
 
@@ -158,11 +159,13 @@ heuristic, 34 exact), `check:viewport-forks` (76 docs scripts) and
 6 clock-skew and 5 metric-pairing cases. **`docs:build` was re-run after this
 file was written**, per `ENVIRONMENT.md` §3b.
 
-**Said precisely, because the wake landed in two commits.** The 17 were run
-green on the tree of the FIRST commit (`5b78e4f`). The second (`f1e7eed3`)
-changes exactly one file, `scripts/loops/polish_requeue.py`, which no gate in
-that suite reads — `check:imports` walks `.mjs/.js/.ts`, not `.py`. What WAS
-re-run after it, and after every later edit to this file: `docs:build` (carrying
+**Said precisely, because the wake landed in four commits.** The 17 were run
+green on the tree of the FIRST commit (`5b78e4f`), and **CI re-ran all of them
+green on `c6385371`** (3m19s, both workflows `success`). `f1e7eed3` changes
+exactly one file, `scripts/loops/polish_requeue.py`, and the fourth commit
+changes only markdown — neither is read by any gate in that suite
+(`check:imports` walks `.mjs/.js/.ts`, not `.py`). What WAS re-run after each,
+and after every later edit to this file: `docs:build` (carrying
 `check:slice-refs` **987** assertions / **374** citations, `check:floor`,
 `check:vendor-names`, `check:imports`, `check:loop-vocab`, `check:selftests`),
 `polish_requeue.py --verify-stamps` itself, and `dispatch_status.py
@@ -272,10 +275,21 @@ the full suite.** The consequence a wake feels directly is `ENVIRONMENT.md` §3b
 — *re-run `npm run docs:build` after writing this file, before pushing* — and it
 was executed this wake, after this file was written, before the push.
 
-## CHECK CI AFTER PUSHING
+## CI IS GREEN on `c6385371`, and checking it cost 20 minutes to a dead detector
+
+```
+CI                   c6385371 completed success  06:56:57Z -> 07:00:16Z
+Deploy docs to Pages c6385371 completed success  06:56:57Z -> 06:57:53Z
+```
 
 Read the runs after your push; one `actions/runs?branch=main` read costs nothing
-and is the only thing standing between a red `main` and the next wake.
+and is the only thing standing between a red `main` and the next wake. **But
+filter it yourself** — this wake's poll loop passed a 9-character sha to
+`?head_sha=`, which answers `200` with an EMPTY list, and the loop had no branch
+for the empty case, so it reported a **timeout** on runs that had finished
+`success` in 3m19s. Trap 2's shape a third time: an absence that means *wrong
+query*, not *nothing there*. Written up durably as `ENVIRONMENT.md` §6d, with the
+control that distinguishes the two.
 
 ## Step 0 traps
 

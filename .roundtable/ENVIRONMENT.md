@@ -403,6 +403,39 @@ amount this section names — the likeliest true cause of the decay roadmap 281.
 attributed to a commit that never touched the table (286.1). Row counts and
 overflow booleans are still unaffected.
 
+## 6d. `actions/runs?head_sha=` NEEDS THE **FULL** SHA, AND A SHORT ONE ANSWERS `200` WITH AN EMPTY LIST
+
+Every hand-off carries *"CHECK CI AFTER PUSHING"*, so every wake runs this. Cost
+a wake 20 minutes on 2026-09-08 (Slice 347): a poll loop filtered on a 9-character
+prefix, matched nothing, and had no branch for the empty case — so it polled 40
+times and reported a **timeout** while both workflows had in fact finished
+`success` in 3m19s.
+
+**This is trap 2's shape a third time** (after `git tag` and §8's `/discussions`):
+an empty answer that reads as *"nothing yet"* when it means *"wrong query"*. The
+control is one line and settles it:
+
+```
+R=https://api.github.com/repos/Busy-Office/busy-office-ui
+H="Authorization: bearer $GITHUB_TOKEN"
+curl -sS -H "$H" "$R/actions/runs?branch=main&head_sha=c6385371c" | ...  # runs: 0   ← 9 chars
+curl -sS -H "$H" "$R/actions/runs?branch=main&per_page=6"                # every run, with its sha
+```
+
+Two rules, both cheap:
+
+- **Prefer the plain `?branch=main&per_page=N` listing and match the sha
+  yourself.** It cannot silently filter to nothing, and it shows the neighbouring
+  runs, which is what tells you a run was never created at all.
+- **A poll loop must emit on the empty case too.** *"Zero runs match"* and *"the
+  runs are still going"* are different states and a loop that only breaks on
+  completion cannot tell them apart — CLAUDE.md's *could this detector go red on
+  anything at all?* applied to a wait rather than to a gate.
+
+`updated_at` on the run is the completion time to read (`06:56:57Z → 07:00:16Z`
+here); §6's warning about it not ticking per step is about mid-flight polling,
+not about a completed run.
+
 ## 7. A BARE `wc -w` UNDERCOUNTS THIS REPO BY 2.4-4.5%
 
 No locale is set in this container, and GNU `wc` in the C locale swallows an em
