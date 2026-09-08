@@ -54,10 +54,16 @@
  * costs more than it looks: this file is excluded from its own scan, so it
  * would have to stop being, which moves the two counts `derive-readme-facts`
  * stamps onto the npm front page and requires a README re-stamp that
- * `stamp-readme.mjs --check` gates inside the core build. Measured, not
- * forecast — `scanGates()` reports 54/20/34 today, so including this file as
- * a heuristic gate makes it 55/21/34. That is a decision, not a detail, so it
- * is filed as roadmap 334.1 rather than taken here.
+ * `stamp-readme.mjs --check` gates inside the core build. That is a decision,
+ * not a detail, so it is filed as roadmap 334.1 rather than taken here.
+ *
+ * NO VALUE IS PINNED HERE ANY MORE (roadmap 362, 2026-09-08). This paragraph
+ * read "scanGates() reports 54/20/34 today, so including this file makes it
+ * 55/21/34"; a day later check-print-tokens.mjs landed and the live reading
+ * became 55/21/34 WITHOUT the retag — so the forecast value had become the
+ * current value, which reads as if the retag were already done. Read the line
+ * this gate prints on every run instead: including this file raises the total
+ * and the heuristic count by one each and leaves the exact count alone.
  *
  * It began as a report rather than a failure: six gates were tagged the day it
  * landed, and failing the build for pre-existing debt would only have

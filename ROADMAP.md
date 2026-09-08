@@ -320,6 +320,235 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 362 — `333.1` decided: **`tsconfig`, not a gate** — and the base rate the item pinned as "0 of 152" is 0 of 600 *consts* but **1 of 1,118 frontmatter bindings**, a dead import live for **22 days** (2026-09-08)
+
+**Dispatched by rule 4.** Rule 1: no open P0 —
+`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0** across **28** open items.
+Rule 2 read `Standardize 3 / 4 ok`, rule 3 `Objective 2 / 3 ok [331, 332]`, so
+neither matched. Rule 4's oldest open item is Slice 15 and everything from
+there to `333.1` is blocked, by kind: **15** owner (AT runtime evidence on owner
+hardware), **112.3/112.4** owner briefs, **249.7/.10/.11/.12/.13** owner,
+**273.2** OWNER CALL, **296.3** OWNER CALL, **320.3** browser-blocked in the
+*screenshot* sense. `333.1` is the oldest cloud-takeable item, and it needs no
+browser: every reading below is a command's output.
+
+Rule 5 was read at Step 0b and would not have fired — `Optimize 0 wake-date(s)
+newer ok`, 8 of 47 names paired across days.
+
+**Step 1 — both intakes read, with §8's controls.** `/issues?state=open` → HTTP
+**200**, len **1** (#2, `updated_at` **2026-09-06T15:10:34Z**, unmoved for a
+twenty-eighth consecutive hand-off); `/discussions` → HTTP **200**, len **0**;
+`/not-a-real-route` → HTTP **404**, so the `200 []` means *served and empty*.
+No new input, so Step 1 committed nothing.
+
+### The premise was re-checked before it was used, and it holds exactly
+
+`333.1` says a first pass got the tsconfig situation wrong, so re-checking it is
+part of the criterion (CLAUDE.md). Every clause reproduces at this revision:
+
+```
+git ls-files '*tsconfig*'        -> packages/core/tsconfig.json, tsconfig.base.json
+tsconfig.base.json               -> "strict": true, and NO noUnusedLocals
+packages/core/tsconfig.json      -> "include": ["src/js/**/*.ts"]
+ls apps/docs/tsconfig.json       -> No such file or directory
+grep -rn 'astro check\|@astrojs/check' --include=package.json --include='*.yml'
+                                 -> no hit anywhere
+```
+
+One clause to add rather than correct: **`typescript` IS installed** (5.9.3),
+but only because `packages/core` declares it (`^5.6.3`) for stylelint; nothing
+in `apps/docs` reaches it. So the item's "no TypeScript configuration in this
+repo has ever looked at a docs `.astro` file" is right, and the compiler is
+already on disk — which is not the expensive part, as below.
+
+### The base rate, re-measured at this revision — and the population was wrong
+
+The scan is `scan-unused-const.mjs` (probe, not shipped): frontmatter split at
+the leading `---` pair, parsed with the TypeScript parser, every top-level
+`const` **and `import`** binding collected, then counted against AST references
+in the frontmatter plus word-boundary matches in the **comment-stripped**
+template. Comments are stripped on purpose — a binding whose only other
+occurrence is the comment explaining it is unused, and counting that mention as
+a use is CLAUDE.md's *"an assertion tripped on its own explanation"* pointing
+the other way.
+
+```
+152 tracked .astro file(s)
+frontmatter bindings: const 600, import 518, total 1,118
+never-used const  : 0 of 600      ← the item's figure, confirmed
+never-used import : 1 of 518      ← the item's figure did not cover this
+```
+
+**The single hit is live and old.** `apps/docs/src/pages/concepts/js-behaviors.astro:5`
+— `import eventsManifest from '@busy-office/ui/events';`, whose identifier
+occurs **once** in the whole file, its own import. History pins it exactly:
+
+```
+git log -S'eventsManifest' -- apps/docs/src/pages/concepts/js-behaviors.astro
+  9bb801ea  2026-08-15  Slice 14 item 2   -> 2 occurrences (import + a use)
+  bb4ece7c  2026-08-17  Slice 23 item 6   -> 1 occurrence  (the use left; the import stayed)
+```
+
+**22 days dead**, against the *"roughly a month to notice"* the item cites for
+the const case. So the answer to *"has the base rate moved off zero"* is: **not
+for the predicate as written, and yes for the predicate one AST node kind
+wider** — and the wider one is the same exact property, an identifier occurring
+only at its own declaration.
+
+### The detector was red-proved twice before either number was used
+
+- **Eight self-test cases, all discriminating**, including the three that would
+  otherwise make it a detector that cannot fail: a binding named **only inside
+  an HTML comment** must still be flagged; an import used only as a **component
+  tag** (`<Gallery … />`) must not be; one half of a destructured `const` unused
+  must flag that half alone.
+- **Injection into a real page.** `const savingMarkup = …` inserted after a
+  needle asserted to occur exactly once, into `apps/docs/src/pages/base/motion.astro`.
+  The injection was confirmed **structurally** rather than assumed: it lands at
+  **line 7**, and the frontmatter runs lines **1-66**, so it is not in a
+  comment; the binding count moved **600 → 601**; the scan reported exactly one
+  hit. Reverted, and the blob sha is back to `526f9b24`.
+
+  That page was chosen because `motion.astro` names `savingMarkup` in **three
+  prose comments** — the exact trap this repo has hit before. The scan flagged
+  it anyway, which is what the comment-stripping is for.
+
+### The `tsconfig` spike — and its first output was wrong in the expensive direction
+
+`@astrojs/check` was installed `--no-save` and an `apps/docs/tsconfig.json`
+written with `noUnusedLocals`. **The first run reported 101 errors, 76 of them
+`ts(2307)` "Cannot find module `@busy-office/ui/api` or its corresponding type
+declarations".** That reads as *the shipped package has no types for its
+subpath exports* — an adopter-facing product claim, and the most quotable thing
+this wake found.
+
+**It is wrong.** `packages/core/dist` did not exist: the workspace dependency
+had not been built in this container. After `npm run build -w @busy-office/ui`,
+with `resolveJsonModule` added (the JSON subpaths need it), the same command
+reports:
+
+```
+npx astro check   ->  Result (164 files): 23 errors, 0 warnings, 27 hints   [17s]
+  ts(2307)  0     ← all 76 were the unbuilt dist
+  ts(2339) 20 · ts(7044) 16 · ts(6387) 7 · ts(6133) 2 · 7043/6385/2551/2322 1 each
+```
+
+Caught by asking what would make the number wrong before quoting it, not
+afterwards. Named here because the claim was one sentence from the hand-off.
+
+**What it catches that the scan does not**, on the built tree:
+
+```
+ts(6133) src/pages/concepts/js-behaviors.astro:5   'eventsManifest' … never read   ← same hit
+ts(6133) src/pages/patterns/comparison.astro:134   'i' … never read                ← template arrow param
+```
+
+Two independent instruments agreeing on `eventsManifest` is the reconciliation
+this repo asks for before a number is quoted. The second hit is outside the
+scan's population entirely.
+
+### The decision: `tsconfig`. The gate is REFUSED, and here is what each costs
+
+**`tsconfig` — chosen.** It is the ordinary tool, it is strictly wider (unused
+`let`, `function`, imports, template params, and 22 further type errors the
+scan cannot express), and the repo's own Objective prefers one general
+mechanism to a specific one. **What it costs, measured rather than forecast:**
+two devDependencies (`@astrojs/check` → `@astrojs/language-server`), a
+`tsconfig.json` that needs `resolveJsonModule` on top of `astro/tsconfigs/base`,
+**17s** of wall clock over 164 files, and **23 errors to clear before it can
+gate anything**. Of those 23, one is the import this slice deletes; the other
+**22 sit in 7 files** — `value-help` 9, `Gallery` 6, `htmx` 3, and one each in
+`ScheduleScreen`, `palettes`, `cascade`, `detail-form` — and every one is DOM
+narrowing inside an inline `<script>` (`Property 'value' does not exist on type
+'HTMLElement'`). That is **editing copyable sample code readers copy**, which is
+why it is a slice of its own and not a line in this one. Filed as `362.1`.
+
+**The gate — refused.** It would be exact rather than semantic, so 94.11's wall
+does not apply, and 310.1's precedent (a gate earning a clean base rate because
+the population held a violation a day earlier) fits this population better than
+it fitted that one — the violation is not a day old, it is in this commit. The
+refusal is not about whether it would work. It is that it duplicates a **subset**
+of a compiler flag whose remaining cost is now measured at 22 errors in 7 files
+rather than unknown, and it is not free: a 54th gate moves the two counts
+`derive-readme-facts.mjs` stamps onto the **npm front page** and forces a README
+re-stamp that `stamp-readme.mjs --check` gates inside the core build. Paying
+that to catch a proper subset of what the chosen tool catches is the wrong
+trade.
+
+**"Neither" — refused**, and the reason is the 22 days.
+
+### What these numbers do NOT cover
+
+The scan reads **top-level `const` and `import` bindings in `.astro`
+frontmatter** and nothing else: not `let`, `function` or `class`, not template
+scope, not inline `<script>` locals, and not `.mjs`/`.ts` anywhere in the repo.
+`astro check`'s two `ts(6133)` hits against the scan's one is that gap being
+visible, not the two instruments disagreeing.
+
+### Landed in this slice: the dead import is deleted, and the removal is proved render-neutral
+
+```
+before:  md5 a8e5762c946cf70dde4187b4698bd8e1   89,440 bytes   529 files in dist
+after :  md5 a8e5762c946cf70dde4187b4698bd8e1   89,440 bytes   529 files in dist
+```
+
+Both from a full `rm -rf apps/docs/dist && npm run docs:build` (never a bare
+`astro build` — `ENVIRONMENT.md` §3). Byte-identical is a suspiciously tidy
+result, so the comparison was **red-proved**: the same `cmp` against a
+*different* built page reports a difference, so the instrument discriminates.
+The scan re-run after the deletion reads **0 of 1,117**.
+
+### A correction owed to an open item: `334.1`'s pinned gate counts are stale
+
+`334.1` and `check-selftests.mjs`'s own header both say *"`scanGates()` reports
+**54 / 20 / 34** today, so counting this file as a heuristic gate makes it
+**55 / 21 / 34**"*. The live reading is now **55 / 21 / 34** — this build's own
+`self-test check passed — 55 gates classified: 21 heuristic (all self-tested;
+172 cases actually run), 34 exact`. `packages/core/scripts/check-print-tokens.mjs`
+is the only gate added since (`git diff --name-status ac4a9a0f..HEAD`).
+
+So the *forecast* value now equals the *current* value, and a wake reading
+`334.1` could reasonably conclude the retag has already happened. That is
+CLAUDE.md's criterion rule with a live cost: **the item embedded a prediction
+where it should have named a property.** Both are re-expressed below and in the
+gate header; no value is pinned any more.
+
+1. [ ] **362.1 — adopt `astro check` with `noUnusedLocals` for `apps/docs`.**
+       `333.1`'s decision, filed rather than taken because the residual is 22
+       type errors in 7 files, all of them DOM narrowing inside inline
+       `<script>` blocks that readers copy — changing those changes published
+       sample code, which is a judgement about what the samples should teach,
+       not a lint fix. The enabling parts are mechanical: `@astrojs/check` as a
+       devDependency, an `apps/docs/tsconfig.json` extending
+       `astro/tsconfigs/base` with `noUnusedLocals` **and** `resolveJsonModule`,
+       and the command wired where the other docs gates run. **The dependency
+       on a BUILT `packages/core/dist` is load-bearing** — without it the same
+       command reports 76 phantom `ts(2307)`s, which this slice mistook for a
+       product defect for one round.
+       - **Accept** — properties, not the values above, all of which are
+         snapshots to re-measure: (a) `npx astro check` exits **0** on a tree
+         where `packages/core` has been built, with the committed tsconfig;
+         (b) the error count before the change and after are both recorded,
+         from that same built state, so the delta is attributable; (c) each
+         inline-`<script>` narrowing is either a real improvement to what the
+         sample teaches, or is recorded as suppressed **with the reason** —
+         deciding that some of them should be suppressed rather than "fixed" is
+         a satisfying outcome; (d) the gate is verified in the narrowest
+         context that must run it, not only in CI (`LOOPS.md`'s own rule), and
+         if it cannot run somewhere it fails loudly there.
+       - **Refusing is a satisfying outcome** if the 22 turn out to be
+         load-bearing sample code whose narrowing would teach the wrong thing —
+         say so with the count that survived.
+       - **Lane:** cloud-takeable. Node, config and prose; no browser, no
+         screenshot.
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. **This slice owes none**: the only rendering change is the
+deletion of an import that reached the HTML zero times, and the built page is
+byte-identical before and after, which is a stronger statement than a
+screenshot comparison would be. The eight older visual debts carried in the
+hand-off are unchanged and unspent.
+
 ## Slice 361 — `332.1` closed by auditing all 18 `ENVIRONMENT.md` sections against this container: **17 live** (four of them BIT this wake), **1 dead** — and the dead one's territory holds a live hazard pointing the opposite way (2026-09-08)
 
 Dispatched by **rule 4** — no open P0 (**0** of 29 open),
@@ -4486,9 +4715,17 @@ restores the intended state rather than `HEAD`'s.
        its own scan**, so it would have to stop being, which moves the two
        counts `derive-readme-facts.mjs` stamps onto the npm front page and
        requires a README re-stamp that `stamp-readme.mjs --check` gates inside
-       the core build. Measured rather than forecast — `scanGates()` reports
-       **54 / 20 / 34** today, so counting this file as a heuristic gate makes
-       it **55 / 21 / 34**.
+       the core build. **The two counts that stood here were a snapshot and a
+       forecast, and both went stale in a day** (corrected 2026-09-08, Slice
+       362): this item read `scanGates()` **54 / 20 / 34** on 2026-09-07 and
+       predicted **55 / 21 / 34** after the retag; the live reading is now
+       **55 / 21 / 34** *without* it, because `check-print-tokens.mjs` landed in
+       between. So the forecast value equals the current value and reads as if
+       the retag had already happened. **The property, not the value:** run the
+       gate and read its own line — counting this file as a heuristic gate
+       raises the total and the heuristic count by one each, leaves the exact
+       count where it is, and whatever those three numbers then are must match
+       what `derive-readme-facts.mjs` stamps on both READMEs.
 
        - **Accept:** a recorded decision — either the retag, its `--self-test`,
          and both READMEs re-stamped in one commit; or a refusal naming what
@@ -4632,8 +4869,15 @@ page's sections. That is recorded in a template-adjacent comment in
 code from one string, never re-add a hand-copy. Doing that adds `<pre>` blocks
 to a built page — the half `310.2`'s own Lane line assigns to a local wake.
 
-1. [ ] **333.1 — should a gate forbid a never-used frontmatter `const` in an
-       `.astro` page?** Not built in this item, and the reason is that the
+1. [x] **333.1 — should a gate forbid a never-used frontmatter `const` in an
+       `.astro` page? DECIDED 2026-09-08 (Slice 362): `tsconfig`, not a gate.**
+       The base rate was re-measured at that revision and the item's population
+       was too narrow — **0 of 600** consts, but **1 of 518** imports, a dead
+       `eventsManifest` import live for **22 days**. `astro check` +
+       `noUnusedLocals` catches it and more; the enabling work is `362.1`. The
+       gate is refused for duplicating a subset of a compiler flag at the cost
+       of a README re-stamp on the npm front page. Original text kept below.
+       Not built in this item, and the reason is that the
        evidence points both ways and neither direction is this item's to
        settle. **For**: the predicate is *exact*, not semantic — an identifier
        occurring once in its own file — so 94.11's wall does not apply, the
