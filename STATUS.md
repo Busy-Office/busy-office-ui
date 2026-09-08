@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-08 03:49 UTC
+Generated at: 2026-09-08 04:59 UTC
 
 ## Open items by slice
 
@@ -55,17 +55,17 @@ Generated at: 2026-09-08 03:49 UTC
   - 339.2 — the sweep's re-scan found a SECOND section with the same unexecuted charter, and this item is deliberately not the fix.
 - **Slice 341** (1 open)
   - 341.1 — Step 0c's generator has TWO outputs and its charter throttles only one. The cut lasted exactly one commit.
-- **Slice 342** (1 open)
-  - 342.1 — the 52 are a lane-1 finding, not this item's to spend.
+- **Slice 345** (1 open)
+  - 345.1 — should `.bo-motion-spin` own its `display: inline-block`?
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1645 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-09-07 21:52   OVERDUE
-  Objective     3 / 3 slices          since 2026-09-08 00:17   OVERDUE  [320, 322, 323]
+dispatch status — counter-triggered rules (1647 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-09-08 04:59   ok
+  Objective     4 / 3 slices          since 2026-09-08 00:17   OVERDUE  [320, 322, 323, 342]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-09-08 00:17   ok   [newest pair: dispatch-region-words; 139 sample(s), 8 of 47 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (39 of 47 name(s) have only one day and are not an input to a rule that compares two runs):
@@ -95,8 +95,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-08 00:17 · Objective · grill · Slice 341 — grill of 316/319/339: 17 of 17 assertions reproduce; 341.1 filed — Step 0c's cut lasted one commit and its generator has an unnamed second output · landed · aac39366
-- 2026-09-08 00:53 · Continue · build · 320.2 — scan:dead-style judges each declaration on its own; the blind spot was NOT empty: 52 dead declarations on 13 pages, all inside attributes the attribute verdict calls live, reconciled against the re-measured 357-of-1365 corpus rather than 320.2's stale 273. Self-test gains a mixed control and fails on exactly one of five assertions when the verdict is put back to the whole attribute (red-proved by injection). 342.1 files the 52 for the next Standardize lane 1 · landed · cdfcb129
 - 2026-09-08 00:53 · Meta · refusal · a depth-aware declaration splitter — base rate 0 of 30,483 style attributes in dist carry a ';' inside a value, so it distinguishes nothing today (94.11) · refused · cdfcb129
 - 2026-09-08 00:53 · Meta · refusal · fixing the 52 dead declarations inside this round — it mixes an instrument change with a corpus change and needs per-site judgement; filed as 342.1 · refused · cdfcb129
 - 2026-09-08 00:53 · Meta · refusal · a thirteenth archive sweep — closed-history share 33.1%, below every measured trigger (55.1%, 56.7%, and the 40.6% at which 279.3 declined); sweeping would pre-empt the open owner call 249.12 · refused · cdfcb129
@@ -105,6 +103,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-08 03:49 · Continue · build · 323.1 — the two base-rate replays keep their different units; the date replay reports SKEW on 0 of 9 occasions and STALE on two of them · landed · b1ce1263
 - 2026-09-08 03:49 · Meta · refusal · reconciling the two base-rate replays into one — measured: the liveness question reads 335 live / 645 not live at commit granularity against 15 of 27 wake-dates, so the unit changes no conclusion · refused · b1ce1263
 - 2026-09-08 03:49 · Meta · refusal · restating timedelta(hours=8) inside the recorded snippet — a constant copied into prose is the drift observed_skew() exists to catch; it imports the module's own instead · refused · b1ce1263
+- 2026-09-08 04:59 · Standardize · sweep · 342.1 — lane 1 verdict per site: 41 dead declarations converted, 11 refused, re-run lands on the refusal set · landed · 161ede68
+- 2026-09-08 04:59 · Meta · refusal · PatternPreview / inline-size:100% / combobox listbox margin / state-patterns Demo literal / motion spinner / AppTile BOX height / zero spacing swatch — 11 dead declarations kept, each dead only in the docs container · refused · 161ede68
 
 ## Sunset test
 
