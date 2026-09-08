@@ -3342,7 +3342,7 @@ repeated.
 `309.5` is closed above with its Accept table, its red-proof and its readings.
 The two things that outlive it are below.
 
-1. [ ] **325.1 — a docs page can name an `npm run` command and nothing checks
+1. [x] **325.1 — a docs page can name an `npm run` command and nothing checks
        the command exists.** The page edited by `309.5` now cites `npm run
        measure:stress -w docs`, which is precisely the defect `309.5` existed
        to fix, one level over: Slice 307 recorded a re-run command
@@ -3372,6 +3372,124 @@ The two things that outlive it are below.
          is the corpus size; building it is satisfying if the corpus has grown.
          Either way the decision names what happens when a cited script is
          renamed.
+       - **REFUSED 2026-09-08 (cloud wake). The gate is not built, and the
+         reason is not the one the item offered.** The corpus did not shrink to
+         a judgement call about "four"; it decomposed, and only **one** of its
+         members is a thing this repo could check at all.
+
+       **First, the item's own base rate does not reproduce — it is the PARENT
+       commit's reading.** Re-measured at three revisions with a charset wide
+       enough for digits, dots and uppercase (the item's `[a-z:@/-]*` was not
+       the defect; the revision was):
+
+       ```
+       for rev in 82dc60e6^ 82dc60e6 HEAD; do
+         for f in $(git ls-tree -r --name-only $rev apps/docs/src/pages/); do
+           git show $rev:$f | grep -ohE 'npm run [A-Za-z0-9:@/._-]+'; done | wc -l; done
+         #  82dc60e6^  ->  4 occurrences on 2 pages   ← what the item published
+         #  82dc60e6   ->  5 occurrences on 3 pages   ← the commit that WROTE the item
+         #  HEAD       ->  5 occurrences on 3 pages
+       ```
+
+       The fifth is `npm run measure:stress -w docs`, which is the citation the
+       item's own first sentence describes. So the figure was read from the
+       tree before its own slice's edit landed — `ENVIRONMENT.md`'s *a figure
+       describing a commit is read from THAT COMMIT, never from the working
+       tree or `HEAD`*, in 275.3's `HEAD` form, inside the item whose subject
+       is stale citations.
+
+       **Second, the five are three different kinds, and the split is what
+       decides this.** Verified against the BUILT site, not the source:
+
+       | # | site | citation | kind |
+       |---|---|---|---|
+       | 1 | `/components/data-table` | `npm run measure:stress -w docs` | **this repo's own script**, shown to a reader |
+       | 3 | `/getting-started/installation` | `npm run check:markup` x2, `npm run build` | the **consumer's** script, inside `const checkScript`/`const checkCi` — what the reader adds to THEIR `package.json` |
+       | 1 | `/concepts/cascade` | `npm run build` | inside the `/* … */` frontmatter comment opened at `cascade.astro:29` — **never reaches a reader** |
+
+       The third row is asserted on the rendered artefact with a
+       discrimination control, per CLAUDE.md, rather than on the source:
+
+       ```
+       grep -c 'npm run build' apps/docs/dist/concepts/cascade/index.html   # 0
+       grep -c 'z-index'       apps/docs/dist/concepts/cascade/index.html   # 3  ← the grep is alive
+       ```
+
+       **So the rendered census is 4 on 2 pages, of which 1 is a command this
+       repo owns.**
+
+       **Third, and decisive: the obvious gate reports 5 of 5 valid while
+       genuinely checking 1.** Resolved against the four workspace script maps
+       the way `check-ci-ignores.mjs`'s existing `expand()` would:
+
+       ```
+       measure:stress  ->  ['docs']                                        ← real
+       check:markup    ->  ['docs', '@busy-office/ui']                     ← NAME COLLISION
+       build           ->  ['docs', '@busy-office/ui', '@busy-office/create-ui', '']
+       ```
+
+       The three consumer citations pass because this repo happens to own
+       scripts of the same NAME and a different definition — `check:markup` is
+       `bo-check-markup dist` in the sample and
+       `node ../../packages/core/scripts/check-markup.mjs dist` here — and the
+       comment passes because a text scan cannot see it. A green whose
+       coverage is 5x its truth is the shape *a number you report is
+       load-bearing* refuses, and it is worse than 94.11's case: 94.11's
+       detector could not fail, this one fails on the wrong thing.
+
+       **The one falsifiable shape narrows it to a corpus of one.** `-w
+       <workspace>` is what separates this repo's commands from a consumer
+       sample, is checkable, and the samples never carry it —
+       `grep -rohE 'npm run [A-Za-z0-9:@/._-]+ -w [A-Za-z0-9@/._-]+' apps/docs/src/pages/`
+       returns **1 of 5**.
+
+       **And the consumer half — the part a reader actually copies — is
+       already gated, by EXECUTION rather than by string resolution.**
+       `check-quickstart.mjs:222` runs `npx bo-check-markup site` in a
+       scaffolded consumer project and `:271` runs `bo-check-markup .` in the
+       scaffold; `check-package.mjs:52` fails when the `bin` is absent. So the
+       higher-stakes three of the four rendered citations are covered.
+
+       **The incident that motivated the item is outside the corpus.** Slice
+       307's `node examples/po-app/server.mjs` is not an `npm run` citation and
+       is not on a docs page — it is prose in `ROADMAP.md`, in Slice 309's
+       grill, under *"307's recorded re-run command does not run on a fresh
+       clone"*. **Cited by slice and heading, never by line — and this citation
+       is the worked example for why.** It was first written as `5038`, true
+       when read; the paragraphs above it in this item then moved it to 5142,
+       correcting it moved it to 5146, and correcting *that* moved it to 5148.
+       Three stale readings inside one wake, in the item about stale citations,
+       each one caused by the fix to the last. No number is written here for
+       that reason — the command is, and it is what a later wake should run:
+
+       ```
+       grep -n "307's recorded re-run command does not run on a fresh clone" ROADMAP.md
+       ```
+
+       A gate over docs-page `npm run` citations would not have caught the one
+       thing that has actually gone wrong.
+
+       **What happens when a cited script is renamed** — the clause the Accept
+       requires, answered per kind rather than in general:
+
+       - `bo-check-markup` (3 of 4 rendered) → `check:quickstart` red at its
+         step 6 and `check:package` red on the missing bin. **Covered.**
+       - `build` in `cascade.astro` → nothing, and nothing should: it is a
+         comment.
+       - `measure:stress` (1 of 4 rendered) → **nothing catches it, and that is
+         the accepted cost.** Measured, not inferred: `git grep measure:stress`
+         returns only `apps/docs/package.json`, the script's own usage header,
+         that one `<code>` on `/components/data-table`, and roadmap/STATUS
+         prose; `grep -n measure .github/workflows/ci.yml` returns three hits,
+         **none of them this script**, so CI never runs it. One `<code>` block
+         can go stale silently.
+
+       **What would reopen this, as a property with its command** — not a
+       forecast: re-measure the `-w`-carrying count above. At **1** a gate is
+       ceremony over a single citation; the machinery to build it already
+       exists (`check-ci-ignores.mjs`'s `WORKSPACES` map and `expand()`, which
+       today drops a missing script silently via `if (body)`), so this is a
+       refusal on corpus size alone and reverses cheaply if that count grows.
 
 2. [ ] **325.2 — `measure:stress`'s render columns have no counterpart in the
        published table, and the published table's method is unrecoverable.**
