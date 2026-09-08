@@ -23,7 +23,8 @@ survives none.
 ## In flight: nothing
 
 Last updated 2026-09-08 (**cloud** wake, scheduled routine). Working tree clean
-at hand-off.
+at hand-off. **No collision this wake** — `origin/main` read `5420f85` at Step 0
+and `5420f85` again immediately before the first commit.
 
 **Reconcile this file against `ROADMAP.md` before trusting its open set:**
 
@@ -91,6 +92,34 @@ in two days), 324.1's note already stands there, and a second copy would grow
 the region this loop is currently worried about to serve a reader who is not
 recording anything.
 
+## Second thing, filed not fixed: `348.1` — the recording step's own advisory check misreported on this hand-off
+
+`record_iteration.py` ran the three advisory checks after the commit, and
+`check:resume-slice-ids` printed *"3 named id(s) are not in `ROADMAP.md` at all
+— **normally archived, not a finding**: `15.0`, `15.10`, `312.2`"*. One of the
+three is a slice id. **The other two are this slice's gzip figures**, written
+in backticks in the section above, which `NAMED_ID` matched.
+
+**The report line is the defect, not the match.** The check hedges correctly
+everywhere else — its CLOSED bucket says outright *"this check cannot tell the
+two apart — you can."* The ABSENT bucket instead asserts *"normally archived"*,
+and it is the one bucket with no way to check: an id missing from `ROADMAP.md`
+is missing whether it was archived or was never an id.
+
+**No shape fix exists, which is why it is filed and not patched.** Requiring a
+non-zero item number drops `15.0` and keeps `15.10` — and `15.10` is
+well-formed: Slice 15 is open and its live items are numbered 11 and 12, so
+that id would sit directly above them. Checked rather than assumed: no
+`## Slice 15` heading exists in `ROADMAP-archive.md` and no `15.10` occurs
+outside this wake's own prose, so the id is neither live nor archived, which is
+exactly the state the bucket cannot tell from a figure. That is roadmap 94.11's
+rule — the checkable shape is exhausted, so either the report changes or
+nothing does. `348.1`'s Accept accepts **either**, and requires the base rate
+(the 8-of-86 firing rate `LOOPS.md` records) before a refusal.
+
+**This hand-off is the reproducer and was deliberately not reworded** to
+suppress the symptom.
+
 ## No metric was recorded this wake, and that is deliberate
 
 `324.2` says outright *"do not record a sample to un-STALE the line before the
@@ -127,8 +156,15 @@ live · 3 NOT VERIFIED, which is `ENVIRONMENT.md` §6b's container fact, not a
 regression), `check:formatting`, `check:scroll`, `check:layout` (128 pages),
 `check:forced-colors`, `test:axe` (128 × 2, zero violations),
 `check:target-size`, `check:search`, `check:pseudo`, `check:quickstart`,
-`check:po-app`, `check -w create-ui`, `npm run suite`. **`docs:build` was
-re-run after this file was written**, per `ENVIRONMENT.md` §3b.
+`check:po-app`, `check -w create-ui`, `npm run suite`.
+
+**Said precisely, because the wake landed in two commits.** All 17 were run
+green on the tree of the FIRST commit (`324.2`). The second commit adds Slice
+348 to `ROADMAP.md` and this section to `RESUME.md` — **markdown only**, and
+nothing in it can reach a browser gate. What was re-run after it, and after
+every later edit to this file: **`docs:build`**, which is where all four gates
+that read `.roundtable/**` and `ROADMAP.md` live (`check:slice-refs`,
+`check:floor`, `check:vendor-names`, `check:imports`), per `ENVIRONMENT.md` §3b.
 
 **The `verifier` agent is not available in this session**, so `LOOPS.md` §2 step
 6's verifier pass was done by hand — the staged diff re-read adversarially.
@@ -152,16 +188,16 @@ discriminates both ways: a `type=float` → `type=str` change **is** detected, a
 docstring-only edit is **not**, and the two body hashes are equal. The claim is
 proved rather than asserted.
 
-## The open set is 29 — no P0, and 18 are cloud-takeable
+## The open set is 30 — no P0, and 19 are cloud-takeable
 
-`roadmap_scope.py` reports **29 open / 82 closed**, and the raw checkbox count
-agrees. This wake closed `324.2`, so open moved 30 → 29 and closed 81 → 82, and
-Slice 324 leaves the OPEN set entirely. **Re-run the script** rather than
-quoting this.
+`roadmap_scope.py` reports **30 open / 82 closed**, and the raw checkbox count
+agrees. This wake closed `324.2` (30 → 29, closed 81 → 82, and Slice 324 leaves
+the OPEN set entirely) and then filed `348.1` open (29 → 30). **Re-run the
+script** rather than quoting this.
 
-- **cloud-takeable: 18** — `325.1`, `325.2`, `326.3`, `327.3`, `328.1`,
+- **cloud-takeable: 19** — `325.1`, `325.2`, `326.3`, `327.3`, `328.1`,
   `330.1`, `331.1`, `332.1`, `333.1`, `334.1`, `335.1`, `336.2`, `337.1`,
-  `338.1`, `339.2`, `341.1`, `345.1`, `346.1`.
+  `338.1`, `339.2`, `341.1`, `345.1`, `346.1`, `348.1`.
   **`325.1` is now the oldest of these**, and is what rule 4 reaches for next:
   *a docs page can name an `npm run` command and nothing checks it exists.*
   `335.1` still carries its caveat — settling it may mean filing a throwaway
@@ -173,7 +209,7 @@ quoting this.
   `249.12`, `249.13`, `273.2` (**OWNER CALL**), `296.3` (**OWNER CALL**).
 - **browser-blocked in the SCREENSHOT sense (1):** `320.3`.
 
-18 + 10 + 1 = 29, asserted rather than left to the reader. **The fifth kind,
+19 + 10 + 1 = 30, asserted rather than left to the reader. **The fifth kind,
 `artifact-lost`, is empty.** Every owner-blocked item above was re-checked **in
 the file** this wake, not carried from the previous hand-off — `249.7` was read
 in full, because it is the one whose heading does not say "OWNER CALL".
@@ -198,9 +234,12 @@ Rule 2 `Standardize 2 / 4 ok` did not match. Rule 3 `Objective 2 / 3 ok
 
 **Rule 3 did not move this wake, and the reason is worth knowing rather than
 re-deriving:** Slice **324 was already in its armed set** from last wake's
-`324.1`, so closing `324.2` adds no new slice number. The counter is still one
+`324.1`, so closing `324.2` adds no new slice number, and **filing Slice 348
+closes nothing** — an open item is not a closed slice. The counter is still one
 NEW slice away from arming the Objective grill — closing anything in a slice
-other than 324 or 347 does it, and rule 3 sits above rule 4.
+other than 324 or 347 does it, and rule 3 sits above rule 4. **Re-run
+`dispatch_status.py`**; a collision could land a row between this line and your
+wake.
 
 **Rule 5 was not reached and would not have fired.** Its line reads `ok`, and
 this wake is why that is now checkable for the one name it could act on: every

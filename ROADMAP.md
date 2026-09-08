@@ -320,6 +320,71 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 348 — `check:resume-slice-ids` reports a backticked DECIMAL FIGURE as a slice id, and files it under a heading that asserts an interpretation it cannot have earned (2026-09-08)
+
+**Dispatched by rule 4** on `324.2` (Slice 324 above); this section carries the
+one incidental finding, in the shape Slice 347 used for the same situation — a
+defect surfaced by the wake's own recording step, in the advisory checks
+`record_iteration.py` runs after the commit.
+
+1. [ ] **348.1 — a kB figure in backticks is indistinguishable from a slice id
+       by shape, and the "absent" bucket claims otherwise.** Recording this
+       wake's iteration printed:
+
+       ```
+       3 named id(s) are not in ROADMAP.md at all — normally archived, not a finding: 15.0, 15.10, 312.2
+       ```
+
+       **One of those three is a slice id.** `312.2` is real and archived.
+       `15.0` and `15.10` are the gzip figures `324.2` measured, written in
+       backticks in `RESUME.md` (*"printing the same `15.0`"*, *"`check:size`
+       prints `15.10`"*), and `NAMED_ID` matched them.
+
+       **Reproducer: the committed `RESUME.md` at this slice's own commit.**
+       `grep -o '`15\.10`\|`15\.0`\|`312\.2`' .roundtable/RESUME.md` → 2, 1, 1.
+       It was deliberately NOT reworded to suppress the symptom.
+
+       **The report line is the defect, not the match.** The check is careful
+       about exactly this everywhere else — its CLOSED bucket says outright
+       *"this check cannot tell the two apart — you can."* The ABSENT bucket
+       instead asserts *"normally archived"*, which is a claim about what the
+       string IS, and it is the one bucket that has no way to check: an id
+       missing from `ROADMAP.md` is missing whether it was archived or was
+       never an id.
+
+       **A shape fix looks available and is not**, which is why this is filed
+       rather than patched. Requiring a non-zero item number would drop `15.0`
+       — item numbers start at 1, so no derived id ever ends `.0` — and it
+       would keep `15.10`, because `15.10` is *well-formed*: Slice 15 is OPEN
+       in this very file and its live items are numbered **11 and 12**, so a
+       `15.10` would sit directly above them and read as perfectly ordinary.
+       (Checked rather than assumed: no `## Slice 15` heading exists in
+       `ROADMAP-archive.md` and no `15.10` occurs outside this wake's own
+       prose, so the id is not live *and* not archived — which is precisely the
+       state the ABSENT bucket cannot distinguish from a figure.) A decimal
+       figure and a plausible slice id genuinely coincide, and no regex
+       separates them. This is roadmap 94.11's rule: the checkable shape is
+       exhausted, so either the report changes or nothing does.
+
+       - **Accept** — the property: either the ABSENT bucket's wording no
+         longer asserts an interpretation the check cannot verify (matching the
+         hedge its CLOSED bucket already carries), **or** a recorded refusal
+         saying why the current wording is right, with the base rate measured —
+         how many of `RESUME.md`'s revisions this bucket has fired on, and on
+         how many of those the named string was a real archived id versus a
+         figure. **Finding the false-positive rate negligible and refusing is a
+         satisfying outcome**, and is the reason the base rate is part of the
+         criterion rather than an afterthought.
+       - **Do not suppress it by changing how a wake writes numbers.** The
+         figures belong in backticks; a convention that bans them to keep an
+         advisory check quiet would trade a real document for a clean report.
+       - Measure first, and one command answers it:
+         `git log -p --follow -- .roundtable/RESUME.md` piped through the
+         check's own `namedIn` export, per revision. `LOOPS.md` Step 0 records
+         that this check fired on **8 of 86** revisions on 2026-08-29 — that is
+         the denominator to re-derive, and whether those 8 were ids or figures
+         is exactly what nobody has looked at.
+
 ## Slice 347 — rule 5's missing DIRECTION is refused, and the reason is not that it is hard to record: supplying it makes rule 5 fire on the one metric it can act on, and the log's own same-timestamp companion samples refute that verdict. `324.1` closed on its Accept's second branch (2026-09-08)
 
 **Dispatched by rule 4**, cloud wake. Step 0: container **DETACHED** again (trap

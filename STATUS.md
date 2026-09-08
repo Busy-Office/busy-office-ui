@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-08 07:20 UTC
+Generated at: 2026-09-08 07:49 UTC
 
 ## Open items by slice
 
@@ -21,8 +21,6 @@ Generated at: 2026-09-08 07:20 UTC
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - **Slice 320** (1 open)
   - 320.3 — the same idiom, two values, in two shared components.
-- **Slice 324** (1 open)
-  - 324.2 — `bundle-gz-kb` is the only metric rule 5 can act on, its generator exists, and its noise floor is wider than three of its four historical moves.
 - **Slice 325** (2 open)
   - 325.1 — a docs page can name an `npm run` command and nothing checks the command exists.
   - 325.2 — `measure:stress`'s render columns have no counterpart in the published table, and the published table's method is unrecoverable.
@@ -58,14 +56,16 @@ Generated at: 2026-09-08 07:20 UTC
   - 345.1 — should `.bo-motion-spin` own its `display: inline-block`?
 - **Slice 346** (1 open)
   - 346.1 — Slice 343 refused a whitespace normaliser on a caller census of counting INSTRUMENTS. The failure recurred the next wake in a population that census did not measure: a wake's own grep checking that a correction it just made landed everywhere.
+- **Slice 348** (1 open)
+  - 348.1 — a kB figure in backticks is indistinguishable from a slice id by shape, and the "absent" bucket claims otherwise.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1653 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-09-08 04:59   ok
+dispatch status — counter-triggered rules (1657 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-09-08 04:59   ok
   Objective     2 / 3 slices          since 2026-09-08 05:54   ok  [324, 347]
   Optimize      0 wake-date(s) newer   since 2026-09-08 00:17   ok   [newest pair: dispatch-region-words; 140 sample(s), 8 of 47 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (39 of 47 name(s) have only one day and are not an input to a rule that compares two runs):
@@ -96,16 +96,16 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-08 03:49 · Meta · refusal · reconciling the two base-rate replays into one — measured: the liveness question reads 335 live / 645 not live at commit granularity against 15 of 27 wake-dates, so the unit changes no conclusion · refused · b1ce1263
-- 2026-09-08 03:49 · Meta · refusal · restating timedelta(hours=8) inside the recorded snippet — a constant copied into prose is the drift observed_skew() exists to catch; it imports the module's own instead · refused · b1ce1263
-- 2026-09-08 04:59 · Standardize · sweep · 342.1 — lane 1 verdict per site: 41 dead declarations converted, 11 refused, re-run lands on the refusal set · landed · 161ede68
-- 2026-09-08 04:59 · Meta · refusal · PatternPreview / inline-size:100% / combobox listbox margin / state-patterns Demo literal / motion spinner / AppTile BOX height / zero spacing swatch — 11 dead declarations kept, each dead only in the docs container · refused · 161ede68
 - 2026-09-08 05:54 · Objective · grill · 322/342 — 20 of 22 reproduce; both defects recur what 322 filed: a number with no command, and a correction missed because the phrase wraps · logged · 6cfe380c
 - 2026-09-08 06:50 · Continue · build · 324.1 — a DIRECTION field on a metric sample: 1 of 8 day-paired names is directional from its unit, and supplying a direction makes rule 5 fire on bundle-gz-kb's four consecutive rises, which the log's own same-timestamp components samples refute (0.400 -> 0.355 kB per component) · refused · 5b78e4f
 - 2026-09-08 06:50 · Meta · refusal · a per-NAME direction registry in dispatch_status.py — base rate: it would cover 8 names, of which one can satisfy 'two consecutive', and that one (bundle-gz-kb) is already better served by check:size's 16.7 kB gz budget, which is rule 5's other clause · refused · 5b78e4f
 - 2026-09-08 06:50 · Meta · refusal · recording a bundle-kb-per-component metric — 324.2 forbids sampling to un-STALE the line, and a 48th single-day name is the shape this slice just refused · refused · 5b78e4f
 - 2026-09-08 06:55 · Continue · bug · 347.1 — polish_requeue.py --verify-stamps, the third advisory check LOOPS.md Step 0 says REPORTS, died with an unhandled traceback on a shallow clone; its docstring claimed that case landed in 'unknown' and it never could. Fourth verdict 'absent' added, red-proved by injection with a control · landed · f1e7eed3
 - 2026-09-08 07:20 · Roadmap · trap · ENVIRONMENT.md 6d — actions/runs?head_sha= needs the FULL sha; a 9-char prefix answers 200 with an empty workflow_runs, which a poll loop reads as 'not started'. Cost this wake 20 minutes on runs that were already green. Trap 2's shape a third time · landed · c93ee1de
+- 2026-09-08 07:46 · Continue · build · 324.2 — bundle-gz-kb's definition written into record_metric.py; the 0.3 kB band measured NARROWER than all four day-pair moves rule 5 reads, and cross-environment gzip drift bounded under 0.1 kB for the first time · landed · fee79dc0
+- 2026-09-08 07:46 · Meta · refusal · retiring bundle-gz-kb, and re-pointing it at the deterministic minified byte count — both offered by the Accept, both refused because the series is not noise-limited · refused · fee79dc0
+- 2026-09-08 07:46 · Meta · refusal · extending dispatch_status.py's rule-5 note a second time — 326.3 is open on the dispatch region's growth and the reader who needs this is recording, not dispatching · refused · fee79dc0
+- 2026-09-08 07:49 · Roadmap · plan · 348.1 filed — check:resume-slice-ids reports a backticked kB figure as a slice id and files it under 'normally archived', the one bucket that cannot verify its own claim; no shape fix exists because 15.10 is a well-formed id for the still-open Slice 15 · triaged · fee79dc0
 
 ## Sunset test
 
