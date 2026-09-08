@@ -30,7 +30,11 @@ const tasks = [
 <div class="bo-widget-grid" style="--bo-widget-min: 8rem" data-density="spacious">
   {tasks.map((t) => (
     <a href={t.href} class="bo-widget" style="text-align: center; padding-block: var(--bo-space-5)">
-      <span style="display: block; font-size: var(--bo-font-size-lg); font-weight: var(--bo-font-weight-semibold); color: var(--bo-color-text-primary)">{t.label}</span>
+      {/* No `display: block` — the tile above is the flex container, so the
+          label is blockified anyway and the declaration read dead at all four
+          sites (roadmap 342.1). `color` STAYS: it opts the label out of the
+          reset's `a { color: accent }`, which is live. */}
+      <span style="font-size: var(--bo-font-size-lg); font-weight: var(--bo-font-weight-semibold); color: var(--bo-color-text-primary)">{t.label}</span>
       <span class="bo-badge" style="margin-block-start: var(--bo-space-2)" aria-label={`${t.count} open`}>{t.count}</span>
     </a>
   ))}

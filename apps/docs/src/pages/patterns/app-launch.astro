@@ -130,8 +130,10 @@ const logistics = [
 <div class="bo-widget-grid" style="--bo-widget-min: 9rem">
   <a href="/purchasing" class="bo-widget"
       style="text-align: center; padding-block: var(--bo-space-4)">
+    <!-- No color on the mark: the reset's own a { color: accent } already
+         gives the tile its accent, and the label below opts OUT of it. -->
     <span class="bo-icon bo-icon--cart" aria-hidden="true"
-        style="font-size: 2rem; color: var(--bo-color-accent); margin-inline: auto"></span>
+        style="font-size: 2rem; margin-inline: auto"></span>
     <span style="color: var(--bo-color-text-primary)">Purchasing</span>
   </a>
   …

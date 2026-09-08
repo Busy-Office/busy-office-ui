@@ -320,6 +320,160 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 345 — Standardize sweep, 4 of 4 lanes. 342.1 closed with a verdict per SITE: **38 of the 52 dead declarations came from FOUR source lines**, and the eleven that remain are the eleven that were refused — the re-run lands on exactly the refusal set, not merely on the arithmetic (2026-09-08)
+
+**Dispatched by rule 2** at `Standardize 4 / 4 Continue rounds OVERDUE` — the
+counter the previous hand-off predicted, re-read this wake rather than trusted.
+Rule 1 found no P0 (`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0** across
+30 open items); rule 3 was `Objective 3 / 3 OVERDUE [320, 322, 323]` and is
+evaluated **below** rule 2, so the grill waits one more wake. Cloud wake. Step 0:
+container **DETACHED** again (trap 1), fixed with `git checkout -B main
+origin/main` before any commit; trap 2 clean in one `--unshallow`, tags again
+arrived with it (`git tag | wc -l` → **8**, run rather than assumed). **No
+collision** — the pre-commit `git fetch origin main` found `origin/main` unmoved
+at `c369b054`.
+
+**Step 1 — both intakes read, with the controls `ENVIRONMENT.md` §8 names:**
+`/issues?state=open` → HTTP 200 len **1**; `/discussions` → HTTP 200 len **0**;
+`/not-a-real-route` → **404**, the control that makes the `200 []` mean *served
+and empty*. Issue #2's `updated_at` is still `2026-09-06T15:10:34Z` — an
+**eleventh** consecutive hand-off with no movement. Nothing new to triage, so
+Step 1 committed nothing.
+
+### The three lanes with no finding, one line each
+
+- **Lane 2 of 4 — `report:css-repeats`: no delta.** 74 files · **242** rules with
+  3+ declarations · **230** distinct bodies · **8** bodies repeating, against the
+  recorded `237 / 225 / 8` of 2026-08-28. Rules and distinct bodies both moved
+  +5, so the five new rules are five new *bodies*: **no group is new and no group
+  grew.** All eight match the settled table in `LOOPS.md` member-for-member,
+  the x4 joined-control radius reset still two components rather than four.
+- **Lane 3 of 4 — `report:prose`: every flagged page carries a verdict.** The
+  flagged union is **15** pages (10 over the corpus 2x, plus `/base/motion/`,
+  `/concepts/layouts/`, `/concepts/js-behaviors/`, `/concepts/design-language/`,
+  `/concepts/scale/` over a family 2x). Checked against the ENUMERATION the lane
+  mandates — 158.1's twelve, 161.1's three, 178.3's `/concepts/scale/` — all 15
+  are members; `/patterns/output-form/` is the sixteenth verdict and is no longer
+  flagged. **No page carries no verdict**, so nothing to record.
+- **Lane 4 of 4 — `report_loop_prose.py`: no file changed accumulate class.**
+  The `ratchet` block reads `LOOPS.md 1 up, last cut f9e0f17d (2026-09-07)`; the
+  dispatch region is **7,548** words, 42.0% of the file, still growing faster
+  than the file. That is a rising number and **not a regrowth reading** until
+  attributed per section (308.1/339.1) — not attributed this wake, and said so
+  rather than concluded. `339.1` is open and owns that question.
+
+### Lane 1 of 4 — `scan:dead-style`, and it IS the finding: `342.1`
+
+The scan opened at **52 dead declarations on 13 pages** (1,365 live attributes,
+1,854 declarations, 357 multi-declaration). 342.1's Accept asks for a verdict per
+site and a reconciled re-run, so the first thing built was the per-site view the
+shipped scan does not print: a throwaway probe copying its verdict logic verbatim
+and emitting one row per site. **It reconciles at 52 rows against the scan's 52**
+before any verdict was written — the instrument check, taken first.
+
+**41 CONVERTED, and 38 of them come from FOUR source lines** — counted rather
+than rounded: 14 + 10 + 10 + 4 sites from one line each, fanned out by a `map()`
+or a shared component, plus **three one-off lines** on `/patterns/output-form`.
+That ratio is the shape of the finding: this was never 13 pages of drift, it was
+four idioms multiplied by their generators and one page with three of its own.
+
+| n | site | source | why it was dead |
+|---|---|---|---|
+| 14 | `color: var(--bo-color-accent)` on every app tile's mark | `AppTile.astro:43` (`MARK`, inherited by `BOX`) | the component renders its OWN `<a class="bo-widget">` one line below, and the framework reset carries `a { color: var(--bo-color-accent) }` (`reset/index.css:73`). Measured in **both** themes: icon and its `a.bo-widget` parent read `rgb(15,118,110)` light and `rgb(45,212,191)` dark. `app-launch.astro`'s copyable `<pre>` sample carried the same declaration and moved in the same commit, so the demo and the markup a reader copies do not diverge |
+| 10 | `margin: 0` on the payload `<ul>` | `reference/events.astro:44` | restates the reset's `* { margin: 0 }` — the original sweep's own headline case |
+| 10 | `display:inline-block` on the spacing swatch | `reference/tokens.astro:153` | the swatch is a flex item of `.bo-cluster`, so it is blockified; computed `display` reads `block` either way |
+| 4 | `display: block` on the task label | `RfTaskMenu.astro:33` | flex child of `a.bo-widget`. Its `color: var(--bo-color-text-primary)` on the same attribute is **live** and stays — it opts the label OUT of the reset's link accent |
+| 3 | `margin: 0` ×2, `padding: 0` ×1 | `patterns/output-form.astro` | restatements of the reset / a `<div>`'s own default, measured dead in **screen AND print** — which is the whole reason this scan emulates both media |
+
+**11 REFUSED, each with the measurement that refuses it.** These are not "not
+got to"; every one is dead *here* and load-bearing somewhere the scan cannot see:
+
+- **3 · `color` on `PatternPreview.astro:35`'s tile fragment** — the accent
+  originates at an `a.bo-widget` **outside** the fragment, supplied by
+  `patterns/index.astro:28`. The ancestor chain was walked to establish that,
+  in both themes. A caller that does not wrap it in a link loses the colour.
+- **3 · `inline-size: 100%` on the demo widget** (`amount`, `byline`,
+  `progress`) — dead only against `section.demo`'s flex stretch. The identical
+  `inline-size: 100%; max-inline-size: 24rem` idiom on `patterns/login.astro:31`
+  is **not** reported dead, which is the discrimination: the pair is the portable
+  form and the docs container is what makes it redundant.
+- **1 · `margin-block-start` on combobox's static listbox** — the component's own
+  copy sits inside `@supports (anchor-name: --a) and (anchor-scope: --a)`
+  (`combobox.css:55-69`). Dead in a browser that supports anchor positioning;
+  **live on the fallback path**, which is exactly where the demo has to hold up.
+- **1 · `align-items: center` on state-patterns' skeleton** — it is inside
+  `const skeletonCard`, rendered through `<Demo code={skeletonCard} />`. 292.8's
+  rule: a declaration inside a copyable template literal is out of scope.
+- **1 · `display: inline-block` on `/base/motion`'s spinner** — dead only because
+  `section.demo` is a flex container; it is what makes `.bo-motion-spin` transform
+  in ordinary inline flow, which is the case a reader will actually have.
+- **1 · `block-size: 2rem` on `AppTile`'s `BOX`** — the box exists to PIN the
+  mark's height when there is no icon glyph. It is dead only because the current
+  glyph happens to be exactly 2rem tall, and AppTile's own comment already ties
+  its `font-size: 2rem` and this `block-size` together.
+- **1 · `inline-size:var(--bo-space-0)` on the zero swatch** — the generated
+  uniform form of the other nine, and the swatch's SUBJECT is the token's width.
+  Zero is the value being shown; special-casing it out of the `map()` would make
+  the one swatch that means "no space" the one swatch that declares nothing.
+
+**The reconciliation is the part worth keeping, and it is stronger than the
+arithmetic.** The re-run reports **11 dead declarations on 9 pages** — `52 − 41`,
+which any miscount would also satisfy — but the eleven it names are, item for
+item, the eleven refused above: `3× inline-size: 100%`, `3× color`,
+`1× display: inline-block`, `1× margin-block-start`, `1× align-items: center`,
+`1× block-size: 2rem`, `1× inline-size:var(--bo-space-0)`. Two independent
+totals move with it: declarations inside live attributes **1,854 → 1,813**
+(−41, one per conversion) and multi-declaration attributes **357 → 345** (−12,
+exactly the conversions that left a single declaration behind — the ten event
+lists and output-form's two). Attribute count is **1,365 → 1,365**: no attribute
+was emptied, so nothing became a `style=""` for the next sweep to trip over.
+
+**Verified against the RENDERED artefact, not the diff** (CLAUDE.md's bulk-edit
+rule): the built site was rebuilt from a cleared `dist` and re-scanned in a real
+browser, and the whole-tree gates that assert layout properties — `check:layout`
+(128 pages, no overflow at 390 or 150% zoom), `check:scroll` (914 containers) and
+`test:axe` (128 × 2, zero violations) — all pass. **The edits were made by hand,
+one block at a time**, never by regex, because four of the five files mix live
+markup with copyable samples.
+
+**One cost, recorded rather than smoothed over.** The first attempt at the
+`events.astro` comment put a `{/* … */}` block **inside a ternary expression**,
+which is not a children position; `astro build` failed with
+`Expected "}" but found "$$render"` pointing at a line 11 below the edit. Caught
+by the build, not by review — the sibling of the compiler trap `ENVIRONMENT.md`
+already carries about hoisted imports.
+
+1. [ ] **345.1 — should `.bo-motion-spin` own its `display: inline-block`?**
+       Raised by lane 1's refusal above and NOT built here — a component CSS
+       change is not a Standardize-sweep edit. The utility only works on a
+       transformable box, so every consumer who puts it on an inline `<span>`
+       must add the declaration by hand; `/base/motion`'s own demo does, and it
+       reads dead there only because the demo section is a flex container. That
+       is the Objective's first accept test verbatim — *it lets a consumer delete
+       code*.
+       - **Accept:** a decision recorded either way. If it moves into
+         `motion.css`, `/base/motion`'s inline declaration goes with it and
+         `scan:dead-style`'s remaining count agrees with whatever the change
+         makes true. If it is refused, the reason names what an inline-block
+         default would break for a consumer who wants a block or flex spinner.
+         **Refusing is a satisfying outcome.**
+
+**Gates: all 17 cloud-runnable entry points green** on the committed tree, plus
+`check:selftests` (55 gates: 21 heuristic, 34 exact), `check:viewport-forks` and
+`check:vendor-names` run directly at its real path (**614** files — a passing
+gate, not a census; the walk includes `examples/` installs).
+
+**NOT VERIFIED, said plainly.** No 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. **This commit changes rendered pages**, so unlike the last
+two wakes it does carry visual debt, and it is named rather than implied: five
+docs sources changed (`AppTile.astro`, `RfTaskMenu.astro`, `events.astro`,
+`tokens.astro`, `output-form.astro`, plus `app-launch.astro`'s sample). Every
+removal is *proven* computed-style-neutral by the instrument that found it — in
+screen and print, and for the accent colour in light and dark — and the three
+whole-tree browser gates pass, so nothing measurable moved. What a cloud wake
+still cannot do is LOOK at `/patterns/output-form` in print or at the RF tile
+grid. **A local wake should glance at those two.**
+
 ## Slice 344 — 323.1: the two base-rate replays keep their different units, because the unit follows the LIFETIME of the state counted, not the unit the predicate compares — and the date replay reports the one verdict SKEW exists to soften on 2 of the 8 dates it is blind on (2026-09-08)
 
 **Dispatched by rule 4** on `323.1`, the oldest still-open cloud-takeable item —
@@ -701,7 +855,9 @@ script's **existing** dead control already proves (the reset's `* { margin: 0 }`
 whereas a `<p>`'s zero padding is an assumption about the docs cascade that
 nothing here had tested.
 
-1. [ ] **342.1 — the 52 are a lane-1 finding, not this item's to spend.**
+1. [x] **342.1 — DONE 2026-09-08 (Slice 345). 41 converted from five source
+       lines, 11 refused per site, and the re-run lands on exactly the refusal
+       set. The 52 are a lane-1 finding, not this item's to spend.**
        `scan:dead-style` is a report the Standardize sweep consumes; 320.2 was
        scoped to the instrument, and fixing 13 pages inside it would mix an
        instrument change with a corpus change in one commit and widen the item.

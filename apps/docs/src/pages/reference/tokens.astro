@@ -150,7 +150,12 @@ const cell = (t: string, vars: Record<string, string>) => resolve(vars['--bo-col
       <div class="bo-cluster" style="--bo-cluster-gap: var(--bo-space-4)">
         <code style="inline-size:8rem;font-size:var(--bo-font-size-xs)">--bo-space-{n}</code>
         <code style="inline-size:5rem;font-size:var(--bo-font-size-xs)" class="bo-u-text-muted">{v}</code>
-        <span style={`display:inline-block;block-size:0.75rem;background:var(--bo-color-accent);inline-size:var(--bo-space-${n})`}></span>
+        {/* No `display:inline-block` — the swatch is a flex item of the
+            `.bo-cluster` above, so it is blockified and the declaration read
+            dead at all 10 sites (roadmap 342.1). `inline-size` STAYS even at
+            --bo-space-0, where it also reads dead: the width IS the subject of
+            this swatch, and zero is the value being shown. */}
+        <span style={`block-size:0.75rem;background:var(--bo-color-accent);inline-size:var(--bo-space-${n})`}></span>
       </div>
     ))}
   </section>

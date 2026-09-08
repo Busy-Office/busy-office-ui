@@ -47,7 +47,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <article class="bo-print-report demo-frame" style="max-inline-size: 46rem; padding: var(--bo-space-6)">
       <header class="bo-u-avoid-break" style="display: flex; justify-content: space-between; gap: var(--bo-space-6)">
         <div>
-          <p style="margin: 0; font-weight: var(--bo-font-weight-semibold)">Busy Office Supplies Ltd</p>
+          {/* No `margin: 0` — the reset's `* { margin: 0 }` already zeroes it,
+              measured dead in BOTH screen and print (roadmap 342.1). The muted
+              sibling below never carried one, so this also makes the pair
+              consistent. */}
+          <p style="font-weight: var(--bo-font-weight-semibold)">Busy Office Supplies Ltd</p>
           <p class="bo-u-text-muted">14 Harbour Road · Rotterdam · NL<br />VAT NL0012 3456 B01</p>
         </div>
         <div style="text-align: end">
@@ -140,11 +144,16 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </table>
     </div>
     <div class="bo-cluster bo-u-avoid-break" style="gap: var(--bo-space-6); align-items: flex-start; margin-block-start: var(--bo-space-4)">
-      <figure class="bo-u-print-exact bo-u-avoid-break" style="margin: 0; text-align: center">
+      {/* No `margin: 0` on the figure — the reset zeroes the UA's `1em 40px`,
+          measured dead in screen and print alike (roadmap 342.1). */}
+      <figure class="bo-u-print-exact bo-u-avoid-break" style="text-align: center">
         {/* Stand-in for YOUR barcode image: bars drawn with a gradient so the
             demo needs no asset. Real documents put an <img> or inline <svg>
-            here — the placement rules are what this page is documenting. */}
-        <div role="img" aria-label="Barcode for document PO-88213" style="inline-size: 48mm; block-size: 14mm; background: repeating-linear-gradient(90deg, #000 0 1.2px, #000 1.2px 2px, transparent 2px 3.4px, #000 3.4px 4.2px, transparent 4.2px 6px); padding: 0; border: 3mm solid #fff"></div>
+            here — the placement rules are what this page is documenting.
+            The quiet zone is the 3mm white BORDER; a `padding: 0` used to sit
+            beside it restating a div's own default, and it read dead in screen
+            and print (roadmap 342.1). */}
+        <div role="img" aria-label="Barcode for document PO-88213" style="inline-size: 48mm; block-size: 14mm; background: repeating-linear-gradient(90deg, #000 0 1.2px, #000 1.2px 2px, transparent 2px 3.4px, #000 3.4px 4.2px, transparent 4.2px 6px); border: 3mm solid #fff"></div>
         <figcaption style="font-family: var(--bo-font-mono); font-size: var(--bo-font-size-xs)">PO-88213</figcaption>
       </figure>
       <figure class="bo-u-print-exact">

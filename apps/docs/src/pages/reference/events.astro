@@ -40,8 +40,12 @@ const fmt = (s: string) =>
               <td set:html={fmt(ev.target)} />
               <td set:html={fmt(ev.when)} />
               <td>
+                {/* The payload list below carries only its indent. A
+                    `margin: 0` sat beside it restating the reset's own
+                    `* { margin: 0 }`, and `scan:dead-style` read it dead at
+                    all 10 sites (roadmap 342.1). */}
                 {ev.noPayload ? <span class="bo-u-text-muted">— none</span> :
-                  <ul style="margin: 0; padding-inline-start: 1rem">
+                  <ul style="padding-inline-start: 1rem">
                     {ev.detail.map((d: any) => (
                       <li><code>{d.name}</code> <span class="bo-u-text-muted">{'{'}{d.type}{'}'}</span> — <span set:html={fmt(d.desc)} /></li>
                     ))}

@@ -40,7 +40,15 @@ const { label, icon, initials } = Astro.props;
    --bo-font-size-xl = 1.5rem, so no token equals it and a swap would shrink
    the mark — and BOX's block-size below is the same 2rem, so the two would
    have to move together. The badge's own size one line down IS a token. */
-const MARK = 'font-size: 2rem; line-height: 1; color: var(--bo-color-accent); margin-inline: auto; margin-block-end: var(--bo-space-2)';
+/* No `color` here, and that is a removal rather than an omission (roadmap
+   342.1): the tile's own anchor on the line below is what colours the mark,
+   because the framework reset carries `a { color: var(--bo-color-accent) }`
+   (reset/index.css). The declaration was inline on every mark and
+   `scan:dead-style` read it dead at 14 sites — measured identical in light
+   AND dark, 15/118/110 and 45/212/191 on the icon and on its `a.bo-widget`
+   parent alike. The `<a>` is INSIDE this component, so nothing a caller does
+   can take the inheritance away. */
+const MARK = 'font-size: 2rem; line-height: 1; margin-inline: auto; margin-block-end: var(--bo-space-2)';
 const BOX = `${MARK}; display: flex; align-items: center; justify-content: center; block-size: 2rem`;
 ---
 <a href="#" class="bo-widget" style="text-align: center; padding-block: var(--bo-space-4)">
