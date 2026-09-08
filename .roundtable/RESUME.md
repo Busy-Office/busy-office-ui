@@ -118,12 +118,23 @@ a historical artefact. Amended into `349.1` in the same commit, per 236.2.
 
 `check:resume-slice-ids` printed `15.0`, `15.10`, `312.2` as "named ids not in
 `ROADMAP.md`" a third consecutive time. **The discrimination test the previous
-hand-off proposed and then refuted is still unrunnable from here** for the same
-reason: naming the figures in backticks to describe them is the same match. This
-file no longer carries them in backticks, so the next recording is the first
-chance to see whether the ABSENT bucket shrinks to `312.2` alone — **that is a
-prediction, not a result**, and it is only clean if the next hand-off also
-avoids discussing `348.1` in backticks.
+hand-off proposed and then refuted is still unrunnable from here**, and the
+first draft of this very paragraph got it wrong in the same way — recorded
+rather than quietly deleted, because the failure is the useful part.
+
+That draft said *"this file no longer carries them in backticks, so the next
+recording is the first chance to see the ABSENT bucket shrink"*. **It is false,
+and the sentence directly above it is the refutation**: line one of this section
+names all three in backticks, because that is the only way to say which ids the
+check printed. So the next recording will again report all three, and it will
+have nothing to do with staleness.
+
+That is `348.1`'s point arriving one level up for the second consecutive wake —
+**the prose explaining the defect is indistinguishable from the defect**, which
+is CLAUDE.md's *an assertion that can be tripped by its own explanation* in the
+one place it cannot be written around. The test is only runnable from a hand-off
+that does not discuss `348.1` at all, and this one cannot be that either.
+Nothing was reworded to suppress the symptom.
 
 ## No metric was recorded this wake, and that is deliberate
 
