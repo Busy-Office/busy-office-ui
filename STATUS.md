@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-08 13:46 UTC
+Generated at: 2026-09-08 14:52 UTC
 
 ## Open items by slice
 
@@ -68,10 +68,9 @@ Generated at: 2026-09-08 13:46 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1671 iterations logged)
+dispatch status — counter-triggered rules (1673 iterations logged)
   Standardize   3 / 4 Continue rounds since 2026-09-08 09:54   ok
-  Objective     3 / 3 slices          since 2026-09-08 10:59   OVERDUE  [325, 327, 353]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-09-08 14:52   ok
   Optimize      0 wake-date(s) newer   since 2026-09-08 00:17   ok   [newest pair: dispatch-region-words; 140 sample(s), 8 of 47 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (39 of 47 name(s) have only one day and are not an input to a rule that compares two runs):
        dispatch-region-words       2d  2026-09-07 7298 words -> 2026-09-08 7492 words  +194
@@ -101,8 +100,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-08 10:59 · Objective · grill · Slice 351 — grill of 324/325/347/350: 63 of 65 assertions reproduce to the digit; every verdict survives. Finding: 350.1's base-rate predicate windows as a..b, so a sweep's OWN conversions count as lane input it had to read — 20/139 (14.4%) on a..b^ against the published 15/139 (10.8%), disagreeing on 5 windows including the one 350 names in prose. And 350.1's 'this commit does not move them' is false of the wake: its own record_iteration row added a no-input window, 138/14 -> 139/15. Filed 351.1; both amended into 350.1 per 236.2. · landed · 0ad6e903
-- 2026-09-08 12:02 · Continue · build · 325.2 — the published Initial render column WITHDRAWN: its method is unrecoverable across four independent history searches, and select-all reconciling at ~1x while render reads 4.2x/11.9x/7.3x is what shows a method gap rather than a machine gap · landed · 3d2816a2
 - 2026-09-08 12:02 · Meta · refusal · the Accept's third branch — a shape-only column kept undefined — refused, because the shape is not checkable without the window and the one probe the page points at produces a different one · refused · 3d2816a2
 - 2026-09-08 12:52 · Continue · build · 353.1 — 326.3 answered: the dispatch region has two kinds of growth (a rule changing vs a GENERATOR section) and the whole-region ratio cannot tell them apart; report_loop_prose.py now prints per-section body deltas since the last commit that REDUCED the region, red-proved by injection after the first draft's residual reconciliation passed it, and reproducing 339.1's published series 3 of 3 and its deltas 5 of 5 · landed · 1310b81a
 - 2026-09-08 12:52 · Meta · refusal · a per-rule word ceiling for the dispatch region — a ceiling low enough to bind fails the sections 326.2 attributed to rules that changed, one above 980 binds nothing, and 'the decision content is short' is semantic (94.11) · refused · 1310b81a
@@ -111,6 +108,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-08 13:46 · Continue · build · 327.3 — 192.1 is cited as a name for a defect, not executed: 1 of 161 slices carries the inventory it prescribes; rule fine, practice is the gap, nothing built · logged · 95d4aca9
 - 2026-09-08 13:46 · Meta · refusal · a gate over 'this claim names its instrument' — base rate 65.2% of the population and 31.6% of pre-rule slices, so the checkable shape distinguishes nothing (94.11) · refused · 95d4aca9
 - 2026-09-08 13:46 · Meta · refusal · moving or re-bolding 192.1's paragraph in CLAUDE.md — a prose change this slice has no instrument for, with 158.2's prose growth open · refused · 95d4aca9
+- 2026-09-08 14:52 · Objective · grill · 355 — Objective grill of Slices 353, 354: 103 of 107 figures reproduce; 354's halves table mixes two conventions (11 -> 12 of 21), 353's verdict series reads the pre-commit tip · logged · b1da20c7
+- 2026-09-08 14:52 · Meta · refusal · a gate or prose change on the unanchored 'at HEAD' shape — base rate is 14/161 population and the string is correct wherever the commit does not move the figure (94.11) · refused · b1da20c7
 
 ## Sunset test
 
