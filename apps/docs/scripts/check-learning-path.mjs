@@ -14,6 +14,15 @@
  *      `npm i` because installation IS a command, and `/concepts/cascade` opens
  *      with CSS because the subject IS CSS. Forcing a widget above those would
  *      be decoration, which is the failure the charter calls out.
+ *
+ *      THE EXEMPTION IS THE MAJORITY CASE, AND THE PASS MESSAGE USED TO HIDE
+ *      THAT (roadmap 328.1, measured 2026-09-08 in a real browser): 3 of 24
+ *      pages here carry a preview; the other 21 are exempt, and every one of
+ *      them renders `bo-*` markup outside any preview. So check 1 judges an
+ *      eighth of what it sweeps. Widening it was refused on that same
+ *      measurement — "renders `bo-*` outside a `<pre>`" is true of 24 of 24,
+ *      a predicate uniformly true of the tree, which is 94.11's ceremony.
+ *      What changed instead is the message: it now reports the split.
  *   2. NO DEAD ENDS — every page on the path links onward.
  *
  * A third check was tried and REMOVED: "every framework term links to where it
@@ -95,6 +104,7 @@ if (process.argv.includes('--self-test')) {
 
 const failures = [];
 let checked = 0;
+let judged = 0;
 
 for (const page of await distPages(DIST)) {
   if (!ON_PATH.test(page.url)) continue;
@@ -102,6 +112,7 @@ for (const page of await distPages(DIST)) {
   const content = contentOf(page.html);
 
   const { code, rendered } = resultBeforeCode(page.html);
+  if (rendered >= 0) judged += 1;
   // Exempt when there is no preview at all: see the header.
   if (rendered >= 0 && code >= 0 && rendered > code) {
     failures.push(
@@ -128,4 +139,23 @@ if (failures.length) {
   for (const f of failures) console.error('  ' + f);
   process.exit(1);
 }
-console.log(`learning-path check passed — ${checked} pages show a result before code, and none is a dead end`);
+/* Report the SPLIT, never the population, because the two are far apart and the
+   old message quoted the population (roadmap 328.1). It read "N pages show a
+   result before code" with N = every page swept — but the result-before-code
+   half only judges a page that carries a `.demo-pair__preview`, and on this
+   population that is 3 of 24. The other 21 were exempt and were counted as
+   having shown a result. Same defect as the "1 of 18 learning-path pages shows
+   anything working" figure 328.1 was filed over, pointing the other way: that
+   one under-reported from a Demo-shaped signal, this one over-reported from the
+   same signal. Only the dead-end half covers all `checked` pages.
+
+   Worded as "none opens with code before it" rather than "all show a result
+   first", because `judged` also admits a page with a preview and NO code block
+   at all — vacuously passing, and the stronger phrasing would be a claim the
+   condition above does not make. All 3 today carry `<pre>` in their content
+   region; that is a reading of today's tree, not a property of the check. */
+console.log(
+  `learning-path check passed — ${checked} pages swept, none a dead end; ` +
+    `${judged} carry a paired preview and none of those opens with code before it, ` +
+    `${checked - judged} carry no preview and are exempt from that half (see this file's header)`,
+);

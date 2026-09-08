@@ -320,6 +320,134 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 356 — `328.1` answered and closed as NOT-A-PATTERN: exactly **1** live instrument answers *"does this page show a result"* with a Demo-shaped signal — and measuring it found the surviving instance reporting the population where it means an eighth of it, 24 where the honest number is 3 (2026-09-08)
+
+**Dispatched by rule 4**, cloud wake. Step 0b read `Standardize 3 / 4 ok`,
+`Objective 0 / 3 ok`, `Optimize 0 wake-date(s) newer ok`; rule 1 **0** open P0
+(`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md`, across 32 open items). So rules
+1-3 were clear and rule 4 took the oldest still-open item no other block covers
+— **`328.1`**, unchanged from the previous two hand-offs. Step 1: both intakes
+read with `ENVIRONMENT.md` §8's controls in one run — `/issues?state=open`
+**200 len 1**, `/discussions` **200 len 0**, `/not-a-real-route` **404**. Issue
+#2's `updated_at` unmoved at `2026-09-06T15:10:34Z` for a **twenty-second**
+consecutive hand-off; no new input, so Step 1 committed nothing.
+
+### The count the Accept asked for: 1
+
+`328.1` said *"measure before building: count how many live instruments still
+ask 'does this page use `Demo`' when the question they are answering is 'does
+this page show a result'. If the answer is one, close this as not-a-pattern with
+the count."* The answer is **one**, so it closes.
+
+The population is **160** committed script files — every `.mjs`/`.js`/`.py`
+under the four directories that hold this repo's detectors, generators and
+reports (`apps/docs/scripts` 78, `packages/core/scripts` 32, `scripts` 12,
+`examples` 38):
+
+```
+git ls-files 'apps/docs/scripts/*.mjs' 'packages/core/scripts/*.mjs' \
+    'scripts/**' 'examples/**/*.mjs' | grep -cE '\.(mjs|js|py)$'          # 160
+```
+
+**8 of the 160 carry a Demo-family signal at all** — `demo-pair`, `<Demo`,
+`Demo.astro`, `class="demo"` or `section.demo`, on a line that is not a comment.
+Comment-only mentions are excluded deliberately, per the removal rule: prose
+explaining a signal is not an instrument reading it.
+
+| script | what its Demo signal is for | asks the wrong question? |
+|---|---|---|
+| `check-learning-path.mjs` | `.demo-pair__preview` decides whether check 1 judges a page | **YES — the one** |
+| `dist-pages.mjs` | `demoRegion()` anchors the content region, then STRIPS `<pre>` | no — its header already refuses both traps |
+| `check-components-used.mjs` | `<section class="demo">` in its own `--self-test` fixtures | no |
+| `check-claims.mjs` | `section.demo` / `.demo-pair__preview` / `details.demo-pair__code` as region anchors and subjects on **named single pages** | no |
+| `check-page-shape.mjs` | `<section class="demo">` as a skeleton part, and its position vs `ClassRef`/`ApiTable` | no |
+| `scope-search-index.mjs` | preview divs are pagefind-ignored as rendered-widget noise | no |
+| `derive-readme-facts.mjs` | splits on `<section class="demo">` to lift ONE named section | no |
+| `new-component.mjs` | the scaffolder WRITES a `<Demo>`; it reads nothing | no (not a detector) |
+
+`dist-pages.mjs` is the reason this is one and not two, and it is worth naming
+because it is the shape that got this right first: `demoRegion()` answers *"what
+does this page render"* and its header records the two dead detectors it was
+built against — the shell's own `.bo-offcanvas` counted in 17 of 17 screens when
+the real figure is 1, and markup a reader COPIES counted as markup the screen
+renders. It uses `<section class="demo">` only to find where content starts.
+
+**So two occurrences a month apart were one habit, not a systematic gap** — and
+the item was right to demand the count before proposing anything. No gate is
+added.
+
+### What the measurement found in the surviving one, which is why this slice is not a one-line tick
+
+`check-learning-path.mjs` sweeps the 24 `/getting-started/` and `/concepts/`
+pages and printed:
+
+```
+learning-path check passed — 24 pages show a result before code, and none is a dead end
+```
+
+It now reads:
+
+```
+learning-path check passed — 24 pages swept, none a dead end; 3 carry a paired
+preview and none of those opens with code before it, 21 carry no preview and are
+exempt from that half (see this file's header)
+```
+
+Its result-before-code half only judges a page carrying a `.demo-pair__preview`;
+a page without one is **exempt**, which the header states and defends. Measured
+in a real browser against the built site (probe in the wake's scratchpad, DOM
+readings at 1440px after `networkidle0` + 2 rAF):
+
+- **3 of 24** pages carry a preview — `/concepts/scale/` (1),
+  `/getting-started/first-screen/` (3), `/getting-started/htmx/` (1).
+- **21 of 24** are exempt.
+- **21 of 21** of those exempt pages nonetheless render `bo-*` markup outside
+  any preview and outside any `<pre>`, ranging from `other=1`
+  (`/concepts/container-queries/`, `/getting-started/versioning/`) to
+  `other=99` (`/concepts/js-behaviors/`).
+
+So the message quoted the **population** for a check that judges an **eighth** of
+it, and the 21 it had no opinion about were reported as pages that "show a
+result before code". **That is `328.1`'s own defect in the one instrument
+`328.1` leaves standing**, pointing the opposite way from the figure that filed
+it: *"1 of 18 learning-path pages shows anything working"* under-reported from a
+Demo-shaped signal; this over-reported from the same signal.
+
+The gate's HTML-string reading and the browser probe were written independently
+and agree exactly on the split — **3 / 21 / 24** both ways. That agreement is
+the reconciliation, not the probe on its own.
+
+**Red-proved by injection.** A single `<div class="demo-pair__preview">` was
+inserted into `dist/concepts/tokens/index.html` immediately after its first
+`<section class="demo">` opening tag, with three assertions before the write:
+the anchor is not inside an HTML comment (`rfind('<!--') <= rfind('-->')`), the
+page carried no preview beforehand, and the result contains exactly **1**
+occurrence. The gate moved **3 → 4** judged and **21 → 20** exempt, and returned
+to **3 / 21** on restore.
+
+### Refused, on the base rate — widening check 1
+
+The obvious next move is to make check 1 judge every page: *"something renders
+before the first code block"*, with "renders" meaning a visible `bo-*` element
+outside a `<pre>`. **Refused, measured:** that predicate is true of **24 of 24**
+pages on this population. A predicate uniformly true of the tree distinguishes
+nothing however carefully it is written — roadmap 94.11's rule, and the same
+reading that makes the count above a **1** rather than a systemic finding.
+
+What changed is therefore the **message**, not the detector: it now reports the
+split it actually measured. The `--self-test`'s three cases are unchanged and
+still pass, because the detector is unchanged.
+
+1. [x] **356.1 — `328.1` answered on its Accept's stated satisfying branch:
+       the count is ONE, so it closes as not-a-pattern and no gate is added.**
+       **1** live instrument of the **8** carrying a Demo-family signal, out of
+       **160** committed script files, answers *"does this page show a result"*
+       with that signal. Two occurrences a month apart were one habit. Widening
+       the survivor is refused on a **24 of 24** base rate (94.11). The
+       instrument was corrected in passing rather than left: its pass message
+       reported **24** where the honest figure is **3**, red-proved by an
+       injection that moved it to **4** and back.
+
 ## Slice 355 — Objective grill of Slices 353, 354: 103 of 107 published figures reproduce, and both defects are a number that is right at one revision and wrong at the one it ships on — 354's heading count is the body-only convention while its own population column is the whole-text one, and 353's verdict series describes the tip the wake READ (2026-09-08)
 
 **Dispatched by rule 3** at `Objective 3 / 3 slices [325, 327, 353] OVERDUE`,
@@ -4186,7 +4314,20 @@ internal links against `dist`. Full docs build green.
        measurement above. Its open question — *"or three of the six rows
        cut"* — is answered: nothing is cut, because nothing was missing.
 
-1. [ ] **328.1 — The `Demo`-component detector has now produced a wrong count
+1. [x] **328.1 — CLOSED 2026-09-08 by Slice 356 (cloud wake, rule 4) on the
+       Accept's stated satisfying branch: the count is ONE, so this is
+       not-a-pattern and no gate is added.** **1** of the **8** script files
+       (of **160** committed) carrying a Demo-family signal answers *"does this
+       page show a result"* with it — `check-learning-path.mjs`. Measuring it
+       found that survivor over-reporting the mirror image of the figure that
+       filed this item: its pass message quoted the **24**-page population for
+       a check that judges **3**, the other **21** being exempt — and **21 of
+       21** of those exempt pages render `bo-*` markup anyway. The message now
+       reports the split; widening the check is refused on a **24 of 24** base
+       rate. Commands, the browser probe and the injection red-proof are in
+       Slice 356. Original text below.
+
+       **328.1 — The `Demo`-component detector has now produced a wrong count
        twice, a month apart, and nothing stops a third.** Once as *"1 of 18
        learning-path pages"* (true figure 16 of 18) and once as `249.6`'s
        three-✗ table. Both times the fix was local to the item; the detector
