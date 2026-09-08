@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-08 18:58 UTC
+Generated at: 2026-09-08 19:56 UTC
 
 ## Open items by slice
 
@@ -21,8 +21,6 @@ Generated at: 2026-09-08 18:58 UTC
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - **Slice 320** (1 open)
   - 320.3 — the same idiom, two values, in two shared components.
-- **Slice 331** (1 open)
-  - 331.1 — `install-prompts.md`, generated from `api.json`.
 - **Slice 332** (1 open)
   - 332.1 — `ENVIRONMENT.md` doubled in 8 days and every wake reads all of it.
 - **Slice 333** (1 open)
@@ -64,9 +62,9 @@ Generated at: 2026-09-08 18:58 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1682 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-09-08 16:51   ok
-  Objective     0 / 3 slices          since 2026-09-08 18:58   ok
+dispatch status — counter-triggered rules (1683 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-09-08 16:51   ok
+  Objective     1 / 3 slice           since 2026-09-08 18:58   ok  [331]
   Optimize      0 wake-date(s) newer   since 2026-09-08 00:17   ok   [newest pair: dispatch-region-words; 140 sample(s), 8 of 47 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (39 of 47 name(s) have only one day and are not an input to a rule that compares two runs):
        dispatch-region-words       2d  2026-09-07 7298 words -> 2026-09-08 7492 words  +194
@@ -96,7 +94,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-08 14:52 · Meta · refusal · a gate or prose change on the unanchored 'at HEAD' shape — base rate is 14/161 population and the string is correct wherever the commit does not move the figure (94.11) · refused · b1da20c7
 - 2026-09-08 15:49 · Continue · build · 356.1 — 328.1 answered: 1 of 8 Demo-signal scripts (of 160) answers 'does this page show a result' with it, so it closes as not-a-pattern; the survivor's pass message corrected from 24 to the real 3/21/24 split, red-proved by injection · landed · 78e96150
 - 2026-09-08 15:49 · Meta · refusal · widening check-learning-path's result-before-code half to every page — the predicate 'renders bo-* outside a <pre>' is true of 24 of 24, uniformly true of the tree (94.11) · refused · 78e96150
 - 2026-09-08 16:51 · Standardize · sweep · Slice 357 — Standardize sweep, 4 of 4 lanes clean; 350.1's lane-input predicate is not per-lane, lane 2 blind on 58/139 (41.7%) windows, red-proved both ways; report-css-repeats.mjs now names its input tree · landed · 919d55d5
@@ -106,6 +103,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-08 18:58 · Objective · grill · Slice 359 — Objective grill of Slices 356, 357, 358: 60 of 64 published assertions reproduce (one per table row, stated because this wake's own first draft published 84/80 from a figure-level tally that did not survive a recount), every red-proved headline figure to the digit; all four defects are a sentence CHARACTERISING a measurement — 358's widening summary sums to 151 not 153, 357's 'nearly 3x the rate 350.1 records' is 351.1's amended 14.4% under 350.1's name, and 356's other=1..99 range names no instrument and re-measures 4/5/103. All corrected in place; nothing proposed · landed · 2bb15e7d
 - 2026-09-08 18:58 · Meta · refusal · a fifth loop-mechanics item restating 192.1 — refused on 355.3's precedent and on Slice 354's measurement that 192.1 is applied in 1 of 161 slices · refused · 2bb15e7d
 - 2026-09-08 18:58 · Meta · refusal · a gate over 'this sentence characterises the measurement correctly' — semantic, 94.11 · refused · 2bb15e7d
+- 2026-09-08 19:56 · Continue · build · 331.1 — install-prompts.md generated from api.json (Slice 360) · refused · cfd781ab
 
 ## Sunset test
 

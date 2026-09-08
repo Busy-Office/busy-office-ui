@@ -178,7 +178,7 @@ instead of a disagreement — the silent kind of wrong this file exists for.
 
 ```
 git fetch --unshallow origin
-git tag | wc -l                 # THE check — 7 here; 0 means fetch them
+git tag | wc -l                 # THE check — run it; 0 means fetch them
 git fetch --tags origin         # idempotent, under a second, safe to always run
 ```
 
@@ -194,8 +194,19 @@ and the durable file went on stating the value; correcting it here is the split
 this file exists for (169.3), and it is written as the property — *run the
 count* — rather than as the new value, per CLAUDE.md's criterion rule. A sixth
 container reading `0` is not a new bug; it is the reason the count is the check.
+**The inline `# 7 here` was removed on 2026-09-08 (Slice 360), because that wake
+counted 8** — the value drifts with every release, so pinning it here converts a
+normal reading into an apparent disagreement, which is the failure this bullet
+already describes one level up.
 
 ## 2b. A TIMED-OUT UNSHALLOW LEAVES `.git/shallow.lock`, AND EVERY LATER FETCH THEN FAILS QUIETLY
+
+**Bit again on 2026-09-08 (Slice 360, cloud wake)**, so this is not a one-off:
+the first `--unshallow` was killed by a **280s** tool timeout, left the 0-byte
+lock, and the next `git rev-parse --is-shallow-repository` still read `true` at
+50 commits. `rm -f .git/shallow.lock` then a plain re-run gave **2,087** commits.
+Recovery took one attempt because this section was read first, which is the only
+evidence a durable file earns.
 
 Bit for real on 2026-08-30 (Slice 216, cloud wake) and cost three attempts. The
 "~25s" above is not a floor: that wake's first `git fetch --unshallow origin`
