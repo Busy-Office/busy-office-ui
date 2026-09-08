@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-08 14:52 UTC
+Generated at: 2026-09-08 15:49 UTC
 
 ## Open items by slice
 
@@ -21,8 +21,6 @@ Generated at: 2026-09-08 14:52 UTC
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - **Slice 320** (1 open)
   - 320.3 — the same idiom, two values, in two shared components.
-- **Slice 328** (1 open)
-  - 328.1 — The `Demo`-component detector has now produced a wrong count twice, a month apart, and nothing stops a third.
 - **Slice 330** (1 open)
   - 330.1 — Sampling is now a named failure mode here, twice.
 - **Slice 331** (1 open)
@@ -68,9 +66,10 @@ Generated at: 2026-09-08 14:52 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1673 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-09-08 09:54   ok
-  Objective     0 / 3 slices          since 2026-09-08 14:52   ok
+dispatch status — counter-triggered rules (1675 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-09-08 09:54   OVERDUE
+  Objective     1 / 3 slice           since 2026-09-08 14:52   ok  [356]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-09-08 00:17   ok   [newest pair: dispatch-region-words; 140 sample(s), 8 of 47 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (39 of 47 name(s) have only one day and are not an input to a rule that compares two runs):
        dispatch-region-words       2d  2026-09-07 7298 words -> 2026-09-08 7492 words  +194
@@ -100,8 +99,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-08 12:02 · Meta · refusal · the Accept's third branch — a shape-only column kept undefined — refused, because the shape is not checkable without the window and the one probe the page points at produces a different one · refused · 3d2816a2
-- 2026-09-08 12:52 · Continue · build · 353.1 — 326.3 answered: the dispatch region has two kinds of growth (a rule changing vs a GENERATOR section) and the whole-region ratio cannot tell them apart; report_loop_prose.py now prints per-section body deltas since the last commit that REDUCED the region, red-proved by injection after the first draft's residual reconciliation passed it, and reproducing 339.1's published series 3 of 3 and its deltas 5 of 5 · landed · 1310b81a
 - 2026-09-08 12:52 · Meta · refusal · a per-rule word ceiling for the dispatch region — a ceiling low enough to bind fails the sections 326.2 attributed to rules that changed, one above 980 binds nothing, and 'the decision content is short' is semantic (94.11) · refused · 1310b81a
 - 2026-09-08 12:52 · Meta · refusal · a rules-file/rationale-file split of Step 2 — the repo's one precedent (169.3) moved RESUME.md's Step-0 read 3,150 -> 3,349 the same day and 9,310 at HEAD, 2.96x, because Step 0 names both files · refused · 1310b81a
 - 2026-09-08 12:52 · Meta · refusal · cutting the dispatch region this wake — 274.2's and 339.1's cuts between them measure that a cut without a mechanism holds about 15 commits · refused · 1310b81a
@@ -110,6 +107,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-08 13:46 · Meta · refusal · moving or re-bolding 192.1's paragraph in CLAUDE.md — a prose change this slice has no instrument for, with 158.2's prose growth open · refused · 95d4aca9
 - 2026-09-08 14:52 · Objective · grill · 355 — Objective grill of Slices 353, 354: 103 of 107 figures reproduce; 354's halves table mixes two conventions (11 -> 12 of 21), 353's verdict series reads the pre-commit tip · logged · b1da20c7
 - 2026-09-08 14:52 · Meta · refusal · a gate or prose change on the unanchored 'at HEAD' shape — base rate is 14/161 population and the string is correct wherever the commit does not move the figure (94.11) · refused · b1da20c7
+- 2026-09-08 15:49 · Continue · build · 356.1 — 328.1 answered: 1 of 8 Demo-signal scripts (of 160) answers 'does this page show a result' with it, so it closes as not-a-pattern; the survivor's pass message corrected from 24 to the real 3/21/24 split, red-proved by injection · landed · 78e96150
+- 2026-09-08 15:49 · Meta · refusal · widening check-learning-path's result-before-code half to every page — the predicate 'renders bo-* outside a <pre>' is true of 24 of 24, uniformly true of the tree (94.11) · refused · 78e96150
 
 ## Sunset test
 
