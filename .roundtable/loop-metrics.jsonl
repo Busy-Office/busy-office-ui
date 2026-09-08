@@ -136,3 +136,4 @@
 {"ts": "2026-09-07 23:29", "name": "claims", "value": 176.0, "unit": "count"}
 {"ts": "2026-09-07 23:29", "name": "target-size-pages", "value": 7.0, "unit": "pages"}
 {"ts": "2026-09-08 00:17", "name": "dispatch-region-words", "value": 7492.0, "unit": "words"}
+{"ts": "2026-09-08 00:53", "name": "dead-declarations", "value": 52.0, "unit": "count"}

@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-08 00:17 UTC
+Generated at: 2026-09-08 00:53 UTC
 
 ## Open items by slice
 
@@ -19,8 +19,7 @@ Generated at: 2026-09-08 00:17 UTC
   - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
 - **Slice 296** (1 open)
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
-- **Slice 320** (2 open)
-  - 320.2 — judge each declaration separately, so a dead one cannot hide behind a live sibling.
+- **Slice 320** (1 open)
   - 320.3 — the same idiom, two values, in two shared components.
 - **Slice 322** (1 open)
   - 322.3 — should a phrase-count over `ROADMAP.md` / `ROADMAP-archive.md` be taken whitespace-normalised by default?
@@ -60,18 +59,20 @@ Generated at: 2026-09-08 00:17 UTC
   - 339.2 — the sweep's re-scan found a SECOND section with the same unexecuted charter, and this item is deliberately not the fix.
 - **Slice 341** (1 open)
   - 341.1 — Step 0c's generator has TWO outputs and its charter throttles only one. The cut lasted exactly one commit.
+- **Slice 342** (1 open)
+  - 342.1 — the 52 are a lane-1 finding, not this item's to spend.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1636 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-09-07 21:52   ok
-  Objective     0 / 3 slices          since 2026-09-08 00:17   ok
-  Optimize      0 wake-date(s) newer   since 2026-09-07 23:29   SKEW   [newest pair: claims; 137 sample(s), 7 of 46 name(s) paired across days]
-     1 further date(s) (2026-09-08) are NOT counted above: every row on them is naive-later than the pair by less than the 8h between the two dispatchers' clocks, so the ordering is undetermined, not stale (roadmap 306.1). Both files carry naive local stamps and neither says which clock wrote it. Recording another metric does not move this line.
-     rule 5's comparable set — 7 name(s) sampled on 2+ distinct days (39 of 46 name(s) have only one day and are not an input to a rule that compares two runs):
+dispatch status — counter-triggered rules (1640 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-09-07 21:52   ok
+  Objective     1 / 3 slice           since 2026-09-08 00:17   ok  [320]
+  Optimize      0 wake-date(s) newer   since 2026-09-08 00:17   ok   [newest pair: dispatch-region-words; 138 sample(s), 8 of 46 name(s) paired across days]
+     rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (38 of 46 name(s) have only one day and are not an input to a rule that compares two runs):
+       dispatch-region-words       2d  2026-09-07 7298 words -> 2026-09-08 7492 words  +194
        claims                      4d  2026-09-06 169 count -> 2026-09-07 176 count  +7
        gates                       3d  2026-08-19 27 count -> 2026-09-07 55 count  +28
        axe-violations              8d  2026-09-03 0 count -> 2026-09-06 0 count  +0   NEVER MOVED
@@ -97,16 +98,16 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-07 19:07 · Meta · refusal · building 336.2 inside the grill — the union question is filed with its base rate, not answered here · refused · 86f034ce
-- 2026-09-08 03:15 · Objective · grill · Objective grill of 297 (collision 5 — the cloud dispatcher ran the same rule and took 315/332/333, so those are ceded to its Slice 336). Defect: 297 called config.yml a third 'template' that 'enforces', when it is the router whose first line is blank_issues_enabled:true — the escape hatch counted as an enforcer. The archive entry it compressed had said 'blank issues on' outright, and Slice 335 spent an API round-trip rediscovering it. Filed 337.1. · landed · 69e43460
-- 2026-09-07 19:53 · Continue · build · 316.1 — check:print-tokens: no theme colour token inside @media print, red-proved twice · landed · e4742fd4
-- 2026-09-07 19:53 · Meta · refusal · the exemption list 316.1 anticipated for print-color-adjust:exact fills — measured, all three such rules declare no colour inside @media print at all · refused · e4742fd4
 - 2026-09-07 21:52 · Standardize · sweep · Slice 339 — Standardize sweep 4 of 4 lanes: lanes 1-3 clean (0 dead of 1,365 attrs; css-repeats 74/242/230/8 a 5th time; 15 flagged prose pages all inside the pinned 16-set). Lane 4's finding is a THIRD case 308.1's fork does not name: Step 0c held FLAT at 936 across 15 commits after 274.2's cut, then two collision write-ups took it to 1,500 — past its pre-cut 1,378. The cut held; the charter behind it was never executed. Applied the charter (forensics to LOOPS-archive.md, instruction inline) rather than cutting again; 1,322 net, and the first attempt moving only 13 words is recorded · landed · f9e0f17d
 - 2026-09-07 23:29 · Continue · build · 319.3 — check:target-size cannot see a named pixel size (red-proved); growth refused on cost+blindness, six pixel claims moved to check:claims · landed · 0d8cc85f
 - 2026-09-07 23:29 · Meta · refusal · growing check:target-size's page list 7 -> 14: +86% CI time, identical exempted set, and the gate's predicate cannot see a pixel claim at all · refused · 0d8cc85f
 - 2026-09-08 00:17 · Meta · collision · collision 5 recorded per 274.2's charter — both dispatchers ran rule 4 on 319.3, same verdict, same slice number; loser discarded after all 17 gates green · logged · aac39366
 - 2026-09-08 00:17 · Meta · refusal · re-running the rule-4 dispatch on 319.3 — the winner's analysis strictly dominated, so the loser's output was checked and discarded · refused · aac39366
 - 2026-09-08 00:17 · Objective · grill · Slice 341 — grill of 316/319/339: 17 of 17 assertions reproduce; 341.1 filed — Step 0c's cut lasted one commit and its generator has an unnamed second output · landed · aac39366
+- 2026-09-08 00:53 · Continue · build · 320.2 — scan:dead-style judges each declaration on its own; the blind spot was NOT empty: 52 dead declarations on 13 pages, all inside attributes the attribute verdict calls live, reconciled against the re-measured 357-of-1365 corpus rather than 320.2's stale 273. Self-test gains a mixed control and fails on exactly one of five assertions when the verdict is put back to the whole attribute (red-proved by injection). 342.1 files the 52 for the next Standardize lane 1 · landed · cdfcb129
+- 2026-09-08 00:53 · Meta · refusal · a depth-aware declaration splitter — base rate 0 of 30,483 style attributes in dist carry a ';' inside a value, so it distinguishes nothing today (94.11) · refused · cdfcb129
+- 2026-09-08 00:53 · Meta · refusal · fixing the 52 dead declarations inside this round — it mixes an instrument change with a corpus change and needs per-site judgement; filed as 342.1 · refused · cdfcb129
+- 2026-09-08 00:53 · Meta · refusal · a thirteenth archive sweep — closed-history share 33.1%, below every measured trigger (55.1%, 56.7%, and the 40.6% at which 279.3 declined); sweeping would pre-empt the open owner call 249.12 · refused · cdfcb129
 
 ## Sunset test
 
