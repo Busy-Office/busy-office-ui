@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-08 15:49 UTC
+Generated at: 2026-09-08 16:51 UTC
 
 ## Open items by slice
 
@@ -66,10 +66,9 @@ Generated at: 2026-09-08 15:49 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1675 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-09-08 09:54   OVERDUE
-  Objective     1 / 3 slice           since 2026-09-08 14:52   ok  [356]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+dispatch status — counter-triggered rules (1678 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-09-08 16:51   ok
+  Objective     2 / 3 slices          since 2026-09-08 14:52   ok  [356, 357]
   Optimize      0 wake-date(s) newer   since 2026-09-08 00:17   ok   [newest pair: dispatch-region-words; 140 sample(s), 8 of 47 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (39 of 47 name(s) have only one day and are not an input to a rule that compares two runs):
        dispatch-region-words       2d  2026-09-07 7298 words -> 2026-09-08 7492 words  +194
@@ -99,9 +98,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-08 12:52 · Meta · refusal · a per-rule word ceiling for the dispatch region — a ceiling low enough to bind fails the sections 326.2 attributed to rules that changed, one above 980 binds nothing, and 'the decision content is short' is semantic (94.11) · refused · 1310b81a
-- 2026-09-08 12:52 · Meta · refusal · a rules-file/rationale-file split of Step 2 — the repo's one precedent (169.3) moved RESUME.md's Step-0 read 3,150 -> 3,349 the same day and 9,310 at HEAD, 2.96x, because Step 0 names both files · refused · 1310b81a
-- 2026-09-08 12:52 · Meta · refusal · cutting the dispatch region this wake — 274.2's and 339.1's cuts between them measure that a cut without a mechanism holds about 15 commits · refused · 1310b81a
 - 2026-09-08 13:46 · Continue · build · 327.3 — 192.1 is cited as a name for a defect, not executed: 1 of 161 slices carries the inventory it prescribes; rule fine, practice is the gap, nothing built · logged · 95d4aca9
 - 2026-09-08 13:46 · Meta · refusal · a gate over 'this claim names its instrument' — base rate 65.2% of the population and 31.6% of pre-rule slices, so the checkable shape distinguishes nothing (94.11) · refused · 95d4aca9
 - 2026-09-08 13:46 · Meta · refusal · moving or re-bolding 192.1's paragraph in CLAUDE.md — a prose change this slice has no instrument for, with 158.2's prose growth open · refused · 95d4aca9
@@ -109,6 +105,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-08 14:52 · Meta · refusal · a gate or prose change on the unanchored 'at HEAD' shape — base rate is 14/161 population and the string is correct wherever the commit does not move the figure (94.11) · refused · b1da20c7
 - 2026-09-08 15:49 · Continue · build · 356.1 — 328.1 answered: 1 of 8 Demo-signal scripts (of 160) answers 'does this page show a result' with it, so it closes as not-a-pattern; the survivor's pass message corrected from 24 to the real 3/21/24 split, red-proved by injection · landed · 78e96150
 - 2026-09-08 15:49 · Meta · refusal · widening check-learning-path's result-before-code half to every page — the predicate 'renders bo-* outside a <pre>' is true of 24 of 24, uniformly true of the tree (94.11) · refused · 78e96150
+- 2026-09-08 16:51 · Standardize · sweep · Slice 357 — Standardize sweep, 4 of 4 lanes clean; 350.1's lane-input predicate is not per-lane, lane 2 blind on 58/139 (41.7%) windows, red-proved both ways; report-css-repeats.mjs now names its input tree · landed · 919d55d5
+- 2026-09-08 16:51 · Meta · refusal · a gate on 'this window could move this lane' — the verdict needs a diff read (350.1's own comment-only instrument change), and 94.11 forbids gating a semantic property · refused · 919d55d5
+- 2026-09-08 16:51 · Meta · refusal · the fourteenth archive sweep at 45.9% — declined on scope, not the number: a sweep is a hand-checked bulk edit one slice at a time · refused · 919d55d5
 
 ## Sunset test
 

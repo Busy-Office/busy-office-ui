@@ -353,8 +353,14 @@ reading taken one commit earlier at `78e96150`, which is **expected rather than
 informative**: `30d94cc7` is that wake's recording commit and does not touch
 `ROADMAP.md`, so the four-wake rise (41.1 → 43.9 → 44.5 → 45.9) has had no
 opportunity to continue — it has not paused, it has not been sampled again. The
-revision is named because **this commit moves it**: every line of this slice
-lands under an open heading, so the closed share falls. Re-run
+revision is named because **this commit moves it, UPWARD**, and the first draft
+of this paragraph forecast the opposite: it said *"every line of this slice
+lands under an open heading, so the closed share falls."* Slice 357 closes its
+only item in the same commit, so it is a **closed** slice and all 238 of its
+lines land as closed history — `919d55d5` reads **5,525 / 11,802 = 46.8%**, up
+0.9pp. Recorded rather than quietly fixed, because it is CLAUDE.md's criterion
+rule biting inside a sweep: the prediction was checkable and wrong, and only
+re-running the script caught it. Re-run
 `python3 scripts/loops/roadmap_scope.py` at the commit rather than quoting this.
 It remains **4.4pp above `324.3`'s thirteenth sweep at 41.5%** and above
 every declined reading on record. Declined here for **scope, not the number**: a
