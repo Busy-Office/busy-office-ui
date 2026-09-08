@@ -1690,3 +1690,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-08 18:58 · Meta · refusal · a gate over 'this sentence characterises the measurement correctly' — semantic, 94.11 · refused · 2bb15e7d
 - 2026-09-08 19:56 · Continue · build · 331.1 — install-prompts.md generated from api.json (Slice 360) · refused · cfd781ab
 - 2026-09-08 22:53 · Continue · build · 332.1 — audited all 18 ENVIRONMENT.md sections against this container: 17 live (4 BIT this wake), 1 dead (§3, astro 5.18.2 DOES clear dist) rewritten with the inverse live hazard; §1c 15->17 and a 40-char count 31->30 corrected · landed · 13545b20
+- 2026-09-08 23:52 · Continue · build · 333.1 decided — tsconfig not a gate; base rate 0 of 600 consts but 1 of 1,118 frontmatter bindings, a 22-day-old dead import deleted and proved render-neutral · landed · 9307c6aa
+- 2026-09-08 23:52 · Meta · refusal · a 54th gate for never-used frontmatter bindings — it duplicates a subset of noUnusedLocals and forces a README re-stamp on the npm front page · refused · 9307c6aa
