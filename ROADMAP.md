@@ -320,7 +320,121 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
-## Slice 354 — `327.3` answered: 192.1 entered this loop's vocabulary as a NAME FOR A DEFECT, not as a step in a write-up — **11 of 21** citations quote its observation half, **1 of 21** its instruction half (and that one a restatement, not an application), and **1 of 161** slices since it landed carries the inventory it prescribes (2026-09-08)
+## Slice 355 — Objective grill of Slices 353, 354: 103 of 107 published figures reproduce, and both defects are a number that is right at one revision and wrong at the one it ships on — 354's heading count is the body-only convention while its own population column is the whole-text one, and 353's verdict series describes the tip the wake READ (2026-09-08)
+
+**Dispatched by rule 3** at `Objective 3 / 3 slices [325, 327, 353] OVERDUE`,
+read from `dispatch_status.py` this wake rather than carried from the hand-off.
+Rule 1 **0** open P0 (`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md`, across 32
+open items); rule 2 `Standardize 3 / 4 ok`. Full report:
+`.roundtable/grill-objective-353-354-2026-09-08.md`.
+
+**Scope, per §6 step 0 — two grilled, one dropped, one added.** **325 dropped**,
+grilled in full by `.roundtable/grill-objective-324-325-347-350-2026-09-08.md`.
+**327 dropped as a slice** — it is itself a grill, closed 2026-09-07, and is in
+the arming set only because the recorded row's item text begins `327.3 — …`, so
+the counter names slice 327 and never names **354**, the slice the round
+actually wrote. That is `349.1` reproducing a fifth time; **not re-filed here**,
+it is open and needs whoever owns `LOOPS.md`'s text. **354 added**, as the slice
+the arming round produced. Grilled: **353 and 354**.
+
+**The instrument is an independent reimplementation, and that is what makes the
+one surviving mismatch mean something.** Slice 354's corpus extractor was a
+throwaway that was never committed, so it was rebuilt from scratch. It
+disagreed at first, and recovering three conventions fixed it: sections bound
+at **any** `^## ` heading (not `^## Slice`), the base-rate needles are
+**`re.IGNORECASE`**, and the observation-half needle is the substring
+**`shipped BESIDE`**, not the full quoted phrase. With those, it reproduces 335
+sections, 286 in both files, 161 population / 174 control, 268,072 words, median
+1,506 — then every base rate and every **id list** in both slices except the
+four figures below. **53 of Slice 354's 54 figures**, four of them exact id
+lists (`[278]`; `[193, 278, 290, 327, 342]`; `[176]`; and the undated pair
+`251` / `306`), is the reconciliation; there is no `--self-test`, because this
+is an ad-hoc measurement, not a gate.
+
+1. [x] **355.1 — Slice 354's halves table prints two conventions in one row,
+       and the wrong one reached the heading. Published `11 of 21`; measured
+       `12 of 21`. Corrected in place in all three locations.** The
+       observation-half slices are
+       `[212, 215, 229, 232, 236, 265, 285, 298, 299, 319, 322, 330]` — **12**,
+       under the same `shipped BESIDE` needle that produces the table's own
+       population figure of 12 (7.5%) and its licensing `0 / 174` control.
+       **The table is not off by one, it is internally impossible:** every one
+       of the 12 cites `192.1` and the self-slice `327` does not quote the
+       observation half, so the citation column and the population column count
+       the **same set** and cannot differ. `11` is the **body-only** count and
+       `12` is the whole-text count; the single discriminator is **Slice 319**,
+       which quotes the observation half in its heading only.
+       - **What it does not change:** the direction. 12 against 1 is the same
+         argument, slightly stronger, and the headline `1 of 161` reproduces
+         exactly, as does everything the base-rate section rests on. The defect
+         is in what shipped **beside** the headline measurement — 192.1's own
+         shape, inside the slice that measures compliance with 192.1.
+       - **Corrected:** Slice 354's heading, item `354.1`, and Slice 327's
+         `327.3` closure note — the three sites the figure had reached — each
+         by hand, with a correction block in Slice 354.
+       - **The obvious verification of that is a detector that cannot pass, and
+         it was written here before being caught.** This item's first draft
+         asserted `grep -c '11 of 21'` → 3 → 0, which is false the moment this
+         item says what it corrected: the string survives in the prose
+         explaining its removal. CLAUDE.md names it — *"an assertion that can
+         be tripped by its own explanation"* — under the removal rule, and the
+         grill that found the two defects below shipped an instance of it in
+         the same commit. **The structural check instead:** the three sites are
+         named above and each now reads `12`; the two remaining occurrences of
+         the old string are both inside this item, which is where they belong.
+
+2. [x] **355.2 — Slice 353's whole-region verdict section describes
+       `299f7063`, the tip the wake read, not `1310b81a`, the commit that
+       ships it. `ENVIRONMENT.md`'s `HEAD` bullet, third consecutive
+       instance. Corrected in place, with the revision named.**
+
+       | tip | revisions | FASTER | SLOWER | share |
+       |---|---|---|---|---|
+       | `299f7063` — the wake's Step 0 tip | **72** | **56** | 16 | **42.0%** |
+       | `1310b81a` — the commit carrying the claim | 73 | 57 | 16 | **41.8%** |
+       | `c1716ead` — this wake's Step 0 tip | 73 | 57 | 16 | 41.8% |
+
+       The published triple is `299f7063` exactly. `1310b81a` is Slice 353's own
+       commit **and** the last revision of `LOOPS.md`, so it adds the 73rd
+       revision and 66 words to the playbooks half. `275.3` added that bullet
+       after `273.1` published 16 where its commit makes it 17 and `274.1`
+       published a verdict already reversed at its own commit.
+       - **The instrument was not at fault — the transcription was.**
+         `report_loop_prose.py` prints its revision in its own first line
+         (`… -> HEAD (c1716ead)`); the figure was quoted into prose as *"now"*
+         and the sha was dropped. Nothing is missing from the script.
+       - **`353.2` files this exact defect about the metric in the same
+         commit**, quoting *"a figure with no revision beside it is read as
+         current"*, while the slice's own prose says `at HEAD` with no revision
+         beside it. **`353.2` stays open and untouched** — this is not that
+         item.
+       - **Everything else in Slice 353 reproduces**, including the split table
+         (`3,150` → `1,683 + 1,666` → `2,728 + 6,582 = 9,310`, **2.96x**),
+         which is read at `1310b81a` **correctly** — so the slice is
+         inconsistent with itself about which tip it stands on rather than
+         uniformly early.
+
+3. [x] **355.3 — the base rate was measured before anything was proposed, and
+       nothing is proposed.** `94.11`. An unanchored *"at `HEAD`"* is present
+       in **14 of 161** population slices (8.7%) and **0 of 174** control
+       slices — `[229, 232, 237, 245, 252, 253, 272, 294, 298, 315, 326, 343,
+       352, 353]` — while *"describes the tree at"*, the practice Slice 354
+       exemplifies, is **0** in the corpus and appears only in Slice 354
+       itself, i.e. **n = 1**.
+       - **No gate and no prose change.** *"At `HEAD`"* is correct wherever the
+         commit does not move the figure — Slice 353's own split table is the
+         worked case — so the checkable shape flags right answers, and *"this
+         figure survives its own commit"* is semantic. `341.1`, `349.1`,
+         `350.1`, `351.1` and `353.2` are already open on loop mechanics; a
+         sixth item restating a shape with no mechanism behind it is what this
+         repo refuses.
+       - **Not re-derived, said rather than implied:** Slice 354's hand-read
+         judgements — the widest `3 of 161`, the 3 marginal, and *"19 of 21 are
+         retrospective diagnoses"* — and its `random.seed(327)` sample, whose
+         pool is not published. The needles feeding them were re-run and all
+         reproduce; the readings were not re-made.
+
+## Slice 354 — `327.3` answered: 192.1 entered this loop's vocabulary as a NAME FOR A DEFECT, not as a step in a write-up — **12 of 21** citations quote its observation half, **1 of 21** its instruction half (and that one a restatement, not an application), and **1 of 161** slices since it landed carries the inventory it prescribes (2026-09-08)
 
 **Dispatched by rule 4**, cloud wake, on the oldest still-open item no other kind
 of block covers. Every open item older than `327.3` was re-read in the file
@@ -395,8 +509,29 @@ instruction half   "list the other claims a change is carrying and name the inst
 
 | | non-self citations of 192.1 (n=21) | all 161 population slices | control: 174 slices ≤ 192 |
 |---|---|---|---|
-| observation half quoted | **11** | 12 (7.5%) | **0** |
+| observation half quoted | **12** | 12 (7.5%) | **0** |
 | instruction half quoted | **1** | 5 → **2** after hand-read | 1 (a false positive) |
+
+### CORRECTED by the Objective grill of 353/354 (Slice 355, 2026-09-08)
+
+**The observation-half citation cell read `11` and is `12`**, and the two
+numbers are two conventions rather than an arithmetic slip. `11` counts slices
+quoting `shipped BESIDE` in their **body**; `12` counts the whole text — the
+convention this table's own population cell (12, 7.5%) and its licensing
+`0 / 174` control already use. The single discriminator is **Slice 319**, which
+quotes the observation half in its heading only:
+
+```
+observation half, whole text  12  [212, 215, 229, 232, 236, 265, 285, 298, 299, 319, 322, 330]
+observation half, body only   11  [212, 215, 229, 232, 236, 265, 285, 298, 299, 322, 330]
+```
+
+**The row was internally impossible, not merely wrong by one.** All 12 cite
+`192.1`, and the self-slice `327` does not quote the observation half — so the
+citations column and the population column count the same set and cannot
+differ. Nothing else in this slice moves: `1 of 161`, the id lists, and all six
+base rates reproduce exactly under an independent reimplementation of the
+extractor. The direction is unchanged and slightly strengthened.
 
 The one citation reaching the instruction half is **193** — a synthesis *table*
 of `CLAUDE.md`'s sections restating the rule, not an application of it. Of the
@@ -538,7 +673,8 @@ are the sentences this slice's own finding predicts would be wrong.
        and nothing is built.** The count is **1 of 161 (0.6%)** under the
        definition fixed before reading, **3 of 161 (1.9%)** at the widest, with
        the diagnosis that 192.1's *observation* half is what entered the
-       vocabulary (11 of 21 citations, against 1 of 21 for its instruction half,
+       vocabulary (12 of 21 citations — CORRECTED from 11 by Slice 355, see the
+       block above — against 1 of 21 for its instruction half,
        and that one a restatement in a table). Commands are in the sections
        above and re-runnable at this commit; the corpus extractor was a
        throwaway in the scratchpad, not added to the repo, because `327.3`
@@ -642,8 +778,8 @@ the rationale half — is deletion wearing a filename.
 
 ### What the whole-region verdict has actually been saying
 
-Over all **72** revisions of `LOOPS.md` since the 2026-08-20 base, the block's
-verdict reads `FASTER` on **56** and `SLOWER` on **16** — and the last `SLOWER`
+Over all **73** revisions of `LOOPS.md` since the 2026-08-20 base, the block's
+verdict reads `FASTER` on **57** and `SLOWER` on **16** — and the last `SLOWER`
 is `69cadcbb`, the revision before the share stepped 33.0% → 38.6% on
 2026-08-28. The block landed at `aa550d2c` on 2026-09-05, **56 revisions and 12
 Standardize sweeps after that step**, so every reading it has ever produced was
@@ -653,6 +789,25 @@ discriminated once in its own lifetime, and **both times a sweep reached a
 correct verdict on the region it came from a per-section reading that overturned
 this one** — 308.1 (*"+877 is five new rules, Step 0c holds at 936"*) and 339.1
 (*"the per-revision series says that verdict is wrong"*).
+
+**CORRECTED by the Objective grill of 353/354 (Slice 355, 2026-09-08): the
+three figures in this section were read at `299f7063`, the wake's Step 0 tip,
+not at `1310b81a`, the commit that ships them.** As published they were
+**72** revisions, `FASTER` on **56**, and *"42.0% now"*; at `1310b81a` — which
+is this slice's own commit **and** the last revision of `LOOPS.md`, adding the
+73rd revision and 66 words to the playbooks half — they are **73**, **57** and
+**41.8%**. The counts above are corrected; the share is stated here with its
+revision rather than as a bare *"now"*. `SLOWER` **16**, the `69cadcbb` anchor,
+and the 34.8% / 27.3% / 46.9% readings are unaffected.
+
+This is `ENVIRONMENT.md`'s *"when your own commit changes the file, `HEAD` is
+the pre-change state"* bullet in its third consecutive instance, after `273.1`
+and `274.1`. **The instrument was not at fault:** `report_loop_prose.py` prints
+its revision in its own first line, and the figure was quoted into prose as
+*"now"* with the sha dropped. The split table above, by contrast, is read at
+`1310b81a` correctly — so this slice is inconsistent about which tip it stands
+on rather than uniformly early. `353.2`, which files this same defect about the
+metric, is untouched and stays open.
 
 1. [x] **353.1 — the attribution 308.1 mandates is now the instrument's output,
        not a recipe a wake re-derives.** `report_loop_prose.py`'s by-region
@@ -4196,7 +4351,8 @@ Two of the three slices are clean:
        gap, nothing built and no gate proposed.** The count is **1 of 161
        slices (0.6%)** since 192.1 landed at `c75d721e`, **3 of 161 (1.9%)** at
        the widest reading; the diagnosis is that the paragraph's *observation*
-       half is what the loop adopted — quoted by **11 of 21** non-self
+       half is what the loop adopted — quoted by **12 of 21** non-self
+       (CORRECTED from 11 by Slice 355)
        citations against **1 of 21** for its instruction half, and **17 of the
        22** citing slices are Objective grills (43.6% of grills vs 4.1% of
        everything else). Base rate measured first and it kills the checkable
