@@ -719,6 +719,25 @@ directly. So:
   box overflows its container, whether the container can scroll to it, what
   `page.accessibility.snapshot()` computes as an accessible description, and a
   red-proof by injecting a rule and re-measuring.
+- **Can run, and is a THIRD thing that is neither of the two: what reaches
+  PAPER.** `page.pdf({ printBackground: false })` — the print dialog's default
+  — is available here, and the PDF is the artefact. Inflate every
+  `stream`/`endstream` pair with `zlib.inflateSync` and parse the fill
+  operators `/(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)\s+rg/`.
+
+  **Use it for any printed ratio, because `emulateMediaType('print')` + computed
+  style is an INPUT to a system that rewrites it** (roadmap 369, 2026-09-09).
+  `print-color-adjust: economy`, the default, does not merely drop backgrounds:
+  it darkens light text when it drops them, so a dark-theme rgb(249,250,251)
+  is painted rgb(166,166,167) — 1.05:1 by computed style, **2.43:1** in fact —
+  and rgb(45,212,191) is painted rgb(27,128,115), which PASSES at 4.79:1 while
+  its computed value fails at 1.86:1. Computed style is still right for the
+  structural question (does this element's own colour survive the print reset);
+  it is wrong for the number. Two traps in the parsing, both of which cost a
+  round: Chrome writes **leading-dot floats** (`.0784 .1882 .1137 rg`), so a
+  regex built from `(n/255).toFixed(2)` matches nothing and every case reads
+  "absent" identically; and `printBackground: true` is the control that proves
+  the parser works at all.
 
 `173.2` was classified **browser-blocked, "no cloud wake can take it"**, on an
 Accept that asked for a row-height measurement red-proved by reverting the flow

@@ -75,19 +75,41 @@
  *
  *   reset/index.css:96   @media print { body { background: #fff; color: #000 } }
  *
- * That covers everything which INHERITS its colour — which is most text, and is
- * why this is a narrow gap rather than a framework-wide one. It does not cover
- * an element that sets its own colour, because `body { color: #000 }` loses to
- * any more specific rule. `.bo-timeline__marker` is such an element:
- * `approval-workflow.css:106` sets `color: var(--bo-timeline-marker-fg)`, and
- * `:69` defines that as `var(--bo-color-text-muted)` — the very token measured
- * at 2.54:1 on white paper. Nothing inside `@media print` overrides it, so a
- * reader printing from the dark theme gets the dark-theme value.
+ * That covers everything which INHERITS its colour. It does not cover an
+ * element that sets its own colour, because `body { color: #000 }` loses to any
+ * more specific rule.
  *
- * **The source path above is grepped; the printed contrast is NOT measured
- * here** — that needs a computed-style reading under print emulation, which is
- * 338.1's job, not this gate's. Filed rather than quietly widened, because a
- * source scan is the wrong instrument for it.
+ * THIS PARAGRAPH USED TO CALL THAT GAP "NARROW" AND TO NAME
+ * `.bo-timeline__marker` AS ITS EXAMPLE. Roadmap 338.1 measured both and BOTH
+ * WERE WRONG, in opposite directions (Slice 369, 2026-09-09):
+ *
+ *  - **The example is not in the gap.** `print/index.css` gives
+ *    `.bo-timeline__marker, .bo-stepper__marker { print-color-adjust: exact }`,
+ *    so the disc BACKGROUND is kept on paper and the glyph never meets white.
+ *    Measured under print emulation, the worst of eight readings across both
+ *    themes is `pending`, rgb(156,163,175) on rgb(38,42,51) = **5.66:1** —
+ *    above AA. The 2.54:1 figure is that token against WHITE, which is not the
+ *    backdrop it has. The NO EXEMPTION LIST paragraph above already named that
+ *    exact rule; this paragraph then reasoned as if it were not there.
+ *  - **The gap itself is framework-wide, not narrow.** Over all 128 built
+ *    pages in the dark theme, 19,511 of 26,817 text fills actually painted to
+ *    PDF are below 4.5:1 against white paper, on 125 of 128 pages.
+ *
+ * AND THE OBVIOUS INSTRUMENT FOR IT IS THE WRONG ONE — the part worth carrying
+ * forward. `print-color-adjust: economy` (the default) does not merely drop
+ * backgrounds: it DARKENS light text when it drops them. rgb(249,250,251) is
+ * painted rgb(166,166,167), so the real ratio is 2.43:1 and not the computed
+ * 1.05:1; and `--bo-color-accent` rgb(45,212,191) is painted rgb(27,128,115),
+ * which PASSES at 4.79:1 while its computed value reads 1.86:1. A ratio read
+ * off computed style is therefore an input to a system that rewrites it, and a
+ * gate built on one would accuse correct code. Anything that publishes a
+ * printed RATIO must read the PDF (`page.pdf({ printBackground: false })`, then
+ * parse the fill operators); computed style is still fine for the structural
+ * question of whether an element's own colour survives the print reset.
+ *
+ * Widening this gate is roadmap 369.1 and is an OWNER CALL, because the only
+ * proportionate fix is re-pointing the theme tokens inside one `@media print`
+ * block — which is a deliberate exception to this gate's own rule.
  *
  * WHY HEURISTIC AND NOT @exact. `check-sticky-layers.mjs` brace-matches rule
  * blocks and is tagged `@exact`, so the precedent pointed the other way. The

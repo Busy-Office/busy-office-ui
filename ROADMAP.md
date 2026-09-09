@@ -320,6 +320,218 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 369 — `338.1` decided: **refused on its named instance, and the instrument its own Accept prescribed is the wrong one.** `.bo-timeline__marker` prints at **5.66:1** (worst state), not the filed 2.54:1, because `print-color-adjust: exact` keeps its disc. The general gap is real and framework-wide — **19,511 of 26,817** painted text fills below AA on **125 of 128** pages — but every computed-style figure about it over-states, because Chrome rewrites light text on the way to paper (2026-09-09)
+
+**Dispatched by rule 4**, on the oldest genuinely dispatchable open item. Rule 1
+no open P0 (`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0** across **24**
+open items); rule 2 `Standardize 3 / 4 ok`; rule 3 `Objective 0 / 3 ok`. Rule 5
+was **EVALUATED, not skipped** even though rule 4 fires above it:
+`Optimize 0 wake-date(s) newer — ok`, movers `gates` +1,
+`dispatch-region-words` +60, `claims` +7, none a regression on two consecutive
+runs. Step 1 read both intakes in the REST form with §8's controls — issues
+**1** (#2, `updated_at` `2026-09-06T15:10:34Z`, unchanged since the previous
+wake and already triaged as `300.2`), discussions **0**, `/not-a-real-route`
+**404** — and triaged nothing.
+
+**Everything older than 338 was re-derived as blocked from each item's own
+text**, not from the hand-off's list: Slice 15 (owner hardware), `112.3`/`112.4`
+(owner briefs), `249.7`/`249.10`-`249.13` (owner calls), `273.2`, `296.3`
+(owner calls), `320.3` (**browser-blocked in the screenshot sense** — its Accept
+says outright "a **rendered** change a cloud wake cannot judge"), `335.1`
+(cloud-blocked in the WRITE sense). `338.1` is the oldest item this wake could
+honestly take, and its own text says so: *"a computed-style reading under print
+emulation is the right one, and a cloud wake can take that"*.
+
+### The verdict on the named instance: REFUSED, with the measurement
+
+`.bo-timeline__marker`, measured under `emulateMediaType('print')` on the built
+site, both themes, `data-theme` forced exactly as 298.1 did:
+
+| state | dark: glyph on disc | light: glyph on disc |
+|---|---|---|
+| `done` | rgb(134,239,172) on rgb(20,48,29) = **10.17:1** | rgb(21,128,61) on rgb(240,253,244) = **4.79:1** |
+| `current` | rgb(94,234,212) on rgb(11,59,55) = **8.38:1** | rgb(17,94,89) on rgb(240,253,250) = **7.27:1** |
+| `rejected` | rgb(252,165,165) on rgb(58,29,29) = **8.06:1** | rgb(185,28,28) on rgb(254,242,242) = **5.91:1** |
+| `pending` | rgb(156,163,175) on rgb(38,42,51) = **5.66:1** | rgb(75,85,99) on rgb(243,244,246) = **6.87:1** |
+
+The filed **2.54:1** is `rgb(156,163,175)` against **white**, and the marker
+never meets white paper. `print/index.css` gives
+`.bo-timeline__marker, .bo-stepper__marker { print-color-adjust: exact }`, which
+keeps the disc — so the pair on paper is glyph-on-disc, and the worst of the
+eight readings is **5.66:1**, above AA for normal text.
+
+**The item's own gate already knew this and the gate's two paragraphs
+contradict each other.** `check-print-tokens.mjs`'s *NO EXEMPTION LIST*
+paragraph names that exact rule by file and selector; its *WHAT THIS GATE DOES
+NOT SEE* paragraph, twenty lines later, computes the same marker against white
+as though the rule were not there. Corrected in place by this slice.
+
+**Not modelled — measured on the artefact.** "Backgrounds are dropped unless
+`exact`" is a claim about what a printer paints, so it was taken from the PDF
+rather than from computed style: `page.pdf({ printBackground: false })`, the
+print dialog's default, inflating every content stream and parsing the fill
+operators. Both marker discs, rgb(20,48,29) and rgb(11,59,55), are **PRESENT**;
+the non-exact page canvas rgb(15,17,21) is **absent** in that same PDF and
+**PRESENT** when `printBackground: true`. Two controls pointing opposite ways in
+one artefact.
+
+### The general gap is real, framework-wide, and NOT what a source trace predicts
+
+`check:print-tokens`'s header calls this *"a narrow gap and not a
+framework-wide one"*. Measured over all **128** built pages, dark theme,
+`printBackground: false`, counting only fills that draw text:
+
+```
+distinct text fill colours actually painted : 40   (26,817 text fill ops)
+below 4.5:1 against white paper             : 17 colours, 19,511 ops, 125 of 128 pages
+```
+
+So the mechanism the item filed is real and the word "narrow" is wrong. **But
+the numbers a computed-style reading gives for it are all wrong**, and that is
+this slice's substantive finding.
+
+### Chrome rewrites the colour between the cascade and the paper
+
+`print-color-adjust: economy` — the default — does not merely drop backgrounds.
+It **darkens light text** when it drops them. Measured as a 2×2 on
+`/concepts/scale/`, which is what identifies the mechanism rather than guessing
+at it:
+
+| | `printBackground: false` | `printBackground: true` |
+|---|---|---|
+| **dark theme** | rgb(249,250,251) → painted **rgb(166,166,167)** | painted rgb(249,250,251), unadjusted |
+| **light theme** | rgb(17,24,39) → painted rgb(17,24,39) | rgb(17,24,39), identical |
+
+The adjustment fires only when the colour is light **and** backgrounds are
+dropped. The light-theme row is the control that rules out "the PDF just writes
+different numbers".
+
+What it does to the ratio, computed style → actually painted:
+
+| token (dark) | computed | painted | computed ratio | **real ratio** |
+|---|---|---|---|---|
+| `--bo-color-text-primary` | rgb(249,250,251) | rgb(166,166,167) | 1.05:1 | **2.43:1** |
+| `--bo-color-success-text` | rgb(134,239,172) | rgb(87,155,111) | 1.4:1 | **3.32:1** |
+| `--bo-color-text-secondary` | rgb(209,213,219) | rgb(129,131,135) | 1.47:1 | **3.80:1** |
+| `--bo-color-danger-text` | rgb(252,165,165) | rgb(168,110,110) | 1.9:1 | **4.10:1** |
+| `--bo-color-accent` | rgb(45,212,191) | rgb(27,128,115) | 1.86:1 | **4.79:1 — PASSES** |
+| `--bo-color-warning` | rgb(245,158,11) | rgb(245,158,11) | 2.15:1 | **2.15:1 — unchanged** |
+
+**One row is not a magnitude error but a wrong verdict**: `--bo-color-accent`
+fails the computed reading and passes on paper. A gate built on the instrument
+338.1's Accept prescribes would have accused correct code.
+
+**So the Accept's own sentence is false**, and it is corrected rather than
+quietly satisfied: *"a computed-style reading under print emulation is the right
+one"*. It is not. It is an INPUT to a system that rewrites it, which is
+CLAUDE.md's downstream-artefact rule (*"when something DOWNSTREAM can rewrite
+the artefact, its output is the artefact — not what you handed it"*) with print
+as the downstream system. Whether the computed reading is *usable* is decided by
+the question: for "does this element set its own colour and survive the print
+reset", yes; for any RATIO that will be published, no.
+
+### What the numbers do not cover, said before they are quoted
+
+- **The 19,511 includes ~30 false positives from `exact` subtrees.** Four
+  colours appear at their *unadjusted* token values — rgb(156,163,175) ×13,
+  rgb(134,239,172) ×9, rgb(94,234,212) ×6, rgb(252,165,165) ×2 — which is the
+  signature of a subtree Chrome left alone, i.e. the markers and `.bo-icon`.
+  Measured against white they read 1.4-2.54:1; they are not on white. The same
+  colours appear *adjusted* elsewhere in the same sweep, which is the internal
+  reconciliation that identifies them.
+- **One headless Chrome, one build.** Whether headed Chrome, Firefox or Safari
+  apply the same economy adjustment is **untested here**. Firefox is not known
+  to darken text this way, so the framework-wide reading is a floor for Chrome
+  and says nothing about the others.
+- **The classifier for "this fill draws text" is a lookahead** (`BT` before the
+  next `re … f`), not a parse. It is a heuristic, and it is named as one.
+- **10 of 128 pages do not get the print reset on `body` at all**, in both
+  themes — the three `components/demos/*`, the six `patterns/rf/*` and
+  `patterns/schedule/full`. Their `body` stays at the theme colours under print
+  emulation. Filed below as `369.2`; not folded into the figures above.
+
+### Two instrument defects, both caught before anything was published
+
+Recorded because the base rate says to expect them, and both are textbook shapes
+from CLAUDE.md:
+
+1. **75,437 of 75,546 below AA — a 99.86% that was a defect in the instrument.**
+   `getComputedStyle(el).display` does not walk ancestors, so every label inside
+   a `@media print { … display: none }` subtree was counted as visible; the docs
+   sidebar alone contributed 27,643. Fixed with `el.checkVisibility()` plus a
+   non-empty `getClientRects()`, and red-proved both ways: an injected
+   `color: var(--bo-color-text-muted)` paragraph moved the count `797 → 798` and
+   the below-AA count `793 → 794`, appearing at exactly 2.54:1, while
+   `.bo-sidebar-nav__label` reads `display: block` for itself and
+   `checkVisibility() === false`.
+2. **All seven PDF cases read "absent" — an identical value across every input.**
+   The stream parser was fine; the fill matcher built `0.08\d*` while Chrome
+   writes leading-dot floats (`.0784 .1882 .1137 rg`). It could not have matched
+   anything, in either arm, and it looked exactly like a clean negative result.
+   Fixed by parsing every operator to 0-255 and comparing with a ±1 tolerance.
+
+### Commands, so the next wake re-runs rather than re-derives
+
+Probes were throwaway and lived in the scratchpad, never the repo (three files:
+computed-style walk, PDF fill sweep, 2×2). Each is `serve-dist.mjs` +
+`browser-harness.mjs` by absolute path plus `page.pdf()`, and the re-runnable
+core is:
+
+```
+node -e '…' # emulateMediaType("print"); control: body must read
+            # rgb(255,255,255) / rgb(0,0,0), and 10 pages do not
+page.pdf({ printBackground: false })   # then inflateSync every stream and
+                                       # parse /([\d.]+) ([\d.]+) ([\d.]+) rg/
+```
+
+1. [x] **338.1 — the gap `check:print-tokens` cannot see.** **REFUSED on its
+       named instance, with the measurement**, per its own Accept's second
+       branch. `.bo-timeline__marker` reads **5.66:1** at worst, not 2.54:1;
+       `print-color-adjust: exact` is why. The gate header's *WHAT THIS GATE
+       DOES NOT SEE* paragraph is corrected in the same commit. The premise
+       being false was a satisfying outcome, as the item said it would be —
+       and the base rate the other branch asked for was measured anyway,
+       because it is what says whether the gap is empty or merely not here.
+
+**Filed by this slice:**
+
+2. [ ] **369.1 — should printing from the DARK theme force the light palette?
+       OWNER OR ARCHITECTURE CALL.** Measured above: **19,511 of 26,817**
+       painted text fills, on **125 of 128** pages, are below 4.5:1 on white
+       when a reader prints from the dark theme with the print dialog's default
+       settings. Chrome's economy adjustment lifts the worst from 1.05:1 to
+       2.43:1 and rescues exactly one token outright, and it is a UA behaviour
+       no other engine is known to share. The framework already declares its
+       intent — `reset/index.css` prints `body { background: #fff; color: #000 }`
+       — so the question is only whether that intent should extend to the
+       tokens that beat it on specificity.
+       - **Accept — the property, and refusing is a satisfying outcome.**
+         EITHER a decision lands that print re-points the `--bo-color-*` set at
+         the light values (one `@media print` block re-declaring the theme, not
+         a per-component sweep), with the same PDF measurement re-run to show
+         the painted set moved and `check:print-tokens` amended, since that
+         block would be a deliberate, wanted exception to the gate's own rule —
+         OR it is refused with the reason recorded, in which case the gate
+         header stops calling this gap "narrow", because measured it is not.
+       - **Lane: owner-blocked.** It is a palette-wide behaviour change with a
+         visible print result, and no wake should take it unilaterally.
+
+3. [ ] **369.2 — 10 of 128 pages never get the print reset on `body`.**
+       Measured this wake, both themes, under print emulation: the three
+       `/components/demos/*` pages, the six `/patterns/rf/*` pages and
+       `/patterns/schedule/full/` keep `body` at the theme's own
+       background/colour instead of `#fff`/`#000`. Every other page flips.
+       Whether that is correct (these are embedded/full-bleed demo documents
+       that may not be meant to print at all) or a specificity loss like the
+       one 338.1 filed is **not decided here, because it was not measured** —
+       the reset's loss was observed, the winning rule was not identified.
+       - **Accept — the property.** Name the rule that beats
+         `reset/index.css`'s `@media print { body { … } }` on each of the ten,
+         then EITHER they are print-exempt by intent and that is recorded in
+         one line, OR the reset is made to win and the same ten are re-measured
+         showing `body` at rgb(255,255,255) / rgb(0,0,0). A cloud wake can take
+         this: it is a computed-style reading, not a rendered image.
+
 ## Slice 368 — Objective grill of Slices 365, 366, 367: **45 of 50** published assertions reproduce, and the one substantive defect is a count taken over a population that was **7/15 one-line archive pointers** — an instrument that opened the stub instead of the body, which the slice's own red-proof structurally could not reach. The arming set needed resolving first: **all three** counter labels are item ids, and the hand-off resolved one (2026-09-09)
 
 **Dispatched by rule 3** — `Objective 3 / 3 slices  OVERDUE  [334, 336, 337]`.
@@ -5312,7 +5524,21 @@ is a colour family by definition, so keying on the token reference loses nothing
 and closes the door. It is red-proved in both places — self-test case 3, and a
 live injection into a real component file (below).
 
-1. [ ] **338.1 — the gap `check:print-tokens` cannot see: a theme token that
+1. [x] **338.1 — DECIDED 2026-09-09 (Slice 369): REFUSED on its named
+       instance, with the measurement.** `.bo-timeline__marker` prints at
+       **5.66:1** at worst, not the 2.54:1 below — `print-color-adjust: exact`
+       keeps its disc, so the glyph never meets white paper. The premise being
+       false was the Accept's own satisfying outcome. The base rate the other
+       branch asked for was measured anyway and the gap is **framework-wide,
+       not narrow** (19,511 of 26,817 painted text fills below AA on 125 of
+       128 pages, dark theme), so the *word* in the gate header is wrong even
+       though the *example* is. And this item's Accept named the wrong
+       instrument: a computed-style reading over-states every ratio and gets
+       `--bo-color-accent` qualitatively wrong, because Chrome rewrites light
+       text on the way to paper. Filed forward as `369.1` and `369.2`.
+       Original text kept below.
+
+       **338.1 — the gap `check:print-tokens` cannot see: a theme token that
        reaches paper through the ORDINARY CASCADE.** FILED, not built. The
        gate catches a token *restated* inside `@media print`. The mechanism it
        misses is specificity, not any print property:
