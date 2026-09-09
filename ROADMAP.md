@@ -320,6 +320,159 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 371 — `339.2` decided: the +303 is **THREE kinds, not two**, and 279.4's inline argument covers only **one of the two paragraphs it was thought to protect**. All three quoted fragments of that argument sit in the paragraph that STAYS; the cost narrative it was read as defending contains none of them, and every one of its figures is carried more completely beside `CLOSES_A_SLICE`. Rule 3: **975 → 907 words** (2026-09-09)
+
+**Dispatched by rule 4**, cloud wake. Rule 1 found **0** open P0 across **24**
+open items; rule 2 read `0 / 4`, rule 3 `2 / 3` — neither at threshold — so rule
+4 fired on the oldest genuinely dispatchable item. The **12** open items older
+than `339.2` were re-derived rather than carried from the hand-off (12 older +
+`339.2` + 11 newer = the 24 counted at Step 0, asserted rather than left to the
+reader — **and this number was written as "eight" first**, caught by the
+by-hand verifier pass re-counting the enumeration beside it): Slice 15,
+`112.3`, `112.4`, `249.7`/`.10`/`.11`/`.12`/`.13`, `273.2`, `296.3`
+(owner-blocked); `320.3` (browser-blocked, screenshot sense); `335.1`
+(cloud-blocked, WRITE sense — the GraphQL `createDiscussion` 403).
+
+**Step 0 traps 1 and 2 both bit**, as `ENVIRONMENT.md` describes them: the
+container arrived **detached** (`git branch --show-current` empty) and
+**shallow** (50 commits). `git fetch origin main && git checkout -B main
+origin/main` and `git fetch --unshallow origin` fixed both — **2,110** commits,
+**8** tags, no `shallow.lock`. Step 1 read both intakes with §8's controls:
+issues **1** (#2, `updated_at` unchanged at 2026-09-06 — already triaged),
+discussions **0**, `/not-a-real-route` **404**, so the empty list means
+*served and empty*. **Nothing triaged.** The pre-commit `git fetch origin main`
+found `origin/main` still at `c7c22ce9` — **no collision this wake.**
+
+### The series re-measured first, as Accept required — and the instrument that produced the premise no longer exists
+
+`339.2`'s block is a snapshot, and its own Accept says to re-measure before
+using it. Measured by **importing** `report_loop_prose.dispatch_sections`
+rather than re-implementing its convention, asserting **exactly one** rule-3
+match per revision, over the **25** revisions of `LOOPS.md` in
+`8848ed55^..HEAD`:
+
+```
+8848ed55  2026-09-05    672
+632bfc46  2026-09-05    975   +303   Slice 279.4
+… 23 revisions …        975     +0   through 5ce62916 (2026-09-09)
+```
+
+**The shape reproduces exactly — one step, then flat — and both endpoints read
+12 words higher than the filed 660 → 963.** That gap is not a disagreement and
+it was run down rather than rounded off: **12 is exactly the rule's own heading
+line**, `3. **THREE OR MORE slices closed since the last Objective**, **or
+user` (12 words, identical at both endpoints), which `dispatch_sections`
+includes in a rule's body and 339's ad-hoc method excluded. **The reason it
+could not have used that function is that the function did not exist**:
+`git log -S "def dispatch_sections"` puts its first appearance at `1310b81a`
+(Slice 353, 2026-09-08), **one day after `339.2` was written**. The offset is
+constant, the delta **+303 is identical under both conventions**, and the
+premise stands.
+
+**A second, independent reconciliation of the same +303**, because one
+instrument agreeing with itself is not evidence: at paragraph granularity the
+change is `OLD P3 (146w) → NEW P3 (89w) + P4 (160w) + P5 (200w)` = 449w, and
+**449 − 146 = 303**. So the whole +303 is contained in one region, and the
+sentence-by-sentence work below has a bounded subject rather than a diff to
+hunt through.
+
+### Sentence by sentence: the +303 is three kinds, and the Accept anticipated two
+
+Rule 3's charter is quoted in its own body: *"The five recurrence narratives —
+what each parser did, the replay figures, the counts that were snapshots — are
+in `LOOPS-archive.md`"*. Against it:
+
+1. **P3, 89w — INSTRUCTION, in full.** The operative set (`Continue`,
+   `Standardize` **and `Polish`**) and the exclusion list with a one-clause
+   reason each. This is what a wake evaluating rule 3 must read to classify a
+   log row. Nothing here is narrative. **Untouched, and asserted byte-identical
+   to HEAD.**
+2. **P4, 160w — FORENSICS, and duplicated in full.** Six figures, each verified
+   present beside `CLOSES_A_SLICE` in `dispatch_status.py` rather than assumed:
+   161.4's now-dead quote (L181-183, verbatim), `1,437` rows (L217), `18 rows /
+   17 slices` (L180), `12 of 17 invisible` (L184-186), `2 / 3 [274, 278]` with
+   the five closed slices (L223-226), and `crossings 51 → 52` (L219-220).
+   **The flat-average caution — the one sentence in P4 that reads as
+   instruction — is there too** (L226-230), and stated MORE completely: *"so an
+   average over the whole log is the wrong instrument for it."*
+3. **P5 — INSTRUCTION, and it splits again.** Its argument (the mechanism is
+   the loop SET, the rows parse perfectly and are discarded by name, so no
+   regex could have found it) is what stops the next wake reaching for a sixth
+   regex. **Untouched, and asserted byte-identical to HEAD.**
+
+**The module is strictly the richer home, which the item did not claim.** It
+carries three things P4's prose never did: the replay reconciled against the
+script's own live output (L232-235), the circularity check that disqualified
+`Objective` (L237-242), and the `6 → 15` late-firing figure (L245-248).
+
+### What actually decided it: 279.4's inline argument does not reach P4
+
+`339.2` filed this rather than cutting it because *"279.4 **argues explicitly
+for its inline placement**"*, and *"overriding a stated argument is its own
+decision … making it at speed is how instruction gets cut."* That premise is
+itself a claim about the text, so it was checked against the text.
+
+**All three fragments `339.2` quotes as the argument — "its mechanism is the
+loop SET rather than a parser", "no widening of any regex could have found
+it", and "this is the point" — are in P5. Not one of them is in P4.** The
+argument for inline placement was made about the *lesson*, and P4 is the *cost
+narrative*; the two paragraphs were being defended by one sentence that only
+covers one of them.
+
+So this wake did not have to override a stated argument, and did not:
+
+- **P5 stays, uncut.** 279.4's argument beats the charter here, on 279.4's own
+  reasoning, and the charter is scoped to *"the five recurrence narratives"* —
+  a sixth of a different mechanism is outside its reach anyway. **Both readings
+  agree, which is why this half needed no judgement call.**
+- **P4 moves**, replaced by 92 words that keep what the archive's own doctrine
+  says must stay inline (*"a lesson that changes what the next wake does"*):
+  that the exclusion's sole ground **died**, so no wake restores it, plus the
+  pointer to the richer home. Verified: the moved text is in `LOOPS-archive.md`
+  **byte-identical, exactly one copy**, and absent from `LOOPS.md`.
+
+**Net: rule 3 975 → 907 words (−68); the dispatch region 7,552 → 7,484.** The
+region delta equals the rule delta exactly, which is the check that nothing
+else moved. HEAD's 7,552 reproduces `report_loop_prose`'s own published figure,
+so the two readings are on the same instrument.
+
+**The two files TOGETHER grew, and that is stated rather than left to be
+found.** `LOOPS-archive.md` went **3,622 → 3,880 words (+258)** — of which
+**160 is the moved paragraph and 98 is prose written this wake to explain the
+move**, so the pair is **+190 net**. That is 339.1's own measured failure
+recurring — *"the narrative that came out was replaced by a paragraph
+explaining why it came out, which is the same accretion by another name"* — and
+it was caught by measuring the archive rather than only the file being cut. The
+first draft of the explanation ran to **167** words and was tightened to 98
+against exactly that finding. **The trade is deliberate and it is not a
+free win:** the region a wake reads EVERY wake is 68 words smaller, and the
+file it opens only when arguing about this mechanism is 258 larger.
+
+### Two things deliberately NOT done, each with its reason
+
+- **The archive heading was renamed, and that was not optional.** It read
+  *"the Objective counter's **five** blind spots"*; moving a sixth under it
+  would have made it stale **on arrival** — the identical defect 339.1 fixed in
+  two other pointers (*"both now name the subject rather than a count"*). It
+  now names the subject, and says outright that two KINDS live there, since the
+  sixth is not a parser at all.
+- **P5's restatement of P8's lesson is NOT filed as a defect.** P5's closing
+  sentences do restate P8, three paragraphs below — but P5 **says so itself**
+  (*"That is the paragraph below's own lesson arriving with a case that proves
+  it"*). A deliberate, self-labelled forward-reference is not accidental
+  duplication, and filing it would inflate the backlog with work nobody asked
+  for, which Step 1 explicitly cautions against.
+- **P7's charter sentence is unamended, deliberately.** *"The five recurrence
+  narratives … are in `LOOPS-archive.md`"* is still true; its scoping to five
+  is the finding of this slice, not a staleness to repair.
+
+**NOT VERIFIED — no screenshots, and none are owed.** This is a **cloud** wake
+with no Podman. `git diff --stat` was read: the slice touches `LOOPS.md`,
+`LOOPS-archive.md` and `ROADMAP.md` only — **no CSS, no docs page, no `.astro`
+file, no generated artefact, no shipped JS**, so there is nothing a 1440/390
+light-and-dark screenshot could have said. The **eight** older visual debts are
+unchanged and unspent.
+
 ## Slice 370 — Standardize sweep, **4 of 4 lanes**, all three artefact lanes clean; the finding is that **`351.1` was decidable from evidence `350.1` already carried in prose**, so the base-rate command now windows `a..b^`. Under `a..b` a sweep is classified *has lane input* on the strength of **its own commit** — `f9e0f17d..161ede68` is 16 commits, **15 touching no lane input**, the 16th being the sweep (2026-09-09)
 
 **Dispatched by rule 2, which was OVERDUE.** Rule 1 found no open P0
@@ -5563,8 +5716,21 @@ red-proved dead.
        premise ("the fold did not hold") FALSE is a satisfying outcome and is
        what happened.
 
-2. [ ] **339.2 — the sweep's re-scan found a SECOND section with the same
+2. [x] **339.2 — the sweep's re-scan found a SECOND section with the same
        unexecuted charter, and this item is deliberately not the fix.**
+       **DECIDED by Slice 371 (2026-09-09): split — the cost narrative moved,
+       the loop-SET argument stayed uncut.** The +303 is three kinds, not the
+       two the Accept anticipated: P3 (89w) is the operative loop set, pure
+       instruction; P4 (160w) is forensics whose every figure was verified
+       present — and more completely — beside `CLOSES_A_SLICE`; P5 is 279.4's
+       lesson. **What settled it was that all three fragments this item quotes
+       as 279.4's inline argument are in P5 and none is in P4**, so the cost
+       narrative was never covered by the argument that protected the lesson,
+       and moving it overrode nothing. Rule 3 **975 → 907** words. The premise
+       re-measured clean: the filed 660 → 963 is the same series 12 words
+       lower, and 12 is exactly the rule's own heading line, which
+       `dispatch_sections` counts and 339's method could not have — that
+       function landed a day later (`1310b81a`, Slice 353).
 
        `LOOPS.md` §3 step 4 says a round re-scans for another instance of the
        same drift. Applying 339.1's own general question — *does this section

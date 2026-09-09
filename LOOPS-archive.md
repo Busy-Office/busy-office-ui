@@ -16,10 +16,13 @@ archaeology moves.
 
 ---
 
-## Dispatcher rule 3 — the Objective counter's five blind spots
+## Dispatcher rule 3 — the Objective counter's blind spots
 
-Cited from `LOOPS.md` rule 3. Five recurrences of one shape: a parser that
-silently matched nothing while printing a confident number.
+Cited from `LOOPS.md` rule 3. **Named for the subject, not a count** (339.2 —
+the heading read "five" until a sixth arrived, the defect 339.1 fixed twice
+elsewhere). Two KINDS: the first five are one shape — a parser that silently
+matched nothing while printing a confident number — and the sixth is not a
+parser at all.
 
    **THE COUNTER WAS BLIND FOR FIVE DAYS, and this is the third recurrence.**
    `dispatch_status.py` parsed slice numbers with `^(\d{2})\.` — exactly two
@@ -90,6 +93,27 @@ silently matched nothing while printing a confident number.
    command: ten rows later the `+ Standardize` figure is **24**. Re-run, do not
    quote; the command is in
    `.roundtable/grill-objective-161-162-166-2026-08-28.md`.
+
+### The sixth — `Polish`, and it is NOT a parser (moved 2026-09-09, roadmap 339.2)
+
+Not a parser: the rows parse perfectly and are then discarded by name. That
+distinction stays inline in `LOOPS.md` — only the cost narrative moved. **Every
+figure below is a 2026-09-05 snapshot and is NOT maintained**; the live ones are
+beside `CLOSES_A_SLICE` in `dispatch_status.py`, which carries more.
+
+   **`Polish` was excluded on a fact that has since died, and this is what that
+   cost.** 161.4's whole ground was *"Meta/Polish/Optimize · 0 rows ever named a
+   slice. Nothing to decide."* True then; re-measured over 1,437 rows it is
+   **18 Polish rows naming 17 slices, 12 of which no Continue/Standardize row
+   names at all** — invisible to this counter. At the moment the amendment
+   landed the counter read `2 / 3 [274, 278]` while **five** slices had closed
+   since the last grill (274, 276, 277, 278, 279), three of them Polish rounds
+   that filed and closed their own slice. **The whole-log replay — 161.4's own
+   method — moves crossings only 51 → 52**, and that flat average is the
+   misleading number: Polish only began closing slices in bulk once rule 4's
+   cloud lane ran dry, so the effect is concentrated in the era the loop is now
+   in. The figures are in `dispatch_status.py` beside `CLOSES_A_SLICE`; re-run
+   them, they are snapshots.
 
 ## Rule 4 — the archive-sweep cadence (moved 2026-08-29, roadmap 191.3)
 

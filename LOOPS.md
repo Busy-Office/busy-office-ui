@@ -417,19 +417,14 @@ match to its full playbook below:
    rows record machinery about the loop itself, which is the Roadmap reason),
    and `Optimize`, which has never named a slice at all.
 
-   **`Polish` was excluded on a fact that has since died, and this is what that
-   cost.** 161.4's whole ground was *"Meta/Polish/Optimize · 0 rows ever named a
-   slice. Nothing to decide."* True then; re-measured over 1,437 rows it is
-   **18 Polish rows naming 17 slices, 12 of which no Continue/Standardize row
-   names at all** — invisible to this counter. At the moment the amendment
-   landed the counter read `2 / 3 [274, 278]` while **five** slices had closed
-   since the last grill (274, 276, 277, 278, 279), three of them Polish rounds
-   that filed and closed their own slice. **The whole-log replay — 161.4's own
-   method — moves crossings only 51 → 52**, and that flat average is the
-   misleading number: Polish only began closing slices in bulk once rule 4's
-   cloud lane ran dry, so the effect is concentrated in the era the loop is now
-   in. The figures are in `dispatch_status.py` beside `CLOSES_A_SLICE`; re-run
-   them, they are snapshots.
+   **`Polish` was excluded on a fact that has since died — do NOT restore the
+   exclusion.** 161.4's sole stated ground was that Polish had never named a
+   slice. It now names many, and rule 3 could see none of them. Every figure
+   behind that amendment lives beside `CLOSES_A_SLICE` in `dispatch_status.py`,
+   which also carries the reconciliation against live output and the
+   circularity check that the prose here never did; re-run them, they are
+   snapshots. The narrative is in `LOOPS-archive.md` (moved by roadmap 339.2,
+   which verified figure-by-figure that the module is the richer home).
 
    **Same effect as the five recurrences below, different mechanism — and that
    is the point.** All five were the parser: a log convention the regex did not
