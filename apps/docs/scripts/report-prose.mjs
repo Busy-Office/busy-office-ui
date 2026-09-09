@@ -171,7 +171,11 @@ if (noMain.length) console.log(`  !! ${noMain.length} page(s) have no <main> and
 
 const OVER = median * 2;
 const outliers = rows.filter((r) => r.words > OVER);
-console.log(`  over 2x the median (${OVER}) — ${outliers.length} page(s):  [words = authored + generated; hidden-at-load shown when over 10]`);
+console.log(
+  `  over 2x the CORPUS median (${OVER}) — ${outliers.length} page(s) — ONE CLAUSE of the lane, not its ` +
+    `population; the flagged union is printed under the family block:  ` +
+    `[words = authored + generated; hidden-at-load shown when over 10]`,
+);
 for (const r of outliers) {
   const hid = r.hidden > 10 ? `  ${r.hidden} hidden` : '';
   console.log(
@@ -213,9 +217,11 @@ const medianOf = (xs) => {
    exactly what Slice 169's own Standardize round did before finding the
    verdict already existed. Printing three numbers is cheaper than the probe. */
 console.log('  by family — a family median, and what 2x it flags  [Na = authored, Ng = generated]:');
+const famFlagged = new Set();
 for (const [fam, rs] of [...byFamily].sort()) {
   const m = medianOf(rs.map((r) => r.words));
   const over = rs.filter((r) => r.words > m * 2);
+  for (const r of over) famFlagged.add(r.url);
   const flagged = over
     .map((r) => `${r.url} ${r.words - r.generated}a+${r.generated}g`)
     .join('  ');
@@ -224,6 +230,46 @@ for (const [fam, rs] of [...byFamily].sort()) {
       `over 2x: ${over.length ? flagged : '—'}`,
   );
 }
+
+/* THE FLAGGED UNION — the population LOOPS.md §3 lane 3 is actually defined on,
+   and which this report did not print until roadmap 336.2. Both halves were
+   already here, one under the corpus headline and one inside the per-family
+   breakdown; what was missing is the one line of arithmetic that joins them —
+   which every sweep did by hand, and one sweep did not.
+
+   WHY THIS IS A LINE AND NOT A THIRD LIST. 336.2's "against" is that the union
+   is derivable from what is already printed and a third list grows the report
+   faster than the thing it measures. So this prints the COUNT plus only the
+   family-only ADDITIONS — the corpus set is listed above and is not repeated.
+
+   WHY IT WAS TAKEN, when the base rate argues the other way. Re-measured at
+   this revision over the seven sweeps since 326 (326, 332, 339, 345, 350, 357,
+   363): the failure this line removes — asserting lane-3 cleanliness over the
+   corpus half — occurred in 1 of 7, Slice 332 alone, and in 0 of the last
+   5. 336.2's filed premise, "2 of the last 2 sweeps mishandled lane 3", is true
+   of lane 3 broadly and NOT of this failure: Slice 326 printed `union = 15` in
+   its own entry and failed on the stale verdict ENUMERATION instead, which no
+   report line can prevent. The ground taken instead is the contract — the lane
+   asks "corpus 2x OR family 2x" and the report answered the first clause under
+   its most prominent number, which is the number Slice 332 quoted.
+
+   THE THREE COUNTS ARE PRINTED SO THE READER CAN CHECK THE ARITHMETIC:
+   corpus + family − both = union, by inclusion-exclusion, in one glance. */
+const unionUrls = new Set([...outliers.map((r) => r.url), ...famFlagged]);
+const famOnly = [...famFlagged].filter((u) => !outliers.some((r) => r.url === u));
+const both = outliers.length + famFlagged.size - unionUrls.size;
+console.log(
+  `  flagged union — over 2x the corpus median OR over 2x its family median — ${unionUrls.size} page(s):  ` +
+    `corpus ${outliers.length} + family ${famFlagged.size} − both ${both} = ${unionUrls.size}`,
+);
+console.log(
+  `    the ${outliers.length} listed above, plus ${famOnly.length} flagged only by a family median: ` +
+    `${famOnly.length ? famOnly.sort().join('  ') : '—'}`,
+);
+console.log(
+  '    LOOPS.md §3 lane 3 verdicts THIS set, not the corpus half — checked against the ENUMERATION ' +
+    'that playbook pins, never a grep (326.1 red-proved that dead).',
+);
 console.log(
   '  a long page is not automatically a defect — 158 asks, per page, whether the ' +
     'PROSE is wrong or the THING it documents is. Do not gate this number.',

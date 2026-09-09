@@ -320,6 +320,174 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 366 — `336.2` decided: **print the union** — and the base rate it was filed on is **1 of 7**, not 2 of 2: Slice 326 printed `union = 15` in its own entry and failed on the ENUMERATION instead, which no report line can prevent (2026-09-09)
+
+**Dispatched by rule 4**, on the oldest genuinely dispatchable open item. Rule 1
+no open P0 (`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0** across **26**
+open items); rule 2 `Standardize 1 / 4 ok`; rule 3 `Objective 1 / 3 ok [334]`;
+rule 5 `Optimize 0 wake-date(s) newer — ok`, EVALUATED not skipped: its
+comparable set's movers are `gates` (55 → 56, coverage growth, one pair) and
+`dispatch-region-words` (+60), neither a regression on two consecutive runs.
+Rules 6-8 not reached, so `polish_requeue.py --apply` was correctly NOT run.
+
+**Step 1 read both intakes, with `ENVIRONMENT.md` §8's controls:**
+`/issues?state=open` → `HTTP 200, len 1` — issue #2, `updated_at`
+**2026-09-06T15:10:34Z**, unmoved for a thirty-second consecutive hand-off;
+`/discussions` → `HTTP 200, len 0`; `/not-a-real-route` → `HTTP 404`, so the
+`200 []` means *served and empty*. No new untriaged input, so Step 1 committed
+nothing.
+
+### `335.1` is ahead of `336.2` in rule 4's order, and this wake measured its blocker instead of assuming it
+
+`335.1` is the oldest cloud-takeable item and its Accept allows filing a
+throwaway discussion to settle it. **The write path is refused in this session,
+and that is measured rather than inferred.** A repository discussion is created
+by the GraphQL `createDiscussion` mutation, and this session's GraphQL endpoint
+is refused outright:
+
+```
+curl -sS -H "Authorization: bearer $GITHUB_TOKEN" -H 'Content-Type: application/json' \
+  -d '{"query":"query { viewer { login } }"}' https://api.github.com/graphql
+  -> HTTP 403  "This GraphQL query is not enabled for this session — only the
+                pinned set of PR-review operations is served."
+```
+
+**Three different valid queries, three identical 403s** — `viewer`, a
+`repository { discussionCategories }` read, and a bare `__type` introspection —
+so the refusal is the endpoint, not one query. The repo object read with the
+same token reports `permissions {admin, maintain, push, triage, pull}` **all
+false**, and no `mcp__github__*` tool in this session's set touches discussions.
+
+**What was NOT measured, and deliberately so: whether a REST POST to
+`/discussions` would work.** The only probe that would settle it is a request
+that can create a real, public, outward-facing item in the owner's repository,
+and no owner is live in a scheduled wake to authorise one; a body crafted to
+fail is still that request. What the API says about itself is the weaker
+evidence taken instead, and it reproduces `ENVIRONMENT.md` §8's reading exactly:
+`/discussions/categories` → **HTTP 404** with
+`documentation_url: rest/repos/discussions#get-a-discussion` — the family's own
+anchor is a **get**. So this item's blocker is stated as *the GraphQL path is
+refused and the REST path is untested-by-choice*, not as *no write path exists*.
+
+So `335.1` stays **OPEN** and **gains** the Lane line it never had: it is
+neither owner-blocked nor browser-blocked but **cloud-blocked in the write
+sense** — a local wake, whose `gh auth token` carries the owner's own GraphQL
+access, can file the test discussion; a cloud wake cannot reach the mutation at
+all. That is exactly the naming `LOOPS.md` rule 4 demands, and the reason it is
+written into the item rather than only here is that this hand-off is rewritten
+wholesale every wake (169.3): **this is the first wake to reach `335.1` under
+rule 4, and without the Lane line the next cloud wake re-derives the same
+403.** Rule 4 therefore fell through to `336.2`, the next cloud-takeable item.
+
+### The Accept asks for the base rate re-measured at this revision, and it moved against the item
+
+`336.2` was filed on *"2 of the last 2 sweeps mishandled lane 3 — 326 on a stale
+enumeration, 332 on the population"*, with its own instruction that the wake
+taking it re-measure over however many sweeps exist by then. Seven do, and the
+enumeration is the log's, not a heading grep alone — `grep -oE '^## Slice [0-9]+
+— Standardize sweep' ROADMAP.md` and `grep -n ' · Standardize · '
+.roundtable/loop-log.md` agree on the same set:
+
+| sweep | what its lane-3 entry asserts cleanliness over |
+|---|---|
+| **326** | *"10 over 2x the corpus median (1,584); 11 over a family median; **union = 15**"* — correct |
+| **332** | *"10 over 2x … checked per page"* — **the corpus half only** ✗ |
+| **339** | *"the flagged union is **15**"* — correct |
+| **345** | *"the flagged union is **15** pages"*, the five family-only named — correct |
+| **350** | *"the flagged union is **15** pages"*, the five named, enumeration read out of the archive — correct |
+| **357** | *"the flagged union is **15** pages"*, on fresh medians (`798 / 959 / 114,124`) — correct |
+| **363** | *"the flagged union is **15**"*, enumeration re-derived from the archive — correct |
+
+**So the failure this item would remove occurred in 1 of 7, and 0 of the last
+5.** The filed premise is true of lane 3 *broadly* and false of *this* failure:
+Slice 326's own entry prints `union = 15` and its recorded finding is the stale
+`Verdicts to date` clause in `LOOPS.md` — a hand-maintained list, which printing
+a union cannot protect. **Read the premise as 1 of 2, not 2 of 2**, and the
+"for" argument in `336.2` is correspondingly weaker than filed.
+
+**What could NOT be measured, said plainly.** Whether the five correct sweeps
+*derived* the union or copied the previous sweep's phrasing is not recoverable
+from the record. Two of them ran the report fresh — 350 quotes the moved
+threshold `1,596` where 326 quotes `1,584`, and 357 publishes a moved mean and
+total — but that shows a fresh REPORT run, not a fresh union. The five
+family-only page paths are identical in 345, 350, 357 and 363, which is
+consistent with either. No claim is made either way.
+
+### Decided: print it — on the contract, not on the base rate
+
+The base rate argues against; the change was taken anyway, on a different ground
+that the re-measurement does not touch. `LOOPS.md` §3 lane 3 is a **two-clause**
+definition — *over 2x the CORPUS median, or over 2x its FAMILY median* — and the
+report answered the first clause under its most prominent line while the second
+lived inside a per-family breakdown. That is the shape `CLAUDE.md`'s storage
+doctrine names outright: **a derived artefact that under-reports is worse than
+none, because its number gets quoted.** Slice 332 quoted it.
+
+The Objective test it passes is principle 3's **rethink**: *reuse by
+copy-paste-modify means extract the reusable core*. Five consecutive sweeps
+hand-wrote the same union arithmetic and the same five URLs into their entries;
+that arithmetic now lives in the instrument.
+
+**What it costs, named.** Three printed lines where there were none, in a report
+whose growth `336.2`'s "against" clause is right to worry about — `LOOPS.md`
+`341.1` and `353.2` both have prose growth open. It is held to three by printing
+the count plus **only the family-only additions**: the corpus set is listed
+above it and is not repeated, so this is not the third list the item feared. The
+corpus headline also now names itself **one clause of the lane, not its
+population** — and *"half"*, the word `336.2` uses and this entry quotes, is
+itself imprecise for 10 of 15, which is why the shipped line does not use it.
+
+**Refused in the same breath, so it is not inferred from silence:** amending
+`LOOPS.md` §3 lane 3. Its text already states the two-clause definition
+correctly — the tool was the half-answer, not the playbook — and `LOOPS.md` is
+**byte-for-byte unchanged** by this slice.
+
+### Red-proved by discrimination, three ways, and each injection was confirmed to land
+
+A union line could be echoing either half or a constant `15`. Three probe copies
+in the same directory (`ENVIRONMENT.md`'s rule — never `git stash`), each
+injection grepped to confirm it changed exactly the intended line before the run:
+
+```
+corpus threshold x100  -> corpus  0 + family 11 - both  0 = 11   (11 additions listed)
+family threshold x100  -> corpus 10 + family  0 - both  0 = 10   (0 additions)
+family threshold x1.5  -> corpus 10 + family 27 - both 10 = 27   (17 additions)
+```
+
+Unmodified it reads `corpus 10 + family 11 − both 6 = **15**`, which reproduces
+the figure five sweeps published and the hand derivation
+(10 + 11 − 6). A line echoing the corpus count would read 10, 10, 10; one
+echoing the family count would read 11, 0, 27; a constant would read 15 three
+times. None of those is the output. The probes were deleted before the commit.
+
+1. [x] **336.2 — DONE, decided: print the union.** `report-prose.mjs` prints the
+       flagged union with its inclusion-exclusion arithmetic (`corpus + family −
+       both = union`) and the family-only additions, and the corpus headline
+       names itself as half the lane's population. The base rate is re-measured
+       at this revision as **1 of 7 / 0 of the last 5** and is recorded as
+       arguing AGAINST the change; the ground taken is the lane's two-clause
+       contract. The reasoning is in the script's own comment beside the code,
+       not only here.
+
+       **Reopen condition:** a sweep that asserts lane-3 cleanliness over a
+       population smaller than the printed union. That would mean the line is
+       being skipped rather than the arithmetic being hard, and the answer then
+       is not a fourth line.
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. **None are owed by this slice**, and that is structural
+rather than a judgement: `git diff --stat` was read, and the diff is one
+`apps/docs/scripts/*.mjs` report that is not a gate and not in `ci.yml`, plus
+`ROADMAP.md` prose. No CSS rule, no `.astro` file, no docs page, no generated
+artefact and no shipped JS is touched, so no rendered surface can have moved.
+`grep -n 'report-prose' .github/workflows/*.yml` returns **nothing** — it is a
+run-by-hand report, so not even a gate's output moves.
+
+The visual debts carried forward are unchanged and unspent, counted from the
+previous hand-off's own enumeration rather than carried as a number: Slice 352's
+two, Slice 345's two, and the four older — `292.4/292.5`, Slice 319, `320.3`,
+`310.1` — **eight**.
+
 ## Slice 365 — `334.1` decided: **retag**, and the premise it was filed on is false — the marker is only the THIRD text leg, and an identical unreachable branch passes or fails this gate on **one line of prose** (2026-09-09)
 
 **Dispatched by rule 4**, on the oldest genuinely dispatchable open item.
@@ -4998,7 +5166,17 @@ in `ac4a9a0f` and not propagated, and A is one `grep -c` from the right answer.
          Related). True of the four demo sections, false as written, and nothing
          rests on it.
 
-2. [ ] **336.2 — should `report:prose` print the flagged UNION, since that is
+2. [x] **336.2 — DECIDED 2026-09-09 (Slice 366): PRINT IT** — the union, its
+       inclusion-exclusion arithmetic and the family-only additions, in three
+       lines, with the corpus headline naming itself as half the population.
+       **The base rate below is corrected there and argues the other way:** it
+       is **1 of 7** sweeps (332 alone) and **0 of the last 5**, not 2 of 2 —
+       Slice 326 printed `union = 15` in its own entry and failed on the stale
+       ENUMERATION, which no report line can prevent. The change was taken on
+       the lane's two-clause contract, not on the rate. Original text kept
+       verbatim below.
+
+       **336.2 — should `report:prose` print the flagged UNION, since that is
        what its lane is defined on?** Today it prints the corpus flags under a
        headline (*"over 2x the median — 10 page(s)"*) and the family flags
        inside a per-family breakdown, and **never prints the union** — so the
@@ -5109,6 +5287,29 @@ does not.
          throwaway Q&A discussion, checked, then closed, would settle it. What
          is NOT allowed is closing this on the controls alone; they prove the
          route is served, not that a real item surfaces.
+       - **Lane, measured 2026-09-09 (Slice 366) rather than assumed:
+         CLOUD-BLOCKED in the WRITE sense — a LOCAL wake can take it.** The
+         Accept's own escape hatch, filing a throwaway discussion, is a GraphQL
+         `createDiscussion` mutation, and this session's GraphQL endpoint
+         answers **HTTP 403** — *"only the
+         pinned set of PR-review operations is served"* — to all three of
+         `viewer`, a `repository { discussionCategories }` read and a bare
+         `__type` introspection, so the refusal is the endpoint and not one
+         query. The repo object read with the same token reports
+         `permissions {admin, maintain, push, triage, pull}` all **false**, and
+         no `mcp__github__*` tool in a cloud session touches discussions. A
+         local wake's `gh auth token` carries the owner's own GraphQL access, so
+         **this is the third kind of block `LOOPS.md` rule 4 asks a wake to
+         name**, not owner-blocked and not browser-blocked. A cloud wake that
+         reaches this item should record the fall-through and take the next one
+         rather than re-deriving the 403.
+         **Whether a REST POST would work is untested BY CHOICE**, said plainly
+         rather than folded into the block: the only probe is a request that can
+         create a real public item in the owner's repository, and a scheduled
+         wake has no live owner to authorise one. `/discussions/categories`
+         answers `404` with `documentation_url:
+         rest/repos/discussions#get-a-discussion` — the family's own anchor is a
+         *get* — which is weaker evidence and is all that was taken.
 
 ## Slice 334 — 315.3: `check:selftests` now RUNS each self-test, because the third rung of its own ladder was open — and the two costs that were expected to refuse it both measure zero (2026-09-07)
 
