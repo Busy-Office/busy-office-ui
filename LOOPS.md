@@ -861,6 +861,15 @@ surfaced more:
    roadmap-regrowth signal, and by the time 208 read it the live file was 67%
    closed history. Say `n of 4` in the write-up.
 
+   **Run all four with `python3 scripts/loops/standardize_lanes.py`** (export
+   `CHROME_PATH` for lane 1, `ENVIRONMENT.md` §1c) **and quote for each lane a
+   figure THAT LANE printed** — roadmap 337.1, where a mistyped workspace and a
+   mistyped script name both exited non-zero with **0B stdout and 0B stderr**,
+   making a lane that never ran indistinguishable from a clean one. The wrapper
+   holds the four spellings and exits non-zero on any lane that printed no
+   figure, so **a lane with no figure beside it in the write-up is one you
+   cannot claim to have run.** What the figure MEANS is still yours.
+
    **Lane 1 of 4 — run `npm run scan:dead-style -w docs`** — inline declarations that change
    no computed value at all. It is not a CI gate on purpose (the walk costs ~2
    min, and folding it into `check:layout` would mean mutating a trusted gate's

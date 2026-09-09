@@ -320,6 +320,172 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 367 — `337.1` closed with a wrapper, because two of the three fixes its Accept offered were **not available**: `LOOPS.md` never carried a `-s` to drop (**0** occurrences of `npm run -s ` in the file), and the per-lane write-up rule is **4 of 15** sweeps old. The filed trap reproduces and is worse than filed — **0B stdout AND 0B stderr** — and a second byte-silent form exists that the item does not name (2026-09-09)
+
+**Dispatched by rule 4**, on the oldest genuinely dispatchable open item. Rule 1
+found no open P0 (`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0** across
+**25** open items). Rule 2 `Standardize 2 / 4 ok`; rule 3 `Objective 2 / 3 ok
+[334, 336]`; rule 5 `Optimize 0 wake-date(s) newer — ok`, **EVALUATED not
+skipped**: its comparable set's movers are `gates` (+1), `claims` (+7) and
+`dispatch-region-words` (+60), none of them a regression on two consecutive
+runs. Rule 4's oldest open item is Slice 15, and everything from there to
+`337.1` is blocked, re-derived from each item's own text: **15** NEEDS-RUNTIME
+(owner hardware), **112.3** *"BLOCKED ON OWNER BRIEFS"*, **112.4** on 112.3's
+verdict, **249.7** holding its remaining rows for **249.10** (owner vocabulary)
+with its first Accept clause already executed, **249.10-13** each an owner call,
+**273.2** and **296.3** likewise, **320.3** browser-blocked in the **screenshot**
+sense (its
+own Accept says *"a rendered change a cloud wake cannot judge"*), **335.1**
+cloud-blocked in the **write** sense (Slice 366's measured 403).
+
+Step 0: container **DETACHED** (`git branch --show-current` **empty**) —
+`ENVIRONMENT.md` trap 1, fixed with `git checkout -B main origin/main` before
+any commit. Trap 2 bit and cleared in one `--unshallow`, no `shallow.lock`:
+**2,102** commits, and it again brought the tags (`git tag | wc -l` → **8**,
+run rather than assumed).
+
+**Step 1 — both intakes read, with `ENVIRONMENT.md` §8's controls:**
+`/issues?state=open` → HTTP 200 len **1**; `/discussions` → HTTP 200 len **0**;
+`/not-a-real-route` → **404**, the control that makes the `200 []` mean *served
+and empty*. Issue #2's `updated_at` reads `2026-09-06T15:10:34Z`, the same value
+the previous hand-off recorded. Nothing new, so **Step 1 committed nothing**.
+
+### The trap reproduces, and it is worse than filed
+
+Run in this container, exit code and both streams measured separately:
+
+| invocation | rc | stdout | stderr |
+|---|---|---|---|
+| `npm run -s scan:dead-style -w @busy-office/docs` | 1 | **0 B** | **0 B** |
+| `npm run scan:dead-style -w @busy-office/docs` | 1 | 0 B | 181 B (`No workspaces found`) |
+| `npm run -s scan:no-such-lane -w docs` | 1 | **0 B** | **0 B** |
+
+The item says the lane *"printed nothing at all and did not visibly fail"*. The
+stronger fact is that **stderr is empty too** — `-s` swallows npm's own error
+along with the banner, so there is no stream carrying a diagnosis at all. And
+the third row is a **second** byte-silent form the item does not name: a
+mistyped *script* name behaves identically to a mistyped workspace. Both are
+npm-level errors, which is exactly the class `-s` suppresses; a lane script that
+crashes on its own still prints its stack (lane 3 did, on a missing `dist`).
+
+### Two of the three offered fixes were not available, measured rather than argued
+
+The Accept left the mechanism open between *a wrapper*, *dropping `-s`*, and
+*the sweep's own write-up rule*. Two do not exist:
+
+- **There is no `-s` to drop.** At `0edfc35e`,
+  `git show HEAD:LOOPS.md | grep -c 'npm run -s '` → **0**, and all three npm
+  lanes are spelled with the correct workspace (`-w docs`, `-w @busy-office/ui`,
+  `-w docs`, at lines 864/876/884). The playbook was already right; the `-s` and
+  the `@busy-office/docs` came from what the wake **typed**, which no edit to the
+  playbook can prevent.
+- **The write-up rule is four sweeps old.** Over the **15** `Standardize sweep,
+  4 of 4 lanes` sections in `ROADMAP.md` + `ROADMAP-archive.md`, the explicit
+  `Lane K of 4` marker appears in **4** — Slices 345, 350, 357 and 363, the last
+  four — and **all four carry a figure under every marker**. The other **11**
+  narrate lanes collectively (*"lanes 1-3 clean"*), which **by construction**
+  cannot say which lane printed what: three lanes that ran and two that ran with
+  one silent produce the same sentence.
+
+  **What that instrument cannot see, said plainly:** it keys on the literal
+  `Lane K of 4` marker, so for those 11 it reports *no marker*, never *no
+  figure* — the 11 are outside its reach, not failing it. It was red-proved by
+  stripping the digits from one lane bullet (Slice 363, lane 2), which flipped
+  that section from 4 lanes with figures to 3; without that the `4` could have
+  been the marker's own digits, which is why the marker text is removed before
+  the digit test.
+
+### What shipped
+
+`scripts/loops/standardize_lanes.py` — one entry point that holds the four
+spellings, runs each lane, and classifies it on three exact clauses of the
+child process's own bytes: `rc == 0`, output non-empty after npm's leading
+banner is stripped, and output contains a digit. A lane failing any of them is
+printed `NOT RUN` with its stderr tail (or *"stderr was EMPTY too — this is why
+the lane looked clean"*), and the process exits non-zero. Run here with all four
+lanes green. Each headline below is the wrapper's own verbatim pick from that
+lane's stdout, truncated only where marked `…`:
+
+```
+lane 1  dead-style scan — 0 dead style attribute(s) on 0 page(s); 1365 live inline style attribute(s) in total
+lane 2  css-repeats report — 74 source file(s) · 242 rule(s) with 3+ declarations · 230 distinct bodies · 8 body(ies) appearing more than once
+lane 3  prose report — 119 documentation page(s) of 128 built · median 798 · mean 959 · total 114,124 words …
+lane 4  loop-prose report — base 6ffdfd3f (2026-08-20) -> HEAD (0edfc35e)
+```
+
+**One live hazard the wrapper creates, found by it and recorded rather than
+inferred.** Lanes 1 and 3 read `apps/docs/dist` — checked per lane rather than
+assumed, since `grep -c dist` says 3 of 4 and lane 2's hits are all the word
+*distinct*, its own header reading *"source, not `dist`"* — so running the sweep
+while a build is in flight reads a half-written site. This wake did it by
+accident — a lane-1 run overlapping a background `docs:build` reported **990**
+live inline style attributes where two consecutive runs on a settled tree (529
+files, the full-build figure `ENVIRONMENT.md` §3 names) both report **1365**.
+The wrong number is plausible, self-consistent and silent, which is
+`ENVIRONMENT.md` §3's fail-open shape reached from the other side: not *"I ran a
+bare `astro build`"* but *"I read while one was running"*. **Run the sweep
+against a settled `dist`, and re-read any lane figure taken beside a build.**
+The 1365 quoted above is the settled reading, taken twice.
+
+**Lane 4's headline is the caveat working as documented, not a defect.** Its
+first digit-carrying line is a base/HEAD sha pair, not the lane's finding — the
+wrapper checks that *a* figure was printed, never that it is the right one, and
+`LOOPS.md`'s lane 4 text still sends the wake to the `ratchet` block. Default
+(non-`--quiet`) output prints each lane in full for exactly that reason.
+
+It is **not a gate and not in `ci.yml`** — the lanes are deliberately not gates
+and this changes nothing about that. `check:selftests` does not scan it either
+(that gate reads `check-*.mjs` in two script dirs), so its `--self-test` is
+shipped on doctrine rather than enforcement.
+
+### The red-proof found a defect in the thing being proved, not in the injection
+
+Three injections, one clause each, every one asserted to hit **exactly 1 site**
+and to change the file before running:
+
+| injection | self-test |
+|---|---|
+| `if rc != 0:` → `if False:` | **red**, 4 cases |
+| `if not headline:` → `if False:` | **red**, 1 case |
+| `if not body.strip():` → `if False and …` | **GREEN — 0 failures** |
+
+The third is the finding. **The emptiness clause cannot change a verdict**: no
+output is a strict subset of no digit, so the digit clause already catches
+everything it catches, and it only ever refines the *reason*. `CLAUDE.md` says a
+green red-proof is a defect in the injection until proven otherwise — here the
+injection was verified to land (1 site, content changed, and the reason string
+visibly moved from *"no output at all"* to *"carries no figure"*), so the
+remaining explanation is the one that held: an unfalsifiable clause, which is the
+decoration this repo refuses.
+
+Fixed by making the clause load-bearing rather than by deleting it: the
+self-test now asserts the **reason substring** as well as the verdict, so
+disabling the clause goes red. Kept because *"no output at all"* points a wake
+at its own command line and *"carries no figure"* points it at the lane's prose.
+Re-run after that change, all three injections go red.
+
+**A fourth error, this wake's own, recorded because it is the one the doctrine
+predicts.** The first attempt at injection 1 was `rc != 0` → `rc != 99999`, which
+is not "disable the rc clause" — it makes the clause true for **every** rc, so
+the classifier returns `NOT RUN` for everything. Only the positive case caught
+it; the three `NOT RUN` cases "passed" while measuring nothing, because a
+classifier stuck on `NOT RUN` satisfies a `NOT RUN` expectation. That is
+`CLAUDE.md`'s *"a red-proof that goes red TOO BROADLY certifies nothing"*, and
+the repair is the same one: the injection was re-aimed to `if False:`, which
+disables only that branch, and it then fails **4** cases. The positive control is
+what made the difference visible both times — a self-test of NOT-RUN cases alone
+could not have failed. **7 self-test cases, 0 failures** at the committed
+revision.
+
+### NOT VERIFIED, said plainly
+
+**No 1440/390 light-and-dark screenshots — a cloud wake has no Podman.** This
+wake owes none, and that is structural rather than a judgement: `git diff --stat`
+was read to confirm the diff is one new run-by-hand Python script plus `LOOPS.md`
+and `ROADMAP.md` prose. No CSS, no docs page, no `.astro`, no generated artefact,
+no shipped JS. `grep -rn 'standardize_lanes' .github/workflows/` returns nothing,
+so no gate's output moves either.
+
 ## Slice 366 — `336.2` decided: **print the union** — and the base rate it was filed on is **1 of 7**, not 2 of 2: Slice 326 printed `union = 15` in its own entry and failed on the ENUMERATION instead, which no report line can prevent (2026-09-09)
 
 **Dispatched by rule 4**, on the oldest genuinely dispatchable open item. Rule 1
@@ -5049,7 +5215,21 @@ removal: assert on structure, never on raw text"* in its exact predicted form �
 `grep -nE "const (name) ="` returns nothing and the deletion holds. **The rule
 caught a live case in the session that had just re-read it.**
 
-1. [ ] **337.1 — A Standardize lane that never RAN is recorded as clean, and
+1. [x] **337.1 — DONE 2026-09-09 (Slice 367): a wrapper, because the write-up
+       rule alone was never load-bearing.** `scripts/loops/standardize_lanes.py`
+       spells the four lanes, runs them, and refuses to call one clean unless it
+       printed a figure — exit non-zero otherwise. **The filed trap reproduces
+       and is worse than filed** (`rc=1`, **0B stdout AND 0B stderr**), and a
+       **second** byte-silent form exists that the item does not name: a
+       mistyped *script* name, `npm run -s scan:no-such-lane -w docs`. **Two of
+       the three fixes the Accept offered were not available**: `LOOPS.md`
+       already spelled all four commands correctly and without `-s`, so there
+       was no `-s` to drop; and the write-up rule is **4 of 15** sweeps old —
+       the `Lane K of 4` marker starts at Slice 345, and the other 11 narrate
+       *"lanes 1-3 clean"* collectively, which by construction cannot say which
+       lane printed what. Original text kept verbatim below.
+
+       **337.1 — A Standardize lane that never RAN is recorded as clean, and
        nothing in the sweep can tell the two apart.** Re-running 332's lanes,
        `npm run -s scan:dead-style -w @busy-office/docs` printed **nothing at
        all** and did not visibly fail — the workspace is named `docs`, and
