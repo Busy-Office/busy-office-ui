@@ -371,6 +371,35 @@ list that named it and an ORDER that ran it too early.
 No prettier config and no prettier dependency exists here. The style enforcers
 are `stylelint` and the gates in `check:repo`.
 
+## 4b. AMENDING THE SLICE COMMIT **AFTER** `record_iteration.py` STRANDS THE SHA IN EVERY ROW IT JUST WROTE
+
+Found 2026-09-09 (Slice 371). `record_iteration.py` stamps each row it appends
+with the current `HEAD`. A `git commit --amend` afterwards — to fold in one more
+edit before pushing — **rewrites that sha**, and the rows keep pointing at an
+object that exists only in this container's reflog. It will never exist on the
+remote.
+
+**Nothing catches this.** `git cat-file -e <old sha>` still answers *yes*
+locally, so the obvious check passes while the published record is already
+broken. This is the mechanism behind `LOOPS.md` §0c's *"five whose sha no longer
+exists, rebased away"* — that section records the symptom and names blame as the
+durable alternative; this is how the shas get stranded in the first place.
+
+Either **do not amend after recording**, or correct the rows before pushing:
+
+```
+grep -c '<old sha>' .roundtable/loop-log.md      # assert the count FIRST
+#   ... replace with the post-amend sha, then rebuild the mirrors:
+python3 scripts/loops/rebuild_from_log.py
+python3 scripts/loops/generate_status.py && python3 scripts/loops/generate_roundtable_index.py
+grep -c '^- ' .roundtable/loop-log.md            # must equal the rebuild's row count
+```
+
+Slice 371 hit it with **3** rows (one Continue + two `--also-refused`), asserted
+the count before replacing per CLAUDE.md's bulk-edit rule, and reconciled the
+rebuild at **1710 = 1710**. **No item is filed** — this is a sequencing rule, not
+something a gate can see, and the loop already refuses gates on that shape.
+
 ## 5. `loops.db` IS GIT-IGNORED, SO A FRESH CONTAINER HAS NO MIRROR
 
 **Guarded since 167.3, so this is a shape to know rather than a live trap** —
