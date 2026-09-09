@@ -320,6 +320,97 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 370 — Standardize sweep, **4 of 4 lanes**, all three artefact lanes clean; the finding is that **`351.1` was decidable from evidence `350.1` already carried in prose**, so the base-rate command now windows `a..b^`. Under `a..b` a sweep is classified *has lane input* on the strength of **its own commit** — `f9e0f17d..161ede68` is 16 commits, **15 touching no lane input**, the 16th being the sweep (2026-09-09)
+
+**Dispatched by rule 2, which was OVERDUE.** Rule 1 found no open P0
+(`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0** across **25** open
+items). `dispatch_status.py` read `Standardize 4 / 4 Continue rounds OVERDUE`,
+`Objective 1 / 3 ok [338]`, `Optimize 0 wake-date(s) newer ok` — so rule 2
+matched and rules 3-8 were not reached. Step 1 read both intakes in the REST
+form with §8's controls: issues **1** (#2, `updated_at`
+`2026-09-06T15:10:34Z` — the **fourth** consecutive hand-off recording that
+same value), discussions **0**, `/not-a-real-route` **404**. Nothing to triage,
+so Step 1 committed nothing.
+
+**Both Step 0 traps bit and both were fixed before any commit.** `git branch
+--show-current` answered EMPTY (the container arrived detached at `421afd15`);
+`git fetch origin main && git checkout -B main origin/main` fixed it. The clone
+arrived shallow at 50 commits; `git fetch --unshallow origin` completed inside
+the timeout, left no `shallow.lock`, and gave **2,108** commits. Per §2 the tag
+count is the check and not a pinned value — this container's unshallow brought
+**8**.
+
+### The four lanes, each quoting a figure that lane itself printed
+
+Run through `scripts/loops/standardize_lanes.py` with `CHROME_PATH` exported,
+against a settled `dist` (**529** files, matching `ENVIRONMENT.md` §3's
+full-build figure — a bare `astro build` leaves 224). The wrapper reported
+`all 4 lane(s) printed a figure`, rc 0.
+
+- **Lane 1 of 4 — `scan:dead-style`: `0 dead style attribute(s) on 0 page(s);
+  1365 live inline style attribute(s)`.** Clean, and identical to Slice 350's
+  1,365.
+- **Lane 2 of 4 — `report:css-repeats`: `74 source file(s) · 242 rule(s) ·
+  230 distinct bodies · 8 body(ies) appearing more than once`.** The finding is
+  the DELTA, and there is none: all **8** groups match the standing table in
+  `LOOPS.md` body-for-body and multiplicity-for-multiplicity, including the x4
+  joined-control radius reset and the x3 visually-hidden idiom.
+- **Lane 3 of 4 — `report:prose`: `119 documentation page(s) of 128 built ·
+  median 798 · total 114,124 words`**, flagged union **15** pages
+  (corpus 10 + family 11 − both 6). Checked against the ENUMERATION the lane
+  mandates — 158.1's twelve, 161.1's three, 178.3's `/concepts/scale/` — **all
+  15 are members**, and the one non-flagged member is `/patterns/output-form/`,
+  as in 345 and 350. No page carries no verdict, so nothing to record and the
+  16-set needs no amendment.
+- **Lane 4 of 4 — `report_loop_prose.py`: no file changed accumulate class.**
+  The dispatch region is **7,552** words at **41.2%** of the file, flat since
+  Slice 368. Attributed per section (308.1/339.1): **1 of 16 sections moved,
+  +198 body words**, and it is `### Step 0c`.
+
+### Lane 4's `+198` is fully attributed, and the per-revision series says it is NOT new material
+
+339.1's rule is that the tell is the series, not the endpoints. Measured by
+importing `report_loop_prose.dispatch_sections` rather than re-implementing its
+convention, over every revision of `LOOPS.md` since the last region cut, and
+asserting that exactly one section matches `Step 0c` at each:
+
+```
+f9e0f17d  2026-09-07  1,322          339.1 applies the charter by hand
+7e2c61c0  2026-09-07  1,516   +194   collision 5 written up in full
+1310b81a  2026-09-08  1,516     +0
+f1e84a77  2026-09-09  1,520     +4   341.1 removes the aggregate half
+e128804d  2026-09-09  1,520     +0
+5ce62916  2026-09-09  1,520     +0
+```
+
+So the `+198` is **one generator firing (+194) plus the +4 net of the very
+commit that was trying to shrink the section**, and Step 0c has been **flat at
+1,520 across the last three revisions**. Both components were already recorded —
+`326.3` publishes the generator series and refuses both structural candidates
+(a per-rule word ceiling, on base rate; a rules/rationale file split, on the
+`RESUME.md`/`ENVIRONMENT.md` precedent measuring **2.96x** the pre-split file),
+and Slice 363 records its own `+4` as *"NOT a cut"*. **No new finding, and no
+cut proposed**: this wake adds only the two revisions after 341.1, which are
+flat.
+
+### The sweep's own lane-2 window is what made `351.1` decidable
+
+`report-css-repeats.mjs` carries a guard — *an unchanged reading is evidence of
+a clean tree only when the window since the last run TOUCHED
+`packages/core/src/css`*. It did: `c5780113` (Slice 369). But that change is
+**comment-only** — 9 insertions, 1 deletion, entirely inside a block comment in
+`print/index.css` — so it could not move any of lane 2's four figures. The
+guard passes while its discriminating power is zero, which is the same
+self-confirming shape `351.1` was filed about one level up. `351.1` is decided
+above; **`350.1` is deliberately left open**, since deciding it was never this
+item's claim.
+
+**Not filed as an item, with the reason.** *"This change could move a lane's
+reading"* is semantic — 94.11's rule, and both `350.1` and `351.1` already
+refuse a gate on exactly it. A comment-only-diff refinement to lane 2's guard
+would be a third statement of the same refusal, which is what `158.2` has open
+about this loop's prose growth.
+
 ## Slice 369 — `338.1` decided: **refused on its named instance, and the instrument its own Accept prescribed is the wrong one.** `.bo-timeline__marker` prints at **5.66:1** (worst state), not the filed 2.54:1, because `print-color-adjust: exact` keeps its disc. The general gap is real and framework-wide — **19,511 of 26,817** painted text fills below AA on **125 of 128** pages — but every computed-style figure about it over-states, because Chrome rewrites light text on the way to paper (2026-09-09)
 
 **Dispatched by rule 4**, on the oldest genuinely dispatchable open item. Rule 1
@@ -3671,12 +3762,56 @@ exists once the wake records. `ENVIRONMENT.md` says where to *read* a figure;
 nothing said a wake's own last mandated step can move one it published three
 commits earlier.
 
-1. [ ] **351.1 — the base-rate command `350.1` hands forward should window on
+1. [x] **351.1 — the base-rate command `350.1` hands forward should window on
        what the sweep could SEE, or say why it does not.** `a..b` includes the
        sweep's own commit; `a..b^` is what the sweep had to read. The two
        disagree on **5 of 139** windows and on the headline rate (10.8% vs
        14.4%). This does not decide `350.1` — that item is still filed, not
        decided — it decides which number `350.1` is decided on.
+
+       **DECIDED 2026-09-09 (Slice 370, Standardize sweep): the change is
+       ACCEPTED, and the command in `350.1` now windows `a..b^`**, with the
+       reason and both readings beside it. `350.1` itself is untouched and still
+       open — this decided which number it is decided on, which is all it
+       claimed to do.
+       - **What settled it was the spot-check `350.1` already carried in prose.**
+         That paragraph names `161ede68`'s only lane-input commit as *"the
+         sweep's own conversions"*, so `a..b` classifies that window as **has
+         lane input** on the strength of the sweep's own OUTPUT. Re-verified by
+         hand at `421afd15` on two of the five disagreeing windows:
+         `f9e0f17d..161ede68` is 16 commits, **15 of which touch no lane input**,
+         the 16th being the sweep; `d3bb443f..cdd7c07e` is the sweep's own single
+         `Gallery.astro`. The confound is the mechanism, not one window's
+         accident. The admissible counter-argument the Accept named — that a
+         sweep's own conversions ARE evidence the window had material — dies on
+         exactly this: it would make the predicate answer *"did the sweep change
+         anything"*, which is not `350.1`'s question and is knowable without it.
+       - **Both predicates re-measured at execution time**, unshallowed first
+         (`git rev-parse --is-shallow-repository` → `false`, 2,108 commits);
+         quoting nothing from above. At `421afd15`, 141 windows:
+         `a..b` **15** no-input (10.6%) / 13 also no-instrument / span **2037**;
+         `a..b^` **20** no-input (14.2%) / 18 / span **1896**.
+       - **The base rate moved in its DENOMINATOR only** — the counts 15 and 20
+         are identical to the pair this item published (measured by the Slice 351
+         grill at **`65de70c`**, not at `81f6281c`, whose own reading is the
+         earlier `14 of 138`), and the disagreement set
+         is **the same five windows** (`15f9bbc1`, `91677655`, `cdd7c07e`,
+         `0768f09f`, `161ede68`), reproduced rather than carried. The rate shift
+         (10.8%→10.6%, 14.4%→14.2%) is 139→141 windows and nothing else.
+       - **Reconciled twice before quoting** (CLAUDE.md): the `a..b` span sums to
+         **2037**, equal to an independent `git rev-list --first-parent
+         <oldest>..<newest>`; and `a..b^` is **exactly 141 lower**, one dropped
+         commit per window, which is the arithmetic the change predicts.
+       - **Verified as the ARTEFACT, not as the diff**: the amended block was
+         extracted back out of `ROADMAP.md` by content (asserting exactly one
+         block matches — the naive "first block" pick found **6** candidates) and
+         executed, printing `141 windows; 20 …; span 1896`, the figures written
+         beside it. A caret count over the extracted block read **3** where the
+         code has 2 — the third is this decision's own explanatory comment, the
+         "assertion tripped by its own explanation" shape, checked rather than
+         assumed.
+       - **No gate**, as both items said: what changed is which commit range a
+         command uses, and that is a one-line edit.
        - **Accept — the property, not a predicted outcome:** the command
          published in `350.1` is amended in place (236.2 permits amending, and
          the slice is live) so that a later wake re-running it gets the
@@ -3871,16 +4006,22 @@ INSTR = ('apps/docs/scripts/scan-dead-style.mjs',
          'packages/core/scripts/report-css-repeats.mjs')
 noin = noboth = span = 0
 for a, b in zip(std, std[1:]):
-    files = {f for c in sh('git','rev-list','--first-parent',f'{a}..{b}').split()
+    # `{b}^`, NOT `{b}` — the window is what the sweep could SEE, and its own
+    # commit did not exist when it ran (351.1, decided 2026-09-09).
+    files = {f for c in sh('git','rev-list','--first-parent',f'{a}..{b}^').split()
                for f in sh('git','show','--name-only','--format=',c).split('\n') if f}
-    span += len(sh('git','rev-list','--first-parent',f'{a}..{b}').split())
+    span += len(sh('git','rev-list','--first-parent',f'{a}..{b}^').split())
     hi = any(f.startswith(INPUTS) for f in files)
     noin += not hi
     noboth += not hi and not any(f in INSTR for f in files)
 print(len(std)-1, 'windows;', noin, 'with no lane input change;', noboth,
       'with no input AND no instrument change; span', span)
 PY
-# 2026-09-08 at 81f6281c: 138 windows; 14 no-input (10.1%); 13 also no-instrument (9.4%); span 1994
+# 2026-09-08 at 81f6281c, windowed a..b:  138 windows; 14 no-input (10.1%); 13 also no-instrument (9.4%); span 1994
+# 2026-09-09 at 421afd15, windowed a..b^: 141 windows; 20 no-input (14.2%); 18 also no-instrument (12.8%); span 1896
+#   the same run windowed a..b reads 15 (10.6%) / 13 (9.2%) / span 2037, which
+#   reconciles to `git rev-list --first-parent <oldest>..<newest>` = 2037; a..b^
+#   is exactly 141 lower, one dropped commit per window.
 ```
 
 **Reconciled against an independent count before quoting** (CLAUDE.md): the 138
@@ -3891,6 +4032,33 @@ input change, up to 16 commits' worth, so this is not the "identical value
 across many inputs" tell. A hand spot-check of the newest closed window
 (`f9e0f17d..161ede68`) shows exactly one of its 16 commits touching a lane
 input — `161ede68`, the sweep's own conversions.
+
+**⚠ THE FIGURES IN THIS PARAGRAPH AND IN THE BLOCK'S FIRST COMMENT LINE ARE
+`a..b` READINGS; THE COMMAND ABOVE NO LONGER WINDOWS THAT WAY** (351.1, decided
+2026-09-09). They are kept as the historical reading at `81f6281c`, not
+re-derived, because they are what 350.1's argument was written against — but a
+wake re-running the block now gets the `a..b^` line instead, and the two are
+**not** comparable. The spot-check sentence immediately above is the whole
+reason for the change: it names `161ede68`'s only lane-input commit as *the
+sweep's own conversions*, so under `a..b` that window is classified **has lane
+input** on the strength of the sweep's own OUTPUT. Re-verified by hand at
+`421afd15` on both disagreeing windows — `f9e0f17d..161ede68` (16 commits, 15
+touching no lane input, the 16th being the sweep) and `d3bb443f..cdd7c07e` (the
+sweep's own single `Gallery.astro`) — so the confound is the mechanism, not an
+artefact of one window. That is CLAUDE.md's *reconcile against the SOURCE, not
+against the argument* one level up: a predicate that reads the sweep's own
+commit cannot see past its own caller.
+
+**The base rate MOVED only in its denominator, which 351.1 names as a satisfying
+outcome.** Re-measured at `421afd15`: the no-input COUNTS are **15** (`a..b`)
+and **20** (`a..b^`), identical to the pair the Slice 351 grill published at
+**`65de70c`** — *not* to the `14 of 138` in the comment line above, which is
+`81f6281c`'s own reading one window earlier, exactly the "a sweep's figure is
+one window short of the sweep publishing it" effect that amendment records. The
+rates move (10.8% → 10.6%, 14.4% → 14.2%) purely because the denominator grew
+139 → 141. The disagreement set is **the same five windows** — `15f9bbc1`, `91677655`,
+`cdd7c07e`, `0768f09f`, `161ede68` — reproduced independently rather than
+carried.
 
 **The cost is measured, not asserted**: lane 1 alone is **123s** of wall clock in
 this container (`date`-bracketed re-run of `npm run scan:dead-style -w docs`),
