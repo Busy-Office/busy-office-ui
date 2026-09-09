@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-09 09:48 UTC
+Generated at: 2026-09-09 10:55 UTC
 
 ## Open items by slice
 
@@ -43,16 +43,17 @@ Generated at: 2026-09-09 09:48 UTC
 - **Slice 369** (2 open)
   - 369.1 — should printing from the DARK theme force the light palette? OWNER OR ARCHITECTURE CALL.
   - 369.2 — 10 of 128 pages never get the print reset on `body`.
+- **Slice 372** (1 open)
+  - 372.1 — rule 5's pairing keeps the last sample of each calendar day on a recorded reason that is false at 72 of 73 pairs, and the case cited for it is mislabelled.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1710 iterations logged)
+dispatch status — counter-triggered rules (1713 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-09-09 08:54   ok
-  Objective     3 / 3 slices          since 2026-09-09 06:54   OVERDUE  [338, 370, 371]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-09-09 10:55   ok
   Optimize      0 wake-date(s) newer   since 2026-09-09 09:44   ok   [newest pair: dispatch-region-words; 143 sample(s), 8 of 47 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (39 of 47 name(s) have only one day and are not an input to a rule that compares two runs):
        gates                       4d  2026-09-07 55 count -> 2026-09-09 56 count  +1
@@ -83,9 +84,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-09 06:54 · Meta · refusal · a fifth loop-mechanics/parser item for the arming-set labels — refused on 355.3, 359.4 and LOOPS.md's own conclusion that widening the regex is not the lesson · refused · 5ce62916
-- 2026-09-09 06:54 · Meta · refusal · re-grilling Slices 334 and 336 as the hand-off's instruction named — both closed, and 336 is itself a grill · refused · 5ce62916
-- 2026-09-09 08:06 · Continue · build · 338.1 — refused on its named instance with the measurement; the gap is framework-wide and the Accept's instrument is wrong · refused · c5780113
 - 2026-09-09 08:06 · Meta · refusal · widening check:print-tokens on the source trace alone — the marker is rescued by print-color-adjust: exact, measured 5.66:1 at worst · refused · c5780113
 - 2026-09-09 08:06 · Meta · refusal · publishing any printed contrast ratio from computed style — Chrome's economy mode rewrites light text on the way to paper · refused · c5780113
 - 2026-09-09 08:54 · Standardize · sweep · Slice 370 — Standardize sweep 4 of 4 lanes, lanes 1-3 clean (0 dead attrs of 1,365; css-repeats 74/242/230/8 matching the standing table body-for-body; 15 flagged prose pages all inside the mandated 16-set). Lane 4's +198 fully attributed by the per-revision series: +194 is collision 5, +4 is 341.1's own net, and Step 0c is flat at 1,520 across three revisions — no new material, no cut. 351.1 DECIDED and ACCEPTED: 350.1's base-rate command now windows a..b^, settled by evidence 350.1 already carried in prose (f9e0f17d..161ede68 is 16 commits, 15 touching no lane input, the 16th being the sweep). Both predicates re-measured at 141 windows — a..b 15/10.6%/span 2037, a..b^ 20/14.2%/span 1896 — reconciled twice and verified by executing the block back out of ROADMAP.md. 350.1 left OPEN on purpose · landed · 3d985b83
@@ -93,6 +91,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-09 09:43 · Continue · build · Slice 371 — 339.2 decided: rule 3's +303 is three kinds; the cost narrative moves to LOOPS-archive.md, 279.4's loop-SET argument stays uncut (975 -> 907 words) · landed · 4e6b83c1
 - 2026-09-09 09:43 · Meta · refusal · filing P5's restatement of P8's lesson as a defect — the text labels itself a forward-reference, and filing it would inflate the backlog · refused · 4e6b83c1
 - 2026-09-09 09:43 · Meta · refusal · amending P7's charter sentence — 'the five recurrence narratives are in LOOPS-archive.md' is still true, and its scoping to five IS this slice's finding · refused · 4e6b83c1
+- 2026-09-09 10:55 · Objective · grill · Slice 372 — Objective grill of Slices 369, 370, 371: per_day_last discards a metric sample on the recorded ground that a wake sampling twice a day is correcting itself; measured, 72 of 73 adjacent intra-day pairs span 2-50 commits and only 1 matches. ci-wall-time's 'burst inside one wake' spans 36 rows / 35 shas / 5 loops. Cost: 5 of 8 day-paired names publish a movement that occurred between no two samples (dispatch-region-words -8 vs a true -68) and rule 5's predicate disagrees on 3 of 8. Filed 372.1, cloud-takeable, Accept as a property. Every structural claim in 370/371 reproduced exactly; all four lanes re-run · landed · 28c6387e
+- 2026-09-09 10:55 · Meta · refusal · a gate asserting a metric sample must not be discarded when a commit falls between it and the next — base rate 72 of 73 intra-day pairs, so it would be red on a correct tree from its first run (94.11's rule pointing the other way) · refused · 28c6387e
+- 2026-09-09 10:55 · Meta · refusal · editing LOOPS.md's own false one-wake sentence inside this grill — 372.1's Accept leaves open which of two fixes is right, and a grill that pre-empts its own item has decided it by practice rather than by measurement · refused · 28c6387e
 
 ## Sunset test
 

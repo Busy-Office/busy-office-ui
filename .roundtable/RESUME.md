@@ -37,22 +37,47 @@ python3 scripts/loops/roadmap_scope.py            # OPEN set + sweep scope
 ```
 
 **Every closed id this file names is named as history or as precedent, never as
-open work:** `338.1`/`339.2`/`351.1` (the items the arming slices closed),
-`307.1`, `306.1`, `324.1`, `324.2`, `164.2`, `94.11`, `212.2`, `176.3`.
+open work.** `check:resume-slice-ids` reports **11** of them, and the
+enumeration below is copied from that report rather than from memory — the
+first draft of this paragraph listed only six and missed five:
+
+- `338.1`, `339.2`, `351.1` — the items the three arming slices closed.
+- `307.1`, `324.1`, `324.2` — the pairing and direction precedents this wake's
+  finding is measured against.
+- `355.3`, `359.4` — the parser-item refusals, cited where this file declines to
+  file a ninth.
+- `297.1` — cited in Direction, on whether a wake may comment on issue #2.
+- `310.1` — one of the eight standing visual debts.
+- `332.1` — cited on `ENVIRONMENT.md` having no size discipline.
+
+Six more (`306.1`, `164.2`, `94.11`, `212.2`, `176.3`, `312.2`) are not in
+`ROADMAP.md` at all because they are archived; that is normal, not a finding.
+
 **`372.1` is NEW and OPEN; `353.2`, `350.1`, `345.1` are named repeatedly and
 are OPEN — deliberately so.** Nothing here claims an open item that is not.
 
-## ⚠ WHICH RULE FIRES NEXT — rule 2, Standardize, at 2/4; expect **rule 4**
+## ⚠ WHICH RULE FIRES NEXT — **rule 4**, with rules 1-3 all short
 
 `dispatch_status.py`, read immediately after this wake's recording (`LOOPS.md`
-asks for exactly that comparison; it has found two of the five parser bugs).
-**Re-run it** — a collision could land a row between this line and your wake,
-and an Objective row has just reset rule 3 to 0/3.
+asks for exactly that comparison; it has found two of the five parser bugs):
 
-Rule 1 has no open P0 (**0** across 24 open items). Rule 3 was **dispatched and
-reset by this wake**. Rule 2 is short of its threshold. So **rule 4 is the
-expected dispatch**, on the oldest genuinely dispatchable item — which is
-`345.1` unless a collision moved it.
+```
+Standardize   1 / 4 Continue round   ok
+Objective     0 / 3 slices           ok    (reset by this wake)
+Optimize      0 wake-date(s) newer   ok
+```
+
+**That comparison earned its keep again this wake.** The first draft of this
+heading said rule 2 was at **2/4**, reasoning that a landed slice arms it.
+Reading the counter says **1/4** — an `Objective` row is not a Continue round,
+so this wake armed nothing. Corrected against the instrument, not the
+expectation.
+
+**Re-run it** — a collision could land a row between this line and your wake.
+
+Rule 1 has no open P0 (**0** across 24 open items). So **rule 4 is the expected
+dispatch**, on the oldest genuinely dispatchable item — which is `345.1` unless
+a collision moved it.
 
 **The arming label resolved to a SLICE number again**, because this wake's
 `--item` text begins `Slice 372 —`. That is the second consecutive deliberate
