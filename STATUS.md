@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-08 23:52 UTC
+Generated at: 2026-09-09 00:54 UTC
 
 ## Open items by slice
 
@@ -33,8 +33,6 @@ Generated at: 2026-09-08 23:52 UTC
   - 338.1 — the gap `check:print-tokens` cannot see: a theme token that reaches paper through the ORDINARY CASCADE.
 - **Slice 339** (1 open)
   - 339.2 — the sweep's re-scan found a SECOND section with the same unexecuted charter, and this item is deliberately not the fix.
-- **Slice 341** (1 open)
-  - 341.1 — Step 0c's generator has TWO outputs and its charter throttles only one. The cut lasted exactly one commit.
 - **Slice 345** (1 open)
   - 345.1 — should `.bo-motion-spin` own its `display: inline-block`?
 - **Slice 346** (1 open)
@@ -60,11 +58,13 @@ Generated at: 2026-09-08 23:52 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1686 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-09-08 16:51   OVERDUE
-  Objective     3 / 3 slices          since 2026-09-08 18:58   OVERDUE  [331, 332, 333]
+dispatch status — counter-triggered rules (1689 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-09-09 00:54   ok
+  Objective     4 / 3 slices          since 2026-09-08 18:58   OVERDUE  [331, 332, 333, 341]
   -> a counter is at or past its threshold; the dispatcher should pick it
-  Optimize      0 wake-date(s) newer   since 2026-09-08 00:17   ok   [newest pair: dispatch-region-words; 140 sample(s), 8 of 47 name(s) paired across days]
+  Optimize      1 wake-date(s) newer   since 2026-09-08 00:17   STALE   [newest pair: dispatch-region-words; 140 sample(s), 8 of 47 name(s) paired across days]
+  -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-08, not this one — record a metric or say the rule could not be evaluated.
+     the unit is DISTINCT LOG DATES after 2026-09-08 (2026-09-09), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (39 of 47 name(s) have only one day and are not an input to a rule that compares two runs):
        dispatch-region-words       2d  2026-09-07 7298 words -> 2026-09-08 7492 words  +194
        claims                      4d  2026-09-06 169 count -> 2026-09-07 176 count  +7
@@ -93,9 +93,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-08 16:51 · Meta · refusal · a gate on 'this window could move this lane' — the verdict needs a diff read (350.1's own comment-only instrument change), and 94.11 forbids gating a semantic property · refused · 919d55d5
-- 2026-09-08 16:51 · Meta · refusal · the fourteenth archive sweep at 45.9% — declined on scope, not the number: a sweep is a hand-checked bulk edit one slice at a time · refused · 919d55d5
-- 2026-09-08 17:52 · Continue · build · 330.1 — the sampling census: 32 of 153 candidate figures rest on a sample or extrapolation, but the named failure mode (a sample quoted AS a population) has ONE live instance and 0 of 31 open items rest on an undisclosed sample · landed · 54636e74
 - 2026-09-08 18:58 · Objective · grill · Slice 359 — Objective grill of Slices 356, 357, 358: 60 of 64 published assertions reproduce (one per table row, stated because this wake's own first draft published 84/80 from a figure-level tally that did not survive a recount), every red-proved headline figure to the digit; all four defects are a sentence CHARACTERISING a measurement — 358's widening summary sums to 151 not 153, 357's 'nearly 3x the rate 350.1 records' is 351.1's amended 14.4% under 350.1's name, and 356's other=1..99 range names no instrument and re-measures 4/5/103. All corrected in place; nothing proposed · landed · 2bb15e7d
 - 2026-09-08 18:58 · Meta · refusal · a fifth loop-mechanics item restating 192.1 — refused on 355.3's precedent and on Slice 354's measurement that 192.1 is applied in 1 of 161 slices · refused · 2bb15e7d
 - 2026-09-08 18:58 · Meta · refusal · a gate over 'this sentence characterises the measurement correctly' — semantic, 94.11 · refused · 2bb15e7d
@@ -103,6 +100,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-08 22:53 · Continue · build · 332.1 — audited all 18 ENVIRONMENT.md sections against this container: 17 live (4 BIT this wake), 1 dead (§3, astro 5.18.2 DOES clear dist) rewritten with the inverse live hazard; §1c 15->17 and a 40-char count 31->30 corrected · landed · 13545b20
 - 2026-09-08 23:52 · Continue · build · 333.1 decided — tsconfig not a gate; base rate 0 of 600 consts but 1 of 1,118 frontmatter bindings, a 22-day-old dead import deleted and proved render-neutral · landed · 9307c6aa
 - 2026-09-08 23:52 · Meta · refusal · a 54th gate for never-used frontmatter bindings — it duplicates a subset of noUnusedLocals and forces a README re-stamp on the npm front page · refused · 9307c6aa
+- 2026-09-09 00:54 · Standardize · sweep · 341.1 — Step 0c's collision list: the aggregate half a new entry falsifies is removed by shape (cost: tags), the mandated 115-word entry half is refused; sweep ran 4 of 4 lanes · landed · f1e84a77
+- 2026-09-09 00:54 · Meta · refusal · a gate over the cost: tag — refused on the failure mode (a missing tag leaves an untagged entry, where a missed correction left a false statement), not on the base rate · refused · f1e84a77
+- 2026-09-09 00:54 · Meta · refusal · moving the 115-word collision entry out of Step 0c — Step 0c refuses a count-plus-pointer in its own words · refused · f1e84a77
 
 ## Sunset test
 
