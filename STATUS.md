@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-09 06:54 UTC
+Generated at: 2026-09-09 08:06 UTC
 
 ## Open items by slice
 
@@ -23,8 +23,6 @@ Generated at: 2026-09-09 06:54 UTC
   - 320.3 — the same idiom, two values, in two shared components.
 - **Slice 335** (1 open)
   - 335.1 — The Discussions intake has never returned a non-empty list, in either environment.
-- **Slice 338** (1 open)
-  - 338.1 — the gap `check:print-tokens` cannot see: a theme token that reaches paper through the ORDINARY CASCADE.
 - **Slice 339** (1 open)
   - 339.2 — the sweep's re-scan found a SECOND section with the same unexecuted charter, and this item is deliberately not the fix.
 - **Slice 345** (1 open)
@@ -46,15 +44,19 @@ Generated at: 2026-09-09 06:54 UTC
   - 353.2 — `dispatch-region-words` is sampled by hand, under a convention the instrument does not use, and no sample records the commit it describes.
 - **Slice 362** (1 open)
   - 362.1 — adopt `astro check` with `noUnusedLocals` for `apps/docs`.
+- **Slice 369** (2 open)
+  - 369.1 — should printing from the DARK theme force the light palette? OWNER OR ARCHITECTURE CALL.
+  - 369.2 — 10 of 128 pages never get the print reset on `body`.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1702 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-09-09 00:54   ok
-  Objective     0 / 3 slices          since 2026-09-09 06:54   ok
+dispatch status — counter-triggered rules (1705 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-09-09 00:54   OVERDUE
+  Objective     1 / 3 slice           since 2026-09-09 06:54   ok  [338]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-09-09 02:50   ok   [newest pair: gates; 142 sample(s), 8 of 47 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (39 of 47 name(s) have only one day and are not an input to a rule that compares two runs):
        gates                       4d  2026-09-07 55 count -> 2026-09-09 56 count  +1
@@ -85,9 +87,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-09 02:00 · Meta · refusal · extending the characterisation-defect run back through the grills of 351 and 355 — not measured, and Slice 355's own row names a defect of a different shape · refused · fed40de9
-- 2026-09-09 02:49 · Continue · build · 334.1 — retag check-selftests.mjs @heuristic; premise recorded false; both READMEs re-stamped 55/21/34 -> 56/22/34 · landed · ae10db97
-- 2026-09-09 04:43 · Continue · build · 336.2 decided: report:prose prints the flagged union (count + inclusion-exclusion + family-only additions); base rate re-measured at 1 of 7 sweeps (332 alone), 0 of last 5, and 336.2's '2 of the last 2' premise refuted — Slice 326 printed union=15 and failed on the stale ENUMERATION; red-proved by three threshold injections (11/10/27 vs 15) · landed · 9a5faeca
 - 2026-09-09 04:43 · Meta · refusal · amending LOOPS.md §3 lane 3 — its two-clause text was already correct; the tool was the half-answer, so LOOPS.md is byte-for-byte unchanged · refused · 9a5faeca
 - 2026-09-09 04:43 · Meta · refusal · filing a throwaway discussion to settle 335.1 — GraphQL is 403 for this session on all three probes, and a REST POST is untested BY CHOICE because it would create a real public item with no live owner to authorise it · refused · 9a5faeca
 - 2026-09-09 05:54 · Continue · build · 337.1 — Standardize lanes: a wrapper that refuses to report a lane clean when it printed no figure · landed · e128804d
@@ -95,6 +94,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-09 06:54 · Meta · refusal · a gate over 'this enumeration opened the body, not the pointer' — the checkable shape is true of 7 of 15 sections on a correct tree, so it is red on a healthy repo (94.11's base rate) · refused · 5ce62916
 - 2026-09-09 06:54 · Meta · refusal · a fifth loop-mechanics/parser item for the arming-set labels — refused on 355.3, 359.4 and LOOPS.md's own conclusion that widening the regex is not the lesson · refused · 5ce62916
 - 2026-09-09 06:54 · Meta · refusal · re-grilling Slices 334 and 336 as the hand-off's instruction named — both closed, and 336 is itself a grill · refused · 5ce62916
+- 2026-09-09 08:06 · Continue · build · 338.1 — refused on its named instance with the measurement; the gap is framework-wide and the Accept's instrument is wrong · refused · c5780113
+- 2026-09-09 08:06 · Meta · refusal · widening check:print-tokens on the source trace alone — the marker is rescued by print-color-adjust: exact, measured 5.66:1 at worst · refused · c5780113
+- 2026-09-09 08:06 · Meta · refusal · publishing any printed contrast ratio from computed style — Chrome's economy mode rewrites light text on the way to paper · refused · c5780113
 
 ## Sunset test
 

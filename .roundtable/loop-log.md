@@ -1708,3 +1708,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-09 06:54 · Meta · refusal · a gate over 'this enumeration opened the body, not the pointer' — the checkable shape is true of 7 of 15 sections on a correct tree, so it is red on a healthy repo (94.11's base rate) · refused · 5ce62916
 - 2026-09-09 06:54 · Meta · refusal · a fifth loop-mechanics/parser item for the arming-set labels — refused on 355.3, 359.4 and LOOPS.md's own conclusion that widening the regex is not the lesson · refused · 5ce62916
 - 2026-09-09 06:54 · Meta · refusal · re-grilling Slices 334 and 336 as the hand-off's instruction named — both closed, and 336 is itself a grill · refused · 5ce62916
+- 2026-09-09 08:06 · Continue · build · 338.1 — refused on its named instance with the measurement; the gap is framework-wide and the Accept's instrument is wrong · refused · c5780113
+- 2026-09-09 08:06 · Meta · refusal · widening check:print-tokens on the source trace alone — the marker is rescued by print-color-adjust: exact, measured 5.66:1 at worst · refused · c5780113
+- 2026-09-09 08:06 · Meta · refusal · publishing any printed contrast ratio from computed style — Chrome's economy mode rewrites light text on the way to paper · refused · c5780113
