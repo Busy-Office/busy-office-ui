@@ -777,6 +777,35 @@ broadly wrong. When declining an item, say which of the two lists it needs.
   trap is the parse, not the number.
 - **A parser change that reports MORE is not self-evidently a fix.** 166.5's
   first draft would have read `4-tick sweep` as slice 4 across 18 rows.
+- **An enumeration of `## Slice` sections across `ROADMAP.md` +
+  `ROADMAP-archive.md` meets a ONE-LINE POINTER for every closed slice, and
+  deduping by slice number can silently pick the stub over the body.** A closed
+  slice keeps its full heading in `ROADMAP.md` with only
+  *"Closed — archived verbatim in `ROADMAP-archive.md`."* underneath; the text
+  is in the archive. So an instrument that walks both files and keeps the FIRST
+  hit per slice — the ordinary reading order — matches the right headings and
+  then reads empty bodies for exactly the closed ones. It does not error, it
+  does not report a miss: it reports a smaller number, which is the silent kind
+  of wrong this file exists for. Measured 2026-09-09 (roadmap 368): a count of
+  the 15 `Standardize sweep, 4 of 4 lanes` sections returned **4** where the
+  answer is **5**, because **7 of the 15** resolved to a pointer and the one
+  carrying the sought marker (Slice 274) was among them. Keep the LONGEST body
+  per slice, or read the archive first, and **assert how many matched sections
+  resolved to a pointer** — that number is the reconciliation. The tell, when
+  something looks thin, is that the sections coming back empty are precisely the
+  closed ones.
+
+  **No gate over this** — the shape *"a matched section whose body is only the
+  pointer"* is true of 7 of 15 on a correct tree, so a gate is red on a healthy
+  repo (roadmap `94.11`'s base-rate rule). This bullet is the mechanism, because
+  it is read before such an instrument is written.
+
+  **And an injection placed inside the population cannot find it.** The slice
+  that published the 4 red-proved its instrument by mutating a section it was
+  already reading, which tests the detector and says nothing about what was
+  never opened. When a red-proof and a population question meet, the population
+  needs its own control: count the raw thing (here, sections matched vs bodies
+  actually read).
 - **A figure describing a commit is read from THAT COMMIT, never from the
   working tree, `HEAD`, or the prose beside it.** Size `git show <sha>:<file> | wc -l`;
   delta `git show --numstat --format='' <sha> -- <file>`; for a figure going

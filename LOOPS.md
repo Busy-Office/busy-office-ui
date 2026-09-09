@@ -1317,6 +1317,23 @@ never dirties main.
        ROADMAP.md ROADMAP-archive.md                   # what each grill covered
    ```
 
+   **⚠ RESOLVE EVERY LABEL FIRST — the armed set names ITEM IDS, not slice
+   numbers, whenever a log row leads with one** (roadmap 368, 2026-09-09). A row
+   written as `337.1 — …` is parsed by `SLICE_BARE`, which credits **337**; the
+   slice that closed that item is **367**. It has read that way on **8**
+   consecutive slices (358, 360-363, 365-367) — measured by mapping each row to
+   the slice number in its own commit subject, which is the check:
+
+   ```
+   git log -1 --format=%s <the sha the row carries>   # "Slice N — …"
+   ```
+
+   Do this for **every** label, not the one that looks odd. The hand-off before
+   this rule existed resolved one of three and instructed a grill of two closed
+   slices, one of them a grill itself. **No parser item** — refused on `355.3`,
+   `359.4`, and this file's own conclusion that widening the regex is not the
+   lesson; the label is not wrong, it is just not a slice number.
+
    **The property, not a list of stale slices** — this playbook has paid three
    times for naming values that go stale silently (the prose-page names, the
    `LOOPS.md 0 down` clause, 191.1). Measured when this step was added (roadmap

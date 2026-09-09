@@ -320,7 +320,180 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
-## Slice 367 — `337.1` closed with a wrapper, because two of the three fixes its Accept offered were **not available**: `LOOPS.md` never carried a `-s` to drop (**0** occurrences of `npm run -s ` in the file), and the per-lane write-up rule is **4 of 15** sweeps old. The filed trap reproduces and is worse than filed — **0B stdout AND 0B stderr** — and a second byte-silent form exists that the item does not name (2026-09-09)
+## Slice 368 — Objective grill of Slices 365, 366, 367: **45 of 50** published assertions reproduce, and the one substantive defect is a count taken over a population that was **7/15 one-line archive pointers** — an instrument that opened the stub instead of the body, which the slice's own red-proof structurally could not reach. The arming set needed resolving first: **all three** counter labels are item ids, and the hand-off resolved one (2026-09-09)
+
+**Dispatched by rule 3** — `Objective 3 / 3 slices  OVERDUE  [334, 336, 337]`.
+Rule 1 found no open P0 (`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0**
+across **24** open items); rule 2 read `Standardize 3 / 4  ok` and did not match.
+Rule 5 was **EVALUATED, not skipped**, even though rule 3 fires above it: its
+line reads `Optimize 0 wake-date(s) newer — ok`, and its comparable set's movers
+are `gates` (+1), `dispatch-region-words` (+60) and `claims` (+7) — none a
+regression on two consecutive runs. Rules 4 and 6-8 were not reached, so
+`polish_requeue.py --apply` was correctly NOT run.
+
+**Step 1 — both intakes read, with `ENVIRONMENT.md` §8's controls:**
+`/issues?state=open` → HTTP 200 len **1** (issue #2, `updated_at`
+**2026-09-06T15:10:34Z**, the same value the previous hand-off recorded);
+`/discussions` → HTTP 200 len **0**; `/not-a-real-route` → **404**, the control
+that makes the `200 []` mean *served and empty*. No new untriaged input, so
+**Step 1 committed nothing**.
+
+**Step 0 traps.** Trap 1 bit — `git branch --show-current` answered **EMPTY**,
+the container arrived detached at `41946018`, fixed with
+`git fetch origin main && git checkout -B main origin/main` before any commit.
+Trap 2 bit and cleared in one `--unshallow` with no `shallow.lock`: **2,104**
+commits, and the tags again arrived with it (`git tag | wc -l` → **8**, run
+rather than assumed; `ENVIRONMENT.md` §2 asks for the count, not an ordinal, so
+no streak figure is carried forward here).
+
+### The arming set had to be resolved before it could be grilled
+
+The counter's three labels — `[334, 336, 337]` — are **item ids, not slice
+numbers**. The slices actually closed since the last Objective row are **365,
+366 and 367**, and those are what was grilled. Two corrections to the previous
+hand-off, which is the only place this was written down:
+
+- **It names the wrong parser.** It attributes the behaviour to `SLICE_TOP`
+  eight times over. `SLICE_TOP` matches **none** of the three items; the pattern
+  that matches is **`SLICE_BARE`** (`^([1-9]\d{0,2})\.\d+[a-z]?\b`), which
+  requires the `.N` that an item id has and a slice number does not.
+- **It resolved one label of three.** It says *"the slice to grill is 367, not
+  337"* and then instructs *"grill 334, 336 and 367"*, while its own preceding
+  sentence records that Slices 365 and 366 hit the same behaviour. Followed
+  literally this wake would have grilled Slice **334** (closed 2026-09-07) and
+  Slice **336** (itself an Objective grill), and missed 365 and 366 entirely.
+  The eight-consecutive-wakes count reproduces exactly; the instruction derived
+  from it does not.
+
+**No parser item is filed** — fifth of its kind, refused on `355.3`, `359.4`
+and `LOOPS.md`'s own conclusion that widening the regex is not the lesson. The
+label is not wrong; it is simply not a slice number. The fix taken is **one
+paragraph in `LOOPS.md` §6 step 0**, the durable playbook that already exists to
+narrow this set, rather than a ninth correction in a hand-off that is rewritten
+wholesale every wake (169.3).
+
+### 45 of 50 reproduce; the full table is in the report
+
+`.roundtable/grill-objective-365-366-367-2026-09-09.md` carries one row per
+assertion with its command. In summary:
+
+- **Slice 365** (`334.1`, the retag) — **11 of 13**. Every figure reproduces:
+  55/21 → 56/22 (183 cases)/34, both READMEs re-stamped, `18791d5^`'s
+  `src.includes('@exact')`, the single real `--self-test` branch at line 279,
+  eleven self-test cases, and **0.041s** to the digit. Two are not re-runnable
+  here and are named: the marker spoof's 172 → 175 (its probe was deliberately
+  not committed), and *"`owed`'s first version matched the bare string"* — the
+  **first committed** revision already carries the strict regex, so that claim
+  restates `CLAUDE.md`'s record of the meta-gate's first *run* and cannot be
+  found in git. Not a defect; recorded so a later wake does not go looking.
+- **Slice 366** (`336.2`, the union) — **16 of 16, nothing failed.** The 403 on
+  three GraphQL forms, the all-false permissions, the `/discussions/categories`
+  404 with its *get* anchor, the seven-sweep table row by row, `1 of 7 / 0 of
+  the last 5`, and the shipped line `corpus 10 + family 11 − both 6 = 15` all
+  reproduce verbatim.
+- **Slice 367** (`337.1`, the wrapper) — **18 of 21**, one partial, two defects.
+  The trap table reproduces **byte-exact** in all three rows, all four lane
+  headlines reproduce verbatim on a settled 529-file `dist`, and the wrapper's
+  `--self-test` reads 7 cases / 0 failures.
+
+### The defect: a one-line archive pointer shadowed the archived body
+
+Slice 367 published *"over the **15** `Standardize sweep, 4 of 4 lanes` sections
+in `ROADMAP.md` + `ROADMAP-archive.md`, the `Lane K of 4` marker appears in
+**4** … the last four"*. Over that same stated population it appears in **5** —
+Slice **274** carries all four markers, each with a figure under it, so it
+passes Slice 367's own test.
+
+**Red-proved by injection with a positive control**, the injection asserted to
+land (4 markers removed from Slice 274 *only*; the archive's marker lines
+15 → 11) before the counter was re-run:
+
+```
+positive control (real files):   sections=15  with marker=5  -> [274, 345, 350, 357, 363]
+274's markers stripped:          sections=15  with marker=4  -> [345, 350, 357, 363]
+```
+
+It reproduces Slice 367's published answer **and its published set, verbatim**,
+which is what pins the miss to 274 rather than to a different threshold.
+
+**The mechanism was reproduced, not hypothesised.** Seven of the fifteen
+sections are closed: `ROADMAP.md` keeps only *"Closed — archived verbatim in
+`ROADMAP-archive.md`."* under the full heading. An enumeration deduping by slice
+number and keeping the **first** hit — the ordinary reading order — opens the
+stub and never the body. That variant returns `4` and the same four slices, and
+names the seven it shadowed (274, 284, 290, 293, 301, 308, 314); 274 is the only
+one of the seven carrying markers, which is exactly the count that went missing.
+**Evidence for the mechanism class, not proof of what Slice 367's script did** —
+that script was ad hoc and is not committed.
+
+**Why its own red-proof could not have caught this.** It stripped the digits
+from one lane bullet *inside a section the instrument was already reading*. No
+injection placed inside the population can surface a section that was never
+opened.
+
+**The correction moves the derived claims against the item's framing, and the
+decision stands.** The marker does not *"start at Slice 345"*. Measured over all
+**47** Standardize sweeps rather than the 15:
+
+- Slice **208** *introduced* it — *"Fixed by numbering, not by a gate. The lanes
+  are now `Lane 1 of 4` …"* — naming the convention rather than yet using it
+  four times.
+- **Seven** sweeps carry a full four-lane write-up (all four markers, each with
+  a figure under it): **228, 237, 274, 345, 350, 357, 363**. Slice **235** uses
+  the marker once, on lane 4 only.
+- Between 274 and 345 it **lapsed for ten consecutive sweeps** — 284, 290, 293,
+  301, 308, 314, 320, 326, 332, 339 — and between 237 and 274 for five.
+
+So the rule is **27 sweeps old** counting from 208, not four, and its real shape
+is a convention that has already fallen silently out of use *twice*. That is a
+**stronger** argument for the executable wrapper `337.1` shipped, not a weaker
+one. Nothing about the wrapper changes.
+
+The second, minor defect is in the same slice's parenthetical about which lanes
+read `dist`: the verdict (**lanes 1 and 3**) reproduces, but `grep -c dist` is
+3 of 4 only under a word-boundary test and 4 of 4 as the literal substring, and
+lane 2's hits are not all `distinct` — two of six are the bare word `dist`, in
+the header clause the same sentence quotes. Both corrected in place above.
+
+### The shape: three consecutive grills, ten slices
+
+Slice 364 recorded *"two consecutive grills, seven slices"* of defects that are
+a sentence **characterising or citing** a measurement rather than the
+measurement. The run continues at three and ten — but this one is Slice
+**336**'s member of the family rather than 364's: *a number that is a faithful
+reading of a **different population** than the noun beside it names*. The
+instrument counted what it opened; what it opened was 8 bodies and 7 stubs,
+where the noun said both files.
+
+The generalisable half is written into **`ENVIRONMENT.md`**'s measurement-trap
+list rather than left in a slice, because it will outlive this instrument: any
+enumeration of `## Slice` sections across both roadmap files meets a one-line
+pointer for every closed slice, and the tell is that the sections coming back
+empty are exactly the closed ones.
+
+### Refused
+
+- **A gate over "this enumeration opened the body, not the pointer".** The
+  checkable shape — a matched section whose body is only the pointer — is true
+  of **7 of 15** sections on a correct tree, so the gate would be red on a
+  healthy repo. Roadmap `94.11`'s base-rate rule exactly; the trap bullet is the
+  answer, since it is read before such an instrument is written.
+- **A parser item for the arming-set labels** — see above.
+- **Re-grilling Slices 334 and 336**, which the hand-off's instruction named.
+  Both are closed and 336 is itself a grill; re-grilling a grill is the
+  repeated-subject failure `INDEX.md` exists to measure (it reports **4**).
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. **This slice owes none, and that is structural rather than a
+judgement:** `git diff --stat` was read, and the diff is `ROADMAP.md`,
+`LOOPS.md`, `.roundtable/ENVIRONMENT.md`, this grill report and the hand-off. No
+CSS rule, no `.astro` file, no docs page, no generated artefact and no shipped JS
+is touched, so no rendered surface can have moved. The **eight** older visual
+debts are unchanged and unspent, counted from the previous hand-off's own
+enumeration rather than carried as a number: Slice 352's two, Slice 345's two,
+and the four older — `292.4/292.5`, Slice 319, `320.3`, `310.1`.
+
+## Slice 367 — `337.1` closed with a wrapper, because two of the three fixes its Accept offered were **not available**: `LOOPS.md` never carried a `-s` to drop (**0** occurrences of `npm run -s ` in the file), and the per-lane write-up rule is **4 of 15** sweeps old [**corrected by Slice 368: 5 of 15 in that population, 7 full write-ups across all 47 sweeps, and the convention is 27 sweeps old**]. The filed trap reproduces and is worse than filed — **0B stdout AND 0B stderr** — and a second byte-silent form exists that the item does not name (2026-09-09)
 
 **Dispatched by rule 4**, on the oldest genuinely dispatchable open item. Rule 1
 found no open P0 (`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0** across
@@ -387,13 +560,35 @@ The Accept left the mechanism open between *a wrapper*, *dropping `-s`*, and
   cannot say which lane printed what: three lanes that ran and two that ran with
   one silent produce the same sentence.
 
+  **⚠ CORRECTED by the Objective grill in Slice 368 (2026-09-09) — this bullet
+  is wrong in both halves, and the correction argues FOR the wrapper, not
+  against it.** Over that same stated population the marker appears in **5**, not
+  4: Slice **274** carries all four markers, each with a figure under it. Seven
+  of the fifteen sections are closed, so `ROADMAP.md` holds only a one-line
+  pointer under the heading and the body lives in the archive — an enumeration
+  deduping by slice number and keeping the FIRST hit reads the stub and never
+  opens the body. Running that variant returns this bullet's `4` and its exact
+  set. And the marker does **not** *"start at Slice 345"*: measured over all
+  **47** Standardize sweeps, Slice **208** introduced it (*"Fixed by numbering,
+  not by a gate. The lanes are now `Lane 1 of 4` …"*), **seven** sweeps carry a
+  full four-lane write-up with a figure under every marker (**228, 237, 274,
+  345, 350, 357, 363**), and it **lapsed for ten consecutive sweeps** (284→339)
+  before resuming at 345. So the rule is **27 sweeps old**, not four, and has
+  fallen silently out of use twice — a stronger case for an executable wrapper
+  than a four-sweep-old rule, so the decision below stands unchanged. Commands,
+  red-proof and the pointer-shadow reproduction are in
+  `.roundtable/grill-objective-365-366-367-2026-09-09.md` §4.
+
   **What that instrument cannot see, said plainly:** it keys on the literal
   `Lane K of 4` marker, so for those 11 it reports *no marker*, never *no
   figure* — the 11 are outside its reach, not failing it. It was red-proved by
   stripping the digits from one lane bullet (Slice 363, lane 2), which flipped
   that section from 4 lanes with figures to 3; without that the `4` could have
   been the marker's own digits, which is why the marker text is removed before
-  the digit test.
+  the digit test. **That red-proof structurally could not have caught the miss
+  above** (Slice 368): the injection lands inside a section the instrument was
+  already reading, and no injection placed inside the population can surface a
+  section that was never opened.
 
 ### What shipped
 
@@ -417,6 +612,12 @@ lane 4  loop-prose report — base 6ffdfd3f (2026-08-20) -> HEAD (0edfc35e)
 inferred.** Lanes 1 and 3 read `apps/docs/dist` — checked per lane rather than
 assumed, since `grep -c dist` says 3 of 4 and lane 2's hits are all the word
 *distinct*, its own header reading *"source, not `dist`"* — so running the sweep
+**[Slice 368: the verdict — lanes 1 and 3 — reproduces; this parenthetical does
+not.** `grep -c dist` reads 3 of 4 only under a word-boundary test (3/2/2/**0**);
+as the literal substring the command names it is **4 of 4** (6/6/4/2). And lane
+2's hits are *not* all `distinct` — two of its six are the bare word `dist`, in
+the very header clause this sentence goes on to quote. Lane **4** is the script
+whose hits are all one other word (`distinguishes`, 2 of 2).**]**
 while a build is in flight reads a half-written site. This wake did it by
 accident — a lane-1 run overlapping a background `docs:build` reported **990**
 live inline style attributes where two consecutive runs on a settled tree (529
