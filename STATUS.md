@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-09 00:54 UTC
+Generated at: 2026-09-09 02:00 UTC
 
 ## Open items by slice
 
@@ -58,15 +58,12 @@ Generated at: 2026-09-09 00:54 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1689 iterations logged)
+dispatch status — counter-triggered rules (1693 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-09-09 00:54   ok
-  Objective     4 / 3 slices          since 2026-09-08 18:58   OVERDUE  [331, 332, 333, 341]
-  -> a counter is at or past its threshold; the dispatcher should pick it
-  Optimize      1 wake-date(s) newer   since 2026-09-08 00:17   STALE   [newest pair: dispatch-region-words; 140 sample(s), 8 of 47 name(s) paired across days]
-  -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-08, not this one — record a metric or say the rule could not be evaluated.
-     the unit is DISTINCT LOG DATES after 2026-09-08 (2026-09-09), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
+  Objective     0 / 3 slices          since 2026-09-09 02:00   ok
+  Optimize      0 wake-date(s) newer   since 2026-09-09 00:55   ok   [newest pair: dispatch-region-words; 141 sample(s), 8 of 47 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (39 of 47 name(s) have only one day and are not an input to a rule that compares two runs):
-       dispatch-region-words       2d  2026-09-07 7298 words -> 2026-09-08 7492 words  +194
+       dispatch-region-words       3d  2026-09-08 7492 words -> 2026-09-09 7552 words  +60
        claims                      4d  2026-09-06 169 count -> 2026-09-07 176 count  +7
        gates                       3d  2026-08-19 27 count -> 2026-09-07 55 count  +28
        axe-violations              8d  2026-09-03 0 count -> 2026-09-06 0 count  +0   NEVER MOVED
@@ -93,16 +90,16 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-08 18:58 · Objective · grill · Slice 359 — Objective grill of Slices 356, 357, 358: 60 of 64 published assertions reproduce (one per table row, stated because this wake's own first draft published 84/80 from a figure-level tally that did not survive a recount), every red-proved headline figure to the digit; all four defects are a sentence CHARACTERISING a measurement — 358's widening summary sums to 151 not 153, 357's 'nearly 3x the rate 350.1 records' is 351.1's amended 14.4% under 350.1's name, and 356's other=1..99 range names no instrument and re-measures 4/5/103. All corrected in place; nothing proposed · landed · 2bb15e7d
-- 2026-09-08 18:58 · Meta · refusal · a fifth loop-mechanics item restating 192.1 — refused on 355.3's precedent and on Slice 354's measurement that 192.1 is applied in 1 of 161 slices · refused · 2bb15e7d
-- 2026-09-08 18:58 · Meta · refusal · a gate over 'this sentence characterises the measurement correctly' — semantic, 94.11 · refused · 2bb15e7d
-- 2026-09-08 19:56 · Continue · build · 331.1 — install-prompts.md generated from api.json (Slice 360) · refused · cfd781ab
 - 2026-09-08 22:53 · Continue · build · 332.1 — audited all 18 ENVIRONMENT.md sections against this container: 17 live (4 BIT this wake), 1 dead (§3, astro 5.18.2 DOES clear dist) rewritten with the inverse live hazard; §1c 15->17 and a 40-char count 31->30 corrected · landed · 13545b20
 - 2026-09-08 23:52 · Continue · build · 333.1 decided — tsconfig not a gate; base rate 0 of 600 consts but 1 of 1,118 frontmatter bindings, a 22-day-old dead import deleted and proved render-neutral · landed · 9307c6aa
 - 2026-09-08 23:52 · Meta · refusal · a 54th gate for never-used frontmatter bindings — it duplicates a subset of noUnusedLocals and forces a README re-stamp on the npm front page · refused · 9307c6aa
 - 2026-09-09 00:54 · Standardize · sweep · 341.1 — Step 0c's collision list: the aggregate half a new entry falsifies is removed by shape (cost: tags), the mandated 115-word entry half is refused; sweep ran 4 of 4 lanes · landed · f1e84a77
 - 2026-09-09 00:54 · Meta · refusal · a gate over the cost: tag — refused on the failure mode (a missing tag leaves an untagged entry, where a missed correction left a false statement), not on the base rate · refused · f1e84a77
 - 2026-09-09 00:54 · Meta · refusal · moving the 115-word collision entry out of Step 0c — Step 0c refuses a count-plus-pointer in its own words · refused · f1e84a77
+- 2026-09-09 02:00 · Objective · grill · Slice 364 — Objective grill of Slices 360, 361, 362, 363: 73 of 78 published assertions reproduce (one per report table row), every headline figure and every verdict among them — 331.1's refusal 26 of 26, Slice 361's bare-astro-build sentinel proof re-run from scratch (224 vs 529), 333.1's probe re-extracted from its landed report and re-run (600/518/1118, then 0 of 1117), and 341.1's 115+79=194 split re-derived from 7e2c61c0 alone. All five defects are a sentence CHARACTERISING or CITING a measurement, never the measurement: 362's ts-code tally is over all 50 diagnostics not the 23 errors (sums to 49; its two largest entries are hints), 362.1's tsconfig omits the load-bearing include (377/69 as prescribed vs the published 164/27, errors unchanged), 361's '40 commits' is 67 under every instrument and had been copied into ENVIRONMENT.md, check-layout.mjs:112 is line 26, and 363's 13-to-11 detector is recorded nowhere as a command. Four corrected in place, one marked UNCHECKED; nothing filed · landed · fed40de9
+- 2026-09-09 02:00 · Meta · refusal · a gate over 'this sentence characterises its own measurement correctly' — semantic, 94.11, and Slice 359's standing refusal · refused · fed40de9
+- 2026-09-09 02:00 · Meta · refusal · an item for 'a slice that measures something novel lands its instrument' — whether a measurement is novel is a judgement, 94.11 again; 355.3/359.4's precedent against a fifth loop-mechanics item · refused · fed40de9
+- 2026-09-09 02:00 · Meta · refusal · extending the characterisation-defect run back through the grills of 351 and 355 — not measured, and Slice 355's own row names a defect of a different shape · refused · fed40de9
 
 ## Sunset test
 
