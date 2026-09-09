@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-09 02:00 UTC
+Generated at: 2026-09-09 02:49 UTC
 
 ## Open items by slice
 
@@ -21,8 +21,6 @@ Generated at: 2026-09-09 02:00 UTC
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - **Slice 320** (1 open)
   - 320.3 — the same idiom, two values, in two shared components.
-- **Slice 334** (1 open)
-  - 334.1 — should `check-selftests.mjs` itself be `@heuristic` now?
 - **Slice 335** (1 open)
   - 335.1 — The Discussions intake has never returned a non-empty list, in either environment.
 - **Slice 336** (1 open)
@@ -58,9 +56,9 @@ Generated at: 2026-09-09 02:00 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1693 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-09-09 00:54   ok
-  Objective     0 / 3 slices          since 2026-09-09 02:00   ok
+dispatch status — counter-triggered rules (1694 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-09-09 00:54   ok
+  Objective     1 / 3 slice           since 2026-09-09 02:00   ok  [334]
   Optimize      0 wake-date(s) newer   since 2026-09-09 00:55   ok   [newest pair: dispatch-region-words; 141 sample(s), 8 of 47 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (39 of 47 name(s) have only one day and are not an input to a rule that compares two runs):
        dispatch-region-words       3d  2026-09-08 7492 words -> 2026-09-09 7552 words  +60
@@ -90,7 +88,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-08 22:53 · Continue · build · 332.1 — audited all 18 ENVIRONMENT.md sections against this container: 17 live (4 BIT this wake), 1 dead (§3, astro 5.18.2 DOES clear dist) rewritten with the inverse live hazard; §1c 15->17 and a 40-char count 31->30 corrected · landed · 13545b20
 - 2026-09-08 23:52 · Continue · build · 333.1 decided — tsconfig not a gate; base rate 0 of 600 consts but 1 of 1,118 frontmatter bindings, a 22-day-old dead import deleted and proved render-neutral · landed · 9307c6aa
 - 2026-09-08 23:52 · Meta · refusal · a 54th gate for never-used frontmatter bindings — it duplicates a subset of noUnusedLocals and forces a README re-stamp on the npm front page · refused · 9307c6aa
 - 2026-09-09 00:54 · Standardize · sweep · 341.1 — Step 0c's collision list: the aggregate half a new entry falsifies is removed by shape (cost: tags), the mandated 115-word entry half is refused; sweep ran 4 of 4 lanes · landed · f1e84a77
@@ -100,6 +97,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-09 02:00 · Meta · refusal · a gate over 'this sentence characterises its own measurement correctly' — semantic, 94.11, and Slice 359's standing refusal · refused · fed40de9
 - 2026-09-09 02:00 · Meta · refusal · an item for 'a slice that measures something novel lands its instrument' — whether a measurement is novel is a judgement, 94.11 again; 355.3/359.4's precedent against a fifth loop-mechanics item · refused · fed40de9
 - 2026-09-09 02:00 · Meta · refusal · extending the characterisation-defect run back through the grills of 351 and 355 — not measured, and Slice 355's own row names a defect of a different shape · refused · fed40de9
+- 2026-09-09 02:49 · Continue · build · 334.1 — retag check-selftests.mjs @heuristic; premise recorded false; both READMEs re-stamped 55/21/34 -> 56/22/34 · landed · ae10db97
 
 ## Sunset test
 

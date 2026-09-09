@@ -1699,3 +1699,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-09 02:00 · Meta · refusal · a gate over 'this sentence characterises its own measurement correctly' — semantic, 94.11, and Slice 359's standing refusal · refused · fed40de9
 - 2026-09-09 02:00 · Meta · refusal · an item for 'a slice that measures something novel lands its instrument' — whether a measurement is novel is a judgement, 94.11 again; 355.3/359.4's precedent against a fifth loop-mechanics item · refused · fed40de9
 - 2026-09-09 02:00 · Meta · refusal · extending the characterisation-defect run back through the grills of 351 and 355 — not measured, and Slice 355's own row names a defect of a different shape · refused · fed40de9
+- 2026-09-09 02:49 · Continue · build · 334.1 — retag check-selftests.mjs @heuristic; premise recorded false; both READMEs re-stamped 55/21/34 -> 56/22/34 · landed · ae10db97
