@@ -282,10 +282,21 @@ npx astro --version -> astro v5.18.2
 
 No `rm -rf`/`rimraf` exists in any docs script and `astro.config.mjs` sets no
 `outDir` or clean option, so it is astro doing it. **The declared range never
-moved** — `^5.1.0` across all 40 commits touching `apps/docs/package.json` — so
-if this behaviour changed it changed under the repo via a floating minor, with
-no commit to point at. Re-measure rather than trusting this paragraph; that is
-how it came to be wrong.
+moved** — `^5.1.0` is the only value the file has ever carried, so if this
+behaviour changed it changed under the repo via a floating minor, with no commit
+to point at. The property is the claim; **run the count rather than reading one
+here** (roadmap 364, which found the pinned `40` unreproducible at any revision
+— every instrument tried returns **67**, at Slice 361's own commit and at HEAD
+alike):
+
+```
+git log --format=%H -- apps/docs/package.json | while read c; do \
+    git show $c:apps/docs/package.json \
+    | python3 -c "import json,sys;d=json.load(sys.stdin);print(d.get('dependencies',{}).get('astro') or d.get('devDependencies',{}).get('astro'))"; \
+  done | sort | uniq -c        # one line, or the range moved
+```
+
+Re-measure rather than trusting this paragraph; that is how it came to be wrong.
 
 `rm -rf apps/docs/dist` first is still harmless and still in the toolchain
 block below — it is simply no longer load-bearing.

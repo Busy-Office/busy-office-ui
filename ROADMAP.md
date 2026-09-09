@@ -320,6 +320,148 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 364 — Objective grill of Slices 360, 361, 362, 363: **73 of 78** published assertions reproduce, every headline figure and every verdict among them — and all **five** defects are again in a sentence that CHARACTERISES or CITES a measurement rather than in the measurement, which is **two consecutive grills, seven slices** (2026-09-09)
+
+**Dispatched by rule 3** at `Objective 4 / 3 slices OVERDUE [331, 332, 333, 341]`.
+Rule 1 found no open P0 (`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0**
+across **27** open items) and rule 2 read `Standardize 0 / 4 ok`, spent by Slice
+363 — exactly as that slice's hand-off predicted, re-read this wake rather than
+trusted. Cloud wake. **No collision:** `origin/main` read `4cfb8b2c` at Step 0
+and `4cfb8b2c` again at the mandated pre-commit fetch.
+
+**Step 1 — both intakes read, with `ENVIRONMENT.md` §8's controls:**
+`/issues?state=open` → HTTP 200 len **1**; `/discussions` → HTTP 200 len **0**;
+`/not-a-real-route` → **404**, the control that makes the `200 []` mean *served
+and empty*. Issue #2's `updated_at` is still `2026-09-06T15:10:34Z` — a
+**thirtieth** consecutive hand-off with no movement. Nothing to triage, so Step
+1 committed nothing.
+
+Full evidence, one table row per assertion:
+`.roundtable/grill-objective-360-361-362-363-2026-09-09.md`.
+
+### The arming set names ITEMS; the slices are 360-363 — and the narrowing needed a reading, not an assumption
+
+`dispatch_status.py`'s `SLICE_TOP` reads the leading id of each log row, and the
+four rows since the last `Objective` row lead with `331.1`, `332.1`, `333.1` and
+`341.1`. `grill-objective-315-332-333-2026-09-07.md` covers *Slices* 332 and
+333, which are **different objects** from items `332.1` and `333.1` — so the
+apparent overlap is not one. Checked rather than waved off: **no earlier grill
+covers Slices 360-363**, and nothing was dropped from scope.
+
+### The pattern, stated as a base rate rather than rediscovered
+
+Slice 359 recorded that all four of its defects were in a sentence
+characterising a measurement, and called that "192.1's shape three slices
+running". This grill's **five** defects are every one of them a
+characterisation, a citation, or a denominator — never a measurement that was
+taken wrong. **Said no more strongly than the two grills support: two
+consecutive grills, seven slices (356-358 and 360-363).** The obvious next
+claim — that the run extends back through the grills of 351 and 355 — was
+*not* measured, and Slice 355's own row names a defect that is not this shape
+(reading a series at the pre-commit tip is a measurement taken at the wrong
+revision, not a sentence about one). **Nothing is proposed for it.** *"This sentence characterises its own measurement correctly"* is
+semantic, which is `94.11`'s wall, and Slice 359 already refused exactly that
+gate; restating the refusal as a fifth loop-mechanics item is what `355.3` and
+`359.4` refuse.
+
+### The five defects
+
+- **A — Slice 362's ts-code tally is over all 50 diagnostics, not the 23
+  errors.** It stood one line under `Result (164 files): 23 errors, 0 warnings,
+  27 hints` and beside `ts(2307) 0` — which *is* an error-population statement —
+  and sums to **49**. Its two largest entries, `ts(7044)` 16 and `ts(6387)` 7,
+  are **hints**, so 23 of the 49 tallied are not part of the 22 `362.1` has to
+  clear. The errors alone are `ts(2339) 20 · ts(2322) 1 · ts(6133) 1 ·
+  ts(2551) 1 = 23`, which is what the slice's own prose already claims
+  ("every one is DOM narrowing inside an inline `<script>`"). Corrected in
+  place, both tallies labelled.
+- **B — `362.1`'s enabling tsconfig omits the `include`, which is
+  load-bearing.** `astro/tsconfigs/base` sets
+  `"include": ["${configDir}/.astro/types.d.ts", "${configDir}/**/*"]`, so the
+  config the item prescribes verbatim yields **377 files / 69 hints** where the
+  slice published **164 / 27** — 2.3x the program. The **error count is
+  unchanged** (22 post-deletion, 23 with the import restored, with the exact
+  published code tally), so the *decision* stands untouched; what does not
+  survive is the reproducibility of the baseline Accept (b) asks a later wake to
+  attribute a delta against. Also: `resolveJsonModule` is **already true** in
+  that base, so naming it as an addition misdescribes the extension. `362.1`
+  amended to name the property.
+- **C — Slice 361's "40 commits" is 67, and it reached the durable file.** The
+  claim is *"`^5.1.0` across all 40 commits touching `apps/docs/package.json`"*.
+  Every instrument tried returns **67** — plain, `--first-parent`, `--follow`,
+  `--no-merges`, and a count of distinct blobs — at Slice 361's own commit
+  `13545b20` as well as at HEAD, so it is not a drifted snapshot. **The property
+  is intact and stronger for it**: `^5.1.0` is the only value across all 67, so
+  the floating-minor argument is unaffected. It matters because the number was
+  copied into **`ENVIRONMENT.md` §3**, the durable file that audit existed to
+  fix — the one figure the audit got wrong is the one it made permanent.
+  Corrected in `ENVIRONMENT.md` (as the command, per CLAUDE.md's criterion
+  rule), in Slice 361, and in the landed `measure-332.1-…` report.
+- **D — `check-layout.mjs:112` is not where `serveDist`'s return shape is.**
+  The shape `{ server, port, base }` is right; line 112 is inside
+  `async function sweep`, at that slice's commit and at HEAD. The destructure is
+  line **26** and the return is `serve-dist.mjs:44`. Re-cited by symbol — a line
+  number into a live script is the weakest citation there is, which is why
+  `RESUME.md`'s charter already forbids `ROADMAP.md:NN`.
+- **E — Slice 363's one novel instrument is recorded nowhere.** Its
+  *"13 sentences at `HEAD` and 11 in this tree"* detector exists only as a prose
+  description, in `ROADMAP.md` and `RESUME.md` in the same words. A
+  reconstruction written to that description reads **11 → 10**; that is a
+  *different* regex, so it refutes nothing — it establishes that nothing can
+  tell the two apart, which is the finding. **The structural contrast is the
+  point:** 360, 361 and 362 each landed a `.roundtable/measure-*.md` carrying
+  its instruments verbatim (Slice 360 calls that "`321.1`'s lesson"), and this
+  grill *executed* two of them unchanged — the `331.1` prototype and the
+  `333.1` base-rate probe both reproduced to the digit. Slice 363 landed none.
+  Marked UNCHECKED in place. **No item filed and no gate proposed**: *"this
+  measurement is novel enough to need its instrument landed"* is a judgement,
+  which is `94.11` again.
+
+### What survives, which is nearly all of it
+
+Every verdict of the four slices reproduces on its own evidence: `331.1`'s
+refusal (26 of 26 rows, including all six controls and the 0-HTML-start-tags
+zero), Slice 361's *17 live / 1 dead* with the bare-`astro build` sentinel proof
+re-run from scratch (**224** files against a full build's **529**, 0 pagefind, no
+`llms.txt`, both sentinels removed), `333.1`'s choice of `tsconfig` over a gate
+(the probe's 8 self-tests all discriminate; **600 / 518 / 1,118** and the single
+`eventsManifest` hit reproduce by restoring the import and re-running, then
+**0 of 1,117** after), and `341.1`'s closure — whose 115 + 79 = 194 split was
+**re-derived from `7e2c61c0` alone**, without reading the item's prose, and
+closes exactly.
+
+### This wake's own first output was wrong, and the run caught it, not review
+
+The first `scan:dead-style` reported **10 dead on 8 pages, 1,121 / 1,453 / 249**
+— a clean disagreement with Slice 363 on all five numbers, which would have been
+the biggest finding here. It is contamination: the scan was running in the
+background when this wake moved `apps/docs/dist` aside for the `astro check`
+reproduction. Re-run with nothing else touching `dist`: **11 / 9 / 1,365 /
+1,813 / 345**, matching Slice 363 item for item including the seven dead kinds.
+The failure worth carrying is that the wrong reading was **plausible** — every
+number moved the same direction by roughly the same fraction, which reads like a
+real tree change. **A background measurement is a statement about the tree
+across its whole run, not at the moment it was launched**, which is
+`ENVIRONMENT.md`'s *"a gate you ran is a statement about the tree at the moment
+it ran"* one process at a time instead of one commit.
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. **This slice owes none**: its diff is `ROADMAP.md`,
+`.roundtable/**` and nothing else — no CSS rule, no docs page, no script and no
+`.astro` file changed, read off `git diff --stat` rather than assumed. The
+**eight** older visual debts carried in the hand-off are unchanged and unspent.
+
+1. [x] **364.1 — Objective grill of Slices 360-363 complete.** 73 of 78
+       published assertions reproduce, counted one per row of the report's
+       table. All five defects are a characterisation, a citation or a
+       denominator, not a measurement — the **second consecutive** grill to find
+       only that shape (Slice 359 was the first), which is seven slices, and no
+       stronger claim than the two grills support. Four corrected in place (A, B, C, D) and one marked UNCHECKED
+       in place (E); `362.1`'s enabling steps amended to name the `include`
+       property. **Nothing new filed and no gate proposed**, deliberately: every
+       one of the five would need a gate over what a sentence MEANS, which is
+       `94.11`'s wall and Slice 359's standing refusal.
+
 ## Slice 363 — Standardize sweep, 4 of 4 lanes. Lanes 1-3 carry no delta (and lane 2's "no delta" is **unchanged by construction** — the window never touched the path it reads). Lane 4's finding is `341.1`, closed on ONE of its two halves: the **79-word** aggregate a new collision falsifies is gone by shape, the **115-word** entry is refused, and Step 0c is **+4 words**, which is not a cut and is said so (2026-09-09)
 
 **Dispatched by rule 2** at `Standardize 4 / 4 Continue rounds OVERDUE` — the
@@ -458,6 +600,20 @@ disappear are exactly the two carrying all three aggregates. It also matches 11
 sentences that are **not** falsifiable by an append, so it cannot serve as a
 gate; *"this sentence is an aggregate over the list"* is semantic, which is
 94.11's wall.
+
+**⚠ CORRECTED by Slice 364: read that 13 → 11 as UNCHECKED, not as measured.**
+The regex exists only as the prose description above — it is written nowhere as
+a command, and this slice landed no `.roundtable` report, alone among Slices
+360-363, each of which landed one carrying its instruments verbatim (Slice 360's
+own text calls that *"`321.1`'s lesson"*). A reconstruction written to that
+description reads **11 → 10**; that is a *different* regex, so it refutes
+nothing — it establishes only that nothing can tell the two apart. CLAUDE.md:
+*"Write the command next to the claim … re-deriving is where the second,
+different mistake comes from."* The substantive claim underneath survives on
+its own evidence and needs no regex: the 115/79 split re-derives from
+`git show 7e2c61c0 --format= -- LOOPS.md` alone, and
+`grep -c 'Five as of\|Three of the five\|the sample is five' LOOPS.md` → **0**
+shows both aggregate sentences gone.
 
 **Refused, half 1: moving the 115-word entry out.** Step 0c refuses a
 count-plus-pointer **in its own words**, written after *"it has happened once"*
@@ -601,8 +757,21 @@ reports:
 ```
 npx astro check   ->  Result (164 files): 23 errors, 0 warnings, 27 hints   [17s]
   ts(2307)  0     ← all 76 were the unbuilt dist
-  ts(2339) 20 · ts(7044) 16 · ts(6387) 7 · ts(6133) 2 · 7043/6385/2551/2322 1 each
+  ALL 50 diagnostics (errors AND hints), sums to 49:
+    ts(2339) 20 · ts(7044) 16 · ts(6387) 7 · ts(6133) 2 · 7043/6385/2551/2322 1 each
+    (the 50th carries no ts code: astro(4000) on src/pages/components/button.astro:107)
+  the 23 ERRORS alone:
+    ts(2339) 20 · ts(2322) 1 · ts(6133) 1 · ts(2551) 1
 ```
+
+**CORRECTED by Slice 364.** The tally originally stood as one line directly
+under the `23 errors` result and beside `ts(2307) 0` — which *is* an
+error-population statement — so it read as the decomposition of the 23, and it
+sums to **49**. Its two largest entries, `ts(7044)` 16 and `ts(6387)` 7, are
+**hints, not errors**, so a wake sizing `362.1` off that line budgets 23
+diagnostics it never has to clear. The slice's prose below is right where the
+tally was not: *"every one is DOM narrowing inside an inline `<script>`"* is
+exactly what the errors-only row shows.
 
 Caught by asking what would make the number wrong before quoting it, not
 afterwards. Named here because the claim was one sentence from the hand-off.
@@ -696,6 +865,20 @@ gate header; no value is pinned any more.
        on a BUILT `packages/core/dist` is load-bearing** — without it the same
        command reports 76 phantom `ts(2307)`s, which this slice mistook for a
        product defect for one round.
+       **AMENDED by Slice 364 — the `include` is load-bearing too, and this
+       item did not name it.** `astro/tsconfigs/base` sets
+       `"include": ["${configDir}/.astro/types.d.ts", "${configDir}/**/*"]`, so
+       extending it with nothing else makes the program the whole of
+       `apps/docs`: measured this wake, **377 files / 69 hints** against the
+       **164 / 27** recorded above, with the error count unchanged. Two of the
+       four published figures therefore do not reproduce from the config as
+       written here. `resolveJsonModule` is **already true** in that base, so
+       naming it as an addition misdescribes what is being extended. Stated as
+       a property rather than a config string, per CLAUDE.md's criterion rule:
+       **the committed tsconfig's `include` decides the program, so the
+       tsconfig and the file count it produces are recorded together**, and any
+       before/after error count (Accept (b)) is quoted with the file count of
+       the run that produced it.
        - **Accept** — properties, not the values above, all of which are
          snapshots to re-measure: (a) `npx astro check` exits **0** on a tree
          where `packages/core` has been built, with the committed tsconfig;
@@ -780,10 +963,14 @@ sentinel file **and** a sentinel directory planted in `apps/docs/dist` were
 both removed — **isolated to a bare `npx astro build`**, not to the 30-step
 chain around it, since attributing it to the wrong step would be the defect:
 no `rm -rf`/`rimraf` exists in any docs script, and `astro.config.mjs` sets
-no `outDir` or clean option. **The declared range never moved** (`^5.1.0`
-across all 40 commits touching `apps/docs/package.json`), so if the behaviour
+no `outDir` or clean option. **The declared range never moved** (`^5.1.0` is
+the only value `apps/docs/package.json` has ever carried), so if the behaviour
 changed it changed under the repo through a floating minor with no commit to
-point at. **Whether the claim was true when written is left unresolved**
+point at. **CORRECTED by Slice 364: the count published here as "40 commits" is
+67** — at this slice's own commit `13545b20` as well as at HEAD, and identical
+under `--first-parent`, `--follow`, `--no-merges` and a distinct-blob count. The
+property is intact and stronger for it (67 of 67); the denominator was wrong,
+and it had been copied into `ENVIRONMENT.md` §3, where it is now the command. **Whether the claim was true when written is left unresolved**
 deliberately — proving it needs an old astro installed, which is not what the
 Accept asked.
 
@@ -823,8 +1010,13 @@ both hits are inside the comment block explaining its removal, and the
 structural check `grep -E '^\s*paths-ignore\s*:'` returns **0**. That is this
 repo's *assert on structure, never on raw text* rule catching a substring
 count answering a structural question. And the §6c probe crashed on a guessed
-`serveDist` return shape; it returns `{ server, port, base }`, as
-`check-layout.mjs:112` shows. The same suspicion was then applied to the
+`serveDist` return shape; it returns `{ server, port, base }` — the return is in
+`serve-dist.mjs`'s `serveDist`, and `check-layout.mjs`'s destructure of it is
+the caller to copy. (**CORRECTED by Slice 364:** this cited
+`check-layout.mjs:112`, which is inside `async function sweep` both at this
+slice's own commit and at HEAD; the destructure is line **26**. A line number
+into a live script is the weakest citation there is — the same reason
+`RESUME.md`'s own charter forbids `ROADMAP.md:NN`.) The same suspicion was then applied to the
 control that also returned 2 — likewise all comments, checked rather than
 assumed.
 

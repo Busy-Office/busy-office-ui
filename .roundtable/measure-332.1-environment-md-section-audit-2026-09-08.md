@@ -134,6 +134,13 @@ floating minor**, with no commit to point at. Whether the claim was true when
 written is **not established here** — that would need an old astro installed,
 and it is not what the Accept asks.
 
+> **CORRECTED by Slice 364 (2026-09-09):** the count above is **67**, not 40 —
+> at this report's own commit `13545b20` as well as at HEAD, and identical under
+> `--first-parent`, `--follow`, `--no-merges` and a distinct-blob count. The
+> property the paragraph rests on ("`^5.1.0` is the only value") holds across
+> all 67, so the argument is unaffected; only the denominator was wrong. It had
+> been copied into `ENVIRONMENT.md` §3, where it is now the command instead.
+
 **The live hazard the section does not describe, and it is the inverse.** Because
 `astro build` empties `dist`, running one *by itself* silently discards
 everything the chain adds afterwards — `copy-suite`, `highlight-code`,
