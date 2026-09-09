@@ -146,20 +146,22 @@ corrupted by one yet: the loser has always been rejected or has found out before
 committing, never merged. **Count them by re-reading the list below rather than
 trusting a number in prose** — "it has happened once" stood here unedited for ten
 days, across a second collision this section already described (forensics in
-`LOOPS-archive.md`). Five as of 2026-09-08:
+`LOOPS-archive.md`). **Each entry ends with a `cost:` tag** — one of `a wake's
+work`, `a rebase`, `a renumber`, `caught early — nothing`:
 
 1. **157.3** — the cloud routine and the local session both built it within an
-   hour (Slice 162). `git push` rejected the loser.
+   hour (Slice 162). `git push` rejected the loser. **cost: a wake's work.**
 2. **169/170/172** — the loser's rebase merged **clean**, refuting the
-   "guaranteed conflict" argument below (roadmap 175.4).
+   "guaranteed conflict" argument below (roadmap 175.4). **cost: a rebase.**
 3. **The Objective grill of 310/328/329** (2026-09-07) — both dispatchers were
    armed by the same `Objective 3 / 3 OVERDUE` and ran the same grill. The loser
    was stopped by the pre-commit fetch **before it had made any commit at all**.
+   **cost: caught early — nothing.**
 4. **`297.1` (rule 4) against the Objective grill of 315/332/333 (rule 3)**,
    2026-09-07 — **the first collision in which the two dispatchers ran DIFFERENT
    rules**, so nothing was duplicated. They collided on the one shared resource
    this section had never named, **the slice NUMBER**; the loser renumbered
-   `## Slice 335` to 336, rebased, and landed intact.
+   `## Slice 335` to 336, rebased, and landed intact. **cost: a renumber.**
 5. **`319.3` (rule 4), both dispatchers, 2026-09-08** — the first collision in
    which both wakes ran the item to a **verdict** and reached the **same one**
    (refuse), by different instruments, and independently numbered it
@@ -169,24 +171,22 @@ days, across a second collision this section already described (forensics in
    discarding" was executed and returned NOTHING** — the winner's analysis
    strictly dominated, and had independently found the loser's one distinctive
    result. That is a negative result for that instruction, not a reason to drop
-   it: the check is cheap and this time it said discard.
+   it: the check is cheap and this time it said discard. **cost: a wake's work.**
 
 **A new collision adds a LINE here and its forensics to `LOOPS-archive.md`** —
 274.2's charter, which collisions 3 and 4 did not follow, and applying it late is
-roadmap 339.1. The list above is the record a count is read from; what a wake
-DOES about a collision is the fetch rule, the renumber mechanic and
-keep-both-rows, all below.
+roadmap 339.1. **The line carries its `cost:` tag and nothing above it changes**
+(roadmap 341.1) — an aggregate over this list is the one thing a new entry can
+silently falsify. What a wake DOES about a collision is the fetch rule, the
+renumber mechanic and keep-both-rows, all below.
 
-**So the cost model has a fourth point and it is the cheapest: a renumber, not a
-wake.** Three of the five (2, 3, 4) cost less than the "up to one wake's work"
-budgeted above, which is worth knowing before anyone re-argues partitioning —
-but the sample is five, and **two of them, collisions 1 and 5, did spend a
-wake's work**, collision 5 the most of any: a full measurement, a red-proof, a
-discrimination control and all 17 gates, discarded. **The cheap cases are the
-ones caught EARLY**, which is the argument for the pre-commit fetch rather than
-for partitioning — collision 3 was stopped before its first commit and cost
-nearly nothing, while collision 5 ran the fetch at the mandated point and still
-paid, because that point is *after* the work. The renumber is
+**The cost model has a point cheaper than the one budgeted above: a renumber,
+not a wake.** Read the tags for the distribution; never restate it here. What
+they cannot carry is the argument: **the cheap cases are the ones caught
+EARLY**, which argues for the pre-commit fetch rather than for partitioning —
+collision 3 was stopped before its first commit and cost nearly nothing, while
+collision 5 ran the fetch at the mandated point and still paid, because that
+point is *after* the work. The renumber is
 mechanical and easy to get wrong in one specific way: `sed 's/335/336/g'` over
 `ROADMAP.md` also rewrites unrelated arithmetic (`396 − 61 = 335` is live in the
 file today), so match `335\.` and the `^## Slice 335` heading, and count the hits

@@ -320,6 +320,177 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 363 — Standardize sweep, 4 of 4 lanes. Lanes 1-3 carry no delta (and lane 2's "no delta" is **unchanged by construction** — the window never touched the path it reads). Lane 4's finding is `341.1`, closed on ONE of its two halves: the **79-word** aggregate a new collision falsifies is gone by shape, the **115-word** entry is refused, and Step 0c is **+4 words**, which is not a cut and is said so (2026-09-09)
+
+**Dispatched by rule 2** at `Standardize 4 / 4 Continue rounds OVERDUE` — the
+counter the previous hand-off predicted, re-read this wake rather than trusted.
+Cloud wake. Rule 1 found no open P0 (`grep -cE '^\s*[0-9]+\. \[ \].*P0'
+ROADMAP.md` → **0** across 28 open items). Rule 3 is also `Objective 3 / 3
+OVERDUE [331, 332, 333]` and sits *below* rule 2, so the grill waits one more
+wake — as the hand-off said it would.
+
+Step 0: container **DETACHED** again (`git branch --show-current` **empty**),
+`ENVIRONMENT.md` trap 1, fixed with `git checkout -B main origin/main` before
+any commit. Trap 2 clean in one `--unshallow` — no `shallow.lock`, **2,094**
+commits, and it again brought the tags (`git tag | wc -l` → **8**, run rather
+than assumed). **No collision:** `origin/main` read `6a7505f9` at Step 0 and
+`6a7505f9` again at the mandated pre-commit fetch.
+
+**Step 1 — both intakes read, with the controls `ENVIRONMENT.md` §8 names:**
+`/issues?state=open` → HTTP 200 len **1**; `/discussions` → HTTP 200 len **0**;
+`/not-a-real-route` → **404**, the control that makes the `200 []` mean *served
+and empty*. Issue #2's `updated_at` is still `2026-09-06T15:10:34Z` — a
+**twenty-ninth** consecutive hand-off with no movement. Nothing new to triage,
+so **Step 1 committed nothing**.
+
+### The three lanes with no finding — and one of the three cannot have had one
+
+- **Lane 1 of 4 — `scan:dead-style`: no delta, and it lands on the refusal set
+  again.** **11** dead declarations on **9** pages (1,365 live attributes, 1,813
+  declarations, 345 multi-declaration). Reconciled **by kind, not by total** —
+  which is what a miscount would also satisfy: `3× inline-size: 100%`, `3×
+  color`, `1× display: inline-block`, `1× margin-block-start`, `1×
+  align-items: center`, `1× block-size: 2rem`, `1× inline-size:var(--bo-space-0)`
+  — item for item the eleven Slice 345 **refused**, each with its own
+  measurement. The nine pages agree too. Ran with `CHROME_PATH` exported in the
+  same command and the workspace spelled `docs` (`337.1`'s trap).
+- **Lane 2 of 4 — `report:css-repeats`: unchanged, and the reading is
+  unchanged BY CONSTRUCTION.** 74 files · **242** rules with 3+ declarations ·
+  **230** distinct bodies · **8** repeating — the sixth consecutive
+  `74/242/230/8`. The report's own footer says an unchanged reading is evidence
+  of a clean tree **only when the window since the last run touched
+  `packages/core/src/css`**, and it did not: `git log --first-parent -1 --
+  packages/core/src/css` → `e4742fd4` (2026-09-07, Slice 338), which **predates
+  the last sweep** (Slice 345, 2026-09-08). So this lane produced **no evidence
+  either way** this wake. Stated rather than reported clear — five previous
+  sweeps have quoted the streak, and a streak taken over an untouched path is
+  the "identical value across many inputs" CLAUDE.md calls a defect until proven
+  otherwise. Here it is proven otherwise, and it is also not a pass.
+- **Lane 3 of 4 — `report:prose`: every flagged page carries a verdict.** 119
+  pages, median **798**, total **114,124**. The flagged union is **15** — 10 over
+  the corpus 2x, plus `/base/motion/`, `/concepts/layouts/`,
+  `/concepts/js-behaviors/`, `/concepts/design-language/` and `/concepts/scale/`
+  over a family 2x. Checked against **the ENUMERATION** the lane mandates and
+  never the grep `326.1` red-proved dead — and the enumeration was re-derived
+  from the archive rather than carried from the last sweep: 158.1's twelve page
+  paths resolve, plus 161.1's three and 178.3's `/concepts/scale/`, giving 16;
+  all 15 flagged are members; `/patterns/output-form/` is the sixteenth and is
+  not flagged. **No page carries no verdict.**
+
+### Lane 4 of 4 — `report_loop_prose.py`, and it IS the finding: `341.1`
+
+No file changed accumulate class. The `ratchet` block reads `LOOPS.md 2 up, last
+cut f9e0f17d (2026-09-07)`; the dispatch region is **7,548** words and still
+growing faster than the file. Per 308.1 that is not a regrowth reading until it
+is attributed per section, and the block now does the attribution itself
+(353.1): **1 of 16 sections moved, +194 body words, all of it Step 0c.**
+
+That is `341.1`, already open and owned by it — so no new item was filed. Its
+per-revision series was **re-measured rather than quoted**, as the item's own
+text demands, and it reproduces to the word:
+
+```
+# per-revision Step 0c body words, dispatch region, headings excluded
+git show <rev>:LOOPS.md | awk '/^## Playbooks/{exit} {print}'   # split on ^#{2,4}
+  f9e0f17d  2026-09-07  1322   ← Slice 339's fix
+  7e2c61c0  2026-09-07  1516  +194   ← collision 5
+  1310b81a .. 6a7505f9  1516    +0   ← flat since
+```
+
+### `341.1` closed — and the split it named is the whole answer
+
+`341.1` measured collision 5's **+194** as two halves and observed that only one
+of them is mandated by anything. Both halves were re-derived here from the
+commit itself (`git show 7e2c61c0 -- LOOPS.md`), not from the item's prose:
+
+| half | words | mandated by |
+|---|---|---|
+| the list entry for collision 5 | **115** | Step 0c's *"a new collision adds a LINE here"* |
+| correcting the counts the incident falsified | **79** net | **nothing** |
+
+115 + 79 = 194, which is the delta the series reports — the arithmetic closes,
+and the two halves were located independently of it (the entry by its own line
+range, the cost-model paragraph by its own paragraph bounds).
+
+**The unnamed half came from exactly two sentences, and both are aggregates over
+the list**: the lead-in `Five as of 2026-09-08:` and the cost-model paragraph's
+*"Three of the five (2, 3, 4) … but the sample is five, and two of them,
+collisions 1 and 5, did spend a wake's work"*. Nothing else above or below the
+list quantifies it — the other references name a **specific** entry
+(*"collision 3 was stopped before its first commit"*), which an append never
+falsifies.
+
+**So Step 0c was, in its own two paragraphs, doing the thing it warns against
+four lines earlier.** *"Count them by re-reading the list below rather than
+trusting a number in prose"* stands directly above a hand-maintained count and a
+hand-maintained fraction of the same list. That is the drift a Standardize sweep
+consolidates: one value, two places, the second going stale on a schedule.
+
+**The fix is a shape, not a cut.** Every entry now ends with a `cost:` tag —
+`a wake's work`, `a rebase`, `a renumber`, `caught early — nothing` — and the
+two aggregate sentences are gone, replaced by *"Read the tags for the
+distribution; never restate it here."* The distribution is now **derived from
+the list by reading it**, which is what the section already told a wake to do.
+
+**+4 words. This is NOT a cut, and saying otherwise would repeat 339.1's own
+recorded failure** — that wake's first attempt moved Step 0c 1,500 → 1,487 and
+it recorded that *"the narrative that came out was replaced by a paragraph
+explaining why it came out, which is the same accretion by another name"*. **The
+first attempt here did exactly that too, measured: +93 words**, because the
+justification for the shape was written inline. It was moved into this slice and
+the section re-measured:
+
+```
+Step 0c body words   1516 (HEAD)  ->  1609 (first attempt, +93)  ->  1520 (+4)
+dispatch region      7548         ->                             ->  7552
+cost tags            0 of 5       ->                                 5 of 5
+```
+
+**The value is the FORWARD cost, and it is stated as a property rather than a
+saving already banked**: a sixth collision now edits the list and nothing above
+it, so the 79-word half does not recur. The 115 does, and is refused below.
+
+**A broad detector confirms the delta lands on the two sentences, and its
+breadth is the reason it is reported as a check rather than a proof.** A regex
+for *a cardinal in the same sentence as a collision word, outside the numbered
+list* reads **13 sentences at `HEAD` and 11 in this tree** — the two that
+disappear are exactly the two carrying all three aggregates. It also matches 11
+sentences that are **not** falsifiable by an append, so it cannot serve as a
+gate; *"this sentence is an aggregate over the list"* is semantic, which is
+94.11's wall.
+
+**Refused, half 1: moving the 115-word entry out.** Step 0c refuses a
+count-plus-pointer **in its own words**, written after *"it has happened once"*
+stood stale for ten days; the list is what makes the count re-readable, and a
+wake reads this section every wake while nothing sends it to
+`LOOPS-archive.md`. `341.1` named this as the likeliest outcome and it is the
+outcome.
+
+**Refused, half 2: a gate over the tag.** Not on the base rate — 5 of 5 by
+construction is the same position `check:wrong-choice` occupies legitimately —
+but on the **failure mode**. Under the old shape a missed correction left a
+**false statement** standing in the dispatch region; under the new one a missing
+tag leaves an **untagged entry**, visible to the next reader and false about
+nothing. A gate buys catching a benign failure at the price of a 56th gate,
+which moves the `gates` fact `derive-readme-facts.mjs` stamps on the **npm front
+page** — read out of that script's line 141, which templates `<checked> build
+gates, <heuristic> of them heuristic detectors…`, rather than cited from Slice
+362.
+
+**Nothing was destroyed by the deletions, checked rather than assumed.** The one
+clause cut from an entry — collision 5's *"the most of any: a full measurement, a
+red-proof, a discrimination control and all 17 gates"* — is in
+`LOOPS-archive.md` in fuller form (*"re-run the item's two counts, measured five
+numeric claims live, timed a 21-page copy of the gate … run all 17 CI-runnable
+gates green"*), which is where the charter puts forensics.
+
+**What this does NOT fix, said plainly.** The charter itself is still a rule a
+human has to notice — `LOOPS-archive.md` says so in its own words about
+collision 5 (*"nothing enforces it, and the next incident is written up by
+whoever notices"*). This slice removes the half of the per-incident cost that
+had no rule behind it at all; it does not make the remaining half
+self-executing, and `341.1` did not ask it to.
+
 ## Slice 362 — `333.1` decided: **`tsconfig`, not a gate** — and the base rate the item pinned as "0 of 152" is 0 of 600 *consts* but **1 of 1,118 frontmatter bindings**, a dead import live for **22 days** (2026-09-08)
 
 **Dispatched by rule 4.** Rule 1: no open P0 —
@@ -3771,8 +3942,24 @@ is the first thing the report distrusts about itself — the scope is narrow by
 selection (only mechanically re-runnable assertions), and what was not re-run is
 named there rather than left implied.
 
-1. [ ] **341.1 — Step 0c's generator has TWO outputs and its charter throttles
-       only one. The cut lasted exactly one commit.** 339.1 concluded that Step
+1. [x] **341.1 — Step 0c's generator has TWO outputs and its charter throttles
+       only one. The cut lasted exactly one commit. CLOSED 2026-09-09 (Slice
+       363): the unmandated half is removed by shape, the mandated half is
+       refused.** The +194 and its 115/79 split were re-derived from
+       `7e2c61c0` and reproduce exactly. The **79** came from precisely two
+       sentences, both aggregates over the list — a count and a fraction —
+       standing four lines under this section's own *"Count them by re-reading
+       the list below rather than trusting a number in prose"*. Every entry now
+       carries a `cost:` tag and the two sentences are gone, so a sixth
+       collision edits the list and nothing above it. **Step 0c is +4 words:
+       this is a shape change, not a cut, and the forward saving is a property
+       rather than a banked one.** The **115** is refused — Step 0c refuses a
+       count-plus-pointer in its own words and a wake reads this section every
+       wake — which is the outcome this item named as likeliest. A gate over the
+       tag is refused too, on the *failure mode* rather than the base rate: a
+       missing tag leaves an untagged entry, where a missed correction left a
+       false statement. Full analysis, commands and the +93-word first attempt
+       are in Slice 363. Original text kept below. 339.1 concluded that Step
        0c has a *generator* — a recurring event each instance of which writes a
        narrative there — and that *"no cut can hold against one"*. **The next
        revision of `LOOPS.md` after 339's fix confirmed it**, and this grill is
