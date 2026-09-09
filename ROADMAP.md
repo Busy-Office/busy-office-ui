@@ -320,6 +320,206 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 372 — Objective grill of Slices 369, 370, 371: every structural claim in 370 and 371 reproduces exactly, and the finding is in the instrument that READS the samples they wrote — **`per_day_last` discards a metric sample on a stated reason that is false at 72 of 73 pairs**, so rule 5 publishes a movement that never happened on **5 of 8** names and its own predicate flips on **3 of 8** (2026-09-09)
+
+**Dispatched by rule 3**, cloud wake, `Objective 3 / 3 slices OVERDUE
+[338, 370, 371]`. Rule 1 found **0** open P0 across **23** open items
+(`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → 0); rule 2 read `1 / 4`. Rules
+4-8 were not reached. Step 1 read both intakes in the REST form with §8's
+controls: issues **1** (#2, `updated_at` `2026-09-06T15:10:34Z` — the **sixth**
+consecutive hand-off recording that same value), discussions **0**,
+`/not-a-real-route` **404**, so the empty list means *served and empty*.
+**Nothing triaged.**
+
+**Both Step 0 traps bit, plus the third.** The container arrived **detached**
+(`git branch --show-current` empty at `61e9d92f`) and **shallow** (50 commits);
+`git fetch origin main && git checkout -B main origin/main` and
+`git fetch --unshallow origin` fixed both — **2,112** commits, **8** tags, no
+`shallow.lock`. Per §2 the tag count is the check, not a pinned value. And
+`node_modules` was absent again, so `npm ci` ran first.
+
+**The arming set resolves to Slices 369, 370, 371** — `338` is an item id whose
+slice is 369, `370` and `371` are genuine slice numbers. Resolved by reading the
+commit subject at each row's sha, per §0's rule, not by treating the label as an
+ordinal. No earlier grill heading names any of the three, and `INDEX.md` reports
+**4 repeated subject(s)** corpus-wide, none of them here — so nothing was
+narrowed out. The full report is
+`.roundtable/grill-objective-369-370-371-2026-09-09.md`.
+
+### The finding: rule 5 discards a sample on a reason that is false at 72 of 73
+
+`per_day_last` keeps only the last sample of each calendar day and records why:
+*"a wake that samples twice in one day is correcting itself, and rule 5 compares
+what each run concluded."* That is a claim about the data, so it was checked
+against the data. **A sample separated from the next by a commit cannot be a
+correction of it — the thing measured changed in between.** Counting distinct
+commit shas strictly between each adjacent intra-day pair, over all **143**
+samples in `loop-metrics.jsonl`:
+
+```
+adjacent pairs with NO commit between (a wake correcting itself):  1
+adjacent pairs separated by >=1 commit (distinct trees):          72
+```
+
+The one pair matching the docstring is `behaviors_frozen`, **19.0 → 18.0 at the
+same minute**, `2026-08-16 11:25`. Every other spans 2 to 50 commits.
+
+**The case the rule was built around is the clearest counterexample.**
+`LOOPS.md:609` and `dispatch_status.py:933-934` both present `ci-wall-time`'s 26
+samples as one wake's burst — the latter outright: *"a burst inside one wake is
+NOT two runs."* That window (`2026-08-18 02:48 .. 19:54`) carries **36 loop-log
+rows, 35 distinct commit shas and 5 distinct loops** (`Continue`, `Explore`,
+`Objective`, `Roadmap`, `Standardize`). The 17 hours are real; "one wake" is not.
+
+### What it costs, and it is not cosmetic
+
+Rule 5's trigger is *"regressed on TWO CONSECUTIVE runs"*; the implementation
+maps *run* to *calendar day*, and 72 of 73 discarded samples were separate runs.
+Across the 8 day-paired names that are rule 5's actual input set, **5 publish a
+movement that occurred between no two samples**:
+
+| name | published (per-day) | last two ACTUAL samples |
+|---|---|---|
+| `dispatch-region-words` | 7492 → 7484 **−8** | 7552 → 7484 **−68** |
+| `components` | 25 → 30 **+5** | 29 → 30 **+1** |
+| `claims` | 169 → 176 **+7** | 170 → 176 **+6** |
+| `bundle-gz-kb` | 11.7 → 15.1 **+3.4** | 15.1 → 15.1 **+0.0** |
+| `behaviors_frozen` | 16 → 18 **+2** | 19 → 18 **−1** (sign inverts) |
+
+And on the rule's own predicate — two consecutive moves in one direction — the
+two readings **disagree on 3 of 8**: true at sample level, invisible at day
+level (`behaviors_frozen`, `ci-gates`, `dispatch-region-words`).
+
+**`dispatch-region-words`'s two same-date samples were written by two different
+wakes nine hours apart**, which is why this grill surfaced it. Attributed by
+`git blame --line-porcelain` on `loop-metrics.jsonl` (164.2's method, and the
+one `353.2` exists because a sample carries no commit of its own):
+
+```
+line 141  7552  2026-09-09 00:55   4cfb8b2c  "record Slice 363 …"  (00:58 +0000)
+line 143  7484  2026-09-09 09:44   61e9d92f  "record Slice 371 …"  (09:49 +0000)
+```
+
+Slice 370's wake sits between them (08:54), read the region at **7,552** in its
+lane-4 write-up, and **recorded no sample at all**. So the discarded reading is
+not a correction Slice 371 superseded — it is another wake's correct reading of
+an earlier tree, and rule 5 never sees it. Slice 371's hand-off meanwhile states
+the movement as *"the region genuinely moved (7,552 → 7,484)"* while
+`dispatch_status.py`, run in that same wake, printed
+`2026-09-08 7492 -> 2026-09-09 7484  -8`. **Two numbers for one movement, 8.5x
+apart, in one wake's record, unreconciled.**
+
+**Evidence, not Hypothesis** — two independent sources: commit boundaries in
+`loop-log.md` against sample stamps in `loop-metrics.jsonl`, and the live output
+of `dispatch_status.py`, which printed the −8 at this wake's Step 0b before any
+of this was measured.
+
+### What these numbers do NOT cover, said before they are quoted
+
+- **"Two consecutive moves in one direction" is the SHAPE of rule 5's predicate,
+  not its verdict.** No direction is recorded with a sample (324.1), so a rise is
+  a regression for `bundle-gz-kb` and the goal for `claims`. The 3-of-8 figure is
+  about what the rule can SEE, not what it should fire on.
+- **A commit between two samples proves they read different trees, not
+  different wakes.** One wake can commit twice. The one-wake reading is refuted
+  for `ci-wall-time` by the five distinct loop names, not by the count alone.
+- **This does not establish the day unit is WRONG.** 324.2 measured
+  `bundle-gz-kb` under four pairings and argued its sample-to-sample moves are
+  noise; for a shared-runner timing that is plausible. What is established is
+  that the recorded JUSTIFICATION is false and the case cited for it is
+  mislabelled — separable, and only the first is proved.
+- **`353.2` is adjacent and is NOT this**, so nothing is filed twice. It asks
+  that a `dispatch-region-words` sample be traceable to its commit; this is about
+  which samples the pairing keeps.
+
+### What reproduced — and the 56 that looked like a discrepancy
+
+Re-measured by **importing** `report_loop_prose.dispatch_sections` rather than
+re-implementing its convention, as both slices did: rule 3 body **907** words
+(exactly one section matches); `### Step 0c` **1,520**; `LOOPS.md` whole-file
+**18,241**; `LOOPS-archive.md` **3,880**; the moved P4 paragraph present in the
+archive **exactly once** and absent from `LOOPS.md`. **All four of Slice 370's
+lanes were re-run against a built `dist` and each reproduces its published
+figure** — lane 1 `0 dead attribute(s) … 1365 live`, lane 2 `74 · 242 · 230 · 8`,
+lane 3 `119 page(s) · median 798 · 114,124 words`, lane 4 Step 0c `1,520`.
+**Every structural claim in Slices 370 and 371 reproduced exactly.**
+
+**One imprecision, recorded and NOT filed.** Slice 370 quoted lane 1's
+*attribute* line and called the lane clean; the same run's second line reads
+**11 dead declaration(s) on 9 page(s)** — the per-declaration view 320.2 added
+because a dead declaration can hide behind a live sibling. The 11 is neither new
+nor unnoticed: it is tracked as its own metric, `dead-declarations`, which moved
+52 → 11 on 2026-09-08 and has not moved since. 370 quoted the weaker of the two
+figures its lane prints; that is worth a sentence in the next sweep, not an item.
+
+The dispatch region first read **7,428**, and the 56 was run down rather than
+rounded off: `dispatch_heading_words` counts the region's own `##`-`####`
+heading lines and returns **56**, so 7,428 + 56 = **7,484**. `353.2` already
+documents that constant. Not a discrepancy.
+
+**Not re-run, and named rather than implied:** Slice 371's 25-revision series
+and its "all three quoted fragments are in P5" check need pre-cut revisions and
+were not replayed — the endpoints reproduce, the path between them is taken on
+371's word. **Slice 369's print figures were not re-measured at all** (a
+multi-hour headless-Chrome + PDF re-derivation); its two browser-free citations
+were, and both are exact — `print/index.css:99-102` is
+`.bo-timeline__marker, .bo-stepper__marker { print-color-adjust: exact }`, and
+the gate header's *WHAT THIS GATE DOES NOT SEE* paragraph carries its correction
+in place, in the same commit `c5780113`.
+
+### Three instrument defects in this grill's own work
+
+0. **Authorship inferred from timestamp proximity instead of measured.** The
+   first draft of the paragraph above said both `dispatch-region-words` samples
+   were written by slices in this arming set, because 7,552 sits between Slices
+   370 and 371 in time. `git blame` says the wake that wrote it recorded **Slice
+   363**, and Slice 370 recorded no sample at all. Caught before publishing, by
+   running the very blame the paragraph was about to cite `353.2` for. **The
+   finding is unchanged** — nothing in it rests on which slice authored a
+   sample.
+1. **The commit-boundary probe was dead on its first run** — it called
+   `r.get("sha")` on rows from `dispatch_status.rows()`, which returns only
+   `at`/`loop`/`item`, so the set was always empty and it reported **0 commits
+   between for 17 of 17 buckets**. Caught by the identical-value tell, then
+   believed only after a **positive control** (9 distinct shas on 2026-09-09)
+   and a **negative control** — the detector must be able to return 0, and does,
+   exactly once, on the same-minute `behaviors_frozen` pair.
+2. **A paraphrase-grep reported a false absence.** `grep -cF` for `"12 of 17"`,
+   `"crossings 51"` and `"18 rows"` — `ROADMAP.md`'s wording for the moved text
+   — returned **0** in both files while the text is present under the archive's
+   own wording. Not reported as an absence; caught by opening the paragraph.
+
+**Filed by this slice:**
+
+1. [ ] **372.1 — rule 5's pairing keeps the last sample of each calendar day on
+       a recorded reason that is false at 72 of 73 pairs, and the case cited for
+       it is mislabelled.** Measured above. The consequence is not cosmetic: on
+       **5 of 8** day-paired names the published movement occurred between no two
+       samples (`dispatch-region-words` −8 against a true −68), and the rule's own
+       two-consecutive-moves predicate **disagrees between the two readings on 3
+       of 8**.
+       - **Accept — the property, and finding the unit RIGHT is a satisfying
+         outcome.** EITHER `per_day_last`'s stated reason is replaced by one that
+         reproduces against the data, with the command beside it, and the
+         `comparable set` line says which movement it reports so a wake cannot
+         read a day-close delta as a consecutive one — **OR** the pairing unit
+         changes and the same 8-name set is re-measured showing what moved.
+         Deciding that the day unit is correct and only its justification was
+         wrong closes this just as well; so does deciding the reverse. What does
+         not close it is leaving two numbers for one movement in one wake's
+         record.
+       - **Lane: cloud-takeable.** It is a Python module, a docstring, a
+         self-test fixture and one sentence of `LOOPS.md`; no rendered evidence
+         is involved.
+
+**Refused, with the measurement:** a gate asserting *"a metric sample must not
+be discarded when a commit falls between it and the next"*. The predicate is
+true of **72 of 73** intra-day pairs today, so the gate would be red on a
+correct tree from its first run — 94.11's base-rate rule pointing the other way
+(there a predicate true of 100% distinguished nothing; here one false of 99%
+would fail everything). The property belongs in the pairing's own reasoning, not
+in a build gate.
+
 ## Slice 371 — `339.2` decided: the +303 is **THREE kinds, not two**, and 279.4's inline argument covers only **one of the two paragraphs it was thought to protect**. All three quoted fragments of that argument sit in the paragraph that STAYS; the cost narrative it was read as defending contains none of them, and every one of its figures is carried more completely beside `CLOSES_A_SLICE`. Rule 3: **975 → 907 words** (2026-09-09)
 
 **Dispatched by rule 4**, cloud wake. Rule 1 found **0** open P0 across **24**
