@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
 
-Generated at: 2026-09-09 02:49 UTC
+Generated at: 2026-09-09 04:43 UTC
 
 ## Open items by slice
 
@@ -23,8 +23,6 @@ Generated at: 2026-09-09 02:49 UTC
   - 320.3 — the same idiom, two values, in two shared components.
 - **Slice 335** (1 open)
   - 335.1 — The Discussions intake has never returned a non-empty list, in either environment.
-- **Slice 336** (1 open)
-  - 336.2 — should `report:prose` print the flagged UNION, since that is what its lane is defined on?
 - **Slice 337** (1 open)
   - 337.1 — A Standardize lane that never RAN is recorded as clean, and nothing in the sweep can tell the two apart.
 - **Slice 338** (1 open)
@@ -56,14 +54,14 @@ Generated at: 2026-09-09 02:49 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1694 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-09-09 00:54   ok
-  Objective     1 / 3 slice           since 2026-09-09 02:00   ok  [334]
-  Optimize      0 wake-date(s) newer   since 2026-09-09 00:55   ok   [newest pair: dispatch-region-words; 141 sample(s), 8 of 47 name(s) paired across days]
+dispatch status — counter-triggered rules (1697 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-09-09 00:54   ok
+  Objective     2 / 3 slices          since 2026-09-09 02:00   ok  [334, 336]
+  Optimize      0 wake-date(s) newer   since 2026-09-09 02:50   ok   [newest pair: gates; 142 sample(s), 8 of 47 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (39 of 47 name(s) have only one day and are not an input to a rule that compares two runs):
+       gates                       4d  2026-09-07 55 count -> 2026-09-09 56 count  +1
        dispatch-region-words       3d  2026-09-08 7492 words -> 2026-09-09 7552 words  +60
        claims                      4d  2026-09-06 169 count -> 2026-09-07 176 count  +7
-       gates                       3d  2026-08-19 27 count -> 2026-09-07 55 count  +28
        axe-violations              8d  2026-09-03 0 count -> 2026-09-06 0 count  +0   NEVER MOVED
        bundle-gz-kb                5d  2026-08-17 11.7 kB -> 2026-09-03 15.1 kB  +3.4
        ci-gates                    2d  2026-08-17 14 gates -> 2026-08-18 15 gates  +1
@@ -77,6 +75,7 @@ dispatch status — counter-triggered rules (1694 iterations logged)
 
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
+- 335.1 — The Discussions intake has never returned a non-empty list, in either environment.
 - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
 - 249.10 — SAP/Fiori terminology column for 249.7.
@@ -88,9 +87,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-08 23:52 · Continue · build · 333.1 decided — tsconfig not a gate; base rate 0 of 600 consts but 1 of 1,118 frontmatter bindings, a 22-day-old dead import deleted and proved render-neutral · landed · 9307c6aa
-- 2026-09-08 23:52 · Meta · refusal · a 54th gate for never-used frontmatter bindings — it duplicates a subset of noUnusedLocals and forces a README re-stamp on the npm front page · refused · 9307c6aa
-- 2026-09-09 00:54 · Standardize · sweep · 341.1 — Step 0c's collision list: the aggregate half a new entry falsifies is removed by shape (cost: tags), the mandated 115-word entry half is refused; sweep ran 4 of 4 lanes · landed · f1e84a77
 - 2026-09-09 00:54 · Meta · refusal · a gate over the cost: tag — refused on the failure mode (a missing tag leaves an untagged entry, where a missed correction left a false statement), not on the base rate · refused · f1e84a77
 - 2026-09-09 00:54 · Meta · refusal · moving the 115-word collision entry out of Step 0c — Step 0c refuses a count-plus-pointer in its own words · refused · f1e84a77
 - 2026-09-09 02:00 · Objective · grill · Slice 364 — Objective grill of Slices 360, 361, 362, 363: 73 of 78 published assertions reproduce (one per report table row), every headline figure and every verdict among them — 331.1's refusal 26 of 26, Slice 361's bare-astro-build sentinel proof re-run from scratch (224 vs 529), 333.1's probe re-extracted from its landed report and re-run (600/518/1118, then 0 of 1117), and 341.1's 115+79=194 split re-derived from 7e2c61c0 alone. All five defects are a sentence CHARACTERISING or CITING a measurement, never the measurement: 362's ts-code tally is over all 50 diagnostics not the 23 errors (sums to 49; its two largest entries are hints), 362.1's tsconfig omits the load-bearing include (377/69 as prescribed vs the published 164/27, errors unchanged), 361's '40 commits' is 67 under every instrument and had been copied into ENVIRONMENT.md, check-layout.mjs:112 is line 26, and 363's 13-to-11 detector is recorded nowhere as a command. Four corrected in place, one marked UNCHECKED; nothing filed · landed · fed40de9
@@ -98,6 +94,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-09 02:00 · Meta · refusal · an item for 'a slice that measures something novel lands its instrument' — whether a measurement is novel is a judgement, 94.11 again; 355.3/359.4's precedent against a fifth loop-mechanics item · refused · fed40de9
 - 2026-09-09 02:00 · Meta · refusal · extending the characterisation-defect run back through the grills of 351 and 355 — not measured, and Slice 355's own row names a defect of a different shape · refused · fed40de9
 - 2026-09-09 02:49 · Continue · build · 334.1 — retag check-selftests.mjs @heuristic; premise recorded false; both READMEs re-stamped 55/21/34 -> 56/22/34 · landed · ae10db97
+- 2026-09-09 04:43 · Continue · build · 336.2 decided: report:prose prints the flagged union (count + inclusion-exclusion + family-only additions); base rate re-measured at 1 of 7 sweeps (332 alone), 0 of last 5, and 336.2's '2 of the last 2' premise refuted — Slice 326 printed union=15 and failed on the stale ENUMERATION; red-proved by three threshold injections (11/10/27 vs 15) · landed · 9a5faeca
+- 2026-09-09 04:43 · Meta · refusal · amending LOOPS.md §3 lane 3 — its two-clause text was already correct; the tool was the half-answer, so LOOPS.md is byte-for-byte unchanged · refused · 9a5faeca
+- 2026-09-09 04:43 · Meta · refusal · filing a throwaway discussion to settle 335.1 — GraphQL is 403 for this session on all three probes, and a REST POST is untested BY CHOICE because it would create a real public item with no live owner to authorise it · refused · 9a5faeca
 
 ## Sunset test
 
