@@ -320,6 +320,152 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 365 — `334.1` decided: **retag**, and the premise it was filed on is false — the marker is only the THIRD text leg, and an identical unreachable branch passes or fails this gate on **one line of prose** (2026-09-09)
+
+**Dispatched by rule 4**, on the oldest genuinely dispatchable open item.
+Rule 1 no open P0 (`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0** across
+27 open items); rule 2 `Standardize 0 / 4 ok`; rule 3 `Objective 0 / 3 ok`;
+rule 5 `Optimize 0 wake-date(s) newer — ok`, so it was EVALUATED and does not
+fire — its comparable set's movers are `dispatch-region-words` (+60) and
+`claims` (+7), neither a regression, and `LOOPS.md` did not change this wake.
+Rule 4's oldest open item is Slice 15, and everything from there to `334.1` is
+owner- or browser-blocked, re-derived from each item's own text rather than
+carried from the hand-off: **15** NEEDS-RUNTIME (owner hardware), **112.3**
+"BLOCKED ON OWNER BRIEFS", **112.4** blocked on 112.3's verdict, **249.7** holds
+its remaining rows for 249.10, **249.10-13** each `OWNER CALL`, **273.2**
+`OWNER CALL`, **296.3** `OWNER CALL`, **320.3** browser-blocked in the
+SCREENSHOT sense. `334.1` is the oldest cloud-takeable one, and its own Lane
+line says so.
+
+**Step 1 read both intakes, with `ENVIRONMENT.md` §8's controls:**
+`/issues?state=open` → `HTTP 200, len 1` — issue #2, `updated_at`
+**2026-09-06T15:10:34Z**, unmoved for a thirty-first consecutive hand-off;
+`/discussions` → `HTTP 200, len 0`; `/not-a-real-route` → `HTTP 404`, so the
+`200 []` means *served and empty*. No new untriaged input, so Step 1 committed
+nothing.
+
+### The premise was tested before the decision, and it is false in the direction that matters
+
+`334.1` reads *"its verdict **used to** rest on a `readdir` and a tag
+comparison. It **now also** rests on matching `SELF_TEST_MARKER` against a child
+process's prose"* — i.e. the marker is what made this gate a recogniser. Both
+halves were checked against the file's history rather than its prose:
+
+| leg | what it actually does | wrong verdict on the real tree? |
+|---|---|---|
+| `readdir` + `check-*.mjs` | membership | no |
+| tag classification | **positional regex over source** | **yes** — until `18791d5` it was `src.includes('@exact')`, so a header explaining a retag read as claiming BOTH tags; that repair's own first draft then reported **eight** gates untagged |
+| `owed` | **regex for an argv branch in source** | **yes** — the first version matched the string `--self-test`, which every heuristic gate satisfies because the tag TEXT says "Carries --self-test" |
+| `SELF_TEST_MARKER` | regex over a child's stdout+stderr | see below |
+
+So two of the three text legs **predate the marker**, and both have produced a
+wrong verdict here. A positional regex over source is *recognising a position*,
+which is this gate's own worked example of the heuristic kind. The premise is
+recorded false: the marker did not make this a recogniser, it made it a third
+one.
+
+### The marker spoof, run rather than hypothesised
+
+The gate's header already carried the hypothesis — *"a per-case label that
+itself contained the words 'self-test passed — 3 cases' would satisfy it"*. It
+was executed, with the injection confirmed on disk first and the counts read
+before and after:
+
+```
+probe: a @heuristic gate carrying 315.1's defect verbatim — a real --self-test
+       branch below an early process.exit(0) — plus ONE line of prose:
+       console.log('self-test: a label that says self-test passed — 3 cases    ok');
+  -> self-test check PASSED — 56 gates … 22 heuristic (175 cases actually run)
+
+the identical probe, that one line changed to console.log('probe ran'):
+  -> self-test check FAILED — "exited 0 but printed no case count … this is
+     roadmap 315.1's defect exactly"
+```
+
+One line of prose, on a byte-identical defect, flips the verdict. And the
+count published to the npm front page took **+3 cases from a probe that ran
+none** (172 → 175). That is the tag definition in this file's own header almost
+verbatim: the verdict rests on recognising a pattern, it can be fooled, and it
+has been.
+
+**Decision: `@heuristic`.** The refusal the Accept offered would have had to
+name the marker match as *equality, membership, or a measurement taken in a real
+browser* — the three things that header admits as exact. A regex with a wildcard
+matched anywhere in concatenated stdout+stderr is none of them.
+
+### What it cost, and the property rather than the value
+
+The self-exclusion is gone, so this file is now scanned by itself. Read the
+gate's own line rather than a number here — the property is that counting this
+file raises the total and the heuristic count by one each and leaves the exact
+count alone, and that whatever the three then are must match what
+`derive-readme-facts.mjs` stamps on both READMEs:
+
+```
+before   self-test check passed — 55 gates classified: 21 heuristic (172 cases), 34 exact
+after    self-test check passed — 56 gates classified: 22 heuristic (183 cases), 34 exact
+```
+
+Both READMEs were re-stamped in this commit (`build:readme-facts` then
+`stamp-readme.mjs`), which `stamp-readme.mjs --check` and `check:readme-facts`
+gate inside the core build. `declaresTag` and `runsSelfTest` were lifted out of
+`scanGates` to module scope so the `--self-test` can drive them; they were an
+inline closure, which is exactly the shape a self-test cannot reach. Eleven
+cases, each a discrimination this file has got wrong or been shown to get wrong.
+
+### Two findings the retag produced that nothing had asked for
+
+- **The gate went red on its own glossary.** The header paragraph *defining*
+  the two tags sat at the declaration position, so the moment this file stopped
+  exempting itself it read as claiming BOTH and failed. That is CLAUDE.md's
+  *an assertion that can be tripped by its own explanation*, arriving in the
+  file that documents it — and it is the same defect `18791d5` fixed for every
+  OTHER gate, surviving here only because this one was exempt. Fixed by quoting
+  the two names; a comment now says the backticks are load-bearing.
+- **The `--self-test` branch must sit above the SPAWN LOOP, and the first
+  attempt to prove that came back green.** This gate spawns every heuristic gate
+  and is now one of them, so it spawns itself. The first injection moved the
+  branch below `scanGates()` and it terminated fine — `scanGates` is a pure read
+  and spawns nothing. Moved below the loop it **did not terminate (killed at
+  30s)**, against **0.041s** where it now sits. The paragraph written beside the
+  finding had said "below the scan" and was wrong; CLAUDE.md's *a red-proof that
+  comes back green is a defect in the injection until proven otherwise* caught a
+  defect in the sentence the injection was testing. `owed` can see none of this
+  — it asks whether the branch exists, never where.
+- **A self-test fixture can satisfy the predicate it is testing, on its own
+  file.** The case asserting *"a `--self-test` mention is not an
+  implementation"* needs the real call spelled out as its positive control —
+  and spelled whole, that literal sits in this file, so `runsSelfTest` would
+  match it and this gate could never report itself as owing a self-test even
+  with the real branch deleted. A mention standing in for an implementation, in
+  the fixture asserting they are different. The string is split
+  (`'if (process.argv' + ".includes('--self-test')) run();"`), and
+  `grep -cE "process\.argv\.includes\('--self-test'\)"` on the file now returns
+  **1** — the real branch, line 279 — rather than 2.
+
+### Red-proved on itself
+
+| injection | landed? | verdict |
+|---|---|---|
+| one fixture's expectation flipped (`false` → `true`) | site count asserted **1** before replacing | **rc 1**, naming `apps/docs/scripts/check-selftests.mjs` and printing the wrong case |
+| the marker prose removed from the probe | occurrences 1 → 0, asserted | **rc 1**, 315.1's message |
+| the branch moved below the spawn loop | position asserted against the loop's index | **did not terminate** |
+
+Each was reverted with `git checkout` **after `git add -A`**, per Slice 334's
+own lesson that a bare checkout takes legitimate edits with it; the gate was
+re-run green after each.
+
+1. [x] **334.1 — decided: retag.** See this slice. The premise is recorded
+       **false** — the marker is the third text leg, not the first — and the
+       spoof it hypothesised was executed rather than reasoned about.
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. **Nothing in this slice renders**: the diff is one gate
+script, the derived `readme-facts.json`, the two stamped README lines and
+roadmap prose. No `.astro`, `.css` or shipped JS is touched, confirmed by
+reading `git diff --stat` rather than assumed. The eight older visual debts are
+unchanged and unspent.
+
 ## Slice 364 — Objective grill of Slices 360, 361, 362, 363: **73 of 78** published assertions reproduce, every headline figure and every verdict among them — and all **five** defects are again in a sentence that CHARACTERISES or CITES a measurement rather than in the measurement, which is **two consecutive grills, seven slices** (2026-09-09)
 
 **Dispatched by rule 3** at `Objective 4 / 3 slices OVERDUE [331, 332, 333, 341]`.
@@ -5085,7 +5231,12 @@ green again only because the edit was re-applied; nothing would have reported
 it. **Stage before injecting** — `git add -A` first, and `git checkout` then
 restores the intended state rather than `HEAD`'s.
 
-1. [ ] **334.1 — should `check-selftests.mjs` itself be `@heuristic` now?** Its
+1. [x] **334.1 — DECIDED 2026-09-09 (Slice 365): RETAG.** The premise below is
+       recorded **false** — the marker is the third text leg, not the first;
+       two others predate it and both produced a wrong verdict on the real
+       tree. The spoof this item hypothesised was executed: one line of prose
+       flips the verdict on a byte-identical unreachable branch. Original text
+       kept below. Should `check-selftests.mjs` itself be `@heuristic` now? Its
        verdict used to rest on a `readdir` and a tag comparison. It now also
        rests on matching `SELF_TEST_MARKER` against a child process's prose,
        which is recognising a pattern — a per-case *label* containing the words
