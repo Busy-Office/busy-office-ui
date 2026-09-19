@@ -44,10 +44,15 @@
 
   /* Dropzone: a bigger drag-target around the same native input, wrapped in
      a <label> so a click anywhere in the box opens the file picker (labels
-     don't need JS to forward clicks to their control). data-dragover is the
-     ONE thing this needs opt-in JS for (initFileDropzone()) — everything
-     else, including the actual drop-to-select, is native browser behavior
-     on a file input. */
+     don't need JS to forward clicks to their control).
+
+     The CLICK half is native — a label forwards it with no JS. The DROP
+     half is not, and this comment used to say it was (roadmap 373.1):
+     a native file input is its own drop target only while it is VISIBLE,
+     and the documented dropzone hides it with .bo-visually-hidden, so a
+     drop on the box lands on the page and the browser opens the file in a
+     new tab. Measured with trusted drops, not reasoned. initFileDropzone()
+     is what makes the box droppable at all, and what draws data-dragover. */
   .bo-file-dropzone {
     display: flex;
     flex-direction: column;
@@ -67,9 +72,50 @@
     outline-offset: var(--bo-focus-ring-offset);
   }
 
+  /* Two-channel, and the second channel is the BORDER STYLE, not a second
+     colour: dashed reads "empty target", solid reads "release here". Colour
+     alone was the whole signal until 373.1, which measured ZERO computed
+     difference between rest and dragover under forced colours — where every
+     colour here is replaced by a system one and the state simply vanished.
+     A style swap costs no layout (the width is unchanged) and survives,
+     because forced-colors overrides colours and leaves geometry alone. */
   .bo-file-dropzone[data-dragover="true"] {
+    border-style: solid;
     border-color: var(--bo-color-accent-solid);
     background: var(--bo-color-bg-selected);
+  }
+
+  /* The hint carries the constraints ("PDF, JPG or PNG — up to 10 MB each"),
+     which is the line the user most needs mid-drag — and text-muted on the
+     dragover background measures 3.59-4.31 on the four DARK brand presets.
+     It steps up a rank rather than the background stepping down, because the
+     background is what says "this is the target". Gated: text-secondary on
+     bg-selected is in check-contrast's PAIRS. */
+  .bo-file-dropzone[data-dragover="true"] .bo-file-dropzone__hint {
+    color: var(--bo-color-text-secondary);
+  }
+
+  /* A disabled input's dropzone said nothing at all — same border, same
+     background, and `cursor: pointer` still promising a picker that will
+     never open. The behavior refuses the drop (as the native control does);
+     this is the half the user can see. */
+  .bo-file-dropzone:has(.bo-file-input:disabled) {
+    opacity: var(--bo-state-disabled-opacity);
+    cursor: not-allowed;
+  }
+
+  /* Invalid: the same two channels every other control uses — the border
+     recolours AND .bo-form-field__message appears (form-field.css keys that
+     on :has([aria-invalid="true"]), which the input inside satisfies). The
+     style swap is what carries it under forced colours. Kept here rather
+     than re-pointing a --bo-*-border custom property the way .bo-input does,
+     because this border belongs to the LABEL, not to the control. */
+  :is(
+    .bo-file-dropzone:has(.bo-file-input[aria-invalid="true"]),
+    .bo-file-dropzone:has(.bo-file-input:user-invalid)
+  ) {
+    border-style: solid;
+    border-color: var(--bo-state-error-color);
   }
 
   .bo-file-dropzone__hint {
@@ -85,10 +131,25 @@
     flex-direction: column;
     gap: var(--bo-space-1);
     margin-block-start: var(--bo-space-2);
+    /* It is a <ul>, and nothing reset the UA's box: measured at 390px, the
+       list sat 40px in from the zone above it (padding-inline-start: 40px,
+       list-style disc) — 13% of a phone's width, on every consumer's page,
+       which is where the row below ran out of room (roadmap 373.1). */
+    padding: 0;
+    list-style: none;
   }
 
+  /* Wraps, because a row is not just name + size + remove: it is also the
+     place YOUR code puts a progress bar, an outcome badge, Retry and Cancel,
+     and a 10rem bar plus a button leaves the name nothing on a phone.
+     Measured before this: at 390px the name of an uploading file was 0px wide
+     and, with `overflow-wrap: anywhere`, broke to ONE LETTER PER LINE — a
+     357px-tall row — and `check:layout` did not see it, because that is
+     vertical growth, not horizontal overflow. With wrap the name keeps its
+     own line and the state controls drop beneath it. */
   .bo-file-list__item {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: var(--bo-space-2);
     padding: var(--bo-space-2) var(--bo-space-3);
@@ -98,7 +159,11 @@
   }
 
   .bo-file-list__name {
-    flex: 1;
+    /* 12ch is the least width at which a name is still readable as a name
+       (~90px): below it the row wraps instead of squeezing the name, which
+       is what makes the wrap above happen at the right moment rather than
+       never. A character-count basis, not a layout step. */
+    flex: 1 1 12ch;
     min-inline-size: 0;
     /* A truncated file name is a real problem — "vendor-signature.jpg"
        and "vendor-signature-final.jpg" look identical when clipped — and

@@ -36,6 +36,78 @@ pin.
 
 ### Fixed
 
+- **`initFileDropzone()` no longer accepts a drop the plain input would
+  refuse, and now fires the events a real selection fires.** Measured with
+  trusted drops (Chrome DevTools Protocol `Input.dispatchDragEvent`, real files)
+  against a plain native `<input type="file">` carrying the same attributes,
+  in the same run: a zone around a **disabled** input took the files and fired
+  `change` (native: nothing); a **non-`multiple`** input handed three files
+  took all three, and a form posted all three (native Chrome refuses that
+  whole drop); a drop fired `change` only, where a real selection fires `input`
+  *then* `change`, so dirty-tracking and `hx-trigger="input"` stayed silent; a
+  text or URL drag lit the zone up and was then swallowed; and a drag event
+  targeted at a Text node inside the zone threw, which stops `preventDefault()`
+  being reached and leaves the zone dead. All five are one cause — the handlers
+  never consulted `input.disabled`, `input.multiple` or `dataTransfer.types`.
+
+  **Compatibility: a bug fix, not a breaking change** — no class, attribute,
+  event name or export moved, and existing markup keeps working. What changes
+  is behaviour that contradicted the behavior's own header ("exactly as if the
+  user had picked the files via the dialog"). Two consumer-visible effects, both
+  in the direction the documentation always promised: a listener on `input`
+  now fires on a drop (it never did), and a several-file drop on an input
+  without `multiple` is **refused whole rather than assigned** — the way the
+  browser refuses it, chosen over "take the first file" because that silently
+  discards the rest. The repo's own reference composition (`po-app`'s Documents
+  fieldset) uses `multiple` and a `change` listener, and is unaffected.
+  `accept` is deliberately still **not** enforced on a drop — the platform does
+  not enforce it either (a native `accept=".pdf"` input takes a dropped
+  `.exe`); the page now says so.
+
+- **The dropzone's states no longer rest on colour alone.** Dragover changed
+  `background-color` and `border-color` and nothing else, so under forced
+  colours — where both are replaced by system colours — the state had **zero**
+  computed difference from rest. It now also turns the border solid (dashed →
+  solid), which forced colours leaves alone. A zone around a `disabled` input
+  used to be indistinguishable from an enabled one and kept `cursor: pointer`;
+  it now dims and shows `not-allowed`. `aria-invalid="true"` (or
+  `:user-invalid`) on the input draws a solid error border alongside the
+  `.bo-form-field__message` it already revealed. No new class or attribute —
+  all three key off the input already in the markup. Adding the dragover hint
+  to `check:contrast` found that its resting `text-muted` reads **3.59–4.31:1**
+  on the four dark brand presets; while dragging it now uses `text-secondary`.
+
+- **`.bo-file-list` no longer keeps the browser's list indent, and a row can
+  wrap.** Measured at 390px: the list is a `<ul>` that nothing reset, so it sat
+  40px in from the zone above it (`padding-inline-start: 40px`) — 13% of a
+  phone's width, on every consumer's page — and a row could not wrap, so the
+  moment YOUR code put a progress bar, an outcome badge or a Retry button beside
+  the name, the name got what was left. In the documented progress row that was
+  **0px**, and `overflow-wrap: anywhere` broke it to one letter per line: a
+  357px-tall row for one file. The list now resets its box (`padding: 0;
+  list-style: none`) and the row wraps, with the name holding a 12ch floor
+  (`flex: 1 1 12ch`) so the controls drop beneath it instead.
+
+  **Compatibility: a fix, but a visible one, so read it.** No class, attribute,
+  event or export changed. Existing lists render **40px further left and 40px
+  wider**, and a row whose contents do not fit on one line now wraps where it
+  used to squeeze the name — both toward what the markup already implied. A
+  consumer who compensated for the indent (`margin-inline-start: -2.5rem`, or
+  their own `padding: 0`) will now see that compensation applied on top of a
+  reset that already happened; the `po-app` reference does neither.
+
+- **The file-upload page said drop-to-select was native, and for the
+  documented markup it is not.** The dropzone hides its input with
+  `bo-visually-hidden` (clipped to 1px), and a clipped input is not a drop
+  target: with no script, a trusted drop yields no file and the browser opens
+  the dropped file in a new tab. The page, the CSS header comment and the
+  ApiTable text now say that `initFileDropzone()` is what makes the box
+  droppable at all, that `accept` filters the picker and not a drop, that a drop
+  replaces `input.files`, and that re-picking the same file needs
+  `input.value = ''`. New demos cover the disabled, rejected and
+  progress/failure/retry states — all composed from `bo-form-field`, `bo-badge`,
+  `bo-progress` and `bo-btn`, with no upload-specific class.
+
 - **`check-markup` no longer crashes on a path that does not exist** — it
   printed a raw Node `ENOENT` stack trace instead of its own message. The walk
   yielded any argument ending `.html` without checking it was a file, so the

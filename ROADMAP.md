@@ -376,7 +376,7 @@ before quoting a change.
 
 ### Items
 
-1. [ ] **373.1 — the dropzone forwards no more than the native input it
+1. [x] **373.1 — the dropzone forwards no more than the native input it
        forwards to would accept, its states are two-channel, and the page says
        only what a browser does.** Measured with TRUSTED drops (CDP
        `Input.dispatchDragEvent` with real file paths, headless Chrome 153,
@@ -430,6 +430,106 @@ before quoting a change.
          `not-allowed` during the drag (`dropEffect = 'none'`), which is the
          feedback the platform gives. Recorded so a later wake does not
          re-decide it.
+
+       - **DONE 2026-09-19 (this invocation, slice 1 of ≤3).** Every Accept line
+         held except where stated below; nothing was forecast, each number has
+         its command.
+
+         **Parity, measured against native in the same run** (`Input.dispatchDragEvent`
+         with real files, headless Chrome 153; scratchpad `parity.mjs`, and now
+         `check-claims.mjs` "file-dropzone parity"): for
+         {`multiple`×3, no-`multiple`×3, no-`multiple`×1, `disabled`×3,
+         `accept=".pdf"`×3} the zone and the plain input agree on files AND event
+         sequence in **5 of 5** cases (was: 0 files/events native vs 3 files +
+         `change` on the zone for `disabled`; 0 vs 3 for no-`multiple`; `[input,
+         change]` vs `[change]` on every drop). Source checked first, then
+         `dist/js` — same table both times. A text drag no longer highlights; a
+         Text-node target no longer throws.
+
+         **The red-proofs, and the one that came back green.** Twelve
+         injections against the SERVED page or bundle, each counted before it
+         was applied and asserted present after: five behaviour guards, four
+         dropzone-state CSS guards, three row/list CSS guards. **Eleven went red
+         on the intended claim first time. The `Files`-type guard went GREEN**,
+         with the injection confirmed landed — so the defect was the gate:
+         Chrome lists a text drag's items during `dragover`, `dragFileCount`
+         already reads 0 and refuses it, and no trusted drag can make the type
+         check the only discriminator. A synthetic empty `DataTransfer` can
+         (no items, no files, no types), so that claim was added and re-proved
+         red. This is CLAUDE.md's "a green red-proof is a defect in the
+         injection until proven otherwise" resolving the other way: the
+         injection was fine.
+
+         **And one red-proof aimed at the wrong file.** The CSS red-proof
+         first targeted `dist/assets/busy-office-ui.min.css`; the page loads
+         `dist/_astro/colors.*.css`, whose spelling differs (`border-style`
+         before `border-color`, `:is()` kept). Caught by reading which
+         `<link>` the page emits before believing a result, and the run was
+         killed and retargeted. Command: `grep -oE '<link[^>]*stylesheet[^>]*>'
+         apps/docs/dist/components/file-upload/index.html`.
+
+         **Found by the screenshot, missed by every gate.** The new
+         progress/failure/retry demo rendered a 357px-tall row at 390px with the
+         file name at **0px wide** — one letter per line. `check:layout` (128
+         pages, "no overflow at 390") passed, because it looks for horizontal
+         overflow and this grew vertically. Two causes, one of them older than
+         this slice: `ul.bo-file-list` never reset the UA's `padding-inline-start:
+         40px` (13% of a phone), and a row could not wrap. Fixed in
+         `file-upload.css` and claimed (`file-upload rows @390`, red-proved by
+         removing `flex-wrap`, the 12ch basis, and the reset, separately).
+         **Filed as 373.9**, not built.
+
+         **Contrast.** Adding `text-secondary`-on-`bg-selected` to `PAIRS`
+         found the dragover hint's resting `text-muted` at **3.59-4.31:1 on the
+         four dark brand presets** (`check:contrast` failed the core build).
+         The hint steps up to `text-secondary` while dragging. The coverage
+         scan could not see this pair: fg and bg are set in two different rules.
+
+         **Gate cost, recorded so it is not paid twice.** `check:claims`
+         179 → **203** (+24). Replacing the document with `page.setContent` /
+         `document.write`, or opening a second `browser.newPage()`, made a
+         `page.click` **21 claims later** block the renderer until the 120s
+         protocol timeout while every assertion in the new block passed —
+         found by tracing claim numbers, not by reading the error (which names
+         only `Runtime.callFunctionOn`). The no-JS claim therefore runs LAST
+         and says why in a comment; nothing may be appended below it.
+
+         **Decided here, so a later wake does not re-decide:** a several-file
+         drop on a no-`multiple` input is refused whole (as Chrome refuses it);
+         `accept` is not enforced on a drop (Chrome does not either — measured);
+         no upload-specific class exists (rows compose `bo-badge`,
+         `bo-progress`, `bo-btn`); the dropzone's name comes from its own
+         visible line via `aria-labelledby` (a separate `aria-label` beat the
+         wrapping label and dropped the visible words out of the name — WCAG
+         2.5.3), checked from the accessibility tree on every live demo.
+
+         **CHANGELOG classification, with reasoning:** a fix, not Breaking —
+         no class, attribute, event or export moved — but two effects are
+         consumer-visible and are written down: a listener on `input` now fires
+         on a drop, and existing `.bo-file-list`s render 40px left and wider.
+         `po-app` was aligned (added `accept`, `aria-labelledby`,
+         `aria-describedby`); it does not compensate for the indent.
+         `behaviors.json`'s `initFileDropzone` hook list is unchanged
+         (`grep -A8 initFileDropzone packages/core/dist/behaviors.json`).
+
+         **Verified live, on the freshly built revision** (served from
+         `apps/docs/dist`, not a cached container image): 1440 and 390, light
+         and dark — solid border on dragover, dimmed `not-allowed` zone,
+         solid red border with message, wrapped state rows. Gates green on the
+         final tree: `build`, `docs:build` (every chained gate), `check:claims`
+         (203), `check:po-app` (20), `check:forced-colors`, `check:target-size`,
+         `test:axe` (128 pages × 2 widths, 0 violations), `check:layout`,
+         `check:selftests` (22 heuristic / 183 cases run, 34 exact),
+         `check:markup`. **Not verified, stated rather than skipped:** Safari
+         and Firefox (native refusal semantics and a null `dragleave`
+         `relatedTarget` were measured in Chrome only); a real screen reader
+         announcing the description; touch; whether any engine actually targets
+         a Text node with a drag event (only a synthetic dispatch proves the
+         throw was real); the native PICK order `[input, change]` (taken from
+         the spec — only native DROP was run). The reviewer was **not
+         independent**: the adversarial pass was by the same agent, and it is
+         what found the wrapped-row defect only because a screenshot was
+         looked at.
 
 2. [ ] **373.2 — four shipped-status claims are false on the built site, and
        the decision page blanks 5 of 39 "Not when" cells it has structured data
@@ -616,6 +716,26 @@ before quoting a change.
        DELETE nothing; the two "absent" lists (`DESIGN.md` component-level,
        `scope.astro` product-level) overlap on ~2 of 17 subjects and are NOT
        merged.
+
+9. [ ] **373.9 — `check:layout` is blind to vertical collapse: a name at 0px
+       wide passed it with a 357px row.** Question, not a gate: should it also
+       flag a text container whose rendered width is below N characters?
+       - **Accept — decide from the base rate first (94.11).** Count how many of
+         the 128 pages have any text node narrower than 8ch at 390px *today*; a
+         predicate true of 0 pages cannot fail, and one true of many is noise.
+         Either the count justifies a `@heuristic` gate with a `--self-test`, or
+         the local claim shipped in 373.1 (`file-upload rows @390`) is recorded
+         as the whole answer and this closes as refused with the count. Finding
+         the gate unnecessary is a satisfying outcome.
+
+10. [ ] **373.10 — independent re-score of `file-upload · interaction`.** The
+       DSA cite claimed "native drag-drop come free", which is false for the
+       documented markup; it was corrected in 373.1 WITHOUT re-taking the
+       score, because a re-score by the agent that changed the surface is not
+       the independent second opinion `LOOPS.md` §3b step 4 requires.
+       - **Accept:** a blind re-score of that one dimension, its date carried in
+         its own cite and `scored` left where it is (the ledger's `$comment`).
+         It may stay 3 or move; either closes it.
 
 **Refused in triage, with reasons:** a graph database or agent runtime (the
 prompt's own boundary; `graph.db` is a derived mirror already); a per-slice

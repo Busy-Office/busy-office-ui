@@ -49,7 +49,8 @@ import { DIST, REPO_ROOT } from './paths.mjs';
 import { WIDTHS, DESKTOP_WIDTH, NARROW_WIDTH } from './viewports.mjs';
 import { contrastRatio, composite } from '../../../packages/core/scripts/wcag.mjs';
 import { createRequire } from 'node:module';
-import { readFile } from 'node:fs/promises';
+import { readFile, writeFile, mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 // Parsed, never grepped: the one claim below that reads shipped CSS is about a
 // rule this browser cannot exercise, and button.css's own comment names both
 // `translateY` and `:not(:focus-visible)` repeatedly — a substring assertion
@@ -73,6 +74,7 @@ await page.setViewport({ width: DESKTOP_WIDTH, height: 1000 });
 const url = (p) => `http://localhost:${port}${base}${p}`;
 const g = gate('claims check', 'documented behaviours');
 const check = g.check;
+
 
 /* Every sticky per-page setting, reset on EVERY navigation.
    emulateMediaType, emulateMediaFeatures and the viewport all persist across
@@ -1962,6 +1964,278 @@ check(
     drop.dragoverAfterDrop !== 'true',
   JSON.stringify(drop),
 );
+
+/* file-dropzone PARITY (roadmap 373.1). The page promises a forwarded drop
+   behaves "exactly as if the user had picked the files via the dialog", and
+   three separate divergences shipped under that sentence: a DISABLED input
+   took files, a NON-multiple input took three of them (and a form posted all
+   three), and only `change` was dispatched where a real selection fires
+   `input` then `change`.
+
+   The native column here is MEASURED IN THE SAME RUN, never asserted from the
+   spec: each attribute set is rendered twice — once as the shipped zone, once
+   as a plain visible input — and the identical trusted drop goes to both.
+   That is the only way this gate can fail correctly if Chrome changes its own
+   rules; a hard-coded expectation would then be wrong in the opposite
+   direction and still green.
+
+   Trusted, not synthetic: `Input.dispatchDragEvent` with real file paths. A
+   synthetic DragEvent cannot exercise the platform's own refusal, which is
+   the whole subject — the case above it, which is synthetic, passes against
+   every one of the three defects. */
+const dzDir = await mkdtemp(join(tmpdir(), 'bo-dz-'));
+const dzFiles = await Promise.all(
+  ['a.pdf', 'b.png', 'c.exe'].map(async (n) => {
+    const p = join(dzDir, n);
+    await writeFile(p, `x-${n}`);
+    return p;
+  }),
+);
+
+const DZ_CASES = [
+  { id: 'multiple', attrs: 'multiple', n: 3 },
+  { id: 'single', attrs: '', n: 3 },
+  { id: 'singleOne', attrs: '', n: 1 },
+  { id: 'disabled', attrs: 'multiple disabled', n: 3 },
+];
+
+/* ONE case at a time, pinned to the top-left of the VIEWPORT.
+   `Input.dispatchDragEvent` takes viewport coordinates, and the first
+   version of this appended the fixture to the end of a long <main>: every
+   drop landed hundreds of pixels below the fold, hit nothing, and left
+   Chrome mid-drag until the protocol timed out. Position:fixed removes the
+   scroll question entirely, and the rects are re-read from the DOM (never
+   from the markup just written) before any drop is dispatched. */
+async function dzMount(c) {
+  const state = await page.evaluate((c) => {
+    let host = document.getElementById('dz-parity');
+    if (!host) {
+      host = document.createElement('div');
+      host.id = 'dz-parity';
+      host.style.cssText =
+        'position:fixed;inset-block-start:0;inset-inline-start:0;z-index:99999;' +
+        'inline-size:420px;background:var(--bo-color-bg-canvas, #fff);padding:8px';
+      document.body.append(host);
+    }
+    host.innerHTML = `<label class="bo-file-dropzone" id="dz-zone" data-file-dropzone>
+  <input class="bo-file-input bo-visually-hidden" type="file" ${c.attrs} id="dz-zone-input" aria-label="zone ${c.id}">
+  <span id="dz-zone-text">Drop files here</span><span class="bo-file-dropzone__hint">hint</span>
+</label>
+<input class="bo-file-input" type="file" ${c.attrs} id="dz-native" aria-label="native ${c.id}" style="display:block;inline-size:400px;block-size:40px">`;
+    window.__dzLog = { 'dz-zone-input': [], 'dz-native': [] };
+    for (const id of Object.keys(window.__dzLog)) {
+      const el = document.getElementById(id);
+      for (const t of ['input', 'change']) el.addEventListener(t, () => window.__dzLog[id].push(t));
+    }
+    const rect = (id) => {
+      const r = document.getElementById(id).getBoundingClientRect();
+      return { x: r.x, y: r.y, w: r.width, h: r.height };
+    };
+    return { zone: rect('dz-zone'), native: rect('dz-native'), vh: innerHeight, vw: innerWidth };
+  }, c);
+  /* A rect the drop coordinates cannot reach is the failure that hung this
+     gate once. Fail loudly on it rather than dispatching into nothing. */
+  for (const [what, r] of [['zone', state.zone], ['native', state.native]]) {
+    const cx = r.x + r.w / 2;
+    const cy = r.y + r.h / 2;
+    if (!(r.w > 0 && r.h > 0 && cx > 0 && cy > 0 && cx < state.vw && cy < state.vh)) {
+      throw new Error(
+        `file-dropzone parity: the ${what} fixture for "${c.id}" is not inside the viewport — ` +
+          JSON.stringify(state),
+      );
+    }
+  }
+  return state;
+}
+const dzCentre = (r) => ({ x: r.x + r.w / 2, y: r.y + r.h / 2 });
+
+/** One trusted drag-enter → drag-over → drop at a viewport point. */
+async function trustedDrop(at, files, dataOverride) {
+  const data = dataOverride ?? { items: [], files, dragOperationsMask: 1 };
+  await cdp.send('Input.dispatchDragEvent', { type: 'dragEnter', ...at, data });
+  await cdp.send('Input.dispatchDragEvent', { type: 'dragOver', ...at, data });
+  await cdp.send('Input.dispatchDragEvent', { type: 'drop', ...at, data });
+  await new Promise((r) => setTimeout(r, 180));
+}
+const dzSnap = (id) =>
+  page.evaluate(
+    (id) => ({
+      files: [...document.getElementById(id).files].map((f) => f.name),
+      events: [...window.__dzLog[id]],
+    }),
+    id,
+  );
+
+const dzParity = {};
+let dzMounted = 0;
+for (const c of DZ_CASES) {
+  const files = dzFiles.slice(0, c.n);
+  const box = await dzMount(c);
+  dzMounted += 1;
+  await trustedDrop(dzCentre(box.native), files);
+  const native = await dzSnap('dz-native');
+  await trustedDrop(dzCentre(box.zone), files);
+  const zone = await dzSnap('dz-zone-input');
+  dzParity[c.id] = { attrs: c.attrs || '(none)', dropped: c.n, native, zone };
+}
+check(
+  'file-dropzone parity: every case mounted inside the viewport before its drop was dispatched',
+  dzMounted === DZ_CASES.length,
+  JSON.stringify({ mounted: dzMounted, expected: DZ_CASES.length }),
+);
+const dzDivergent = Object.entries(dzParity).filter(
+  ([, r]) =>
+    JSON.stringify(r.native.files) !== JSON.stringify(r.zone.files) ||
+    JSON.stringify(r.native.events) !== JSON.stringify(r.zone.events),
+);
+check(
+  'file-dropzone: a forwarded drop is never more permissive than the same drop on the plain input — same files, same events, measured against native in this run',
+  dzDivergent.length === 0,
+  JSON.stringify(dzParity),
+);
+/* Asserted separately from the parity comparison above, because "both took
+   nothing" is ALSO what two broken columns look like. These two pin down
+   which side of the comparison is which. */
+check(
+  'file-dropzone: the platform itself refuses a disabled input and a several-file drop on a non-multiple one — so parity with it means refusing them too',
+  dzParity.disabled.native.files.length === 0 &&
+    dzParity.single.native.files.length === 0 &&
+    dzParity.multiple.native.files.length === 3 &&
+    dzParity.singleOne.native.files.length === 1,
+  JSON.stringify({
+    disabled: dzParity.disabled.native,
+    single: dzParity.single.native,
+    multiple: dzParity.multiple.native,
+    singleOne: dzParity.singleOne.native,
+  }),
+);
+check(
+  'file-dropzone: a forwarded drop fires input THEN change, the pair a real selection fires',
+  dzParity.multiple.zone.events.join() === 'input,change' &&
+    dzParity.multiple.native.events.join() === 'input,change',
+  JSON.stringify({ zone: dzParity.multiple.zone.events, native: dzParity.multiple.native.events }),
+);
+
+/* The highlight is a PROMISE that the drop will be accepted, so it must be
+   read mid-drag and must not appear over a drop the zone is about to refuse.
+   Read after the drop it would always be cleared, which is the measurement
+   trap this file's header warns about in its own terms. */
+async function dzHover(c, files, dataOverride) {
+  const box = await dzMount(c);
+  const at = dzCentre(box.zone);
+  const data = dataOverride ?? { items: [], files, dragOperationsMask: 1 };
+  await cdp.send('Input.dispatchDragEvent', { type: 'dragEnter', ...at, data });
+  await cdp.send('Input.dispatchDragEvent', { type: 'dragOver', ...at, data });
+  await new Promise((r) => setTimeout(r, 120));
+  const state = await page.evaluate(
+    () => document.getElementById('dz-zone').dataset.dragover ?? null,
+  );
+  await cdp.send('Input.dispatchDragEvent', { type: 'dragCancel', ...at, data });
+  await new Promise((r) => setTimeout(r, 80));
+  return state;
+}
+const [dzMulti, dzSingle, dzDisabledCase] = [DZ_CASES[0], DZ_CASES[1], DZ_CASES[3]];
+const dzHighlight = {
+  accepted: await dzHover(dzMulti, dzFiles),
+  acceptedOne: await dzHover(dzSingle, dzFiles.slice(0, 1)),
+  disabled: await dzHover(dzDisabledCase, dzFiles),
+  tooMany: await dzHover(dzSingle, dzFiles),
+  textDrag: await dzHover(dzMulti, [], {
+    items: [{ mimeType: 'text/plain', data: 'hello world' }],
+    files: [],
+    dragOperationsMask: 1,
+  }),
+};
+check(
+  'file-dropzone: the zone highlights only for a drag it will accept — not for a disabled input, a too-many-files drop, or a drag carrying no files',
+  dzHighlight.accepted === 'true' && dzHighlight.acceptedOne === 'true' &&
+    dzHighlight.disabled === null && dzHighlight.tooMany === null && dzHighlight.textDrag === null,
+  JSON.stringify(dzHighlight),
+);
+/* The `Files`-type guard, on the one input that can tell it from the count.
+   Removing it left every claim above GREEN — red-proved, injection confirmed
+   in the served page — because Chrome LISTS a text drag's items during
+   dragover, so `dragFileCount` already reads 0 and refuses it. The type
+   check only carries the load where items are not listed at all (Safari has
+   historically hidden them until drop), and no trusted drag in Chrome can
+   produce that. A synthetic event can: an empty DataTransfer has no items,
+   no files and no types, so the count is unknowable and `types` is the ONLY
+   thing left saying "this is not a file drag". */
+{
+  await dzMount(dzMulti);
+  const unreadable = await page.evaluate(() => {
+    const zone = document.getElementById('dz-zone');
+    const dt = new DataTransfer();
+    const ev = new DragEvent('dragover', { dataTransfer: dt, bubbles: true, cancelable: true });
+    zone.dispatchEvent(ev);
+    return {
+      items: dt.items.length,
+      types: [...dt.types],
+      prevented: ev.defaultPrevented,
+      highlighted: zone.dataset.dragover ?? null,
+      dropEffect: dt.dropEffect,
+    };
+  });
+  check(
+    'file-dropzone: a drag with no readable items and no Files type is not advertised as droppable — the type check is what says so when the count is unknowable',
+    unreadable.items === 0 && unreadable.types.length === 0 &&
+      unreadable.highlighted === null && unreadable.dropEffect === 'none',
+    JSON.stringify(unreadable),
+  );
+}
+
+/* And a text drag that is actually RELEASED changes nothing — including not
+   navigating the page away, which is what an un-cancelled dragover would let
+   the browser do. */
+{
+  const box = await dzMount(dzMulti);
+  await trustedDrop(dzCentre(box.zone), [], {
+    items: [{ mimeType: 'text/plain', data: 'hello world' }],
+    files: [],
+    dragOperationsMask: 1,
+  });
+  const after = await dzSnap('dz-zone-input');
+  check(
+    'file-dropzone: a released non-file drag leaves the input untouched and the page in place',
+    after.files.length === 0 && after.events.length === 0 && page.url().includes('/components/file-upload'),
+    JSON.stringify({ after, url: page.url() }),
+  );
+}
+
+/* A Text node as the event target. Synthetic on purpose — Chrome targets the
+   element for trusted drags, so this path is unreachable with a real one, and
+   the claim is only that no error escapes and the drop is still accepted.
+   `(e.target as Element)?.closest(…)` threw here: `?.` guards null, not a Node
+   that has no `closest`, and a throw inside dragover means preventDefault is
+   never reached and the zone silently stops accepting drops. */
+const dzTextNode = await page.evaluate(() => {
+  const errors = [];
+  const onError = (e) => errors.push(String(e.message));
+  window.addEventListener('error', onError);
+  const dt = new DataTransfer();
+  dt.items.add(new File(['x'], 'a.pdf'));
+  const text = document.getElementById('dz-zone-text').firstChild;
+  const ev = new DragEvent('dragover', { dataTransfer: dt, bubbles: true, cancelable: true });
+  text.dispatchEvent(ev);
+  window.removeEventListener('error', onError);
+  return { nodeType: text.nodeType, prevented: ev.defaultPrevented, errors };
+});
+check(
+  'file-dropzone: a drag event targeted at a Text node inside the zone is handled, not thrown on',
+  dzTextNode.nodeType === 3 && dzTextNode.errors.length === 0 && dzTextNode.prevented === true,
+  JSON.stringify(dzTextNode),
+);
+
+/* The no-JS claim. The page used to say drop-to-select worked natively and
+   the behavior only widened the target; it does not, because the documented
+   input is `bo-visually-hidden` and a clipped input is not a drop target.
+   Measured on a page where initFileDropzone was never called. */
+/* Run on THIS page rather than a second tab: in headless Chrome only the
+   foreground target gets a normal rendering cadence, and opening a second
+   page left every later `boundingBox()` on this one waiting for a layout
+   that never came, until the protocol timed out. `setContent` replaces the
+   document (so the script that ran on the built page is gone with it), and
+   the next `visit()` restores the served site. */
 
 /* load-more. This behavior appends nothing — it dispatches `bo:table-load-more`
    and the consumer fetches. So its failure is maximally silent: the button
@@ -4735,6 +5009,269 @@ check(
   JSON.stringify(moneySpacious),
 );
 await page.evaluate(() => document.documentElement.removeAttribute('data-density'));
+
+/* file-dropzone STATES (roadmap 373.1) — two channels, measured in the
+   browser rather than read off the stylesheet.
+
+   Every state here used to be COLOUR ONLY, and one of them (disabled) was no
+   state at all: a zone around a disabled input had zero computed difference
+   from an enabled one. Under forced colours every colour is replaced by a
+   system one, so a colour-only state simply vanishes — which is why the
+   forced-colours reading is asserted from `matchMedia` FIRST. An emulation
+   that never engaged would make "rest and dragover differ in nothing" read as
+   a defect in the CSS, or worse, "differ in something" read as a pass.
+
+   The fixture is four zones in one pinned box so that one read of computed
+   style sees them all in the same cascade. */
+/* file-upload state rows at a PHONE width (roadmap 373.1). The progress /
+   failure / retry demo first shipped with the file name at 0px wide: the row
+   could not wrap, so beside a 10rem bar and a button the name got whatever was
+   left, and `overflow-wrap: anywhere` broke it to ONE LETTER PER LINE — a
+   357px-tall row that `check:layout` never flagged, because it looks for
+   horizontal overflow and this grew vertically. The property is "the name
+   keeps a readable width", so that is what is measured: its rendered width
+   against 12ch in the name's own font, read from a probe rather than typed. */
+await visit('/components/file-upload/', { width: NARROW_WIDTH });
+const dzRows = await page.evaluate(() => {
+  const lists = [...document.querySelectorAll('.demo ul.bo-file-list')];
+  const rows = lists.flatMap((ul) => [...ul.querySelectorAll('.bo-file-list__item')]);
+  const probe = document.createElement('span');
+  probe.style.cssText = 'position:absolute;visibility:hidden;inline-size:12ch;font:inherit';
+  document.querySelector('.bo-file-list__name').append(probe);
+  const twelveCh = probe.getBoundingClientRect().width;
+  probe.remove();
+  const ul = lists[0] ? getComputedStyle(lists[0]) : null;
+  return {
+    lists: lists.length,
+    rows: rows.length,
+    twelveCh,
+    narrowest: Math.min(...rows.map((r) => r.querySelector('.bo-file-list__name').getBoundingClientRect().width)),
+    tallest: Math.max(...rows.map((r) => r.getBoundingClientRect().height)),
+    padInline: ul?.paddingInlineStart ?? null,
+    listStyle: ul?.listStyleType ?? null,
+    pageOverflow: document.documentElement.scrollWidth > innerWidth,
+  };
+});
+check(
+  'file-upload rows @390: the fixture has rows to measure, and a probe read a real 12ch (an empty list would pass the claim below by measuring nothing)',
+  dzRows.lists >= 2 && dzRows.rows >= 6 && dzRows.twelveCh > 40,
+  JSON.stringify(dzRows),
+);
+check(
+  'file-upload rows @390: no file name is squeezed below 12ch beside a progress bar, badge or button — the row wraps instead of breaking the name to a letter per line',
+  dzRows.narrowest >= dzRows.twelveCh - 1 && dzRows.tallest < 140 && !dzRows.pageOverflow,
+  JSON.stringify(dzRows),
+);
+check(
+  'file-upload list: .bo-file-list has no UA indent and no bullet — it is a <ul> the reset never touched, and the indent cost 13% of a phone',
+  dzRows.padInline === '0px' && dzRows.listStyle === 'none',
+  JSON.stringify({ padInline: dzRows.padInline, listStyle: dzRows.listStyle }),
+);
+
+await visit('/components/file-upload/');
+
+/* The accessible NAME and DESCRIPTION of every live dropzone on the page,
+   read from the accessibility tree — not from the attributes. The page used
+   to teach `aria-label="Attach vendor documents"` beside a visible line
+   reading "Drop files here, or click to browse": aria-label wins over the
+   wrapping label, so the visible words were not in the name (WCAG 2.5.3
+   Label in Name — a voice-control user says what they SEE) and the
+   constraint hint was in no part of the tree at all. Each zone below must
+   have its visible instruction inside its name and its hint inside its
+   description. */
+const dzAxZones = await page.evaluate(() =>
+  [...document.querySelectorAll('.demo [data-file-dropzone]')].map((z, i) => {
+    z.dataset.axProbe = String(i);
+    return {
+      i,
+      instruction: (z.querySelector('span:not(.bo-file-dropzone__hint)')?.textContent ?? '').trim(),
+      hint: (z.querySelector('.bo-file-dropzone__hint')?.textContent ?? '').trim(),
+    };
+  }),
+);
+const dzAxRead = [];
+for (const z of dzAxZones) {
+  const { root } = await cdp.send('DOM.getDocument', { depth: 0 });
+  const { nodeId } = await cdp.send('DOM.querySelector', {
+    nodeId: root.nodeId,
+    selector: `[data-ax-probe="${z.i}"] input[type="file"]`,
+  });
+  const { nodes } = await cdp.send('Accessibility.getPartialAXTree', { nodeId, fetchRelatives: false });
+  dzAxRead.push({
+    ...z,
+    name: nodes[0]?.name?.value ?? '',
+    description: nodes[0]?.description?.value ?? '',
+  });
+}
+check(
+  'file-upload page: there are live dropzone demos to measure (an empty list would pass the next claim by measuring nothing)',
+  dzAxZones.length >= 4 && dzAxZones.every((z) => z.instruction.length > 0),
+  JSON.stringify(dzAxZones),
+);
+check(
+  'file-upload page: every dropzone\'s accessible name contains its visible instruction, and its description contains its hint — from the accessibility tree',
+  dzAxRead.every((z) => z.name.includes(z.instruction) && (!z.hint || z.description.includes(z.hint))),
+  JSON.stringify(dzAxRead.filter((z) => !z.name.includes(z.instruction) || (z.hint && !z.description.includes(z.hint)))),
+);
+await page.evaluate(() => document.querySelectorAll('[data-ax-probe]').forEach((z) => delete z.dataset.axProbe));
+
+const dzStateHtml = `
+<div id="dz-states" style="position:fixed;inset-block-start:0;inset-inline-start:0;z-index:99999;inline-size:460px;background:var(--bo-color-bg-canvas,#fff);padding:8px">
+  <label class="bo-file-dropzone" id="st-rest" data-file-dropzone><input class="bo-file-input bo-visually-hidden" type="file" aria-label="rest"><span>rest</span><span class="bo-file-dropzone__hint" id="st-rest-hint">hint</span></label>
+  <label class="bo-file-dropzone" id="st-over" data-file-dropzone data-dragover="true"><input class="bo-file-input bo-visually-hidden" type="file" aria-label="over"><span>over</span><span class="bo-file-dropzone__hint" id="st-over-hint">hint</span></label>
+  <label class="bo-file-dropzone" id="st-off" data-file-dropzone><input class="bo-file-input bo-visually-hidden" type="file" disabled aria-label="off"><span>off</span></label>
+  <div class="bo-form-field" id="st-field">
+    <label class="bo-file-dropzone" id="st-bad" data-file-dropzone><input class="bo-file-input bo-visually-hidden" id="st-bad-input" type="file" aria-invalid="true" aria-describedby="st-bad-msg" aria-label="bad"><span>bad</span></label>
+    <p class="bo-form-field__message" id="st-bad-msg">Not a PDF.</p>
+  </div>
+  <span id="st-ink" style="color:var(--bo-color-text-secondary)">ink</span>
+</div>`;
+await page.evaluate((html) => {
+  document.getElementById('dz-states')?.remove();
+  document.body.insertAdjacentHTML('beforeend', html);
+}, dzStateHtml);
+
+const readDzStates = () =>
+  page.evaluate(() => {
+    const pick = (id) => {
+      const cs = getComputedStyle(document.getElementById(id));
+      return {
+        borderStyle: cs.borderTopStyle,
+        borderColor: cs.borderTopColor,
+        background: cs.backgroundColor,
+        opacity: cs.opacity,
+        cursor: cs.cursor,
+      };
+    };
+    const rect = document.getElementById('st-rest').getBoundingClientRect();
+    return {
+      forced: matchMedia('(forced-colors: active)').matches,
+      rendered: rect.width > 0 && rect.height > 0,
+      rest: pick('st-rest'),
+      over: pick('st-over'),
+      off: pick('st-off'),
+      bad: pick('st-bad'),
+      hintRest: getComputedStyle(document.getElementById('st-rest-hint')).color,
+      hintOver: getComputedStyle(document.getElementById('st-over-hint')).color,
+      ink: getComputedStyle(document.getElementById('st-ink')).color,
+      message: getComputedStyle(document.getElementById('st-bad-msg')).display,
+    };
+  });
+
+const dzNormal = await readDzStates();
+check(
+  'file-dropzone states: the fixture is rendered and NOT under forced colours before the normal reading is trusted',
+  dzNormal.rendered && dzNormal.forced === false,
+  JSON.stringify({ rendered: dzNormal.rendered, forced: dzNormal.forced }),
+);
+check(
+  'file-dropzone states (normal): dragover is told apart from rest by a NON-colour property — the border style — as well as by colour',
+  dzNormal.over.borderStyle !== dzNormal.rest.borderStyle &&
+    dzNormal.over.borderColor !== dzNormal.rest.borderColor,
+  JSON.stringify({ rest: dzNormal.rest, over: dzNormal.over }),
+);
+check(
+  'file-dropzone states (normal): a zone around a disabled input is not indistinguishable from an enabled one, and no longer promises a picker',
+  dzNormal.off.opacity !== dzNormal.rest.opacity &&
+    dzNormal.off.cursor === 'not-allowed' && dzNormal.rest.cursor === 'pointer',
+  JSON.stringify({ rest: dzNormal.rest, off: dzNormal.off }),
+);
+check(
+  'file-dropzone states (normal): aria-invalid draws a solid border AND reveals the message — a visible non-colour cue plus text',
+  dzNormal.bad.borderStyle !== dzNormal.rest.borderStyle && dzNormal.message === 'block',
+  JSON.stringify({ rest: dzNormal.rest, bad: dzNormal.bad, message: dzNormal.message }),
+);
+check(
+  'file-dropzone states: while dragging, the constraint hint steps up to text-secondary — the pair check:contrast gates',
+  dzNormal.hintOver === dzNormal.ink && dzNormal.hintRest !== dzNormal.ink,
+  JSON.stringify({ hintRest: dzNormal.hintRest, hintOver: dzNormal.hintOver, ink: dzNormal.ink }),
+);
+
+/* Programmatic channel of the invalid state, from the ACCESSIBILITY TREE and
+   not from the markup: the markup says aria-describedby, the tree says
+   whether the browser resolved it to a description a screen reader speaks. */
+const dzAx = await (async () => {
+  const { root } = await cdp.send('DOM.getDocument', { depth: 0 });
+  const { nodeId } = await cdp.send('DOM.querySelector', { nodeId: root.nodeId, selector: '#st-bad-input' });
+  const { nodes } = await cdp.send('Accessibility.getPartialAXTree', { nodeId, fetchRelatives: false });
+  const n = nodes[0] ?? {};
+  const props = Object.fromEntries((n.properties ?? []).map((p) => [p.name, p.value?.value]));
+  return { name: n.name?.value ?? null, description: n.description?.value ?? null, invalid: props.invalid ?? null };
+})();
+check(
+  'file-dropzone states: the invalid input exposes invalid=true AND the message as its accessible description in the accessibility tree',
+  dzAx.invalid === 'true' && typeof dzAx.description === 'string' && dzAx.description.includes('Not a PDF'),
+  JSON.stringify(dzAx),
+);
+
+/* Forced colours. CDP directly, as the scan claim above does: puppeteer's own
+   emulateMediaFeatures rejects `forced-colors`. Reset in a `finally`-shaped
+   order — a throw between set and reset would leave every later claim in a
+   forced-colours browser. */
+await cdp.send('Emulation.setEmulatedMedia', { media: 'screen', features: [{ name: 'forced-colors', value: 'active' }] });
+const dzForced = await readDzStates();
+await cdp.send('Emulation.setEmulatedMedia', { media: 'screen', features: [] });
+check(
+  'file-dropzone states (forced colours): the emulation is ACTIVE before any difference is believed',
+  dzForced.forced === true && dzForced.rendered,
+  JSON.stringify({ forced: dzForced.forced, rendered: dzForced.rendered }),
+);
+check(
+  'file-dropzone states (forced colours): dragover is still told apart from rest — by border style, the channel forced colours does not replace',
+  dzForced.over.borderStyle !== dzForced.rest.borderStyle,
+  JSON.stringify({ rest: dzForced.rest, over: dzForced.over }),
+);
+check(
+  'file-dropzone states (forced colours): invalid is still told apart from rest, and disabled still stops advertising a picker',
+  dzForced.bad.borderStyle !== dzForced.rest.borderStyle && dzForced.off.cursor === 'not-allowed',
+  JSON.stringify({ rest: dzForced.rest, bad: dzForced.bad, off: dzForced.off }),
+);
+await page.evaluate(() => document.getElementById('dz-states')?.remove());
+
+/* file-dropzone, the no-JS half — LAST, and that position is the finding.
+   The page used to say drop-to-select worked natively and the behavior only
+   widened the target. It does not: the documented input is
+   `bo-visually-hidden`, and a clipped input is not a drop target.
+
+   This has to replace the document to prove it (the built page calls
+   initFileDropzone, so the behavior cannot be un-run any other way), and
+   replacing the document is what makes it the last claim in the file.
+   Measured, not guessed: with this block in the middle, all its own
+   assertions pass and then `page.click` on a LATER claim blocks the
+   renderer until the 120s protocol timeout — `page.setContent` and a second
+   `browser.newPage()` both do it, and skipping the block alone takes the run
+   from 110 claims to 186. Nothing may be appended below it. */
+await page.setContent(`<!doctype html><meta charset=utf-8><title>dz-no-js</title>
+<style>#z{display:block;padding:40px;border:2px dashed #888;inline-size:420px;margin:8px}
+#i{position:absolute;inline-size:1px;block-size:1px;clip-path:inset(50%)}</style>
+<label id="z"><input type="file" multiple id="i" aria-label="no-js zone">
+<span>Drop files here, or click to browse</span></label>`);
+const noJsBox = await page.evaluate(() => {
+  const r = document.getElementById('z').getBoundingClientRect();
+  return { x: r.x + r.width / 2, y: r.y + r.height / 2, w: r.width, initScripts: document.scripts.length };
+});
+check(
+  'file-dropzone no-JS fixture: a rendered zone with no behavior attached',
+  noJsBox.w > 0 && noJsBox.initScripts === 0,
+  JSON.stringify(noJsBox),
+);
+{
+  const data = { items: [], files: dzFiles.slice(0, 1), dragOperationsMask: 1 };
+  for (const type of ['dragEnter', 'dragOver', 'drop']) {
+    await cdp.send('Input.dispatchDragEvent', { type, x: noJsBox.x, y: noJsBox.y, data });
+  }
+  await new Promise((r) => setTimeout(r, 300));
+}
+const noJsResult = await page
+  .evaluate(() => ({ files: document.getElementById('i').files.length }))
+  .catch((e) => ({ files: 'unreadable — the document went away', why: String(e.message).slice(0, 80) }));
+check(
+  'file-dropzone: WITHOUT initFileDropzone the documented markup is not a drop target — which is why no page may claim drop-to-select is free',
+  noJsResult.files !== 1,
+  JSON.stringify({ noJsResult, url: page.url() }),
+);
+
+await rm(dzDir, { recursive: true, force: true });
 
 await browser.close();
 server.close();

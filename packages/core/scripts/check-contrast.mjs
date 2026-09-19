@@ -75,6 +75,14 @@ const PAIRS = [
   ['--bo-color-accent', '--bo-color-bg-surface', 4.5], // links
   ['--bo-color-text-primary', '--bo-color-bg-hover', 4.5], // table hover rows
   ['--bo-color-text-primary', '--bo-color-bg-selected', 4.5], // selected rows
+  // A dropzone under a drag repaints to bg-selected and its constraint hint
+  // rides along — the one line the user most needs to read at that moment.
+  // Adding this pair is what found that the hint's resting text-muted lands
+  // at 3.59-4.31 on the four DARK brand presets, so the hint steps up to
+  // text-secondary while dragging (roadmap 373.1). The coverage scan cannot
+  // see this pair at all: fg and bg are set in two different rules, and it
+  // pairs only within one rule.
+  ['--bo-color-text-secondary', '--bo-color-bg-selected', 4.5],
   ['--bo-color-accent-text', '--bo-color-bg-selected', 4.5], // aria-pressed buttons
   ['--bo-color-text-primary', '--bo-color-bg-surface-raised', 4.5], // dialog/menu
   ['--bo-color-text-secondary', '--bo-color-bg-canvas', 4.5], // muted-on-canvas

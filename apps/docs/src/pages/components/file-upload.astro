@@ -24,15 +24,39 @@ const camera = `<!-- Phone evidence: the camera as ONE way in, not the only one.
 </div>`;
 
 const dropzone = `<label class="bo-file-dropzone" data-file-dropzone>
-  <input class="bo-file-input bo-visually-hidden" type="file" multiple aria-label="Attach vendor documents">
-  <span>Drop files here, or click to browse</span>
-  <span class="bo-file-dropzone__hint">PDF, JPG, or PNG — up to 10 MB each</span>
+  <input class="bo-file-input bo-visually-hidden" type="file" multiple
+      accept=".pdf,.jpg,.png" aria-labelledby="fu-text" aria-describedby="fu-hint">
+  <span id="fu-text">Drop vendor documents here, or click to browse</span>
+  <span class="bo-file-dropzone__hint" id="fu-hint">PDF, JPG, or PNG — up to 10 MB each</span>
 </label>`;
 
+const disabled = `<label class="bo-file-dropzone" data-file-dropzone>
+  <input class="bo-file-input bo-visually-hidden" type="file" multiple disabled
+      aria-labelledby="fu-dis-text" aria-describedby="fu-dis">
+  <span id="fu-dis-text">Attachments are closed for this period</span>
+  <span class="bo-file-dropzone__hint" id="fu-dis">Reopen the period to attach documents</span>
+</label>`;
+
+const invalid = `<div class="bo-form-field">
+  <label class="bo-form-field__label" for="fu-inv">Signed delivery note</label>
+  <label class="bo-file-dropzone" data-file-dropzone>
+    <input class="bo-file-input bo-visually-hidden" id="fu-inv" type="file"
+        accept=".pdf" aria-invalid="true" aria-labelledby="fu-inv-text"
+        aria-describedby="fu-inv-msg fu-inv-hint">
+    <span id="fu-inv-text">Drop the signed note here, or click to browse</span>
+    <span class="bo-file-dropzone__hint" id="fu-inv-hint">One PDF</span>
+  </label>
+  <p class="bo-form-field__message" id="fu-inv-msg">
+    delivery-note.xlsx is not a PDF. Attach the signed PDF.
+  </p>
+</div>`;
+
 const withList = `<label class="bo-file-dropzone" data-file-dropzone>
-  <input class="bo-file-input bo-visually-hidden" type="file" multiple aria-label="Attach goods-receipt documents">
-  <span>Drop files here, or click to browse</span>
-  <span class="bo-file-dropzone__hint">PDF, JPG, or PNG — up to 10 MB each</span>
+  <input class="bo-file-input bo-visually-hidden" type="file" multiple
+      accept=".pdf,.jpg,.png" aria-labelledby="fu-gr-text"
+      aria-describedby="fu-gr-hint">
+  <span id="fu-gr-text">Drop goods-receipt documents here, or click to browse</span>
+  <span class="bo-file-dropzone__hint" id="fu-gr-hint">PDF, JPG, or PNG — up to 10 MB each</span>
 </label>
 <ul class="bo-file-list" aria-live="polite">
   <li class="bo-file-list__item">
@@ -47,15 +71,57 @@ const withList = `<label class="bo-file-dropzone" data-file-dropzone>
   </li>
 </ul>`;
 
-const canonical = `<!-- The input is the real control — the label makes the whole box
-     clickable and gives the input its accessible name. initFileDropzone()
-     is optional: only adds drag-over highlighting + forwarding a drop
-     anywhere in the box into the input (native drop-on-input already
-     works without it, just only over the small native control). -->
+const rowStates = `<!-- Every row below is YOUR state, rendered by your code. No
+     class here is upload-specific: a row is a .bo-file-list__item, the
+     outcome is a .bo-badge, the bar is a <progress class="bo-progress">,
+     and retry/cancel are ordinary buttons. -->
+<ul class="bo-file-list" aria-live="polite">
+  <li class="bo-file-list__item">
+    <span class="bo-file-list__name">goods-receipt-88213.pdf</span>
+    <span class="bo-file-list__size">412 KB</span>
+    <span class="bo-badge bo-badge--success">Attached</span>
+    <button class="bo-btn bo-btn--sm bo-btn--danger-ghost" type="button" aria-label="Remove goods-receipt-88213.pdf">✕</button>
+  </li>
+  <li class="bo-file-list__item">
+    <span class="bo-file-list__name">pallet-damage.jpg</span>
+    <span class="bo-file-list__size">2.4 MB</span>
+    <progress class="bo-progress" value="62" max="100" aria-label="Uploading pallet-damage.jpg">62%</progress>
+    <button class="bo-btn bo-btn--sm bo-btn--ghost" type="button" aria-label="Cancel upload of pallet-damage.jpg">Cancel</button>
+  </li>
+  <li class="bo-file-list__item">
+    <span class="bo-file-list__name">vendor-contract.pdf</span>
+    <span class="bo-file-list__size">8.7 MB</span>
+    <span class="bo-badge bo-badge--danger">Upload failed</span>
+    <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button">Retry vendor-contract.pdf</button>
+  </li>
+  <li class="bo-file-list__item">
+    <span class="bo-file-list__name">scan-0042.tiff</span>
+    <span class="bo-file-list__size">14.2 MB</span>
+    <span class="bo-badge bo-badge--danger">Rejected — over 10 MB</span>
+    <button class="bo-btn bo-btn--sm bo-btn--danger-ghost" type="button" aria-label="Remove scan-0042.tiff">✕</button>
+  </li>
+</ul>`;
+
+const canonical = `<!-- The input is the real control. The <label> makes the whole box
+     clickable — that part is native, labels forward clicks with no JS.
+     The DROP half is not native here: bo-visually-hidden clips the input
+     to 1px, and a clipped input is not a drop target, so without the
+     script a dropped file lands on the page and the browser opens it.
+     Ship initFileDropzone() with the zone, or show the input.
+
+     Name the input FROM its own visible line with aria-labelledby, and put
+     the subject in that line ("Drop vendor documents here"): the accessible
+     name is then the visible text by construction (WCAG 2.5.3 Label in
+     Name), a voice-control user can say what they see, and a screen reader
+     hears WHAT is being attached. A separate aria-label wins over the
+     wrapping label and drifts from the words on screen. aria-describedby
+     points at the hint so the constraint is announced too, not only seen. -->
 <label class="bo-file-dropzone" data-file-dropzone>
   <input class="bo-file-input bo-visually-hidden" type="file" multiple
-      aria-label="Attach vendor documents">
-  <span>Drop files here, or click to browse</span>
+      accept=".pdf,.jpg,.png"
+      aria-labelledby="doc-text" aria-describedby="doc-hint">
+  <span id="doc-text">Drop vendor documents here, or click to browse</span>
+  <span class="bo-file-dropzone__hint" id="doc-hint">PDF, JPG, or PNG — up to 10 MB each</span>
 </label>
 <script type="module">
   import { initFileDropzone } from "@busy-office/ui/js";
@@ -66,15 +132,23 @@ const canonical = `<!-- The input is the real control — the label makes the wh
      aria-live="polite" on the <ul> — a screen-reader user who just
      dropped or removed a file otherwise gets no confirmation it
      registered (same live-region need as the data-table selection
-     count). -->`;
+     count).
+
+     Two things a drop shares with a pick, and one it does not:
+       * input.files is REPLACED, never appended — keep your own array
+         if the user should be able to add in several goes.
+       * picking the SAME file twice fires nothing the second time
+         unless you clear input.value = '' after reading the files.
+       * accept filters the PICKER dialog, not a drop — neither ours nor
+         the browser's own. Validate input.files yourself. -->`;
 ---
-<Gallery title="File upload" description="Attaching documents and photos to a record with a real file input, so the platform picker, keyboard access and native drag-and-drop come free.">
+<Gallery title="File upload" description="Attaching documents and photos to a record with a real file input, so the platform picker, keyboard access and accessible naming come free.">
   <p class="demo-note">
     Attach a signed goods-receipt PDF, a vendor contract, a photo of a
     damaged shipment. A real <code>&lt;input type="file"&gt;</code> — the
-    platform's own picker, keyboard access, and (Chrome/Firefox) native
-    drag-drop onto the control come free; the framework styles it and adds
-    one small opt-in behavior for a bigger drop target.
+    platform's own picker and keyboard access come free; the framework
+    styles it and adds one small opt-in behavior that turns a whole box
+    into the drop target.
     <strong>Not for one required document with nothing to review</strong> — a
     bare <code>&lt;input type="file"&gt;</code> in a
     <a href={base + '/components/form'}>form field</a> is enough there; the
@@ -104,7 +178,10 @@ const canonical = `<!-- The input is the real control — the label makes the wh
     <Demo code={basic} />
     <p class="bo-u-text-muted"><code>::file-selector-button</code> is the one
     part of a file input CSS can restyle — the "No file chosen" text stays
-    native UA rendering, not something to fight.</p>
+    native UA rendering, not something to fight. A <em>visible</em> input
+    like this one is its own drop target with no JavaScript at all; that
+    stops being true the moment you hide it inside a dropzone, which is what
+    the behavior below exists for.</p>
   </section>
 
   <section class="demo">
@@ -112,7 +189,12 @@ const canonical = `<!-- The input is the real control — the label makes the wh
     <Demo code={multiple} />
     <p class="bo-u-text-muted"><code>multiple</code> and <code>accept</code>
     are native attributes — no framework API for them, because there's
-    nothing to add.</p>
+    nothing to add. <strong><code>accept</code> filters the picker dialog,
+    not a drop</strong>: drop a <code>.exe</code> on an
+    <code>accept=".pdf"</code> input and the browser takes it (measured in
+    Chrome, and our forwarded drop matches the platform rather than being
+    stricter than it). Treat it as a convenience for the picker and validate
+    <code>input.files</code> yourself.</p>
   </section>
 
   <section class="demo">
@@ -140,9 +222,39 @@ const canonical = `<!-- The input is the real control — the label makes the wh
     <p class="bo-u-text-muted">Try dragging a file over the box. Click
     anywhere in it to open the picker (a <code>&lt;label&gt;</code> wrapping
     an input forwards clicks — no JS needed for that part).
-    <code>initFileDropzone()</code> only adds the highlight-while-dragging
-    state and lets a drop anywhere in the box (not just the tiny native
-    input) populate the file list.</p>
+    <strong>The drop half does need
+    <code>initFileDropzone()</code></strong>: the input is
+    <code>bo-visually-hidden</code>, and a clipped input is not a drop
+    target, so without the script the browser opens the dropped file instead.
+    While a droppable drag is over the box the border turns solid as well as
+    blue — the style change is what survives forced-colours mode, where
+    every colour here is replaced by a system one.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Refusing a drop the input would refuse</h2>
+    <Demo code={disabled} />
+    <p class="bo-u-text-muted"><strong>A forwarded drop is never more
+    permissive than the same drop on the plain input.</strong> A
+    <code>disabled</code> input refuses it, and so does an input without
+    <code>multiple</code> handed more than one file — the browser refuses
+    that whole drop rather than taking the first, and we match the platform
+    instead of silently discarding files. In each case the box does not
+    highlight, the cursor shows no-drop, and nothing is assigned. Drag
+    anything over the box above to see it stay inert.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Rejected, with the reason</h2>
+    <Demo code={invalid} />
+    <p class="bo-u-text-muted">Validation is yours — the framework never
+    inspects a file. What it gives you is where to put the answer:
+    <code>aria-invalid="true"</code> on the input turns the zone's border
+    solid red <em>and</em> reveals the
+    <a href={base + '/components/form'}><code>.bo-form-field__message</code></a>,
+    so the state has a visible non-colour cue and a programmatic one. Point
+    <code>aria-describedby</code> at the message so it is announced, not just
+    seen.</p>
   </section>
 
   <section class="demo">
@@ -151,9 +263,23 @@ const canonical = `<!-- The input is the real control — the label makes the wh
     <p class="bo-u-text-muted"><code>.bo-file-list</code> styles rows YOUR
     code renders after reading <code>input.files</code> on <code>change</code>
     — same "framework does visuals, you do the data" split as everywhere
-    else. No upload progress bar shipped here either: pair with the
-    <a href={base + '/components/progress'}>Progress</a> component once a
-    real upload is in flight — this framework doesn't do XHR for you.</p>
+    else.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Upload progress, failure and retry — all consumer state</h2>
+    <Demo code={rowStates} />
+    <p class="bo-u-text-muted">Selecting a file is not uploading one, so
+    nothing here is framework behaviour: there is no XHR, no retry policy and
+    no progress simulation in this package. Every row above is markup your
+    code renders from state your code owns, composed from
+    <a href={base + '/components/badge'}>badge</a>,
+    <a href={base + '/components/progress'}>progress</a> and
+    <a href={base + '/components/button'}>button</a> — no upload-specific
+    class exists, because none would be reusable anywhere else. Give the
+    <code>&lt;progress&gt;</code> an <code>aria-label</code> naming its file,
+    and keep <code>aria-live="polite"</code> on the list so a status change
+    is announced once.</p>
   </section>
 
   <script>
@@ -169,11 +295,13 @@ const canonical = `<!-- The input is the real control — the label makes the wh
   <ClassRef component="file-upload" />
   <ApiTable
     component="file-upload"
-    js="Optional: initFileDropzone() — adds drag-over highlighting to a [data-file-dropzone] label and forwards a drop anywhere in it into the input's FileList (dispatching a real change event). The input works without it; drops just only land on the small native control."
+    js="Optional but effectively required for a dropzone: initFileDropzone() — highlights a [data-file-dropzone] label while a droppable drag is over it and forwards a drop anywhere in it into the input's FileList, dispatching input then change. The documented zone hides its input, and a hidden input is not a drop target, so without this the box is clickable but not droppable."
     notes={[
-      'Always give the input an accessible name — <code>aria-label</code>, or a visible <code>&lt;label&gt;</code> (which a dropzone already needs, to make the whole box clickable).',
-      'File type/size limits are native attributes (<code>accept</code>) or your own validation after reading <code>input.files</code> — nothing this component enforces.',
-      'No file list, upload, or progress bar shipped — read <code>input.files</code> on <code>change</code> and render <code>.bo-file-list</code> rows yourself; pair with <a href="' + base + '/components/progress">Progress</a> for an in-flight upload.',
+      'Name the input from its own visible line with <code>aria-labelledby</code>, and put the subject in that line (<em>"Drop vendor documents here"</em>): the name is then the visible text by construction (WCAG 2.5.3). A separate <code>aria-label</code> wins over the wrapping label and drifts from what is on screen. Point <code>aria-describedby</code> at the hint so the constraint is announced too.',
+      'A forwarded drop is never more permissive than the same drop on the plain input: a <code>disabled</code> input refuses it, and so does an input without <code>multiple</code> handed more than one file (the browser refuses that drop outright — we match it rather than taking the first).',
+      "<code>accept</code> filters the picker dialog, not a drop — neither ours nor the browser's own. File type and size limits are your validation after reading <code>input.files</code>; nothing this component enforces.",
+      "A drop REPLACES <code>input.files</code> rather than appending, and re-picking the same file fires nothing unless you clear <code>input.value = ''</code> after reading it.",
+      'No file list, upload, or progress bar shipped — read <code>input.files</code> on <code>change</code> and render <code>.bo-file-list</code> rows yourself; compose <a href="' + base + '/components/progress">Progress</a> and <a href="' + base + '/components/badge">Badge</a> for in-flight and failed rows.',
       'Put <code>aria-live="polite"</code> on the <code>.bo-file-list</code> — a screen-reader user who just dropped or removed a file gets no confirmation it registered otherwise (same live-region need as the data-table selection count).',
     ]}
   />

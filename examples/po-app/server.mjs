@@ -833,9 +833,10 @@ const detailScreen = (p, editErrors = null) => `
   <legend class="bo-form-section__legend">Documents</legend>
   <label class="bo-file-dropzone" data-file-dropzone>
     <input class="bo-file-input bo-visually-hidden" type="file" multiple
-        id="po-doc-input" aria-label="Attach vendor documents">
-    <span>Drop files here, or click to browse</span>
-    <span class="bo-file-dropzone__hint">PDF, JPG, or PNG — up to 10 MB each</span>
+        id="po-doc-input" accept=".pdf,.jpg,.png"
+        aria-labelledby="po-doc-text" aria-describedby="po-doc-hint">
+    <span id="po-doc-text">Drop vendor documents here, or click to browse</span>
+    <span class="bo-file-dropzone__hint" id="po-doc-hint">PDF, JPG, or PNG — up to 10 MB each</span>
   </label>
   <ul class="bo-file-list" id="po-doc-list" aria-live="polite"></ul>
 </fieldset>

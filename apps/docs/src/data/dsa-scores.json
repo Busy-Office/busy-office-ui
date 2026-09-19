@@ -397,7 +397,7 @@
         },
         "interaction": {
           "score": 3,
-          "cite": "a real <input type=file>: platform picker, keyboard access and native drag-drop come free"
+          "cite": "a real <input type=file>: platform picker and keyboard access come free; the drop half needs initFileDropzone(), because the documented input is visually hidden and a hidden input is not a drop target (cite corrected 373.1, 2026-09-19 — the score was NOT re-taken; that needs an independent pass)"
         },
         "content": {
           "score": 3,
