@@ -320,6 +320,318 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 373 — Owner direction 2026-09-19: a master prompt naming five workstreams (docs IA, app-shell contract, dropzone / reorder / dock / launcher, layout recipes); Phase 0 inventory finds **one capability existing-incomplete with two HIGH behaviour defects, two refused on record (dock, drag), and every other ask answered by composition** — 24 of 26 gap claims reproduce under an adversarial pass, and the baseline tree is green on every gate (2026-09-19)
+
+**Triaged from chat (Step 1): the owner pasted a "master prompt" for a UI
+framework architect agent** — graph-driven planning, bounded loops, five
+workstreams (A docs simplification, B app-shell contract, C1-C4 dropzone /
+reorder-transfer / app dock / fullscreen launcher, D six structural layout
+recipes for AI composition). Its scope boundary matches this repo's (UI only,
+no business modules, no React, no mandatory HTMX, the browser floor as is). Its
+process asks — a dependency/evidence graph, an execution state machine, ≤3
+slices per invocation, ≤3 repair attempts — are **already this file, `LOOPS.md`
+and graphify's `graph.db`**; nothing new is adopted, per the prompt's own
+"extend existing mechanisms" line.
+
+**Phase 0 ran as one workflow of nine agents** (seven read-only mappers, one
+baseline runner, one skeptic instructed to REFUTE every "missing" and every
+"defect" claim by re-running the evidence). Baseline at `ce17d9b4`, Node 26.8 /
+Chrome 153 (CI pins Node 22): `build`, `test` (29 files / 165), `lint:css`
+(74 files), `check:size`, `docs:build` (all chained gates), `check:claims` (179
+live), `check:selftests` (22 heuristic / 183 cases, 34 exact), `check:markup`,
+`test:axe` (128 × 2, 0 violations), `check:layout` — **all pass, no
+pre-existing failure, no environment blocker, tree clean after.** Skeptic: **24
+confirmed, 2 partially true, 0 refuted** of 26 claims; every confirmation is a
+re-execution, not a re-read.
+
+### Classification (source-backed; each mapper's evidence is in the workflow journal, the load-bearing ones are re-stated beside their item)
+
+| Ask | Class | Existing surface | Verdict |
+|---|---|---|---|
+| C1 dropzone | **existing-incomplete** | `file-upload.css`, `file-dropzone.ts` (stable set), `check-claims.mjs:1938`, po-app | **extend** — 373.1 |
+| C2 reorder / transfer / basket | **deliberately-excluded** | button floor ships: `ordered-list__actions`, kanban *Move to…* menu, bulk-actions, tag-input events | **reuse**; drag REFUSED ×4 on record (100.1, 110.7, 132.5, 317) — 373.4 fixes the two focus leaks on that floor |
+| C3 app dock, hide-on-upward-scroll | **deliberately-excluded → owner call** | none; 0 hits for dock / scroll-direction in source | 123.2 refused the bottom-nav tier, Slice 154 refused direction-driven chrome motion — **373.6, OWNER CALL** |
+| C4 fullscreen launcher + search | **existing-incomplete** | `/patterns/app-launch`, `/patterns/command-bar`, `bo-dialog` + `initDialogs` (focus restore already claimed), `bo-widget-grid` | **compose** — 373.5, zero core source |
+| B app-shell contract | **existing-incomplete** | `sidebar-layout.css`, `/concepts/layouts` (Slice 156: one shell, not three), z-index tokens, `check:sticky-layers` | **extend the page**; 2 HIGH CSS leaks — 373.3 |
+| D six layout recipes | **existing** | every intent resolves to a gated pattern page; `/concepts/which-pattern` is generated from `patterns.json` | **reuse** — 373.7 repairs the router; 112.4 stays blocked |
+| A docs IA | **existing-incomplete** | 17 sidebar groups, 2-level cap (docs-IA comparison 2026-08-16); Slice 112 REFUSED the six-section reorg | 4 stale claims — 373.2; regroup is **373.8, OWNER CALL** |
+
+### The 8-task lookup baseline (Workstream A's number to beat — "less or equal reading, no loss of correctness")
+
+Instrument: whitespace tokens of tag-stripped `<main>` content on the built
+site, docs chrome removed, code samples included; "words" = words passed before
+the answer first appears, walking links from `/` without search. Re-run it
+before quoting a change.
+
+| # | Task | Path | Words | Answer |
+|---|---|---|---|---|
+| T1 | make a table dense | `/` → `/concepts/density` | ~479 | exists (`data-density="compact"`) |
+| T2 | pattern for an approval screen | `/` → `/patterns/` → `/patterns/approval` | ~1,354 | exists |
+| T3 | wire the dropzone | `/components/` → `/components/file-upload` | ~1,077 | exists |
+| T4 | the shell's scroll container | `/concepts/layouts` | ~1,142 | **partial** — `__main` scrolls is stated; that the document does NOT is nowhere |
+| T5 | is there a dock / launcher | `/patterns/` → `/patterns/app-launch` | ~277 | launcher exists; **dock absent and no page says so** |
+| T6 | HTMX on a 409 | `/getting-started/htmx` | ~1,337 | exists, late in the page |
+| T7 | event fired when a row edit saves | `/reference/events` | ~262 | exists (`bo:row-save`) |
+| T8 | is there a data grid | `/getting-started/scope` | ~494 | **partial** — never says "grid"; full answer only on `/getting-started/ai-assistants` |
+
+### Items
+
+1. [ ] **373.1 — the dropzone forwards no more than the native input it
+       forwards to would accept, its states are two-channel, and the page says
+       only what a browser does.** Measured with TRUSTED drops (CDP
+       `Input.dispatchDragEvent` with real file paths, headless Chrome 153,
+       source transpiled in memory; a plain native input in the same run as
+       control): a zone wrapping a **disabled** input takes 3 files and fires
+       `change` (native: 0 files, 0 events); 3 files on a **non-`multiple`**
+       input are all assigned and `FormData` carries three entries (native
+       Chrome refuses the drop outright); the behavior fires `change` only
+       where native fires `input` then `change`; a **text/plain drag**
+       highlights the zone and is then swallowed; `data-dragover` differs from
+       rest in **colour only** and in **zero** computed properties under
+       forced colours; a zone around a disabled input has **zero** computed
+       difference from an enabled one. And the three shipped texts that say
+       drop-to-select works natively without the behavior (`file-upload.css:47`,
+       `file-upload.astro:52`, ApiTable js line) are **false for the
+       documented markup**: the input is `bo-visually-hidden` (1px, clipped),
+       so a trusted drop with no init yields 0 files and Chrome opens the file
+       in a new tab.
+       - **Accept — parity is measured against native in the same run, never
+         asserted.** For each of {disabled; non-`multiple` with 3 files;
+         `multiple` with 3 files; one file}, the file names on the input and
+         the ordered event sequence after a trusted zone drop agree with the
+         same trusted drop on a plain visible input carrying the same
+         attributes. A drag whose `dataTransfer.types` lacks `Files` leaves
+         `data-dragover` unset and `dragover` un-prevented. Each new claim is
+         red-proved by reverting its guard, with the injection confirmed in the
+         BUILT `dist/js` before a pass is believed.
+       - **Accept — two-channel.** With `(forced-colors: active)` emulated and
+         asserted, at least one computed property differs between rest and
+         `data-dragover`; in normal mode at least one differing property is not
+         a colour; a zone with a disabled input differs from rest in a
+         non-colour property and its cursor is not `pointer`; any fg/bg pair
+         the states produce is in `PAIRS` and `check:contrast` agrees in both
+         themes.
+       - **Accept — the page.** Every sentence about what a drop does WITHOUT
+         `initFileDropzone()` agrees with a trusted-drop case on the documented
+         markup, or is in `EXEMPT` with a reason; the documented input's
+         computed accessible name/description carry the visible instruction and
+         the constraint hint (accessibility tree, not markup); every demo's
+         visible hint agrees with that input's `accept`; the page states that
+         `accept` does not filter a drop (native or forwarded — measured);
+         rejected / in-progress / retry rows are static consumer-state markup
+         composed from shipped surfaces with no timer or network call.
+       - The CHANGELOG entry's compatibility classification matches the effect
+         on the po-app composition and the docs demos, with the reasoning;
+         `behaviors.json` agrees with the extractor after the change.
+       - **Decided here, not forecast:** a several-file drop on a
+         non-`multiple` input is **refused whole, the way native Chrome
+         refuses it** — matching the platform is the deterministic floor and
+         "take the first file" silently discards the rest; the cursor shows
+         `not-allowed` during the drag (`dropEffect = 'none'`), which is the
+         feedback the platform gives. Recorded so a later wake does not
+         re-decide it.
+
+2. [ ] **373.2 — four shipped-status claims are false on the built site, and
+       the decision page blanks 5 of 39 "Not when" cells it has structured data
+       for.** `installation.astro:173` says the RF lower-floor profile is "not
+       shipped yet" — `build:rf-essentials` + `check:rf-floor` run on every core
+       build; `scope.astro:57` and BOTH READMEs' stamped not-for row list
+       "Kanban boards" while `/patterns/kanban` ships in the sidebar;
+       `density.astro:59` calls App Launch "forthcoming (Slice 9, queued)";
+       `which-pattern.astro:29/46` re-parse the opener with a regex and drop
+       `record-detail`, `role-home`, `command-bar`, `output-form`, `rf-putaway`
+       although `patterns.json` carries a `wrongChoice.clause` for all 39; and
+       `/concepts/layouts` says `check:markup` protects its four shell
+       templates when an invented class inside a template string builds green
+       (injection confirmed in the built page, 1 of 1 replaced).
+       - **Accept:** each of the five either changes at its SOURCE (scope table
+         re-stamped through `stamp-readme.mjs --check`, never a hand edit in a
+         stat block) or records a one-line reason it should not; the count of
+         non-blank "Not when" cells in the BUILT decision page equals the count
+         of non-empty `wrongChoice.clause` in `patterns.json` counted by
+         re-reading the JSON; the layouts sentence agrees with what the
+         injection showed. No new gate — the population is 2 lexical matches
+         and the Kanban case has no lexical marker (94.11).
+
+3. [ ] **373.3 — the app-shell contract, on the page that already owns it, and
+       the two shipped CSS leaks the shell measurement found.** Measured on the
+       fresh dist: (i) an `<dialog class="bo-offcanvas">` drawer holding a
+       `bo-sidebar-nav` placed INSIDE a `.bo-app-shell` narrower than the rail
+       band inherits the rail's icon-only collapse — labels render as 1×1
+       clipped boxes; `Gallery.astro` carries a hand patch for the docs' own
+       drawer (Objective §1: the fix lets a consumer delete code); (ii) on
+       `/patterns/list-report` as shipped (bounded `max-block-size: 24rem`,
+       sticky `thead`), Shift+Tab from the last row lands row 5's checkbox
+       **16 of 16 px under the sticky header** — WCAG 2.4.11 at the block-start
+       edge, the mirror of `form-section.css:100-103`'s block-end fix; (iii) a
+       one-line toast covers 69 % of *Save* on a sticky `.bo-form-actions` at
+       390×844. Plus the contract itself: Slice 156's binding decision is
+       *"extend `/concepts/layouts`, do not fork a second page"*, so the
+       region model (header / optional nav / workspace: page header, toolbar
+       scope, app area, action region / overlays), the scroll owner
+       (`__main`, and that the document does not scroll — T4's missing half),
+       sticky offsets via `--bo-app-shell-pad`, top-layer ownership, the
+       z-index scale and safe-area go THERE with every number derived from
+       `sidebar-layout.css` / `z-index.css` rather than retyped.
+       - **Accept:** a claims case injects the drawer markup inside a narrow
+         shell and outside one as control and asserts the label's rendered box
+         and computed `clip-path` agree; a claims case walks Shift+Tab with real
+         keys on shipped `list-report` and asserts no focused control's rect
+         intersects a `thead th` rect, red-proved on the current build; the
+         toast/actions collision is either resolved (a documented clearance or
+         region rule) or refused with the measurement; `grep -rnF "900px"` over
+         docs src and `DESIGN.md` returns no shell-band restatement; the scroll
+         owner is asserted by a claims case (`document.scrollingElement` does
+         not overflow, `__main` does). **Refused here, with reasons:** a
+         page-header component (breadcrumb + `h1` + cluster already compose
+         it), a second rail (GAP-1's trigger unmet), a split primitive
+         (31.2/152.1), speculative `env(safe-area-inset-*)` (state the
+         `viewport-fit` assumption instead), `role="toolbar"` on any action row
+         without the APG keyboard model.
+
+4. [ ] **373.4 — the shipped move/remove floor loses focus at completion, in
+       the framework and in the copyable sample.** Measured with trusted keys:
+       Enter on `tag-input`'s remove button → chip removed, `activeElement ===
+       body` (`tag-input.ts` `removeTag` calls `tag.remove()` with no handoff);
+       Enter on editable-grid's *Remove line* → row removed, focus on `body`, in
+       BOTH the live script and the copy-paste sample (`editable-grid.astro:80`,
+       `:232`). This is the part of C2 that is not refused: the single-pointer,
+       non-drag floor SC 2.5.7 asks for already ships everywhere (ordered-list
+       `__actions`, kanban's server-legal *Move to…* menu, bulk-actions,
+       tag-input) — what it lacks is the focus and announcement obligations
+       written down.
+       - **Accept:** after a trusted-key removal, `activeElement` is inside the
+         same `.bo-tag-input` (first, middle, last and only chip), focus moves
+         ONLY when the removed chip contained it, `bo:tag-remove` still fires
+         before removal; the editable-grid case holds for live and sample and a
+         rendered-row check pairs each *Remove* label with its own row; the
+         ordered-list, kanban and editable-grid pages state where focus goes
+         (including the boundary where the pressed button no longer exists)
+         and that the status sentence is consumer-owned (317.1's style); the
+         generated ACR carries an SC 2.5.7 row derived from a scan of
+         `packages/core/src/js` with the command beside it, naming
+         `file-dropzone` as the one drag surface and its click alternative.
+         **Drag stays refused** — 100.1, 110.7 (owner re-ask, "not a third
+         time"), 132.5 (membership), 317 (a generic move core: 4 of 5
+         parameters are announcement strings); the reopen bars are quoted, not
+         re-argued. No new "reorder" concept page (158.2).
+
+5. [ ] **373.5 — a searchable, viewport-filling launcher as a section of
+       `/patterns/app-launch`, with zero framework source change.** Composition:
+       header ghost button with `data-dialog-trigger` + `initDialogs()` (modal,
+       Escape, Tab loop, focus restore — `check-claims.mjs:2303` already asserts
+       the restore with real clicks); `<dialog class="bo-dialog"
+       aria-labelledby>` with the recipe's visible Close; `<input type="search"
+       class="bo-input">` as initial focus; one labelled section + `bo-widget-grid`
+       per category, tiles `<a class="bo-widget">` with visible labels;
+       `.bo-state` + `role="status"` count for no-results; hiding via `hidden`
+       (leaves the Tab trap, `focus-trap.ts:20`). Page-local: ~6 declarations
+       of viewport-filling sizing and ~20 lines of `data-keywords` substring
+       filtering, like `command-bar.astro` and `value-help.astro:257` already
+       carry. **Not** `initCombobox` (imposes listbox, hides headings under a
+       query, brings 174.1's overflow trap) and **not** `bo-dialog--fullscreen`
+       (99.3 refused a one-caller modifier; `dialog.css:15-19` argues against
+       edge-to-edge panels — the page must justify its exception in its
+       wrong-choice clause against 123.2's owner-confirmed popover switcher and
+       command-bar's type-to-jump).
+       - **Accept:** `git diff --stat -- packages/core/src` for the slice is
+         empty or the page says why not; claims cases driven by CDP clicks and
+         keys assert open → `activeElement` is the search input, Escape and
+         Close → focus on the trigger, a substring query shows exactly the tiles
+         whose label or `data-keywords` contain it (DOM-compared, not a
+         hard-coded count), a keyword-only match shows its tile, a no-match
+         query renders the `.bo-state` and the status count reads 0; long
+         labels wrap at 390 with no horizontal overflow (`check:layout`).
+         Whether a generic text-filter behavior should be extracted is a
+         separate grill (two page-local copies would then exist — §3's bar is
+         two real compositions), recorded in `.roundtable/` either way.
+
+6. [ ] **373.6 — App dock: hide on UPWARD scroll. OWNER CALL — two refusals
+       stand on the record and the reversal is not written down.** 123.2
+       (2026-08-23): *"Mobile bottom-nav tier REFUSED for now (icon-rail
+       collapse already ships; re-open on a real consumer need)"*, trigger
+       sharpened in 125.2 to *"first phone-first consumer"*. Slice 154: *"A tab
+       strip that hides on scroll-down and reappears on scroll-up — direction-
+       driven chrome motion"* REFUSED. The 2026-09-19 prompt asks for exactly
+       these two halves and says "do not silently reverse" the direction. The
+       direction itself is taken as stated (upward = decreasing `scrollTop` in
+       `.bo-app-shell__main`; reveal on downward; initial and no-JS state =
+       visible), and its consequence is named: it is the reverse of the common
+       mobile convention, so the persistent reveal control is load-bearing, not
+       decorative. **Three questions, then it is dispatchable:** (a) does this
+       supersede 123.2 and Slice 154 — both, or the dock only, leaving the
+       general hide-on-scroll mechanism refused; (b) which consumer meets the
+       "phone-first" trigger, or is the trigger withdrawn; (c) is the item
+       cleared to add a CSS dir plus one call-once behavior if the compose-first
+       spike (static `nav` + `.bo-btn-group--bar` links with `aria-current` in
+       app-frame AND `erp-suite/_shell.mjs`) measures a real gap — the four
+       things composition cannot do today are a shell slot, a hidden state that
+       drops tab stops, safe-area insets (0 `env()` in source) and a clearance
+       contract with `.bo-form-actions`.
+       - **Accept (once answered):** the owner entry names what it supersedes;
+         a spike report lists every C3 requirement as composed-from or missing
+         with the measurement; direction, hysteresis, overscroll clamp,
+         focus-within guard and manual reveal each have a claims case that
+         asserts `scrollTop` really moved before believing a state; hidden items
+         are not tab stops; reduced motion drops the transition; listeners
+         follow `anchor-nav.ts:136` (one capture-phase document listener,
+         resolve the scroller at event time).
+
+7. [ ] **373.7 — the six-intent recipe path exists; make its one router read
+       its own data and name the validator in the AI path.** Every intent
+       maps to a gated page: find-and-act → `list-report`; inspect one →
+       `record-detail` / `object-page`; create-or-edit → `detail-form` /
+       `wizard`; list + selected → `master-detail`; review decision →
+       `approval`; monitor → `reporting-dashboard` / `job-monitor`. The
+       pattern recipe (Anatomy / Data contract / States / Components used) is
+       already build-gated, `which-pattern` is generated from `patterns.json`,
+       and `bo-check-markup` is a consumer-runnable validator. What is missing
+       is small: `llms.txt` never names the validator command or the shells
+       page, and `ai-assistants`' paste-in block does not state the order
+       shell → pattern → components → verify.
+       - **Accept:** the built `llms.txt` names the validator command read from
+         the one source the ai-assistants snippet and the scaffolder use; every
+         added URL resolves under gen-llms' existing assertion; the paste-in
+         block's "Why these N things" agrees with its list; no States / Data
+         contract / Anatomy text is added (gen-llms' "kept lean" stands) and
+         the size delta is written into the item. **Not built, by name:** a
+         machine-readable per-pattern recipe with required/optional regions,
+         structural checks in `bo-check-markup`, a findings format — those are
+         112.4 word for word, OWNER-BLOCKED behind 112.3's briefs; editing
+         `llms.txt` changes the pilot's instrument and is written into 112.3's
+         record rather than landed silently.
+
+8. [ ] **373.8 — docs IA: collapse 17 sidebar groups into the prompt's seven
+       (Start here / Foundations / Components / Patterns and layouts /
+       Integration / Reference / Contributor and decision history). OWNER
+       CALL.** It contradicts the recorded 2-level nesting cap (docs-IA
+       comparison 2026-08-16; `Gallery.astro:88`) or yields a 42-item
+       Components group, and Slice 112 REFUSED the six-section IA reorg pending
+       a second real consumer. The cheapest honest option — non-interactive
+       section labels over the existing groups, no third level — is the
+       recommendation; the T1-T8 baseline above is the property to beat.
+       Independent of the call and already concurred (Slice 249): a
+       `CONTRIBUTING.md` that POINTS at `CLAUDE.md`'s recipes, `DESIGN.md`,
+       `LOOPS.md` and `.roundtable/INDEX.md` with no second copy of any rule.
+       DELETE nothing; the two "absent" lists (`DESIGN.md` component-level,
+       `scope.astro` product-level) overlap on ~2 of 17 subjects and are NOT
+       merged.
+
+**Refused in triage, with reasons:** a graph database or agent runtime (the
+prompt's own boundary; `graph.db` is a derived mirror already); a per-slice
+"requirement / benefit / nodes / evidence / rollback" record format beyond
+what an item's Accept lines carry (a second record shape is what 326.3 and
+158.2 measure the cost of); a new "reorder", "dock" or "launcher" component
+family before its spike (§3: nothing ships for one screen); a universal quality
+score (171.3: layout is not scorable; the DSA rubric stands).
+
+**Sequence for this invocation (≤3 slices, the prompt's own budget):** 373.1
+now — it is the only ask with HIGH behaviour defects in a stable behavior, its
+harness (trusted drops) is reusable by 373.3's claims, and nothing depends on
+an owner. Then 373.2 (independent, documentation-only). 373.3 / 373.4 / 373.5 /
+373.7 are dispatchable by rule 4 in that order; 373.6 and 373.8 wait on the
+owner and block nothing else.
+
 ## Slice 372 — Objective grill of Slices 369, 370, 371: every structural claim in 370 and 371 reproduces exactly, and the finding is in the instrument that READS the samples they wrote — **`per_day_last` discards a metric sample on a stated reason that is false at 72 of 73 pairs**, so rule 5 publishes a movement that never happened on **5 of 8** names and its own predicate flips on **3 of 8** (2026-09-09)
 
 **Dispatched by rule 3**, cloud wake, `Objective 3 / 3 slices OVERDUE
