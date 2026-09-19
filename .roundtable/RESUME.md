@@ -20,6 +20,37 @@ survives none.
 
 ---
 
+## 2026-09-19 — a LOCAL, owner-driven session, not a router wake
+
+The owner pasted a master prompt (five UI workstreams: docs IA, app-shell
+contract, dropzone / reorder / dock / launcher, layout recipes). It was triaged
+as **Slice 373** (`26ba75a1`) and its first item landed as `42c4e4b0`. **Nothing
+was pushed.** `origin/main` was 81 commits ahead at the start; the local tree
+was fast-forwarded first (`git pull --ff-only`), so read `git log` rather than
+trusting the sha in the paragraph below.
+
+- **Slice 373 has 10 items.** `373.1` is `[x]`. `373.2`-`373.5` and `373.7` are
+  dispatchable, in that order; `373.2` is documentation-only and independent, so
+  it is the next ready slice. `373.6` (the dock — it reverses two recorded
+  refusals) and `373.8` (the 7-group sidebar — it contradicts the 2-level cap)
+  are OWNER CALLS and block nothing else. `373.9` and `373.10` are questions,
+  not builds.
+- **The prompt's own budget was ≤3 slices per invocation:** 1 used.
+- **Counters read after recording:** Standardize 2/4, Objective 1/3, Optimize ok.
+  The Objective row's `[373]` label was resolved from this session's `--item`
+  text, which begins `373.1` — the label reflects how the row was written (see
+  the arming-label note below), so it is not evidence a slice CLOSED.
+- **Where the evidence is:** each item's Accept lines carry the property, and
+  373.1's DONE block carries every command. The red-proof scripts and the
+  trusted-drop parity probe live in the session scratchpad and are NOT in the
+  repo — the durable form is the 24 new cases in `check-claims.mjs`
+  ("file-dropzone parity" onward).
+- **One trap to carry:** in `check-claims.mjs`, replacing the document
+  (`page.setContent`, `document.write`) or opening a second `browser.newPage()`
+  makes a `page.click` many claims later hang until the 120s protocol timeout,
+  with every assertion in the new block passing and an error that names only
+  `Runtime.callFunctionOn`. The no-JS dropzone claim is therefore LAST.
+
 ## In flight: nothing
 
 Last updated 2026-09-09 (**cloud** wake, scheduled routine). Working tree clean
