@@ -36,6 +36,40 @@ pin.
 
 ### Fixed
 
+- **A joined Money or Quantity field no longer butts a rounded corner against
+  a square one, and a Quantity's segments share one edge colour.** Both
+  components spelled the joint against the AUTHORED markup — `:first-child` /
+  `:last-child` — while the rendered DOM carries children the markup does not,
+  so a segment that stopped being first or last kept all four corners at 6px.
+  Three different trailing children cause it, and the component's own canonical
+  markup is one of them: a `.bo-quantity__unit` span after the `+` button, a
+  visually-hidden label, and the hidden input `initGroupedNumber()` inserts
+  after the visible one. Measured on the built site, the trailing `+` rendered
+  `border-radius: 6px` on all four corners across three pages (the
+  `data-grouped` demo and two RF screens), where `0 6px 6px 0` is correct. Two
+  of those three carry no `data-grouped` at all, so the hidden input was never
+  the whole cause. Quantity now keys off adjacency to its input
+  (`.bo-quantity__input ~ .bo-quantity__step`) and Money skips the generated
+  hidden input (`:nth-child(1 of :not([type="hidden"]))`). Separately, the
+  Quantity steppers drew `--bo-color-border-strong` while the input drew
+  `--bo-color-border-control` — one welded control in two colours; the steppers
+  now converge on the input's darker token, so no segment falls below the 3:1
+  non-text contrast floor. `check:claims` now asserts both properties live, in
+  both themes.
+
+  **Compatibility: a fix, but a visible one, so read it.** No class, attribute,
+  event or export changed — `api.json`'s `classes`, `parts`, `dataAttrs` and
+  `ariaAttrs` for both components are unchanged, and `behaviors.json`'s hooks
+  are unchanged; `quantity.tokensConsumed` gains `--bo-color-border-control`,
+  an addition to a generated artifact. Existing markup keeps working and starts
+  rendering the way these components' own documentation always described. Two
+  changes are visible without any markup edit: a Quantity's `+` button loses
+  the rounded corners facing its input wherever anything follows it in the
+  DOM, and every Quantity stepper's border darkens from `#d1d5db` to `#6b7280`
+  in light (`#3d434f` → `#9ca3af` in dark). A consumer who overrode
+  `.bo-quantity__step`'s `border-color` to compensate will now be compensating
+  on top of a fix; `.bo-btn--secondary` outside a Quantity is untouched.
+
 - **`initFileDropzone()` no longer accepts a drop the plain input would
   refuse, and now fires the events a real selection fires.** Measured with
   trusted drops (Chrome DevTools Protocol `Input.dispatchDragEvent`, real files)

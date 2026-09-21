@@ -1677,12 +1677,25 @@ than as a list of blessed blocks:
 The last one is the only one worth watching. Four copies is the trigger this
 file names for the 0fr/1fr case, and it is met — but it is **two components, not
 four**: money and quantity each spell the idiom twice, because the joined child
-is either a bare control (`.bo-money > :first-child`; quantity's
-`__input:has(+ .bo-quantity__unit-select)`) or a combobox WRAPPER whose real
-border is one level down (`> .bo-combobox:first-child > .bo-input`). Same
-decision, two child shapes, per component. Reopen if a THIRD component joins the
-pair — that is when a shared joined-control part would have somewhere to live
-that isn't one component styling another's insides.
+is either a bare control (`.bo-money > :nth-child(1 of :not([type="hidden"]))`;
+quantity's `__input:has(+ .bo-quantity__unit-select)`) or a combobox WRAPPER
+whose real border is one level down (`> .bo-combobox:first-child > .bo-input`).
+Same decision, two child shapes, per component. Reopen if a THIRD component
+joins the pair — that is when a shared joined-control part would have somewhere
+to live that isn't one component styling another's insides.
+
+**The two components now spell the SELECTOR differently, and that is the
+finding rather than the drift** (roadmap 374). Both used to key off
+`:first-child`/`:last-child`; both were wrong, because each component's
+rendered DOM carries children its authored markup does not. Money blocks the
+one child it can gain (`:not([type="hidden"])`); quantity keys off adjacency to
+its input, because three different trailing children defeat position there and
+a blocklist ported from money regressed six live controls when measured. The
+repeat group is unchanged — `report:css-repeats` groups by declaration BODY,
+and both bodies are byte-identical — so the x4 / two-components reading holds
+and the reopen trigger is still a third component. What a future sweep should
+NOT do is "standardize" these two selectors back onto one spelling: they differ
+by measurement, not by accident.
 
 **What would change any of this:** a body appearing in a component that is not
 already in the table, or an existing group growing. Run the command; the delta

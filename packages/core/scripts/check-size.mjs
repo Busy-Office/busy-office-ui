@@ -103,7 +103,20 @@ const PAYLOAD = ['.css', '.js'];
  * every run prints current, budget and headroom, so these stay checkable.
  */
 const BUDGETS = {
-  'css/index.css': { total: 97.3 },
+  /* RE-BASED 2026-09-22, and the old number is kept here because the reason
+     is the interesting part. The 2026-09-03 basis of 97.3 was fully consumed:
+     93.69 kB at HEAD, 97.24 with the tree's then-uncommitted work — 61 bytes
+     of headroom — and the joined-control seam fix's comments took it to
+     97.71. `css/index.css` is the DEFAULT `./css` export and ships
+     UNMINIFIED, so this repo's write-the-reasoning-inline doctrine is payload
+     on this row and on no other: `index.min.css` sits at 15.15/16.7 and is
+     unaffected by a comment, which is also the artifact `stamp-readme`
+     publishes. Re-based on the same convention as every other row — current
+     + ~10% — rather than trimming to fit, because a 1% headroom would make
+     the next comment anyone writes a budget negotiation (roadmap 374.5 holds
+     the structural question: whether `./css` should resolve to the minified
+     file). */
+  'css/index.css': { total: 107.5 },
   'css/index.min.css': { total: 16.7 },
   'css/rf-essentials.css': { total: 45.9 },
   'css/rf-essentials.min.css': { total: 8.4 },

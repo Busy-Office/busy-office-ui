@@ -3612,6 +3612,79 @@ check(
    the property is the fix and the overlap is the defect: a future change to
    ring width or group spacing could restore the overlap while leaving the
    offset untouched. */
+
+/* THE SAME PAIRS, TWO MORE PROPERTIES. The ring check below asks whether the
+   seam is SAFE TO FOCUS. These two ask whether it is a seam at all, and both
+   defects they cover were live in this repo:
+
+   (A) An INTERIOR corner — the corner a segment turns toward its neighbour
+       across the shared edge — must be 0. Both components spelled the joint
+       POSITIONALLY (`:first-child` / `:last-child`), so a segment that stopped
+       being first or last kept all four corners and butted a rounded edge
+       against a square one. money.css records that failure and now spells its
+       joint `:nth-child(1 of :not([type="hidden"]))`; quantity.css keys off
+       adjacency to its input. Three different trailing children caused it
+       there — an authored `__unit` span, a `.bo-visually-hidden` label, and
+       `initGroupedNumber()`'s generated hidden input.
+   (B) All segments of one welded control agree on border-color. Measured
+       before `.bo-quantity > .bo-quantity__step`'s `border-color` landed: the
+       flanking steppers drew rgb(209,213,219) while the input drew
+       rgb(107,114,128) — one control, two edge colours, which reads as three
+       pasted-on parts.
+
+   Nothing else can see either one. `check:contrast` compares token PAIRS, not
+   two elements' agreement; `check:layout` looks for overflow, not radii; the
+   ring check below measures outline geometry and is blind to both.
+
+   SCOPE STAYS .bo-money / .bo-quantity — the scope the ring check already
+   has — and that is a decision, not an oversight. `.bo-btn-group` is the same
+   SHAPE and not the same PROPERTY: `.bo-btn` sets `--bo-btn-border:
+   transparent` (button.css:9) while `.bo-btn--secondary` sets
+   `--bo-color-border-strong` (button.css:81), so a solid primary beside a
+   secondary in a `.bo-btn-group--bar` legitimately disagrees on border-color
+   while painting exactly one visible edge (measured: zero pixels of
+   rgb(209,213,219) across that seam). Widening (B) there would need an
+   exemption covering a whole modifier, and a predicate that is mostly exempt
+   is ceremony. Reopen as its own item if btn-group ever grows a joint bug.
+
+   READ `borderTopColor`, NEVER the shorthand and never the facing side. A
+   leading segment carries `border-inline-end: none`, so its
+   `border-right-color` computes to the INITIAL value — measured
+   rgb(17, 24, 39) against the drawn rgb(107, 114, 128), and `cs.borderColor`
+   duly returns a four-value string. Either read reports a mismatch on 8 of 8
+   money groups while nothing at all is wrong. The block-start edge is `solid`
+   at 1px on every segment of both components, which is why it is the one edge
+   that can be compared.
+
+   THE COMBOBOX SEGMENT IS NOT THE CHILD. `.bo-combobox` is an unbordered
+   positioning wrapper around the real `.bo-input` (money.css says so;
+   measured on the built page: border-top-width 0px, radius 0px, border-top-
+   color rgb(17,24,39) — the text colour, which nothing paints). Reading the
+   wrapper would pass (A) vacuously and fail (B) against a colour that is not
+   on screen. `bordered()` resolves it, and the post-loop checks fail loudly if
+   that ever stops resolving rather than letting those segments quietly drop.
+
+   SETTLE, DO NOT rAF. `.bo-input` carries `transition: border-color
+   var(--bo-motion-duration-fast)` (100ms) and `.bo-select` / `.bo-btn` carry
+   no border-color transition at all, so a colour read taken during a theme
+   flip catches the input mid-interpolation while its neighbours are already on
+   the new token, and EVERY welded group reports a mismatch that is not there.
+   Ladder measured on /components/quantity/, one light->dark flip, 7
+   multi-segment groups:
+
+     +0ms +8ms +16ms +33ms +50ms +80ms  ->  7 of 7 groups "mismatched"
+     +120ms +300ms +600ms               ->  0
+
+   and the +50ms sample is rgb(145,152,164) against rgb(156,163,175) — an
+   interpolated value, not a token, which is the tell. A double rAF lands at
+   ~+16ms, so this file's usual settle idiom is the WRONG one here. 600ms is
+   6x the transition; the first clean sample (120ms) has no margin at all. The
+   literal is not trusted — the post-loop check compares it against the
+   duration read off the live element, so raising --bo-motion-duration-fast
+   past 150ms turns this red instead of quietly under-settling. */
+const seams = {};
+const SEAM_SETTLE_MS = 600;
+
 for (const [label, path, sel] of [
   ['money', '/components/money/', '.bo-money'],
   ['quantity', '/components/quantity/', '.bo-quantity'],
@@ -3653,7 +3726,146 @@ for (const [label, path, sel] of [
     rings.pairs > 0 && rings.maxOverlap <= 1,   // 1px tolerance: the shared border rounds
     JSON.stringify(rings),
   );
+
+  /* Both themes. (B) is an agreement WITHIN a group, so it ought to be
+     theme-invariant — which makes it precisely the "identical value across
+     many inputs" to distrust, so the post-loop check proves the two runs
+     rendered different themes rather than assuming it. It also means the
+     colour is read immediately after a flip, i.e. in the one condition where
+     the transition above can poison it, which is what keeps the settle from
+     being ceremony. */
+  for (const theme of ['light', 'dark']) {
+    await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), theme);
+    await page.evaluate((ms) => new Promise((r) => setTimeout(r, ms)), SEAM_SETTLE_MS);
+    const seam = await page.evaluate((groupSel) => {
+      /* The BORDERED box, which is not always the child. */
+      const bordered = (c) =>
+        (c.matches('.bo-combobox') ? c.querySelector(':scope > .bo-input') : c);
+      const px = (v) => parseFloat(v) || 0;
+      /* `transition-duration` comes back as a comma list in seconds ("0.1s,
+         0.1s") or milliseconds; take the longest, in ms. */
+      const msOf = (v) => Math.max(0, ...String(v).split(',')
+        .map((s) => parseFloat(s) * (s.includes('ms') ? 1 : 1000) || 0));
+      const out = {
+        groups: 0, welded: 0, wrappers: 0, resolved: 0, transitionMs: 0,
+        rounded: [], mismatched: [],
+        bodyBg: getComputedStyle(document.body).backgroundColor,
+      };
+      for (const grp of document.querySelectorAll(groupSel)) {
+        const segs = [];
+        /* `:not([type="hidden"])` for the same reason money.css's joint
+           selector carries it: initGroupedNumber() inserts a hidden input
+           after the visible one, so the rendered DOM has a child the authored
+           markup does not, and a 0x0 field with no border is not a segment. */
+        for (const kid of [...grp.children].filter((c) =>
+          c.matches('input:not([type="hidden"]), select, button, .bo-combobox'))) {
+          if (!kid.matches('.bo-combobox')) { segs.push(kid); continue; }
+          out.wrappers++;
+          const inner = bordered(kid);
+          if (!inner) continue;    // counted but unresolved -> post-loop goes red
+          out.resolved++;
+          segs.push(inner);
+        }
+        if (segs.length < 2) continue;   // a lone control has no seam
+        out.groups++;
+        /* Where it is, for the FAIL line. A class list does not tell the next
+           reader which demo to open, and this file's failures are read by
+           someone with less context than whoever wrote the claim. */
+        const where = (grp.closest('section.demo')?.querySelector('h2')?.textContent || '?')
+          .trim().slice(0, 48);
+        /* (B) — the DRAWN edge, across every segment of this group. */
+        const colours = [...new Set(segs.map((s) => getComputedStyle(s).borderTopColor))];
+        if (colours.length > 1) out.mismatched.push({ where, colours });
+        for (const s of segs) {
+          out.transitionMs = Math.max(out.transitionMs,
+            msOf(getComputedStyle(s).transitionDuration));
+        }
+        for (let i = 0; i < segs.length - 1; i++) {
+          const a = segs[i], n = segs[i + 1];
+          const ar = a.getBoundingClientRect(), nr = n.getBoundingClientRect();
+          if (Math.abs(ar.top - nr.top) > 6) continue;   // not side by side
+          const gap = nr.left - ar.right;
+          /* WELDED, not merely adjacent — these two assertions are about a
+             SHARED edge and say nothing about two controls with a gap between
+             them. `.bo-quantity__unit` beside a stepper sits a --bo-space-2
+             away and keeps its own rounded corners correctly, so 0.5px is the
+             upper bound. The lower bound rules out boxes that merely overlap:
+             the only real negative gap in the framework is quantity.css's
+             `margin-inline: -1px` border collapse (measured: 0 on all 8 money
+             seams, 0 and -1 on quantity's 12), while a run under dir=rtl
+             would put `n` a full control-width to the LEFT and read as a weld
+             with the facing sides swapped. */
+          if (gap > 0.5 || gap < -3) continue;
+          out.welded++;
+          /* (A) — the two corners that FACE each other. The weld test above
+             puts `n` to the right of `a` by construction, so the facing pair
+             is a's end corners and n's start ones. Read the PHYSICAL
+             longhands: getComputedStyle resolves border-*-radius, not the
+             logical border-start-end-radius the stylesheet authors. */
+          const ca = getComputedStyle(a), cn = getComputedStyle(n);
+          const worst = Math.max(
+            px(ca.borderTopRightRadius), px(ca.borderBottomRightRadius),
+            px(cn.borderTopLeftRadius), px(cn.borderBottomLeftRadius));
+          /* No tolerance worth the name: a collapsed corner computes to
+             exactly 0px and a live one to var(--bo-radius-md) = 6px. 0.5 is
+             float slack, not a budget. */
+          if (worst > 0.5) {
+            out.rounded.push({ where, seam: `${a.className} | ${n.className}`, worst });
+          }
+        }
+      }
+      return out;
+    }, sel);
+    seams[`${label}/${theme}`] = seam;
+    check(
+      `${label} (${theme}): an INTERIOR corner of a welded control is square — no rounded edge butted against a flat one`,
+      seam.welded > 0 && seam.rounded.length === 0,
+      JSON.stringify(seam),
+    );
+    check(
+      `${label} (${theme}): every segment of one welded control draws the same border colour`,
+      seam.groups > 0 && seam.mismatched.length === 0,
+      JSON.stringify(seam),
+    );
+  }
+  /* The flip is set on the LIVE document rather than emulated, so visit()'s
+     "everything resets on navigation" contract does not cover it. Cleared
+     here rather than relying on the next claim happening to navigate — that
+     inheritance is the exact class of bug visit()'s header records. */
+  await page.evaluate(() => document.documentElement.removeAttribute('data-theme'));
 }
+
+/* The four runs must not be two themes measured twice — the failure this file
+   already had with the wrong localStorage key. */
+check(
+  'joined-control seam: the light and dark readings rendered different themes',
+  ['money', 'quantity'].every((l) => seams[`${l}/light`].bodyBg !== seams[`${l}/dark`].bodyBg),
+  JSON.stringify(Object.fromEntries(Object.entries(seams).map(([k, s]) => [k, s.bodyBg]))),
+);
+/* The combobox resolver is EXERCISED, and resolves everything it counted. A
+   `:scope > .bo-input` that stopped matching would silently drop those
+   segments and leave both assertions above passing over a smaller set — the
+   quiet coverage loss this whole file exists to prevent. /components/money
+   carries the two combobox demos; /components/quantity has none, and 0 === 0
+   there says so without inventing a floor for a page that has nothing to
+   floor. */
+check(
+  'joined-control seam: every .bo-combobox segment resolved to its nested .bo-input, and money exercised that path',
+  Object.values(seams).every((s) => s.resolved === s.wrappers) &&
+    seams['money/light'].resolved > 0 && seams['money/dark'].resolved > 0,
+  JSON.stringify(Object.fromEntries(Object.entries(seams)
+    .map(([k, s]) => [k, { wrappers: s.wrappers, resolved: s.resolved }]))),
+);
+/* The settle is only a fix if it outlasts the transition it exists to
+   outlast, and the duration is a TOKEN somebody can raise. `transitionMs > 0`
+   is the other half: if the live transition ever read 0 here the colour
+   readings would be trustworthy for a different reason than this block
+   claims, and that is worth noticing rather than passing through. */
+check(
+  'joined-control seam: the settle outlasts the live border-color transition, so a colour reading is a token and not an interpolation',
+  Object.values(seams).every((s) => s.transitionMs > 0 && SEAM_SETTLE_MS >= 4 * s.transitionMs),
+  JSON.stringify(Object.fromEntries(Object.entries(seams).map(([k, s]) => [k, s.transitionMs]))),
+);
 
 // /components/form "Label-start sections" (roadmap 117): "the section
 // collapses back to labels-on-top on its own" below 30rem, and "start...

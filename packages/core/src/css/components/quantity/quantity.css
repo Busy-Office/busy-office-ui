@@ -19,6 +19,20 @@
     max-inline-size: 12rem;
   }
 
+  /* The three segments are one control, so they share one edge colour.
+     Measured before this rule: the `.bo-btn--secondary` steppers drew
+     border-strong rgb(209,213,219) while the input drew border-control
+     rgb(107,114,128) — one welded control reading as three pasted-on parts.
+     Converging on the INPUT's colour is deliberate: it is the darker, so the
+     join cannot drop a segment below the 3:1 non-text floor (WCAG 1.4.11) a
+     control boundary must meet; the other direction puts every input segment
+     at 1.47:1 and check:contrast goes red. Scoped to the group — a standalone
+     secondary button still draws 1.47:1, which is roadmap 374.4's question,
+     not this rule's to settle by side effect. */
+  .bo-quantity > .bo-quantity__step {
+    border-color: var(--bo-color-border-control);
+  }
+
   .bo-quantity__step {
     flex: 0 0 auto;
     inline-size: var(--bo-density-control-height);
@@ -70,12 +84,23 @@
     outline-offset: calc(-1 * var(--bo-focus-ring-width, 2px));
   }
 
-  .bo-quantity__step:first-child {
+  /* ADJACENCY to the input, not position in the parent. `:last-child` shipped
+     broken: this component's own canonical markup puts `__unit` AFTER the
+     `+`, so the `+` matched nothing and kept all four corners at 6px, butting
+     a rounded edge into the square input (measured on three pages).
+
+     THREE trailing children cause it — `__unit`, a visually-hidden label, and
+     initGroupedNumber()'s hidden input, which lands BETWEEN input and `+` —
+     so money's `:not([type="hidden"])` blocklist does not transfer. Nor does
+     `:nth-child(1 of .bo-quantity__step)`: with ONE stepper both rules pick
+     the same button and square all four corners. Adjacency fails soft, the
+     bar the unit-select comment below sets. Details: roadmap 374.1. */
+  .bo-quantity > .bo-quantity__step:has(~ .bo-quantity__input) {
     border-start-end-radius: 0;
     border-end-end-radius: 0;
   }
 
-  .bo-quantity__step:last-child {
+  .bo-quantity > .bo-quantity__input ~ .bo-quantity__step {
     border-start-start-radius: 0;
     border-end-start-radius: 0;
   }

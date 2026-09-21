@@ -159,7 +159,14 @@
      buttons: each .bo-btn keeps its own border so :focus-visible,
      :disabled and forced-colors all still resolve per-button; only the
      ADJACENT edge disappears (this button's border draws over the
-     previous button's, so exactly one line survives between them). */
+     previous button's, so exactly one line survives between them).
+
+     A filled segment beside an outlined one disagrees on border-color and
+     that is CORRECT — noticed twice now from computed style, so: the accent
+     fill paints under its own transparent border, a pixel scan finds one
+     edge, not two, and it is the better-contrasted one. Measurements in
+     roadmap 374.3; this is why check:claims' seam colour assertion scopes to
+     money/quantity. */
   .bo-btn-group {
     display: inline-flex;
   }

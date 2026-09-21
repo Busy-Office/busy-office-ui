@@ -381,6 +381,227 @@ before quoting a change.
        only what a browser does.** Measured with TRUSTED drops (CDP
        `Input.dispatchDragEvent` with real file paths, headless Chrome 153,
        source transpiled in memory; a plain native input in the same run as
+## Slice 374 — the joined-control seam was spelled against the AUTHORED markup, not the RENDERED DOM: three trailing children defeat `:last-child`, the framework's own canonical quantity markup is one of them, and the defect shipped on **3 pages / 5 rendered views** while a gate that visits those exact elements measured only their focus rings (2026-09-22)
+
+**Found by the owner, from a screenshot.** The `+` stepper on
+`/components/quantity/`'s grouped demo renders as a pill notched into a square
+field. `.bo-quantity__step:last-child` was the only rule squaring its inner
+corners, and the `+` is not the last child — so it matched nothing and kept all
+four `.bo-btn` corners at 6px, where 0/6/6/0 is correct.
+
+**THREE different trailing children cause it, and only one is the one that was
+blamed.** The sibling money fix (uncommitted, same window) attributed this
+class to `initGroupedNumber()`'s generated hidden input and fixed money with
+`:nth-child(1 of :not([type="hidden"]))`. Ported to quantity that blocklist
+fixes **one of the three** instances:
+
+| page | trailing children after the `+` | hidden input? |
+|---|---|---|
+| `/components/quantity/` grouped demo | `input[type=hidden]`, `__unit`, `.bo-visually-hidden` | yes |
+| `/patterns/rf/rf-pick-rf/` | `__unit`, `.bo-visually-hidden` | **no** |
+| `/patterns/rf/goods-receipt-rf/` | `__unit` | **no** |
+
+Two of the three carry no `data-grouped` and no `name`, so no hidden input
+exists on them at all. The real predicate is *"the trailing step is not the
+last child"*, and the `__unit` span alone is sufficient — a span this
+component's own canonical `Markup` block puts there
+(`quantity.astro:143-146`).
+
+**A correction to the sibling fix's stated mechanism, which is why the two
+files needed different answers.** `money.css` said `initGroupedNumber()`
+*"APPENDS"* a hidden input. It does not: `grouped-number.ts:161` is
+`input.after(hidden)` — inserted immediately after the VISIBLE input, wherever
+that sits. In money the amount happens to be last, so it lands last and the
+description was accidentally true. In `.bo-quantity` it lands at index 2 of 6,
+**between** the input and the `+`. Corrected in the file.
+
+**The base rate, measured rather than assumed** (33 rendered instances across
+every page of the built site that carries either component, `querySelectorAll`
+not grep — 15 served pages match the string, only 7 render an element):
+**5 of 33 defective, all the same defect, all in quantity.** Every welded seam
+in the framework measures 0 or −1px; there are no odd gaps. Six joined controls
+exist (`.bo-money`, `.bo-quantity`, `.bo-btn-group`, `.bo-btn-group--bar`,
+`.bo-richtext`, `.bo-tabs`); `.bo-segmented`, `.bo-tag-input`, `.bo-pagination`,
+`.bo-stepper`, `.bo-date` and a standalone `.bo-combobox` were measured and
+ruled out as not welded.
+
+**Three candidate selectors were measured against every instance, not reasoned
+about.** Ground truth was computed geometrically and independently of any
+selector (a child is a segment if it — or its nested `.bo-input` — has
+border-width > 0 and width > 0; two consecutive segments are welded if their
+rects gap ≤ 0.5px), then each candidate was run as `querySelectorAll` AND
+injected as an unlayered `<style>` with the resulting computed radius read
+back:
+
+- **adjacency** (`:has(~ .bo-quantity__input)` / `.bo-quantity__input ~ …`) —
+  9/9 stepper cases, 11/11 stepper-less, 4/4 synthetic single-stepper, correct
+  in RTL. **Chosen.**
+- **typed nth** (`:nth-child(1 of .bo-quantity__step)`) — fixes the bug, but
+  with a single stepper both rules select the same button and square all four
+  of its corners (0/0/0/0 on 4 of 4 probes, LTR and RTL). Latent, and it
+  mis-draws rather than failing soft, which this file's own unit-select comment
+  rules out.
+- **money's blocklist, ported** — **regresses six controls that ship today**.
+  In a button-less composition both rules land on the bare `.bo-quantity__input`:
+  `/components/quantity/` instances 2, 4, 8, 9, 10 and `/patterns/rf/rf-count-rf/`
+  all go 6/6/6/6 → 0/0/0/0. Named by a before/after diff, not predicted.
+
+**The gate that should have caught it was standing on the elements.**
+`check-claims.mjs` already walked `.bo-money` and `.bo-quantity` segment pairs
+live — and asserted only that a focused segment's ring stays off its neighbour.
+Radius and border-colour were both invisible to it, to `check:contrast` (which
+compares token PAIRS, not two elements' agreement) and to `check:layout` (which
+looks for overflow). Extended in 374.2.
+
+### Items
+
+1. [x] **374.1 — the quantity joint keys off ADJACENCY to the input, not
+       position in the parent.** `.bo-quantity__step:first-child` /
+       `:last-child` → `.bo-quantity > .bo-quantity__step:has(~ .bo-quantity__input)`
+       / `.bo-quantity > .bo-quantity__input ~ .bo-quantity__step`. General
+       sibling, so the injected hidden input and both authored trailing spans
+       are stepped over without enumerating them; specificity (0,3,0) clears
+       the base `.bo-btn` rules with no `!important`.
+       - **Accept — met.** Every `.bo-quantity` on the built site reports the
+         interior corners its geometry says it should, in both themes, and
+         `check:claims` agrees (374.2 is the instrument, so this is not
+         self-attested). The three previously-defective views measure 0/6/6/0
+         where they measured 6/6/6/6.
+
+2. [x] **374.2 — `check:claims` asserts the two properties that define a seam,
+       on the pairs it was already visiting.** (A) an interior corner of a
+       welded control is square; (B) every segment of one welded control draws
+       the same `border-top-color`. Both in light and dark, with three
+       cross-cutting checks behind them: the two theme runs rendered different
+       `bodyBg`, every `.bo-combobox` segment resolved to its nested
+       `.bo-input` (and money exercised that path), and the settle outlasts the
+       live transition.
+       - **Accept — met, red-proved by injection with the injection confirmed
+         in the COMPUTED STYLE before the verdict was believed.** (A) injected
+         a 6px end-radius → red on 8 of 8 money seams; a separate injection on
+         the combobox's NESTED input → red, which is what proves the resolver
+         rather than the wrapper. (B) injected `border-strong` onto the
+         steppers → red with the real token pairs, and the dark run reported
+         DIFFERENT values from light, which is itself the evidence the two runs
+         are not one run duplicated. Base rate before any injection was **1 of
+         20 already failing** on (A) and 20 of 20 passing on (B) — so (A) was
+         not vacuous, and (B) is 100% only because 374.1's sibling fix had just
+         landed, which is what a gate is for.
+       - **Settle, not rAF — measured as a ladder, because this is the hazard
+         that produced a false "all 12 mismatch" earlier in the same window.**
+         `.bo-input` transitions `border-color` (100ms) and `.bo-select` /
+         `.bo-btn` do not, so a read taken during a theme flip catches the
+         input mid-interpolation: +0/8/16/33/50/80ms all report 7 of 7 groups
+         mismatched, +120/300/600ms report 0, and the +50ms sample reads
+         rgb(145,152,164) against rgb(156,163,175) — an interpolated value, not
+         a token, which is the tell. A double rAF lands at ~16ms, so this
+         file's usual settle idiom is the wrong one here. The 600ms literal is
+         not trusted: a check compares it against the duration read off the
+         live element, so raising `--bo-motion-duration-fast` goes red rather
+         than quietly under-settling.
+       - **No new `@heuristic` obligation.** `check:selftests` tags a FILE, not
+         a check, and `check-claims.mjs`'s existing `@exact` still holds: every
+         verdict here is a number compared in a real browser. The one
+         judgement-shaped term is the weld window (gap ∈ [−3, 0.5]), a
+         membership test against measured geometry. `where` (the demo heading)
+         IS a positional recognition and is diagnostic only — printed in the
+         FAIL detail, never in a boolean.
+
+3. [x] **374.3 — what else is in this class, and the one that is NOT a
+       defect.** Two records, both measured, so neither is re-derived a third
+       time:
+       - **`.bo-btn-group--bar`'s filled segment is correct — refused.** A
+         primary computes `border-color: transparent` beside
+         `.bo-btn--secondary`'s border-strong, which reads as a border-colour
+         disagreement in computed style and paints nothing extra: a 1px-row
+         pixel scan across that seam on `/patterns/approval/` reads white →
+         rgb(15,118,110) with **zero** pixels of rgb(209,213,219), while the
+         same scanner DOES see them at both seams of `/components/button/`'s
+         all-secondary group — so the absence is a real absence, not a dead
+         detector. `background-clip: border-box` means the accent fill paints
+         under its own transparent border. That edge is the better-contrasted
+         one (5.47:1 vs border-strong's 1.47:1), and forced-colors gives every
+         segment `ButtonText` anyway. This is why 374.2 scopes (B) to
+         money/quantity: widening it would need an exemption covering a whole
+         modifier, and a predicate that is mostly exempt is ceremony.
+       - **Money's fix is a BLOCKLIST, and holds only while every `.bo-money`
+         child is a welded part.** True of all 12 rendered instances — there is
+         no money composition on the site with a trailing non-welded child. Not
+         guaranteed: injecting the compositions quantity already ships (a
+         trailing `.bo-visually-hidden`, a trailing note span) reproduces the
+         identical 6/6/6/6 defect, and a currency-less money field renders
+         0/0/0/0. Left as a blocklist deliberately — the hardened allowlist
+         measured 15/15 including those three probes but subsumes two more
+         rules, and money's joint must stay order-agnostic (currency leads in
+         en-US, trails in de-DE), so it is a larger change than a live defect
+         warrants.
+       - **Accept — met:** the refusal and the latency are both recorded next
+         to the rules they explain, with the command or measurement that
+         produced each.
+
+4. [ ] **374.4 — `.bo-btn--secondary` standing alone is identified almost
+       entirely by a 1.47:1 border, the contrast gate structurally cannot see
+       it, and the published ACR says it can.** Surfaced by 374.1's sibling
+       fix, which converged the quantity steppers onto `border-control`
+       *because* border-strong would drop a segment below 3:1 — and then scoped
+       that to the group, leaving the general case where it was. Three parts,
+       and the first is a correctness defect rather than a design question:
+       - `extract-acr.mjs:159-162` publishes 1.4.11 as **Supports**, remarking
+         that non-text pairs *"(borders, focus rings, icon fills) are included
+         in the same contrast.json gate as text pairs — not a separate, weaker
+         check."* `PAIRS` has three `--bo-color-border-control` rows and **zero**
+         `--bo-color-border-strong` rows, and `check-contrast.mjs:232` binds
+         `fg` only when `d.prop === 'color'`, so the coverage guard cannot see
+         a `border-color` declaration at all. A derived artefact deciding on
+         its own what it failed to see, which is the rule this repo paid for.
+       - Measured: `.bo-btn--secondary`'s fill is bg-surface, so it is
+         **1.00–1.17:1** against every surface it sits on across the built site
+         (navbar, card, widget, app-shell main, sidebar, dialog footer, alert,
+         form-section) in both themes. The fill identifies nothing; the border
+         at 1.34–1.90:1 is the only non-text identifier — precisely the
+         condition `color.css:29-31` already names. **1,252 rendered instances
+         across 123 of 139 pages.** `.bo-file-input::file-selector-button` and
+         `.bo-file-dropzone` (1px dashed border-strong on bg-muted = 1.34:1
+         light / 1.45:1 dark, shipped in 373.1) share the recipe; the dropzone
+         is the clearest case, since its own comment says the border *"is what
+         makes the box droppable at all"*.
+       - The strongest case it is NOT a defect was looked for and is not on
+         record: nothing in ROADMAP, ROADMAP-archive, DESIGN.md, `.roundtable/`,
+         `button.css` or `/concepts/accessibility` argues that a button's label
+         carries identification in place of its border. `border-strong` has
+         zero hits in ROADMAP.md, DESIGN.md and all of `.roundtable/`.
+       - **Accept — write the property, not the verdict.** Every
+         `--bo-color-border-strong` site that paints an INTERACTIVE control's
+         boundary either clears 3:1 against the surface it sits on as
+         `check:contrast` computes it, or records a one-line reason it should
+         not. Finding some of them fine is a satisfying outcome. Do the
+         dropzone first. Before adding the `PAIRS` rows, **measure the base
+         rate** — no brand preset overrides the token (0 hits across all six),
+         so a row goes red identically in 14 places (2 base + 12 brand×theme),
+         which is honest rather than noisy, but it is a token re-value and
+         therefore an owner call. Separating the decorative uses (kbd, filter
+         chips, blockquote, data-table outline) onto their own token is one way
+         out; `border-control` for everything flattens the input/button
+         hierarchy `color.css:29-31` deliberately built.
+
+5. [ ] **374.5 — `./css` resolves to the UNMINIFIED bundle, so this repo's
+       write-the-reasoning-inline doctrine is payload a consumer downloads.**
+       Surfaced by 374.1: the seam fix's comments broke `check:size`.
+       `css/index.css` measured 93.69 kB gz at HEAD, 97.24 with the tree's
+       then-uncommitted work — **61 bytes** under a 97.3 budget — and 97.71
+       with the fix's explanation. The budget row was re-based to 107.5 on the
+       table's own stated convention (current + ~10%) with the reason recorded
+       in `check-size.mjs`, rather than trimming a fix's rationale to fit; this
+       item holds the question that raise defers.
+       - Note the asymmetry: `index.min.css` is 15.15/16.7 kB and a comment
+         cannot move it, and the minified figure is what `stamp-readme`
+         publishes. Only the default export pays.
+       - **Accept:** either `./css` resolves to the minified artifact and
+         `./css/src` (or similar) keeps the annotated one, or the budget's
+         header states outright that this row is a comment budget as well as a
+         code one and what that is worth. Deciding it is fine as it stands, with
+         the reason written down, closes this.
+
        control): a zone wrapping a **disabled** input takes 3 files and fires
        `change` (native: 0 files, 0 events); 3 files on a **non-`multiple`**
        input are all assigned and `FormData` carries three entries (native

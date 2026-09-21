@@ -56,13 +56,22 @@
      keeps tab order and visual order the same thing by construction.
      `initMoneyField()` needs no change — it resolves its pair with closest()
      plus querySelector(), which never depended on order. */
-  .bo-money > :first-child {
+  /* `of :not([type="hidden"])` is load-bearing. `initGroupedNumber()` inserts
+     a hidden input AFTER the visible one (`input.after`, not an append to the
+     container), which here lands it last, so a plain `:last-child` rule hits a
+     0x0 field and the amount kept all four corners at 6px. Only the rendered
+     DOM matters, not the authored markup.
+
+     A blocklist suffices only while every child is a welded part — true of
+     all 12 rendered instances, and NOT true of quantity, which is why that
+     file keys off adjacency instead (roadmap 374.3). */
+  .bo-money > :nth-child(1 of :not([type="hidden"])) {
     border-start-end-radius: 0;
     border-end-end-radius: 0;
     border-inline-end: none;
   }
 
-  .bo-money > :last-child {
+  .bo-money > :nth-last-child(1 of :not([type="hidden"])) {
     border-start-start-radius: 0;
     border-end-start-radius: 0;
   }
