@@ -320,67 +320,6 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
-## Slice 373 — Owner direction 2026-09-19: a master prompt naming five workstreams (docs IA, app-shell contract, dropzone / reorder / dock / launcher, layout recipes); Phase 0 inventory finds **one capability existing-incomplete with two HIGH behaviour defects, two refused on record (dock, drag), and every other ask answered by composition** — 24 of 26 gap claims reproduce under an adversarial pass, and the baseline tree is green on every gate (2026-09-19)
-
-**Triaged from chat (Step 1): the owner pasted a "master prompt" for a UI
-framework architect agent** — graph-driven planning, bounded loops, five
-workstreams (A docs simplification, B app-shell contract, C1-C4 dropzone /
-reorder-transfer / app dock / fullscreen launcher, D six structural layout
-recipes for AI composition). Its scope boundary matches this repo's (UI only,
-no business modules, no React, no mandatory HTMX, the browser floor as is). Its
-process asks — a dependency/evidence graph, an execution state machine, ≤3
-slices per invocation, ≤3 repair attempts — are **already this file, `LOOPS.md`
-and graphify's `graph.db`**; nothing new is adopted, per the prompt's own
-"extend existing mechanisms" line.
-
-**Phase 0 ran as one workflow of nine agents** (seven read-only mappers, one
-baseline runner, one skeptic instructed to REFUTE every "missing" and every
-"defect" claim by re-running the evidence). Baseline at `ce17d9b4`, Node 26.8 /
-Chrome 153 (CI pins Node 22): `build`, `test` (29 files / 165), `lint:css`
-(74 files), `check:size`, `docs:build` (all chained gates), `check:claims` (179
-live), `check:selftests` (22 heuristic / 183 cases, 34 exact), `check:markup`,
-`test:axe` (128 × 2, 0 violations), `check:layout` — **all pass, no
-pre-existing failure, no environment blocker, tree clean after.** Skeptic: **24
-confirmed, 2 partially true, 0 refuted** of 26 claims; every confirmation is a
-re-execution, not a re-read.
-
-### Classification (source-backed; each mapper's evidence is in the workflow journal, the load-bearing ones are re-stated beside their item)
-
-| Ask | Class | Existing surface | Verdict |
-|---|---|---|---|
-| C1 dropzone | **existing-incomplete** | `file-upload.css`, `file-dropzone.ts` (stable set), `check-claims.mjs:1938`, po-app | **extend** — 373.1 |
-| C2 reorder / transfer / basket | **deliberately-excluded** | button floor ships: `ordered-list__actions`, kanban *Move to…* menu, bulk-actions, tag-input events | **reuse**; drag REFUSED ×4 on record (100.1, 110.7, 132.5, 317) — 373.4 fixes the two focus leaks on that floor |
-| C3 app dock, hide-on-upward-scroll | **deliberately-excluded → owner call** | none; 0 hits for dock / scroll-direction in source | 123.2 refused the bottom-nav tier, Slice 154 refused direction-driven chrome motion — **373.6, OWNER CALL** |
-| C4 fullscreen launcher + search | **existing-incomplete** | `/patterns/app-launch`, `/patterns/command-bar`, `bo-dialog` + `initDialogs` (focus restore already claimed), `bo-widget-grid` | **compose** — 373.5, zero core source |
-| B app-shell contract | **existing-incomplete** | `sidebar-layout.css`, `/concepts/layouts` (Slice 156: one shell, not three), z-index tokens, `check:sticky-layers` | **extend the page**; 2 HIGH CSS leaks — 373.3 |
-| D six layout recipes | **existing** | every intent resolves to a gated pattern page; `/concepts/which-pattern` is generated from `patterns.json` | **reuse** — 373.7 repairs the router; 112.4 stays blocked |
-| A docs IA | **existing-incomplete** | 17 sidebar groups, 2-level cap (docs-IA comparison 2026-08-16); Slice 112 REFUSED the six-section reorg | 4 stale claims — 373.2; regroup is **373.8, OWNER CALL** |
-
-### The 8-task lookup baseline (Workstream A's number to beat — "less or equal reading, no loss of correctness")
-
-Instrument: whitespace tokens of tag-stripped `<main>` content on the built
-site, docs chrome removed, code samples included; "words" = words passed before
-the answer first appears, walking links from `/` without search. Re-run it
-before quoting a change.
-
-| # | Task | Path | Words | Answer |
-|---|---|---|---|---|
-| T1 | make a table dense | `/` → `/concepts/density` | ~479 | exists (`data-density="compact"`) |
-| T2 | pattern for an approval screen | `/` → `/patterns/` → `/patterns/approval` | ~1,354 | exists |
-| T3 | wire the dropzone | `/components/` → `/components/file-upload` | ~1,077 | exists |
-| T4 | the shell's scroll container | `/concepts/layouts` | ~1,142 | **partial** — `__main` scrolls is stated; that the document does NOT is nowhere |
-| T5 | is there a dock / launcher | `/patterns/` → `/patterns/app-launch` | ~277 | launcher exists; **dock absent and no page says so** |
-| T6 | HTMX on a 409 | `/getting-started/htmx` | ~1,337 | exists, late in the page |
-| T7 | event fired when a row edit saves | `/reference/events` | ~262 | exists (`bo:row-save`) |
-| T8 | is there a data grid | `/getting-started/scope` | ~494 | **partial** — never says "grid"; full answer only on `/getting-started/ai-assistants` |
-
-### Items
-
-1. [x] **373.1 — the dropzone forwards no more than the native input it
-       forwards to would accept, its states are two-channel, and the page says
-       only what a browser does.** Measured with TRUSTED drops (CDP
-       `Input.dispatchDragEvent` with real file paths, headless Chrome 153,
-       source transpiled in memory; a plain native input in the same run as
 ## Slice 374 — the joined-control seam was spelled against the AUTHORED markup, not the RENDERED DOM: three trailing children defeat `:last-child`, the framework's own canonical quantity markup is one of them, and the defect shipped on **3 pages / 5 rendered views** while a gate that visits those exact elements measured only their focus rings (2026-09-22)
 
 **Found by the owner, from a screenshot.** The `+` stepper on
@@ -602,6 +541,171 @@ looks for overflow). Extended in 374.2.
          code one and what that is worth. Deciding it is fine as it stands, with
          the reason written down, closes this.
 
+6. [x] **374.6 — the published conformance report overclaims in four rows, and
+       the rows that are wrong are exactly the ones that interpolate nothing.**
+       Audited all 21 criteria in `extract-acr.mjs` against the gate each one
+       names. Four overclaim, one is an unbacked Supports, and the rest verify
+       true — so it is a class, not a slip.
+       - **The structural cause, which is the finding.** Where a remark pulls a
+         live number or calls `cite()`, the build fails on it and it is right.
+         Where it is a bare string literal — 1.4.11, 1.4.1's "automated proof",
+         4.1.2's `aria-sort`, 3.2.1 — nothing can fail, and three of those four
+         were wrong. The file's own header says the evidence is "pulled live …
+         so the report can't quietly go stale"; that doctrine was applied in
+         the places it was applied, and absent in the places it was not. Every
+         row corrected here now interpolates.
+       - **The forced-colors count was 23 and the truth is 18.** A substring
+         scan, `.includes('forced-colors')`, counted five components that match
+         only in a COMMENT — and `date/date.css` is the inversion that gives it
+         away: the sentence it matched on says the block has "no forced-colors
+         rule". The deleted comment named the exact hazard ("the @media block
+         is easy to lose in a string scan") and then used a string scan anyway.
+         `extract-api.mjs` already PARSES this correctly, so `/concepts/
+         accessibility` published 18 while `/reference/acr` published 23 — two
+         pages, one fact, different answers. Fixed by deleting the second
+         mechanism, not by patching its regex.
+       - **The reconciliation that replaced it failed its own red-proof first,
+         and that is worth recording.** The first version compared the list
+         against `api.components[*].forcedColors` — the thing it is built
+         from — so it agreed with itself by construction and a flipped flag
+         produced a PASS. Re-derived from the stylesheets instead. Red-proved
+         three ways: a wrong flag in `api.json` → red; a real `@media` rule in
+         a stylesheet the mirror has not seen → red; a comment mentioning
+         forced-colors → green, which is the negative control proving it is not
+         the old substring bug.
+       - **1.4.11 and 2.4.7 → `Partially Supports`**, a recognised VPAT 2.x
+         level this file had never used. `Conditional-on-adopter` would have
+         blamed the adopter for a gap in our own token values and our own gate;
+         `Not Evaluated` would have discarded evidence that does run every
+         build. Both rows now name the ungated part and say what returns them
+         to Supports. 2.4.7 carries a LIVE miss, not just a structural one: the
+         ring reads 2.99:1 on bg-muted under brand-forest light, where
+         `.bo-segmented` draws it.
+       - **4.1.2 named `aria-sort` as evidence while a green gate asserts the
+         opposite** — `check-claims.mjs` presses Enter on the sort header and
+         confirms the attribute does not move. It also quoted the behaviour
+         TOTAL as if it were the ARIA-syncing subset (26 for 10). Now derived
+         from source, with the denominator reconciled against
+         `behaviors.json` — the first run of that scan drew from all 31 modules
+         under `src/js` rather than the 26 behaviours and pulled in
+         `reveal.ts`, which would have put two populations in one fraction, in
+         the fix for a row being corrected for exactly that.
+       - **1.4.3 understated itself sevenfold** — "both themes plus the brand
+         preset" counted `contrast.themes` only (74) while 444 brand readings
+         were computed and quoted by nothing, and "the brand preset" was
+         singular about six. Both now derived, with the 4.5/3.0 split spelled
+         so "74/74 pass AA" cannot be read as 74 readings at 4.5.
+       - **3.2.1 → `Not Evaluated`.** It reads true on inspection but names no
+         gate, and this file's own methodology line says a row with no
+         automated evidence is Not Evaluated, never inferred as Supports.
+         Applied to the row rather than exempted.
+       - **`acr.astro`'s summary was a mirror that could under-report.** It
+         hardcoded three verdict badges, so a fourth rendered in the table and
+         was invisible in the count above it, and an unmapped verdict
+         interpolated to `class="bo-badge undefined"` — silently unstyled. Now
+         derived from the rows, with a build-time throw on either failure.
+       - **Accept — met:** every corrected row's numbers are interpolated from
+         `dist/*.json` or derived from source, so the build fails when they
+         drift; verified live at 1440 and 390 in both themes (21 rows, summary
+         accounts for all 21, no unstyled badge).
+
+7. [ ] **374.7 — `check:contrast`'s coverage guard cannot see an edge, and the
+       base rate says a gate would earn its keep.** The mechanism is 374.4's:
+       `check-contrast.mjs` binds `fg` only on `d.prop === 'color'`, so a
+       `border-color` declaration matches none of its branches and the three
+       `border-control` rows are hand-maintained with nothing noticing a fourth.
+       - **Base rate, measured before proposing the gate (94.11's rule).** Of
+         the 78 token-resolving boundary declarations in the component tree,
+         **7 of 36 INTERACTIVE ones are below 3:1 (19%)** — not ceremony, not a
+         blanket verdict. The classification is load-bearing rather than
+         decoration: container is 21 of 22 below and decorative 16 of 20, so
+         the same gate written WITHOUT the interactive filter would be 44 of 78
+         — an opinion about `--bo-color-border-default` delivered 44 times.
+       - **Four of the seven are not on record anywhere** and are this item's
+         actual content: `.bo-segmented`'s track at **1.13:1** (the worst in
+         the interactive set), `.bo-chip` at 1.34, the dropzone's
+         `[data-dragover]` accent at **2.26 in dark** across all six presets,
+         and `.bo-data-table tbody tr:hover` at 1.34 — that last one being the
+         strongest case, because `bg-hover` and `bg-muted` are the same value,
+         so on a striped row that outline is the ONLY hover channel there is.
+       - **A gate cannot tell an interactive boundary from a decorative one.**
+         `--bo-color-border-strong` at 1.34:1 is `.bo-kbd`'s keycap edge and
+         `.bo-btn--secondary`'s control boundary — same token, same ratio,
+         opposite verdicts. So the enforceable property is a SHAPE, exactly
+         `check:wrong-choice`'s bargain: every edge pairing is in `PAIRS` at
+         3:1, or in an exemption map with a reason NAMING the other channel
+         that identifies the control, or in a TODO list as debt. What the
+         reason says stays a human call.
+       - **Accept:** the guard fails on an edge pairing that is in neither
+         list — red-proved by injection, with the injection confirmed in the
+         parsed declaration list the guard reads, not in the file text. Expect
+         the `@exact` tag to move to `@heuristic` (the extension recognises a
+         boundary from a property NAME, which is a recognition and can be
+         fooled); if it does, `readme-facts` must agree with what
+         `check:selftests` reports in the same commit, or `stamp-readme
+         --check` fails the core build.
+
+## Slice 373 — Owner direction 2026-09-19: a master prompt naming five workstreams (docs IA, app-shell contract, dropzone / reorder / dock / launcher, layout recipes); Phase 0 inventory finds **one capability existing-incomplete with two HIGH behaviour defects, two refused on record (dock, drag), and every other ask answered by composition** — 24 of 26 gap claims reproduce under an adversarial pass, and the baseline tree is green on every gate (2026-09-19)
+
+**Triaged from chat (Step 1): the owner pasted a "master prompt" for a UI
+framework architect agent** — graph-driven planning, bounded loops, five
+workstreams (A docs simplification, B app-shell contract, C1-C4 dropzone /
+reorder-transfer / app dock / fullscreen launcher, D six structural layout
+recipes for AI composition). Its scope boundary matches this repo's (UI only,
+no business modules, no React, no mandatory HTMX, the browser floor as is). Its
+process asks — a dependency/evidence graph, an execution state machine, ≤3
+slices per invocation, ≤3 repair attempts — are **already this file, `LOOPS.md`
+and graphify's `graph.db`**; nothing new is adopted, per the prompt's own
+"extend existing mechanisms" line.
+
+**Phase 0 ran as one workflow of nine agents** (seven read-only mappers, one
+baseline runner, one skeptic instructed to REFUTE every "missing" and every
+"defect" claim by re-running the evidence). Baseline at `ce17d9b4`, Node 26.8 /
+Chrome 153 (CI pins Node 22): `build`, `test` (29 files / 165), `lint:css`
+(74 files), `check:size`, `docs:build` (all chained gates), `check:claims` (179
+live), `check:selftests` (22 heuristic / 183 cases, 34 exact), `check:markup`,
+`test:axe` (128 × 2, 0 violations), `check:layout` — **all pass, no
+pre-existing failure, no environment blocker, tree clean after.** Skeptic: **24
+confirmed, 2 partially true, 0 refuted** of 26 claims; every confirmation is a
+re-execution, not a re-read.
+
+### Classification (source-backed; each mapper's evidence is in the workflow journal, the load-bearing ones are re-stated beside their item)
+
+| Ask | Class | Existing surface | Verdict |
+|---|---|---|---|
+| C1 dropzone | **existing-incomplete** | `file-upload.css`, `file-dropzone.ts` (stable set), `check-claims.mjs:1938`, po-app | **extend** — 373.1 |
+| C2 reorder / transfer / basket | **deliberately-excluded** | button floor ships: `ordered-list__actions`, kanban *Move to…* menu, bulk-actions, tag-input events | **reuse**; drag REFUSED ×4 on record (100.1, 110.7, 132.5, 317) — 373.4 fixes the two focus leaks on that floor |
+| C3 app dock, hide-on-upward-scroll | **deliberately-excluded → owner call** | none; 0 hits for dock / scroll-direction in source | 123.2 refused the bottom-nav tier, Slice 154 refused direction-driven chrome motion — **373.6, OWNER CALL** |
+| C4 fullscreen launcher + search | **existing-incomplete** | `/patterns/app-launch`, `/patterns/command-bar`, `bo-dialog` + `initDialogs` (focus restore already claimed), `bo-widget-grid` | **compose** — 373.5, zero core source |
+| B app-shell contract | **existing-incomplete** | `sidebar-layout.css`, `/concepts/layouts` (Slice 156: one shell, not three), z-index tokens, `check:sticky-layers` | **extend the page**; 2 HIGH CSS leaks — 373.3 |
+| D six layout recipes | **existing** | every intent resolves to a gated pattern page; `/concepts/which-pattern` is generated from `patterns.json` | **reuse** — 373.7 repairs the router; 112.4 stays blocked |
+| A docs IA | **existing-incomplete** | 17 sidebar groups, 2-level cap (docs-IA comparison 2026-08-16); Slice 112 REFUSED the six-section reorg | 4 stale claims — 373.2; regroup is **373.8, OWNER CALL** |
+
+### The 8-task lookup baseline (Workstream A's number to beat — "less or equal reading, no loss of correctness")
+
+Instrument: whitespace tokens of tag-stripped `<main>` content on the built
+site, docs chrome removed, code samples included; "words" = words passed before
+the answer first appears, walking links from `/` without search. Re-run it
+before quoting a change.
+
+| # | Task | Path | Words | Answer |
+|---|---|---|---|---|
+| T1 | make a table dense | `/` → `/concepts/density` | ~479 | exists (`data-density="compact"`) |
+| T2 | pattern for an approval screen | `/` → `/patterns/` → `/patterns/approval` | ~1,354 | exists |
+| T3 | wire the dropzone | `/components/` → `/components/file-upload` | ~1,077 | exists |
+| T4 | the shell's scroll container | `/concepts/layouts` | ~1,142 | **partial** — `__main` scrolls is stated; that the document does NOT is nowhere |
+| T5 | is there a dock / launcher | `/patterns/` → `/patterns/app-launch` | ~277 | launcher exists; **dock absent and no page says so** |
+| T6 | HTMX on a 409 | `/getting-started/htmx` | ~1,337 | exists, late in the page |
+| T7 | event fired when a row edit saves | `/reference/events` | ~262 | exists (`bo:row-save`) |
+| T8 | is there a data grid | `/getting-started/scope` | ~494 | **partial** — never says "grid"; full answer only on `/getting-started/ai-assistants` |
+
+### Items
+
+1. [x] **373.1 — the dropzone forwards no more than the native input it
+       forwards to would accept, its states are two-channel, and the page says
+       only what a browser does.** Measured with TRUSTED drops (CDP
+       `Input.dispatchDragEvent` with real file paths, headless Chrome 153,
+       source transpiled in memory; a plain native input in the same run as
        control): a zone wrapping a **disabled** input takes 3 files and fires
        `change` (native: 0 files, 0 events); 3 files on a **non-`multiple`**
        input are all assigned and `FormData` carries three entries (native

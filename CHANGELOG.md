@@ -36,6 +36,32 @@ pin.
 
 ### Fixed
 
+- **The generated accessibility conformance report (`dist/acr.json`,
+  `/reference/acr`) overclaimed in four rows.** An audit of all 21 criteria
+  against the gate each one names found four overclaims and one unbacked
+  `Supports`, sharing one cause: the remarks that were wrong are exactly the
+  ones that interpolated nothing, so no build could fail on them. The
+  forced-colors component count was **23 and is 18** — a substring scan counted
+  five components matching only in a comment, one of them a comment saying the
+  file has *no* such rule, while `/concepts/accessibility` published the
+  correctly-parsed 18 from the same build. 1.4.11 Non-text Contrast and 2.4.7
+  Focus Visible move from `Supports` to **`Partially Supports`** and now name
+  what is not gated: `--bo-color-border-strong` and `--bo-color-border-default`
+  have no contrast row, and the coverage guard cannot see a `border-color`
+  declaration at all. 4.1.2 cited `aria-sort` as evidence although a CI gate
+  asserts the sort header is inert without app code, and quoted the behaviour
+  total (26) where the ARIA-syncing subset is 10. 1.4.3 counted 74 base-theme
+  pairs while 444 brand readings went unquoted. 3.2.1 moves to `Not Evaluated`,
+  which is what this file's own methodology prescribes for a row with no gate.
+
+  **Compatibility:** `acr.json` is a published export, so a consumer reading it
+  sees two verdicts change from `Supports` to `Partially Supports`, one to `Not
+  Evaluated`, `forcedColorsComponents` shrink from 23 entries to 18, and the
+  corrected remarks. No key was added or removed. `Partially Supports` is a new
+  value in the verdict vocabulary — code that switches on verdict strings
+  should handle it. The verdicts moved because the claims were wrong, not
+  because the framework's accessibility changed.
+
 - **A joined Money or Quantity field no longer butts a rounded corner against
   a square one, and a Quantity's segments share one edge colour.** Both
   components spelled the joint against the AUTHORED markup — `:first-child` /

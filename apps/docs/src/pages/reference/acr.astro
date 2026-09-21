@@ -6,12 +6,24 @@ import api from '@busy-office/ui/api';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const componentCount = Object.keys(api.components).length;
 
-const verdictBadge = {
+const verdictBadge: Record<string, string> = {
   Supports: 'bo-badge--success',
+  'Partially Supports': 'bo-badge--warning',
   'Conditional-on-adopter': 'bo-badge--warning',
   'Not Evaluated': 'bo-badge--type',
 };
 const counts = acr.criteria.reduce((c, r) => ((c[r.verdict] = (c[r.verdict] ?? 0) + 1), c), {} as Record<string, number>);
+/* An unmapped verdict used to interpolate to `class="bo-badge undefined"` —
+   silently unstyled, and the Summary below listed three hardcoded verdicts, so
+   a fourth would have rendered in the table and been INVISIBLE in the count
+   that sits above it. A mirror that under-reports is the failure this repo has
+   already paid for, so the summary is derived from the rows and an unknown
+   verdict fails the build by name rather than rendering grey. */
+const unmapped = [...new Set(acr.criteria.map((c: any) => c.verdict))].filter((v) => !verdictBadge[v as string]);
+if (unmapped.length) throw new Error(`acr.astro: verdict(s) with no badge mapping: ${unmapped.join(', ')}`);
+const summary = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+const totalRows = acr.criteria.length;
+if (summary.reduce((n, [, v]) => n + v, 0) !== totalRows) throw new Error('acr.astro: summary does not account for every criterion row');
 ---
 <Gallery title="Accessibility Conformance Report" description="An accessibility conformance report in VPAT shape, generated from the same facts the build gates already produce rather than typed by hand.">
   <p class="demo-note">
@@ -27,9 +39,12 @@ const counts = acr.criteria.reduce((c, r) => ((c[r.verdict] = (c[r.verdict] ?? 0
   <section class="demo">
     <h2>Summary</h2>
     <p>
-      <span class="bo-badge bo-badge--success">{counts.Supports ?? 0} Supports</span>{' '}
-      <span class="bo-badge bo-badge--warning">{counts['Conditional-on-adopter'] ?? 0} Conditional-on-adopter</span>{' '}
-      <span class="bo-badge bo-badge--type">{counts['Not Evaluated'] ?? 0} Not Evaluated</span>
+      {summary.map(([verdict, n]) => (
+        <>
+          <span class={`bo-badge ${verdictBadge[verdict]}`}>{n} {verdict}</span>{' '}
+        </>
+      ))}
+      <span class="bo-badge">{totalRows} criteria</span>
     </p>
     <p class="bo-u-text-muted">{acr.methodology}</p>
   </section>
