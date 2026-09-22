@@ -423,6 +423,27 @@ untracked or uncommitted, so the removal was a working-tree change.
          own comment are re-measured and updated to whatever the change actually
          produces — not predicted in advance.
 
+7. [ ] **375.7 — three "Not when" cells on the decision page are
+       content-free, and the page's own generated prose overclaims that they
+       are not.** Found while verifying 373.2. `/concepts/which-pattern/`
+       renders the bare words "Not for" — seven characters, no object — for
+       Editable grid, RF task menu and RF task queue, while the generated
+       sentence above the table says "39 state when not to use them".
+       - **Cause is upstream and pre-existing**, not introduced by 373.2:
+         `gen-patterns.mjs`'s `WRONG_CHOICE_RE` captures only the text INSIDE
+         `<strong>`, and those three pages write `<strong>Not for</strong>`
+         with the object after the tag. `check:wrong-choice` cannot see it —
+         the clause is present, it is just empty of content, which is exactly
+         the shape CLAUDE.md's 94.11 note describes: a gate can enforce that a
+         clause EXISTS and cannot judge whether it says anything.
+       - **Accept — write the property, not the fix.** Either the extraction
+         takes the whole clause (so the three cells carry an object), or those
+         three pages move the object inside the `<strong>`, or the generated
+         sentence stops counting cells it cannot vouch for. Whichever lands,
+         the count in the prose must be derived from the same field the cells
+         render, so the two cannot disagree again. A cell whose clause is
+         under ~12 characters is the cheap detector; measure how many exist
+         before deciding it is worth a gate.
 
 ## Slice 374 — the joined-control seam was spelled against the AUTHORED markup, not the RENDERED DOM: three trailing children defeat `:last-child`, the framework's own canonical quantity markup is one of them, and the defect shipped on **3 pages / 5 rendered views** while a gate that visits those exact elements measured only their focus rings (2026-09-22)
 
@@ -970,7 +991,7 @@ before quoting a change.
          what found the wrapped-row defect only because a screenshot was
          looked at.
 
-2. [ ] **373.2 — four shipped-status claims are false on the built site, and
+2. [x] **373.2 — four shipped-status claims are false on the built site, and
        the decision page blanks 5 of 39 "Not when" cells it has structured data
        for.** `installation.astro:173` says the RF lower-floor profile is "not
        shipped yet" — `build:rf-essentials` + `check:rf-floor` run on every core
