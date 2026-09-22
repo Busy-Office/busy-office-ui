@@ -84,6 +84,23 @@ twice is the signature of a directory that has outgrown retrieval, so it is
 measured on every run rather than asserted. It read 3 when written, all
 deliberate follow-ups.
 
+## Jev — typed second opinion at two points (rubrics: `.roundtable/jev-rubrics.md`)
+
+Jev (`jev-ai.pro`, MCP tools `jev_evaluate` / `jev_route`) answers typed
+`noul`/`choice`/`score` questions with probabilities. Use it at exactly two
+points: **deciding between drafted alternatives**, and **reviewing whether
+evidence supports a completion claim**. Batch questions that share one evidence
+state into one call. Do not call it per action, per file, or for anything the
+code can answer — read the code instead. It is a different service from `kev`;
+never substitute one for the other.
+
+**It is advisory and it is not a gate.** PASS needs the required checks to pass
+AND the criteria to be supported; a failed check is FAIL whatever Jev says; and
+a Jev outage is **UNVERIFIED, never PASS**. `noul` is a probability, not a
+confidence, and a `score` is a weighted mean over levels — not a confidence
+either. Thresholds (≥0.85 supports, ≤0.35 does not, between = unverified) are
+**provisional at n=5**; the rubric file carries the validation set to re-run.
+
 ## Quality bar (every change meets it)
 
 - Verify **live** before committing — the docs run in a Podman container on `:8081`

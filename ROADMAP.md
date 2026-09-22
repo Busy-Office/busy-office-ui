@@ -622,7 +622,17 @@ looks for overflow). Extended in 374.2.
          rate** — no brand preset overrides the token (0 hits across all six),
          so a row goes red identically in 14 places (2 base + 12 brand×theme),
          which is honest rather than noisy, but it is a token re-value and
-         therefore an owner call. Separating the decorative uses (kbd, filter
+         therefore an owner call. **Put to Jev under decision rubric v1
+         (2026-09-22) and it escalated**: split-the-token 0.61 / repoint-the-three
+         -sites 0.32 at confidence **0.54**, under the 0.8 route threshold, so the
+         choice stays with the owner — where this item already placed it. One
+         answer was usable: documenting that the label identifies the button and
+         exempting it would CONFLICT with the accepted decisions (0.90), because
+         `color.css` reserves the 3:1 token for "when the border is the only
+         affordance" and nothing in the repo argues the label substitutes. So
+         refusal-by-documentation is off the table; what remains is which token
+         shape, and that is a visual-weight preference.
+         Separating the decorative uses (kbd, filter
          chips, blockquote, data-table outline) onto their own token is one way
          out; `border-control` for everything flattens the input/button
          hierarchy `color.css:29-31` deliberately built.

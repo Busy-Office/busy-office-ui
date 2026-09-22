@@ -1,0 +1,158 @@
+# Jev rubrics — v1 (2026-09-22)
+
+Jev is a **typed-judgement service**, not a text model: it answers `noul` / `choice`
+/ `score` questions with probabilities. It is used here at two decision points and
+one optional third. **Its output is advisory. It cannot pass a failing check.**
+
+Version this file, not the service: there is no saved-judge API on
+`/v1/systemone`, so the question definitions below ARE the judge. Change the
+version when a rubric's wording changes, and re-run the validation set — a
+threshold is only meaningful for the wording it was measured on.
+
+## What is actually installed (verified 2026-09-22)
+
+- MCP server `jev`, user-scoped stdio, `~/Projects/jev-mcp/.venv/bin/jev-mcp`.
+- Targets **`https://jev-ai.pro/api`**, `POST /v1/systemone`. Confirmed in
+  `client.py` (`DEFAULT_BASE`), not assumed.
+- Tools: `jev_evaluate` (batched, any mix of types) and `jev_route` (one choice
+  question plus a confidence threshold). There are no others.
+- Credentials: `JEV_AI_API_KEY`, from the environment or
+  `~/Projects/jev-mcp/.env`, which is gitignored there. **Nothing in this repo
+  references or stores it**, and nothing here should.
+- **`kev` is a different service** (local, `127.0.0.1:8008`). Never substitute one
+  for the other; they are separate MCP servers with separate tools.
+
+### Model and effort — there is only one tier
+
+The request body is exactly `{state, model, questions}`. **No `effort`,
+`reasoning` or `temperature` parameter exists**, and `jev-latest` is the only
+alias, resolving at time of writing to **`jev-1.13.0`**. So there is nothing to
+tune on the Jev side, and any "use a stronger model / higher effort" step means
+escalating to a **Claude** model, not to a different Jev.
+
+## Reading the output — the three types do not mean the same thing
+
+| type | field | meaning |
+|---|---|---|
+| `noul` | `noul: 0.74` | **probability that the answer is true.** There is NO confidence field. |
+| `choice` | `choice` + `confidence` + `probabilities` | confidence is the winning option's probability |
+| `score` | `score: 1.13` + **separate** `confidence` + per-level `probabilities` | **`score` is a probability-weighted mean over the level indices — it is NOT a confidence.** A 1.13 on a 0-3 rubric means "between level 1 and 2", not "13% sure". |
+
+Quote the field you used. A `score` and a `confidence` in the same answer are
+two different numbers and mixing them is a reporting defect.
+
+## Thresholds — PROVISIONAL, n=5, advisory only
+
+Measured 2026-09-22 against five cases from this repo whose true answers were
+already established by measurement (see "Validation set" below). All five were
+classified correctly.
+
+| band | reading | what to do |
+|---|---|---|
+| `noul >= 0.85` | evidence supports | proceed; Jev agrees with the checks |
+| `noul <= 0.35` | evidence does not support | do not claim completion |
+| `0.35 < noul < 0.85` | **UNVERIFIED** | gather the missing evidence, or escalate |
+
+For `choice`, use `jev_route` with `confidence_threshold: 0.8` and treat
+`escalate: true` as "decide it yourself". For `score`, use the **level
+probabilities**, not the mean, and treat a top-level probability below 0.6 as
+unverified.
+
+**Why these numbers and not tidier ones.** The observed separation was
+supported ≥ 0.92 and unsupported ≤ 0.20, so any cut in between separates the
+validation set perfectly; 0.85/0.35 leaves margin on both sides rather than
+fitting the sample. n=5 is too small to call this calibrated — it is enough to
+show the rubric discriminates and not enough to trust a borderline number. **Do
+not tighten these without re-running the set with more cases**, and do not let a
+band decide anything a check can decide.
+
+## Rubric 1 — DECISION support
+
+Use when choosing between **explicit, already-drafted alternatives**. Not for
+generating options, and not for questions the code can answer.
+
+- State: the alternatives, the requirement each must meet, and the relevant
+  **accepted project decisions** (`ROADMAP.md` items, `DESIGN.md`, CLAUDE.md
+  rules). Consult those first — if an accepted decision already settles it,
+  there is nothing to ask.
+- Type: `choice`, one option per alternative, **plus these two literal options**:
+  - `insufficient_evidence` — "the supplied evidence does not distinguish them"
+  - `ask_user` — "this turns on a user preference, not a technical fact"
+- If the winner is `ask_user`, ask. If `insufficient_evidence`, go measure.
+- **If Jev's answer conflicts with an accepted project decision, the accepted
+  decision wins** unless you record why it changes, in the roadmap item.
+
+## Rubric 2 — COMPLETION evidence review
+
+Use once per completion claim, after the checks have run. **Never as a
+substitute for them.**
+
+> For each case, decide whether the supplied evidence SUPPORTS the completion
+> claim. Supported means: the claim is about a specific artifact, and the
+> evidence is a measurement, gate result, or reproduction of that artifact —
+> not an assertion, a plan, or a restatement. Absent or purely narrative
+> evidence is NOT support.
+
+`noul` per claim, criteria `{true: "Evidence is a measurement, gate result or
+reproduction of the specific artifact.", false: "Evidence is absent, narrative,
+or does not bear on the claim."}`. **Batch every claim that shares one evidence
+state into a single call.**
+
+### The gate is binding and Jev is not part of it
+
+| verdict | condition |
+|---|---|
+| **PASS** | required checks passed **and** criteria are supported |
+| **FAIL** | a required check or criterion failed |
+| **UNVERIFIED** | necessary evidence is missing |
+
+- A failed check is **FAIL**. A high `noul` does not lift it, and neither does a
+  stronger model's opinion.
+- **A Jev outage is UNVERIFIED, never PASS.** Both failure modes raise rather
+  than returning a default (connection error; `401 Unauthorized`), so a missing
+  answer is visible — report it as UNVERIFIED and say the review did not run.
+- Jev adds a second opinion on whether the evidence bears on the claim. That is
+  all it adds.
+
+## Rubric 3 — DISPATCH (optional, off by default)
+
+Only when routing is genuinely ambiguous among **predefined** routes and the
+extra call is cheaper than deciding. `jev_route`, `confidence_threshold: 0.8`,
+escalate on `true`. Not yet enabled: it needs a small comparison showing a real
+reduction in time, cost or rework before it earns a place in the loop. Until
+then, the dispatcher rules in `LOOPS.md` decide.
+
+## When NOT to call Jev
+
+- A fact the code can settle → read the code or run the check.
+- A user preference → ask the user.
+- The same question with unchanged evidence and criteria → reuse the answer.
+- Per-action or per-file checks → no. Two decision points, batched.
+
+## Escalation — at most two rounds
+
+Jev has one tier, so escalation means a Claude model:
+
+1. Simple / mechanical → fast model, low effort.
+2. Ordinary technical decision → balanced model, medium effort.
+3. Complex or consequential, or conflicting evidence → stronger model, high
+   effort.
+
+**Do not jump to the strongest model merely because Jev was uncertain** — an
+uncertain Jev usually means thin evidence, and the fix is to measure, not to
+spend more. After two rounds, stop and state the unresolved issue.
+
+## Validation set (re-run this when a rubric changes)
+
+Five cases, ground truth established by measurement in this repo:
+
+| case | truth | v1 result |
+|---|---|---|
+| Quantity seam fix — measured 6/6/6/6 → 0/6/6/0 on 3 pages, gate red-proved | supported | 0.96 ✓ |
+| forced-colors count 18 — regex, comment-stripping and `api.json` agree | supported | 0.92 ✓ |
+| "borders are covered by the same contrast gate" — PAIRS has zero rows for the token | not supported | 0.05 ✓ |
+| "the gate works" — evidence is "it was added and the build passed" | not supported | 0.20 ✓ |
+| "the refactor made it faster" — evidence is "removed a loop that looked redundant" | not supported | 0.03 ✓ |
+
+5/5. The fourth is the useful one: a bare "build passed" is the most plausible
+wrong answer, and it still landed below the band.
