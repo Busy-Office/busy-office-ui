@@ -23,11 +23,16 @@ COPY DESIGN.md ./
 # omitted the screen kit would look fine and be wrong.
 COPY examples/erp-suite ./examples/erp-suite
 RUN npm ci --ignore-scripts
-# The docs build ends in check-boost, which drives a real browser. Without
-# Chrome the image build fails — which it silently did from the moment that
-# gate landed until 2026-08-17. resolve-chrome.mjs finds this path itself.
-# Build stage only: the runtime image below carries none of it.
-RUN apk add --no-cache chromium
+# NO CHROMIUM HERE, deliberately. This used to `apk add --no-cache chromium`
+# because "the docs build ends in check-boost, which drives a real browser".
+# check-boost no longer exists, and no step of either build drives a browser
+# now — the browser gates (`check:claims`, `test:axe`, `check:layout`) are run
+# separately, outside this image. Verified by building without it: exit 0, and
+# the served homepage, a component page and a suite screen all return 200.
+# It cost 738 MB in the build stage (904 MB vs 166 MB for node:22-alpine) and
+# 42 s per cold build. PUT IT BACK if a browser-driving step is ever added to
+# `npm run build -w docs` — that is the condition, and it rotted unnoticed
+# three times before, so check this line when a gate starts failing only here.
 RUN npm run build -w @busy-office/ui
 # No base path: served at the container root, so links resolve at "/".
 RUN npm run build -w docs
