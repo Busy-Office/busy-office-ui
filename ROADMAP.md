@@ -1106,6 +1106,31 @@ before quoting a change.
          separate grill (two page-local copies would then exist — §3's bar is
          two real compositions), recorded in `.roundtable/` either way.
 
+       - **Verified 2026-09-23, HOLD — the page ships a claim the build does not
+         support.** The rendered prose reads "Opening, the search, Escape, Close
+         and the focus moves are real and are verified by the build", and
+         `check-claims.mjs` contains **zero** launcher cases (grep count 0 for
+         `al-launcher`, `app-launch`, "All applications"). That is the same class
+         374.6 corrected in the published conformance report: an artefact
+         asserting verification that does not exist.
+       - **And one of the asserted behaviours is broken.** Escape does not close
+         the launcher while a query is typed: the field is `type="search"`, so
+         Chromium's native Escape-to-clear consumes the first press and two are
+         required. The empty-field case works, which is why it read as fine.
+       - **The criterion names a gate that cannot see the property.**
+         `check:layout` is cited for the 390px wrap, but it walks
+         `.bo-app-shell__main` and a closed `<dialog>` computes `display: none`
+         with a 0x0 rect. Its green is unearned here. Also: no long label exists
+         to exercise the wrap (longest shipped is "Purchase orders"), and
+         `data-keywords` — named in the criterion — does not exist; the
+         implementation ships a JSON script block instead.
+       - **Accept, revised:** the sentence about build verification is either
+         made true (launcher cases in `check-claims.mjs`, driven by real key and
+         pointer events) or removed. Escape is either fixed or the page and this
+         criterion say two presses are needed. Runtime search/filter behaviour
+         measured correct and is not in question. Decision review scored the
+         hold at **confidence 1.00**.
+
 6. [ ] **373.6 — App dock: hide on UPWARD scroll. OWNER CALL — two refusals
        stand on the record and the reversal is not written down.** 123.2
        (2026-08-23): *"Mobile bottom-nav tier REFUSED for now (icon-rail
@@ -1160,6 +1185,22 @@ before quoting a change.
          112.4 word for word, OWNER-BLOCKED behind 112.3's briefs; editing
          `llms.txt` changes the pilot's instrument and is written into 112.3's
          record rather than landed silently.
+
+       - **Verified 2026-09-23, NOT landable — two gaps, not one.** Six of seven
+         criteria measure PASS: the validator command is single-sourced
+         (injection-proved), the three added URLs each pass gen-llms' existing
+         assertion (failure-proved), "Why these five things" now matches its
+         list, nothing from the exclusion list was added, and the instrument
+         change is recorded in `pilot-112/README.md` with figures independently
+         reconciled (49,982 + 556 = 50,538 B, SHA e9c1ef20…).
+         **(a)** The size delta is still not written into this item —
+         `git diff ROADMAP.md` was zero lines. **(b)** The changed page has no
+         1440/390 light-and-dark verification; the prior session's claim of
+         "four rendered viewport/theme cases" rested on `/private/tmp` evidence
+         that no longer exists, so it is UNVERIFIED rather than done.
+         Completion review scored this **0.35** — at the "evidence does not
+         support" boundary — which corrected a wake that had reported it as
+         "one line short". Gap (b) is a measurement, not clerical.
 
 8. [ ] **373.8 — docs IA: collapse 17 sidebar groups into the prompt's seven
        (Start here / Foundations / Components / Patterns and layouts /

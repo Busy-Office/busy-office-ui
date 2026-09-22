@@ -98,6 +98,21 @@ reproduction of the specific artifact.", false: "Evidence is absent, narrative,
 or does not bear on the claim."}`. **Batch every claim that shares one evidence
 state into a single call.**
 
+**"Completion review" MEANS calling `jev_evaluate`. It is not a vocabulary.**
+Writing PASS/FAIL/UNVERIFIED into a report without making the call is skipping
+the review, and that is exactly what happened on the first real opportunity
+(the 373.x batch, 2026-09-23) — the rubric's words were used in the agent
+prompts and the tool was never invoked. The owner noticed before the loop did.
+When the call was finally made it moved two of three positions, so the cost of
+skipping is not hypothetical: an item reported as "one line short" scored
+**0.35** because a second criterion was genuinely unverified, and a landing
+reported as clean scored **0.51**.
+
+So: **before marking any roadmap item `[x]`, run the completion review on its
+claim and quote the number.** One batched call per landing round, not per item
+and not per file. If the call cannot be made, the item is UNVERIFIED — say the
+review did not run rather than reporting a verdict as though it had.
+
 ### The gate is binding and Jev is not part of it
 
 | verdict | condition |
