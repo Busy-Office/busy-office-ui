@@ -147,9 +147,13 @@ def main():
             print(f"  (warning: {label} regeneration failed: {exc})", file=sys.stderr)
 
     # RESUME.md's own checks run HERE, not in `check:repo` (roadmap 169.4).
-    # `.roundtable/**` is in CI's paths-ignore, so a commit touching only it is
-    # never built — which made a CI-run gate reading RESUME.md a silent hole:
-    # it could break and go unbuilt, surfacing on whatever landed next. They are
+    # The ORIGINAL reason is now false and is recorded as such rather than
+    # quietly left standing: `.roundtable/**` used to sit in CI's paths-ignore,
+    # so a commit touching only it was never built and a CI-run gate reading
+    # RESUME.md was a silent hole. There is no paths-ignore any more (removed
+    # 2026-09-07, roadmap 312.1/312.2 — ci.yml says so twice in comments), so
+    # that argument no longer supports anything. The placement still stands on
+    # its second reason, which was always the stronger one: they are
     # loop hygiene about the loop's own workspace, so they belong on the loop's
     # own path, which runs every time a wake records an iteration. Advisory here
     # by the same rule as the generators above: neither may fail the recording,

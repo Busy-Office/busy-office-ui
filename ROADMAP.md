@@ -320,6 +320,110 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 375 — owner-directed cleanup: the two-agent arrangement is retired, `CLAUDE.md` loses 45% to a reference file, and two defects are rescued from records that were about to become history (2026-09-22)
+
+**Owner instruction:** reduce development overhead and inconsistent decisions
+while preserving intended behaviour; and specifically, remove the instructions
+designating a peer agent ("Codex") as development lead. Claude Code carries out
+authorized development independently from here.
+
+**The arrangement never reached the committed instruction surface.** `CLAUDE.md`,
+`LOOPS.md`, `DESIGN.md`, `ROADMAP.md`, `STATUS.md`, `README.md` and
+`ENVIRONMENT.md` contain zero references to it. There is no script, hook, agent
+config, npm script, CI job, crontab or launchd entry for it: `.git/hooks` has no
+non-sample files, `.claude/` has no agents/hooks/commands, and the 15-minute
+`busy-office-ui-development-lead` heartbeat that two documents asserted has **no
+definition anywhere on this machine**. Every directive lived in files that were
+untracked or uncommitted, so the removal was a working-tree change.
+
+### Items
+
+1. [x] **375.1 — the arrangement's instructions are gone; its measurements are
+       kept.** `codex-claude-roles.md` became `history-two-agent-2026-09.md`
+       (role table, coordination protocol, await-assignment convention,
+       ownership claims and asserted heartbeat removed; acceptance records kept
+       verbatim under a header saying nothing in the file directs behaviour).
+       `exchange/` (45 files) is now committed rather than untracked, with a
+       README stating no file in it is a live assignment and no reply is
+       expected — untracked is not preservation, and several measurements exist
+       only there.
+       - **Accept — met:** no file outside the history record and `exchange/`
+         contains an instruction to await, acknowledge, or route work through a
+         peer. The remaining references are attribution in dated evidence or a
+         quoted external review naming several LLMs.
+
+2. [x] **375.2 — `CLAUDE.md` 624 -> 334 lines by moving evidence, not rules.**
+       373 of 624 lines were dated war stories in a file loaded into every
+       session. The nine essays moved verbatim to
+       `.roundtable/verification-discipline.md`; every rule stayed. Six stale
+       figures corrected, four of them load-bearing arguments: "seven build
+       gates" (56), "behavior tests" listed as a build gate (vitest is not in
+       either build), "148 citations" (404), "131 findings" (206, and generated),
+       the archive-sweep narrative ending at 1,094 lines (15,353 today), and a
+       recipe path that does not resolve from the repo root.
+       - **Accept — met:** 37,682 -> 20,869 bytes on the auto-loaded file, and
+         every number in it either agrees with the gate that produces it or is
+         left to that gate to print.
+
+3. [x] **375.3 — dead weight, each verified rather than assumed.** The
+       Containerfile's `apk add chromium` was justified by `check-boost`, which
+       no longer exists; no step of either build drives a browser. Removing it
+       is 738 MB of build stage and 42 s per cold build, measured, with the
+       runtime image unchanged at 79.5 MB. `pixelmatch` and `pngjs` had no
+       importer. An orphaned preview server (PID 5162, 1d12h) was bound to the
+       SAME port as the Podman container on a different stack, so
+       `localhost:8081` answered from either depending on IPv6 preference and
+       the IPv4 answer was two commits stale — the prescribed stale-image
+       defence cannot catch that, because it is a different server, not a stale
+       layer.
+       - **Accept — met:** builds green, and `:8081` has one listener.
+
+4. [ ] **375.4 — a class name inside a copyable sample is validated by
+       nothing.** `check-markup` validates rendered `dist` HTML, but a class in
+       a `<pre>` block is escaped text, so an invalid modifier in a recipe a
+       user copies is invisible to it. This is how `bo-btn--primary` once
+       shipped in a sample when `button.css` defines only `--danger`, `--ghost`,
+       `--icon`, `--secondary`, `--sm`. That instance is gone (`grep` finds no
+       occurrence in `apps/docs/src` or `examples/` today), so this is about the
+       missing check, not a live defect.
+       - **Accept — measure the base rate first (94.11).** Extract every
+         `bo-*` class from every copyable block on the built site and check it
+         against `api.json`'s generated class list. If the count of invalid
+         classes is zero today the gate is ceremony and this closes with the
+         count recorded; if it is not, the gate is worth writing. Finding zero
+         is a satisfying outcome. Note the shape question before writing it:
+         samples legitimately contain consumer-side classes that are not ours,
+         so the predicate is "a `bo-`-prefixed class that `api.json` does not
+         know", not "every class".
+
+5. [ ] **375.5 — the direct Qty-to-Add pointer path is uncertified.** Rescued
+       from the retired arrangement's records, where it was explicitly retained
+       for triage and never folded into an assignment: a direct pointer click on
+       Qty-to-Add was reported as missing because the focus-shown message changes
+       the row height under the cursor. The checks that exist blur and settle
+       before clicking, so they do not exercise that path.
+       - **Accept — re-check the premise, it is another wake's measurement
+         (158.2's rule).** Reproduce the click against the built site with a
+         trusted pointer event at the original coordinates, or record that it
+         does not reproduce and why. Either outcome closes it; what does not
+         close it is a settled-then-clicked check, which is the thing already
+         known to pass.
+
+6. [ ] **375.6 — CI rebuilds the whole project six times per run.**
+       `.github/workflows/ci.yml`'s `docs-gates` is a 5-entry matrix whose steps
+       run `npm ci`, the core build and the docs build **inside every shard**,
+       and the `core` job builds again — so the core build's 24 steps run 6x and
+       the docs build's 35 steps run 5x, with only the final `${{ matrix.run }}`
+       line differing. The file records the bill at "~14.7 machine-minutes across
+       6 parallel jobs (~3 min wall)". Reported rather than changed: the fix
+       shape is build once and pass `dist` between jobs as an artifact, which
+       cannot be verified locally.
+       - **Accept:** the shards consume a built `dist` they did not build
+         themselves, and the wall-clock and machine-minute figures in ci.yml's
+         own comment are re-measured and updated to whatever the change actually
+         produces — not predicted in advance.
+
+
 ## Slice 374 — the joined-control seam was spelled against the AUTHORED markup, not the RENDERED DOM: three trailing children defeat `:last-child`, the framework's own canonical quantity markup is one of them, and the defect shipped on **3 pages / 5 rendered views** while a gate that visits those exact elements measured only their focus rings (2026-09-22)
 
 **Found by the owner, from a screenshot.** The `+` stepper on
