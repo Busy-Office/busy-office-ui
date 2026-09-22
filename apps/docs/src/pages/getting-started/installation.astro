@@ -168,10 +168,11 @@ const skeleton = `<!doctype html>
     61-83 depending on the shipped Android version) and is out of scope for
     any framework built on modern CSS, not a floor this project chases.</p>
     <p class="bo-u-text-muted">This framework's current CSS floor
-    ({floor.label}) does not reach 108 — <code>:has()</code>,
-    <code>@container</code> and the logical-property shorthands used
-    throughout sit above it. A lower-floor build profile for the RF-relevant
-    component set is tracked as roadmap 59.2-59.3, not shipped yet. See
+    ({floor.label}) does not reach 108. The shipped <code>rf-essentials</code> stylesheet
+    provides a smaller component set for Chrome/WebView 108; import
+    <code>@busy-office/ui/css/rf-essentials</code> in place of the full
+    stylesheet. See the <a href={base + '/patterns/rf-landing'}>RF landing
+    pattern</a> for its supported components, and
     <a href={base + '/patterns/goods-receipt'}>goods receipt</a> for the
     scanning interaction itself — <code>initScanInput()</code> and the
     quantity stepper are already Chrome-80-safe today and need no profile.</p>

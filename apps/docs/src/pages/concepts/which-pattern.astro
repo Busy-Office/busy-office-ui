@@ -26,7 +26,6 @@ const tiles = patterns.groups.flatMap((g: any) => g.tiles);
 const byTitle = new Map<string, any>(tiles.map((t: any) => [t.title.toLowerCase(), t]));
 
 const WHO = /Who uses it:\s*(.+?)(?=\s+(?:How often|What "done")|$)/s;
-const NOT = /\b(?:Not for|Not when)\b\s*(.+?)(?=\s*(?:\.\s+[A-Z]|$))/s;
 
 /** Split a wrong-choice clause so any pattern it names becomes a real link. */
 function linkAlternatives(clause: string, selfTitle: string) {
@@ -43,7 +42,7 @@ const groups = patterns.groups.map((g: any) => ({
   label: g.label.replace(/^Patterns:\s*/, ''),
   rows: g.tiles.map((t: any) => {
     const who = WHO.exec(t.opener)?.[1]?.trim() ?? '';
-    const notRaw = NOT.exec(t.opener)?.[1]?.trim() ?? '';
+    const notRaw = t.wrongChoice?.clause?.trim() ?? '';
     return { ...t, who, not: notRaw ? linkAlternatives(notRaw, t.title) : null };
   }),
 }));
@@ -125,8 +124,9 @@ const withWho = groups.flatMap((g: any) => g.rows).filter((r: any) => r.who).len
     <span class="bo-u-text-muted">—</span> and their page is the answer. The
     "not when" column is the pattern's own wrong-choice clause, which
     <code>check:wrong-choice</code> requires every page to carry — so a blank
-    means the clause is phrased in a way this extraction did not match, never
-    that the page is silent on it.</p>
+    means the generated pattern record has no wrong-choice clause. This page
+    uses that record directly, so it preserves guidance phrased as
+    "Never" or "Do not" as well as "Not for" and "Not when".</p>
     <p class="bo-u-text-muted">And a pattern named in a wrong-choice clause is
     linked automatically where the clause names one outright. Where it
     describes the alternative instead of naming it, the prose stands — the

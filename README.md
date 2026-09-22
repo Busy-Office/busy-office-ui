@@ -65,7 +65,7 @@ Deliberately not shipped, each with its reasoning recorded on the
 [scope page](https://busy-office.github.io/busy-office-ui/getting-started/scope)
 — a "not in scope" list says the gap was decided, not forgotten:
 
-<!-- stat:notfor -->A charting engine · A rich-text editing engine · A virtualised table · A JS component framework · Kanban boards, page builders, WYSIWYG layout · Icons as a shipped set · State management, routing, i18n runtime<!-- /stat -->
+<!-- stat:notfor -->A charting engine · A rich-text editing engine · A virtualised table · A JS component framework · Page builders and WYSIWYG layout engines · Icons as a shipped set · State management, routing, i18n runtime<!-- /stat -->
 
 ## When something doesn't work
 

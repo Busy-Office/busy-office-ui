@@ -265,6 +265,100 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   </section>
 
   <section class="demo">
+    <h2>Focus after a move the server accepted — or refused</h2>
+    <p><strong>The board above is static.</strong> Its <em>Move&nbsp;▾</em>
+    menus open and close for real, and that is all: no menu item has a handler,
+    nothing moves between lanes, and nothing is restored afterwards. What
+    follows describes what <strong>your</strong> build must do once a real
+    <code>POST /cards/:id/move</code> comes back — it is not a description of
+    this demo.</p>
+    <p class="bo-u-text-muted">The problem is specific to this pattern: the
+    control the user activated lives <em>inside the card</em>, and a successful
+    move re-renders that card in a different lane. The menu they were in is
+    replaced, its trigger with it — so by the time the response lands, the
+    element that had focus is detached and focus is on
+    <code>&lt;body&gt;</code>.</p>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Accepted (2xx).</strong> The card is re-rendered in its new
+      lane. Find it again <strong>by its card identity</strong> — the
+      <code>:id</code> you just posted to — and focus its new
+      <em>Move&nbsp;▾</em> trigger, so the user lands on the same card they
+      moved, now in its new place. Never re-find it by lane position: the
+      position is what changed.</li>
+      <li><strong>Refused (409).</strong> The data contract above re-renders
+      the card <em>where it is</em>, with the reason. Focus its trigger again —
+      the one in the card that did not move — so the user is back where they
+      acted, next to the explanation. Do not focus the target lane: nothing
+      arrived there.</li>
+      <li><strong>The card or its action is gone.</strong> A move can legally
+      leave a card with no action at all — the Done lane's cards have no
+      trigger, by design, because a completed card is a record and not a thing
+      to act on again. If the re-render leaves no trigger on that card, focus
+      the card itself; if the card is absent entirely, focus its lane's
+      heading. <strong>Both of those need <code>tabindex="-1"</code></strong> —
+      a heading is no more focusable than a list item, and
+      <code>.focus()</code> on either is a no-op without it. Name a fallback
+      for each step;
+      the failure mode here is silently landing on <code>&lt;body&gt;</code>
+      after a successful action.</li>
+    </ol>
+    <p class="bo-u-text-muted"><strong>Only when the moved card held focus —
+    and read that from the OLD card, immediately before you replace it.</strong>
+    A board is a shared screen: someone else's move, or a poll, can re-render a
+    card while this user is reading or typing elsewhere, and placing focus then
+    is an interruption rather than a courtesy. The check has to happen while the
+    old card is still in the document — testing the <em>new</em> card after
+    rendering asks about an element that never had focus, and a flag saved when
+    the request started goes stale if the user moves on while it is in flight.
+    Capture it at the last moment before the swap, and act on that.</p>
+    <p class="bo-u-text-muted"><strong>Which moves are offered stays the
+    server's call</strong>, exactly as the Data contract says: the menu lists
+    only the legal next stages, and a 409 is the server declining the move it
+    was sent. That does not imply the client was wrong to offer it — on a
+    shared board an offer that was legal when the menu rendered can be stale by
+    the time it is activated, because someone else moved the card first. Treat
+    409 as the current answer, re-render with the reason, and let the refreshed
+    menu carry whatever is legal now. Focus handling does not change any of
+    that, and must not be used to guess a workflow.</p>
+    <p class="bo-u-text-muted"><strong>And focus is still not the
+    announcement.</strong> As the section above this one already says, a native
+    button in a popover is operable and silent — moving focus tells an
+    assistive technology where the user now is, not that a card changed lane.
+    &ldquo;WO-4471 moved to In progress, 3 in that lane&rdquo; is a sentence
+    you write, into your own <a href={base + '/concepts/accessibility#live-regions'}>live
+    region</a>, from the same handler that re-renders. Nothing on this page
+    establishes what a screen reader actually says.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Why there is no drag here, and what would change that</h2>
+    <p class="bo-u-text-muted">Dragging cards between lanes has been refused
+    more than once, on recorded evidence rather than taste. The refusals are
+    not reopened here; they are quoted so a reader can see the bar rather than
+    guess at it.</p>
+    <ul class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Roadmap 100.1</strong> — the bar is
+      <em>&ldquo;a specific screen, a specific row count, a user complaint
+      about click count&rdquo;</em>. Note what it says next: on reopening, the
+      first thing to examine is <strong>jump controls, not drag</strong>.</li>
+      <li><strong>Roadmap 110.7</strong> — re-grilled the refusal at full
+      depth and upheld it, explicitly excluding one kind of input:
+      <em>not &ldquo;the owner wants it&rdquo; a third time</em>.</li>
+      <li><strong>Roadmap 132.5</strong> — states no reopen sentence; its own
+      Accept is the bar — name the shipped screen that needs it, and
+      <em>if none exists, refuse and record it</em>.</li>
+    </ul>
+    <p class="bo-u-text-muted">The practical consequence for this page is the
+    one already made above: the move affordance is a
+    <a href={base + '/components/dropdown'}>menu</a>, every card is reachable
+    by keyboard through it, and there is deliberately no drop-target styling
+    because there is nothing to drop. A drag implementation would also owe
+    <a href={base + '/reference/acr'}>WCAG 2.2 SC 2.5.7</a> a single-pointer
+    alternative that does not require dragging — which is what the menu
+    already is.</p>
+  </section>
+
+  <section class="demo">
     <h2>Components used</h2>
     <p class="bo-u-text-muted"><span class="bo-badge">complexity 3 of 4</span></p>
     <ul class="bo-cluster docs-list-bare">
