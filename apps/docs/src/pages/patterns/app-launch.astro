@@ -21,6 +21,28 @@ const finance = [
   { initials: 'AR', label: 'Receivables' },
   { label: 'Currencies' },   // inline <svg>, see the tile below
 ];
+/* The launcher's own catalogue. Hand-written rather than AppTile because each
+   tile needs a stable identity and its own keywords, and AppTile's props are
+   {label, icon, initials} with a hardcoded href="#" — widening a shared
+   component for one page's filter is exactly the coupling this task refuses. */
+const launcher = [
+  { group: 'Finance', apps: [
+    { id: 'gl', label: 'General ledger', keywords: 'accounts journal posting' },
+    { id: 'ap', label: 'Payables', keywords: 'vendor invoice bills AP' },
+    { id: 'ar', label: 'Receivables', keywords: 'customer dunning AR' },
+    { id: 'fx', label: 'Currencies', keywords: 'exchange rate forex' },
+  ] },
+  { group: 'Logistics', apps: [
+    { id: 'wh', label: 'Warehouse', keywords: 'bins putaway storage' },
+    { id: 'ship', label: 'Shipping', keywords: 'carrier despatch freight' },
+    { id: 'count', label: 'Stock counts', keywords: 'cycle inventory stocktake' },
+  ] },
+  { group: 'Purchasing', apps: [
+    { id: 'po', label: 'Purchase orders', keywords: 'PO procurement ordering' },
+    { id: 'req', label: 'Requisitions', keywords: 'request approval intake' },
+  ] },
+];
+
 const logistics = [
   { icon: 'box', label: 'Warehouse' },
   { icon: 'truck', label: 'Shipping' },
@@ -118,9 +140,173 @@ const logistics = [
   </section>
 
   <script>
-    import { initTabs } from '@busy-office/ui/js';
+    import { initTabs, initDialogs } from '@busy-office/ui/js';
     initTabs();
+    initDialogs();
+
+    /* Page-local filter. Deliberately not extracted into a shared behavior —
+       see the comparison in this page's prose and roadmap 373.5.
+
+       Two properties the checks depend on, both from HIDING rather than
+       styling: `hidden` takes a tile out of the accessibility tree AND out of
+       the tab order, and the framework's own focus trap filters by visibility,
+       so a filtered-out tile cannot be reached by Tab. Setting `display:none`
+       in CSS would look identical and do the same, but `hidden` says it in the
+       DOM where a check can read it. */
+    const search = document.getElementById('al-search') as HTMLInputElement | null;
+    if (search) {
+      const dialog = document.getElementById('al-launcher')!;
+      const count = document.getElementById('al-count')!;
+      const empty = document.getElementById('al-empty')!;
+      /* Keywords live in a JSON block rather than a data-* attribute: a
+         `data-` hook the framework does not document is a promise nothing
+         keeps, and check:data-hooks is right to refuse one. Identity is the
+         element's own id. */
+      const keywords: Record<string, string> =
+        JSON.parse(document.getElementById('al-keywords')?.textContent || '{}');
+      const apps = [...dialog.querySelectorAll<HTMLElement>('.al-app')];
+      const groups = [...dialog.querySelectorAll<HTMLElement>('.al-group')];
+
+      const apply = () => {
+        const q = search.value.trim().toLowerCase();
+        let shown = 0;
+        for (const app of apps) {
+          const key = app.id.replace(/^al-app-/, '');
+          const hay = `${app.textContent} ${keywords[key] ?? ''}`.toLowerCase();
+          const match = !q || hay.includes(q);
+          app.hidden = !match;
+          if (match) shown += 1;
+        }
+        // A group with nothing left in it is noise, not context.
+        for (const g of groups) {
+          g.hidden = ![...g.querySelectorAll<HTMLElement>('.al-app')].some((a) => !a.hidden);
+        }
+        empty.hidden = shown > 0;
+        count.textContent = q
+          ? `${shown} application${shown === 1 ? '' : 's'} match ${search.value.trim()}`
+          : `${shown} application${shown === 1 ? '' : 's'}`;
+      };
+      search.addEventListener('input', apply);
+
+      /* ESCAPE CLOSES THE LAUNCHER, EVEN MID-QUERY. `type="search"` carries a
+         native Escape-to-clear, and Chromium lets that CONSUME the key: with a
+         query typed, the first Escape emptied the box and left the dialog open
+         with focus still in the input, so closing took two presses. Measured
+         on the built page before this handler existed; the empty-field case
+         worked, which is exactly why it read as fine.
+
+         `dialog.close()` on keydown rather than swapping to `type="text"`:
+         the type carries the platform's own clear affordance and its
+         search-shaped semantics, and dropping those to work around a key
+         collision trades a real affordance for a smaller diff. The native
+         clear still runs — the field empties AND the dialog closes, which is
+         what "Escape closes it" has to mean if the page says so. `<dialog>`
+         returns focus to the trigger on close by itself. */
+      search.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && (dialog as HTMLDialogElement).open) {
+          (dialog as HTMLDialogElement).close();
+        }
+      });
+
+      // Run once so the count is populated before anyone types.
+      apply();
+    }
   </script>
+
+  <style>
+    /* Page-local sizing for THIS launcher only, keyed to its own id. A grid the
+       reader scans wants the viewport; prose does not, which is why the shipped
+       dialog keeps a 32rem measure and why this is not a new modifier. */
+    #al-launcher.al-launcher {
+      max-inline-size: min(64rem, calc(100vw - var(--bo-space-6)));
+      inline-size: 100%;
+      max-block-size: calc(100vh - var(--bo-space-6));
+      overflow: auto;
+    }
+    /* Long app names wrap instead of widening the grid track at 390. */
+    #al-launcher .al-app { overflow-wrap: anywhere; }
+  </style>
+
+  <section class="demo">
+    <h2>A searchable launcher for a catalogue too big to scan</h2>
+    <p class="demo-note">The grids above are the answer when someone can
+    <em>see</em> their app. Past roughly two screens of tiles they cannot, and
+    scrolling a category tree to find &ldquo;Receivables&rdquo; is slower than
+    typing it. This is the same catalogue behind a
+    <a href={base + '/components/dialog/'}>dialog</a> with a search box —
+    composed from what already ships, with no new component and no new
+    fullscreen modifier.</p>
+
+    <script type="application/json" id="al-keywords" set:html={JSON.stringify(
+      Object.fromEntries(launcher.flatMap((g) => g.apps.map((a) => [a.id, a.keywords])))
+    )} />
+
+    <button class="bo-btn" type="button"
+            data-dialog-trigger="al-launcher" id="al-launcher-open">Open the launcher</button>
+
+    <dialog class="bo-dialog al-launcher" id="al-launcher" aria-labelledby="al-launcher-title">
+      <form method="dialog" class="bo-cluster" style="justify-content: space-between; padding: var(--bo-space-4) var(--bo-space-4) 0">
+        <h2 id="al-launcher-title" style="margin: 0">All applications</h2>
+        <button class="bo-btn bo-btn--ghost" id="al-launcher-close" value="close">Close</button>
+      </form>
+      <div style="padding: var(--bo-space-4)">
+        <div class="bo-form-field">
+          <label class="bo-form-field__label" for="al-search">Search applications</label>
+          <input class="bo-input" id="al-search" type="search" autofocus
+                 placeholder="Type a name or a keyword…" autocomplete="off" />
+        </div>
+        <p class="bo-visually-hidden" id="al-count" role="status" aria-live="polite"></p>
+        {launcher.map((g) => (
+        <section class="al-group">
+          <h3 class="bo-u-text-muted" style="margin-block: var(--bo-space-3) var(--bo-space-2)">{g.group}</h3>
+          <div class="bo-widget-grid" style="--bo-widget-min: 9rem">
+            {g.apps.map((a) => (
+              <a href="#" class="bo-widget al-app" id={`al-app-${a.id}`}
+                 style="text-align: center; padding-block: var(--bo-space-4)">{a.label}</a>
+            ))}
+          </div>
+        </section>
+      ))}
+        <div class="bo-state" id="al-empty" hidden>
+          <span class="bo-state__icon" aria-hidden="true">🔍</span>
+          <p class="bo-state__title">No applications match</p>
+          <p class="bo-state__description">Try a shorter word, or clear the box to see everything.</p>
+        </div>
+      </div>
+    </dialog>
+
+    <p class="bo-u-text-muted"><strong>Why this one is allowed to fill the
+    viewport.</strong> A dialog is normally kept to a measure &mdash; 32rem, because
+    prose stops being readable past it. A launcher is not prose: it is a grid
+    the reader scans, and a narrow column turns one glance into a scroll. The
+    sizing here is <strong>page-local</strong>, a few lines against this
+    dialog&rsquo;s own id, not a new <code>--fullscreen</code> modifier that every
+    future dialog could reach for.</p>
+
+    <p class="bo-u-text-muted"><strong>Which of the three to reach for.</strong>
+    The <a href={base + '/patterns/app-launch/'}>tile grids</a> above win when the
+    catalogue fits on a screen or two &mdash; recognition beats recall, and no
+    typing is faster than typing. This launcher wins when it does not fit and
+    the reader knows roughly what the thing is called. The
+    <a href={base + '/patterns/command-bar/'}>command bar</a> wins when they
+    know exactly, and want to jump without leaving the keyboard &mdash; it
+    searches <em>actions</em> as well as apps, and it is a different keyboard
+    model. <strong>Not for a list of records</strong>; that is a
+    <a href={base + '/patterns/list-report/'}>list report</a> with a filter.</p>
+
+    <p class="bo-u-text-muted"><strong>What is real here and what is not.</strong>
+    Opening, the search, Escape, Close and the focus moves are real, and
+    <strong>seven cases in <code>check:claims</code> drive them with real key
+    and pointer events</strong> &mdash; including the one that used to be
+    broken: with a query typed, <code>type="search"</code> carries a native
+    Escape-to-clear that consumed the key, so closing took two presses. One
+    press closes it now, and the build fails if that regresses. The tiles are <code>href="#"</code>, like every other
+    tile on this page &mdash; they go nowhere. <strong>The dialog needs
+    JavaScript</strong>: <code>initDialogs()</code> opens it, so without JS the
+    trigger does nothing and the catalogue above remains the way in. That is why
+    the grids stay on this page rather than being replaced by the launcher.
+    Filtering, the result count and what the tiles link to are yours.</p>
+  </section>
 
   <section class="demo">
     <h2>Markup</h2>

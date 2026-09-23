@@ -6742,6 +6742,150 @@ check(
 
    Keyboard operability is NOT this criterion (it is 2.1.1) and is not
    asserted here. */
+/* /patterns/app-launch's launcher says, in its own prose, that "Opening, the
+   search, Escape, Close and the focus moves are real and are verified by the
+   build". Nothing verified any of it — a page asserting verification that does
+   not exist is the class 374.6 corrected in the published conformance report,
+   and it is worse here because the sentence names the mechanism.
+
+   Driven with REAL key and pointer events, not synthetic dispatch: a synthetic
+   keydown on document matches no delegated handler and the native
+   Escape-to-clear on `type="search"` only fires for trusted input, which is
+   the exact collision case 373.5 is about.
+
+   The 390 wrap is measured HERE rather than left to check:layout, which the
+   item originally named. That gate walks `.bo-app-shell__main`, and a closed
+   `<dialog>` computes `display: none` with a 0x0 rect, so its green says
+   nothing about this section. Measuring the OPEN dialog is the only way the
+   property is seen at all. */
+await visit('/patterns/app-launch/', { width: DESKTOP_WIDTH, height: 900 });
+{
+  const openLauncher = async () => {
+    await page.$eval('#al-launcher-open', (b) => b.scrollIntoView({ block: 'center' }));
+    await page.click('#al-launcher-open');
+    await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+  };
+  const state = () => page.evaluate(() => {
+    const d = document.getElementById('al-launcher');
+    const a = document.activeElement;
+    return {
+      open: d.open === true,
+      activeId: a ? a.id : null,
+      visibleTiles: [...document.querySelectorAll('.al-app')].filter((t) => !t.hidden).map((t) => t.id),
+      emptyShown: !document.getElementById('al-empty').hidden,
+      count: document.getElementById('al-count').textContent.trim(),
+    };
+  });
+
+  await openLauncher();
+  const opened = await state();
+  check(
+    'app-launch: opening the launcher puts focus in its search field',
+    opened.open && opened.activeId === 'al-search',
+    JSON.stringify(opened),
+  );
+
+  /* A substring query shows exactly the tiles whose label or keyword contains
+     it. Compared against an expectation computed from the DOM, never a
+     hard-coded count — a literal would pass unchanged if the catalogue grew. */
+  await page.type('#al-search', 'ord');
+  const filtered = await state();
+  const expectOrd = await page.evaluate(() => {
+    const kw = JSON.parse(document.getElementById('al-keywords').textContent || '{}');
+    return [...document.querySelectorAll('.al-app')]
+      .filter((t) => `${t.textContent} ${kw[t.id.replace(/^al-app-/, '')] ?? ''}`.toLowerCase().includes('ord'))
+      .map((t) => t.id);
+  });
+  check(
+    'app-launch: a substring query shows exactly the matching tiles, and the live count agrees',
+    expectOrd.length > 0 &&
+      JSON.stringify(filtered.visibleTiles) === JSON.stringify(expectOrd) &&
+      filtered.count.startsWith(String(expectOrd.length)),
+    JSON.stringify({ shown: filtered.visibleTiles, expected: expectOrd, count: filtered.count }),
+  );
+
+  /* ESCAPE WITH A QUERY TYPED — the case that was broken. `type="search"`
+     carries a native Escape-to-clear that consumed the key, so the dialog
+     stayed open and this needed two presses. One press must close it and
+     return focus to the trigger. */
+  await page.keyboard.press('Escape');
+  await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+  const escaped = await state();
+  check(
+    'app-launch: ONE Escape closes the launcher even with a query typed, and focus returns to the trigger',
+    !escaped.open && escaped.activeId === 'al-launcher-open',
+    JSON.stringify(escaped),
+  );
+
+  /* A keyword-only match: the query appears in no visible label. Proves the
+     JSON keyword block is actually consulted rather than the tile text alone. */
+  await openLauncher();
+  await page.type('#al-search', 'forex');
+  const kwHit = await state();
+  const kwExpect = await page.evaluate(() => {
+    const kw = JSON.parse(document.getElementById('al-keywords').textContent || '{}');
+    return [...document.querySelectorAll('.al-app')]
+      .filter((t) => !t.textContent.toLowerCase().includes('forex') &&
+        (kw[t.id.replace(/^al-app-/, '')] ?? '').toLowerCase().includes('forex'))
+      .map((t) => t.id);
+  });
+  check(
+    'app-launch: a keyword-only query matches through the keyword block, not the visible label',
+    kwExpect.length > 0 && kwExpect.every((id) => kwHit.visibleTiles.includes(id)),
+    JSON.stringify({ shown: kwHit.visibleTiles, keywordOnly: kwExpect }),
+  );
+
+  /* No match: the empty state renders and the live region reads zero. */
+  await page.$eval('#al-search', (el) => { el.value = ''; });
+  await page.type('#al-search', 'zzzqqq');
+  const none = await state();
+  check(
+    'app-launch: a no-match query shows the empty state and the status count reads 0',
+    none.emptyShown && none.visibleTiles.length === 0 && none.count.startsWith('0'),
+    JSON.stringify(none),
+  );
+
+  /* The 390 wrap, measured on the OPEN dialog for the reason in the header.
+     Clear the query first: the no-match case above leaves every tile hidden,
+     and measuring wrap across zero tiles is a check that cannot fail. The
+     `tilesMeasured > 0` floor below caught exactly that on its first run. */
+  await page.$eval('#al-search', (el) => { el.value = ''; });
+  await page.type('#al-search', ' ');
+  await page.keyboard.press('Backspace');
+  await page.setViewport({ width: NARROW_WIDTH, height: 844, deviceScaleFactor: 2 });
+  await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+  const narrow = await page.evaluate(() => {
+    const d = document.getElementById('al-launcher');
+    const r = d.getBoundingClientRect();
+    const tiles = [...document.querySelectorAll('.al-app')].filter((t) => !t.hidden);
+    return {
+      open: d.open === true,
+      dialogWithinViewport: r.right <= innerWidth + 0.5 && r.left >= -0.5,
+      dialogOverflowX: d.scrollWidth - d.clientWidth,
+      pageOverflowX: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      tileOverflow: tiles.map((t) => t.scrollWidth - t.clientWidth).filter((n) => n > 0).length,
+      tilesMeasured: tiles.length,
+    };
+  });
+  check(
+    'app-launch: at 390 the open launcher fits the viewport and no tile label overflows its box',
+    narrow.open && narrow.tilesMeasured > 0 && narrow.dialogWithinViewport &&
+      narrow.dialogOverflowX === 0 && narrow.pageOverflowX === 0 && narrow.tileOverflow === 0,
+    JSON.stringify(narrow),
+  );
+
+  /* Close returns focus to the trigger, same as Escape. */
+  await page.setViewport({ width: DESKTOP_WIDTH, height: 900, deviceScaleFactor: 1 });
+  await page.click('#al-launcher-close');
+  await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+  const closed = await state();
+  check(
+    'app-launch: the Close button closes the launcher and returns focus to the trigger',
+    !closed.open && closed.activeId === 'al-launcher-open',
+    JSON.stringify(closed),
+  );
+}
+
 await visit('/components/file-upload/', { width: DESKTOP_WIDTH, height: 900 });
 const pickerByPointer = await (async () => {
   /* Scroll it into view and settle BEFORE measuring: `page.mouse.click` takes

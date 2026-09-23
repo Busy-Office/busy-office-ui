@@ -15,7 +15,7 @@ Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_
 - [`surface-baseline.md`](surface-baseline.md) — the scored-surface baseline
 - [`surface-review-rubric.md`](surface-review-rubric.md) — how a surface is scored
 
-## Findings — 202 snapshots, newest first
+## Findings — 209 snapshots, newest first
 
 A **·** marks a file nothing outside `.roundtable/` links to. That is not a defect: a grill can settle a question without anything needing to cite it afterwards. It is here so the uncited set stays visible instead of growing unnoticed.
 
@@ -24,8 +24,15 @@ A **·** marks a file nothing outside `.roundtable/` links to. That is not a def
 | — | [Grill report — Slice 112: the governance/conformance proposal (2026-08-22)](grill-112-pattern-fit-proposal.md) | ✓ |
 | — | [Grill — Slice 22 item 1, the color/scales/tokens docs (presentation pass)](grill-slice22-color-docs.md) | ✓ |
 | — | [Grill — Slice 22 sign-off (items 2+3, shipped ungrilled)](grill-slice22-signoff.md) | · |
+| — | [History — the 2026-09-20/21 two-agent arrangement (RETIRED)](history-two-agent-2026-09.md) | ✓ |
+| — | [Jev rubrics — v1 (2026-09-22)](jev-rubrics.md) | ✓ |
 | — | [0.3.0 release brief — read in under a minute (2026-08-22)](release-0.3.0-brief.md) | ✓ |
 | — | [Suite score — the screen ledger](suite-score.md) | ✓ |
+| — | [Verification discipline — the worked examples](verification-discipline.md) | ✓ |
+| 2026-09-23 | [Should the launcher's text filter be extracted? — no, and here is the measurement](launcher-filter-extraction-2026-09-23.md) | · |
+| 2026-09-21 | [Grill — putting Kev (kev-0.5b) into the loop: dispatcher, gate, first-level decision](grill-kev-in-the-loop-2026-09-21.md) | · |
+| 2026-09-20 | [Direction review — comprehensive ERP UI framework](grill-erp-framework-direction-2026-09-20.md) | · |
+| 2026-09-20 | [Grill — examples as experiments across desktop, mobile and RF](grill-examples-device-coverage-2026-09-20.md) | · |
 | 2026-09-09 | [Objective grill — Slices 360, 361, 362, 363 (2026-09-09, cloud wake)](grill-objective-360-361-362-363-2026-09-09.md) | ✓ |
 | 2026-09-09 | [Objective grill — Slices 365, 366, 367 (2026-09-09, cloud wake)](grill-objective-365-366-367-2026-09-09.md) | ✓ |
 | 2026-09-09 | [Objective grill — Slices 369, 370, 371 (2026-09-09, cloud wake)](grill-objective-369-370-371-2026-09-09.md) | ✓ |
@@ -235,4 +242,4 @@ The signature of a directory that has outgrown retrieval is the same subject inv
 
 Two files on one subject is usually a deliberate follow-up (a grill and its sign-off). Three is worth a look.
 
-— 210 files, 153 cited from outside, 58 uncited snapshots, 4 repeated subject(s).
+— 217 files, 156 cited from outside, 62 uncited snapshots, 4 repeated subject(s).
