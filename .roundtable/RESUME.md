@@ -22,37 +22,27 @@ survives none.
 
 ## GOAL — set 2026-09-23. Clear every non-owner-blocked item in 373/374/375.
 
-**STATUS: 19 of 22 landed. THREE remain, all measured with fixes drafted.**
+**STATUS: 22 of 22 original items closed** (375.7, 375.5, 375.4 landed
+2026-09-23, commits `e7f69729`, `e41fddfb`, `0edae5c7`; pushed to origin at
+`e4243415`). **One item remains in scope, and it is new: P0 375.9**, filed by
+375.5's reproduction.
 
-Done: 373.1-373.5, 373.7, 373.9, 373.10, 374.1-374.3, 374.5, 374.6, 374.7,
-375.1-375.3, 375.6, 375.8.
+**Next wake — dispatcher rule 1 fires on it (open P0).**
 
-**Remaining, in this order — each already has its measurement taken:**
-
-1. **375.7** — three "Not when" cells on `/concepts/which-pattern` render the
-   bare words "Not for" with no object, while the generated prose says "39
-   state when not to use them". Cause is upstream: `gen-patterns.mjs`'s
-   `WRONG_CHOICE_RE` captures only the text INSIDE `<strong>`. Measured: 3 of
-   39 today, 0 after the fix; nearest legitimate clause is 14 characters.
-   **Take the first of the Accept's three shapes — the extraction takes the
-   whole clause — and do NOT build the ~12-character gate.** Moving the object
-   inside the `<strong>` on three pages leaves the trap armed for the next
-   author. 36 of 39 tiles stay byte-identical.
-
-2. **375.5** — REPRODUCED, close it as such. 0 of 9 trusted presses at the Add
-   button's own on-screen coordinates, with focus in the invalid Qty cell,
-   added a line; all 9 delivered `click` to `SECTION.demo`, the nearest common
-   ancestor of the down- and up-targets. **The item's own prose is wrong about
-   WHY** and that correction is part of closing it — do not inherit the stated
-   mechanism without re-reading the measurement.
-
-3. **375.4** — the gate IS worth building; the premise that it might be
-   ceremony is FALSE. `bo-label` is an invalid class in a copyable sample on
-   `/concepts/accessibility/` that shipped at HEAD for 33 days, invisible to
-   `check-markup` by construction (red-proved: its input is byte-identical
-   with and without the class). Count is 1, not 0. A fix for that one instance
-   already exists uncommitted in the working tree — commit it first, then
-   build the gate.
+1. **375.9 — any control below a data-table loses its first click while a
+   cell's error message is shown.** Reproduced 0 of 6 trusted presses on the
+   editable-grid demo's "+ Add line" (1440 and 390); blur-first control 6 of
+   6. Cause measured: `.bo-data-table-container`'s `padding-block-end:
+   calc(6lh + …)` reserve (data-table.css, the `:has(… :focus-within
+   .bo-form-field__message)` rule from 190.1) exists only while the focused
+   cell shows its message. The mousedown on Add blurs the cell, the reserve
+   collapses (container shrinks 142px), Add rises ~141px before the mouseup,
+   and `click` lands on `SECTION.demo`. **The row height does NOT change** —
+   173.2 holds; do not "fix" the row. Accept requires a `check:claims` case
+   with real mouse down/up, red-proved, and 173.2's and 190.1's properties
+   still true. Use `diagnosing-bugs` first (it is bug mode). The repro script
+   lived in this session's scratchpad and is gone; its method is written into
+   375.5's closure in ROADMAP.md.
 
 **Owner-blocked, do not touch:** 374.4 (border-strong token re-value; Jev
 escalated it at 0.54, so it is a visual-weight preference), 373.6 (dock
@@ -60,10 +50,10 @@ hide-on-upward-scroll; two refusals stand and the reversal is unwritten),
 373.8 (docs IA, 17 groups to 7). Plus, outside these slices: 112.3/112.4,
 296.3, 369.1, 273.2.
 
-**Two dispatcher counters are deliberately deferred** and both are overdue:
-Standardize 5/4 and Objective 3/3 (slices 373, 374, 375). The Objective grill
-is the natural close-out once the three above land — it would grill slices
-whose work has actually landed rather than sitting in flight.
+**Two dispatcher counters are overdue and deferred only behind the P0**:
+Standardize 8/4 and Objective 3/3 (slices 373, 374, 375). Rule 1 outranks
+both, so 375.9 goes first; then rule 2 (Standardize) fires, then rule 3
+(the Objective grill of 373/374/375, whose work has now landed).
 
 **A trap that has bitten twice — read before touching ROADMAP.md.** Build the
 staged content from HEAD BY CONSTRUCTION and write the same bytes to the
@@ -73,11 +63,12 @@ drifted, and a later `git add` silently reverted four closed items to `[ ]`.
 
 ## PLAN — work this order.
 
-**Base state.** `main` is pushed and level with origin at `3a71d6bc`. The last
-full run was green: core build, 172 tests, docs build 0 FAILs, `check:claims`
-263, `check:layout` 128 pages, `test:axe` 128 pages x 2 widths, 0 violations.
-**55 files are uncommitted** — the in-flight 373.x work recorded below, plus
-corrections to this file, INDEX.md, pilot-112 and the direction grill.
+**Base state.** `main` is pushed and level with origin at `e4243415`. Last
+full run green on this tree: core build, 172 tests, docs build 0 FAIL (57
+gates, 24 heuristic), `test:axe` 128 pages x 2 widths 0 violations,
+`check:layout` 128 pages. The files still uncommitted are the 2026-09-20 owner
+checkpoint (erp-suite journey, DESIGN.md, Gallery.astro, …) — not this GOAL's
+work; do not stage them with an item.
 
 **Phase 1 — verify and land the uncommitted 373.x work. Highest priority: it
 is the only thing at risk of rotting.** Runtime surface is small and contained:
