@@ -173,8 +173,7 @@ const saveConfirmMarkup = `<form>
     <p class="bo-u-text-muted">The composition that measured clean is
     <strong>in-flow</strong>: the result is written into a region that sits in the
     form's own document flow, so the page reflows around it rather than a fixed layer
-    painting over it. Two details carry that, and both are the reason the earlier
-    attempt failed. The region ships <strong>empty and exposed</strong> — not
+    painting over it. Two details carry that. The region ships <strong>empty and exposed</strong> — not
     <code>hidden</code>, because a hidden node is not rendered and so is not in the
     accessibility tree at all, which makes filling it and revealing it a change
     nothing was in a position to hear. And a save replaces the region's
