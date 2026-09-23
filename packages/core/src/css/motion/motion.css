@@ -99,12 +99,17 @@
   /* inline-block because `transform` does not apply to an inline box: the
      documented `<span class="bo-motion-spin">` sat still in ordinary flow —
      while its computed transform animated, which is how it passed (roadmap
-     345.1). A consumer who wants a block or flex spinner sets their own
-     display; unlayered author CSS beats this layer. A rotating box should
-     shrink-wrap its glyph anyway — a full-width block spins round a centre
-     far from the icon. */
-  .bo-motion-spin {
+     345.1). A spinner that is a BLOCK element — a sized <div> ring centred
+     with auto margins, say — now needs its own `display: block` in unlayered
+     CSS, which beats this layer (the 379 grill measured the ring falling to
+     the line start without it), and so does a layout primitive carrying the
+     class, since this layer outranks bo-components. `:not([hidden])` so
+     importing this module without the reset cannot un-hide a hidden
+     spinner. */
+  .bo-motion-spin:not([hidden]) {
     display: inline-block;
+  }
+  .bo-motion-spin {
     animation: bo-motion-spin 1s linear infinite;
   }
   @keyframes bo-motion-spin {

@@ -32,9 +32,11 @@ interface Props {
 }
 const { label, icon, initials } = Astro.props;
 /* One shared box for every mark so tiles line up whichever kind they use.
-   The height is FIXED rather than left to the content: a `.bo-badge` chip is
-   37px tall against an icon's 32px, which pushed the initials tiles' labels 5px
-   below their neighbours' in the same row (measured, not eyeballed).
+   The height is FIXED rather than left to the content: a `.bo-badge` chip and
+   an icon are different heights (37px against 32px when this was written; the
+   badge measures 30px as of 2026-09-24, so the pin now pads it UP), and an
+   unpinned mark put the initials tiles' labels out of line with their
+   neighbours' in the same row.
    The 2rem stays a literal on purpose (roadmap 314.1, and 292.8 recorded the
    same verdict for patterns/app-launch): the font-size scale tops out at
    --bo-font-size-xl = 1.5rem, so no token equals it and a swap would shrink

@@ -1693,7 +1693,7 @@ The last one is the only one worth watching. Four copies is the trigger this
 file names for the 0fr/1fr case, and it is met — but it is **two components, not
 four**: money and quantity each spell the idiom twice, because the joined child
 is either a bare control (`.bo-money > :nth-child(1 of :not([type="hidden"]))`;
-quantity's `__input:has(+ .bo-quantity__unit-select)`) or a combobox WRAPPER
+quantity's `__input:has(+ .bo-quantity__unit-select, + [type="hidden"] + .bo-quantity__unit-select)`, which skips one hidden input since 376.4) or a combobox WRAPPER
 whose real border is one level down (`> .bo-combobox:first-child > .bo-input`).
 Same decision, two child shapes, per component. Reopen if a THIRD component
 joins the pair — that is when a shared joined-control part would have somewhere

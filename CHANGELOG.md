@@ -14,9 +14,16 @@ pin.
 - **`.bo-motion-spin` now sets `display: inline-block`.** `transform` does not
   apply to an inline box, so the documented `<span class="bo-motion-spin">`
   did not visibly rotate in ordinary flow unless you added the declaration
-  yourself (you can now delete it). A spinner you want as a block or flex box
-  keeps whatever `display` your own CSS gives it — unlayered author styles beat
-  the framework's utility layer. Roadmap 345.1.
+  yourself (you can now delete it). **Migration:** a spinner that is a block
+  element and relied on the browser default — a sized `<div>` ring centred with
+  `margin-inline: auto`, or a `<div>` spinner with its label on the next line —
+  now needs `display: block` in your own CSS (unlayered author styles beat the
+  framework's utility layer); without it the ring sits at the line start and
+  the label joins its line. The same holds if you put the class on a layout
+  primitive (`<div class="bo-stack bo-motion-spin">`): the utility layer
+  outranks the component layer, so the stack computes `inline-block` unless
+  your own CSS restores `display: flex`. A `hidden` spinner stays hidden.
+  Roadmap 345.1.
 
 - **The default `./css` export no longer ships the framework's source
   comments.** `dist/css/index.css` (and every per-component file) is now

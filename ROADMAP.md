@@ -320,6 +320,62 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 379 — Objective grill of Slices 345, 378: every headline figure reproduces at its own revision, and all twelve findings are in what shipped BESIDE the figure — 345.1's move of `display: inline-block` into the utility breaks a block spinner nobody measured, and 378 published totals read off a working tree (2026-09-24)
+
+**Dispatched by rule 3** (`Objective 3 / 3 OVERDUE [320, 345, 378]`) after rule 1
+read 0 open P0 and rule 2 read `2 / 4` (`dispatch_status.py`). **Narrowed:**
+320 was grilled by Slice 322; 345 is in scope because 345.1 closed today, not
+for its 2026-09-08 sweep.
+Report: `.roundtable/grill-objective-345-378-2026-09-24.md` (2 finders + 2
+adversarial verifiers, workflow `wf_528e77c3-118`; 26 claims reproduced, 12
+findings, 12 survived, 0 refuted).
+
+**What held:** `scan:dead-style` 10 on 8 at HEAD and 11 on 9 at 378's own
+revision (clean `git archive` builds of both); 345's "38 of 52 from four source
+lines" recounted from the built pages; all seven standing refusal premises
+re-measured; the pasted recipe rotating (8 distinct rects in 8, red at 1 under
+forced `display: inline`); lanes 2-4 of 378 on clean builds of four commits;
+320.3's 8px chip gap live, red at 6.4px on the pre-fix build.
+
+**Fixed in this commit:**
+- **A block spinner lost its layout** (medium). A sized `<div>` ring centred
+  with `margin-inline: auto` fell to the line start (offsetLeft 184 → 0), and
+  `<div class="bo-stack bo-motion-spin">` computed `inline-block`, not `flex`.
+  No shipped page uses either shape (`git grep bo-motion-spin`), and the change
+  is unreleased, so it stays, with a **Migration** note in the CHANGELOG naming
+  both shapes and the fix. A consumer's own `display: block` restores the ring
+  (probe: offsetLeft 189 = centred).
+- **An à-la-carte import un-hid a `hidden` spinner** (low): motion.css alone
+  gave `<span hidden>` `display: inline-block`. The rule is now
+  `.bo-motion-spin:not([hidden])`, and it stays `none` with or without the
+  reset.
+- **The ACR's 2.5.7 remark read "…combobox.ts, …context-menu.ts is a non-drag
+  match"**: the verb now follows the list length (`extract-acr.mjs`).
+- **LOOPS.md's Settled joined-control paragraph** quoted quantity's selector
+  from before 376.4; it now quotes the shipped one.
+- **AppTile's comment** said a badge is 37px tall; it measures 30px, so BOX's
+  `block-size` pads the initials box up rather than capping it down.
+
+**Corrected in place:** 345.1's closure (the demo box is 16×36, its rotating
+rect 16-40px; drift was measured by the glyph's text Range, and the
+bounding-rect centre could not fail; the demo carries a font size and a `<p>`
+the recipe does not); Slice 345's `inline-size: 100%` refusal reason (dead in
+block flow too; `login.astro`'s discriminator is `margin-inline: auto`, live
+only inside a flex or grid parent); Slice 378's lane 3 totals (a working-tree
+build, +135 uncommitted words) and lane 4's DESIGN.md premise (no longer the
+slowest-growing file).
+
+**Thesis (§6 step 1, the reading 377.7 asks for, recorded 05:50 with
+`record_metric.py`):** npm
+`@busy-office/ui` 16 downloads in the last week (daily 0, 2, 2, 1, 0, 0, 0),
+`create-ui` 12; jsDelivr 41 hits a month; 0 stars, forks, or non-owner issues
+or discussions. Latest published is 0.8.0 (2026-09-06). Not visible to any of
+these: copies of `dist`, private mirrors, unpkg. Unchanged from Slice 377's
+reading: adoption cannot be told apart from zero, and 377.5/377.6 are still
+the owner's.
+
+No new item: every finding was fixed or corrected in this commit.
+
 ## Slice 378 — Standardize sweep, **4 of 4 lanes, all clean**: the window touched every lane's input (two CSS fixes, a JS fix, prose), and no lane moved against the verdicts Slice 376 recorded that morning (2026-09-24)
 
 **Dispatched by rule 2** (`Standardize 4 / 4 OVERDUE` — 376.2, 376.4, 377.1,
@@ -336,12 +392,20 @@ would have stopped paying for itself.
   lists 376.2 and 376.4, so the lane read changed input and found no new repeat.
 - **Lane 3** — the flagged union is the same 17 pages (every one in the
   20-page enumeration), total 119,198 -> 119,212 words from the 376/377 prose
-  edits; no page crossed a line.
+  edits; no page crossed a line. [**Corrected by Slice 379:** both totals were
+  read from working-tree builds carrying 135 words of the owner's uncommitted
+  `/getting-started/screen-kit/` checkpoint. At the commits they are
+  **119,063 -> 119,077** (`7ee51901` → `456f9966`); the flagged set is the same
+  17 either way.]
 - **Lane 4** — LOOPS.md's dispatch region: 0 of 16 sections moved. ROADMAP.md
   is 5 up since the 376.8 sweep (a real cut, `ce10de0d`). ENVIRONMENT.md 24 up
   and DESIGN.md 24 up keep their standing verdicts (224.2 / 332.1 -> 361
   HONEST; 167.1 item 5 HONEST, the control) — DESIGN.md's one new step is the
-  373.3 remainder, a correction.
+  373.3 remainder, a correction. [**Corrected by Slice 379:** "the control"
+  was re-quoted without re-checking its premise. 167.1 called DESIGN.md the
+  control as "the slowest-growing file measured"; on the report this lane
+  read (its default window) it is +48.4%, against CLAUDE.md +14.7% and
+  ROADMAP.md +14.3%. The HONEST verdict is not re-decided here.]
 
 No consolidation, no new verdict, no item: a clean pass is the Exit (§3).
 
@@ -4410,7 +4474,13 @@ got to"; every one is dead *here* and load-bearing somewhere the scan cannot see
   `progress`) — dead only against `section.demo`'s flex stretch. The identical
   `inline-size: 100%; max-inline-size: 24rem` idiom on `patterns/login.astro:31`
   is **not** reported dead, which is the discrimination: the pair is the portable
-  form and the docs container is what makes it redundant.
+  form and the docs container is what makes it redundant. [**Corrected by
+  Slice 379:** the reason is false, and was when written. The three are dead
+  in plain block flow too (288 → 288, 384 → 384, 256 → 256 px), and login's
+  rule is not identical: it adds `margin-inline: auto`, which is what makes it
+  live, and only inside a flex or grid parent. The verdict to keep them
+  stands: they are the portable half of the pair, live wherever a flex or
+  grid parent does not stretch the widget, which is login's case.]
 - **1 · `margin-block-start` on combobox's static listbox** — the component's own
   copy sits inside `@supports (anchor-name: --a) and (anchor-scope: --a)`
   (`combobox.css:55-69`). Dead in a browser that supports anchor positioning;
@@ -4482,8 +4552,13 @@ already carries about hoisted imports.
          it: `scan:dead-style` 11 on 9 pages -> **10 on 8**, that declaration
          exactly. **Found beside it:** the live demo span was a stretched flex
          item, 342px wide, so its glyph orbited the box's centre (true before
-         and after); the demo is now written as the recipe is (inside a `<p>`),
-         32-36px wide, 0px centre drift, live at 1440/390 light/dark.
+         and after); the demo is now inside a `<p>` as the claim case pastes
+         the recipe, 0px glyph drift, live at 1440/390 light/dark.
+         [**Corrected by Slice 379:** the demo box is **16×36px**; "32-36px"
+         was one read of the rotating rect, which spans 16-40px. The drift
+         figure holds, but only when measured by the glyph's text Range: the
+         bounding-rect centre reads 0 on the old orbiting demo too, so it cannot
+         fail. The demo also carries a font size the recipe does not.]
          `check:claims` +1 (the pasted recipe visibly rotates), red before.
          CHANGELOG entry. Jev: supported 0.94 (A 0.98, B 0.92).
 
