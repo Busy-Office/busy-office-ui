@@ -445,6 +445,31 @@ untracked or uncommitted, so the removal was a working-tree change.
          under ~12 characters is the cheap detector; measure how many exist
          before deciding it is worth a gate.
 
+8. [ ] **375.8 — the Jev threshold cannot discriminate where it is being asked
+       to.** The completion review scored 373.3 at **0.81** against a
+       provisional band of 0.85, on evidence where every Accept criterion had a
+       direct measurement and one carried a self-run red-proof. The item was
+       marked done on this repo's own rule — "do not let a band decide anything
+       a check can decide" — but the episode is the finding: **an n=5
+       validation set does not support a 0.04 distinction**, and a band that
+       cannot be trusted at its own boundary will either be overridden (as here)
+       or obeyed wrongly.
+       - Observed so far, which is the seed of a larger set: supported cases
+         have read 0.96, 0.92, 0.91; unsupported 0.20, 0.05, 0.03; and the
+         genuinely-partial ones 0.84, 0.81, 0.79, 0.68, 0.65, 0.51, 0.35. The
+         middle band is populated, which is what a useful detector looks like —
+         it is the CUT that is unvalidated, not the signal.
+       - **Accept — measure, do not tune.** Build the set to at least 20 cases
+         drawn from this repo's own landed and refused items, each with a truth
+         value established by measurement rather than by recollection, and
+         report the separation. Then either the 0.85/0.35 cuts are justified by
+         the data and stay, or they move to where the data puts them, or the
+         review is reported as a three-way signal with no cut at all. Finding
+         that no clean cut exists is a satisfying outcome and should be written
+         down rather than papered over with a rounder number.
+       - Until that lands the bands stay PROVISIONAL and the review stays
+         advisory, exactly as `.roundtable/jev-rubrics.md` already says.
+
 ## Slice 374 — the joined-control seam was spelled against the AUTHORED markup, not the RENDERED DOM: three trailing children defeat `:last-child`, the framework's own canonical quantity markup is one of them, and the defect shipped on **3 pages / 5 rendered views** while a gate that visits those exact elements measured only their focus rings (2026-09-22)
 
 **Found by the owner, from a screenshot.** The `+` stepper on
@@ -1013,7 +1038,7 @@ before quoting a change.
          injection showed. No new gate — the population is 2 lexical matches
          and the Kanban case has no lexical marker (94.11).
 
-3. [ ] **373.3 — the app-shell contract, on the page that already owns it, and
+3. [x] **373.3 — the app-shell contract, on the page that already owns it, and
        the two shipped CSS leaks the shell measurement found.** Measured on the
        fresh dist: (i) an `<dialog class="bo-offcanvas">` drawer holding a
        `bo-sidebar-nav` placed INSIDE a `.bo-app-shell` narrower than the rail
@@ -1049,7 +1074,7 @@ before quoting a change.
          `viewport-fit` assumption instead), `role="toolbar"` on any action row
          without the APG keyboard model.
 
-4. [ ] **373.4 — the shipped move/remove floor loses focus at completion, in
+4. [x] **373.4 — the shipped move/remove floor loses focus at completion, in
        the framework and in the copyable sample.** Measured with trusted keys:
        Enter on `tag-input`'s remove button → chip removed, `activeElement ===
        body` (`tag-input.ts` `removeTag` calls `tag.remove()` with no handoff);
