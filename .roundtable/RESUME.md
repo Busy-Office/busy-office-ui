@@ -20,25 +20,24 @@ survives none.
 
 ---
 
-## GOAL — set 2026-09-23 (second, owner-requested). Clear the three armed dispatcher rules, in rule order.
+## GOAL — set 2026-09-23 (second, owner-requested): COMPLETE 2026-09-24 03:02.
 
-**STATUS 2026-09-24 02:20 — rules 1 and 2 cleared; rule 3 in flight.**
+Cleared in rule order and pushed (`ae053854`): **rule 1** — 375.9, 375.10,
+376.2, 376.4, plus the 373.3/373.4 remainders; **rule 2** — Slice 376 (4 of 4
+lanes) and the 376.8 archive sweep (ROADMAP.md 15,977 -> 9,314 lines);
+**rule 3** — Slice 377, the Objective grill of 373-376
+(`.roundtable/grill-objective-373-374-375-376-2026-09-24.md`: 47 of 47
+load-bearing claims hold; 35 of 37 findings survived adversarial verification).
 
-- **Rule 1 (P0), cleared four times over:** 375.9 (anchored cell message +
-  static fallback; nothing resizes on focus/blur), 375.10 (combobox options
-  commit by mouse/touch), and — filed by the Standardize sweep — 376.2
-  (collapse stub + the dashboard card that had stopped animating) and 376.4
-  (grouped quantity keeps its unit joint). Plus the 373.3/373.4 remainders
-  (hunks behind two closed items that were never committed). All pushed.
-- **Rule 2 (Standardize), cleared:** Slice 376, 4 of 4 lanes, and the twelfth
-  archive sweep (376.8: 40 slices, ROADMAP.md 15,977 -> 9,314 lines).
-- **Rule 3 (Objective grill of 373/374/375/376), IN FLIGHT:** workflow
-  `wf_50c977f1-ac4` (4 finders + 4 adversarial verifiers). Output becomes
-  `.roundtable/grill-objective-373-374-375-376-2026-09-24.md` and a slice
-  for its findings. If a context clear lands first: re-run that grill from
-  its script; nothing of it is committed yet.
-- **Open, not P0:** 375.11 (375.9's residuals), 376.5 (launcher header
-  decision), 376.7 (ratchet counts noise as a cut).
+**Next wake, by the dispatcher's own rules:** rule 1 fires on **P0 377.1** (a
+real right-click never opens the context menu — its own pointerup
+light-dismisses it) and **P0 377.2** (the launcher filter desyncs after
+Escape). Then rule 4's oldest open item.
+
+**Owner decisions now queued** — the two new ones are the grill's headline:
+**377.5** (release the eight unreleased fixes, four of them P0, or record why
+not) and **377.6** (is busy-office-erp the named first user?). Plus the
+standing set: 112.3/112.4, 296.3, 373.6, 373.8, 369.1, 273.2, 374.4.
 
 **UNCOMMITTED FILES, classified 2026-09-24 — do not trust an older label.**
 The 373.3 and 373.4 hunks that sat here (DESIGN.md, Gallery.astro,
