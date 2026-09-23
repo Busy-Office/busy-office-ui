@@ -29,7 +29,7 @@ A **·** marks a file nothing outside `.roundtable/` links to. That is not a def
 | — | [0.3.0 release brief — read in under a minute (2026-08-22)](release-0.3.0-brief.md) | ✓ |
 | — | [Suite score — the screen ledger](suite-score.md) | ✓ |
 | — | [Verification discipline — the worked examples](verification-discipline.md) | ✓ |
-| 2026-09-23 | [Should the launcher's text filter be extracted? — no, and here is the measurement](launcher-filter-extraction-2026-09-23.md) | · |
+| 2026-09-23 | [Should the launcher's text filter be extracted? — no, and here is the measurement](launcher-filter-extraction-2026-09-23.md) | ✓ |
 | 2026-09-21 | [Grill — putting Kev (kev-0.5b) into the loop: dispatcher, gate, first-level decision](grill-kev-in-the-loop-2026-09-21.md) | · |
 | 2026-09-20 | [Direction review — comprehensive ERP UI framework](grill-erp-framework-direction-2026-09-20.md) | · |
 | 2026-09-20 | [Grill — examples as experiments across desktop, mobile and RF](grill-examples-device-coverage-2026-09-20.md) | · |
@@ -242,4 +242,4 @@ The signature of a directory that has outgrown retrieval is the same subject inv
 
 Two files on one subject is usually a deliberate follow-up (a grill and its sign-off). Three is worth a look.
 
-— 217 files, 156 cited from outside, 62 uncited snapshots, 4 repeated subject(s).
+— 217 files, 157 cited from outside, 61 uncited snapshots, 4 repeated subject(s).

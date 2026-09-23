@@ -1,8 +1,8 @@
 # STATUS
 
-Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror, same doctrine as `loops.db` itself (see CLAUDE.md).
+Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-19 12:16 UTC
+Generated at: 2026-09-23 12:36 UTC
 
 ## Open items by slice
 
@@ -45,32 +45,31 @@ Generated at: 2026-09-19 12:16 UTC
   - 369.2 — 10 of 128 pages never get the print reset on `body`.
 - **Slice 372** (1 open)
   - 372.1 — rule 5's pairing keeps the last sample of each calendar day on a recorded reason that is false at 72 of 73 pairs, and the case cited for it is mislabelled.
-- **Slice 373** (9 open)
-  - 373.2 — four shipped-status claims are false on the built site, and the decision page blanks 5 of 39 "Not when" cells it has structured data for.
-  - 373.3 — the app-shell contract, on the page that already owns it, and the two shipped CSS leaks the shell measurement found.
-  - 373.4 — the shipped move/remove floor loses focus at completion, in the framework and in the copyable sample.
-  - 373.5 — a searchable, viewport-filling launcher as a section of `/patterns/app-launch`, with zero framework source change.
+- **Slice 373** (2 open)
   - 373.6 — App dock: hide on UPWARD scroll. OWNER CALL — two refusals stand on the record and the reversal is not written down.
-  - 373.7 — the six-intent recipe path exists; make its one router read its own data and name the validator in the AI path.
   - 373.8 — docs IA: collapse 17 sidebar groups into the prompt's seven (Start here / Foundations / Components / Patterns and layouts / Integration / Reference / Contributor and decision history). OWNER CALL.
-  - 373.9 — `check:layout` is blind to vertical collapse: a name at 0px wide passed it with a 357px row.
-  - 373.10 — independent re-score of `file-upload · interaction`.
+- **Slice 374** (1 open)
+  - 374.4 — `.bo-btn--secondary` standing alone is identified almost entirely by a 1.47:1 border, the contrast gate structurally cannot see it, and the published ACR says it can.
+- **Slice 375** (2 open)
+  - 375.4 — a class name inside a copyable sample is validated by nothing.
+  - 375.5 — the direct Qty-to-Add pointer path is uncertified.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1715 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-09-09 08:54   ok
-  Objective     1 / 3 slice           since 2026-09-09 10:55   ok  [373]
-  Optimize      1 wake-date(s) newer   since 2026-09-09 09:44   STALE   [newest pair: dispatch-region-words; 143 sample(s), 8 of 47 name(s) paired across days]
-  -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-09, not this one — record a metric or say the rule could not be evaluated.
-     the unit is DISTINCT LOG DATES after 2026-09-09 (2026-09-19), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
+dispatch status — counter-triggered rules (1741 iterations logged)
+  Standardize   9 / 4 Continue rounds since 2026-09-22 20:55   OVERDUE
+  Objective     3 / 3 slices          since 2026-09-09 10:55   OVERDUE  [373, 374, 375]
+  -> a counter is at or past its threshold; the dispatcher should pick it
+  Optimize      2 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 144 sample(s), 8 of 47 name(s) paired across days]
+  -> rule 5's newest comparable pair predates 2 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-19, not this one — record a metric or say the rule could not be evaluated.
+     the unit is DISTINCT LOG DATES after 2026-09-19 (2026-09-22, 2026-09-23), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (39 of 47 name(s) have only one day and are not an input to a rule that compares two runs):
+       claims                      5d  2026-09-07 176 count -> 2026-09-19 203 count  +27
        gates                       4d  2026-09-07 55 count -> 2026-09-09 56 count  +1
        dispatch-region-words       3d  2026-09-08 7492 words -> 2026-09-09 7484 words  -8
-       claims                      4d  2026-09-06 169 count -> 2026-09-07 176 count  +7
        axe-violations              8d  2026-09-03 0 count -> 2026-09-06 0 count  +0   NEVER MOVED
        bundle-gz-kb                5d  2026-08-17 11.7 kB -> 2026-09-03 15.1 kB  +3.4
        ci-gates                    2d  2026-08-17 14 gates -> 2026-08-18 15 gates  +1
@@ -85,7 +84,6 @@ dispatch status — counter-triggered rules (1715 iterations logged)
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
 - 373.6 — App dock: hide on UPWARD scroll. OWNER CALL — two refusals stand on the record and the reversal is not written down.
-- 373.7 — the six-intent recipe path exists; make its one router read its own data and name the validator in the AI path.
 - 335.1 — The Discussions intake has never returned a non-empty list, in either environment.
 - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
@@ -98,16 +96,16 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-09 08:54 · Standardize · sweep · Slice 370 — Standardize sweep 4 of 4 lanes, lanes 1-3 clean (0 dead attrs of 1,365; css-repeats 74/242/230/8 matching the standing table body-for-body; 15 flagged prose pages all inside the mandated 16-set). Lane 4's +198 fully attributed by the per-revision series: +194 is collision 5, +4 is 341.1's own net, and Step 0c is flat at 1,520 across three revisions — no new material, no cut. 351.1 DECIDED and ACCEPTED: 350.1's base-rate command now windows a..b^, settled by evidence 350.1 already carried in prose (f9e0f17d..161ede68 is 16 commits, 15 touching no lane input, the 16th being the sweep). Both predicates re-measured at 141 windows — a..b 15/10.6%/span 2037, a..b^ 20/14.2%/span 1896 — reconciled twice and verified by executing the block back out of ROADMAP.md. 350.1 left OPEN on purpose · landed · 3d985b83
-- 2026-09-09 08:54 · Meta · refusal · a comment-only-diff refinement to lane 2's window guard — 'this change could move a lane's reading' is semantic (94.11), and both 350.1 and 351.1 already refuse a gate on exactly it · refused · 3d985b83
-- 2026-09-09 09:43 · Continue · build · Slice 371 — 339.2 decided: rule 3's +303 is three kinds; the cost narrative moves to LOOPS-archive.md, 279.4's loop-SET argument stays uncut (975 -> 907 words) · landed · 4e6b83c1
-- 2026-09-09 09:43 · Meta · refusal · filing P5's restatement of P8's lesson as a defect — the text labels itself a forward-reference, and filing it would inflate the backlog · refused · 4e6b83c1
-- 2026-09-09 09:43 · Meta · refusal · amending P7's charter sentence — 'the five recurrence narratives are in LOOPS-archive.md' is still true, and its scoping to five IS this slice's finding · refused · 4e6b83c1
-- 2026-09-09 10:55 · Objective · grill · Slice 372 — Objective grill of Slices 369, 370, 371: per_day_last discards a metric sample on the recorded ground that a wake sampling twice a day is correcting itself; measured, 72 of 73 adjacent intra-day pairs span 2-50 commits and only 1 matches. ci-wall-time's 'burst inside one wake' spans 36 rows / 35 shas / 5 loops. Cost: 5 of 8 day-paired names publish a movement that occurred between no two samples (dispatch-region-words -8 vs a true -68) and rule 5's predicate disagrees on 3 of 8. Filed 372.1, cloud-takeable, Accept as a property. Every structural claim in 370/371 reproduced exactly; all four lanes re-run · landed · 28c6387e
-- 2026-09-09 10:55 · Meta · refusal · a gate asserting a metric sample must not be discarded when a commit falls between it and the next — base rate 72 of 73 intra-day pairs, so it would be red on a correct tree from its first run (94.11's rule pointing the other way) · refused · 28c6387e
-- 2026-09-09 10:55 · Meta · refusal · editing LOOPS.md's own false one-wake sentence inside this grill — 372.1's Accept leaves open which of two fixes is right, and a grill that pre-empts its own item has decided it by practice rather than by measurement · refused · 28c6387e
-- 2026-09-19 20:16 · Continue · build · 373.1 — dropzone parity with the native input (5/5 cases, trusted drops), two-channel states, page corrected, claims 179→203; wrapped-row defect found by screenshot and fixed; 373.9/373.10 filed · landed · 42c4e4b0
-- 2026-09-19 20:16 · Meta · refusal · accept-filtering inside initFileDropzone — the platform does not filter a drop either (measured), so it would be stricter than native and would hand the framework a message policy that belongs to the consumer · refused · 42c4e4b0
+- 2026-09-23 15:15 · Continue · build · 374.7 — check:contrast's coverage guard could not see a border at all (it bound fg only on d.prop==='color'); extended to adjudicate every edge pairing three ways: PAIRS at 3:1, EDGE_EXEMPT with a reason naming the other channel, or EDGE_TODO as debt. 26 adjudicated, 15 exempt, 5 debt, three state edges newly gated and passing. Red-proved by injection confirmed in the parsed declarations; retagged @heuristic with a 6-case self-test covering the detector's two real defects · landed · 78cb4457
+- 2026-09-23 15:15 · Meta · refusal · gating on 'is this edge interactive' — that is a property of the rendered element, not of a declaration, and border-strong at 1.34:1 is both .bo-kbd's decorative keycap and .bo-btn--secondary's control boundary; the gate enforces the SHAPE and leaves the judgement to a human · refused · 78cb4457
+- 2026-09-23 19:11 · Continue · build · 374.5 — the default ./css export shipped the framework's inline reasoning: comments measured 80.5 kB gz, 98% of the gap to index.min.css. Build now strips them from dist (index.css 99.5->16.7, rf-essentials 45.7->8.2, whole payload 401.1->185.8 kB gz) while src/css keeps every word. Five budget rows re-based, including yesterday's 97.3->107.5 raise, recorded as overturned · landed · 6acbfe70
+- 2026-09-23 19:11 · Meta · refusal · a blanket comment strip — check:deprecated-icons caught that icon.css's four DEPRECATED blocks are read out of the SHIPPED artifact as user-facing contract, so the rule became the CSS bang-comment convention instead · refused · 6acbfe70
+- 2026-09-23 19:54 · Continue · build · 375.8 + 375.6 — validated the Jev threshold at n=20 (no clean cut exists: a true and a false case both read 0.81; 0.85 gives 0 false positives / 1 false negative, any cut <=0.80 flips that, so the asymmetry is what the cut buys) and refused 375.6 after re-measuring its premise: the duplicated CI build is 71s, 1.2 of ~14.7 machine-minutes, about 8% of the run · landed · de4cbaeb
+- 2026-09-23 19:54 · Meta · refusal · restructuring CI to build once and share dist — measured at 8% of the run, the large duplication is npm ci which setup-node already caches, shard 5 does not merely read dist, and the Accept's figures only exist after a real CI run · refused · de4cbaeb
+- 2026-09-23 20:12 · Continue · build · 373.9 refused with the count (the '<8ch at 390px' predicate is true of 125 of 128 pages; the premise IS true — check:layout passes on a 0px-wide name in a 714px row — but no threshold separates the defect from four-column tables, and the best predicate scores 0 true / 12 false positives) and 373.10's blind re-score of file-upload interaction HELD AT 3 · landed · f7bc8777
+- 2026-09-23 20:12 · Meta · refusal · building a vertical-collapse gate for 373.9 — 94.11's ceremony case in mirror image: there a predicate was uniformly true, here no threshold exists at all · refused · f7bc8777
+- 2026-09-23 20:36 · Continue · build · 375.7 — wrong-choice extraction takes the whole clause; 3 empty 'Not for' cells now carry their object · landed · e7f69729
+- 2026-09-23 20:36 · Meta · refusal · 375.7's <12-char clause gate — base rate 0 of 39 after the fix · refused · e7f69729
 
 ## Sunset test
 
