@@ -36,6 +36,13 @@ pin.
 
 ### Fixed
 
+- **A mouse press or a tap on a combobox option now selects it.** It never
+  did: the press moved focus off the field, which closed the list before the
+  click arrived, so only the keyboard could pick a value — in every combobox,
+  including the command bar, where the press also closed the palette.
+  `initCombobox()` now keeps focus in the field while an option is pressed.
+  Roadmap 375.10.
+
 - **A press below a data-table no longer misses while a cell shows its error
   message.** The table used to grow a 142px reserve under itself while an
   invalid cell had focus and drop it on blur — and the mousedown on "+ Add

@@ -1515,6 +1515,81 @@ check(
   JSON.stringify(cbPick),
 );
 
+/* 375.10 — a real POINTER press on an option commits it. The keyboard path
+   above always worked; a mouse press or a tap did not, anywhere: mousedown
+   moved focus off the input, focusout closed the list, and the click landed
+   on whatever was left under the pointer. element.click() skips mousedown,
+   which is why every unit test passed — so these drive real input. */
+async function pointerPick(path, inputSel, typed, { touch = false, width = DESKTOP_WIDTH, pre = null, pick = 0 } = {}) {
+  await visit(path, { width, height: 900 });
+  if (touch) await page.setViewport({ width, height: 900, hasTouch: true, isMobile: true });
+  if (pre) { await page.click(pre); await new Promise((r) => setTimeout(r, 250)); }
+  await page.evaluate((s) => {
+    document.querySelector(s).scrollIntoView({ block: 'center' });
+    window.__cbSelects = 0;
+    document.addEventListener('bo:combobox-select', () => { window.__cbSelects++; });
+  }, inputSel);
+  await page.focus(inputSel);
+  await page.evaluate((s) => document.querySelector(s).select(), inputSel);
+  await page.keyboard.type(typed, { delay: 20 });
+  await new Promise((r) => setTimeout(r, 200));
+  const before = await page.evaluate((s, pick) => {
+    const input = document.querySelector(s);
+    const list = document.getElementById(input.getAttribute('aria-controls'));
+    const o = [...(list?.querySelectorAll('[role="option"]') ?? [])]
+      .filter((x) => !x.hidden && x.getAttribute('aria-disabled') !== 'true' && x.getClientRects().length)[pick];
+    if (!o) return { noOption: true };
+    const r = o.getBoundingClientRect();
+    const x = r.left + r.width / 2, y = r.top + r.height / 2;
+    return { label: o.textContent.trim().replace(/\s+/g, ' '), value: input.value, x, y,
+      hitIsOption: document.elementFromPoint(x, y)?.closest('[role="option"]') === o };
+  }, inputSel, pick);
+  if (before.noOption) return before;
+  if (touch) {
+    await page.touchscreen.tap(before.x, before.y);
+  } else {
+    await page.mouse.move(before.x, before.y);
+    await page.mouse.down();
+    await new Promise((r) => setTimeout(r, 60));
+    await page.mouse.up();
+  }
+  await new Promise((r) => setTimeout(r, 300));
+  const after = await page.evaluate((s) => ({
+    value: document.querySelector(s)?.value, selects: window.__cbSelects,
+  }), inputSel);
+  return { ...before, after, committed: after.selects > 0 && after.value !== before.value && before.label.includes(after.value) };
+}
+for (const [label, path, sel, typed, opts] of [
+  ['/components/combobox, mouse', '/components/combobox/', '#demo-cb-input', 'c', {}],
+  ['/components/combobox, touch tap @390', '/components/combobox/', '#demo-cb-input', 'c', { touch: true, width: NARROW_WIDTH }],
+  ['/patterns/editable-grid cell, mouse', '/patterns/editable-grid/', '#eg-table tbody tr [role="combobox"]', 'st', { pick: 1 }],
+  ['/patterns/command-bar inside its dialog, mouse', '/patterns/command-bar/', '#cmd-input', 'po', { pre: '#cmd-open' }],
+  ['/components/money searchable currency, mouse', '/components/money/', 'input[aria-controls="cur-list"]', 'u', {}],
+]) {
+  const r = await pointerPick(path, sel, typed, opts);
+  check(`combobox (${label}): a real press on an option commits it — bo:combobox-select fires and the field holds the option (375.10)`,
+    !r.noOption && r.hitIsOption && r.committed, JSON.stringify(r));
+}
+
+/* /components/money: "The list stays shut until you type" — the searchable
+   currency demo shipped without initCombobox(), so typing opened nothing
+   (found by 375.10's attack). Focus alone must not open it; a keystroke must. */
+await visit('/components/money/');
+await page.focus('input[aria-controls="cur-list"]');
+await new Promise((r) => setTimeout(r, 150));
+const curFocus = await page.evaluate(() => document.getElementById('cur-list').matches(':popover-open'));
+// The field ships holding "EUR"; select it so the keystroke replaces it, as a user's would.
+await page.evaluate(() => document.querySelector('input[aria-controls="cur-list"]').select());
+await page.keyboard.type('u', { delay: 20 });
+await new Promise((r) => setTimeout(r, 200));
+const curTyped = await page.evaluate(() => ({
+  open: document.getElementById('cur-list').matches(':popover-open'),
+  shown: [...document.querySelectorAll('#cur-list [role="option"]')].filter((o) => !o.hidden).map((o) => o.dataset.value),
+}));
+check('money: the searchable currency stays shut on focus and opens, filtered, on the first keystroke',
+  !curFocus && curTyped.open && curTyped.shown.length > 0 && curTyped.shown.length < 5,
+  JSON.stringify({ openOnFocus: curFocus, ...curTyped }));
+
 /* scan-input — an RF handheld types the barcode fast and sends its terminator.
    Three things must hold or the warehouse silently receives garbage: the field
    CLEARS, it KEEPS focus for the next scan, and the polite live region gets the

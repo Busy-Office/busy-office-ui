@@ -35,8 +35,8 @@ The first 2026-09-23 goal (every non-owner-blocked item in 373/374/375) closed
    173.2's and 190.1's properties still hold.
    **LANDED 2026-09-24** — anchored message + static fallback reserve,
    dialog/offcanvas rest at `none`; +14 `check:claims` cases, each red-proved.
-   It filed **P0 375.10** (a real mouse/touch press on a combobox option never
-   commits — keyboard only), so rule 1 fires again: do 375.10 next, then rule 2.
+   It filed **P0 375.10** (combobox options could not be picked by mouse or
+   touch) — LANDED 2026-09-24 as well. Rule 1 is clear; next is rule 2.
    375.11 holds the measured residuals (Firefox unverified, classic-scrollbar
    fallback, frozen columns) and is NOT a P0.
 

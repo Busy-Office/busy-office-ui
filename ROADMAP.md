@@ -635,7 +635,7 @@ untracked or uncommitted, so the removal was a working-tree change.
          both rounds, in the middle band — it tracks the not-covered list
          above, which is outside this item's Accept and is 375.11.
 
-10. [ ] **P0 · 375.10 — a real mouse or touch press on a combobox option never
+10. [x] **P0 · 375.10 — a real mouse or touch press on a combobox option never
        commits it; only the keyboard works.** Found by 375.9's attack
        workflow (side lens, unpatched CSS). `combobox.ts`'s `focusout`
        handler closes the listbox at mousedown (focus goes to BODY, the
@@ -658,6 +658,25 @@ untracked or uncommitted, so the removal was a working-tree change.
          `preventDefault()` on enabled options committed 11 of 11. Also
          settle whether `/components/money`'s currency combobox demo is
          meant to be live (it never calls `initCombobox`).
+       - **DONE 2026-09-24.** `combobox.ts` cancels `mousedown` on an enabled
+         option of a listbox that has an input — the APG pattern — so focus
+         never leaves the input and the existing click handler commits; the
+         listbox's padding and scrollbar are left alone. `check:claims` +4
+         real-pointer cases (mouse and touch on `/components/combobox`, the
+         editable-grid cell, the command bar inside its dialog): all four
+         FAILED on the pre-fix build with the option under the pointer and
+         `bo:combobox-select` never firing, and pass now. The attack's
+         11-scenario reproduction reads 11/11 committed (was 0/10). The
+         command bar commits, THEN its own select handler closes it. A vitest
+         case pins the contract (cancelled on an enabled option only) and
+         failed before the fix; jsdom cannot move focus on mousedown, so the
+         browser cases carry the behaviour.
+       - **The money demo is meant to be live** — its caption states "the list
+         stays shut until you type" and the sample carries no script — so
+         the page now calls `initCombobox()`, with two claims (shut on focus,
+         opens filtered on the first keystroke; a real press commits),
+         red-proved by stripping the call from the built script.
+       - Jev completion review: supported 0.92 (A 0.95, B 0.87, C 0.94).
 
 11. [ ] **375.11 — what 375.9 measured and did not fix.** Each is recorded
        rather than silently accepted; each wants a measurement or a

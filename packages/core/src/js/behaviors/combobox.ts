@@ -386,6 +386,20 @@ export function initCombobox(): void {
     true,
   );
 
+  // A pointer press on an option must not move focus (roadmap 375.10). An
+  // option is not focusable, so the browser's mousedown default sent focus to
+  // <body> or the nearest focusable ancestor; the focusout handler above then
+  // closed the list, and the click landed on whatever was left under the
+  // pointer. Nothing committed by mouse or touch, anywhere — keyboard only.
+  // Cancelling the focus move on enabled options keeps the list open for the
+  // click below; the listbox's own padding and scrollbar are left alone.
+  document.addEventListener('mousedown', (e) => {
+    const option = (e.target as Element | null)?.closest<HTMLElement>('[role="option"]');
+    if (!option || option.getAttribute('aria-disabled') === 'true') return;
+    const listbox = option.closest<HTMLElement>('[role="listbox"]');
+    if (listbox && inputFor(listbox)) e.preventDefault();
+  });
+
   document.addEventListener('click', (e) => {
     const option = (e.target as Element | null)?.closest<HTMLElement>('[role="option"]');
     const listbox = option?.closest<HTMLElement>('[role="listbox"]');

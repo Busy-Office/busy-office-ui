@@ -286,6 +286,27 @@ describe('initCombobox', () => {
     expect(input.getAttribute('aria-expanded')).toBe('false');
   });
 
+  /* 375.10. jsdom does not move focus on mousedown, so this cannot show the
+     press committing — check:claims does that in a real browser. It pins the
+     contract the fix rests on: the browser's focus move is cancelled on an
+     enabled option, and nowhere else. */
+  it('mousedown on an enabled option is cancelled so focus cannot leave the input', () => {
+    const { input, listbox } = combobox();
+    type(input, 'cc');
+    const press = (el: Element) => {
+      const e = new MouseEvent('mousedown', { bubbles: true, cancelable: true });
+      el.dispatchEvent(e);
+      return e.defaultPrevented;
+    };
+    const opt = listbox.querySelector('#cb-opt-2') as HTMLElement;
+    expect(press(opt)).toBe(true);
+    const disabled = listbox.querySelector('#cb-opt-3') as HTMLElement;
+    disabled.setAttribute('aria-disabled', 'true');
+    expect(press(disabled)).toBe(false);
+    expect(press(listbox)).toBe(false);
+    expect(press(input)).toBe(false);
+  });
+
   it('survives duplicated ids from a partial swap: each widget stays self-contained', () => {
     // A naive fragment duplication (the classic HTMX partial-swap accident)
     // leaves two widgets with IDENTICAL ids and aria-controls. Resolution
