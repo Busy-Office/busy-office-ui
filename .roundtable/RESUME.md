@@ -34,8 +34,12 @@ right-click now opens the context menu — a menu asked for mid-press opens afte
 the release) and P0 377.2 (the launcher re-filters on close) both LANDED and
 pushed (`29365089`). Rule 1 is clear.
 
-**Next wake:** rule 2 — Standardize reads **4 / 4 OVERDUE** (376.2, 376.4,
-377.1, 377.2). Then rule 4's oldest open item.
+**Rule 2 ran at 04:15:** Slice 378, 4 of 4 lanes, all clean. Counters now
+Standardize 0 / 4, Objective 1 / 3.
+
+**Next wake:** rules 1-3 have nothing; **rule 4** — the oldest open item
+across all slices that is not owner-blocked (read `ROADMAP.md`, skip the
+owner list below).
 
 **Row-label trap, found by `dispatch_status.py`:** record rows that begin
 `P0 377.1 — …` name no slice to the rule-3 counter (it warns "none names a
