@@ -1761,3 +1761,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-24 03:02 · Objective · grill · Slice 377 — grill of 373-376: 47/47 claims hold; P0 377.1 + 377.2, revision-blind completion gate, adoption ~zero, owner calls 377.5/377.6 · logged · faf331b4
 - 2026-09-24 03:36 · Continue · bug · P0 377.1 — real right-click opens the context menu (opens after release when asked mid-press) · landed · 0ade896e
 - 2026-09-24 03:48 · Continue · bug · P0 377.2 — launcher re-filters on dialog close; grid matches field after Escape · landed · b4e592d3
+- 2026-09-24 04:15 · Standardize · sweep · 378 — Standardize sweep 4 of 4 lanes, all clean (lane 2 input touched by 376.2/376.4) · logged · 456f9966
