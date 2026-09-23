@@ -246,7 +246,7 @@
               "the sidebar's active entry carries aria-current=\"page\" + the visible marker — two channels"
             ],
             [
-              "Narrow (<900px shell width)",
+              "Narrow shell (container state)",
               "the sidebar collapses to its icon rail; labels stay in the accessibility tree. A bottom-nav tier is deliberately NOT shipped — re-opens on a real consumer need"
             ],
             [

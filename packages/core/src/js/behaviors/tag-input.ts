@@ -29,6 +29,22 @@ function removeTag(tag: Element): void {
   const clone = tag.cloneNode(true) as Element;
   clone.querySelector('.bo-tag-input__remove')?.remove();
   const label = clone.textContent?.trim() ?? '';
+
+  /* Removing the chip that HOLDS focus drops the caret to <body> — the
+     keyboard user loses their place mid-task (WCAG 3.2.1/2.4.3). Read that
+     BEFORE dispatching: a listener may move focus itself, and the question
+     here is where focus was when the removal began.
+
+     The field is the destination because it already exists in the markup
+     contract, already takes the next value, and needs no new state — a
+     roving index over the remaining chips would be a second navigation model
+     for one interaction. Resolved from the container before `tag.remove()`,
+     since a detached chip has no ancestor to search from. */
+  const container = tag.closest('.bo-tag-input');
+  const field = container?.querySelector<HTMLElement>('.bo-tag-input__field') ?? null;
+  const activeBefore = document.activeElement;
+  const removingFocused = tag.contains(activeBefore);
+
   tag.dispatchEvent(
     /**
      * @event bo:tag-remove
@@ -38,7 +54,17 @@ function removeTag(tag: Element): void {
      */
     new CustomEvent('bo:tag-remove', { bubbles: true, detail: { value: label } }),
   );
+
+  /* A listener that moved focus somewhere outside the doomed chip meant it.
+     Comparing against `activeBefore` rather than testing for "not body" is
+     what distinguishes a deliberate move from the blur the removal is about
+     to cause anyway. */
+  const activeAfter = document.activeElement;
+  const consumerMovedFocus = activeAfter !== activeBefore && !tag.contains(activeAfter);
+
   tag.remove();
+
+  if (removingFocused && !consumerMovedFocus) field?.focus();
 }
 
 export function initTagInput(): void {

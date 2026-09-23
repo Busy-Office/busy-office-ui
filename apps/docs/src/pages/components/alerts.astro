@@ -15,6 +15,31 @@ const toastMarkup =`<!-- Region ships in your layout ONCE, before any toast exis
   <button class="bo-btn bo-btn--ghost bo-btn--icon bo-alert__dismiss"
           aria-label="Dismiss">✕</button>
 </div>`;
+const saveConfirmMarkup = `<form>
+  <!-- Ships EMPTY and EXPOSED, like the toast region above. Not
+       \`hidden\`: a hidden node is not rendered, so it is not in the
+       accessibility tree — filling it while hidden and revealing it
+       afterwards changes nothing anyone was listening to. -->
+  <div id="save-result" role="status" aria-live="polite"></div>
+
+  <!-- ...your fields... -->
+
+  <div class="bo-form-actions">
+    <button class="bo-btn" type="button">Cancel</button>
+    <button class="bo-btn" type="submit">Save</button>
+  </div>
+</form>
+
+<script type="module">
+  // On your real save success (fetch/htmx response), not a click demo.
+  // Replace the region's CONTENTS; never remove the region itself.
+  // That is what makes the second save behave like the first.
+  const box = document.createElement('div');
+  box.className = 'bo-alert bo-alert--success';
+  box.innerHTML =
+    '<div><span class="bo-alert__title">Saved.</span> PO-88213 approved.</div>';
+  document.getElementById('save-result').replaceChildren(box);
+</script>`;
 ---
 <Gallery title="Alerts & toasts" description="Inline alerts and toasts for busy-office-ui, including which ARIA role to use so an assistive technology announces only what actually arrives.">
   <p class="demo-note">
@@ -130,6 +155,54 @@ const toastMarkup =`<!-- Region ships in your layout ONCE, before any toast exis
     <strong>not</strong> float above an open modal dialog (the dialog owns the top
     layer) — render confirmations inside the dialog instead.</p>
   </section>
+
+  <section class="demo">
+    <h2>A save confirmation on a form with a sticky action bar</h2>
+    <p class="bo-u-text-muted"><strong>Not a floating toast here.</strong> Both a
+    toast and a sticky <a href={`${base}/components/form/`}>form action bar</a> anchor
+    to the viewport's bottom-end corner, and a toast always wins the stacking order —
+    measured, on <code>/patterns/detail-form</code> at 390&times;844: the Save button
+    100% covered. A fixed clearance offset was tried and measured wrong too: pushed
+    tall enough to clear the widest shipped action bar, it moved the SAME obstruction
+    onto a real field instead — Tab from Vendor through the form and
+    <code>Quantity for Standing desk</code> landed 100% behind the shifted region, an
+    editable input the reader could no longer see. No fixed offset is safe: the toast
+    is pinned to the viewport, the form scrolls its own content, and any constant
+    either misses the action bar or migrates the collision onto whatever field native
+    scroll-into-view happens to land on next.</p>
+    <p class="bo-u-text-muted">The composition that measured clean is
+    <strong>in-flow</strong>: the result is written into a region that sits in the
+    form's own document flow, so the page reflows around it rather than a fixed layer
+    painting over it. Two details carry that, and both are the reason the earlier
+    attempt failed. The region ships <strong>empty and exposed</strong> — not
+    <code>hidden</code>, because a hidden node is not rendered and so is not in the
+    accessibility tree at all, which makes filling it and revealing it a change
+    nothing was in a position to hear. And a save replaces the region's
+    <strong>contents</strong>, never the region, so the second save behaves exactly
+    like the first.</p>
+    <button class="bo-btn bo-btn--secondary" type="button" id="save-confirm-trigger">Simulate save</button>
+    <div id="save-confirm-region" role="status" aria-live="polite"></div>
+    <div class="bo-form-field" style="margin-block-start: var(--bo-space-3)">
+      <label class="bo-form-field__label" for="save-confirm-demo-field">A field below the confirmation</label>
+      <input class="bo-input" id="save-confirm-demo-field" />
+    </div>
+    <pre><code>{saveConfirmMarkup}</code></pre>
+    <p class="bo-u-text-muted">No dismiss button, and that is deliberate: dismissing
+    removes the node the reader is focused on, which drops focus to the document body
+    (<code>initAlerts()</code> removes its <code>.bo-alert</code> and hands focus
+    nowhere). A result that is replaced by the next result does not need one.
+    <strong>What was measured, and only this:</strong> on
+    <code>/patterns/detail-form</code>, real Tab and Shift+Tab traversal between
+    <code>Vendor</code> and <code>Save purchase order</code> — every field and both
+    action buttons, each with a positive rendered box and its own centre hit-testing
+    to itself — at 390 and 1440, light and dark, all three densities, and a 2-row
+    wrapped action bar. No measured control intersected the message. That is a result
+    about this composition on this form, not a general property of in-flow content,
+    and it does not transfer to a floating overlay elsewhere on the page — the
+    attempt above is what that costs. Whether a screen reader actually speaks the
+    change is a separate question these checks do not answer; they assert the region
+    is exposed before it is written to, which is the precondition for it.</p>
+  </section>
   <script>
     import { initAlerts } from '@busy-office/ui/js';
     initAlerts();
@@ -155,6 +228,19 @@ const toastMarkup =`<!-- Region ships in your layout ONCE, before any toast exis
           <button class="bo-btn bo-btn--ghost bo-btn--icon bo-alert__dismiss" aria-label="Dismiss">✕</button>
         </div>`,
       );
+    });
+    let saveCount = 0;
+    document.getElementById('save-confirm-trigger')?.addEventListener('click', () => {
+      // Replace the CONTENTS of a region that is always there. The previous
+      // shape toggled `hidden` on the alert itself and let initAlerts remove
+      // it, which made the second save throw on a node that no longer
+      // existed — the demo and the copyable recipe now share this one.
+      const region = document.getElementById('save-confirm-region')!;
+      saveCount += 1;
+      const box = document.createElement('div');
+      box.className = 'bo-alert bo-alert--success';
+      box.innerHTML = `<div><span class="bo-alert__title">Saved.</span> PO-88213 was approved (save ${saveCount}).</div>`;
+      region.replaceChildren(box);
     });
   </script>
   <ClassRef component="alert" />

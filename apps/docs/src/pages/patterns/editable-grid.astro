@@ -43,14 +43,42 @@ const markup = `<table class="bo-data-table" data-row-edit>
             step="0.01" value="3.40" aria-label="Unit price" />
       </td>
       <td class="bo-data-table__row-edit-actions">
-        <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--secondary" type="button" data-row-edit-save aria-label="Save line 1 (Steel bracket) — unsaved changes" hidden><span class="bo-icon bo-icon--save" aria-hidden="true"></span></button>
-        <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--ghost" type="button" data-row-edit-cancel aria-label="Discard changes to line 1 (Steel bracket)" hidden><span class="bo-icon bo-icon--close" aria-hidden="true"></span></button>
-        <button class="bo-btn bo-btn--sm bo-btn--danger-ghost" type="button" data-line-remove aria-label="Remove line">✕</button>
+        <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--secondary" type="button" data-row-edit-save aria-label="Save LINE-1 — unsaved changes" hidden><span class="bo-icon bo-icon--save" aria-hidden="true"></span></button>
+        <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--ghost" type="button" data-row-edit-cancel aria-label="Discard changes to LINE-1" hidden><span class="bo-icon bo-icon--close" aria-hidden="true"></span></button>
+        <button class="bo-btn bo-btn--sm bo-btn--danger-ghost" type="button" data-line-remove aria-label="Remove LINE-1">✕</button>
       </td>
     </tr>
   </tbody>
 </table>
 <button class="bo-btn bo-btn--secondary" type="button" data-line-add>+ Add line</button>
+
+<!-- The row source the Add button clones. It ships WITH this recipe: the
+     script below reads it by id, so a copy without it adds nothing. -->
+<template id="line-template">
+  <tr data-row-id="">
+    <td>
+      <div class="bo-combobox">
+        <input class="bo-input" role="combobox" aria-expanded="false"
+            aria-controls="" aria-autocomplete="list" autocomplete="off" aria-label="Item" />
+        <ul class="bo-combobox__listbox" role="listbox" popover>
+          <li class="bo-combobox__option" role="option" data-value="SKU-4021">Steel bracket, 40mm</li>
+          <li class="bo-combobox__option" role="option" data-value="SKU-4022">Steel bracket, 60mm</li>
+        </ul>
+      </div>
+    </td>
+    <td class="bo-data-table__col--numeric">
+      <input class="bo-input bo-input--numeric" type="number" aria-label="Quantity" />
+    </td>
+    <td class="bo-data-table__col--numeric">
+      <input class="bo-input bo-input--numeric" type="number" step="0.01" aria-label="Unit price" />
+    </td>
+    <td class="bo-data-table__row-edit-actions">
+      <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--secondary" type="button" data-row-edit-save hidden><span class="bo-icon bo-icon--save" aria-hidden="true"></span></button>
+      <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--ghost" type="button" data-row-edit-cancel hidden><span class="bo-icon bo-icon--close" aria-hidden="true"></span></button>
+      <button class="bo-btn bo-btn--sm bo-btn--danger-ghost" type="button" data-line-remove>✕</button>
+    </td>
+  </tr>
+</template>
 
 <script type="module">
   import { initRowEdit, initCombobox } from "@busy-office/ui/js";
@@ -59,10 +87,31 @@ const markup = `<table class="bo-data-table" data-row-edit>
   // Add/remove a line is plain app logic, not a framework behavior — the
   // framework has no opinion on WHERE new rows come from (a <template>
   // clone here; your app might fetch a fragment from the server instead).
+  const table = document.querySelector("[data-row-edit]");
+  const addBtn = document.querySelector("[data-line-add]");
+
+  // Every row action names the row it is IN. One generic "Remove line"
+  // repeated down the column tells a screen-reader user nothing about which
+  // line they are deleting, and positions shift on every add or removal.
+  // Names come from the row's STABLE identity, never from the item text: the
+  // item is editable, so a name copied from it is wrong the moment someone
+  // retypes the cell, and keeping the two in sync would mean listening to
+  // every edit to fix a label nobody changed.
+  function nameRowActions(tr) {
+    const id = tr.dataset.rowId;
+    tr.querySelector("[data-line-remove]")?.setAttribute("aria-label", \`Remove \${id}\`);
+    // Save keeps the "— unsaved changes" phrase: the Unsaved BADGE was
+    // removed and its programmatic state moved into this name (owner
+    // decision 157.1), so the name is the only channel carrying the row's
+    // dirty state. Renaming it to just "Save LINE-2" silently deletes that.
+    tr.querySelector("[data-row-edit-save]")?.setAttribute("aria-label", \`Save \${id} — unsaved changes\`);
+    tr.querySelector("[data-row-edit-cancel]")?.setAttribute("aria-label", \`Discard changes to \${id}\`);
+  }
+
   let n = 1;
-  document.querySelector("[data-line-add]").addEventListener("click", () => {
+  addBtn.addEventListener("click", () => {
     n += 1;
-    const tbody = document.querySelector("[data-row-edit] tbody");
+    const tbody = table.querySelector("tbody");
     const row = document.getElementById("line-template").content.cloneNode(true);
     const tr = row.querySelector("tr");
     tr.dataset.rowId = \`LINE-\${n}\`;
@@ -72,14 +121,34 @@ const markup = `<table class="bo-data-table" data-row-edit>
     const list = row.querySelector("ul");
     list.id = \`line-\${n}-list\`;
     row.querySelector('[role="combobox"]').setAttribute("aria-controls", list.id);
+    // Save/Cancel are icon-only and start hidden; without this they reveal
+    // themselves on first edit with no accessible name at all.
+    nameRowActions(tr);
     tbody.appendChild(row);
     tbody.lastElementChild.querySelector("input").focus();
     // No re-init call: initRowEdit()/initCombobox() are document-level
     // delegation — the new row's input and combobox work immediately.
   });
-  document.addEventListener("click", (e) => {
+
+  // Scoped to THIS table, not the document: a second grid on the page would
+  // otherwise have its rows removed by this handler too.
+  table.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-line-remove]");
-    if (btn) btn.closest("tr").remove();
+    if (!btn) return;
+    const tr = btn.closest("tr");
+
+    // Where focus goes is decided BEFORE the row leaves the DOM — afterwards
+    // there is no sibling to ask. Next row, else previous row, else the Add
+    // button, which is the only thing left when the table empties.
+    const next = tr.nextElementSibling?.querySelector("[data-line-remove]");
+    const prev = tr.previousElementSibling?.querySelector("[data-line-remove]");
+    const moveFocus = tr.contains(document.activeElement);
+
+    tr.remove();
+
+    // Only when the removed row HELD focus. Removing some other row must not
+    // yank the user out of whatever they were typing in.
+    if (moveFocus) (next || prev || addBtn).focus();
   });
 </script>`;
 ---
@@ -142,7 +211,7 @@ const markup = `<table class="bo-data-table" data-row-edit>
                   step="0.01" value="3.40" aria-label="Unit price" />
             </td>
             <RowEditActions row="line 1 (Steel bracket)">
-                <button class="bo-btn bo-btn--sm bo-btn--danger-ghost" type="button" data-line-remove aria-label="Remove line">✕</button>
+                <button class="bo-btn bo-btn--sm bo-btn--danger-ghost" type="button" data-line-remove aria-label="Remove LINE-1">✕</button>
             </RowEditActions>
           </tr>
         </tbody>
@@ -203,6 +272,49 @@ const markup = `<table class="bo-data-table" data-row-edit>
     fires a real <code>input</code> event, not just <code>bo:combobox-select</code>,
     so it composes with any generic field listener). Add a line: the new row's
     combobox and inline edit work immediately, no re-init call.</p>
+
+    <h3>Removing a row: where focus goes, and what the button is called</h3>
+    <p class="bo-u-text-muted">Both of these are <strong>yours</strong>, not the
+    framework's — add and remove are app logic here, so the recipe above has to
+    get them right rather than assume a behavior will. Two rules:</p>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Focus goes to the next surviving row's Remove button</strong>;
+      if the removed row was last, the <strong>previous</strong> row's; if it was
+      the only row, <strong>the grid's own Add button</strong> — which is all
+      that is left once the table is empty, and keeps the keyboard user on the
+      one control that can undo the emptiness. The destinations are read
+      <em>before</em> the row is detached, because afterwards there is no
+      sibling to ask. Focus only moves when the removed row actually
+      <em>contained</em> it: deleting some other row must not pull the reader
+      out of the cell they were typing in.</li>
+      <li><strong>Every Remove button names its own row.</strong> One generic
+      &ldquo;Remove line&rdquo; repeated down the column tells a screen-reader
+      user nothing about which line they are deleting, and after an add or a
+      removal the positions shift — so the label is derived from the row's
+      <strong>stable identity</strong> (<code>Remove LINE-2</code>), never typed
+      once into the markup and left there. Deliberately <em>not</em> the item
+      text: that cell is editable, so a name copied from it is wrong the moment
+      someone retypes it, and keeping the two in step would mean listening to
+      every edit to repair a label nobody touched. The same rule names the
+      row's icon-only Save and Cancel, which are <code>hidden</code> until the
+      row is dirty and would otherwise appear with no accessible name at
+      all.</li>
+    </ol>
+    <p class="bo-u-text-muted"><strong>When the pressed button no longer
+    exists</strong> — which is every successful removal — the browser drops
+    focus to <code>&lt;body&gt;</code> unless something moves it. That is why
+    the destination is computed first and applied after
+    <code>.remove()</code>; there is no framework behavior doing it for you
+    here.</p>
+    <p class="bo-u-text-muted"><strong>The status sentence is yours too.</strong>
+    Moving focus is not an announcement. If removing a line should be spoken
+    (&ldquo;LINE-2 removed, 2 lines remaining&rdquo;), write it into your own
+    <a href={base + '/concepts/accessibility#live-regions'}>live region</a> from
+    the same handler — along with whatever persistence the removal implies,
+    which is application data and stays yours. What is verified on this page is
+    where focus lands, the order of those steps, and that each label matches its
+    row, in a real browser with real key presses; whether a screen reader speaks
+    the change is a separate question these checks do not answer.</p>
   </section>
 
   <script>
@@ -215,8 +327,24 @@ const markup = `<table class="bo-data-table" data-row-edit>
     initQuantity();
     initTableSum();
     initTagInput();
+    // Mirrors the copyable recipe above, including the removal-focus rule and
+    // the row-specific Remove label. If these two drift apart the page is
+    // documenting something it does not run.
+    const egTable = document.getElementById('eg-table')!;
+    const egAdd = document.getElementById('eg-add')!;
+    function egNameRowActions(tr: HTMLElement) {
+      const id = tr.dataset.rowId;
+      tr.querySelector('[data-line-remove]')?.setAttribute('aria-label', `Remove ${id}`);
+      // See the recipe above: the dirty state lives in this name (157.1).
+      tr.querySelector('[data-row-edit-save]')?.setAttribute('aria-label', `Save ${id} — unsaved changes`);
+      tr.querySelector('[data-row-edit-cancel]')?.setAttribute('aria-label', `Discard changes to ${id}`);
+    }
+    // The rows present at load get the same treatment as cloned ones, so the
+    // label rule holds for every row rather than only the new ones.
+    for (const tr of egTable.querySelectorAll('tbody tr')) egNameRowActions(tr as HTMLElement);
+
     let n = 1;
-    document.getElementById('eg-add').addEventListener('click', () => {
+    egAdd.addEventListener('click', () => {
       n += 1;
       const tpl = document.getElementById('eg-template') as HTMLTemplateElement;
       const frag = tpl.content.cloneNode(true) as DocumentFragment;
@@ -226,12 +354,21 @@ const markup = `<table class="bo-data-table" data-row-edit>
       const combo = row.querySelector('input[role="combobox"]')!;
       list.id = `line-${n}-list`;
       combo.setAttribute('aria-controls', list.id);
-      document.querySelector('#eg-table tbody')!.appendChild(row);
+      egNameRowActions(row);
+      egTable.querySelector('tbody')!.appendChild(row);
       (row.querySelector('input') as HTMLElement).focus();
     });
-    document.getElementById('eg-table')!.addEventListener('click', (e) => {
+    egTable.addEventListener('click', (e) => {
       const btn = (e.target as Element).closest('[data-line-remove]');
-      if (btn) btn.closest('tr')!.remove();
+      if (!btn) return;
+      const tr = btn.closest('tr')! as HTMLElement;
+      // Destinations captured before removal — afterwards there is no sibling
+      // left to ask.
+      const next = tr.nextElementSibling?.querySelector('[data-line-remove]') as HTMLElement | undefined;
+      const prev = tr.previousElementSibling?.querySelector('[data-line-remove]') as HTMLElement | undefined;
+      const moveFocus = tr.contains(document.activeElement);
+      tr.remove();
+      if (moveFocus) (next || prev || egAdd).focus();
     });
 
     // Tag chips are consumer data: append on add (rejecting duplicates),
@@ -672,8 +809,8 @@ const markup = `<table class="bo-data-table" data-row-edit>
               </div>
             </td>
             <td class="bo-data-table__row-edit-actions">
-              <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--secondary" type="button" data-row-edit-save aria-label="Save line 1 (Steel bracket) — unsaved changes" hidden><span class="bo-icon bo-icon--save" aria-hidden="true"></span></button>
-              <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--ghost" type="button" data-row-edit-cancel aria-label="Discard changes to line 1 (Steel bracket)" hidden><span class="bo-icon bo-icon--close" aria-hidden="true"></span></button>
+              <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--secondary" type="button" data-row-edit-save aria-label="Save LINE-1 — unsaved changes" hidden><span class="bo-icon bo-icon--save" aria-hidden="true"></span></button>
+              <button class="bo-btn bo-btn--sm bo-btn--icon bo-btn--ghost" type="button" data-row-edit-cancel aria-label="Discard changes to LINE-1" hidden><span class="bo-icon bo-icon--close" aria-hidden="true"></span></button>
             </td>
           </tr>
           <tr data-row-id="PO-L2">

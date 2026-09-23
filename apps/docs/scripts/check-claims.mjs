@@ -49,7 +49,7 @@ import { DIST, REPO_ROOT } from './paths.mjs';
 import { WIDTHS, DESKTOP_WIDTH, NARROW_WIDTH } from './viewports.mjs';
 import { contrastRatio, composite } from '../../../packages/core/scripts/wcag.mjs';
 import { createRequire } from 'node:module';
-import { readFile, writeFile, mkdtemp, rm } from 'node:fs/promises';
+import { readFile, writeFile, mkdtemp, rm, cp } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 // Parsed, never grepped: the one claim below that reads shipped CSS is about a
 // rule this browser cannot exercise, and button.css's own comment names both
@@ -4676,6 +4676,324 @@ check(
   JSON.stringify(elevatedMotion),
 );
 
+/* MEASURED REFUSAL (roadmap 373.3): a universal automatic floating-toast
+   clearance was tried, shipped, and withdrawn — it fixed the original
+   Save-button collision but moved the SAME obstruction onto a real
+   focused FIELD instead (`Quantity for Standing desk`, 100% covered,
+   1481px^2, found by real Tab traversal from Vendor, not synthetic
+   focus-setting). The docs now state that measurement as the reason a
+   floating toast is not used in this composition, so it is a claim this
+   file has to keep proving, the same as any other — if an unrelated
+   change ever silently fixed the underlying z-index/anchor collision, the
+   refusal above would be citing a defect that no longer exists. */
+// `refEl` is a selector for a second element measured alongside the
+// focused one at EVERY step, not once at setup — an in-flow (or any
+// non-fixed) reference element's own viewport position changes as the
+// page scrolls during the walk, so a single snapshot from before the walk
+// began goes stale the moment the first Tab press scrolls the page (found
+// the hard way: comparing live steps against a setup-time snapshot of an
+// in-flow box read as "covered" purely because the PAGE had scrolled since
+// that snapshot, nothing to do with real geometry at the time each step
+// was measured).
+async function focusThroughForm(startSelector, steps, refSelector) {
+  await page.focus(startSelector);
+  const rows = [];
+  for (let i = 0; i < steps; i++) {
+    await page.keyboard.press('Tab');
+    await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+    rows.push(await page.evaluate((refSelector) => {
+      const a = document.activeElement;
+      const label = a.closest('.bo-form-field')?.querySelector('label')?.textContent?.trim() || a.getAttribute('aria-label') || a.name || a.id || a.tagName;
+      const r = a.getBoundingClientRect();
+      const ref = refSelector ? document.querySelector(refSelector) : null;
+      const refRect = ref ? ref.getBoundingClientRect() : null;
+      const ox = refRect ? Math.max(0, Math.min(r.right, refRect.right) - Math.max(r.x, refRect.x)) : 0;
+      const oy = refRect ? Math.max(0, Math.min(r.bottom, refRect.bottom) - Math.max(r.y, refRect.y)) : 0;
+      return { label, hasSize: r.width > 0 && r.height > 0, rect: { x: r.x, y: r.y, right: r.right, bottom: r.bottom }, refOverlap: ox * oy }; // unrounded
+    }, refSelector));
+  }
+  return rows;
+}
+
+/* Reproduces, via an isolated `page.addStyleTag` override (shared source is
+   NOT reverted — the fix above stays removed), the SPECIFIC configuration
+   that was actually shipped and withdrawn: an offset large enough to clear
+   the Save button (9rem, the value this task shipped then pulled). Proves
+   the claim the docs make — "a fixed offset big enough to clear the button
+   migrates the SAME obstruction onto a field" — is still true, not the
+   unrelated (always-true, always-was-true) fact that the plain unshifted
+   default also fails to clear Save; that is a different, narrower claim
+   this check does not need to carry. */
+await visit('/patterns/detail-form/', { width: NARROW_WIDTH, height: 844 });
+await page.addStyleTag({ content: 'html:has(.bo-form-actions:not(.bo-widget *)) .bo-toast-region{inset-block-end:calc(var(--bo-space-4) + 9rem) !important}' });
+const withdrawnOffsetRegression = await page.evaluate(() => {
+  const region = document.createElement('div');
+  region.className = 'bo-toast-region';
+  region.id = 'withdrawn-offset-check';
+  region.setAttribute('role', 'status');
+  document.body.append(region);
+  region.innerHTML = '<div class="bo-alert bo-alert--success bo-toast"><div><span class="bo-alert__title">Saved.</span> PO-88213 was approved.</div><button class="bo-btn bo-btn--ghost bo-btn--icon bo-alert__dismiss" aria-label="Dismiss">✕</button></div>';
+  return true;
+});
+await page.evaluate(() => new Promise((r) => setTimeout(r, 350)));
+const withdrawnOffsetSteps = await focusThroughForm('#df-vendor', 12, '#withdrawn-offset-check .bo-toast');
+const quantityStep = withdrawnOffsetSteps.find((s) => s.label === 'Quantity for Standing desk');
+check(
+  'MEASURED REFUSAL, reproduced via isolated override: the withdrawn 9rem offset still covers a real focused field (why a bigger fixed number is not the fix)',
+  !!quantityStep && quantityStep.hasSize && quantityStep.refOverlap > 0,
+  JSON.stringify({ quantityStep }),
+);
+await page.evaluate(() => document.getElementById('withdrawn-offset-check')?.remove());
+
+/* The safe composition, as /components/alerts now ships it: a PERSISTENT
+   `role="status"` region in the form's own document flow whose CONTENTS are
+   replaced on each save.
+
+   The candidate this replaces toggled `hidden` on the `.bo-alert` itself and
+   left `initAlerts()` free to remove it. Three things were wrong with it, all
+   three reproduced against the built page before this rewrite (2026-09-21,
+   `/patterns/detail-form/` and `/components/alerts/` at NARROW_WIDTH x 844):
+
+     1. Save -> dismiss -> Save threw `Cannot set properties of null (setting
+        'textContent')` and rendered nothing. `initAlerts()` REMOVES a non-toast
+        alert (`behaviors/alert.ts` `dismiss()`), so the handler's second call
+        wrote to a detached id. Focus went to BODY.
+     2. `hidden` means not rendered, and the accessibility tree said so:
+        ignored=true, ignoredReasons=["notRendered"], role=none. The content
+        changed while the node was in that state, so the region was never
+        exposed at the moment it mattered.
+     3. The geometry walk took a fixed 12 steps, which reaches `Cancel`
+        (79.36x36) and stops one short of `Save purchase order` (169.89x36) at
+        step 13; it never reversed direction; it never measured the control it
+        started on; and its predicate was `!hasSize || refOverlap === 0`, which
+        PASSES a control with no rendered box at all.
+
+   So the walk below is bounded by an explicit TERMINAL CONTROL rather than a
+   step count — `Order date` is an `<input type="date">` and Chromium gives it
+   four separate Tab stops, so any hard-coded number encodes a browser detail
+   and silently shortens when it changes. Not reaching the terminal is a
+   FAILURE, not a short list that reads like a clean pass. */
+
+/* Walk with real keys from `startSelector` to the control whose accessible
+   text is `terminalText`, measuring the START element itself before the first
+   press (the previous version Tab'd off Vendor and never measured it). `ref`
+   is re-read at EVERY step: an in-flow element's viewport position moves as
+   the page scrolls, so one setup-time snapshot goes stale on the first press. */
+async function walkToTerminal({ startSelector, terminalText, back = false, limit = 40, refSelector }) {
+  await page.focus(startSelector);
+  const read = async (step) => page.evaluate((refSelector, step) => {
+    const a = document.activeElement;
+    const label = a.closest('.bo-form-field')?.querySelector('label')?.textContent?.trim()
+      || a.getAttribute('aria-label') || a.textContent?.trim().slice(0, 40) || a.name || a.id || a.tagName;
+    const r = a.getBoundingClientRect();
+    const ref = refSelector ? document.querySelector(refSelector) : null;
+    const refRect = ref ? ref.getBoundingClientRect() : null;
+    const ox = refRect ? Math.max(0, Math.min(r.right, refRect.right) - Math.max(r.x, refRect.x)) : 0;
+    const oy = refRect ? Math.max(0, Math.min(r.bottom, refRect.bottom) - Math.max(r.y, refRect.y)) : 0;
+    /* The visible hit target, not just a non-zero rect: a control can have a
+       box and still be unreachable because something paints over its middle.
+       `elementFromPoint` resolving INTO the control (itself or a descendant)
+       is what "the reader can actually click this" means. */
+    const cx = r.x + r.width / 2, cy = r.y + r.height / 2;
+    const hit = (r.width > 0 && r.height > 0) ? document.elementFromPoint(cx, cy) : null;
+    return {
+      step, label, tag: a.tagName, id: a.id || '',
+      w: +r.width.toFixed(2), h: +r.height.toFixed(2),
+      hasSize: r.width > 0 && r.height > 0,
+      centreHitsSelf: !!hit && (hit === a || a.contains(hit)),
+      refPresent: !!refRect && refRect.width > 0 && refRect.height > 0,
+      refOverlap: +(ox * oy).toFixed(4),
+    };
+  }, refSelector, step);
+
+  const steps = [await read(0)];
+  let reached = steps[0].label === terminalText;
+  for (let i = 1; i <= limit && !reached; i++) {
+    if (back) await page.keyboard.down('Shift');
+    await page.keyboard.press('Tab');
+    if (back) await page.keyboard.up('Shift');
+    await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+    const s = await read(i);
+    steps.push(s);
+    if (s.label === terminalText) reached = true;
+  }
+  return { steps, reached, terminalText, presses: steps.length - 1, limit };
+}
+
+const SAFE_REGION = '#safe-confirm-region';
+const SAFE_START = '#df-vendor';
+const SAFE_TERMINAL = 'Save purchase order';
+
+/* The fixture is the SHIPPED composition, built the way the page's own handler
+   builds it: an always-present exposed region, contents replaced. It is not a
+   separately invented box — `safeRegionHtml` is the same shape the copyable
+   recipe on /components/alerts prints. */
+function safeRegionHtml(id) {
+  return `<div id="${id}" role="status" aria-live="polite"></div>`;
+}
+function safeResultHtml() {
+  return '<div class="bo-alert bo-alert--success"><div><span class="bo-alert__title">Saved.</span> PO-88213 was approved.</div></div>';
+}
+
+async function safeCompositionCheck({ width, height, theme, density, extraButton }) {
+  await visit('/patterns/detail-form/', { width, height });
+  /* `data-theme` set directly, as the elevated-alert case above does — NOT
+     `localStorage.setItem('bo-theme', …)` + revisit. That key is not the one
+     the docs shell reads (it stores `bo-theme-pref`), so the reload comes back
+     on the default and a "dark" case silently measures light. Verified here
+     rather than assumed: `themeApplied` below is read back off the rendered
+     body, and the two themes must not produce the same background. */
+  await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), theme);
+  if (density) {
+    await page.evaluate((d) => document.documentElement.setAttribute('data-density', d), density);
+    await new Promise((r) => setTimeout(r, 120));
+  }
+  const setup = await page.evaluate((regionHtml, resultHtml, extraButton, regionSel) => {
+    const form = document.querySelector('#df-vendor').closest('form');
+    form.insertAdjacentHTML('afterbegin', regionHtml);
+    const region = document.querySelector(regionSel);
+    const bar = document.querySelector('.bo-form-actions');
+    if (extraButton) {
+      const btn = document.createElement('button');
+      btn.className = 'bo-btn bo-btn--secondary'; btn.type = 'button'; btn.textContent = 'Save as draft';
+      bar.prepend(btn);
+    }
+    // Empty-and-exposed is the state the claim is about, so measure it BEFORE
+    // anything is written: an empty region must occupy no space.
+    const emptyRect = region.getBoundingClientRect();
+    const box = document.createElement('div');
+    box.innerHTML = resultHtml;
+    region.replaceChildren(box.firstElementChild);
+    const r = region.getBoundingClientRect();
+    /* The wrapped-bar scenario claims TWO rows. Counting distinct rounded
+       block-start offsets among the bar's own buttons is what "two rows"
+       means; asserting the extra button exists does not. */
+    const tops = [...bar.querySelectorAll('button')].map((b) => Math.round(b.getBoundingClientRect().top));
+    return {
+      insideForm: !!form,
+      emptyRegionTakesNoSpace: emptyRect.height === 0,
+      regionRendered: r.width > 0 && r.height > 0,
+      regionText: region.textContent.trim(),
+      regionStillPresent: !!document.querySelector(regionSel),
+      barRows: new Set(tops).size,
+      barButtons: tops.length,
+      themeApplied: document.documentElement.getAttribute('data-theme'),
+      bodyBg: getComputedStyle(document.body).backgroundColor,
+    };
+  }, safeRegionHtml('safe-confirm-region'), safeResultHtml(), extraButton, SAFE_REGION);
+
+  const fwd = await walkToTerminal({ startSelector: SAFE_START, terminalText: SAFE_TERMINAL, refSelector: SAFE_REGION });
+  /* Reverse walk: starts at the END of the ring and walks back to Vendor.
+     Starting it at `#df-vendor` with terminal 'Vendor' is the mistake this
+     comment exists to prevent — step 0 matches the terminal immediately, the
+     walk returns after 0 presses, and a reverse direction that measured
+     nothing reads as a pass. Caught by the `steps.length > 1` guard below. */
+  const back = await walkToTerminal({
+    startSelector: '.bo-form-actions button[type="submit"]', terminalText: 'Vendor', back: true, refSelector: SAFE_REGION,
+  });
+  await page.evaluate((sel) => document.querySelector(sel)?.remove(), SAFE_REGION);
+  return { setup, fwd, back };
+}
+
+/* No `!hasSize` escape: a control with no rendered box FAILS rather than being
+   skipped. Every measured control must have a positive box, hit-test to itself
+   at its centre, and share zero area with the message — and the message must
+   actually be on screen while that is measured, or the zeros mean nothing. */
+function safeOk({ setup, fwd, back }, { expectRows = 1, expectTheme = 'light' } = {}) {
+  const stepsOk = (w) => w.reached && w.steps.length > 1 &&
+    w.steps.every((s) => s.hasSize && s.centreHitsSelf && s.refPresent && s.refOverlap === 0);
+  return setup.insideForm && setup.regionRendered && setup.regionStillPresent &&
+    setup.emptyRegionTakesNoSpace && setup.regionText.includes('PO-88213') &&
+    setup.barRows === expectRows && setup.themeApplied === expectTheme &&
+    stepsOk(fwd) && stepsOk(back);
+}
+const safeNarrowLight = await safeCompositionCheck({ width: NARROW_WIDTH, height: 844, theme: 'light', density: null });
+check(
+  'in-flow save result: narrow light — real Vendor<->Save traversal both directions, every control has a box, hit-tests to itself and shares zero area with the message',
+  safeOk(safeNarrowLight),
+  JSON.stringify(safeNarrowLight),
+);
+const safeNarrowDark = await safeCompositionCheck({ width: NARROW_WIDTH, height: 844, theme: 'dark', density: null });
+check('in-flow save result: narrow dark', safeOk(safeNarrowDark, { expectTheme: 'dark' }), JSON.stringify(safeNarrowDark));
+/* The dark case must actually BE dark. Two themes that render the same body
+   background mean the theme never applied and the pair measured one thing
+   twice — the failure this file just had, with the wrong localStorage key. */
+check(
+  'in-flow save result: the light and dark cases rendered different themes (the pair is not measuring light twice)',
+  safeNarrowLight.setup.themeApplied === 'light' && safeNarrowDark.setup.themeApplied === 'dark' &&
+    safeNarrowLight.setup.bodyBg !== safeNarrowDark.setup.bodyBg,
+  JSON.stringify({ light: { theme: safeNarrowLight.setup.themeApplied, bg: safeNarrowLight.setup.bodyBg },
+    dark: { theme: safeNarrowDark.setup.themeApplied, bg: safeNarrowDark.setup.bodyBg } }),
+);
+const safeDesktop = await safeCompositionCheck({ width: DESKTOP_WIDTH, height: 900, theme: 'light', density: null });
+check('in-flow save result: desktop', safeOk(safeDesktop), JSON.stringify(safeDesktop));
+const safeSpacious = await safeCompositionCheck({ width: NARROW_WIDTH, height: 844, theme: 'light', density: 'spacious' });
+check('in-flow save result: spacious density', safeOk(safeSpacious), JSON.stringify(safeSpacious));
+const safeCompact = await safeCompositionCheck({ width: NARROW_WIDTH, height: 844, theme: 'light', density: 'compact' });
+check('in-flow save result: compact density', safeOk(safeCompact), JSON.stringify(safeCompact));
+const safeWrap = await safeCompositionCheck({ width: NARROW_WIDTH, height: 844, theme: 'light', density: 'spacious', extraButton: true });
+check(
+  'in-flow save result: 2-row wrapped action bar at spacious density (the two rows are asserted, not assumed)',
+  safeOk(safeWrap, { expectRows: 2 }),
+  JSON.stringify(safeWrap),
+);
+
+/* The walk's own terminal guard, red-proved in-band rather than argued: asking
+   for a terminal that is not in the tab ring must come back NOT reached. If
+   this passes, `reached` is a field nothing can falsify and every walk above
+   is decorative. */
+const terminalGuard = await walkToTerminal({
+  startSelector: SAFE_START, terminalText: 'No such control in this form', limit: 20, refSelector: null,
+});
+check(
+  'in-flow save result, walk self-test: a terminal that does not exist is reported NOT reached (the guard can fail)',
+  terminalGuard.reached === false && terminalGuard.steps.length === 21,
+  JSON.stringify({ reached: terminalGuard.reached, steps: terminalGuard.steps.length, last: terminalGuard.steps.at(-1) }),
+);
+
+/* The lifecycle the review reproduced, on the ACTUAL page rather than an
+   injected fixture: two saves in a row, with a real click each time. The old
+   composition threw on the second; this one must render both, and the region
+   must survive as the same node. */
+await visit('/components/alerts/', { width: NARROW_WIDTH, height: 844 });
+const pageErrors = [];
+const onPageError = (e) => pageErrors.push(String(e.message || e));
+page.on('pageerror', onPageError);
+const regionAx = await (async () => {
+  const { root } = await cdp.send('DOM.getDocument', { depth: 0 });
+  const { nodeId } = await cdp.send('DOM.querySelector', { nodeId: root.nodeId, selector: '#save-confirm-region' });
+  if (!nodeId) return { missing: true };
+  const { nodes } = await cdp.send('Accessibility.getPartialAXTree', { nodeId, fetchRelatives: false });
+  const n = nodes[0] ?? {};
+  return { ignored: n.ignored ?? null, ignoredReasons: (n.ignoredReasons ?? []).map((p) => p.name), role: n.role?.value ?? null };
+})();
+check(
+  'in-flow save result: the status region is EXPOSED in the accessibility tree while still empty, before any save writes to it',
+  regionAx.ignored === false && regionAx.role === 'status',
+  JSON.stringify(regionAx),
+);
+const lifecycle = await (async () => {
+  const before = await page.$eval('#save-confirm-region', (el) => el.textContent.trim());
+  await page.click('#save-confirm-trigger');
+  await new Promise((r) => setTimeout(r, 150));
+  const first = await page.$eval('#save-confirm-region', (el) => el.textContent.trim());
+  await page.click('#save-confirm-trigger');
+  await new Promise((r) => setTimeout(r, 150));
+  const second = await page.evaluate(() => {
+    const region = document.getElementById('save-confirm-region');
+    return region ? { text: region.textContent.trim(), boxes: region.querySelectorAll('.bo-alert').length, rendered: region.getBoundingClientRect().height > 0 } : null;
+  });
+  return { before, first, second };
+})();
+page.off('pageerror', onPageError);
+check(
+  'in-flow save result: a second save renders as the first did — the region is never removed, exactly one result at a time, and nothing throws',
+  lifecycle.before === '' && lifecycle.first.includes('PO-88213') &&
+    !!lifecycle.second && lifecycle.second.text.includes('PO-88213') &&
+    lifecycle.second.boxes === 1 && lifecycle.second.rendered && pageErrors.length === 0,
+  JSON.stringify({ lifecycle, pageErrors }),
+);
+
 /* 278.1 — /components/table-toolbar enumerates the grid's keys, and until this
    wake it listed four of the six the shipped module implements: Home/End and
    their Ctrl variants were published in `keymap.json` (and from there onto
@@ -5439,6 +5757,1403 @@ check(
   JSON.stringify({ rest: dzForced.rest, bad: dzForced.bad, off: dzForced.off }),
 );
 await page.evaluate(() => document.getElementById('dz-states')?.remove());
+
+/* Drawer sidebar-nav labels never collapse to the rail's icon-only state,
+   however narrow the surrounding .bo-app-shell reads (roadmap 373.3). A
+   <dialog> escapes the shell's PAINT layer once open, not its DOM subtree —
+   `sidebar-nav.css`'s `@container bo-shell (max-width: 56rem)` block still
+   matched inside it. Measured before the fix: the drawer's own first label
+   read 1x1px, clip-path:inset(50%) — identical to the rail it sits beside,
+   on a page whose own hand-patch (removed with this fix, Gallery.astro) had
+   been quietly carrying the correct look for years. Opened with a REAL
+   click through the shipped [data-dialog-trigger] wiring, not a synthetic
+   dispatch — the trigger only renders under the same narrow-shell media
+   query the bug lived in, so a desktop-width visit would prove nothing. */
+await visit('/components/button/', { width: NARROW_WIDTH });
+await page.click('.docs-menu-btn');
+await new Promise((r) => setTimeout(r, 250));
+const drawerOpenLabel = await page.evaluate(() => {
+  const dialog = document.getElementById('nav-drawer');
+  const label = dialog?.querySelector('.bo-sidebar-nav__label');
+  if (!dialog || !label) return null;
+  const r = label.getBoundingClientRect();
+  const cs = getComputedStyle(label);
+  return { open: dialog.open, w: Math.round(r.width), h: Math.round(r.height), position: cs.position, clipPath: cs.clipPath };
+});
+check(
+  'docs drawer: opened with a real click, its sidebar-nav labels are never collapsed to icon-only, no matter how narrow the surrounding shell reads',
+  !!drawerOpenLabel && drawerOpenLabel.open === true && drawerOpenLabel.w > 20 &&
+    drawerOpenLabel.position === 'static' && drawerOpenLabel.clipPath === 'none',
+  JSON.stringify(drawerOpenLabel),
+);
+await page.keyboard.press('Escape');
+await new Promise((r) => setTimeout(r, 200));
+
+/* Paired fixture: the same drawer composition inside a narrow shell vs
+   truly outside any shell, at DESKTOP width — container behavior, not
+   viewport width, is what's under test (373.3 review finding 2). Label,
+   heading AND link, since finding 1 (heading padding leaking through)
+   needs a property the label-only pair above it can't catch.
+
+   Two real bugs in the FIRST version of this fixture, found by independent
+   review and confirmed by re-reading the code before touching anything:
+   (1) no viewport reset — it silently inherited NARROW_WIDTH from the
+   drawer-click case above it, so "at DESKTOP width" was asserted in a
+   comment and never actually true; (2) the "outside" control was ALSO a
+   `.bo-app-shell` (just a 900px-wide one), so it was "inside a shell wide
+   enough not to collapse," not "outside any shell" — a real control has no
+   `.bo-app-shell` ancestor at all. Both fixed below, plus a setup check so
+   neither can silently regress: two boxes that are equally broken (both
+   0-size, say) must not read as "they match." */
+await page.setViewport({ width: DESKTOP_WIDTH, height: 900 });
+const pairedDrawer = await page.evaluate(() => {
+  const wrap = document.createElement('div');
+  wrap.id = 'drawer-pair-probe';
+  wrap.style.cssText = 'position:fixed;inset-block-start:0;inset-inline-start:0;z-index:99999';
+  const drawerHtml = (idPrefix) => `
+    <dialog class="bo-offcanvas" open data-state="open">
+      <nav class="bo-sidebar-nav" aria-label="${idPrefix}">
+        <div class="bo-sidebar-nav__section">
+          <div class="bo-sidebar-nav__heading" id="${idPrefix}-heading">Getting started</div>
+          <ul><li><a class="bo-sidebar-nav__link" id="${idPrefix}-link"><span class="bo-sidebar-nav__icon">*</span><span class="bo-sidebar-nav__label" id="${idPrefix}-label">Installation</span></a></li></ul>
+        </div>
+      </nav>
+    </dialog>`;
+  // INSIDE: a real, container-query-establishing .bo-app-shell, narrow.
+  const inShell = document.createElement('div');
+  inShell.className = 'bo-app-shell';
+  inShell.style.cssText = 'display:inline-block;inline-size:300px;block-size:200px;vertical-align:top';
+  inShell.innerHTML = drawerHtml('pd-in');
+  // OUTSIDE control: no .bo-app-shell ancestor anywhere — not a wide one,
+  // NONE — so no ancestor in this subtree establishes the `bo-shell` name
+  // at all, and the narrow-shell collapse query cannot match by construction.
+  const outNoShell = document.createElement('div');
+  outNoShell.style.cssText = 'display:inline-block;inline-size:300px;block-size:200px;vertical-align:top';
+  outNoShell.innerHTML = drawerHtml('pd-out');
+  wrap.append(inShell, outNoShell);
+  document.body.append(wrap);
+  const measure = (id) => {
+    const el = document.getElementById(id);
+    const r = el.getBoundingClientRect();
+    const cs = getComputedStyle(el);
+    return { w: Math.round(r.width), h: Math.round(r.height), position: cs.position, clipPath: cs.clipPath, padding: cs.padding, justifyContent: cs.justifyContent };
+  };
+  const setup = {
+    viewportWidth: innerWidth,
+    insideWidth: inShell.getBoundingClientRect().width,
+    inShellEstablished: getComputedStyle(inShell).containerName.includes('bo-shell'),
+    outShellEstablished: (() => {
+      for (let el = outNoShell; el; el = el.parentElement) {
+        if (getComputedStyle(el).containerName.split(/\s+/).includes('bo-shell')) return true;
+      }
+      return false;
+    })(),
+  };
+  const out = {
+    inHeading: measure('pd-in-heading'), outHeading: measure('pd-out-heading'),
+    inLabel: measure('pd-in-label'), outLabel: measure('pd-out-label'),
+    inLink: measure('pd-in-link'), outLink: measure('pd-out-link'),
+  };
+  wrap.remove();
+  return { setup, ...out };
+});
+check(
+  'drawer paired fixture: the setup is what the claims below assume — INSIDE establishes the named shell container, OUTSIDE establishes none',
+  pairedDrawer.setup.viewportWidth === DESKTOP_WIDTH && pairedDrawer.setup.insideWidth === 300 &&
+    pairedDrawer.setup.inShellEstablished === true && pairedDrawer.setup.outShellEstablished === false,
+  JSON.stringify(pairedDrawer.setup),
+);
+check(
+  'drawer sidebar-nav, paired: inside a 300px named shell vs genuinely outside any shell, the label renders identically — and both are actually READABLE, not equally clipped',
+  pairedDrawer.inLabel.w > 20 && pairedDrawer.outLabel.w > 20 &&
+    pairedDrawer.inLabel.h > 1 && pairedDrawer.inLabel.h === pairedDrawer.outLabel.h &&
+    pairedDrawer.inLabel.w === pairedDrawer.outLabel.w && pairedDrawer.inLabel.position === pairedDrawer.outLabel.position &&
+    pairedDrawer.inLabel.clipPath === pairedDrawer.outLabel.clipPath && pairedDrawer.inLabel.clipPath === 'none',
+  JSON.stringify({ inLabel: pairedDrawer.inLabel, outLabel: pairedDrawer.outLabel }),
+);
+check(
+  'drawer sidebar-nav, paired: the section heading renders identically too, INCLUDING its padding — readable height and non-zero padding on both, not two equally-broken boxes',
+  pairedDrawer.inHeading.h > 10 && pairedDrawer.outHeading.h > 10 &&
+    pairedDrawer.inHeading.w > 20 && pairedDrawer.inHeading.w === pairedDrawer.outHeading.w &&
+    pairedDrawer.inHeading.clipPath === 'none' && pairedDrawer.outHeading.clipPath === 'none' &&
+    pairedDrawer.inHeading.h === pairedDrawer.outHeading.h && pairedDrawer.inHeading.padding === pairedDrawer.outHeading.padding &&
+    pairedDrawer.inHeading.padding !== '0px',
+  JSON.stringify({ inHeading: pairedDrawer.inHeading, outHeading: pairedDrawer.outHeading }),
+);
+check(
+  'drawer sidebar-nav, paired: the link keeps its drawer alignment and padding on both sides — the collapsed rail centers icons with zero inline padding, a drawer link must not',
+  pairedDrawer.inLink.justifyContent === pairedDrawer.outLink.justifyContent && pairedDrawer.inLink.justifyContent === 'flex-start' &&
+    pairedDrawer.inLink.padding === pairedDrawer.outLink.padding && pairedDrawer.inLink.padding !== '0px',
+  JSON.stringify({ inLink: pairedDrawer.inLink, outLink: pairedDrawer.outLink }),
+);
+
+/* Regression, isolated: the REGULAR rail (never inside a .bo-offcanvas)
+   must still collapse correctly — the fix is scoped to .bo-offcanvas
+   descendants only, and must not turn the collapse off everywhere. Built
+   fresh rather than reusing the docs page's own rail, which this file's
+   narrow-width visit above already hides.
+   No `.bo-app-shell__sidebar` class on the nav: the FIRST version of this
+   probe carried it (correct for a real shell's grid placement) and got
+   display:none for a completely different reason — it accidentally matched
+   this docs page's OWN local rule, `body > .bo-app-shell >
+   .bo-app-shell__sidebar { display: none }` under max-width:56rem (the
+   docs site hides its real rail below the drawer breakpoint; nothing to do
+   with the framework's icon-collapse mechanism this probe exists to test).
+   The container-query collapse this checks needs only `.bo-sidebar-nav`
+   inside a `bo-shell`-named container — never `__sidebar`. */
+const railStillCollapses = await page.evaluate(() => {
+  const probe = document.createElement('div');
+  probe.id = 'rail-regression-probe';
+  probe.className = 'bo-app-shell';
+  probe.style.cssText =
+    'position:fixed;inset-block-start:0;inset-inline-start:0;z-index:99999;inline-size:300px;block-size:200px;background:#fff';
+  probe.innerHTML = `<nav class="bo-sidebar-nav" id="rail-probe-nav" aria-label="probe">
+    <ul><li><a class="bo-sidebar-nav__link"><span class="bo-sidebar-nav__icon">*</span><span class="bo-sidebar-nav__label" id="rail-probe-label">Regression check</span></a></li></ul>
+  </nav>`;
+  document.body.append(probe);
+  const nav = document.getElementById('rail-probe-nav');
+  const label = document.getElementById('rail-probe-label');
+  const navRendered = getComputedStyle(nav).display !== 'none' && nav.getBoundingClientRect().width > 0;
+  const r = label.getBoundingClientRect();
+  // getComputedStyle() returns a LIVE CSSStyleDeclaration, not a snapshot —
+  // read the properties NOW, while the element is still connected. The
+  // first version of this probe read cs.position/cs.clipPath in the return
+  // statement below, after probe.remove(): a disconnected element's live
+  // computed style reads back empty, so it "passed" a truthy navRendered
+  // check while silently reporting position:'' and clipPath:'' — a false
+  // failure that looked like a real regression until traced to the ordering.
+  const position = getComputedStyle(label).position;
+  const clipPath = getComputedStyle(label).clipPath;
+  probe.remove();
+  return { navRendered, w: Math.round(r.width), h: Math.round(r.height), position, clipPath };
+});
+check(
+  'sidebar-nav: the regular rail (outside any .bo-offcanvas) still collapses its labels under a narrow shell — the drawer fix did not turn this off globally',
+  railStillCollapses.navRendered && railStillCollapses.w <= 2 &&
+    railStillCollapses.position === 'absolute' && railStillCollapses.clipPath !== 'none',
+  JSON.stringify(railStillCollapses),
+);
+
+/* Sticky table header never geometrically covers a focused row control
+   (WCAG 2.4.11), even after native Tab scroll-into-view (roadmap 373.3).
+   Bar: EXACT expected row at every step, BOTH directions, ZERO intersection
+   (unrounded — an earlier draft rounded area to an int before the `> 0`
+   filter, which would silently pass a genuine sub-1px^2 overlap; review 05
+   caught it) with any header cell that is not the focused element's own
+   ancestor (containment excluded via `!h.contains(a)`), PROVEN scroll
+   movement (`scrollTop` actually changes at some step — `scrollHeight >
+   clientHeight` alone proves overflow capacity, not that a scroll
+   happened, review 05), and the fixture ASSERTED to be what it claims:
+   review 05 ran this exact fragment against disposable pages with the
+   extra header rows removed, and separately with spacious downgraded to
+   comfortable, and every check still passed — the weaker scenario is
+   trivially easier to satisfy, so a check that cannot tell it apart from
+   the real one is not testing what it claims to. Guarded below: rendered
+   header-row count, rendered header geometry (`sum of thead tr heights`
+   against the density tier's own row-height, not just "some declared
+   attribute"), and computed `--bo-density-row-height` at the focused
+   descendant.
+
+   `walkStickyTable` is shared by the real exemplar and two synthetic worst
+   cases because the property under test is identical across all three:
+   measure against `th`, never `thead`; and density can live on the TABLE,
+   which the first version of this fix missed (a spacious table inside a
+   comfortable-default container under-reserved 120px against a real 144px
+   header). The mechanism itself changed between review rounds too —
+   `scroll-margin-block-start` on the focused body control now, not
+   `scroll-padding-block-start` on the container: the container form
+   reserved space for EVERY scroll-into-view target inside it, including
+   the header's OWN controls, which never needed it and were measurably
+   worse for it (focusing the header's sort button snapped the container
+   to `scrollTop 0`, a bigger unwanted jump than doing nothing). Scoped to
+   `tbody :focus`, that jump is zero — verified in the session scratchpad,
+   not repeated here — and it is why `marginSet` below reads a `tbody`
+   input's own computed style, not the container's. */
+const DENSITY_ROW_PX = { compact: 30, comfortable: 40, spacious: 48 };
+async function walkStickyTable(selector, { expectedHeaderRows, expectedDensity }) {
+  const setup = await page.evaluate((sel, expectedHeaderRows, expectedRowPx) => {
+    const c = document.querySelector(sel);
+    if (!c) return { found: false };
+    const rows = c.querySelectorAll('tbody tr').length;
+    const headerRows = [...c.querySelectorAll('thead tr')];
+    const headerHeightSum = headerRows.reduce((sum, tr) => sum + tr.getBoundingClientRect().height, 0);
+    // scroll-margin-block-start only applies via `:focus` — has to actually
+    // be focused to read it (an earlier draft checked the unfocused
+    // computed style, which is trivially always '0px' and always failed).
+    const firstInput = c.querySelector('tbody input');
+    let marginSet = false;
+    if (firstInput) {
+      firstInput.focus();
+      marginSet = getComputedStyle(firstInput).scrollMarginBlockStart !== '0px';
+      firstInput.blur();
+    }
+    return {
+      found: true,
+      rowCount: rows,
+      marginSet,
+      scrollable: c.scrollHeight > c.clientHeight,
+      headerRowCount: headerRows.length,
+      headerRowCountOk: headerRows.length === expectedHeaderRows,
+      // Geometry, not just the attribute: the rendered header band must
+      // actually be `expectedHeaderRows * expectedRowPx` tall (2px slack
+      // for border-collapse), proving the density tier really rendered,
+      // not merely that `data-density` was set somewhere.
+      headerHeightSum,
+      headerGeometryOk: Math.abs(headerHeightSum - expectedHeaderRows * expectedRowPx) <= 2,
+    };
+  }, selector, expectedHeaderRows, DENSITY_ROW_PX[expectedDensity]);
+  if (!setup.found || !setup.rowCount) return { setup, forward: [], backward: [] };
+  async function oneDirection(direction) {
+    const first = direction === 'forward' ? 0 : setup.rowCount - 1;
+    const startInput = await page.$(`${selector} tbody tr:nth-child(${first + 1}) input`);
+    await startInput.click();
+    await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+    const steps = [];
+    for (let i = 0; i < setup.rowCount; i++) {
+      const expectedIndex = direction === 'forward' ? i : setup.rowCount - 1 - i;
+      if (i > 0) {
+        if (direction === 'backward') await page.keyboard.down('Shift');
+        await page.keyboard.press('Tab');
+        if (direction === 'backward') await page.keyboard.up('Shift');
+        await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+      }
+      const step = await page.evaluate((sel, expectedIndex) => {
+        const c = document.querySelector(sel);
+        const a = document.activeElement;
+        const inputs = [...c.querySelectorAll('tbody input')];
+        const isExpected = inputs[expectedIndex] === a;
+        const er = a.getBoundingClientRect();
+        const hits = [...c.querySelectorAll('thead th')]
+          .filter((h) => !h.contains(a))
+          .map((h) => {
+            const t = h.getBoundingClientRect();
+            const ox = Math.max(0, Math.min(er.right, t.right) - Math.max(er.left, t.left));
+            const oy = Math.max(0, Math.min(er.bottom, t.bottom) - Math.max(er.top, t.top));
+            return ox * oy; // unrounded — see header comment
+          })
+          .filter((area) => area > 0);
+        return { isExpected, hasSize: er.width > 0 && er.height > 0, hits, scrollTop: c.scrollTop };
+      }, selector, expectedIndex);
+      steps.push(step);
+    }
+    return steps;
+  }
+  const forward = await oneDirection('forward');
+  const backward = await oneDirection('backward');
+  return { setup, forward, backward };
+}
+function stickyOk({ setup, forward, backward }) {
+  const all = [...forward, ...backward];
+  const scrollTops = new Set(all.map((s) => s.scrollTop));
+  return setup.found && setup.scrollable && setup.marginSet &&
+    setup.headerRowCountOk && setup.headerGeometryOk &&
+    scrollTops.size > 1 && // proves the scrollport actually moved, not just that it could
+    all.length === setup.rowCount * 2 &&
+    all.every((s) => s.isExpected && s.hasSize && s.hits.length === 0);
+}
+function stickyDetail({ setup, forward, backward }) {
+  return {
+    setup,
+    badForward: forward.filter((s) => !s.isExpected || s.hits.length).map((s) => ({ ...s, hits: s.hits.map((h) => Math.round(h)) })),
+    badBackward: backward.filter((s) => !s.isExpected || s.hits.length).map((s) => ({ ...s, hits: s.hits.map((h) => Math.round(h)) })),
+  };
+}
+
+await visit('/patterns/list-report/');
+await page.evaluate(() => {
+  const c = [...document.querySelectorAll('.bo-data-table-container')]
+    .find((el) => el.querySelector('input[aria-label^="Select INV-"]'));
+  if (c) c.id = 'sticky-claim-real';
+});
+const stickyReal = await walkStickyTable('#sticky-claim-real', { expectedHeaderRows: 1, expectedDensity: 'compact' });
+check(
+  'sticky table: the real list-report exemplar — every expected row control focused in both directions, zero foreign-header intersection, proven scroll movement',
+  stickyOk(stickyReal),
+  JSON.stringify(stickyDetail(stickyReal)),
+);
+
+/* Table-LOCAL density (`data-density` on `.bo-data-table`, not the
+   container) is a supported, documented arrangement — and the specific one
+   the first version of this fix got wrong via `scroll-padding` on the
+   ancestor container, which cannot see a custom property redefined on a
+   descendant. `scroll-margin` on the focused descendant sidesteps that
+   entirely (normal inheritance already resolves the nearest density), so
+   this case is really testing "still true after the mechanism changed",
+   not a new risk. Container is left with NO explicit density (defaults to
+   comfortable), table declares spacious. */
+// The wrap below needs an explicit `inline-size` — found the hard way. A
+// shrink-wrapped ancestor can't measure a `container-type: inline-size`
+// descendant's natural width (size containment reports none), so the wrap
+// collapsed to ~2px (its own border) with no width set, the fixture
+// rendered off in a 2px sliver nobody could click, and Puppeteer's "click"
+// landed on whatever real page content was actually under the cursor — the
+// docs sidebar. Every `isExpected` in that state was false for a reason
+// that had nothing to do with the CSS fix under test.
+function stickyFixtureHtml({ containerDensity, tableDensity, id }) {
+  const rows = Array.from({ length: 8 }, (_, i) =>
+    `<tr><td><input type="checkbox" aria-label="${id} row ${i}"></td><td>Item ${i}</td></tr>`).join('');
+  return `<div class="bo-data-table-container" id="${id}" ${containerDensity ? `data-density="${containerDensity}"` : ''} style="max-block-size:16rem;max-inline-size:400px">
+    <table class="bo-data-table" ${tableDensity ? `data-density="${tableDensity}"` : ''} style="min-width:600px"><thead>
+      <tr><th colspan="2" style="text-align:center">Group</th></tr>
+      <tr><th>Sub</th><th>Head</th></tr>
+      <tr><th scope="col">Sel</th><th scope="col">Item</th></tr>
+    </thead><tbody>${rows}</tbody></table>
+  </div>`;
+}
+await page.evaluate((html) => {
+  const wrap = document.createElement('div');
+  wrap.id = 'sticky-synthetic-wrap';
+  wrap.style.cssText = 'position:fixed;inset-block-start:0;inset-inline-start:0;z-index:99999;background:#fff;inline-size:450px';
+  wrap.innerHTML = html;
+  document.body.append(wrap);
+}, stickyFixtureHtml({ containerDensity: null, tableDensity: 'spacious', id: 'sticky-table-density' }));
+const stickyTableDensity = await walkStickyTable('#sticky-table-density', { expectedHeaderRows: 3, expectedDensity: 'spacious' });
+check(
+  'sticky table: density declared on the TABLE (container left default) — the fix must not depend on reading density from the container',
+  stickyOk(stickyTableDensity),
+  JSON.stringify(stickyDetail(stickyTableDensity)),
+);
+await page.evaluate(() => document.getElementById('sticky-synthetic-wrap')?.remove());
+
+/* Container-spacious, the reservation's own stated ceiling: reserved and
+   actual header height are EXACTLY equal (144px both, before the +1px
+   margin). Review found this exact-match case still left a 0.5px/8px^2
+   edge intersection on 7 of 28 samples — the `+ 1px` subpixel margin in
+   data-table.css exists for exactly this case, so the bar here is zero
+   intersection, not merely "not fully covered" (the weaker property the
+   first version of this gate checked, which the edge case passed by
+   construction). */
+await page.evaluate((html) => {
+  const wrap = document.createElement('div');
+  wrap.id = 'sticky-synthetic-wrap';
+  wrap.style.cssText = 'position:fixed;inset-block-start:0;inset-inline-start:0;z-index:99999;background:#fff;inline-size:450px';
+  wrap.innerHTML = html;
+  document.body.append(wrap);
+}, stickyFixtureHtml({ containerDensity: 'spacious', tableDensity: null, id: 'sticky-exact-match' }));
+const stickyExactMatch = await walkStickyTable('#sticky-exact-match', { expectedHeaderRows: 3, expectedDensity: 'spacious' });
+check(
+  'sticky table: container-spacious exact-match case (144px reserved == 144px header) — zero intersection, not just "not fully covered"',
+  stickyOk(stickyExactMatch),
+  JSON.stringify(stickyDetail(stickyExactMatch)),
+);
+await page.evaluate(() => document.getElementById('sticky-synthetic-wrap')?.remove());
+
+/* EDITABLE-GRID REMOVAL FOCUS (roadmap 373.4, editable-grid subset).
+   Measured on the shipped page before the fix (2026-09-21): a trusted Enter on
+   a focused row's Remove left `activeElement === BODY`, and every Remove
+   button carried the identical label "Remove line". Both are composition
+   defects on this page; no framework source is involved or changed.
+
+   Destinations, decided BEFORE the row leaves the DOM: next surviving row's
+   Remove, else previous row's Remove, else that grid's Add button.
+
+   ONE helper drives both the live demo and the rendered copyable recipe, so
+   the two cannot drift into being differently tested. `ctx` is only a pair of
+   selectors. */
+const EG_LIVE = { table: '#eg-table', add: '#eg-add', label: 'live demo' };
+const EG_SAMPLE = { table: '[data-row-edit]', add: '[data-line-add]', label: 'copyable recipe' };
+
+async function egRows(ctx) {
+  return page.evaluate((ctx) => {
+    const rows = [...document.querySelectorAll(`${ctx.table} tbody tr`)];
+    return rows.map((r) => ({
+      id: r.dataset.rowId ?? null,
+      removeLabel: r.querySelector('[data-line-remove]')?.getAttribute('aria-label') ?? null,
+      listId: r.querySelector('ul')?.id ?? null,
+      controls: r.querySelector('[role="combobox"]')?.getAttribute('aria-controls') ?? null,
+    }));
+  }, ctx);
+}
+async function egAddRows(ctx, n) {
+  for (let i = 0; i < n; i++) {
+    /* Blur and settle BEFORE the real click, because the click would otherwise
+       miss. Traced rather than guessed: with focus still in a row's Qty input,
+       `page.click` resolved the Add button's box, then its own mousedown blurred
+       the input — which hides the focus-shown cell message, shrinks the row and
+       moves everything below it UP — so the event landed on the `<section>`
+       where the button had been a frame earlier. The click was real and the
+       page simply moved under it (`hits: ['doc:SECTION']`, row count unchanged).
+       Blurring first makes the layout stable before the gesture, so this stays a
+       genuine click rather than a programmatic `.click()`. */
+    await page.evaluate((ctx) => {
+      if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+      document.querySelector(ctx.add)?.scrollIntoView({ block: 'center' });
+    }, ctx);
+    await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+    await page.click(ctx.add);
+    await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+  }
+}
+/* Remove the row at `index` with a real Enter, and return a BEFORE/AFTER pair
+   rich enough that the predicate can name the exact control it expects rather
+   than settling for "something in the right row". A review found the earlier
+   version passing when focus was redirected to the next row's Item INPUT:
+   asserting the row alone is not asserting the destination. */
+async function egRemoveAt(ctx, index) {
+  const before = await egRows(ctx);
+  const focused = await page.evaluate((ctx, index) => {
+    const rows = [...document.querySelectorAll(`${ctx.table} tbody tr`)];
+    const btn = rows[index]?.querySelector('[data-line-remove]');
+    btn?.focus();
+    return {
+      rowCount: rows.length,
+      isRemoveButton: !!document.activeElement.closest('[data-line-remove]'),
+      rowId: document.activeElement.closest('tr')?.dataset.rowId ?? null,
+    };
+  }, ctx, index);
+  await page.keyboard.press('Enter');
+  await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+  const after = await egRows(ctx);
+  const active = await page.evaluate((ctx) => {
+    const a = document.activeElement;
+    const row = a.closest ? a.closest('tr') : null;
+    return {
+      isBody: a === document.body,
+      isAdd: a === document.querySelector(ctx.add),
+      /* The EXACT control, not merely its neighbourhood: a combobox input in
+         the right row must not satisfy "focus lands on the Remove button". */
+      isRemoveButton: !!(a.closest && a.closest('[data-line-remove]')),
+      rowId: row?.dataset.rowId ?? null,
+      label: a.getAttribute ? a.getAttribute('aria-label') : null,
+      tag: a.tagName,
+      role: a.getAttribute ? a.getAttribute('role') : null,
+    };
+  }, ctx);
+  // Expected destination, derived from the BEFORE snapshot rather than read
+  // back out of the result.
+  const expectedRow = before[index + 1]?.id ?? before[index - 1]?.id ?? null;
+  const expectedSurvivors = before.filter((_, i) => i !== index).map((r) => r.id);
+  return { before, focused, after, active, index,
+    expected: { removedId: before[index]?.id ?? null, row: expectedRow, survivors: expectedSurvivors } };
+}
+function egRemovalOk(r) {
+  const survivors = r.after.map((x) => x.id);
+  const setupOk = r.focused.isRemoveButton && r.focused.rowId === r.expected.removedId &&
+    r.before.length === r.focused.rowCount && r.before.every((x) => !!x.id);
+  // Exact identity comparison, not containment: LINE-1 must not be satisfied
+  // by LINE-10, and an empty id must not be satisfied by anything.
+  const rowsOk = JSON.stringify(survivors) === JSON.stringify(r.expected.survivors) &&
+    !survivors.includes(r.expected.removedId);
+  const focusOk = r.expected.row === null
+    ? (r.active.isAdd && !r.active.isBody)
+    : (r.active.isRemoveButton && r.active.rowId === r.expected.row && !r.active.isBody);
+  return setupOk && rowsOk && focusOk;
+}
+/* Every row action's name is exactly `<verb> <rowId>` — compared whole, so a
+   stale or generic label cannot pass by containing the right substring. */
+function egLabelsOk(rows) {
+  return rows.length > 0 && rows.every((r) => !!r.id && r.removeLabel === `Remove ${r.id}`);
+}
+function egListboxesOk(rows) {
+  return rows.every((r) => !!r.listId && r.controls === r.listId) &&
+    new Set(rows.map((r) => r.listId)).size === rows.length;
+}
+
+/* The row's icon-only Save/Cancel are `hidden` until the row is dirty, so the
+   row is EDITED into that state before any name is read — a name check on a
+   hidden control is vacuous. Names come from the ACCESSIBILITY TREE, not the
+   attribute: the tree is what an assistive technology consults.
+
+   Save must keep the "— unsaved changes" phrase. The Unsaved BADGE was
+   removed and its programmatic state moved into this accessible name (owner
+   decision 157.1, recorded in RowEditActions.astro and row-edit.ts), so the
+   name is the ONLY channel carrying the row's dirty state — the two-channel
+   rule's programmatic half. A non-empty name, or an exact name without the
+   phrase, both miss that; my own previous revision shortened it to
+   `Save LINE-n` and this check is what now refuses that. */
+async function egRowActionNames(ctx, index) {
+  const tagged = await page.evaluate((ctx, index) => {
+    const rows = [...document.querySelectorAll(`${ctx.table} tbody tr`)];
+    const row = rows[index];
+    if (!row) return null;
+    for (const el of document.querySelectorAll('[data-ax-row]')) el.removeAttribute('data-ax-row');
+    row.setAttribute('data-ax-row', 'probe');
+    const qty = row.querySelector('input[type="number"]');
+    if (qty) qty.focus();
+    return { rowId: row.dataset.rowId ?? null, hasQty: !!qty };
+  }, ctx, index);
+  if (!tagged) return { missing: true };
+  await page.keyboard.type('7');
+  await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+  const visible = await page.evaluate(() => {
+    const row = document.querySelector('[data-ax-row="probe"]');
+    const box = (el) => {
+      if (!el) return { missing: true };
+      const r = el.getBoundingClientRect();
+      return { hidden: el.hidden, w: +r.width.toFixed(1), h: +r.height.toFixed(1) };
+    };
+    return { rowId: row.dataset.rowId ?? null, dirty: row.getAttribute('data-row-state'),
+      save: box(row.querySelector('[data-row-edit-save]')), cancel: box(row.querySelector('[data-row-edit-cancel]')) };
+  });
+  const { root } = await cdp.send('DOM.getDocument', { depth: 0 });
+  const ax = {};
+  for (const [key, sel] of [['save', '[data-row-edit-save]'], ['cancel', '[data-row-edit-cancel]']]) {
+    const { nodeId } = await cdp.send('DOM.querySelector', {
+      nodeId: root.nodeId, selector: `[data-ax-row="probe"] ${sel}`,
+    });
+    if (!nodeId) { ax[key] = { missing: true }; continue; }
+    const { nodes } = await cdp.send('Accessibility.getPartialAXTree', { nodeId, fetchRelatives: false });
+    const n = nodes[0] ?? {};
+    ax[key] = { name: n.name?.value ?? '', role: n.role?.value ?? null, ignored: n.ignored ?? null };
+  }
+  await page.evaluate(() => document.querySelector('[data-ax-row="probe"]')?.removeAttribute('data-ax-row'));
+  return { rowId: visible.rowId, visible, ax };
+}
+function egNamesOk(r) {
+  if (!r || r.missing) return false;
+  const id = r.rowId;
+  return !!id &&
+    // genuinely exposed, not a vacuous pass on hidden controls
+    r.visible.save.hidden === false && r.visible.save.w > 0 && r.visible.save.h > 0 &&
+    r.visible.cancel.hidden === false && r.visible.cancel.w > 0 && r.visible.cancel.h > 0 &&
+    r.ax.save.role === 'button' && r.ax.cancel.role === 'button' &&
+    r.ax.save.ignored === false && r.ax.cancel.ignored === false &&
+    // identity AND the dirty-state phrase, compared whole
+    r.ax.save.name === `Save ${id} — unsaved changes` &&
+    r.ax.cancel.name === `Discard changes to ${id}`;
+}
+
+/* ---- the live demo ---- */
+await visit('/patterns/editable-grid/', { width: DESKTOP_WIDTH, height: 900 });
+await egAddRows(EG_LIVE, 3);
+const egLiveSetup = await egRows(EG_LIVE);
+check(
+  'editable-grid (live): after three adds, every Remove button is named exactly "Remove <rowId>" and every combobox addresses its own row\'s listbox',
+  egLiveSetup.length === 4 && egLabelsOk(egLiveSetup) && egListboxesOk(egLiveSetup),
+  JSON.stringify(egLiveSetup),
+);
+/* first / middle / last, then the only row — each on the state the previous
+   one left behind, which is also how a user meets them. */
+const egLiveFirst = await egRemoveAt(EG_LIVE, 0);
+check('editable-grid (live): real Enter on the FIRST row — focus lands on the NEXT surviving row\'s Remove button',
+  egRemovalOk(egLiveFirst), JSON.stringify(egLiveFirst));
+const egLiveMiddle = await egRemoveAt(EG_LIVE, 1);
+check('editable-grid (live): real Enter on a MIDDLE row — focus lands on the next row\'s Remove button',
+  egRemovalOk(egLiveMiddle), JSON.stringify(egLiveMiddle));
+const egLiveLast = await egRemoveAt(EG_LIVE, (await egRows(EG_LIVE)).length - 1);
+check('editable-grid (live): real Enter on the LAST row — no next row, so focus falls back to the PREVIOUS row\'s Remove button',
+  egRemovalOk(egLiveLast), JSON.stringify(egLiveLast));
+const egLiveOnly = await egRemoveAt(EG_LIVE, 0);
+check('editable-grid (live): real Enter on the ONLY row — the table empties and focus falls back to that grid\'s Add button',
+  egRemovalOk(egLiveOnly) && egLiveOnly.after.length === 0, JSON.stringify(egLiveOnly));
+await egAddRows(EG_LIVE, 1);
+const egLiveRefill = await egRows(EG_LIVE);
+check('editable-grid (live): adding again after the table emptied still works',
+  egLiveRefill.length === 1, JSON.stringify(egLiveRefill));
+check('editable-grid (live): the row added after the table emptied is named exactly "Remove <rowId>"',
+  egLabelsOk(egLiveRefill), JSON.stringify(egLiveRefill));
+
+/* Dirty-row action names, LIVE: the INITIAL row (which the live helper also
+   renames at load) and an ADDED row. Both must carry identity AND the
+   dirty-state phrase. */
+await visit('/patterns/editable-grid/', { width: DESKTOP_WIDTH, height: 900 });
+const egNamesLiveInitial = await egRowActionNames(EG_LIVE, 0);
+check(
+  'editable-grid (live): the INITIAL row\'s dirty Save/Cancel expose identity AND the "unsaved changes" state phrase in the accessibility tree',
+  egNamesOk(egNamesLiveInitial), JSON.stringify(egNamesLiveInitial),
+);
+await egAddRows(EG_LIVE, 1);
+const egNamesLiveAdded = await egRowActionNames(EG_LIVE, 1);
+check(
+  'editable-grid (live): an ADDED row\'s dirty Save/Cancel expose the same identity + state phrase',
+  egNamesOk(egNamesLiveAdded), JSON.stringify(egNamesLiveAdded),
+);
+
+/* The label must survive an EDIT to the row's item. It used to embed the item
+   text, so retyping the cell left the name describing the old value. */
+await visit('/patterns/editable-grid/', { width: DESKTOP_WIDTH, height: 900 });
+const egEdited = await (async () => {
+  const before = (await egRows(EG_LIVE))[0];
+  await page.click('#eg-table tbody tr [role="combobox"]', { clickCount: 3 });
+  await page.keyboard.type('Steel bracket, 60mm');
+  await page.evaluate(() => new Promise((r) => requestAnimationFrame(r)));
+  const after = (await egRows(EG_LIVE))[0];
+  const itemNow = await page.evaluate(() => document.querySelector('#eg-table tbody tr [role="combobox"]').value);
+  return { before, after, itemNow };
+})();
+check(
+  'editable-grid (live): editing a row\'s item does NOT make its Remove label stale — the name is the row\'s stable identity, not a copy of the item text',
+  egEdited.itemNow.includes('60mm') && egEdited.after.removeLabel === `Remove ${egEdited.after.id}` &&
+    egEdited.after.removeLabel === egEdited.before.removeLabel,
+  JSON.stringify(egEdited),
+);
+
+/* Conditional focus: removing a row that does NOT hold focus must leave the
+   user where they were. */
+await visit('/patterns/editable-grid/', { width: DESKTOP_WIDTH, height: 900 });
+await egAddRows(EG_LIVE, 1);
+const egUnfocused = await page.evaluate(() => {
+  const outside = document.getElementById('eg-add');
+  outside.focus();
+  const started = document.activeElement === outside;
+  document.querySelector('#eg-table tbody tr [data-line-remove]').click();
+  return { started, stillOutside: document.activeElement === outside,
+    rows: document.querySelectorAll('#eg-table tbody tr').length };
+});
+check('editable-grid (live): removing an UNFOCUSED row does not steal focus from the control the user was in',
+  egUnfocused.started && egUnfocused.stillOutside && egUnfocused.rows === 1, JSON.stringify(egUnfocused));
+
+/* SCOPING, proved the way that can actually fail. The earlier version clicked
+   Remove inside `#eg-table` and observed another grid unchanged — which a
+   DOCUMENT-wide handler also passes, because it still removes only the row
+   that was clicked. The discriminating test is to activate a Remove button
+   carrying the SAME hook in an unrelated grid: a document-wide handler would
+   delete that row, and a correctly scoped one leaves it alone. */
+const egScoping = await page.evaluate(() => {
+  const other = document.getElementById('eg-adv-table');
+  if (!other) return { missing: true };
+  const row = other.querySelector('tbody tr');
+  if (!row) return { missing: true };
+  const probe = document.createElement('button');
+  probe.type = 'button';
+  probe.setAttribute('data-line-remove', '');
+  probe.id = 'eg-scope-probe';
+  row.querySelector('td:last-child')?.appendChild(probe);
+  const before = other.querySelectorAll('tbody tr').length;
+  probe.click();
+  const after = other.querySelectorAll('tbody tr').length;
+  const stillThere = !!document.getElementById('eg-scope-probe');
+  probe.remove();
+  return { missing: false, before, after, stillThere,
+    hookPresent: true, sameHook: '[data-line-remove]' };
+});
+check(
+  'editable-grid: the remove handler is scoped to its own grid — a Remove button with the SAME hook, activated in an unrelated grid, removes nothing (a document-wide handler would delete that row)',
+  !egScoping.missing && egScoping.before > 0 && egScoping.after === egScoping.before,
+  JSON.stringify(egScoping),
+);
+
+/* ---- the copyable recipe, EXECUTED ----
+   The text is lifted from the RENDERED `<pre>` a reader copies; the ONLY
+   adaptation is the bare import specifier, which cannot resolve outside a
+   bundler. It is served from its OWN temporary directory on its own port, so
+   a failure cannot leave a partial page inside the shared dist. The framework
+   JS is copied beside it because Astro bundles it into hashed `_astro` chunks
+   with no standalone served copy.
+
+   This exists because the recipe once called `getElementById('line-template')`
+   without showing that template: copied as printed it added nothing, and
+   nothing noticed, because nothing ever ran the printed text. */
+await visit('/patterns/editable-grid/', { width: DESKTOP_WIDTH, height: 900 });
+const egSampleText = await page.evaluate(() => {
+  const pres = [...document.querySelectorAll('pre')].map((p) => p.textContent || '');
+  return pres.find((t) => t.includes('data-line-add') && t.includes('<script')) ?? null;
+});
+let egSample = { ran: false };
+const egTmp = await mkdtemp(join(tmpdir(), 'bo-eg-sample-'));
+let egSampleServer = null;
+try {
+  if (egSampleText) {
+    await cp(join(REPO_ROOT, 'packages/core/dist/js'), join(egTmp, 'js'), { recursive: true });
+    const adapted = egSampleText.replace(/from\s+["']@busy-office\/ui\/js["']/, 'from "./js/index.js"');
+    await writeFile(join(egTmp, 'index.html'),
+      '<!doctype html><meta charset=utf-8><title>eg-sample</title>\n' + adapted, 'utf8');
+    const served = await serveDist(egTmp);
+    egSampleServer = served.server;
+    const errs = [];
+    const onErr = (e) => errs.push(String(e.message || e));
+    page.on('pageerror', onErr);
+    await page.goto(`http://localhost:${served.port}/`, { waitUntil: 'networkidle0' });
+    const loaded = await page.evaluate(() => ({
+      rows: document.querySelectorAll('[data-row-edit] tbody tr').length,
+      hasTemplate: !!document.getElementById('line-template'),
+      importRewritten: !!document.querySelector('script[type="module"]')?.textContent?.includes('./js/index.js'),
+    }));
+    // The recipe's OWN initial row, named before the removal sequence empties
+    // the table — "initial" has to mean the row the recipe ships.
+    const namesInitial = await egRowActionNames(EG_SAMPLE, 0);
+    // Its OWN Add — the proof the module executed rather than merely loaded.
+    await egAddRows(EG_SAMPLE, 3);
+    const grown = await egRows(EG_SAMPLE);
+    const first = await egRemoveAt(EG_SAMPLE, 0);
+    const middle = await egRemoveAt(EG_SAMPLE, 1);
+    const last = await egRemoveAt(EG_SAMPLE, (await egRows(EG_SAMPLE)).length - 1);
+    const only = await egRemoveAt(EG_SAMPLE, 0);
+    await egAddRows(EG_SAMPLE, 1);
+    const refill = await egRows(EG_SAMPLE);
+    const unfocused = await page.evaluate(() => {
+      const outside = document.querySelector('[data-line-add]');
+      outside.focus();
+      const started = document.activeElement === outside;
+      document.querySelector('[data-row-edit] tbody tr [data-line-remove]').click();
+      return { started, stillOutside: document.activeElement === outside,
+        rows: document.querySelectorAll('[data-row-edit] tbody tr').length };
+    });
+    /* An ADDED row's names, through the same helper the live checks use. The
+       unfocused case above empties the table, so a row is added back first. */
+    await egAddRows(EG_SAMPLE, 1);
+    const rowsNow = await egRows(EG_SAMPLE);
+    const namesAdded = await egRowActionNames(EG_SAMPLE, rowsNow.length - 1);
+    page.off('pageerror', onErr);
+    egSample = { ran: true, loaded, grown, first, middle, last, only, refill, unfocused,
+      namesInitial, namesAdded, errs, selfContained: /<template[^>]*id="line-template"/.test(egSampleText),
+      scopedRemove: !/document\.addEventListener\("click"/.test(egSampleText) };
+  }
+} finally {
+  if (egSampleServer) egSampleServer.close();
+  await rm(egTmp, { recursive: true, force: true });
+}
+check(
+  'editable-grid (copyable recipe, executed as printed): self-contained, its own Add runs, and first/middle/last/only removal all land focus on the exact expected control',
+  egSample.ran && egSample.selfContained && egSample.scopedRemove &&
+    egSample.loaded.hasTemplate && egSample.loaded.importRewritten &&
+    egSample.grown.length === 4 && egLabelsOk(egSample.grown) && egListboxesOk(egSample.grown) &&
+    egRemovalOk(egSample.first) && egRemovalOk(egSample.middle) &&
+    egRemovalOk(egSample.last) && egRemovalOk(egSample.only) &&
+    egSample.only.after.length === 0 &&
+    egSample.refill.length === 1 && egLabelsOk(egSample.refill) &&
+    egSample.unfocused.started && egSample.unfocused.stillOutside &&
+    egSample.errs.length === 0,
+  JSON.stringify({ ...egSample, actionNames: undefined }),
+);
+check(
+  'editable-grid (copyable recipe): the INITIAL row\'s dirty Save/Cancel expose identity AND the "unsaved changes" state phrase',
+  egSample.ran && egNamesOk(egSample.namesInitial),
+  JSON.stringify(egSample.namesInitial ?? null),
+);
+check(
+  'editable-grid (copyable recipe): an ADDED row\'s dirty Save/Cancel expose the same identity + state phrase — not two unnamed icon buttons',
+  egSample.ran && egNamesOk(egSample.namesAdded),
+  JSON.stringify(egSample.namesAdded ?? null),
+);
+
+/* ORDERED-LIST REFOCUS RECIPE, EXECUTED AS PRINTED — roadmap 373.4.
+   The page prints a two-call recipe for where focus goes after a consumer's
+   own reorder or removal. It is copyable code, so it is run, not read: an
+   earlier version referenced an undeclared `lastIndex` and threw
+   ReferenceError on every removal path, leaving focus on BODY — shipped and
+   caught by review, exactly the defect this case now prevents.
+
+   The recipe text is lifted from the rendered `<pre>` and evaluated in a
+   throwaway list built here. Nothing is re-implemented: if the printed text
+   stops working, this goes red. */
+await visit('/components/ordered-list/', { width: DESKTOP_WIDTH, height: 900 });
+const olRecipeText = await page.evaluate(() => {
+  /* Read the <code>, not the <pre>: highlight-code.mjs appends a "Copy"
+     button INSIDE the <pre>, so `pre.textContent` ends with the button's own
+     label and the extracted source fails to compile (`Copy is not defined`) —
+     which is what the first version of this case did. */
+  const codes = [...document.querySelectorAll('pre > code')].map((c) => c.textContent || '');
+  return codes.find((t) => t.includes('captureBefore') && t.includes('refocusAfter')) ?? null;
+});
+const olRecipe = await page.evaluate((src) => {
+  if (!src) return { missing: true };
+  const host = document.createElement('div');
+  host.id = 'ol-recipe-host';
+  host.style.cssText = 'position:fixed;inset-block-start:0;inset-inline-start:0;z-index:99999;background:#fff;inline-size:420px';
+  document.body.append(host);
+  // The printed functions, as printed. Only wrapped so they can be called.
+  let captureBefore, refocusAfter;
+  try {
+    // eslint-disable-next-line no-new-func
+    ({ captureBefore, refocusAfter } = new Function(`${src}\nreturn { captureBefore, refocusAfter };`)());
+  } catch (e) { host.remove(); return { compileError: String(e.message || e) }; }
+
+  const build = (spec) => {
+    host.innerHTML = `<ol id="ol-r">${spec.map((it) => `<li data-item="${it.id}">${it.id}` +
+      (it.actions ?? []).map((a) => `<button data-action="${a}" aria-label="${a} ${it.id}">${a}</button>`).join('') +
+      '</li>').join('')}</ol><button id="ol-add">Add</button>`;
+    return document.getElementById('ol-r');
+  };
+  const idsOf = (list) => [...list.querySelectorAll('[data-item]')].map((l) => l.dataset.item);
+  const active = () => {
+    const a = document.activeElement;
+    return { isBody: a === document.body, item: a.closest?.('[data-item]')?.dataset.item ?? null,
+      action: a.dataset?.action ?? null, isAdd: a.id === 'ol-add', tag: a.tagName };
+  };
+  const out = {};
+  const errors = [];
+  const run = (name, fn) => { try { out[name] = fn(); } catch (e) { errors.push(`${name}: ${String(e.message || e)}`); } };
+
+  // 1. BOUNDARY reorder: B moves up to first, so its own "up" disappears.
+  run('boundary', () => {
+    const list = build([{ id: 'A', actions: ['down', 'remove'] }, { id: 'B', actions: ['up', 'down', 'remove'] }]);
+    list.querySelector('[data-item="B"] [data-action="up"]').focus();
+    const before = captureBefore(list, 'B');
+    build([{ id: 'B', actions: ['down', 'remove'] }, { id: 'A', actions: ['up', 'remove'] }]);
+    refocusAfter(document.getElementById('ol-r'), before, document.getElementById('ol-add'));
+    return { before, ...active(), ids: idsOf(document.getElementById('ol-r')) };
+  });
+  // 2. FIRST removed — focus should land on whatever took index 0.
+  run('removeFirst', () => {
+    const list = build([{ id: 'A', actions: ['remove'] }, { id: 'B', actions: ['remove'] }, { id: 'C', actions: ['remove'] }]);
+    list.querySelector('[data-item="A"] [data-action="remove"]').focus();
+    const before = captureBefore(list, 'A');
+    build([{ id: 'B', actions: ['remove'] }, { id: 'C', actions: ['remove'] }]);
+    refocusAfter(document.getElementById('ol-r'), before, document.getElementById('ol-add'));
+    return { ...active(), ids: idsOf(document.getElementById('ol-r')) };
+  });
+  // 3. MIDDLE removed.
+  run('removeMiddle', () => {
+    const list = build([{ id: 'A', actions: ['remove'] }, { id: 'B', actions: ['remove'] }, { id: 'C', actions: ['remove'] }]);
+    list.querySelector('[data-item="B"] [data-action="remove"]').focus();
+    const before = captureBefore(list, 'B');
+    build([{ id: 'A', actions: ['remove'] }, { id: 'C', actions: ['remove'] }]);
+    refocusAfter(document.getElementById('ol-r'), before, document.getElementById('ol-add'));
+    return { ...active(), ids: idsOf(document.getElementById('ol-r')) };
+  });
+  // 4. LAST removed — index clamps to the new last item.
+  run('removeLast', () => {
+    const list = build([{ id: 'A', actions: ['remove'] }, { id: 'B', actions: ['remove'] }]);
+    list.querySelector('[data-item="B"] [data-action="remove"]').focus();
+    const before = captureBefore(list, 'B');
+    build([{ id: 'A', actions: ['remove'] }]);
+    refocusAfter(document.getElementById('ol-r'), before, document.getElementById('ol-add'));
+    return { ...active(), ids: idsOf(document.getElementById('ol-r')) };
+  });
+  // 5. ONLY item removed — the list empties, so the explicit fallback.
+  run('removeOnly', () => {
+    const list = build([{ id: 'A', actions: ['remove'] }]);
+    list.querySelector('[data-item="A"] [data-action="remove"]').focus();
+    const before = captureBefore(list, 'A');
+    build([]);
+    refocusAfter(document.getElementById('ol-r'), before, document.getElementById('ol-add'));
+    return { ...active(), ids: idsOf(document.getElementById('ol-r')) };
+  });
+  // 6. ACTIONLESS SURVIVOR — the item is still there with nothing focusable
+  //    inside it. The old helper returned here and left BODY.
+  run('actionless', () => {
+    const list = build([{ id: 'A', actions: ['remove'] }, { id: 'B', actions: ['remove'] }]);
+    list.querySelector('[data-item="A"] [data-action="remove"]').focus();
+    const before = captureBefore(list, 'A');
+    build([{ id: 'A', actions: [] }, { id: 'B', actions: ['remove'] }]);
+    refocusAfter(document.getElementById('ol-r'), before, document.getElementById('ol-add'));
+    return { ...active(), ids: idsOf(document.getElementById('ol-r')) };
+  });
+  /* 7. OUTSIDE FOCUS — the user is elsewhere; the recipe must not move them.
+     The control focused here lives OUTSIDE the rebuilt host on purpose: the
+     first version focused `#ol-add`, which `build()` itself destroys, so the
+     case reported BODY and looked like the recipe had stolen focus when the
+     fixture had removed the element. */
+  run('outside', () => {
+    const elsewhere = document.createElement('button');
+    elsewhere.id = 'ol-elsewhere';
+    elsewhere.textContent = 'Elsewhere';
+    document.body.append(elsewhere);
+    const list = build([{ id: 'A', actions: ['remove'] }, { id: 'B', actions: ['remove'] }]);
+    elsewhere.focus();
+    const startedOnElsewhere = document.activeElement === elsewhere;
+    const before = captureBefore(list, 'A');
+    build([{ id: 'B', actions: ['remove'] }]);
+    refocusAfter(document.getElementById('ol-r'), before, document.getElementById('ol-add'));
+    const stillElsewhere = document.activeElement === elsewhere;
+    elsewhere.remove();
+    return { before, startedOnElsewhere, stillElsewhere, ...active() };
+  });
+  /* 8. UNAVAILABLE ACTION — the pressed action still EXISTS after the move but
+     is disabled, with a usable one beside it. Selector presence is not
+     focusability: the helper must skip the disabled one and land on the
+     enabled sibling, not return having focused nothing. This case exists so
+     the actionless-only case cannot certify that branch. */
+  run('disabledAction', () => {
+    const list = build([{ id: 'A', actions: ['down', 'remove'] }, { id: 'B', actions: ['up', 'down', 'remove'] }]);
+    list.querySelector('[data-item="B"] [data-action="up"]').focus();
+    const before = captureBefore(list, 'B');
+    build([{ id: 'B', actions: ['up', 'down', 'remove'] }, { id: 'A', actions: ['up', 'remove'] }]);
+    const up = document.querySelector('[data-item="B"] [data-action="up"]');
+    up.disabled = true;
+    refocusAfter(document.getElementById('ol-r'), before, document.getElementById('ol-add'));
+    return { upPresent: !!up, upDisabled: up.disabled, ...active() };
+  });
+  /* 9. THE DOCUMENTED CALLER ORDER, with focus moved elsewhere WHILE the
+     request is pending. Capturing before the await is the natural-looking
+     mistake; this exercises the order the page prints — await, then snapshot,
+     then replace — and asserts the focus the user already had survives.
+     The move here is a programmatic .focus(), not a trusted pointer click, so
+     this case covers the ORDER the page prints and not real pointer input. */
+  run('callerOrder', () => {
+    const elsewhere = document.createElement('input');
+    elsewhere.id = 'ol-pending-field';
+    document.body.append(elsewhere);
+    const list = build([{ id: 'A', actions: ['remove'] }, { id: 'B', actions: ['remove'] }]);
+    list.querySelector('[data-item="B"] [data-action="remove"]').focus();
+    const heldAtRequestStart = list.querySelector('[data-item="B"]').contains(document.activeElement);
+    /* ...the request is in flight, and focus moves elsewhere. NOTE: this is a
+       programmatic .focus(), not a trusted pointer click — it exercises the
+       CALLER ORDER (capture after the await, immediately before the swap),
+       which is what this case is about. Real async/pointer input is out of
+       this fixture's scope and is not claimed by it. */
+    elsewhere.focus();
+    const userMovedAway = document.activeElement === elsewhere;
+    // Documented order: snapshot the LIVE list now, immediately before the
+    // synchronous replacement — not back when the request started.
+    const before = captureBefore(document.getElementById('ol-r'), 'B');
+    build([{ id: 'A', actions: ['remove'] }]);
+    refocusAfter(document.getElementById('ol-r'), before, document.getElementById('ol-add'));
+    const stillElsewhere = document.activeElement === elsewhere;
+    elsewhere.remove();
+    return { heldAtRequestStart, userMovedAway, capturedHeld: before.held, stillElsewhere, ...active() };
+  });
+  host.remove();
+  return { ...out, errors };
+}, olRecipeText);
+check(
+  'ordered-list: the PRINTED refocus recipe, executed as printed — boundary, first/middle/last/only removal, an actionless survivor and an outside-focus update all land somewhere real, and nothing throws',
+  !olRecipe.missing && !olRecipe.compileError && olRecipe.errors.length === 0 &&
+    // boundary: B survived without its "up"; focus stays on B, on some action
+    olRecipe.boundary.item === 'B' && !olRecipe.boundary.isBody && olRecipe.boundary.action !== null &&
+    /* Removals: the exact CONTROL, not merely its containing item. Redirecting
+       the surviving-removal branch to the <li> passed the earlier predicate
+       while an enabled Remove sat right there — the same right-row/wrong-control
+       hole found twice before in this file. Identity, action and tag are all
+       asserted, plus the surviving ids. */
+    olRecipe.removeFirst.item === 'B' && olRecipe.removeFirst.action === 'remove' &&
+    olRecipe.removeFirst.tag === 'BUTTON' && !olRecipe.removeFirst.isBody &&
+    JSON.stringify(olRecipe.removeFirst.ids) === JSON.stringify(['B', 'C']) &&
+    olRecipe.removeMiddle.item === 'C' && olRecipe.removeMiddle.action === 'remove' &&
+    olRecipe.removeMiddle.tag === 'BUTTON' && !olRecipe.removeMiddle.isBody &&
+    JSON.stringify(olRecipe.removeMiddle.ids) === JSON.stringify(['A', 'C']) &&
+    olRecipe.removeLast.item === 'A' && olRecipe.removeLast.action === 'remove' &&
+    olRecipe.removeLast.tag === 'BUTTON' && !olRecipe.removeLast.isBody &&
+    JSON.stringify(olRecipe.removeLast.ids) === JSON.stringify(['A']) &&
+    // boundary lands on a real BUTTON too, not the row
+    olRecipe.boundary.tag === 'BUTTON' &&
+    // a disabled action is skipped for a usable sibling
+    olRecipe.disabledAction.upPresent && olRecipe.disabledAction.upDisabled &&
+    olRecipe.disabledAction.item === 'B' && olRecipe.disabledAction.tag === 'BUTTON' &&
+    olRecipe.disabledAction.action !== 'up' && !olRecipe.disabledAction.isBody &&
+    // the documented caller order leaves the user's own click alone
+    olRecipe.callerOrder.heldAtRequestStart && olRecipe.callerOrder.userMovedAway &&
+    olRecipe.callerOrder.capturedHeld === false && olRecipe.callerOrder.stillElsewhere &&
+    // empty list: the explicit fallback, not BODY
+    olRecipe.removeOnly.isAdd && !olRecipe.removeOnly.isBody &&
+    // actionless survivor: the ITEM itself takes focus rather than BODY
+    olRecipe.actionless.item === 'A' && olRecipe.actionless.action === null &&
+    !olRecipe.actionless.isBody && olRecipe.actionless.tag === 'LI' &&
+    // outside focus is left exactly where it was
+    olRecipe.outside.startedOnElsewhere && olRecipe.outside.before.held === false &&
+    olRecipe.outside.stillElsewhere,
+  JSON.stringify(olRecipe),
+);
+
+/* SC 2.5.7 (Dragging Movements), the pointer half — roadmap 373.4.
+   The generated ACR row claims the dropzone's function is reachable WITHOUT
+   dragging, by a single pointer. That is a runtime claim, so it is proved
+   here rather than argued: a real mouse click on the VISIBLE part of the
+   label must open the file picker.
+
+   Two things make this evidence rather than decoration. The click lands on
+   the hint text, deliberately away from the input — which is clipped to 1px
+   by `bo-visually-hidden`, so a click that happened to hit the input would
+   prove nothing about the label forwarding it. And it waits for an actual
+   `filechooser` event from the browser, not for a class or an attribute:
+   the criterion is about the function being reachable, and the picker
+   opening is that function starting.
+
+   Keyboard operability is NOT this criterion (it is 2.1.1) and is not
+   asserted here. */
+await visit('/components/file-upload/', { width: DESKTOP_WIDTH, height: 900 });
+const pickerByPointer = await (async () => {
+  /* Scroll it into view and settle BEFORE measuring: `page.mouse.click` takes
+     VIEWPORT coordinates, and the first version of this computed a point at
+     y=1380 in a 900px viewport — the click landed on nothing and the chooser
+     timed out, which would have read as "the picker does not open". */
+  await page.evaluate(() => document.querySelector('.bo-file-dropzone')?.scrollIntoView({ block: 'center' }));
+  await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+  const geom = await page.evaluate(() => {
+    const zone = document.querySelector('.bo-file-dropzone');
+    if (!zone) return null;
+    const input = zone.querySelector('input[type="file"]');
+    const hint = zone.querySelector('.bo-file-dropzone__hint') ?? zone;
+    const z = zone.getBoundingClientRect();
+    const i = input?.getBoundingClientRect();
+    const h = hint.getBoundingClientRect();
+    return {
+      isLabel: zone.tagName === 'LABEL',
+      inputHidden: !!input && i.width <= 2 && i.height <= 2,
+      inputNotDisplayNone: !!input && getComputedStyle(input).display !== 'none',
+      zoneBox: { w: +z.width.toFixed(1), h: +z.height.toFixed(1) },
+      // the point we will click: inside the visible hint, away from the input
+      point: { x: Math.round(h.x + h.width / 2), y: Math.round(h.y + h.height / 2) },
+      pointIsOnInput: !!i && h.x + h.width / 2 >= i.x && h.x + h.width / 2 <= i.right &&
+        h.y + h.height / 2 >= i.y && h.y + h.height / 2 <= i.bottom,
+      pointInViewport: h.x + h.width / 2 >= 0 && h.x + h.width / 2 <= innerWidth &&
+        h.y + h.height / 2 >= 0 && h.y + h.height / 2 <= innerHeight,
+    };
+  });
+  if (!geom || !geom.isLabel) return { missing: true, geom };
+  let opened = false, chooserErr = null;
+  try {
+    const [chooser] = await Promise.all([
+      page.waitForFileChooser({ timeout: 5000 }),
+      page.mouse.click(geom.point.x, geom.point.y),
+    ]);
+    opened = !!chooser;
+    await chooser.cancel();
+  } catch (e) { chooserErr = String(e.message || e); }
+  return { geom, opened, chooserErr };
+})();
+check(
+  'SC 2.5.7 alternative: a single real mouse click on the dropzone\'s visible hint — not on the clipped input — opens the file picker, so the drop function is reachable without any dragging movement',
+  !pickerByPointer.missing && pickerByPointer.geom.isLabel &&
+    pickerByPointer.geom.inputHidden && pickerByPointer.geom.inputNotDisplayNone &&
+    pickerByPointer.geom.pointIsOnInput === false && pickerByPointer.geom.pointInViewport &&
+    pickerByPointer.opened === true,
+  JSON.stringify(pickerByPointer),
+);
+
+/* TAG REMOVAL FOCUS (roadmap 373.4, tag-input subset). Removing the chip that
+   HOLDS focus used to leave `document.activeElement === body`: the keyboard
+   user lost their place mid-task. The page now states the destination, so it
+   is a claim this file has to keep proving.
+
+   The activation is a REAL Enter press on the focused remove button. That is
+   the whole point of doing it here rather than in the unit tests: `.click()`
+   and a synthetic `KeyboardEvent` both bypass the browser's default
+   activation behaviour, so neither is evidence about a keyboard user. The
+   unit tests cover the conditional and the event order; this covers the key.
+
+   Measured on the shipped page, before the fix (2026-09-21): focus was on
+   `button[aria-label="Remove CC-4021"]`, Enter removed the chip, and
+   `activeElement` came back BODY. */
+async function tagRemoveCase({ groupSel, index, expectLabels, otherSel }) {
+  await visit('/components/tag-input/', { width: DESKTOP_WIDTH, height: 900 });
+  const setup = await page.evaluate((groupSel, index, otherSel) => {
+    const g = document.querySelector(groupSel);
+    if (!g) return { missing: true };
+    const tags = [...g.querySelectorAll('.bo-tag-input__tag')];
+    const btn = tags[index]?.querySelector('.bo-tag-input__remove');
+    btn?.focus();
+    const other = document.querySelector(otherSel);
+    return {
+      groupExists: true,
+      count: tags.length,
+      labels: tags.map((t) => t.textContent.replace('×', '').trim()),
+      targetLabel: tags[index] ? tags[index].textContent.replace('×', '').trim() : null,
+      // the activation target really is focused, and really is inside the chip
+      focusedIsRemoveBtn: document.activeElement === btn,
+      focusInsideTargetChip: !!tags[index] && tags[index].contains(document.activeElement),
+      otherCount: other ? other.querySelectorAll('.bo-tag-input__tag').length : null,
+    };
+  }, groupSel, index, otherSel);
+  await page.keyboard.press('Enter');
+  await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+  const after = await page.evaluate((groupSel, otherSel) => {
+    const g = document.querySelector(groupSel);
+    const a = document.activeElement;
+    const other = document.querySelector(otherSel);
+    return {
+      count: g.querySelectorAll('.bo-tag-input__tag').length,
+      labels: [...g.querySelectorAll('.bo-tag-input__tag')].map((t) => t.textContent.replace('×', '').trim()),
+      activeIsThisGroupsField: a === g.querySelector('.bo-tag-input__field'),
+      activeIsBody: a === document.body,
+      activeTag: a.tagName,
+      otherCount: other ? other.querySelectorAll('.bo-tag-input__tag').length : null,
+    };
+  }, groupSel, otherSel);
+  return { setup, after, expectLabels };
+}
+function tagRemoveOk({ setup, after, expectLabels }) {
+  return !setup.missing && setup.groupExists &&
+    // the fixture is real before anything is believed about it
+    setup.count === expectLabels.before.length &&
+    JSON.stringify(setup.labels) === JSON.stringify(expectLabels.before) &&
+    setup.targetLabel === expectLabels.removed &&
+    setup.focusedIsRemoveBtn && setup.focusInsideTargetChip &&
+    // the chip is gone, by label and by count
+    after.count === expectLabels.after.length &&
+    JSON.stringify(after.labels) === JSON.stringify(expectLabels.after) &&
+    // focus landed in THIS group's field, not on body
+    after.activeIsThisGroupsField && !after.activeIsBody &&
+    // and the neighbouring group was not touched
+    setup.otherCount !== null && after.otherCount === setup.otherCount;
+}
+/* Three chips are needed for a genuine MIDDLE case, and they are produced the
+   way a consumer produces them — the page's own bo:tag-add handler, driven by
+   a real Enter in the field. */
+async function tagRemoveMiddle() {
+  await visit('/components/tag-input/', { width: DESKTOP_WIDTH, height: 900 });
+  await page.focus('#ti-basic .bo-tag-input__field');
+  await page.keyboard.type('CC-9001');
+  await page.keyboard.press('Enter');
+  await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+  const setup = await page.evaluate(() => {
+    const g = document.getElementById('ti-basic');
+    const tags = [...g.querySelectorAll('.bo-tag-input__tag')];
+    const btn = tags[1]?.querySelector('.bo-tag-input__remove');
+    btn?.focus();
+    return { count: tags.length, labels: tags.map((t) => t.textContent.replace('×', '').trim()),
+      focusedIsRemoveBtn: document.activeElement === btn,
+      middleLabel: tags[1] ? tags[1].textContent.replace('×', '').trim() : null };
+  });
+  await page.keyboard.press('Enter');
+  await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+  const after = await page.evaluate(() => {
+    const g = document.getElementById('ti-basic');
+    const a = document.activeElement;
+    return { count: g.querySelectorAll('.bo-tag-input__tag').length,
+      labels: [...g.querySelectorAll('.bo-tag-input__tag')].map((t) => t.textContent.replace('×', '').trim()),
+      activeIsThisGroupsField: a === g.querySelector('.bo-tag-input__field'), activeIsBody: a === document.body };
+  });
+  return { setup, after };
+}
+const tagFirst = await tagRemoveCase({
+  groupSel: '#ti-basic', index: 0, otherSel: '#ti-recipients',
+  expectLabels: { before: ['CC-4021', 'CC-2205'], removed: 'CC-4021', after: ['CC-2205'] },
+});
+check(
+  'tag-input removal focus: real Enter on the FIRST chip\'s remove button — chip gone, focus in that group\'s field (was BODY), neighbouring group untouched',
+  tagRemoveOk(tagFirst), JSON.stringify(tagFirst),
+);
+const tagLast = await tagRemoveCase({
+  groupSel: '#ti-basic', index: 1, otherSel: '#ti-recipients',
+  expectLabels: { before: ['CC-4021', 'CC-2205'], removed: 'CC-2205', after: ['CC-4021'] },
+});
+check('tag-input removal focus: real Enter on the LAST chip', tagRemoveOk(tagLast), JSON.stringify(tagLast));
+const tagOnly = await tagRemoveCase({
+  groupSel: '#ti-recipients', index: 0, otherSel: '#ti-basic',
+  expectLabels: { before: ['j.kim@busy-office.example'], removed: 'j.kim@busy-office.example', after: [] },
+});
+check(
+  'tag-input removal focus: real Enter on the ONLY chip — the group empties and focus still lands in its own field',
+  tagRemoveOk(tagOnly), JSON.stringify(tagOnly),
+);
+const tagMiddle = await tagRemoveMiddle();
+check(
+  'tag-input removal focus: real Enter on a MIDDLE chip, in a group grown to three through the page\'s own add flow',
+  tagMiddle.setup.count === 3 && tagMiddle.setup.focusedIsRemoveBtn && tagMiddle.setup.middleLabel === 'CC-2205' &&
+    tagMiddle.after.count === 2 && JSON.stringify(tagMiddle.after.labels) === JSON.stringify(['CC-4021', 'CC-9001']) &&
+    tagMiddle.after.activeIsThisGroupsField && !tagMiddle.after.activeIsBody,
+  JSON.stringify(tagMiddle),
+);
+/* The conditional half, in a real browser: removing a chip that does NOT hold
+   focus must leave focus exactly where it was. Without this, "focus moves to
+   the field" could be implemented as "focus the field on every removal", which
+   would steal focus from whatever the user was actually doing. */
+await visit('/components/tag-input/', { width: DESKTOP_WIDTH, height: 900 });
+const tagUnfocused = await page.evaluate(() => {
+  const g = document.getElementById('ti-basic');
+  const field = document.querySelector('#ti-recipients .bo-tag-input__field');
+  field.focus();
+  const before = document.activeElement === field;
+  // remove a chip in the OTHER group, with a real click on its button
+  g.querySelector('.bo-tag-input__remove').click();
+  return { focusStartedInOtherGroupsField: before,
+    stillInThatField: document.activeElement === field,
+    activeTag: document.activeElement.tagName,
+    basicCount: g.querySelectorAll('.bo-tag-input__tag').length };
+});
+check(
+  'tag-input removal focus: removing an UNFOCUSED chip does not steal focus — it stays in the control the user was in',
+  tagUnfocused.focusStartedInOtherGroupsField && tagUnfocused.stillInThatField && tagUnfocused.basicCount === 1,
+  JSON.stringify(tagUnfocused),
+);
+
+/* SCROLL OWNER (roadmap 373.3). `/concepts/layouts` now states outright that
+   long workspace content scrolls `.bo-app-shell__main` and that the DOCUMENT
+   does not scroll. That is two claims, and the second is the one nothing was
+   asserting — `check:scroll` covers whether content past a container's edge is
+   REACHABLE, which is a different property and is true either way.
+
+   Both halves are measured on a real rendered page with genuinely long content
+   (`/components/data-table/`, ~13.6k px of overflow), not a synthetic fixture:
+   the positive half would be trivially satisfiable by a probe that creates its
+   own scroller, and the negative half is only interesting on a document the
+   shell actually owns.
+
+   The setup is asserted before the movement is believed — a page whose `__main`
+   did not overflow would report "main did not move, document did not move" and
+   read exactly like a pass. */
+async function scrollOwnerCheck({ width, height, theme }) {
+  await visit('/components/data-table/', { width, height });
+  // Set `data-theme` directly. `localStorage.setItem('bo-theme', …)` is NOT the
+  // key the docs shell reads (it stores `bo-theme-pref`), so that idiom returns
+  // on the default and a "dark" case silently measures light.
+  await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), theme);
+  await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+  return page.evaluate(() => {
+    const main = document.querySelector('.bo-app-shell__main');
+    const doc = document.scrollingElement;
+    if (!main) return { missing: true };
+    const shell = document.querySelector('.bo-app-shell');
+    const mainRect = main.getBoundingClientRect();
+    /* A SCROLLPORT THE READER CAN SEE. Overflow and a mutable scrollTop are
+       not evidence of one: collapse `__main` to `block-size: 0` and
+       `scrollHeight - clientHeight` stays large (22160 at 390), `scrollTop`
+       still moves 400, and the document still does not scroll — every term
+       the first version of this check asserted survives an invisible
+       workspace (found by review, boui-layout-review-20260921-02).
+       So the visible box is asserted directly, and the scroller's identity is
+       tied to the shell rather than taken on trust. */
+    const cx = mainRect.x + mainRect.width / 2, cy = mainRect.y + mainRect.height / 2;
+    const hit = mainRect.width > 0 && mainRect.height > 0 ? document.elementFromPoint(cx, cy) : null;
+    const shellRect = shell.getBoundingClientRect();
+    const setup = {
+      mainExists: true,
+      mainOverflow: main.scrollHeight - main.clientHeight,
+      mainOverflowY: getComputedStyle(main).overflowY,
+      docOverflow: doc.scrollHeight - doc.clientHeight,
+      shellClips: getComputedStyle(shell).overflow,
+      theme: document.documentElement.getAttribute('data-theme'),
+      bodyBg: getComputedStyle(document.body).backgroundColor,
+      // Proves the two elements are not the same node, which would make the
+      // whole comparison vacuous.
+      mainIsNotDoc: main !== doc,
+      // The visible scrollport, four independent ways.
+      mainClientH: main.clientHeight,
+      mainClientW: main.clientWidth,
+      mainRenderedH: +mainRect.height.toFixed(2),
+      mainRenderedW: +mainRect.width.toFixed(2),
+      mainCentreHitsSelf: !!hit && (hit === main || main.contains(hit)),
+      // …and its relationship to the shell that is supposed to bound it.
+      shellContainsMain: shell.contains(main) && main !== shell,
+      shellClientH: shell.clientHeight,
+      // The workspace is the bulk of the shell: header row + main = shell, so a
+      // collapsed main reads far below this while the real one is ~0.94.
+      mainShareOfShell: shell.clientHeight > 0 ? +(main.clientHeight / shell.clientHeight).toFixed(3) : 0,
+      mainWithinShell: mainRect.height > 0 && shellRect.height > 0 &&
+        mainRect.bottom <= shellRect.bottom + 1 && mainRect.top >= shellRect.top - 1,
+    };
+    const mainBefore = main.scrollTop;
+    const docBefore = doc.scrollTop;
+    main.scrollTop = 400;
+    const mainAfter = main.scrollTop;
+    const docAfter = doc.scrollTop;
+    main.scrollTop = mainBefore;
+    return { setup, mainMoved: mainAfter - mainBefore, docMoved: docAfter - docBefore };
+  });
+}
+function scrollOwnerOk(r, expectTheme) {
+  if (!r || r.missing) return false;
+  const s = r.setup;
+  return s.mainExists && s.mainIsNotDoc && s.mainOverflow > 1000 && s.mainOverflowY === 'auto' &&
+    s.shellClips === 'hidden' && s.theme === expectTheme &&
+    /* The scrollport is VISIBLE before any movement is believed. Each term
+       catches the collapse independently: a zero-height main fails the client
+       and rendered heights, hit-tests to whatever is behind it, and drops its
+       share of the shell from ~0.94 to 0. */
+    s.mainClientH > 0 && s.mainClientW > 0 &&
+    s.mainRenderedH > 0 && s.mainRenderedW > 0 &&
+    s.mainCentreHitsSelf &&
+    s.shellContainsMain && s.mainWithinShell && s.mainShareOfShell > 0.5 &&
+    // the workspace scrolls…
+    r.mainMoved === 400 &&
+    // …and the document neither overflows nor moves.
+    s.docOverflow <= 1 && r.docMoved === 0;
+}
+const scrollOwners = {};
+for (const [w, h] of [[DESKTOP_WIDTH, 900], [NARROW_WIDTH, 844]]) {
+  for (const theme of ['light', 'dark']) {
+    scrollOwners[`${w}-${theme}`] = await scrollOwnerCheck({ width: w, height: h, theme });
+  }
+}
+for (const [key, r] of Object.entries(scrollOwners)) {
+  const theme = key.endsWith('dark') ? 'dark' : 'light';
+  check(
+    `scroll owner (${key}): a real overflowing .bo-app-shell__main scrolls 400px while document.scrollingElement neither overflows nor moves`,
+    scrollOwnerOk(r, theme),
+    JSON.stringify(r),
+  );
+}
+/* The pair must not be measuring one theme twice — the failure this file had
+   with the wrong localStorage key. */
+check(
+  'scroll owner: the light and dark cases rendered different themes',
+  scrollOwners[`${DESKTOP_WIDTH}-light`].setup.bodyBg !== scrollOwners[`${DESKTOP_WIDTH}-dark`].setup.bodyBg,
+  JSON.stringify({ light: scrollOwners[`${DESKTOP_WIDTH}-light`].setup.bodyBg, dark: scrollOwners[`${DESKTOP_WIDTH}-dark`].setup.bodyBg }),
+);
+
+/* NEGATIVE PROOF #1 — the collapsed workspace, run through the SAME production
+   predicate (`scrollOwnerCheck` + `scrollOwnerOk`), not a re-implementation.
+   This is the exact defect review boui-layout-review-20260921-02 found: with
+   `__main` collapsed to zero height the first version of this check returned
+   TRUE in all four cases, because overflow and a mutable scrollTop survive an
+   invisible scrollport. The override is added to the page only; shared source
+   is untouched, and it is removed by the `visit()` inside the helper on the
+   next case.
+   What the mutation breaks: `.bo-app-shell__main` block-size/min-block-size/
+   padding/border -> 0, so clientHeight and the rendered box go to 0 while
+   scrollHeight stays large. */
+await visit('/components/data-table/', { width: DESKTOP_WIDTH, height: 900 });
+await page.addStyleTag({ content: '.bo-app-shell__main{block-size:0 !important;min-block-size:0 !important;padding:0 !important;border:0 !important}' });
+await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), 'light');
+await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+const collapsedMain = await page.evaluate(() => {
+  const main = document.querySelector('.bo-app-shell__main');
+  const doc = document.scrollingElement;
+  const shell = document.querySelector('.bo-app-shell');
+  const rect = main.getBoundingClientRect();
+  const cx = rect.x + rect.width / 2, cy = rect.y + rect.height / 2;
+  const hit = rect.width > 0 && rect.height > 0 ? document.elementFromPoint(cx, cy) : null;
+  const before = main.scrollTop;
+  main.scrollTop = 400;
+  const moved = main.scrollTop - before;
+  main.scrollTop = before;
+  return {
+    setup: {
+      mainExists: true, mainIsNotDoc: main !== doc,
+      mainOverflow: main.scrollHeight - main.clientHeight,
+      mainOverflowY: getComputedStyle(main).overflowY,
+      docOverflow: doc.scrollHeight - doc.clientHeight,
+      shellClips: getComputedStyle(shell).overflow,
+      theme: document.documentElement.getAttribute('data-theme'),
+      bodyBg: getComputedStyle(document.body).backgroundColor,
+      mainClientH: main.clientHeight, mainClientW: main.clientWidth,
+      mainRenderedH: +rect.height.toFixed(2), mainRenderedW: +rect.width.toFixed(2),
+      mainCentreHitsSelf: !!hit && (hit === main || main.contains(hit)),
+      shellContainsMain: shell.contains(main) && main !== shell,
+      shellClientH: shell.clientHeight,
+      mainShareOfShell: shell.clientHeight > 0 ? +(main.clientHeight / shell.clientHeight).toFixed(3) : 0,
+      mainWithinShell: rect.height > 0,
+    },
+    mainMoved: moved, docMoved: 0,
+  };
+});
+check(
+  'scroll owner, negative proof (collapsed workspace): a zero-height __main is REFUSED by the same predicate the four claims use, although it still overflows and still scrolls',
+  // The injection landed: the old terms all still hold…
+  collapsedMain.setup.mainOverflow > 1000 && collapsedMain.mainMoved === 400 &&
+    collapsedMain.setup.mainClientH === 0 &&
+    // …and the predicate rejects it anyway.
+    scrollOwnerOk(collapsedMain, 'light') === false,
+  JSON.stringify(collapsedMain),
+);
+
+/* NEGATIVE PROOF #2 — a DIFFERENT failure, kept because it verifies the other
+   half of the contract: which element owns the scroll at all. Removing
+   the shell's own height cap is the single change that hands scrolling back to
+   the document: `__main` keeps `overflow: auto` but has nothing to overflow,
+   so it stops being the scroller and the document starts. If this came back
+   with the document still at zero, the override would not have landed and the
+   four claims above would be asserting a constant. What the mutation breaks:
+   `.bo-app-shell { block-size: 100dvh }` -> `auto`, plus the shell's clip. */
+await visit('/components/data-table/', { width: DESKTOP_WIDTH, height: 900 });
+/* `scroll-behavior: auto` is part of the override, and it is a MEASUREMENT
+   correction rather than a weakening: the docs shell sets `scroll-behavior:
+   smooth` on `html`, so `doc.scrollTop = 400` animates and reading it back in
+   the same tick returns 0. The first version of this proof reported
+   `docMoved: 0` with `docOverflow: 13665` — the document plainly could scroll
+   and the instrument could not see it. `scroll-behavior` is not inherited, so
+   `__main` is unaffected and the positive half above never had this problem,
+   which is exactly why the asymmetry was worth chasing rather than patching. */
+await page.addStyleTag({ content: '.bo-app-shell{block-size:auto !important;overflow:visible !important}html{scroll-behavior:auto !important}' });
+await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+const scrollOwnerRedProof = await page.evaluate(() => {
+  const main = document.querySelector('.bo-app-shell__main');
+  const doc = document.scrollingElement;
+  const injected = { blockSize: getComputedStyle(document.querySelector('.bo-app-shell')).blockSize,
+    shellOverflow: getComputedStyle(document.querySelector('.bo-app-shell')).overflow,
+    // the measurement correction itself, asserted rather than assumed
+    scrollBehavior: getComputedStyle(document.documentElement).scrollBehavior };
+  const docBefore = doc.scrollTop;
+  doc.scrollTop = 400;
+  const docAfter = doc.scrollTop;
+  doc.scrollTop = docBefore;
+  return {
+    injected,
+    mainOverflow: main.scrollHeight - main.clientHeight,
+    docOverflow: doc.scrollHeight - doc.clientHeight,
+    docMoved: docAfter - docBefore,
+  };
+});
+check(
+  'scroll owner, negative proof: with the shell height cap overridden the DOCUMENT overflows and scrolls instead — so the four claims above are not asserting a constant',
+  scrollOwnerRedProof.injected.shellOverflow === 'visible' &&
+    scrollOwnerRedProof.injected.scrollBehavior === 'auto' &&
+    scrollOwnerRedProof.docOverflow > 1000 && scrollOwnerRedProof.docMoved === 400 &&
+    scrollOwnerRedProof.mainOverflow <= 1,
+  JSON.stringify(scrollOwnerRedProof),
+);
 
 /* file-dropzone, the no-JS half — LAST, and that position is the finding.
    The page used to say drop-to-select worked natively and the behavior only

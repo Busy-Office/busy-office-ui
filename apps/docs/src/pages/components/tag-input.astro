@@ -91,6 +91,38 @@ const canonical = `<!-- The framework owns REMOVAL (it's the framework's own ren
     special empty-state markup needed.</p>
   </section>
 
+  <section class="demo">
+    <h2>What happens when a tag is removed</h2>
+    <p class="demo-note">Removing a chip with the keyboard used to leave focus
+    on <code>&lt;body&gt;</code> — the reader lost their place in the form.
+    Three rules, in this order:</p>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong><code>bo:tag-remove</code> fires first</strong>, from the
+      chip, while it is <em>still in the document</em> — so a listener can read
+      its position or siblings — and it bubbles, carrying
+      <code>detail.value</code>.</li>
+      <li><strong>Then the chip is removed.</strong></li>
+      <li><strong>Then focus moves to that same group's
+      <code>.bo-tag-input__field</code></strong> — but <em>only</em> if the
+      chip being removed contained focus. Removing a chip the user was not on
+      never moves them.</li>
+    </ol>
+    <p class="bo-u-text-muted">The field is the destination because it already
+    exists in the markup contract and is where the next value goes, so no new
+    attribute, option or roving tab order is introduced. <strong>If your own
+    <code>bo:tag-remove</code> listener moves focus somewhere else, that wins</strong>
+    — the framework checks and does not override a deliberate move.</p>
+    <p class="bo-u-text-muted"><strong>The status sentence is yours.</strong>
+    The framework moves focus; it does not announce the removal. If removing a
+    tag should be spoken (&ldquo;CC-4021 removed, 2 remaining&rdquo;), write it
+    into your own <a href={base + '/concepts/accessibility#live-regions'}>live
+    region</a> from your <code>bo:tag-remove</code> listener — the same
+    &ldquo;framework does visuals, you do the data&rdquo; split as adding a
+    tag. What is verified here is where focus lands and the order of the three
+    steps above, in a real browser with real key presses; whether a screen
+    reader speaks it is a separate question these checks do not answer.</p>
+  </section>
+
   <script>
     import { initTagInput } from '@busy-office/ui/js';
     initTagInput();

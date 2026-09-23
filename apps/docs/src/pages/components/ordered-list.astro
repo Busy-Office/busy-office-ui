@@ -35,6 +35,77 @@ const markup = `<!-- default: mono, for codes/amounts -->
     <button class="bo-btn bo-btn--sm bo-btn--ghost bo-btn--icon" aria-label="Remove Standing desk">×</button>
   </span>
 </li>`;
+const focusRecipe = `// After YOUR reorder/remove re-renders the list. The buttons above are
+// inert markup — this is the part you write.
+
+// A control that EXISTS is not a control that can take focus: a disabled Up
+// beside an enabled Down is a normal way to present a boundary. So try the
+// candidate and confirm it actually landed, rather than trusting the selector.
+function place(el) {
+  if (!el) return false;
+  el.focus();
+  return document.activeElement === el;
+}
+
+function captureBefore(list, itemId) {
+  const items = [...list.querySelectorAll('[data-item]')];
+  const item = list.querySelector(\`[data-item="\${itemId}"]\`);
+  return {
+    itemId,
+    index: items.indexOf(item),
+    // Ownership is read HERE, from the live old list. See the caller below:
+    // this must be the last thing before the replacement, with no await after.
+    held: !!item && item.contains(document.activeElement),
+    action: document.activeElement?.dataset?.action ?? null,
+  };
+}
+
+// \`fallback\` is passed in, not looked up — the control to land on when the
+// list empties is the caller's decision, usually its Add button.
+function refocusAfter(list, before, fallback) {
+  // Someone else's update, or the user clicking away, must not be overridden.
+  if (!before.held) return;
+
+  const tryIn = (root) => {
+    if (!root) return false;
+    // The action just pressed first, if it can still take focus. At a boundary
+    // it often cannot: it is removed, or present but disabled.
+    if (before.action && place(root.querySelector(\`[data-action="\${before.action}"]\`))) return true;
+    for (const el of root.querySelectorAll('[data-action], input, select, textarea, a[href]')) {
+      if (place(el)) return true;
+    }
+    // Nothing inside it is usable — make the row itself the destination
+    // rather than letting focus fall to <body>.
+    root.tabIndex = -1;
+    return place(root);
+  };
+
+  if (tryIn(list.querySelector(\`[data-item="\${before.itemId}"]\`))) return;
+
+  // The item is gone. Whatever now sits at its index, else the last item.
+  const items = [...list.querySelectorAll('[data-item]')];
+  if (tryIn(items[Math.min(before.index, items.length - 1)])) return;
+
+  // The list is empty: nothing inside it can take focus.
+  place(fallback);
+}
+
+// Caller — the ORDER matters as much as the functions.
+//
+//   const result = await applyMove(...);   // 1. app work FIRST, awaited
+//   const list = document.getElementById('lines');  // 2. re-read: your
+//                                          //    re-render may have replaced it
+//   const before = captureBefore(list, 'SKU-1180'); // 3. snapshot the LIVE list
+//   render(result);                        // 4. synchronous replacement
+//   refocusAfter(document.getElementById('lines'), before,
+//                document.getElementById('add-line'));
+//
+// Capturing before the await looks natural and is wrong: the request is in
+// flight for a while, and if the user clicks a field elsewhere during it,
+// \`held\` is already stale — you would yank them back after the render.
+// Keep steps 3-5 synchronous, with no await between them.
+`;
+
 ---
 <Gallery title="Ordered list" description="A native ordered list of line items, approval routes or release steps, where the number is a real list marker that survives copy and screen readers.">
   <p class="demo-note">
@@ -68,6 +139,65 @@ const markup = `<!-- default: mono, for codes/amounts -->
     <p class="bo-u-text-muted">The <code>↑↓×</code> buttons are inert markup — bind the
     reorder/remove in your app or HTMX. Each carries a row-specific
     <code>aria-label</code>.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Focus and status after a reorder or a removal</h2>
+    <p class="demo-note">The buttons above are inert, so <strong>all of this is
+    yours</strong> — the framework renders the row and its labels and does not
+    move, remove or announce anything. What follows is the part that is easy to
+    get wrong, because the control the user just pressed is often gone by the
+    time the list comes back.</p>
+    <p class="bo-u-text-muted">Three cases, and the first is the one that
+    surprises people:</p>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>A move that reaches a boundary.</strong> Move the second item
+      up and it becomes the first — so its own <code>↑</code> is no longer
+      offered, exactly as the demo above omits it on row 1. The button the user
+      pressed no longer exists, and focus falls to
+      <code>&lt;body&gt;</code> unless you place it. Re-find the item by its
+      identity and focus its <em>remaining</em> action.</li>
+      <li><strong>A removed item.</strong> There is no item to return to.
+      Focus the same action on whatever now occupies that position, else on the
+      item before it.</li>
+      <li><strong>An empty list.</strong> No item, no action, nothing to fall
+      back to inside the list — so name a control outside it, normally the one
+      that adds an item. This case is the one most often left out, and it is
+      the one that strands the keyboard user completely.</li>
+    </ol>
+    <p class="bo-u-text-muted"><strong>Find the item by identity, never by
+    position</strong> — the position is precisely what your reorder just
+    changed. Use whatever stable id your data already carries (a line id, the
+    SKU in the row); the demo above has none because it is inert markup, and a
+    real list needs one.</p>
+    <p class="bo-u-text-muted">Two rules make this work in practice. <strong>A
+    control that exists is not necessarily one that can take focus</strong> — a
+    disabled <code>↑</code> next to an enabled <code>↓</code> is an ordinary way
+    to show a boundary — so the recipe confirms each attempt landed instead of
+    trusting the selector. And <strong>the snapshot is taken after your data
+    arrives, immediately before the synchronous re-render</strong>: capture it
+    before the <code>await</code> and a user who clicks elsewhere mid-request
+    gets yanked back.</p>
+    <p class="bo-u-text-muted">It is two calls, because the answer depends on
+    state that only exists <em>before</em> the DOM is replaced — which item was
+    acted on, where it sat, and whether it actually held focus. Read that
+    first; act on it after. The item needs an identity attribute for this to
+    work; the inert demo above has none, and a real list needs one.</p>
+    <pre><code>{focusRecipe}</code></pre>
+    <p class="bo-u-text-muted"><strong>Only when the changed item held
+    focus.</strong> If the user was typing somewhere else when a row was
+    removed — by another user's update, or a background refresh — moving their
+    focus into the list is worse than leaving it alone. Check before you
+    place.</p>
+    <p class="bo-u-text-muted"><strong>Moving focus is not an announcement, and
+    the sentence is yours.</strong> Focus placement tells an assistive
+    technology <em>where</em> the user now is, not <em>what happened</em>. If
+    &ldquo;Monitor arm moved to position 1 of 3&rdquo; or &ldquo;Desk lamp
+    removed, 2 remaining&rdquo; should be spoken, write it into your own
+    <a href={base + '/concepts/accessibility#live-regions'}>live region</a> from
+    the same handler that re-renders. The framework ships no announcement for
+    this and none of the checks behind this page establish what a screen reader
+    says.</p>
   </section>
 
   <section class="demo">

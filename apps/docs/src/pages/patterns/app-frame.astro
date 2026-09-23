@@ -157,8 +157,9 @@ const markup = `<!-- The frame is ONE navbar + ONE sidebar around every screen.
     <h2>Anatomy</h2>
     <ol class="bo-stack bo-stack--tight docs-list">
       <li><strong>Shell</strong> — <a href={base + '/base/primitives'}>.bo-app-shell</a>:
-        header + sidebar + main; the sidebar collapses to an icon rail under
-        900px of shell width, labels kept in the accessibility tree.</li>
+        header + sidebar + main; the sidebar collapses to an icon rail in the
+        shell's <a href={base + '/concepts/layouts#contract'}>narrow container
+        state</a>, labels kept in the accessibility tree.</li>
       <li><strong>Top bar</strong> — <a href={base + '/components/nav'}>navbar</a>:
         brand, then the suite-level controls.</li>
       <li><strong>Module switcher</strong> — a ghost
@@ -208,7 +209,7 @@ const markup = `<!-- The frame is ONE navbar + ONE sidebar around every screen.
         <thead><tr><th scope="col">State</th><th scope="col">What ships</th></tr></thead>
         <tbody>
           <tr><td>Current module</td><td>the sidebar's active entry carries <code>aria-current="page"</code> + the visible marker — two channels</td></tr>
-          <tr><td>Narrow (&lt;900px shell width)</td><td>the sidebar collapses to its icon rail; labels stay in the accessibility tree. A bottom-nav tier is deliberately NOT shipped — re-opens on a real consumer need</td></tr>
+          <tr><td>Narrow shell (container state)</td><td>the sidebar collapses to its icon rail; labels stay in the accessibility tree. A bottom-nav tier is deliberately NOT shipped — re-opens on a real consumer need</td></tr>
           <tr><td>No permission for a module</td><td>absent from switcher and sidebar both — a disabled module teaches nothing and leaks structure</td></tr>
           <tr><td>Count unavailable</td><td>no badge, no error — the bar never fails loudly over a number</td></tr>
           <tr><td>Print</td><td>the whole frame disappears (<code>.bo-navbar</code> and the sidebar are print-hidden); paper gets the page, not the chrome</td></tr>

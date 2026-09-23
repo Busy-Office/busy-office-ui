@@ -239,6 +239,44 @@
     inset-block-start: calc(2 * var(--bo-density-row-height));
   }
 
+  /* Native Tab/Shift+Tab scroll-into-view has no idea the sticky thead above
+     occupies real screen space — it only sees a control's LAYOUT position is
+     inside the scrollport and stops there (roadmap 373.3). Measured on the
+     shipped list-report exemplar: Shift+Tab from the last row lands
+     `input[aria-label="Select INV-10238"]` exactly inside the sticky
+     header's rect, 256px^2 overlap — a whole 16x16 checkbox, fully covered,
+     still focused.
+
+     `scroll-margin-block-start` on the focused BODY control, not
+     `scroll-padding-block-start` on the container: the container was tried
+     first and reserves space for EVERY scroll-into-view target inside it,
+     including the header's own controls — which are already sticky and
+     never need it, and measurably worse for it (focusing the header's own
+     sort button snapped the container to scrollTop 0, a bigger unwanted
+     jump than doing nothing at all). Scoped to `tbody` only, that jump is
+     zero, matching the no-reservation baseline exactly.
+
+     Reading `--bo-density-row-height` here, not a separate ceiling
+     constant: this selector always matches a DESCENDANT of wherever density
+     is declared (the table or this container), so normal CSS inheritance
+     already resolves the correct tier at the point of use — density
+     declared on the table instead of the container needs no special
+     handling, because a custom property cascades down to a descendant
+     fine; the earlier version of this fix set `scroll-padding` on the
+     ANCESTOR container instead, which cannot see a tier redefined below it,
+     and worked around that with a redundant global max-tier token (roadmap
+     373 review). One row-height per grouped header row, capped at three,
+     same as the sticky offsets just above — never wrong for a shorter
+     header, only stops native scroll slightly earlier than the minimum.
+
+     `+ 1px`: measured, not guessed — even the exact reserved-equals-actual
+     case (144px both) still left a 0.5px/8px^2 edge intersection on 7 of 28
+     samples, because native scroll-into-view treats this as an exact stop
+     line and sub-pixel rounding can land a control fractionally past it. */
+  .bo-data-table tbody :focus {
+    scroll-margin-block-start: calc(3 * var(--bo-density-row-height) + 1px);
+  }
+
   .bo-data-table--striped tbody tr:nth-child(even) {
     --bo-cell-bg: var(--bo-color-bg-muted);
   }

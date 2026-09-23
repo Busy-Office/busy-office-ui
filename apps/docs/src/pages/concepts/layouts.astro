@@ -16,12 +16,63 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
    conclusion and shows the shell as code with placeholders; this follows that
    precedent for all four. It is also the form an agent can actually use:
    something to copy, not a picture to interpret. */
-/* The ONE band the stylesheet declares for the shell, in both units, so the
-   prose below never restates it from memory. `.bo-app-shell` sets
-   `container-name: bo-shell`; `sidebar-nav.css` is the only rule that queries
-   it. If a second band is ever added, this page is wrong until it moves. */
-const SHELL_BAND_REM = 56;
+/* The ONE band the stylesheet declares for the shell, PARSED from the source
+   css at build — the same idiom `/concepts/cascade` uses for the z-index
+   scale. This const used to be hand-typed `56`, with a comment saying the
+   prose "never restates it from memory" — which was true of the prose and
+   false of the const: nothing compared it to the stylesheet, so a CSS change
+   would have moved `check:claims`' band assertion and left this page quietly
+   stale. `.bo-app-shell` sets `container-name: bo-shell`; `sidebar-nav.css`
+   is the only rule that queries it, and a second band throws below rather
+   than being silently ignored. */
+const shellFiles = import.meta.glob('../../../../../packages/core/src/css/primitives/sidebar-layout.css', {
+  query: '?raw', import: 'default', eager: true,
+});
+const navFiles = import.meta.glob('../../../../../packages/core/src/css/components/sidebar-nav/sidebar-nav.css', {
+  query: '?raw', import: 'default', eager: true,
+});
+const spaceFiles = import.meta.glob('../../../../../packages/core/src/css/tokens/space.css', {
+  query: '?raw', import: 'default', eager: true,
+});
+const shellCssSrc = Object.values(shellFiles)[0];
+const navCssSrc = Object.values(navFiles)[0];
+const spaceCssSrc = Object.values(spaceFiles)[0];
+
+const bands = [...navCssSrc.matchAll(/@container bo-shell \(max-width:\s*([\d.]+)rem\)/g)].map((m) => Number(m[1]));
+if (bands.length !== 1)
+  throw new Error(
+    `layouts: expected exactly ONE '@container bo-shell (max-width: …rem)' in sidebar-nav.css, found ${bands.length} ` +
+      `[${bands.join(', ')}]. The page's device matrix assumes a single band; add the new one here deliberately.`,
+  );
+const SHELL_BAND_REM = bands[0];
 const SHELL_BAND_PX = SHELL_BAND_REM * 16;
+
+/* The scroll owner's padding, and the sticky offset every bar inside `__main`
+   is measured against. Declared on `__main` itself, NOT on `.bo-app-shell` —
+   which is why the header and the sidebar cannot read it. */
+const padVar = shellCssSrc.match(/--bo-app-shell-pad:\s*var\((--bo-space-\d+)\)/);
+if (!padVar)
+  throw new Error(
+    "layouts: no '--bo-app-shell-pad: var(--bo-space-N)' in primitives/sidebar-layout.css — " +
+      'the sticky-offset section below is derived from it and would be asserting a number that no longer ships.',
+  );
+const padToken = padVar[1];
+const padValue = spaceCssSrc.match(new RegExp(`${padToken}:\\s*([\\d.]+rem)`));
+if (!padValue)
+  throw new Error(`layouts: '${padToken}' is not declared in tokens/space.css, so --bo-app-shell-pad cannot be resolved.`);
+const SHELL_PAD_REM = padValue[1];
+const SHELL_PAD_PX = Number.parseFloat(SHELL_PAD_REM) * 16;
+
+/* The shell's own sizing and clipping, read rather than described — the scroll
+   contract below stands on exactly these two declarations. */
+const shellBlockSize = shellCssSrc.match(/\.bo-app-shell\s*\{[^}]*?block-size:\s*([^;]+);/s)?.[1]?.trim();
+const mainOverflow = shellCssSrc.match(/\.bo-app-shell__main\s*\{[^}]*?\boverflow:\s*([^;]+);/s)?.[1]?.trim();
+if (!shellBlockSize || !mainOverflow)
+  throw new Error(
+    `layouts: could not read the shell's own sizing from sidebar-layout.css ` +
+      `(block-size=${shellBlockSize ?? 'MISSING'}, __main overflow=${mainOverflow ?? 'MISSING'}). ` +
+      'The scroll-owner contract is derived from these; refusing to render a guess.',
+  );
 
 /* Device classes, defined by what the CONTAINER is doing rather than by any
    device-sniffing — the whole point of the matrix below. The px ranges are
@@ -381,11 +432,156 @@ const SHELLS = [
         <pre><code>{s.template}</code></pre>
       </div>
     ))}
-    <p class="bo-u-text-muted">Every class above ships — the build fails on an
-    invented <code>bo-*</code> class or <code>data-*</code> value, so these
-    templates cannot quietly drift from the framework. The one exception is
-    named as one: <code>your-split</code> is deliberately yours, because
-    <strong>no split primitive ships</strong>.</p>
+    <p class="bo-u-text-muted">These templates use framework classes except
+    <code>your-split</code>, which is deliberately yours because
+    <strong>no split primitive ships</strong>. The markup checker validates
+    rendered HTML; it skips code samples, including the templates above.
+    After adapting a template, run <code>bo-check-markup</code> on your built
+    HTML to check its framework classes and supported attributes.</p>
+  </section>
+
+  <section class="demo" id="contract">
+    <h2>The shell contract — regions, scrolling, sticky, stacking</h2>
+    <p class="bo-u-text-muted">Everything below is read from
+    <code>primitives/sidebar-layout.css</code>, <code>sidebar-nav.css</code> and
+    <code>tokens/z-index.css</code> at build time, so a number here cannot drift
+    from the stylesheet that ships. There is no second shell and no new class:
+    the framework declares exactly four — <code>.bo-app-shell</code> and its
+    three parts.</p>
+
+    <h3>Regions and who owns what</h3>
+    <div class="bo-data-table-container" tabindex="0">
+      <table class="bo-data-table">
+        <thead>
+          <tr><th scope="col">Region</th><th scope="col">Class</th><th scope="col">Responsibility</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Header</td>
+            <td><code>.bo-app-shell__header</code></td>
+            <td>Grid area only — it sets no height and no position. Its height
+            is whatever you put in it; a
+            <a href={`${base}/components/navbar/`}>navbar</a> contributes its
+            own <em>minimum</em>, and grows with its content. It does not
+            stick; it stays put because the grid row is <code>auto</code>
+            inside a clipped shell.</td>
+          </tr>
+          <tr>
+            <td>Navigation <span class="bo-u-text-muted">(optional)</span></td>
+            <td><code>.bo-app-shell__sidebar</code></td>
+            <td>A <strong>second, independent scroller</strong>
+            (<code>overflow-y: auto</code>). A long nav scrolls on its own
+            without moving the workspace. Omit the element entirely for a
+            shell with no rail.</td>
+          </tr>
+          <tr>
+            <td>Workspace</td>
+            <td><code>.bo-app-shell__main</code></td>
+            <td>The primary scroller, and the only region that scrolls the
+            application's content. Carries <code>--bo-app-shell-pad</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="bo-u-text-muted">Inside the workspace there are four
+    responsibilities. Each is met by <strong>composing elements and components
+    that already ship</strong> — which is why no page-header wrapper is needed
+    and none is provided:</p>
+    <ol class="bo-stack bo-stack--tight docs-list">
+      <li><strong>Page heading and breadcrumb</strong> — compose
+      <a href={`${base}/components/breadcrumb/`}>breadcrumb</a> with an
+      <code>h1</code> and a <a href={`${base}/base/primitives/`}>cluster</a>.</li>
+      <li><strong>Action / toolbar scope</strong> — a
+      <a href={`${base}/components/table-toolbar/`}>table toolbar</a> acts on
+      the table below it; a page-level action row acts on the record. The scope
+      is <em>where you put it</em>. Do not add <code>role="toolbar"</code> to an
+      action row: that role carries the APG arrow-key model, and a row that
+      claims it without implementing it is worse than an unlabelled row.</li>
+      <li><strong>Application content</strong> — the pattern you picked above.</li>
+      <li><strong>Sticky action region</strong> —
+      <a href={`${base}/components/form/`}><code>.bo-form-actions</code></a>,
+      which sticks to the end of the main scroller.</li>
+    </ol>
+
+    <h3>Who scrolls</h3>
+    <p>In screen mode the shell is <code>block-size: {shellBlockSize}</code> and
+    clips its own overflow, and <code>__main</code> is
+    <code>overflow: {mainOverflow}</code>. So <strong>long workspace content
+    scrolls <code>__main</code>; the document does not scroll.</strong> The
+    sidebar scrolls independently of both.</p>
+    <p class="bo-u-text-muted"><strong>The boundary, stated because it is easy
+    to lose.</strong> Nothing in the framework puts <code>overflow</code> on
+    <code>html</code> or <code>body</code>. The document stays put only because
+    the shell is exactly viewport-height and is <em>body's only normal-flow
+    content</em>. Add normal-flow content beside the shell, or give
+    <code>body</code> padding, and you get a scrolling document with the shell
+    sliding off the top — the framework cannot prevent that and does not try.
+    (An overlay that is taken out of flow — a <code>&lt;dialog&gt;</code>, a
+    fixed toast region, a <code>&lt;script&gt;</code> — adds no document height,
+    which is why the overlay compositions documented elsewhere are safe here.)
+    Two further boundaries: this is a
+    <strong>screen-mode</strong> contract — <code>@media print</code> sets the
+    shell to <code>display: block</code> with <code>overflow: visible</code> and
+    hides the header and sidebar, so printing deliberately scrolls the document
+    — and an <a href={`${base}/patterns/rf-landing/`}>RF screen</a> rendered as
+    its own isolated document has no shell at all, so none of this applies to
+    it.</p>
+
+    <h3>Sticky offsets</h3>
+    <p>A sticky element positions against <strong>its nearest scroll
+    container, not the viewport</strong>. For page-level content with no
+    scroller between it and the workspace — a
+    <a href={`${base}/components/form/`}>form action bar</a>, say — that
+    container is <code>__main</code>. A
+    <a href={`${base}/components/data-table/`}>bounded table</a> brings its
+    own: its sticky header sticks to <em>that</em> container's edge, not to the
+    workspace's. Knowing which one you are in is the whole question.</p>
+    <p>The workspace's padding is <code>--bo-app-shell-pad</code>, declared as
+    <code>{padToken}</code> = <code>{SHELL_PAD_REM}</code> ({SHELL_PAD_PX}px).
+    It is declared on <code>__main</code> itself, so only descendants of the
+    workspace can read it — the header and the sidebar cannot.</p>
+    <p class="bo-u-text-muted">That is what lets a sticky action bar paint over
+    the padding strip below it instead of leaving a canvas-coloured gap, and
+    the same fallback (<code>0px</code>) is what makes the rule inert for a bar
+    used outside a shell. A rail narrower than the band collapses to icons at
+    <code>{SHELL_BAND_REM}rem</code> ({SHELL_BAND_PX}px) of <em>shell</em>
+    width — a container query, not a viewport one, which is why the same page
+    behaves differently in a narrow split than at a narrow window.</p>
+
+    <h3>Stacking, and what z-index cannot buy</h3>
+    <p>The shell itself sets no <code>z-index</code>. Layering is one scale,
+    documented and generated at
+    <a href={`${base}/concepts/cascade/`}>cascade &amp; layers</a>; the
+    layout-relevant part is the order — a sticky column sits under a sticky
+    table header, which sits under a page-level sticky bar, which sits under a
+    toast.</p>
+    <p><strong>A native <code>&lt;dialog&gt;</code> is not on that scale, and no
+    number reaches it.</strong> An open modal dialog renders in the browser's
+    <em>top layer</em>, above every positioned element in the document
+    regardless of <code>z-index</code>. So a body-level toast cannot appear over
+    an open dialog, and raising its number changes nothing. Render the
+    confirmation <em>inside</em> the dialog instead — the framework ships no
+    dialog z-index token, deliberately, because there is no value that would
+    work.</p>
+    <p class="bo-u-text-muted">For feedback that must not collide with a sticky
+    action bar, see <a href={`${base}/components/alerts/`}>alerts &amp;
+    toasts</a>, which documents a measured in-flow composition for exactly that
+    case. <strong>Note what that measurement is not:</strong> the form's
+    reserved focus gutter keeps <em>keyboard-focused</em> controls clear of the
+    scroller's end edge. It is not a general promise that floating overlays, or
+    an action bar of arbitrary height, will clear anything.</p>
+
+    <h3>Viewport and safe areas</h3>
+    <p>The shipped pages declare
+    <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code>
+    — <strong>no <code>viewport-fit=cover</code></strong>. That is the shipped
+    assumption, and the framework ships no <code>env(safe-area-inset-*)</code>
+    anywhere. What a browser does by default without that keyword is the
+    browser's documented behaviour, not something this page establishes.</p>
+    <p class="bo-u-text-muted">If your app opts into edge-to-edge by adding
+    <code>viewport-fit=cover</code>, that is your decision and the insets become
+    yours to handle — the shell will not do it for you, and this framework does
+    not ship speculative padding for a mode it does not enable.</p>
   </section>
 
   <Related links={[

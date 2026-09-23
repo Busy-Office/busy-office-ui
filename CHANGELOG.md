@@ -96,6 +96,19 @@ pin.
   `.bo-quantity__step`'s `border-color` to compensate will now be compensating
   on top of a fix; `.bo-btn--secondary` outside a Quantity is untouched.
 
+- **Removing a focused tag now keeps keyboard focus in its group.**
+  `initTagInput()` moves focus to that group's `.bo-tag-input__field` after
+  removing the chip, instead of leaving it on `<body>`. Removing an unfocused
+  chip preserves focus, including Backspace from an already focused field.
+  A synchronous `bo:tag-remove` listener that moves focus elsewhere keeps
+  control of the destination. The event still bubbles from the connected chip
+  before removal with the same `detail.value`.
+
+  **Compatibility:** this repairs focus loss without changing signatures,
+  markup, options or events. Focus listeners now observe the field receiving
+  focus after a focused removal; an asynchronous consumer redirect may follow
+  that move. Apps remain responsible for removal announcements.
+
 - **`initFileDropzone()` no longer accepts a drop the plain input would
   refuse, and now fires the events a real selection fires.** Measured with
   trusted drops (Chrome DevTools Protocol `Input.dispatchDragEvent`, real files)

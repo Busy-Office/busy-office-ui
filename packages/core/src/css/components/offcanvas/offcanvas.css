@@ -171,6 +171,52 @@
     border-inline-end: none;
   }
 
+  /* A drawer's sidebar-nav must never collapse to the rail's icon-only
+     state, however narrow the surrounding .bo-app-shell container reads
+     (roadmap 373.3). <dialog> escapes the shell's PAINT layer once open —
+     that's the whole point of the top layer — but it does not leave the
+     shell's DOM subtree, so sidebar-nav.css's own narrow-shell collapse
+     query still matches inside it: measured, a drawer nested in a shell
+     under that band collapsed its own labels to a 1px clipped box,
+     identical to the rail beside it (the same query a reader opened the
+     drawer specifically to get around). The width collapse above was
+     already harmless here — this rule already wins that one on
+     specificity — only the label/heading visually-hidden rule leaked
+     through, because it targeted the same two classes with no narrower
+     selector. Everything here matches that rule's own recipe (see its
+     comment in sidebar-nav.css) so a drawer and a rail never diverge in how
+     "not collapsed" is expressed, only in whether it applies. */
+  .bo-offcanvas .bo-sidebar-nav__label,
+  .bo-offcanvas .bo-sidebar-nav__heading {
+    position: static;
+    inline-size: auto;
+    block-size: auto;
+    margin: 0;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
+    border: 0;
+  }
+
+  /* The collapsed recipe above also zeroes padding — harmless for __label
+     (it carries none normally; the link around it holds the spacing) but a
+     real, separate leak for __heading, which normally isn't padding:0 at
+     all (sidebar-nav.css's own base rule). Measured: a drawer's section
+     heading sat flush against the nav edge, 272x18/padding:0, against
+     272x34/padding:8px 12px for the identical heading outside any shell.
+     Restoring the value once here, rather than in the shared rule above,
+     keeps that rule's job to exactly "undo the collapse" and this one's job
+     to "the one property the collapse recipe touches that a heading, but
+     not a label, actually uses outside it." */
+  .bo-offcanvas .bo-sidebar-nav__heading {
+    padding: var(--bo-space-2) var(--bo-space-3);
+  }
+
+  .bo-offcanvas .bo-sidebar-nav__link {
+    justify-content: flex-start;
+    padding-inline: var(--bo-space-3);
+  }
+
   /* Forced-colors: same issue as .bo-dialog — border: none by design (the
      edge-sheet look relies on box-shadow alone), which isn't rendered
      under forced-colors. The panel is flush to 3 viewport edges, so only

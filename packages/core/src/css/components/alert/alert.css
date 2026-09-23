@@ -94,6 +94,48 @@
     max-inline-size: 24rem;
   }
 
+  /* MEASURED REFUSAL (roadmap 373.3): a page's sticky `.bo-form-actions` bar
+     and this region both anchor to the viewport's bottom-end corner, and
+     `--bo-z-toast` (1600) always wins over `--bo-z-sticky-page` (1150,
+     z-index.css) — so an unguarded toast CAN paint over the bar's buttons
+     (measured on detail-form, 390x844: Save 100% covered, 6116px^2).
+
+     A universal automatic clearance was tried and measured wrong, not
+     merely awkward: pushing this region up by a fixed offset (9rem, chosen
+     to clear the widest shipped action bar) moved the same obstruction onto
+     a real EDITABLE FIELD instead. Real Tab traversal from Vendor through
+     detail-form, 390x844: `Quantity for Standing desk` — an `<input>`, not
+     a button — landed 100% behind the shifted region, 1481px^2, center
+     hit-test the toast, not the field. A user could no longer see what they
+     were typing. No fixed offset is safe here: the toast is fixed to the
+     VIEWPORT, forms scroll their OWN content, so any constant either fails
+     to clear a tall action bar or, made tall enough to clear it, migrates
+     the collision onto whatever field native scroll-into-view happens to
+     park at that same band next. A CSS-only, load-independent solution
+     would need to reserve that space AT ALL TIMES on every scrollable form
+     to guard a TRANSIENT, occasional event — a permanent cost for a rare
+     case — or coordinate with the toast's actual lifecycle, which needs
+     JS the recipe does not ship and this task does not authorize.
+
+     The safe answer is not a bigger number — it's not this component's
+     problem to solve by floating over the page at all. `/components/alerts`
+     documents an IN-FLOW alternative for this composition: a persistent
+     `role="status"` region in the form's own document flow, shipped EMPTY
+     and EXPOSED from load (not `hidden` — a hidden node is not rendered, so
+     it is not in the accessibility tree when its content changes), whose
+     CONTENTS a save replaces. The region is never removed, so a repeat save
+     behaves like the first.
+
+     What was measured is that composition, on that form: real Tab and
+     Shift+Tab traversal between `Vendor` and `Save purchase order` — every
+     field and both action buttons, each with a positive rendered box and a
+     centre hit-test resolving to itself — at 390 and 1440, light and dark,
+     all three densities, and a 2-row wrapped action bar. No measured
+     control intersected the message. That is a result about this
+     composition, NOT a general property of in-flow content and not a
+     promise of clearance from floating overlays or arbitrary-height action
+     bars. `check-claims.mjs` keeps proving it. */
+
   .bo-toast {
     box-shadow: var(--bo-shadow-lg);
     background: var(--bo-color-bg-surface-raised);
