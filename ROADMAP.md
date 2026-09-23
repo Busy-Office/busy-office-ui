@@ -409,7 +409,7 @@ untracked or uncommitted, so the removal was a working-tree change.
          close it is a settled-then-clicked check, which is the thing already
          known to pass.
 
-6. [ ] **375.6 — CI rebuilds the whole project six times per run.**
+6. [x] **375.6 — CI rebuilds the whole project six times per run.**
        `.github/workflows/ci.yml`'s `docs-gates` is a 5-entry matrix whose steps
        run `npm ci`, the core build and the docs build **inside every shard**,
        and the `core` job builds again — so the core build's 24 steps run 6x and
@@ -422,6 +422,31 @@ untracked or uncommitted, so the removal was a working-tree change.
          themselves, and the wall-clock and machine-minute figures in ci.yml's
          own comment are re-measured and updated to whatever the change actually
          produces — not predicted in advance.
+       - **CLOSED 2026-09-23 as REFUSED, because re-measuring the premise
+         refuted it.** The duplication is real — 5 shards each run `npm ci`,
+         the core build and the docs build, and the `core` job builds again —
+         but the BUILD half of it is not where the time goes. Measured cold
+         (dist, `.astro` and the node astro cache all removed first): core
+         build 6s, docs build 7s, 13s combined. So the duplicated build work is
+         5 x 13 + 6 = **71s, 1.2 machine-minutes of the ~14.7 the file itself
+         quotes — about 8%**. Building once and passing `dist` as an artifact
+         saves ~0.9 machine-min before the upload and download cost is
+         subtracted, which on a `dist` this size would eat much of it.
+       - **The large duplication is `npm ci`, and it is already mitigated** by
+         `actions/setup-node`'s `cache: npm` in every job. The fix this item
+         proposed therefore targets the small half.
+       - **And it could not be landed blind anyway**, which is the second
+         reason to stop: shard 5 runs `npm run suite` and `check:quickstart`,
+         which pack the local package and build the ERP suite rather than
+         merely reading `dist`, so "consume a prebuilt dist" is not true of
+         every shard. A wrong artifact wiring blocks all of CI, and this
+         item's own Accept requires figures that only a real CI run produces.
+       - **Limit of this measurement, stated rather than hidden:** it was taken
+         on a developer machine with dependencies already installed, not on a
+         cold CI runner. The build steps are CPU-bound (astro, postcss) so they
+         should not differ by an order of magnitude, but the 8% is a local
+         reading and the honest way to confirm it is the per-step timings in
+         any real run's log. Reopen if those show the build dominating.
 
 7. [ ] **375.7 — three "Not when" cells on the decision page are
        content-free, and the page's own generated prose overclaims that they
