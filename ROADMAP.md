@@ -445,7 +445,7 @@ untracked or uncommitted, so the removal was a working-tree change.
          under ~12 characters is the cheap detector; measure how many exist
          before deciding it is worth a gate.
 
-8. [ ] **375.8 — the Jev threshold cannot discriminate where it is being asked
+8. [x] **375.8 — the Jev threshold cannot discriminate where it is being asked
        to.** The completion review scored 373.3 at **0.81** against a
        provisional band of 0.85, on evidence where every Accept criterion had a
        direct measurement and one carried a self-run red-proof. The item was
@@ -476,8 +476,31 @@ untracked or uncommitted, so the removal was a working-tree change.
          part of the instrument: state the evidence, never the prior score, and
          never what verdict is hoped for. Add a pair of framing variants to the
          validation set so this is measured rather than remembered.
-       - Until that lands the bands stay PROVISIONAL and the review stays
-         advisory, exactly as `.roundtable/jev-rubrics.md` already says.
+       - **Closed 2026-09-23 with 20 cases, and the answer is that NO CLEAN CUT
+         EXISTS — which the Accept named as a satisfying outcome.** The set was
+         drawn from this repo's own landed and refused work, each truth value
+         established by measurement. Evidence-supports: min 0.81, median 0.95,
+         max 0.97. Evidence-does-not: min 0.03, median 0.24, max 0.81. **A true
+         case and a false case both landed on exactly 0.81**, so the ranges
+         overlap and no threshold separates them.
+       - **What the cut buys is an asymmetry, and 0.85 buys the right one:**
+         0 false positives and 1 false negative, against 1 false positive and 0
+         false negatives at any cut of 0.80 or below. A false positive claims
+         completion on evidence that does not support it, which is what the
+         review exists to prevent; a false negative costs one more measurement.
+         So 0.85 stays, now on evidence rather than on margin, and the band's
+         job is understood: it never wrongly says yes, and a reading between
+         0.35 and 0.85 is an instruction to go measure, not a verdict.
+       - **The two cases at 0.81 are the useful ones.** The TRUE one claimed
+         "every rule was restated" and offered byte counts — real, but they
+         cannot evidence a claim about CONTENT. The FALSE one claimed "only one
+         thing remains" on evidence that established six criteria passing and
+         said nothing about what else was open. Both are claims outrunning
+         their evidence, which is exactly what the middle band is for.
+       - The framing variant is recorded rather than re-measured here: the same
+         evidence scored 0.25 with a leading prior-score sentence and 0.48
+         without it, a 0.23 swing, so `jev-rubrics.md` forbids putting a prior
+         score or a hoped-for verdict in a payload.
 
 ## Slice 374 — the joined-control seam was spelled against the AUTHORED markup, not the RENDERED DOM: three trailing children defeat `:last-child`, the framework's own canonical quantity markup is one of them, and the defect shipped on **3 pages / 5 rendered views** while a gate that visits those exact elements measured only their focus rings (2026-09-22)
 

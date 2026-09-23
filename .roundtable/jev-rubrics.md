@@ -41,7 +41,7 @@ escalating to a **Claude** model, not to a different Jev.
 Quote the field you used. A `score` and a `confidence` in the same answer are
 two different numbers and mixing them is a reporting defect.
 
-## Thresholds — PROVISIONAL, n=5, advisory only
+## Thresholds — VALIDATED at n=20, still advisory
 
 Measured 2026-09-22 against five cases from this repo whose true answers were
 already established by measurement (see "Validation set" below). All five were
@@ -58,13 +58,41 @@ For `choice`, use `jev_route` with `confidence_threshold: 0.8` and treat
 probabilities**, not the mean, and treat a top-level probability below 0.6 as
 unverified.
 
-**Why these numbers and not tidier ones.** The observed separation was
-supported ≥ 0.92 and unsupported ≤ 0.20, so any cut in between separates the
-validation set perfectly; 0.85/0.35 leaves margin on both sides rather than
-fitting the sample. n=5 is too small to call this calibrated — it is enough to
-show the rubric discriminates and not enough to trust a borderline number. **Do
-not tighten these without re-running the set with more cases**, and do not let a
-band decide anything a check can decide.
+**Validated 2026-09-23 against 20 cases** drawn from this repo's own landed and
+refused work, each truth value established by measurement rather than
+recollection (the set is in `375.8`). Result:
+
+| set | n | min | median | max |
+|---|---|---|---|---|
+| evidence genuinely supports | 10 | **0.81** | 0.95 | 0.97 |
+| evidence genuinely does not | 10 | 0.03 | 0.24 | **0.81** |
+
+**There is no clean cut, and that is the finding.** A true case and a false case
+both landed on exactly 0.81 — so the ranges overlap and no threshold separates
+them perfectly. What the cut buys is an ASYMMETRY, and 0.85 buys the right one:
+
+| cut | false positives | false negatives |
+|---|---|---|
+| **0.85** | **0 of 10** | 1 of 10 |
+| 0.80 or lower | 1 of 10 | 0 of 10 |
+
+A false positive is claiming completion on evidence that does not support it —
+precisely what this review exists to prevent. A false negative costs one more
+measurement. So 0.85 stays, now on evidence rather than on margin, and the
+band's job is understood: **it never wrongly says yes; it sometimes says "go
+measure" when you did not need to.** Treat a reading between 0.35 and 0.85 as
+that instruction, not as a verdict.
+
+The two cases at 0.81 are worth reading before trusting a borderline number.
+The TRUE one claimed "every rule was restated" and offered byte counts — the
+counts are real but they cannot evidence the *content* claim, so the doubt is
+correct. The FALSE one claimed "only one thing remains", where the evidence
+established six criteria passing and said nothing about what else might be
+open. Both are cases where the EVIDENCE is thinner than the CLAIM, which is
+what the middle band is for.
+
+**Do not tighten these without re-running the set**, and do not let a band
+decide anything a check can decide.
 
 ## Rubric 1 — DECISION support
 
