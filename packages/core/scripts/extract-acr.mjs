@@ -264,6 +264,11 @@ const CRITERIA = [
     remarks: 'The sticky action bar is the one surface that could cover a focused control; CI focuses every field on the detail-form pattern and asserts none intersects the bar. Executed, not reasoned about.',
   },
   {
+    id: '2.5.7', name: 'Dragging Movements', level: 'AA',
+    verdict: 'Conditional-on-adopter',
+    remarks: `Derived, not asserted: a scan of the ${dragScanned} shipped source modules under packages/core/src/js shortlists ${dragShortlist.length} (${dragShortlist.join(', ')}); after review the author-defined dragging surface is ${dragSurfaces.length} — ${dragSurfaces.join(', ')} — and ${[...NON_DRAG_REVIEWED.keys()].join(', ')} is a non-drag match (${[...NON_DRAG_REVIEWED.values()].join('; ')}). Reproduce with: ${DRAG_SCAN_CMD}. Each drag surface carries a single-pointer alternative that does not require dragging: ${[...NON_DRAG_ALTERNATIVE.entries()].map(([f, why]) => `${f} — ${why}`).join('; ')}. The framework itself therefore offers no function that REQUIRES a dragging movement. Two limits are part of this claim, not footnotes to it: the scan reads literal event names, so a fully computed listener name, a drag arriving through a dependency, or drag written in an adopter's own screens is invisible to it; and keyboard operability is NOT evidence for this criterion — it is 2.1.1, and the alternative cited above is a pointer path. Adopters own any dragging they add themselves, and the non-drag equivalent for it.`,
+  },
+  {
     id: '2.5.8', name: 'Target Size (Minimum)', level: 'AA',
     verdict: 'Supports',
     remarks: 'Conformance here rides on the SPACING EXCEPTION, not on a 24px floor: checkboxes, radios, the tag-input remove button and the data-table sort button are 16-18px, and CI runs the actual spec test (a 24px circle centred on each undersized target must not reach another target) across seven control-dense pages in all three densities. Adopters who crowd controls tighter than 24px between centres break this — the framework cannot guarantee it for markup it did not author.',
@@ -336,6 +341,9 @@ const report = {
   standard: 'WCAG 2.2, Level A + AA (applicable subset for a CSS/JS UI toolkit — criteria with no toolkit surface, e.g. captions/audio, are omitted, not silently marked Supports)',
   methodology: 'Automated evidence (contrast, keyboard-map, event/ARIA generation, forced-colors emulation) is cited by number and regenerates every build; rows with no automated evidence are Not Evaluated, never inferred as Supports.',
   forcedColorsComponents,
+  dragSurfaces,
+  dragShortlist,
+  dragScanCommand: DRAG_SCAN_CMD,
   contrastPassCount,
   contrastTotal,
   criteria: CRITERIA,
