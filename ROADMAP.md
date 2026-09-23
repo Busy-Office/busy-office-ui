@@ -352,13 +352,23 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          2.5.7 drag scan shortlisted the file once it named pointer events and
          refused to build — recorded as non-drag, with its reason (the gate
          doing its job). Jev: supported 0.93 (A 0.94, B 0.94).
-2. [ ] **P0 · 377.2 — the app-launch launcher's filter desyncs after Escape.**
+2. [x] **P0 · 377.2 — the app-launch launcher's filter desyncs after Escape.**
        Escape empties the field (Chromium fires `search`, not `input`) while
        the grid stays filtered and the status still names the old query.
        - **Accept:** after one Escape with a query typed and a reopen, the
          visible tiles equal the set computed from the field's CURRENT value
          and the status agrees, DOM-compared, in a real-key `check-claims`
          case red-proved against today's build.
+       - **DONE 2026-09-24.** The launcher re-runs its filter on the dialog's
+         `close` event, which fires after the native Escape-clear on every
+         engine, so the grid follows whatever the field holds — cleared or not
+         — without depending on Chromium's non-standard `search` event.
+         `check:claims` +2 (1440 and 390) asserts the invariant rather than
+         re-implementing the filter: re-running the page's own filter on the
+         reopened field changes nothing. Red on the pre-fix build (empty field,
+         2 of 9 tiles, "2 applications match inv"), green after; the seven
+         existing launcher claims still pass. Live at 1440/390 light/dark.
+         Jev: supported 0.94 (A 0.93).
 3. [ ] **377.3 — the completion gate cannot see a revision.** 2 of 30 closes
        since 2026-09-19 were false at HEAD when marked (373.3, 373.4); the
        rubric names no revision; no check reads git status; `build-id.json`'s

@@ -7213,6 +7213,35 @@ await visit('/patterns/app-launch/', { width: DESKTOP_WIDTH, height: 900 });
   );
 }
 
+/* 377.2 — after Escape mid-query and a reopen, the grid matches the field.
+   Chromium's Escape clears a search field with a `search` event, not `input`,
+   so the filter kept the old query while the box showed empty. The invariant,
+   rather than a re-implementation of the filter: re-running the page's own
+   filter on the field's current value changes nothing. Real keys throughout. */
+for (const width of WIDTHS) {
+  await visit('/patterns/app-launch/', { width, height: 900 });
+  const snap = () => page.evaluate(() => ({
+    value: document.getElementById('al-search').value,
+    shown: [...document.querySelectorAll('#al-launcher .al-app')].filter((a) => !a.hidden).map((a) => a.id),
+    status: document.getElementById('al-count').textContent,
+    open: document.getElementById('al-launcher').open,
+  }));
+  await page.click('#al-launcher-open');
+  await page.keyboard.type('inv', { delay: 20 });
+  const typed = await snap();
+  await page.keyboard.press('Escape');
+  await new Promise((r) => setTimeout(r, 150));
+  await page.click('#al-launcher-open');
+  await new Promise((r) => setTimeout(r, 150));
+  const reopened = await snap();
+  await page.evaluate(() => document.getElementById('al-search').dispatchEvent(new Event('input', { bubbles: true })));
+  const refiltered = await snap();
+  check(`app-launch @${width}: after Escape mid-query and a reopen, the visible tiles and the status match the field's current value (377.2)`,
+    typed.shown.length > 0 && reopened.open && reopened.shown.length > typed.shown.length &&
+      JSON.stringify(reopened.shown) === JSON.stringify(refiltered.shown) && reopened.status === refiltered.status,
+    JSON.stringify({ typed: typed.shown.length, reopened, refiltered: { shown: refiltered.shown.length, status: refiltered.status } }));
+}
+
 await visit('/components/file-upload/', { width: DESKTOP_WIDTH, height: 900 });
 const pickerByPointer = await (async () => {
   /* Scroll it into view and settle BEFORE measuring: `page.mouse.click` takes

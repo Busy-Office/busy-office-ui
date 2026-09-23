@@ -208,6 +208,13 @@ const logistics = [
         }
       });
 
+      /* Re-filter on close (roadmap 377.2). Chromium's Escape-clear fires
+         `search`, not `input`, so the grid kept the old query under an empty
+         box and the reopened launcher disagreed with itself. `close` fires
+         after that clear, on every engine, so the grid always follows whatever
+         the field holds — cleared or not. */
+      (dialog as HTMLDialogElement).addEventListener('close', apply);
+
       // Run once so the count is populated before anyone types.
       apply();
     }
