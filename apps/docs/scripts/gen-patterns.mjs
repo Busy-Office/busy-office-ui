@@ -44,8 +44,17 @@ function extractWrongChoice(src) {
   const op = extractOpener(src);
   const m = WRONG_CHOICE_RE.exec(op);
   if (!m) return null;
-  const clause = textOf(m[1]);
+  const head = textOf(m[1]);
   const rest = m[2] ?? '';
+  // `<strong>Not for</strong> a table…` puts the object outside the tag; the
+  // clause runs on to the first terminator unless the bold text already ended.
+  let clause = head;
+  if (!/[.!?;:—–]$/.test(head)) {
+    const restText = textOf(rest);
+    const t = restText.search(/[—–.;:]/);
+    const tail = (t === -1 ? restText : restText.slice(0, t)).trim();
+    if (tail) clause = `${head} ${tail}`.replace(/\s+/g, ' ');
+  }
   const link = LINK_RE.exec(rest)?.[1] ?? null;
   return { clause, alternative: link };
 }
@@ -72,6 +81,12 @@ if (process.argv.includes('--self-test')) {
     ['wrong-choice clause WITH an alternative link',
       JSON.stringify(extractWrongChoice('<p class="demo-note"><strong>Not for X</strong> — see <a href={base + \'/patterns/y\'}>Y</a> instead.</p>')),
       JSON.stringify({ clause: 'Not for X', alternative: '/patterns/y' })],
+    ['an object written AFTER the </strong> is part of the clause, up to the first terminator',
+      JSON.stringify(extractWrongChoice('<p class="demo-note"><strong>Not for</strong> a table that is mostly read — use <a href={base + \'/patterns/y\'}>Y</a>.</p>')),
+      JSON.stringify({ clause: 'Not for a table that is mostly read', alternative: '/patterns/y' })],
+    ['a bold clause that already ends in a full stop takes nothing from the next sentence',
+      JSON.stringify(extractWrongChoice('<p class="demo-note"><strong>Not for desk clerks.</strong> Without a scanner it is slow.</p>')),
+      JSON.stringify({ clause: 'Not for desk clerks.', alternative: null })],
     /* The escaped `&lt;tbody&gt;` must come out as the TEXT it stands for.
        This case used to assert `'the &lt;tbody&gt; swap'` — it pinned the
        source spelling as the expected output, which is the defect roadmap

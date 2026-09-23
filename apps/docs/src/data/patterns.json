@@ -1331,7 +1331,7 @@
             ]
           ],
           "wrongChoice": {
-            "clause": "Not for",
+            "clause": "Not for a table that's read far more often than edited",
             "alternative": "/components/data-table"
           }
         },
@@ -2728,7 +2728,7 @@
             ]
           ],
           "wrongChoice": {
-            "clause": "Not for",
+            "clause": "Not for a general app launcher with dozens of destinations",
             "alternative": "/patterns/app-launch"
           }
         },
@@ -2789,7 +2789,7 @@
             ]
           ],
           "wrongChoice": {
-            "clause": "Not for",
+            "clause": "Not for editing a line's data on this screen",
             "alternative": "/patterns/rf-list#editable-refused"
           }
         },

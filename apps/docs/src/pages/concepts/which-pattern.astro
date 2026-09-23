@@ -29,12 +29,15 @@ const WHO = /Who uses it:\s*(.+?)(?=\s+(?:How often|What "done")|$)/s;
 
 /** Split a wrong-choice clause so any pattern it names becomes a real link. */
 function linkAlternatives(clause: string, selfTitle: string) {
+  // Whole words only: "app launch" must not link the front of "app launcher".
+  const at = (lt: string) =>
+    clause.toLowerCase().search(new RegExp(`\\b${lt.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`));
   const hit = [...byTitle.entries()].find(
-    ([lt]) => lt !== selfTitle.toLowerCase() && clause.toLowerCase().includes(lt),
+    ([lt]) => lt !== selfTitle.toLowerCase() && at(lt) !== -1,
   );
   if (!hit) return { before: clause, target: null as any, after: '' };
   const [lt, target] = hit;
-  const i = clause.toLowerCase().indexOf(lt);
+  const i = at(lt);
   return { before: clause.slice(0, i), target, after: clause.slice(i + lt.length) };
 }
 

@@ -448,7 +448,7 @@ untracked or uncommitted, so the removal was a working-tree change.
          reading and the honest way to confirm it is the per-step timings in
          any real run's log. Reopen if those show the build dominating.
 
-7. [ ] **375.7 — three "Not when" cells on the decision page are
+7. [x] **375.7 — three "Not when" cells on the decision page are
        content-free, and the page's own generated prose overclaims that they
        are not.** Found while verifying 373.2. `/concepts/which-pattern/`
        renders the bare words "Not for" — seven characters, no object — for
@@ -469,6 +469,23 @@ untracked or uncommitted, so the removal was a working-tree change.
          render, so the two cannot disagree again. A cell whose clause is
          under ~12 characters is the cheap detector; measure how many exist
          before deciding it is worth a gate.
+       - **DONE 2026-09-23 — the extraction takes the whole clause; no gate.**
+         `extractWrongChoice` now runs on past `</strong>` to the first
+         terminator unless the bold text already ended in punctuation.
+         `patterns.json`: exactly the 3 named clauses changed, 36 of 39
+         byte-identical. Built page: cells under 12 characters 3 → **0**,
+         shortest legitimate clause 14 ("Not a launcher"). The prose count
+         `withNot` and the cell both read `r.not`, so they share one field.
+         **Gate refused on its base rate**: a <12-character predicate is true
+         of 0 of 39 cells after the fix and could not fail on this tree.
+         Self-test red-proved (disabling the branch fails the new case).
+         **Found beside it:** the extended RF task menu clause ("general app
+         launcher") substring-matched the "App launch" title and rendered a
+         mid-word link replacing the reader's word; `linkAlternatives` now
+         matches whole words. Measured: that was the ONLY substring hit — the
+         linker links 0 of 39 cells today, which this item does not change.
+         Jev completion review, round 2: supported 0.86 (A 0.95, B 0.94,
+         C 0.89); round 1 read 0.77 without per-criterion evidence.
 
 8. [x] **375.8 — the Jev threshold cannot discriminate where it is being asked
        to.** The completion review scored 373.3 at **0.81** against a
