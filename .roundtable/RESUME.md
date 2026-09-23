@@ -29,10 +29,18 @@ lanes) and the 376.8 archive sweep (ROADMAP.md 15,977 -> 9,314 lines);
 (`.roundtable/grill-objective-373-374-375-376-2026-09-24.md`: 47 of 47
 load-bearing claims hold; 35 of 37 findings survived adversarial verification).
 
-**Next wake, by the dispatcher's own rules:** rule 1 fires on **P0 377.1** (a
-real right-click never opens the context menu — its own pointerup
-light-dismisses it) and **P0 377.2** (the launcher filter desyncs after
-Escape). Then rule 4's oldest open item.
+**Since the goal closed (wake of 2026-09-24 03:25):** P0 377.1 (a real
+right-click now opens the context menu — a menu asked for mid-press opens after
+the release) and P0 377.2 (the launcher re-filters on close) both LANDED and
+pushed (`29365089`). Rule 1 is clear.
+
+**Next wake:** rule 2 — Standardize reads **4 / 4 OVERDUE** (376.2, 376.4,
+377.1, 377.2). Then rule 4's oldest open item.
+
+**Row-label trap, found by `dispatch_status.py`:** record rows that begin
+`P0 377.1 — …` name no slice to the rule-3 counter (it warns "none names a
+slice"). Lead an item row with its id — `377.1 — P0: …` — so the counter can
+read it.
 
 **Owner decisions now queued** — the two new ones are the grill's headline:
 **377.5** (release the eight unreleased fixes, four of them P0, or record why
