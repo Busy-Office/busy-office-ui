@@ -130,7 +130,7 @@
     --bo-icon-src: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 4v16h16'/><path d='M8 16v-5M13 16V8M18 16v-8'/></svg>");
   }
 
-  /* DEPRECATED (2026-08-19, roadmap 53.2). Kept, not deleted:
+  /*! DEPRECATED (2026-08-19, roadmap 53.2). Kept, not deleted:
      @busy-office/ui is published, so removal is a next-major change.
      Compose instead: point --bo-icon-src at your own
      SVG (see /components/icon, "Any icon you like") — the mechanism is
@@ -144,7 +144,7 @@
     --bo-icon-src: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='4' width='7' height='7' rx='1'/><rect x='13' y='4' width='7' height='7' rx='1'/><rect x='4' y='13' width='7' height='7' rx='1'/><rect x='13' y='13' width='7' height='7' rx='1'/></svg>");
   }
 
-  /* DEPRECATED (2026-08-19, roadmap 53.2). Kept, not deleted:
+  /*! DEPRECATED (2026-08-19, roadmap 53.2). Kept, not deleted:
      @busy-office/ui is published, so removal is a next-major change.
      Compose instead: point --bo-icon-src at your own
      SVG (see /components/icon, "Any icon you like") — the mechanism is
@@ -154,7 +154,7 @@
     --bo-icon-src: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'><path d='M4 6v12M8 6v12M12 6v12M16 6v12M20 6v12'/></svg>");
   }
 
-  /* DEPRECATED (2026-08-19, roadmap 53.2). Kept, not deleted:
+  /*! DEPRECATED (2026-08-19, roadmap 53.2). Kept, not deleted:
      @busy-office/ui is published, so removal is a next-major change.
      Compose instead: point --bo-icon-src at your own
      SVG (see /components/icon, "Any icon you like") — the mechanism is
@@ -164,7 +164,7 @@
     --bo-icon-src: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 21V4h10v17M15 9h4v12M3 21h18'/><path d='M8 8h2M8 12h2M8 16h2M12 8h1M12 12h1M12 16h1'/></svg>");
   }
 
-  /* DEPRECATED (2026-08-19, roadmap 53.2). Kept, not deleted:
+  /*! DEPRECATED (2026-08-19, roadmap 53.2). Kept, not deleted:
      @busy-office/ui is published, so removal is a next-major change.
      Compose instead: point --bo-icon-src at your own
      SVG (see /components/icon, "Any icon you like") — the mechanism is

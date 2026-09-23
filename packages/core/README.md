@@ -3,7 +3,7 @@
 CSS-first UI framework for ERP and back-office screens. Semantic components — not
 utility soup — built on modern CSS: `@layer` cascade contract, `:has()`, named
 container queries, native `<dialog>` and `popover`.
-<!-- stat:size -->94 kB minified (15.2 kB gzipped)<!-- /stat --> for the whole
+<!-- stat:size -->95 kB minified (15.6 kB gzipped)<!-- /stat --> for the whole
 framework, zero runtime dependencies, tree-shakable per-component files.
 
 ![Hand-made screenshot: the list-report pattern at data-density="compact" — a

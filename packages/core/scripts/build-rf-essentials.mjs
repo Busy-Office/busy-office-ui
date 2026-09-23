@@ -71,7 +71,16 @@ const [pretty, min] = await Promise.all([
 ]);
 
 await mkdir(dirname(to), { recursive: true });
-await writeFile(to, pretty.css);
+/* Same reason as build-component-css.mjs's strip (roadmap 374.5): this is a
+   SHIPPED bundle, so the reasoning in it is payload. `src/css` keeps every
+   word. Two copies of a three-line strip rather than a shared module — below
+   the repeat threshold, and a module for this would be the indirection the
+   Objective refuses. */
+pretty.root.walkComments((c) => { if (!c.text.startsWith('!')) c.remove(); });
+const prettyOut =
+  '/*! @busy-office/ui rf-essentials — generated; reasoning lives in src/css, not here. */\n' +
+  pretty.root.toString().replace(/\n{2,}/g, '\n');
+await writeFile(to, prettyOut);
 await writeFile(to.replace(/\.css$/, '.min.css'), min.css);
 
 /* Size budget (roadmap 126.1, RF grill Q4): a profile whose whole point is
@@ -91,7 +100,7 @@ if (minKb > RF_BUDGET_KB) {
   process.exit(1);
 }
 console.log(
-  `  ${to.replace(pkgRoot + '/', '')} (${(pretty.css.length / 1024).toFixed(1)} kB / min ${minKb.toFixed(1)} kB, budget ${RF_BUDGET_KB} kB)`,
+  `  ${to.replace(pkgRoot + '/', '')} (${(prettyOut.length / 1024).toFixed(1)} kB / min ${minKb.toFixed(1)} kB, budget ${RF_BUDGET_KB} kB)`,
 );
 console.log(`  components: ${RF_COMPONENTS.length} (${RF_COMPONENTS.join(', ')})`);
 console.log('rf-essentials build complete.');

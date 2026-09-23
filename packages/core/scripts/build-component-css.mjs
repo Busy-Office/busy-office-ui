@@ -43,17 +43,50 @@ function assertNamedContainers(css, file) {
   }
 }
 
+/* COMMENTS ARE A SOURCE PRACTICE, NOT PAYLOAD (roadmap 374.5). This repo
+   writes the reasoning next to the rule, and `src/css` keeps every word of it —
+   that doctrine is untouched. What changed is that the reasoning was also being
+   SHIPPED: `./css`, the default export, is the unminified bundle, so every
+   consumer downloaded it.
+
+   Measured 2026-09-23 before the change: index.css was 99.5 kB gz against
+   index.min.css at 15.4. Stripping comments alone takes it to 17.1 — so
+   comments were **80.5 kB gz, 98% of the gap**, and minification only 1.6.
+   A consumer on the default export was paying 6.4x for prose they cannot see.
+
+   Stripped from dist rather than pointing `./css` at the minified file: the
+   path keeps resolving to readable, formatted CSS that someone can open in
+   devtools and diff, which is most of why a non-minified build is exported at
+   all. Nothing reads comments out of `dist` — `extract-api.mjs` takes the
+   `@tagline`/`@category` headers from `src/css`, which this does not touch.
+
+   NOT a blanket strip, and the first attempt at one was wrong. A bang comment
+   is the CSS convention for "preserve this", and some comments in `dist` are
+   USER-FACING CONTRACT rather than internal reasoning: icon.css's four
+   DEPRECATED blocks tell a consumer reading the shipped file which glyph to
+   stop using, and `check:deprecated-icons` reads them back out of the shipped
+   artifact on purpose. A blanket strip removed them and that gate correctly
+   refused to report a pass it had not earned. So: ordinary comments go, bang
+   comments stay, and anything that must survive into dist says so with a
+   bang. */
+const BANNER = '/*! @busy-office/ui — generated; reasoning lives in src/css, not here. */\n';
+function stripComments(root) {
+  root.walkComments((c) => { if (!c.text.startsWith('!')) c.remove(); });
+}
+
 async function build(entrySource, from, to) {
   const [pretty, min] = await Promise.all([
     pipeline.process(entrySource, { from, to }),
     pipelineMin.process(entrySource, { from, to: to.replace(/\.css$/, '.min.css') }),
   ]);
   assertNamedContainers(pretty.css, to);
+  stripComments(pretty.root);
+  const prettyOut = BANNER + pretty.root.toString().replace(/\n{2,}/g, '\n');
   await mkdir(dirname(to), { recursive: true });
-  await writeFile(to, pretty.css);
+  await writeFile(to, prettyOut);
   await writeFile(to.replace(/\.css$/, '.min.css'), min.css);
   console.log(
-    `  ${to.replace(pkgRoot + '/', '')} (${(pretty.css.length / 1024).toFixed(1)} kB / min ${(min.css.length / 1024).toFixed(1)} kB)`,
+    `  ${to.replace(pkgRoot + '/', '')} (${(prettyOut.length / 1024).toFixed(1)} kB / min ${(min.css.length / 1024).toFixed(1)} kB)`,
   );
 }
 

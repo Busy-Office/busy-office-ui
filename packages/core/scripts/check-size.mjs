@@ -103,28 +103,25 @@ const PAYLOAD = ['.css', '.js'];
  * every run prints current, budget and headroom, so these stay checkable.
  */
 const BUDGETS = {
-  /* RE-BASED 2026-09-22, and the old number is kept here because the reason
-     is the interesting part. The 2026-09-03 basis of 97.3 was fully consumed:
-     93.69 kB at HEAD, 97.24 with the tree's then-uncommitted work — 61 bytes
-     of headroom — and the joined-control seam fix's comments took it to
-     97.71. `css/index.css` is the DEFAULT `./css` export and ships
-     UNMINIFIED, so this repo's write-the-reasoning-inline doctrine is payload
-     on this row and on no other: `index.min.css` sits at 15.15/16.7 and is
-     unaffected by a comment, which is also the artifact `stamp-readme`
-     publishes. Re-based on the same convention as every other row — current
-     + ~10% — rather than trimming to fit, because a 1% headroom would make
-     the next comment anyone writes a budget negotiation (roadmap 374.5 holds
-     the structural question: whether `./css` should resolve to the minified
-     file). */
-  'css/index.css': { total: 107.5 },
+  /* RE-BASED TWICE, and both reasons are kept because the second overturned
+     the first. On 2026-09-22 this row went 97.3 -> 107.5 to make room for
+     comments, since `css/index.css` is the DEFAULT `./css` export and shipped
+     UNMINIFIED. 374.5 then asked whether that was right at all, and measured
+     it: comments were **80.5 kB gz of the 99.5, 98% of the gap** to
+     `index.min.css`, while minification itself was 1.6. The doctrine is about
+     SOURCE — `src/css` still carries every word — so the build now strips
+     comments when it emits `dist`, and the same row measures **16.7**. The
+     107.5 ceiling was therefore protecting prose nobody could read, and is
+     re-based here on the table's own convention, current + ~10%. */
+  'css/index.css': { total: 18.4 },
   'css/index.min.css': { total: 16.7 },
-  'css/rf-essentials.css': { total: 45.9 },
+  'css/rf-essentials.css': { total: 9.1 },   // 8.22 after the 374.5 comment strip
   'css/rf-essentials.min.css': { total: 8.4 },
-  'css/components/*.css': { total: 115.8, max: 14.9 },
+  'css/components/*.css': { total: 32.5, max: 2.4 },  // 29.57 / largest 2.15 after the 374.5 strip
   'css/components/*.min.css': { total: 27.3, max: 2.2 },
-  'css/brand-*.css': { total: 6.7, max: 1.2 },
+  'css/brand-*.css': { total: 2.4, max: 0.45 },  // 2.15 / largest 0.37 after the strip
   'css/brand-*.min.css': { total: 1.9, max: 0.4 },
-  'css/*.css': { total: 15.5, max: 7.3 },
+  'css/*.css': { total: 6.8, max: 2.6 },  // 6.12 / largest 2.28 after the strip
   'css/*.min.css': { total: 5.8, max: 2.3 },
   'js/**/*.js': { total: 68.2, max: 7.3 },
 };
