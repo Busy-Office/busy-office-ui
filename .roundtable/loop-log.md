@@ -1758,3 +1758,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-24 01:47 · Standardize · sweep · 376.8 — archive sweep: 40 slices moved verbatim; live 15,977 -> 9,301 lines; share 56.7% -> 23.8% · landed · ce10de0d
 - 2026-09-24 02:02 · Continue · bug · P0 376.2 — motion collapse stub fixed; dashboard card animation restored (minmax both states) · landed · 6ef23624
 - 2026-09-24 02:14 · Continue · bug · P0 376.4 — quantity/unit joint skips a hidden input (initGroupedNumber) · landed · e1ba6e8d
+- 2026-09-24 03:02 · Objective · grill · Slice 377 — grill of 373-376: 47/47 claims hold; P0 377.1 + 377.2, revision-blind completion gate, adoption ~zero, owner calls 377.5/377.6 · logged · faf331b4

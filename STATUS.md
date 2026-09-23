@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-23 18:14 UTC
+Generated at: 2026-09-23 19:02 UTC
 
 ## Open items by slice
 
@@ -55,16 +55,30 @@ Generated at: 2026-09-23 18:14 UTC
 - **Slice 376** (2 open)
   - 376.5 — the app-launch launcher hand-rolls a dialog header.
   - 376.7 — the lane-4 ratchet counts any net shrink as a cut.
-- **Slice —** (1 open)
+- **Slice 377** (10 open)
+  - 377.3 — the completion gate cannot see a revision.
+  - 377.4 — pointer coverage, named per behaviour.
+  - 377.7 — an adoption reading at every Objective grill, and §6's exit requires the thesis section.
+  - 377.8 — the ACR's 1.4.11 and 2.4.7 remarks derive from source.
+  - 377.9 — re-decide 375.6 on real CI timings.
+  - 377.10 — the Jev band, re-measured with the question form Rubric 2 prescribes, and the set recorded.
+  - 377.11 — 375.10's "holds the option" half must be able to fail.
+  - 377.12 — the preview's provenance is truthful.
+  - 377.13 — 375.9's corpus figure is re-runnable.
+  - 377.14 — the low items, one bundle.
+- **Slice —** (5 open)
+  - P0 · 377.1 — a real right-click does not open the context menu.
+  - P0 · 377.2 — the app-launch launcher's filter desyncs after Escape.
+  - OWNER · 377.5 — release the unreleased fixes, or record why not.
+  - OWNER · 377.6 — is busy-office-erp the named first user?
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1752 iterations logged)
+dispatch status — counter-triggered rules (1753 iterations logged)
   Standardize   2 / 4 Continue rounds since 2026-09-24 01:47   ok
-  Objective     4 / 3 slices          since 2026-09-09 10:55   OVERDUE  [373, 374, 375, 376]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-09-24 03:02   ok
   Optimize      3 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 144 sample(s), 8 of 47 name(s) paired across days]
   -> rule 5's newest comparable pair predates 3 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-19, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-19 (2026-09-22, 2026-09-23, 2026-09-24), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -98,7 +112,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-23 20:46 · Continue · build · 375.4 — check-sample-classes gate; the one live instance (bo-label, 33 days) fixed; 0 of 2,382 sample classes unknown · landed · 0edae5c7
 - 2026-09-24 00:42 · Continue · bug · P0 375.9 — anchored cell message + static fallback reserve; nothing resizes on focus/blur; 0 of 4944 corpus presses lost · landed · 986d6399
 - 2026-09-24 00:42 · Meta · refusal · 375.9 pointer-events:none on the floated message — fired the hidden Remove button · refused · 986d6399
 - 2026-09-24 00:42 · Meta · refusal · 375.9 delay/:active latch, reserve-follows-error, negative-margin overlap, static reserve everywhere · refused · 986d6399
@@ -108,6 +121,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-24 01:47 · Standardize · sweep · 376.8 — archive sweep: 40 slices moved verbatim; live 15,977 -> 9,301 lines; share 56.7% -> 23.8% · landed · ce10de0d
 - 2026-09-24 02:02 · Continue · bug · P0 376.2 — motion collapse stub fixed; dashboard card animation restored (minmax both states) · landed · 6ef23624
 - 2026-09-24 02:14 · Continue · bug · P0 376.4 — quantity/unit joint skips a hidden input (initGroupedNumber) · landed · e1ba6e8d
+- 2026-09-24 03:02 · Objective · grill · Slice 377 — grill of 373-376: 47/47 claims hold; P0 377.1 + 377.2, revision-blind completion gate, adoption ~zero, owner calls 377.5/377.6 · logged · faf331b4
 
 ## Sunset test
 
