@@ -396,7 +396,7 @@ untracked or uncommitted, so the removal was a working-tree change.
          so the predicate is "a `bo-`-prefixed class that `api.json` does not
          know", not "every class".
 
-5. [ ] **375.5 — the direct Qty-to-Add pointer path is uncertified.** Rescued
+5. [x] **375.5 — the direct Qty-to-Add pointer path is uncertified.** Rescued
        from the retired arrangement's records, where it was explicitly retained
        for triage and never folded into an assignment: a direct pointer click on
        Qty-to-Add was reported as missing because the focus-shown message changes
@@ -408,6 +408,21 @@ untracked or uncommitted, so the removal was a working-tree change.
          does not reproduce and why. Either outcome closes it; what does not
          close it is a settled-then-clicked check, which is the thing already
          known to pass.
+       - **CLOSED 2026-09-23 as REPRODUCED — and the stated mechanism is
+         wrong.** Trusted CDP presses (puppeteer `mouse.down/up`) at `#eg-add`'s
+         own centre, read with focus in the invalid Qty cell, against the
+         `:8081` container's `/patterns/editable-grid/`: **0 of 6** added a line
+         (3 at 1440, 3 at 390). mousedown hit `#eg-add` every time; mouseup hit
+         a `P`/`CODE` below; `click` went to `SECTION.demo`, the nearest common
+         ancestor. Control, blur first: **6 of 6**.
+       - **Why, measured:** the row does NOT change height — 173.2 holds it.
+         What moves is `.bo-data-table-container`, which shrinks **142px**
+         focused → blurred while the message span itself is 28px: the
+         `padding-block-end: calc(6lh + …)` reserve (data-table.css, 190.1)
+         exists only while a cell message is shown. The press lands on Add;
+         the mousedown blurs Qty; the reserve collapses; Add rises ~141px
+         before mouseup. Filed as **375.9**. Jev: supported 0.89, corrected
+         mechanism 0.96.
 
 6. [x] **375.6 — CI rebuilds the whole project six times per run.**
        `.github/workflows/ci.yml`'s `docs-gates` is a 5-entry matrix whose steps
@@ -543,6 +558,24 @@ untracked or uncommitted, so the removal was a working-tree change.
          evidence scored 0.25 with a leading prior-score sentence and 0.48
          without it, a 0.23 swing, so `jev-rubrics.md` forbids putting a prior
          score or a hoped-for verdict in a payload.
+
+9. [ ] **P0 · 375.9 — any control below a grid loses its first click while a
+       cell's error message is shown.** Reproduced by 375.5 (0 of 6 trusted
+       presses on the editable-grid demo's "+ Add line" landed). The cause is
+       the container's reserve padding (`.bo-data-table-container:has(… :focus-within
+       .bo-form-field__message)`, data-table.css) appearing on focus and
+       vanishing on blur: the mousedown that blurs the cell moves everything
+       beneath the table ~141px before the mouseup. It is framework CSS, so
+       every consumer's grid carries it, and the user sees a press that did
+       nothing.
+       - **Accept:** a trusted pointer press (down and up at the target's
+         centre, read while an invalid cell has focus) on a control below the
+         grid activates it, at 1440 and 390, on the demo AND on a copy of the
+         canonical markup — asserted in `check:claims` with real mouse events,
+         red-proved by restoring the collapse. 173.2's property still holds
+         (row height unchanged by a message) and so does 190.1's (a six-line
+         message is not clipped by the container). Which shape removes the
+         shift is the builder's call and is argued in the item, not assumed.
 
 ## Slice 374 — the joined-control seam was spelled against the AUTHORED markup, not the RENDERED DOM: three trailing children defeat `:last-child`, the framework's own canonical quantity markup is one of them, and the defect shipped on **3 pages / 5 rendered views** while a gate that visits those exact elements measured only their focus rings (2026-09-22)
 
