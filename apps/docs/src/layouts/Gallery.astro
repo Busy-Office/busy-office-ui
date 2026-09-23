@@ -806,13 +806,13 @@ const documentTitle = `${title} · busy-office-ui`;
   }
   @media (min-width: 56.01rem) { .docs-drawer { display: none; } }
   .docs-drawer .bo-sidebar-nav { padding: var(--bo-space-2); overflow-y: auto; inline-size: 100%; }
-  /* The drawer lives inside the bo-shell container, so the sidebar's icon-rail
-     collapse hides its labels too — undo that inside the drawer. */
-  .docs-drawer .bo-sidebar-nav__label,
-  .docs-drawer .bo-sidebar-nav__heading {
-    position: static; inline-size: auto; block-size: auto; margin: 0;
-    overflow: visible; clip-path: none; white-space: normal; border: 0;
-  }
+  /* The icon-rail-collapse-leaks-into-the-drawer patch that used to live here
+     is gone: offcanvas.css now un-collapses .bo-sidebar-nav__label/__heading
+     for ANY .bo-offcanvas, not just this docs page's drawer (roadmap 373.3).
+     Confirmed redundant, not just removed on the strength of the framework
+     comment: with this block deleted, a real browser walk of the built
+     .docs-drawer still measures every rendered label at its natural width,
+     position:static, clip-path:none — unchanged from before the delete. */
 
   /* Cmd/Ctrl+K command palette. Native <dialog> in the top layer, so it escapes
      the app-shell's overflow. The element also carries .bo-dialog (roadmap

@@ -167,11 +167,12 @@ const shellMarkup = `<div class="bo-app-shell">          <!-- container: bo-shel
     </div>
     <pre><code>{shellMarkup}</code></pre>
     <p class="bo-u-text-muted">The shell is a named container
-    (<code>bo-shell</code>), so the sidebar collapses to icon-only below
-    900px of <em>shell</em> width — not viewport width, which is why it
-    behaves correctly inside a split view. Labels stay in the
-    accessibility tree when collapsed. Details on
-    <a href={base + '/concepts/container-queries'}>Container queries</a>.</p>
+    (<code>bo-shell</code>), so the sidebar collapses to icon-only once the
+    <em>shell</em> is narrow — not the viewport, which is why it behaves
+    correctly inside a split view. Labels stay in the accessibility tree when
+    collapsed. The band itself is stated once, from source, in the
+    <a href={base + '/concepts/layouts#contract'}>shell contract</a>; details
+    on <a href={base + '/concepts/container-queries'}>Container queries</a>.</p>
   </section>
 
   <section class="demo">

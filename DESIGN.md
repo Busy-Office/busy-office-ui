@@ -266,7 +266,9 @@ selection count for bulk actions).
   480px. Precedence: an explicit `data-density` on the table or its container always
   wins — compaction only applies when neither declares one.
 - **Sidebar collapse**: container query on `.bo-app-shell` collapses nav to icon-only
-  under 900px of shell width (not viewport width).
+  in the shell's narrow container state (shell width, not viewport width). The band
+  is declared once in `sidebar-nav.css` and rendered from source on
+  `/concepts/layouts#contract`; it is deliberately not restated here.
 
 ## ERP optimizations (acceptance criteria)
 
