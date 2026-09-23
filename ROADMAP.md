@@ -320,6 +320,31 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 378 — Standardize sweep, **4 of 4 lanes, all clean**: the window touched every lane's input (two CSS fixes, a JS fix, prose), and no lane moved against the verdicts Slice 376 recorded that morning (2026-09-24)
+
+**Dispatched by rule 2** (`Standardize 4 / 4 OVERDUE` — 376.2, 376.4, 377.1,
+377.2) after rule 1 read 0 open P0. Each lane's own figure
+(`scripts/loops/standardize_lanes.py`):
+
+- **Lane 1** — *"0 dead style attribute(s) on 0 page(s)"*; per declaration 11
+  on 9 pages, exactly Slice 345's standing refusals (unchanged since 376.1).
+- **Lane 2** — *"7 body(ies) appearing more than once"*, the same seven groups
+  as Slice 376; the one textual change is 376.4's quantity joint, whose
+  selector now also matches `+ [type="hidden"] +` — same body, same x4
+  joined-control group the Settled table already rules on. **Not unchanged by
+  construction:** `git log --first-parent 85e8c6f5..HEAD -- packages/core/src/css`
+  lists 376.2 and 376.4, so the lane read changed input and found no new repeat.
+- **Lane 3** — the flagged union is the same 17 pages (every one in the
+  20-page enumeration), total 119,198 -> 119,212 words from the 376/377 prose
+  edits; no page crossed a line.
+- **Lane 4** — LOOPS.md's dispatch region: 0 of 16 sections moved. ROADMAP.md
+  is 5 up since the 376.8 sweep (a real cut, `ce10de0d`). ENVIRONMENT.md 24 up
+  and DESIGN.md 24 up keep their standing verdicts (224.2 / 332.1 -> 361
+  HONEST; 167.1 item 5 HONEST, the control) — DESIGN.md's one new step is the
+  373.3 remainder, a correction.
+
+No consolidation, no new verdict, no item: a clean pass is the Exit (§3).
+
 ## Slice 377 — Objective grill of Slices 373, 374, 375, 376: all 47 load-bearing claims re-checked HOLD; the findings are two shipped pointer defects, a completion gate that cannot see a revision, and a product thesis no grill had asked about — adoption indistinguishable from zero, and the one real user unnamed (2026-09-24)
 
 Report: `.roundtable/grill-objective-373-374-375-376-2026-09-24.md` (4 finders
