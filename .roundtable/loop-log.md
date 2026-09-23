@@ -1747,3 +1747,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-23 20:12 · Meta · refusal · building a vertical-collapse gate for 373.9 — 94.11's ceremony case in mirror image: there a predicate was uniformly true, here no threshold exists at all · refused · f7bc8777
 - 2026-09-23 20:36 · Continue · build · 375.7 — wrong-choice extraction takes the whole clause; 3 empty 'Not for' cells now carry their object · landed · e7f69729
 - 2026-09-23 20:36 · Meta · refusal · 375.7's <12-char clause gate — base rate 0 of 39 after the fix · refused · e7f69729
+- 2026-09-23 20:40 · Continue · build · 375.5 — Qty-to-Add pointer path reproduced (0/6 direct, 6/6 blur-first); cause is the container reserve, not row height; filed P0 375.9 · triaged · e41fddfb
