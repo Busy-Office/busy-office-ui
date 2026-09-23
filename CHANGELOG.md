@@ -11,6 +11,13 @@ pin.
 
 ### Changed
 
+- **`.bo-motion-spin` now sets `display: inline-block`.** `transform` does not
+  apply to an inline box, so the documented `<span class="bo-motion-spin">`
+  did not visibly rotate in ordinary flow unless you added the declaration
+  yourself (you can now delete it). A spinner you want as a block or flex box
+  keeps whatever `display` your own CSS gives it — unlayered author styles beat
+  the framework's utility layer. Roadmap 345.1.
+
 - **The default `./css` export no longer ships the framework's source
   comments.** `dist/css/index.css` (and every per-component file) is now
   emitted with comments stripped: about 84 kB gzipped of prose left the

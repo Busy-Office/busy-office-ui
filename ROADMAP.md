@@ -4457,7 +4457,7 @@ which is not a children position; `astro build` failed with
 by the build, not by review — the sibling of the compiler trap `ENVIRONMENT.md`
 already carries about hoisted imports.
 
-1. [ ] **345.1 — should `.bo-motion-spin` own its `display: inline-block`?**
+1. [x] **345.1 — should `.bo-motion-spin` own its `display: inline-block`?**
        Raised by lane 1's refusal above and NOT built here — a component CSS
        change is not a Standardize-sweep edit. The utility only works on a
        transformable box, so every consumer who puts it on an inline `<span>`
@@ -4471,6 +4471,21 @@ already carries about hoisted imports.
          makes true. If it is refused, the reason names what an inline-block
          default would break for a consumer who wants a block or flex spinner.
          **Refusing is a satisfying outcome.**
+       - **DONE 2026-09-24 — moved in.** The page's own copyable recipe (a bare
+         `<span class="bo-motion-spin">`) did not rotate in ordinary flow — and
+         its COMPUTED `transform` animated all the while, so a computed-style
+         check passes a spinner that never turns; the box's bounding rect is
+         what shows rotation (1 distinct rect in 6 samples before, 5-6 after).
+         A consumer wanting a block or flex spinner keeps their own `display`
+         (unlayered author CSS beats the utility layer); a rotating box should
+         shrink-wrap its glyph anyway. The demo's inline declaration went with
+         it: `scan:dead-style` 11 on 9 pages -> **10 on 8**, that declaration
+         exactly. **Found beside it:** the live demo span was a stretched flex
+         item, 342px wide, so its glyph orbited the box's centre (true before
+         and after); the demo is now written as the recipe is (inside a `<p>`),
+         32-36px wide, 0px centre drift, live at 1440/390 light/dark.
+         `check:claims` +1 (the pasted recipe visibly rotates), red before.
+         CHANGELOG entry. Jev: supported 0.94 (A 0.98, B 0.92).
 
 **Gates: all 17 cloud-runnable entry points green** on the committed tree, plus
 `check:selftests` (55 gates: 21 heuristic, 34 exact), `check:viewport-forks` and

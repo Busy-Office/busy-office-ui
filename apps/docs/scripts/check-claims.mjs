@@ -3716,6 +3716,33 @@ check(
   JSON.stringify(motionCollapse),
 );
 
+/* 345.1 — the page's copyable spinner recipe spins as written. `transform`
+   does not apply to an inline box, and the recipe is a bare <span>, so pasted
+   into ordinary flow it sat still — while its COMPUTED transform animated, so
+   a computed-style check passes a spinner that never turns. What rotates is
+   the box: its bounding rect changes. The recipe is read off the page's own
+   <pre>, placed in a plain paragraph (not the flex demo section). */
+await visit('/base/motion/', { width: DESKTOP_WIDTH, height: 1200 });
+const spinRecipe = await page.evaluate(async () => {
+  const pre = [...document.querySelectorAll('pre')].find((p) => p.textContent.includes('bo-motion-spin') && p.textContent.includes('Loading'));
+  if (!pre) return { missing: true };
+  const host = document.createElement('p');
+  host.innerHTML = pre.textContent;
+  document.querySelector('main').prepend(host);
+  const s = host.querySelector('.bo-motion-spin');
+  const rects = new Set();
+  for (let i = 0; i < 6; i++) {
+    await new Promise((r) => setTimeout(r, 90));
+    const r = s.getBoundingClientRect();
+    rects.add(`${r.width.toFixed(1)}x${r.height.toFixed(1)}`);
+  }
+  const out = { display: getComputedStyle(s).display, distinctRects: rects.size };
+  host.remove();
+  return out;
+});
+check('motion: the page\'s copyable spinner recipe, pasted into ordinary flow, visibly rotates (345.1)',
+  !spinRecipe.missing && spinRecipe.distinctRects >= 3, JSON.stringify(spinRecipe));
+
 /* 376.2 — a closed collapse reaches ZERO with a padded child, and still
    animates. An `fr` track's minimum is `auto`, so a bare `0fr` held a padded
    child open (a 32px stub); and `minmax(0, 0fr)` against a bare `1fr` does not

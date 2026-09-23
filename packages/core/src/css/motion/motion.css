@@ -96,7 +96,15 @@
   /* Continuous loading spinner. Not token-duration-driven (a spinner's rate
      isn't a one-shot transition) — reduced-motion is guarded explicitly
      below instead of via the duration tokens. */
+  /* inline-block because `transform` does not apply to an inline box: the
+     documented `<span class="bo-motion-spin">` sat still in ordinary flow —
+     while its computed transform animated, which is how it passed (roadmap
+     345.1). A consumer who wants a block or flex spinner sets their own
+     display; unlayered author CSS beats this layer. A rotating box should
+     shrink-wrap its glyph anyway — a full-width block spins round a centre
+     far from the icon. */
   .bo-motion-spin {
+    display: inline-block;
     animation: bo-motion-spin 1s linear infinite;
   }
   @keyframes bo-motion-spin {
