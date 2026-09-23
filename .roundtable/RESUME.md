@@ -20,6 +20,383 @@ survives none.
 
 ---
 
+## GOAL — set 2026-09-23. Clear every non-owner-blocked item in 373/374/375.
+
+**STATUS: 19 of 22 landed. THREE remain, all measured with fixes drafted.**
+
+Done: 373.1-373.5, 373.7, 373.9, 373.10, 374.1-374.3, 374.5, 374.6, 374.7,
+375.1-375.3, 375.6, 375.8.
+
+**Remaining, in this order — each already has its measurement taken:**
+
+1. **375.7** — three "Not when" cells on `/concepts/which-pattern` render the
+   bare words "Not for" with no object, while the generated prose says "39
+   state when not to use them". Cause is upstream: `gen-patterns.mjs`'s
+   `WRONG_CHOICE_RE` captures only the text INSIDE `<strong>`. Measured: 3 of
+   39 today, 0 after the fix; nearest legitimate clause is 14 characters.
+   **Take the first of the Accept's three shapes — the extraction takes the
+   whole clause — and do NOT build the ~12-character gate.** Moving the object
+   inside the `<strong>` on three pages leaves the trap armed for the next
+   author. 36 of 39 tiles stay byte-identical.
+
+2. **375.5** — REPRODUCED, close it as such. 0 of 9 trusted presses at the Add
+   button's own on-screen coordinates, with focus in the invalid Qty cell,
+   added a line; all 9 delivered `click` to `SECTION.demo`, the nearest common
+   ancestor of the down- and up-targets. **The item's own prose is wrong about
+   WHY** and that correction is part of closing it — do not inherit the stated
+   mechanism without re-reading the measurement.
+
+3. **375.4** — the gate IS worth building; the premise that it might be
+   ceremony is FALSE. `bo-label` is an invalid class in a copyable sample on
+   `/concepts/accessibility/` that shipped at HEAD for 33 days, invisible to
+   `check-markup` by construction (red-proved: its input is byte-identical
+   with and without the class). Count is 1, not 0. A fix for that one instance
+   already exists uncommitted in the working tree — commit it first, then
+   build the gate.
+
+**Owner-blocked, do not touch:** 374.4 (border-strong token re-value; Jev
+escalated it at 0.54, so it is a visual-weight preference), 373.6 (dock
+hide-on-upward-scroll; two refusals stand and the reversal is unwritten),
+373.8 (docs IA, 17 groups to 7). Plus, outside these slices: 112.3/112.4,
+296.3, 369.1, 273.2.
+
+**Two dispatcher counters are deliberately deferred** and both are overdue:
+Standardize 5/4 and Objective 3/3 (slices 373, 374, 375). The Objective grill
+is the natural close-out once the three above land — it would grill slices
+whose work has actually landed rather than sitting in flight.
+
+**A trap that has bitten twice — read before touching ROADMAP.md.** Build the
+staged content from HEAD BY CONSTRUCTION and write the same bytes to the
+working tree. Do not `git add ROADMAP.md` from a working copy that may be
+stale: earlier commits staged blobs straight to the index, the working tree
+drifted, and a later `git add` silently reverted four closed items to `[ ]`.
+
+## PLAN — work this order.
+
+**Base state.** `main` is pushed and level with origin at `3a71d6bc`. The last
+full run was green: core build, 172 tests, docs build 0 FAILs, `check:claims`
+263, `check:layout` 128 pages, `test:axe` 128 pages x 2 widths, 0 violations.
+**55 files are uncommitted** — the in-flight 373.x work recorded below, plus
+corrections to this file, INDEX.md, pilot-112 and the direction grill.
+
+**Phase 1 — verify and land the uncommitted 373.x work. Highest priority: it
+is the only thing at risk of rotting.** Runtime surface is small and contained:
+`alert.css` (+42), `data-table.css` (+38), `offcanvas.css` (+46),
+`tag-input.ts` (+26), `tag-input.test.ts` (+105), `create-ui` (+6). Everything
+else is docs and records.
+
+- **Do not land on the prior session's acceptance.** Those claims were written
+  under a retired two-agent arrangement (`history-two-agent-2026-09.md`) and
+  their evidence pointed at `/private/tmp` paths that no longer exist. Re-verify
+  each item against the artifact before committing it. This is the completion
+  gate in `jev-rubrics.md`: PASS needs the checks to pass AND the criteria
+  supported; missing evidence is UNVERIFIED, not PASS.
+- **Before marking any item `[x]`, run the completion review — actually call
+  `jev_evaluate`, one batched call per landing round — and quote the number in
+  the commit. The rubric's vocabulary is not the review.** Skipped on the first
+  round and it cost two wrong positions (373.7 read 0.35, not "one line short").
+- Land per item, smallest coherent commit each, so a bad one is revertable
+  alone. Order: 373.2 (docs-only, independent) then 373.3, 373.4, 373.7, 373.5.
+- Record each with `scripts/loops/record_iteration.py` after its commit.
+
+**Phase 2 — 374.7, the `check:contrast` coverage guard.** The base rate is
+measured and says a gate earns its keep: **7 of 36 interactive boundary
+declarations are below 3:1 (19%)**, while the same predicate without the
+interactive filter is 44 of 78 and would just be an opinion about
+`--bo-color-border-default` delivered 44 times. Four of the seven are recorded
+nowhere else; the strongest is `.bo-data-table tbody tr:hover` at 1.34:1, where
+`bg-hover` and `bg-muted` are the same value so the outline is the only hover
+channel. A gate cannot tell an interactive edge from a decorative one, so the
+enforceable property is a SHAPE: every edge pairing is in `PAIRS` at 3:1, or in
+an exemption map with a reason naming the other channel, or in a TODO list as
+debt.
+
+**Phase 3 — the verification gaps**, in this order: 369.2 (10 of 128 pages miss
+the print reset on `body`), 375.4 (no gate validates class names inside
+copyable samples — measure the base rate first, finding zero closes it), 375.5
+(the direct Qty-to-Add pointer path is uncertified — re-check the premise, it
+is another wake's measurement).
+
+**Do NOT touch these without the owner.** Seven decisions are queued for one
+sitting: 112.3/112.4 (pilot briefs), 296.3 (is "secure" in scope), 373.6 (dock
+hide-on-upward-scroll; two refusals stand and the reversal is unwritten),
+373.8 (docs IA, 17 groups to 7), 369.1 (dark-theme printing), 273.2 (`dry++`),
+and 374.4 (token re-value — Jev escalated it at 0.54 confidence, so it is a
+visual-weight preference, not a technical fact).
+
+**Standing constraints.** Publishing stays owner-triggered. Before a push run
+`test:axe` and `check:layout`. Before trusting a screenshot confirm one
+listener: `lsof -nP -iTCP:8081 -sTCP:LISTEN`. A Jev outage is UNVERIFIED, never
+PASS.
+
+## 2026-09-20 — owner direction, local uncommitted checkpoint
+
+**Local preview (corrected 2026-09-22):** `:8081` is the Podman container, as
+`CLAUDE.md` prescribes — `podman build -f apps/docs/Containerfile -t bo-docs .`
+then `podman run`. The paragraph that stood here described a temporary host
+server on 127.0.0.1:8081 serving a frozen snapshot, and it was wrong in a way
+worth recording: that server and the container were bound to the **same port**
+on different stacks (node on IPv4, gvproxy on IPv6), so `http://localhost:8081`
+answered from whichever the client preferred, and the IPv4 answer was two
+commits and 21 hours stale. The prescribed stale-image defence
+(`curl .../_astro/*.css | grep <new-class>`) cannot catch that, because it is a
+different server rather than a stale layer. The host server was stopped and its
+`/private/tmp/boui-*` files deleted on 2026-09-22. **Before trusting a
+screenshot, confirm only one process is listening:**
+`lsof -nP -iTCP:8081 -sTCP:LISTEN`.
+
+**Drawer subset accepted locally (2026-09-21):** Claude returned the corrected
+paired fixture in `exchange/from-claude/boui-drawer-test-review-20260920-03.md`.
+Codex inspected it, added final setup/dimension guards after the ready-for-review
+handoff, and independently ran the complete live claims suite: **209/209 pass**.
+The actual four paired assertions also pass against 8081; five isolated mutations
+fail the intended setup/geometry assertions. No runtime or preview was changed.
+The earlier independent 1440/390 × light/dark drawer/rail checks remain valid.
+The final guards in check-claims.mjs belong to this accepted integration; preserve
+them. The later acceptance blocks below cover the remaining 373.3 criteria.
+
+**Journey review complete and accepted (2026-09-21):** Claude returned
+`exchange/from-claude/boui-journey-review-20260920-01.md` with no blocking findings.
+It independently ran suite:build (31 screens) and check-journey.mjs, including
+navigation/queue parity, focus, conflict/retry/replay, 12 viewport/theme captures,
+accessibility, RF-only assets and no-JS checks. Codex reconciled those findings
+against current source and existing assertions. No new journey edit or repeat
+review is requested; hardware and human task-time evidence remain outside this
+browser experiment.
+
+**Sticky-table subset accepted locally (2026-09-21):** Claude acknowledged
+review 05, adopted density-aware `tbody :focus` scroll margin, removed the extra
+token and strengthened the fixture guards. Codex independently ran **212/212
+claims, exit 0**, and **280 exact-focus samples across 10 scenarios**, both
+directions with zero header intersection. The exact permanent checks reject
+removed grouped rows, downgraded density and disabled margin in isolated pages.
+Header sort focus preserves scrollTop 200 at 1440/390; narrow horizontal
+scrolling and sticky columns are retained. README/sticky-layer/whitespace checks
+pass, and tokens/density.css has no diff. Source implementation remains Claude's;
+no source-writing handback was inferred. Evidence and acceptance are in
+`exchange/from-codex/boui-toast-actions-20260921-01.md`.
+
+**Toast/form-feedback subset accepted locally (2026-09-21):** Claude finished
+review 03 and all isolated negative proofs. Codex independently ran 223/223 claims,
+actual exit 0; verified the real demo and rendered copyable recipe across four
+viewport/theme combinations; and checked 170 focus samples across six scenarios,
+including all expected fields/actions in both directions. A real overlay added
+after setup fails the exact permanent geometry predicate with valid setup.
+The persistent exposed status region supports repeated saves with one result,
+no dismiss button and no focus theft. README/stamp and whitespace checks pass.
+No actual screen-reader announcement is claimed. Source remains Claude's.
+Evidence: `/private/tmp/boui-toast-final-claims.log` and
+`/private/tmp/boui-toast-acceptance.mjs`, `.log`, `.json`; narrow screenshot inspected.
+The previous reviews remain in exchange files as history. The adjacent theme-key
+and accessibility-guidance findings in Claude's reply are retained for separate
+verification/triage and are not part of this next task.
+
+**Layout contract accepted locally (2026-09-21):** Claude acknowledged review
+02 and returned the corrected contract and visible-scrollport guard. Codex
+independently passed 230/230 live claims (actual exit 0), the 128-page layout
+gate and scroll reachability over 810 containers on 118 pages at both widths.
+Four normal viewport/theme cases pass the exact production measurement/predicate;
+four isolated zero-height cases now fail it while overflow and scrollTop still
+behave. Four screenshots were inspected with no horizontal page overflow.
+Link/metadata/sticky-layer and README facts/stamp checks pass. The only remaining
+900px mention is the unrelated sidebar height measurement. Source-derived band,
+padding and sizing and the previous 373.2 correction are preserved.
+
+All implementation criteria of 373.3 are now accepted locally; no commit, push,
+release or publication occurred. Full evidence and limits are recorded in
+`exchange/from-codex/boui-layout-acceptance-20260921-01.md`. The permanent negative
+case shares the production predicate but duplicates the measurement; Codex's
+independent proof invokes both exact helpers. This is Chromium geometry evidence,
+not physical-device safe-area or screen-reader testing.
+
+**Tag-input focus subset accepted locally (2026-09-21):** Claude acknowledged
+both boui-tag-remove-focus-20260921-01 and the changelog integration decision.
+Codex inspected the runtime/test/docs changes, independently passed all 172
+behavior tests across 29 files and 235/235 live claims (actual exits 0), and
+ran 16 keyboard removal scenarios across four viewport/theme combinations.
+The same production helpers reproduce four old-build failures against the
+frozen accepted layout preview, while the new build restores each group's field.
+Four trusted-key event/consumer-focus cases and four conditional/Backspace cases
+pass; event timing/target/bubbling/value remain intact. All four screenshots were
+inspected. Link/metadata/README facts/stamp and whitespace checks pass.
+Evidence: `exchange/from-codex/boui-tag-focus-acceptance-20260921-01.md` and
+`/private/tmp/boui-tag-acceptance.{mjs,log,json}`. Codex added a Fixed entry to
+CHANGELOG.md explaining measured compatibility, including asynchronous redirects.
+Only the tag-input subset of 373.4 is accepted; the whole item stays open.
+No commit, push, release or publication occurred. The full docs integration build passed (actual exit 0). The accepted host
+preview now serves 2026-09-21T01:26:00.535Z; four viewport/theme removals and
+the procurement journey were rechecked. Podman and other containers were untouched.
+
+**Editable-grid subset accepted locally (2026-09-21):** Claude acknowledged
+review `boui-editable-grid-review-20260921-03` and returned ready with no blockers.
+Codex inspected the actual source and independently passed **250/250 live claims**
+(actual exit 0), **32 trusted-key removal scenarios**, **16 initial/added dirty
+row name cases** across live/copied recipe × 1440/390 × light/dark, and four
+isolated missing-state-phrase cases rejected by the exact production predicate.
+Focus lands on the exact next/previous Remove or own Add; stable row identities,
+conditional focus, scoping and the self-contained recipe are verified. Save
+preserves `— unsaved changes`. Eight styled cases have no document overflow;
+narrow live-dark and sample-light screenshots were inspected. Link/metadata,
+README facts/stamps and whitespace checks pass. Evidence and limits:
+`exchange/from-codex/boui-editable-grid-acceptance-20260921-01.md`,
+`/private/tmp/boui-grid-r3-acceptance.{mjs,log,json}` and
+`/private/tmp/boui-grid-r3-final-claims.log`. This is Chromium focus/AX/geometry
+evidence, not physical AT speech. No core runtime source or API changed here.
+Source ownership was not transferred to Codex. All 373.4 implementation work is
+not complete: list/kanban guidance and the generated ACR row remain.
+
+The existing 8081 host preview now serves accepted build
+`2026-09-21T03:15:35.767Z`, sha `6b72a778`, dirty=true. Four actual-preview
+viewport/theme focus/name cases and the procurement journey pass; evidence:
+`/private/tmp/boui-grid-preview-check.{mjs,log,json}`. The old snapshot is retained
+at `/private/tmp/boui-preview-before-grid-20260921-0332`. No listener restart,
+Podman change, commit, push, merge, release, publication or deployment occurred.
+
+Claude's separate report of a direct Qty-to-Add click missing due to the existing
+focus-shown message changing row height is retained for verification/triage.
+The Add helper blurs/settles before clicking; these checks do not certify that
+direct pointer path. It is not silently folded into the next assignment.
+
+**Move guidance and ACR accepted locally (2026-09-21):** Claude explicitly
+acknowledged review 02 and returned round 3 ready. Codex inspected the actual
+diff and build `2026-09-21T12:44:38.784Z`, independently passed **252/252 live
+claims**, **36 exact recipe scenarios**, **8 actual printed-caller async cases**
+with real outside clicks or retained ownership, and **two exact-predicate
+negative cases** for wrong-control and failed focus. All processes exited 0.
+The unchanged source-relative ACR collision proof and pointer-picker evidence
+remain applicable. Twelve documentation viewport/theme cases, 14,608 links,
+1,159 metadata assertions, README facts/stamps and whitespace pass. Narrow dark
+changed sections were inspected. Full evidence and limitations are in
+`exchange/from-codex/boui-move-guidance-acceptance-20260921-01.md` and
+`/private/tmp/boui-move-r3-acceptance.{mjs,log,json}`.
+
+All implementation acceptance criteria of **373.4** are now satisfied locally,
+together with prior tag-input/grid acceptances. Checkbox remains open pending
+landing; no commit/release. The permanent callerOrder check uses `.focus()` and
+composes the functions; Codex's separate proof executes the actual printed
+async caller with trusted pointer input. This distinction is recorded rather
+than claiming stronger permanent coverage. No source-writing transfer or Codex
+implementation edit occurred. Review 02 is answered; do not resend it.
+
+The accepted host preview at 8081 is now `2026-09-21T12:44:38.784Z`, dirty=true;
+backup `/private/tmp/boui-preview-before-move-20260921-1256`. Four exact grid
+focus/name cases and the procurement journey are rechecked in
+`/private/tmp/boui-move-preview-check.{mjs,log,json}`. No listener/Podman restart.
+
+**AI-agent composition path accepted locally (2026-09-21):** Claude explicitly
+acknowledged `boui-agent-composition-20260921-01`, accepted ownership with no
+conflicts and returned ready. Codex inspected source/package diff and build
+`2026-09-21T13:25:38.091Z`. The extracted starter works outside this repository
+with its shared commands module included. Actual generated and documented
+commands pass valid markup and reject the intended typo using a locally packed,
+offline-installed core. Four rendered viewport/theme cases verify command/order,
+URLs and five-item count; no page overflow. Links/metadata/whitespace pass.
+The lean llms baseline is preserved byte-for-byte, plus **556 bytes**, now
+**50,538 bytes**. Pilot input change/delta is recorded in pilot-112/README;
+112.4 stays blocked and no owner brief/pick was read or authored.
+
+All **373.7 implementation acceptance criteria** now pass locally. Full evidence
+and limits: `exchange/from-codex/boui-agent-composition-acceptance-20260921-01.md`,
+`/private/tmp/boui-agent-review.{py,log,json}` and
+`/private/tmp/boui-agent-browser-review.{mjs,log,json}`. Checkbox stays open
+pending landing; no commit/release. Supported CLI reconfirmed the same peer and
+checkout. Its busy status did not prompt any interruption or duplicate edit.
+
+The accepted 8081 host snapshot is now `2026-09-21T13:25:38.091Z`, dirty=true;
+backup `/private/tmp/boui-preview-before-agent-20260921-1336`. Four served-page
+cases and procurement journey are checked in
+`/private/tmp/boui-agent-preview-review.{log,json}`. No listener/Podman restart.
+
+**15:11 UTC discovery update (2026-09-21):** no new durable handoff or sample
+correction acknowledgment yet. The local build advanced to
+`2026-09-21T15:07:44.976Z`. Supported `claude agents --json --cwd` now reports
+**session `c878a614-03e4-4480-87d2-f443a2ea1a39`**, while retaining PID 3714,
+name `busy-office-ui-8f`, original startedAt and exact checkout; status busy.
+This differs from the last durably acknowledged session below. Treat it as a
+candidate identity transition, not automatically the same logical conversation.
+No message was sent, no restart/resume occurred, and source ownership is
+preserved. Before any next send, reconfirm native discovery/name/ref and
+corroborate the new session against a durable peer reply or supported identity
+exchange. Do not send another assignment or assume historical ref/UUID mapping
+still applies. Continue checking durable replies first; accepted preview is
+unchanged. No user action is presently required.
+
+**373.5 launcher ACTIVE — safe checkpoint received (2026-09-21):** Claude's
+shared reply now says the owner returned priority to the roadmap, its loop work
+is finished/self-contained, and the launcher is active with no conflicts.
+Same peer `busy-office-ui-8f [01621f]`, session
+`fa641e32-24d1-4321-abf0-64c7e25015ca`, exact checkout; supported discovery and
+native ListAgents corroborate the busy peer. The earlier scheduling hold and
+status checkpoint are answered; do not repeat them. Preserve the separate gate
+files, grill and .gitignore addition; no review/adoption/execution of the gate
+by Codex is claimed.
+
+Claude owns app-launch.astro, scoped launcher claims and the shared reply under
+`exchange/from-codex/boui-launcher-20260921-01.md`. Core-source task baseline
+(107 files) is `/private/tmp/boui-launcher-core-source-baseline.json`; preserve
+the already-dirty prior source. The gen-llms comment is corrected accurately.
+The inner callerOrder comment now distinguishes programmatic focus; its enclosing
+comment still claims a real click and remains a comment-only followup. No
+executable changes to accepted cases are authorized by those comment fixes.
+
+**Confirmed save-recipe defect / bounded correction:** Claude reported the
+373.3 copyable in-flow save sample includes nonexistent `bo-btn--primary`.
+Codex extracted that ACTUAL code from the accepted 8081 snapshot and ran the
+existing consumer markup validator: exit 1 naming the invalid modifier. The
+current alerts.astro source had already dropped it (mtime 14:34:08 UTC), and
+its extracted saveConfirmMarkup passes, exit 0, four bo-* uses. No Codex source
+edit. Evidence: `/private/tmp/boui-save-recipe-review.json`. Valid `bo-btn`
+styling remains; the defect is an invalid extra modifier and consumer-validation
+failure, not a completely unstyled control. The prior focus/status acceptance
+is not broader proof of sample-class validity. Frozen preview remains unchanged
+and still contains that typo pending the reviewed build.
+
+Codex sent `boui-launcher-sample-correction-20260921-01`: authorize alerts.astro
+ONLY for this one invalid-modifier removal, preserve the existing edit, reconcile
+its provenance with the earlier "untouched" reply, and validate the actual
+rendered copyable recipe after the normal full build. Also correct the remaining
+enclosing callerOrder description, comment-only. No new sample-scanning gate,
+broad audit or other alerts change is assigned; the wider coverage question is
+unmeasured and retained separately. Codex made no competing build/source edits.
+Native queue ID `2c7f14d0-9311-4a24-9411-42cff9bcc9dc`, no hold/refusal notice
+observed, relay exit 0; acknowledgment pending. Transport:
+`/private/tmp/boui-launcher-sample-correction-relay.jsonl`.
+
+Record generators and floor/slice-reference/vendor/import/whitespace gates pass.
+Index regeneration also discovered the separate new
+`grill-kev-in-the-loop-2026-09-21.md`; it is preserved, not reviewed or
+implemented as part of this assignment. No KEV invocation by Codex is claimed.
+
+
+**Latest owner acceptance:** “As you proposed” authorized the bounded
+desktop/mobile/RF procurement experiment. It is built under
+`examples/erp-suite/journey/`, linked from suite home and docs Screen kit, with
+example-owned fixtures and no new core API. Read its README and GAP-22 in
+`erp-suite-gaps.md` for behavior boundaries and the native-validation finding.
+The suite now builds 31 screens. Verification includes the dedicated journey
+check and suite audit; the final experiment report carries current results.
+This remains local and uncommitted. Current assignment is recorded above;
+this experiment does not close 373.6 or claim real RF-device evidence.
+
+The owner asked for a comprehensive ERP UI framework emphasizing simplicity,
+scale, performance, AI-agent usability, end-to-end delivery and graph engineering.
+Read ROADMAP's **Objective** (ROADMAP.md:8) and
+`grill-erp-framework-direction-2026-09-20.md` for the challenged scope and evidence.
+
+**373.2 is implemented and verified locally; changes are uncommitted and nothing
+is published.** Codex edited the five affected documentation pages, regenerated
+README facts and both READMEs, and recorded the direction. Docs build, rendered
+39/39 pattern guidance, 20 viewport/theme content cases and the 128-page layout
+gate pass. Core validation passed through README checks; its final package check
+passed separately with a writable temporary npm cache after a sandbox error.
+No core runtime source changed. 373.3 is also locally accepted. The next development item is **373.4**, then
+373.7 and 373.5. The September 19 and earlier blocks below are historical handoffs.
+
+The code graph and SQLite mirror were refreshed and reconciled; document/semantic
+edges are retained historical extraction and must be verified from current prose.
+The journey's independent review is complete and accepted. No iteration is
+recorded as landed without a commit.
+
 ## 2026-09-19 — a LOCAL, owner-driven session, not a router wake
 
 The owner pasted a master prompt (five UI workstreams: docs IA, app-shell
