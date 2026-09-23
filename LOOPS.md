@@ -1596,7 +1596,14 @@ it stopped being the same four on 2026-08-19, six days before this was written â
 52.2 changed the widget copy's closed track to `minmax(0, 0fr)` because a bare
 `0fr` has an `auto` minimum and a padded child leaves a stub; the utility copy
 never got it. The ownership argument below still holds; the "identical" claim
-did not, and exact-body keying could only show it as a group vanishing:
+did not, and exact-body keying could only show it as a group vanishing.
+**State after 376.2's fix, and its verdict:** the utility and the widget now use
+`minmax(0, 0fr)` / `minmax(0, 1fr)` in BOTH states â€” the same track function at
+both ends, because `minmax(0, 0fr)` against a bare `1fr` does not interpolate and
+the height snaps (the widget snapped from 52.2 until 376.2). Richtext keeps bare
+`0fr` / `1fr` on purpose: it zeroes its own padding and border when collapsed, so
+it neither stubs nor snaps. The reopen condition below was met, and the verdict
+is the same ownership argument with the copies now differing by design:
 
 - **Selector ownership.** `.bo-motion-collapse` is a UTILITY: it works because
   the consumer puts it on their own markup. `.bo-widget__collapse` and

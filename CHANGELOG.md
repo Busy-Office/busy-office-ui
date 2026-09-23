@@ -11,6 +11,15 @@ pin.
 
 ### Changed
 
+- **The default `./css` export no longer ships the framework's source
+  comments.** `dist/css/index.css` (and every per-component file) is now
+  emitted with comments stripped: about 84 kB gzipped of prose left the
+  default export, taking it from roughly 101 kB to 17 kB gzipped; `src/css`
+  still carries every word. Class names, selectors and values are unchanged.
+  `/*! … */` comments survive — the banner and the four DEPRECATED notices in
+  `components/icon.css` — and now also appear in the `.min.css` files.
+  Roadmap 374.5.
+
 - **Licence: MIT → Apache-2.0.** Both packages now declare `Apache-2.0` and
   ship the full licence text, which neither did before — the repo had **no
   `LICENSE` file at all**, only a `license` field and a bare "MIT" line in the

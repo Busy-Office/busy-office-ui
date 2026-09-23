@@ -265,9 +265,9 @@ for (const width of WIDTHS) {
 
   /* Nothing moves on focus or blur, the row keeps its height (173.2), and a
      long message is fully painted rather than clipped by the container
-     (190.1). Painted = hit-tests to the message at every sample point; the
-     message is pointer-events:none by design, so the probe restores hit
-     testing for itself only — pointer-events changes no layout. */
+     (190.1). Painted = hit-tests to the message at every sample point. The
+     probe forces hit testing on for itself so a pointer-events rule could
+     never pass as "clipped"; pointer-events changes no layout. */
   await visit('/patterns/editable-grid/', { width, height: 900 });
   const geo = await page.evaluate(async () => {
     const add = document.getElementById('eg-add');

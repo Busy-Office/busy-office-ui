@@ -320,6 +320,114 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 377 — Objective grill of Slices 373, 374, 375, 376: all 47 load-bearing claims re-checked HOLD; the findings are two shipped pointer defects, a completion gate that cannot see a revision, and a product thesis no grill had asked about — adoption indistinguishable from zero, and the one real user unnamed (2026-09-24)
+
+Report: `.roundtable/grill-objective-373-374-375-376-2026-09-24.md` (4 finders
++ 4 adversarial verifiers; 37 findings, 35 survived, 2 refuted). Record-only
+corrections landed with this slice: 374.6's criterion count, 373.7's file
+attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
+`check-claims` comment, and LOOPS.md's 0fr/1fr Settled section brought to
+376.2's state.
+
+1. [ ] **P0 · 377.1 — a real right-click does not open the context menu.** On
+       `/components/data-table/` a trusted right press opens the menu on
+       `contextmenu` and its own `pointerup` light-dismisses it (three drivers,
+       1440 and 390); a synthetic `contextmenu` opens it, and no `check-claims`
+       case exists. The page instructs "Right-click Vendor or Amount above."
+       - **Accept:** a real right press (down, hold, up via CDP) on the Vendor
+         and Amount headers leaves the menu `:popover-open` after release, at
+         the cursor, at 1440 and 390 — in `check-claims`, red on today's build.
+         The fix shape is argued in the item; say what it does on an engine
+         that fires `contextmenu` after mouseup.
+2. [ ] **P0 · 377.2 — the app-launch launcher's filter desyncs after Escape.**
+       Escape empties the field (Chromium fires `search`, not `input`) while
+       the grid stays filtered and the status still names the old query.
+       - **Accept:** after one Escape with a query typed and a reopen, the
+         visible tiles equal the set computed from the field's CURRENT value
+         and the status agrees, DOM-compared, in a real-key `check-claims`
+         case red-proved against today's build.
+3. [ ] **377.3 — the completion gate cannot see a revision.** 2 of 30 closes
+       since 2026-09-19 were false at HEAD when marked (373.3, 373.4); the
+       rubric names no revision; no check reads git status; `build-id.json`'s
+       dirty flag is constant in the container.
+       - **Accept:** a close is verified on HEAD alone — e.g. `record_iteration
+         --outcome landed` builds HEAD in a throwaway worktree and re-runs the
+         item's named commands, or the rubric requires a HEAD-only build and
+         the report quotes its sha. Replaying the 43cca240 close must FAIL it.
+4. [ ] **377.4 — pointer coverage, named per behaviour.** 16 of 26 behaviours
+       listen for pointer input; trusted events reach 8 in `check-claims`;
+       presses from a focused state had no coverage before 2026-09-24; two
+       comments call an in-page `el.click()` "real". Base rate of a synthetic-
+       only path being broken under real input: about 1 in 9.
+       - **Accept:** a `check:pointer-coverage` meta-gate (`@heuristic`, with
+         `--self-test`) fails when a behaviour with a pointer listener has no
+         CDP-input case, unless it is in an EXEMPT map with a reason; the two
+         mislabelled comments are gone. Measure its base rate before wiring it.
+5. [ ] **OWNER · 377.5 — release the unreleased fixes, or record why not.**
+       231 commits and eight framework defect fixes (four P0) since 0.8.0
+       (2026-09-06). The one consumer pins 0.8.0 and vendors only the CSS, so
+       375.9, 376.2, 376.4 and 374.5's 6x smaller default export are fixes it
+       does not have. Publishing is owner-triggered. Either outcome closes it.
+6. [ ] **OWNER · 377.6 — is busy-office-erp the named first user?** Its ADR-0016
+       names this package the reference implementation of its runtime-UI
+       contract; nothing in this repo's steering documents names it. If yes:
+       the Objective names it, and one checkable property (its contract's
+       §7.1 conformance against current `dist`) stands in for "serves them".
+7. [ ] **377.7 — an adoption reading at every Objective grill, and §6's exit
+       requires the thesis section.** No record has ever read adoption; none
+       of 71 grills ran step 1; in 373-376 about 1% of changed lines were
+       framework code.
+       - **Accept:** `record_metric.py` gains the reading (non-publish-day npm
+         downloads for both packages, jsDelivr monthly hits, non-owner issues/
+         discussions/stars/forks) and the next grill quotes it with the
+         channels it cannot see; LOOPS.md §6's Exit names a thesis section
+         (adoption reading, the named user, comparators starting from SAP
+         fundamental-styles) and the framework-code line count since the last
+         grill, with its command.
+8. [ ] **377.8 — the ACR's 1.4.11 and 2.4.7 remarks derive from source.** 1.4.11
+       still states the limitation 374.7 removed; both remarks are literals.
+       - **Accept:** removing check-contrast's edge branch, or changing the
+         forest focus-ring or border-strong value in a scratch copy, changes
+         the published remark or fails the build.
+9. [ ] **377.9 — re-decide 375.6 on real CI timings.** Build steps are
+       14.2-15.6% of job time (8 runs), not ~8%; `npm ci` is about a third of
+       the build.
+       - **Accept:** 375.6 and ci.yml's cost comment carry figures reproduced
+         from `gh api …/actions/runs/<id>/jobs` over ≥3 recent runs, with the
+         command beside them; the decision follows the data either way.
+10. [ ] **377.10 — the Jev band, re-measured with the question form Rubric 2
+       prescribes, and the set recorded.** 375.8's zero-FP result rested on
+       asymmetric criteria; uniform re-runs put a false case at 0.87 once.
+       - **Accept:** the 20 cases (claims, evidence, questions, truth) are
+         committed; re-run with uniform criteria, truth-blind ids, ≥3 repeats;
+         FP/FN at 0.85 and 0.35 reported with spread; the rubric, its heading
+         and CLAUDE.md agree on n; the "never wrongly says yes" sentence is
+         kept, qualified or withdrawn on that data.
+11. [ ] **377.11 — 375.10's "holds the option" half must be able to fail.**
+       `label.includes('')` is true.
+       - **Accept:** the predicate rejects an empty value or asserts equality
+         with the label or the event detail; red-proved by a handler that
+         clears the field on `bo:combobox-select`.
+12. [ ] **377.12 — the preview's provenance is truthful.** The container
+       reports `{sha:null, dirty:true}` whatever it holds.
+       - **Accept:** the container build receives the sha and the dirty
+         build-input paths and `stamp-build-id` honours them, failing loudly
+         rather than writing null; the served stamp names HEAD plus exactly the
+         uncommitted paths it contains.
+13. [ ] **377.13 — 375.9's corpus figure is re-runnable.** The sweep script
+       lives only in session scratch.
+       - **Accept:** the script (or its committed equivalent) is in the repo
+         where 375.9 cites it, and a later run on HEAD reproduces or corrects
+         0 of 4,944.
+14. [ ] **377.14 — the low items, one bundle.** (a) 374.1's seam loop visits 2
+       of the 7 pages rendering `.bo-quantity`/`.bo-money` — derive the list
+       from `dist` or narrow the Accept; (b) six "56rem" prose restatements of
+       the shell band pass 373.3's value grep — derive or accept them;
+       (c) 373.9's refusal counts carry no recorded predicate; (d) count the
+       runtime-behaviour sentences on component/pattern pages with and without
+       a `check-claims` case before deciding anything about the umbrella
+       pattern. Each closes on its own measurement.
+
 ## Slice 376 — Standardize sweep, **4 of 4 lanes**: one dead style and two false passages fixed, four prose verdicts recorded (enumeration 16 -> 20), one standing CSS group found DISSOLVED by a measured fix, and two shipped defects found BESIDE the lanes; the completeness critic also found two closed items resting on uncommitted work (2026-09-24)
 
 **Dispatched by rule 2** (`Standardize 13 / 4 OVERDUE`) after rule 1 cleared
@@ -440,10 +548,12 @@ were `[x]` on hunks that were never committed (the ACR 2.5.7 row; DESIGN.md,
        343, 366, 283). Moved fence-aware from HEAD's bytes, each section
        verified byte-identical in the archive by a second reader that locates
        it by heading text, each leaving the pointer line. Reconciled on raw
-       counts both ways: live closed **145 -> 73**, archive **730 -> 802** (72
-       moved); open **32 -> 32**, the same ids name for name; slice headings
-       live **358 -> 358**, archive **286 -> 326**; live lines **15,977 ->
-       9,301**; closed-history share **56.7% -> 23.8%**. `check:slice-refs`
+       counts both ways: live closed **145 -> 74** (72 moved; this entry is
+       itself a new `[x]`), archive **730 -> 802**; open **32 -> 32**, the
+       same ids name for name; slice headings live **358 -> 358**, archive
+       **286 -> 326**; live lines **15,977 -> 9,314** at the committed
+       revision (9,301 was the working copy before this entry was written —
+       corrected by the 377 grill); closed-history share **56.7% -> 23.7%**. `check:slice-refs`
        passes (1,091 assertions, 358 slice numbers each heading one section).
 
 ## Slice 375 — owner-directed cleanup: the two-agent arrangement is retired, `CLAUDE.md` loses 45% to a reference file, and two defects are rescued from records that were about to become history (2026-09-22)
@@ -1074,6 +1184,7 @@ looks for overflow). Extended in 374.2.
          overturned. Completion review 0.85; regression risk 0.97.
 
 6. [x] **374.6 — the published conformance report overclaims in four rows, and
+       - **CORRECTION 2026-09-24 (377 grill):** its "audited all 21 criteria" and "21 rows" were counted on a working tree carrying the then-uncommitted 2.5.7 row; `extract-acr.mjs` as committed in `1816d366` held **20** criteria, and clean builds carried 20 until `5d0146f5` landed the 21st.
        the rows that are wrong are exactly the ones that interpolate nothing.**
        Audited all 21 criteria in `extract-acr.mjs` against the gate each one
        names. Four overclaim, one is an unbacked Supports, and the rest verify
@@ -1589,6 +1700,7 @@ before quoting a change.
          resolve the scroller at event time).
 
 7. [x] **373.7 — the six-intent recipe path exists; make its one router read
+       - **CORRECTION 2026-09-24 (377 grill):** three of the five files its closing measurement called "this item's" and reverted for its baseline (`gen-suite-index.mjs`, `suite.json`, `screen-kit.astro`) were never touched by a 373.7 commit — they hold only the owner's 2026-09-20 journey checkpoint. The item's own files are `gen-llms.mjs`, `ai-assistants.astro` and `commands.mjs`.
        its own data and name the validator in the AI path.** Every intent
        maps to a gated page: find-and-act → `list-report`; inspect one →
        `record-detail` / `object-page`; create-or-edit → `detail-form` /
