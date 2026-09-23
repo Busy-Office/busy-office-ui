@@ -378,7 +378,7 @@ untracked or uncommitted, so the removal was a working-tree change.
        layer.
        - **Accept — met:** builds green, and `:8081` has one listener.
 
-4. [ ] **375.4 — a class name inside a copyable sample is validated by
+4. [x] **375.4 — a class name inside a copyable sample is validated by
        nothing.** `check-markup` validates rendered `dist` HTML, but a class in
        a `<pre>` block is escaped text, so an invalid modifier in a recipe a
        user copies is invisible to it. This is how `bo-btn--primary` once
@@ -395,6 +395,22 @@ untracked or uncommitted, so the removal was a working-tree change.
          samples legitimately contain consumer-side classes that are not ours,
          so the predicate is "a `bo-`-prefixed class that `api.json` does not
          know", not "every class".
+       - **DONE 2026-09-23 — the premise ("that instance is gone … not a live
+         defect") was FALSE, so the gate was built.** Measured on the built
+         site: 2,382 `bo-*` class tokens in 261 `<pre>` blocks across 169 HTML
+         files; **1 unknown** — `class="bo-label"` in the form-field sample on
+         `/concepts/accessibility/`, shipped since 2026-08-21 (`01d09528`, 33
+         days). Corrected to `bo-form-field__label`; count 0.
+       - `apps/docs/scripts/check-sample-classes.mjs` (`@heuristic`, 6-case
+         self-test), in the docs build after `check-markup`. Red-proved: HEAD's
+         `bo-label` put back into the built page → FAIL naming the page and
+         class, exit 1; `check-markup` PASSES that same page. Docs-side rather
+         than inside `check-markup`, which ships as a consumer bin whose users'
+         samples are not ours to judge. Not covered, and stated in its header:
+         classes built in script, and inline `<code>` fragments.
+       - Gate count re-stamped 56/23 → 57/24 (READMEs, and `CLAUDE.md`'s
+         hand-typed figure, which already read 22). Jev: supported 0.95
+         (A 0.96, B 0.96, C 0.95).
 
 5. [x] **375.5 — the direct Qty-to-Add pointer path is uncertified.** Rescued
        from the retired arrangement's records, where it was explicitly retained

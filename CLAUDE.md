@@ -121,7 +121,7 @@ either. Thresholds (≥0.85 supports, ≤0.35 does not, between = unverified) ar
     invocation, it just keeps suggestions current instead of relying on stale
     training-data patterns.
 - Keep the build gates green. `npm run build -w @busy-office/ui` and `npm run
-  docs:build` run them all — 56 today, 22 of them `@heuristic` detectors that each
+  docs:build` run them all — 57 today, 24 of them `@heuristic` detectors that each
   ship a `--self-test` (`check:selftests` prints the live split; the READMEs are
   stamped from it, so the number cannot drift silently). The ones most often hit:
   named `@container`, contrast threshold **+ coverage**, behaviors-vs-`.d.ts`, dist

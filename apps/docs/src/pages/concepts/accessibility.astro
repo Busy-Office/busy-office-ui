@@ -22,7 +22,7 @@ const liveRegions = `<!-- ARRIVES after load (htmx swap, fetch, client validatio
 <!-- PRESENT at load (server re-rendered the form after a failed POST):
      no live region. Wire it to the field, and move focus to a summary. -->
 <div class="bo-form-field">
-  <label class="bo-label" for="cc">Cost center</label>
+  <label class="bo-form-field__label" for="cc">Cost center</label>
   <input class="bo-input" id="cc" aria-invalid="true" aria-describedby="cc-err">
   <span class="bo-form-field__message" id="cc-err">Unknown cost center code</span>
 </div>
