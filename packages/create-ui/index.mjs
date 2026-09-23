@@ -22,6 +22,9 @@
 import { mkdir, writeFile, readFile, readdir, access } from 'node:fs/promises';
 import { join, dirname, basename, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+// The validator command lives in ONE place and ships in this tarball —
+// an installed scaffolder cannot reach a sibling workspace path.
+import { VALIDATE_TARGETS, validateCommand } from './commands.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const TEMPLATE = join(HERE, 'template');
@@ -58,7 +61,7 @@ const files = {
       type: 'module',
       scripts: {
         dev: 'node server.mjs',
-        check: 'bo-check-markup .',
+        check: validateCommand(VALIDATE_TARGETS.scaffold),
       },
       dependencies: { '@busy-office/ui': dependency },
     },

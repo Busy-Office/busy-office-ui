@@ -9,6 +9,7 @@
   },
   "files": [
     "index.mjs",
+    "commands.mjs",
     "template",
     "NOTICE",
     "framework.json",

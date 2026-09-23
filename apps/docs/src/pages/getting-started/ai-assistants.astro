@@ -6,6 +6,7 @@ import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SITE_URL } from '../../../scripts/paths.mjs';
+import { VALIDATE_TARGETS, validateCommand } from '../../../../../packages/create-ui/commands.mjs';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const site = SITE_URL;
@@ -54,10 +55,23 @@ Generated from the shipped CSS: every class, every JS behavior's DOM hooks, and
 the legal VALUES for framework data-* attributes. If it is not in there, it does
 not exist — do not invent a plausible name.
 
+## Build a screen in this order
+1. Shell — pick the app shell and its regions:
+   ${site}/concepts/layouts/
+2. Pattern — let the router pick the screen shape, do not invent one:
+   ${site}/concepts/which-pattern/
+3. Components — compose the pattern from what exists:
+   ${site}/components/
+4. Verify — run the checker below before you call it done.
+Each step narrows the next. Skipping to step 3 is how a grid gets built for a
+job one of the shipped patterns already answers.
+
 ## Verify, do not trust
-npx bo-check-markup dist
+${validateCommand(VALIDATE_TARGETS.built, { npx: true })}
 Fails on any bo-* class that does not exist and any framework data-* value the
-CSS never switches on. Run it in CI on BUILT html.
+CSS never switches on. Run it in CI on BUILT html. A generated project has no
+build step, so its own script runs ${validateCommand(VALIDATE_TARGETS.scaffold)}
+instead.
 
 ## Choosing how users maintain data — these four, and no grid
 ${patterns.map(([id, what, when]) => wrap(`- ${id}: ${what.split('.')[0]}. Use when: ${when}`)).join('\n')}
@@ -87,14 +101,14 @@ const lines = snippet.split('\n').length;
   </section>
 
   <section class="demo">
-    <h2>Why these four things</h2>
+    <h2>Why these five things</h2>
     <ol class="bo-stack bo-stack--tight docs-list">
       <li><strong><a href={site + '/llms.txt'}>llms.txt</a></strong> — the surface, generated
         from the shipped CSS so it cannot disagree with it. It now carries the legal values
         for <code>data-*</code> attributes, which is the difference between
         <code>data-row-state="dirty"</code> and a plausible-looking invention that silently
         does nothing.</li>
-      <li><strong><code>bo-check-markup</code></strong> — because an unknown class renders
+      <li><strong><code>{validateCommand(VALIDATE_TARGETS.built)}</code></strong> — because an unknown class renders
         unstyled and looks like a CSS bug, and an unknown attribute value looks like
         nothing at all. See <a href={base + '/getting-started/troubleshooting'}>troubleshooting</a>.</li>
       <li><strong>The four maintenance patterns</strong> — "how do users maintain this data"

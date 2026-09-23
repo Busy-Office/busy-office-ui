@@ -11,6 +11,7 @@ import { createRequire } from 'node:module';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DOCS_ROOT, SITE_URL } from './paths.mjs';
+import { VALIDATE_TARGETS, validateCommand } from '../../../packages/create-ui/commands.mjs';
 
 const require = createRequire(import.meta.url);
 const api = JSON.parse(await readFile(require.resolve('@busy-office/ui/api'), 'utf8'));
@@ -180,6 +181,27 @@ for (const p of [
   for (const m of rows) out += `- ${strip(m[1])} -> ${strip(m[2])}\n`;
   out += `\nThese were considered and declined on purpose; see DESIGN.md and ROADMAP.md for the reasoning.\n`;
 }
+
+/* The order a screen is actually built in, and the one command that checks the
+   result. Both pages already exist, so this points at them rather than
+   restating the six-intent table, which would be a second copy to drift.
+   Only the ROUTER is generated from `patterns.json`; `/concepts/layouts`
+   parses the shipped CSS for its own numbers. An earlier version of this
+   comment credited both to patterns.json, which was simply wrong.
+
+   The validator command comes from `create-ui/commands.mjs` — the same source
+   the scaffolder's generated `check` script and the pasteable instructions
+   use — so renaming the bin cannot leave this file naming something that no
+   longer exists. The TARGET differs on purpose and stays different: a built
+   site validates `dist`, a scaffolded project has no build step and validates
+   its own directory. */
+out += `\n## Build a screen in this order\n\n`;
+out += `1. Shell — the app shell and its regions:\n   ${site}/concepts/layouts/\n`;
+out += `2. Pattern — let the router pick the screen shape:\n   ${site}/concepts/which-pattern/\n`;
+out += `3. Components — compose it from what exists:\n   ${site}/components/\n`;
+out += `4. Verify — \`${validateCommand(VALIDATE_TARGETS.built, { npx: true })}\` on the BUILT html.\n`;
+out += `\nEach step narrows the next. A generated project has no build step, so its own\n`;
+out += `script runs \`${validateCommand(VALIDATE_TARGETS.scaffold)}\` instead.\n`;
 
 // Assert every URL we publish resolves to a built page (site-grill S-2:
 // generated links must be verified against output, not assumed).

@@ -98,6 +98,13 @@ reproduction of the specific artifact.", false: "Evidence is absent, narrative,
 or does not bear on the claim."}`. **Batch every claim that shares one evidence
 state into a single call.**
 
+**Never put a prior score, or the verdict you want, in the payload.** Measured
+2026-09-23: identical evidence scored 0.25 with the sentence "an earlier review
+scored 0.35" and 0.48 without it. A 0.23 swing from one leading sentence is
+bigger than any distinction these bands are asked to make, so the payload is
+part of the instrument. State the evidence and the criteria; let the number
+come back cold.
+
 **"Completion review" MEANS calling `jev_evaluate`. It is not a vocabulary.**
 Writing PASS/FAIL/UNVERIFIED into a report without making the call is skipping
 the review, and that is exactly what happened on the first real opportunity
