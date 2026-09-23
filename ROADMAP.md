@@ -740,7 +740,7 @@ looks for overflow). Extended in 374.2.
          out; `border-control` for everything flattens the input/button
          hierarchy `color.css:29-31` deliberately built.
 
-5. [x] **374.5 — `./css` resolves to the UNMINIFIED bundle, so this repo's
+5. [ ] **374.5 — `./css` resolves to the UNMINIFIED bundle, so this repo's
        write-the-reasoning-inline doctrine is payload a consumer downloads.**
        Surfaced by 374.1: the seam fix's comments broke `check:size`.
        `css/index.css` measured 93.69 kB gz at HEAD, 97.24 with the tree's
@@ -757,22 +757,6 @@ looks for overflow). Extended in 374.2.
          header states outright that this row is a comment budget as well as a
          code one and what that is worth. Deciding it is fine as it stands, with
          the reason written down, closes this.
-       - **Closed 2026-09-23, by measuring rather than arguing.** index.css was
-         99.5 kB gz against index.min.css 15.4; stripping comments alone lands
-         at 17.1, so comments were **80.5 kB gz, 98% of the gap**, and
-         minification only 1.6. The build now strips them when emitting dist:
-         index.css 99.5 -> 16.7, rf-essentials 45.7 -> 8.2, whole shipped
-         payload **401.1 -> 185.8 kB gz**. No export path moved. `src/css` is
-         untouched — the doctrine was always about source.
-       - **The blanket strip was wrong and `check:deprecated-icons` caught it**,
-         failing with "found no deprecated glyphs in the shipped css to check".
-         It reads icon.css's four DEPRECATED blocks out of the SHIPPED artifact
-         on purpose: they are user-facing contract, not internal reasoning. The
-         rule became the CSS bang-comment convention — ordinary comments go,
-         bang comments stay — and anything that must reach dist now says so.
-         Five budget rows that existed to protect prose were re-based, including
-         the 97.3 -> 107.5 raise made the day before, recorded in place as
-         overturned. Completion review 0.85; regression risk 0.97.
 
 6. [x] **374.6 — the published conformance report overclaims in four rows, and
        the rows that are wrong are exactly the ones that interpolate nothing.**
@@ -842,7 +826,7 @@ looks for overflow). Extended in 374.2.
          drift; verified live at 1440 and 390 in both themes (21 rows, summary
          accounts for all 21, no unstyled badge).
 
-7. [x] **374.7 — `check:contrast`'s coverage guard cannot see an edge, and the
+7. [ ] **374.7 — `check:contrast`'s coverage guard cannot see an edge, and the
        base rate says a gate would earn its keep.** The mechanism is 374.4's:
        `check-contrast.mjs` binds `fg` only on `d.prop === 'color'`, so a
        `border-color` declaration matches none of its branches and the three
@@ -877,21 +861,6 @@ looks for overflow). Extended in 374.2.
          fooled); if it does, `readme-facts` must agree with what
          `check:selftests` reports in the same commit, or `stamp-readme
          --check` fails the core build.
-       - **Closed 2026-09-23.** 26 edge pairings adjudicated: 15 exempt with a
-         stated reason, 5 in `EDGE_TODO` as debt against 374.4, the rest gated;
-         three state edges (calendar selected day, invalid field in a
-         data-table, active filter chip) went into `PAIRS` at 3:1 and pass,
-         taking it 37 -> 40 rows. Red-proved by injection with the injection
-         confirmed in the PARSED declaration list, and the staleness branch
-         red-proved itself on a mis-keyed exemption. Retagged
-         `@exact` -> `@heuristic` with a 6-case `--self-test` covering the two
-         defects the detector actually had — a LENGTH read as the edge colour
-         on 22 of 33 sites, and a local property read as a token, inventing a
-         pairing no element holds — and that retag forced the README
-         gate-count re-stamp it should have. Verified in a packages-only
-         context, not just a full checkout. Completion review 0.80; its weakest
-         criterion is the claim that a shape is the right enforceable property,
-         which is a judgement no measurement settles (94.11).
 
 ## Slice 373 — Owner direction 2026-09-19: a master prompt naming five workstreams (docs IA, app-shell contract, dropzone / reorder / dock / launcher, layout recipes); Phase 0 inventory finds **one capability existing-incomplete with two HIGH behaviour defects, two refused on record (dock, drag), and every other ask answered by composition** — 24 of 26 gap claims reproduce under an adversarial pass, and the baseline tree is green on every gate (2026-09-19)
 
@@ -1189,7 +1158,7 @@ before quoting a change.
          parameters are announcement strings); the reopen bars are quoted, not
          re-argued. No new "reorder" concept page (158.2).
 
-5. [x] **373.5 — a searchable, viewport-filling launcher as a section of
+5. [ ] **373.5 — a searchable, viewport-filling launcher as a section of
        `/patterns/app-launch`, with zero framework source change.** Composition:
        header ghost button with `data-dialog-trigger` + `initDialogs()` (modal,
        Escape, Tab loop, focus restore — `check-claims.mjs:2303` already asserts
@@ -1241,19 +1210,7 @@ before quoting a change.
          made true (launcher cases in `check-claims.mjs`, driven by real key and
          pointer events) or removed. Escape is either fixed or the page and this
          criterion say two presses are needed. Runtime search/filter behaviour
-         measured correct and is not in question.
-       - **Closed 2026-09-23.** Escape fixed with an explicit `dialog.close()`
-         on keydown (the native `type="search"` clear was consuming the key);
-         seven claims cases now drive open / search / keyword-only / no-match /
-         Escape / Close / the 390 wrap with real key and pointer events, taking
-         the suite 263 -> 270; the Escape case is red-proved by removing the
-         handler from the built bundle, with the injection confirmed landed and
-         the bundle restored byte-identical. The page's sentence now names what
-         actually runs. The 390 wrap is measured on the OPEN dialog rather than
-         left to `check:layout`, which cannot see a closed `<dialog>`. The
-         extraction question is recorded as a refusal in
-         `launcher-filter-extraction-2026-09-23.md`, with a third caller of the
-         same shape named as the reopen trigger. Completion review 0.89. Decision review scored the
+         measured correct and is not in question. Decision review scored the
          hold at **confidence 1.00**.
 
 6. [ ] **373.6 — App dock: hide on UPWARD scroll. OWNER CALL — two refusals
@@ -1287,7 +1244,7 @@ before quoting a change.
          follow `anchor-nav.ts:136` (one capture-phase document listener,
          resolve the scroller at event time).
 
-7. [x] **373.7 — the six-intent recipe path exists; make its one router read
+7. [ ] **373.7 — the six-intent recipe path exists; make its one router read
        its own data and name the validator in the AI path.** Every intent
        maps to a gated page: find-and-act → `list-report`; inspect one →
        `record-detail` / `object-page`; create-or-edit → `detail-form` /
@@ -1363,7 +1320,7 @@ before quoting a change.
        `scope.astro` product-level) overlap on ~2 of 17 subjects and are NOT
        merged.
 
-9. [ ] **373.9 — `check:layout` is blind to vertical collapse: a name at 0px
+9. [x] **373.9 — `check:layout` is blind to vertical collapse: a name at 0px
        wide passed it with a 357px row.** Question, not a gate: should it also
        flag a text container whose rendered width is below N characters?
        - **Accept — decide from the base rate first (94.11).** Count how many of
@@ -1373,8 +1330,35 @@ before quoting a change.
          the local claim shipped in 373.1 (`file-upload rows @390`) is recorded
          as the whole answer and this closes as refused with the count. Finding
          the gate unnecessary is a satisfying outcome.
+       - **CLOSED 2026-09-23 as REFUSED, with the count — and the count settles
+         it without judgement.** The literal predicate, "a text container
+         narrower than 8ch at 390px", is true of **125 of 128 pages, 4,956
+         boxes**. The item's own criterion says "one true of many is noise".
+       - **The premise is TRUE, which is why this is a refusal and not a
+         dismissal.** Injecting the 373.1 defect and running `check-layout`'s
+         own probes verbatim: name at 0px wide, row 714px tall, both probes
+         return null, gate PASSES. The blindness is real; it is the PREDICATE
+         that cannot be built.
+       - **No threshold separates the defect from the tree.** 8ch → 125 pages;
+         require the text to wrap → 36; require 3+ lines → 21; under 4ch and
+         wrapped → 1; under 3ch → 0. The band between is 4-column tables at
+         390px, which are fine: `/components/quantity/`'s units column stacks
+         "ea / each / pc pcs / unit / item / box / carton / pallet" with every
+         word intact, while 373.1 broke ONE LETTER per line. "< 8ch" cannot
+         tell those apart.
+       - **The best-constructed predicate was tried and also fails.** "Box
+         narrower than its own longest word" (browser `min-content`, with
+         `overflow-wrap`/`word-break` forced normal so the property under test
+         cannot suppress its own measurement) red-proves on the injection
+         (0 vs 92.8px) and scores **0 true positives / 12 false positives** on
+         today's tree — nine single-glyph icon buttons where the glyph paints
+         over padding, and three `.bo-pagination__btn` whose text spills its own
+         box but sits 49-231px INSIDE the parent, fully visible.
+       - So 373.1's local `file-upload rows @390` claim is recorded as the whole
+         answer. This is 94.11's ceremony case in mirror image: there the
+         predicate was uniformly true, here no threshold exists at all.
 
-10. [ ] **373.10 — independent re-score of `file-upload · interaction`.** The
+10. [x] **373.10 — independent re-score of `file-upload · interaction`.** The
        DSA cite claimed "native drag-drop come free", which is false for the
        documented markup; it was corrected in 373.1 WITHOUT re-taking the
        score, because a re-score by the agent that changed the surface is not
@@ -1382,6 +1366,17 @@ before quoting a change.
        - **Accept:** a blind re-score of that one dimension, its date carried in
          its own cite and `scored` left where it is (the ledger's `$comment`).
          It may stay 3 or move; either closes it.
+       - **CLOSED 2026-09-23: blind re-score HELD AT 3.** Scored independently
+         from the shipped component and its page before reading the existing
+         value, per `LOOPS.md` §3b step 4, then compared: 3 and 3. The cite in
+         `dsa-scores.json` now carries the 2026-09-23 date; `scored` stays
+         2026-08-21, because a single re-scored dimension must not move the
+         full-pass date. No `improve` entry — nothing sits below 3.
+       - Worth recording rather than just the number: after 373.1 this is now
+         the repo's strongest example of the dimension, because the page names
+         what omitting the JS actually COSTS ("the browser opens the dropped
+         file instead") rather than merely noting a behaviour, and both halves
+         are executable in `check:claims`.
 
 **Refused in triage, with reasons:** a graph database or agent runtime (the
 prompt's own boundary; `graph.db` is a derived mirror already); a per-slice
