@@ -65,9 +65,13 @@
      height measurement needed. The child needs min-block-size: 0 or the
      grid track can't shrink past its content. Toggle with the framework's
      existing data-state="open"/"closed" convention (same as dialog/offcanvas). */
+  /* minmax(0, Nfr) in BOTH states (roadmap 376.2). An `fr` track's minimum
+     is `auto`, so a bare `0fr` cannot shrink below a padded child (a 32px
+     stub); and `minmax(0, 0fr)` against a bare `1fr` does not interpolate,
+     so fixing only the closed side makes the height snap instead of animate. */
   .bo-motion-collapse {
     display: grid;
-    grid-template-rows: 0fr;
+    grid-template-rows: minmax(0, 0fr);
     overflow: hidden;
     transition: grid-template-rows var(--bo-motion-duration-slow) var(--bo-motion-easing-standard);
   }
@@ -76,7 +80,7 @@
     overflow: hidden;
   }
   .bo-motion-collapse[data-state="open"] {
-    grid-template-rows: 1fr;
+    grid-template-rows: minmax(0, 1fr);
   }
 
   /* "This just changed" feedback — a background flash, e.g. after a row

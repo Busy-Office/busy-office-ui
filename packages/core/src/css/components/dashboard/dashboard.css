@@ -67,7 +67,11 @@
      the markup but without the behavior wired up still shows its content. */
   .bo-widget__collapse {
     display: grid;
-    grid-template-rows: 1fr;
+    /* minmax(0, 1fr), not 1fr: it must be the same track function as the
+       closed state's minmax(0, 0fr) below, or the two do not interpolate and
+       the card snaps shut instead of animating — which it did from 52.2's
+       stub fix until 376.2. */
+    grid-template-rows: minmax(0, 1fr);
     overflow: hidden;
     transition: grid-template-rows var(--bo-motion-duration-slow) var(--bo-motion-easing-standard);
   }

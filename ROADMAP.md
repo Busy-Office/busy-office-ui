@@ -347,7 +347,7 @@ were `[x]` on hunks that were never committed (the ACR 2.5.7 row; DESIGN.md,
        LOOPS.md table row says so and warns off re-standardizing. The count
        "eight" is gone from LOOPS.md and the report's header (a value in a
        playbook is the staleness this file keeps paying for).
-2. [ ] **P0 · 376.2 — `.bo-motion-collapse` keeps the bare `0fr` closed track
+2. [x] **P0 · 376.2 — `.bo-motion-collapse` keeps the bare `0fr` closed track
        that 52.2 fixed in the widget copy only.** A bare `0fr` track has an
        `auto` minimum, so a padded child leaves a stub (the dashboard copy
        measured 32px before 52.2 changed it to `minmax(0, 0fr)`). The utility
@@ -357,6 +357,18 @@ were `[x]` on hunks that were never committed (the ACR 2.5.7 row; DESIGN.md,
          padded child measures a non-zero stub before the fix and 0 after, in
          a `check:claims` case red-proved against the unfixed rule; the
          Settled section's correction stays accurate.
+       - **DONE 2026-09-24 — and the fix found a second defect.** Reproduced on
+         the shipped CSS: closed utility, 16px-padded child, 32px tall. Fixing
+         only the closed side (`minmax(0, 0fr)` against a bare `1fr`) was
+         measured to SNAP (0, 0, 0, 95) — the two do not interpolate — and that
+         is the dashboard card's exact shipped form since 52.2, so its collapse
+         has not animated for a month. Both now use `minmax(0, Nfr)` in both
+         states. `check:claims` +2 (a padded motion collapse closes to 0 and
+         animates; the dashboard card animates and closes to 0): red on the
+         unfixed build (closed 32; intermediate frames 0), green after. Live at
+         1440/390 light/dark: 74px -> 0 with 7 intermediate frames. The richtext
+         copy keeps bare `0fr/1fr` — it zeroes its own padding, so it neither
+         stubs nor snaps. Jev: supported 0.93 (A 0.95, B 0.94).
 3. [x] **376.3 — lane 3 verdicts; the enumeration is 20.** Four newly flagged
        pages, each classified by whether the PROSE or the THING was wrong:
        `/patterns/kanban/` — HONEST COVERAGE (373.4's required focus section);

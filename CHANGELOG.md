@@ -36,6 +36,11 @@ pin.
 
 ### Fixed
 
+- **Collapses close all the way, and animate.** `.bo-motion-collapse` left a
+  stub the height of its child's padding when closed, and the collapsible
+  dashboard card snapped shut instead of animating. Both now use
+  `minmax(0, 0fr)` / `minmax(0, 1fr)`. Roadmap 376.2.
+
 - **A mouse press or a tap on a combobox option now selects it.** It never
   did: the press moved focus off the field, which closed the list before the
   click arrived, so only the keyboard could pick a value — in every combobox,

@@ -3716,6 +3716,42 @@ check(
   JSON.stringify(motionCollapse),
 );
 
+/* 376.2 — a closed collapse reaches ZERO with a padded child, and still
+   animates. An `fr` track's minimum is `auto`, so a bare `0fr` held a padded
+   child open (a 32px stub); and `minmax(0, 0fr)` against a bare `1fr` does not
+   interpolate, which is how the dashboard card's collapse came to SNAP for a
+   month after its stub was fixed. Both states are `minmax(0, Nfr)` now. */
+async function collapseRun(toggleSel, bodySel, padChild) {
+  return page.evaluate(async (toggleSel, bodySel, padChild) => {
+    const t = document.querySelector(toggleSel);
+    const d = document.querySelector(bodySel);
+    if (padChild) d.firstElementChild.style.padding = '16px';
+    const isOpen = () => d.dataset.state === 'open';
+    if (!isOpen()) { t.click(); await new Promise((r) => setTimeout(r, 700)); }
+    const open = d.getBoundingClientRect().height;
+    const frames = [];
+    const t0 = performance.now();
+    t.click();
+    await new Promise((res) => {
+      const tick = () => {
+        frames.push(+d.getBoundingClientRect().height.toFixed(1));
+        if (performance.now() - t0 < 700) requestAnimationFrame(tick); else res();
+      };
+      requestAnimationFrame(tick);
+    });
+    return { open: +open.toFixed(1), closed: frames.at(-1), state: d.dataset.state,
+      intermediate: frames.filter((h) => h > 1 && h < open - 1).length };
+  }, toggleSel, bodySel, padChild);
+}
+await visit('/base/motion/', { width: DESKTOP_WIDTH, height: 1600 });
+const padded = await collapseRun('#collapse-toggle', '#collapse-demo', true);
+check('motion: a collapse whose child has padding closes to 0px, not a stub, and still animates (376.2)',
+  padded.open > 0 && padded.closed === 0 && padded.intermediate > 0, JSON.stringify(padded));
+await visit('/components/dashboard/', { width: DESKTOP_WIDTH, height: 1600 });
+const card = await collapseRun('[aria-controls="collapse-demo-body"]', '#collapse-demo-body', false);
+check('dashboard: a collapsible card animates closed rather than snapping, and closes to 0px (376.2)',
+  card.open > 0 && card.closed === 0 && card.state === 'closed' && card.intermediate > 0, JSON.stringify(card));
+
 /* /getting-started/htmx §5 (roadmap 200.6) — the page now claims three things
    a browser can settle, and the middle one is the whole reason the item
    exists:
