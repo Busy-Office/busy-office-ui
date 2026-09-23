@@ -3786,6 +3786,40 @@ check('quantity: a grouped, named field keeps the qty | unit joint — same radi
     joint.grouped.selRadius === joint.control.selRadius && joint.grouped.gap === joint.control.gap,
   JSON.stringify(joint));
 
+/* 377.1 — "right-click a header … and the menu opens at the cursor". A real
+   right press opens the menu on `contextmenu`, which Chromium on macOS/Linux
+   fires while the button is still DOWN; the popover's light dismiss then paired
+   the earlier pointerdown (before the menu existed) with the release and closed
+   it. A synthetic contextmenu has no press around it, which is why the only
+   other test passed. Real right button, held, then released. */
+for (const width of WIDTHS) {
+  await visit('/components/data-table/', { width, height: 900 });
+  for (const col of ['vendor', 'amount']) {
+    const pt = await page.evaluate((col) => {
+      const th = document.querySelector(`[data-context-menu="col-menu-${col}"]`);
+      th.scrollIntoView({ block: 'center' });
+      const r = th.getBoundingClientRect();
+      return { x: Math.round(r.left + Math.min(24, r.width / 3)), y: Math.round(r.top + r.height / 2) };
+    }, col);
+    await page.mouse.move(pt.x, pt.y);
+    await page.mouse.down({ button: 'right' });
+    await new Promise((r) => setTimeout(r, 120));
+    await page.mouse.up({ button: 'right' });
+    await new Promise((r) => setTimeout(r, 250));
+    const cm = await page.evaluate((col, pt) => {
+      const m = document.getElementById(`col-menu-${col}`);
+      const open = m.matches(':popover-open');
+      const r = m.getBoundingClientRect();
+      const dx = Math.max(r.left - pt.x, 0, pt.x - r.right), dy = Math.max(r.top - pt.y, 0, pt.y - r.bottom);
+      const out = { open, distToCursor: Math.round(Math.hypot(dx, dy)) };
+      if (open) m.hidePopover();
+      return out;
+    }, col, pt);
+    check(`data-table @${width}: a real right-click on the ${col} header leaves its menu open after release, at the cursor (377.1)`,
+      cm.open && cm.distToCursor <= 16, JSON.stringify({ ...pt, ...cm }));
+  }
+}
+
 /* /getting-started/htmx §5 (roadmap 200.6) — the page now claims three things
    a browser can settle, and the middle one is the whole reason the item
    exists:

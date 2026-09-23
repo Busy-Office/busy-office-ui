@@ -144,4 +144,26 @@ describe('shared popover positioning (roadmap 105.1)', () => {
     // so it flips: y (380) - height (150) - gap (4) = 226.
     expect(menu.style.top).toBe('226px');
   });
+
+  /* 377.1: a contextmenu that arrives mid-press opens after the release, one
+     task later — opening while the button is down let the popover's light
+     dismiss close it on the release. jsdom has no light dismiss, so this pins
+     the ordering; check:claims proves the real right-click in a browser. */
+  it('context-menu: a menu asked for while a press is in progress opens only after the release', async () => {
+    ui.initContextMenu();
+    html`
+      <div data-context-menu="cm-2"></div>
+      <div class="bo-dropdown__menu" id="cm-2" popover></div>
+    `;
+    const trigger = document.querySelector('[data-context-menu="cm-2"]') as HTMLElement;
+    const menu = document.getElementById('cm-2') as HTMLElement & { showPopover: () => void };
+    menu.showPopover = vi.fn();
+    trigger.dispatchEvent(new Event('pointerdown', { bubbles: true }));
+    trigger.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true, clientX: 10, clientY: 10 }));
+    expect(menu.showPopover).not.toHaveBeenCalled();
+    trigger.dispatchEvent(new Event('pointerup', { bubbles: true }));
+    expect(menu.showPopover).not.toHaveBeenCalled();
+    await new Promise((r) => setTimeout(r, 0));
+    expect(menu.showPopover).toHaveBeenCalledTimes(1);
+  });
 });

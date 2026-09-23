@@ -36,9 +36,30 @@ function position(menu: HTMLElement, x: number, y: number): void {
   positionPopover(menu, pointAnchor(x, y));
 }
 
+function open(menu: HTMLElement, x: number, y: number): void {
+  menu.showPopover();
+  // showPopover() is synchronous and lays out the top-layer element
+  // immediately, so offsetWidth/Height are accurate right after — the
+  // same assumption initDropdowns' own anchor-based position() makes.
+  position(menu, x, y);
+}
+
+// Whether a press is in progress. Chromium on macOS/Linux fires `contextmenu`
+// while the right button is still DOWN; opening then let the popover's light
+// dismiss pair the earlier pointerdown (made before the menu existed) with the
+// release, and close it at once (roadmap 377.1). So a menu asked for mid-press
+// opens after the release, one task later; a contextmenu with no press around
+// it (Windows ordering, the keyboard menu key) opens immediately.
+let pressed = false;
+
 export function initContextMenu(): void {
   if (installed) return;
   installed = true;
+
+  document.addEventListener('pointerdown', () => { pressed = true; }, true);
+  const release = () => { pressed = false; };
+  document.addEventListener('pointerup', release, true);
+  document.addEventListener('pointercancel', release, true);
 
   document.addEventListener('contextmenu', (e) => {
     const trigger = (e.target as Element | null)?.closest<HTMLElement>('[data-context-menu]');
@@ -46,10 +67,14 @@ export function initContextMenu(): void {
     const menu = document.getElementById(trigger.dataset.contextMenu ?? '');
     if (!(menu instanceof HTMLElement) || !menu.hasAttribute('popover')) return;
     e.preventDefault();
-    menu.showPopover();
-    // showPopover() is synchronous and lays out the top-layer element
-    // immediately, so offsetWidth/Height are accurate right after — the
-    // same assumption initDropdowns' own anchor-based position() makes.
-    position(menu, e.clientX, e.clientY);
+    const { clientX: x, clientY: y } = e;
+    if (!pressed) { open(menu, x, y); return; }
+    const after = () => {
+      document.removeEventListener('pointerup', after, true);
+      document.removeEventListener('pointercancel', after, true);
+      setTimeout(() => open(menu, x, y), 0);
+    };
+    document.addEventListener('pointerup', after, true);
+    document.addEventListener('pointercancel', after, true);
   });
 }

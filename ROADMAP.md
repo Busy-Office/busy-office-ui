@@ -329,7 +329,7 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
 `check-claims` comment, and LOOPS.md's 0fr/1fr Settled section brought to
 376.2's state.
 
-1. [ ] **P0 · 377.1 — a real right-click does not open the context menu.** On
+1. [x] **P0 · 377.1 — a real right-click does not open the context menu.** On
        `/components/data-table/` a trusted right press opens the menu on
        `contextmenu` and its own `pointerup` light-dismisses it (three drivers,
        1440 and 390); a synthetic `contextmenu` opens it, and no `check-claims`
@@ -339,6 +339,19 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          the cursor, at 1440 and 390 — in `check-claims`, red on today's build.
          The fix shape is argued in the item; say what it does on an engine
          that fires `contextmenu` after mouseup.
+       - **DONE 2026-09-24.** `initContextMenu` now records whether a press is
+         in progress (capture-phase pointerdown/up/cancel): a `contextmenu`
+         that arrives mid-press opens the menu after the release, one task
+         later, at the `contextmenu` coordinates; one with no press around it —
+         Windows, which fires it after mouseup, and the keyboard menu key —
+         opens immediately, as before. `popover="auto"` is kept, so light
+         dismiss, Esc and item-click-to-close are unchanged (verified live: an
+         outside click and Esc still close it). `check:claims` +4 (both headers,
+         1440 and 390): all four red on the pre-fix build (open false, 506-929px
+         from the cursor), green after; vitest +1 pins the ordering. The ACR's
+         2.5.7 drag scan shortlisted the file once it named pointer events and
+         refused to build — recorded as non-drag, with its reason (the gate
+         doing its job). Jev: supported 0.93 (A 0.94, B 0.94).
 2. [ ] **P0 · 377.2 — the app-launch launcher's filter desyncs after Escape.**
        Escape empties the field (Chromium fires `search`, not `input`) while
        the grid stays filtered and the status still names the old query.

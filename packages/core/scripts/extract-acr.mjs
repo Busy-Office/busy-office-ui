@@ -97,7 +97,8 @@ const DRAG_TOKENS = /['"](drag(start|enter|over|leave|end)?|drop|pointer(down|mo
 /* Shortlisted but NOT dragging. Each entry is a decision with its reason, the
    same shape as check-live-regions' exception map. */
 const NON_DRAG_REVIEWED = new Map([
-  ['behaviors/combobox.ts', 'pointermove keeps the pointer-hovered option in sync with the keyboard-active one — nothing is moved, and there is no dragstart or pointer capture'],
+  ['behaviors/combobox.ts', 'pointermove keeps the pointer-hovered option in sync with the keyboard-active one, and mousedown on an option is cancelled only so focus stays in the field (375.10) — nothing is moved, and there is no dragstart or pointer capture'],
+  ['behaviors/context-menu.ts', 'pointerdown/pointerup only record whether a press is in progress, so a menu asked for mid-press opens after the release (377.1) — nothing follows the pointer and nothing is moved'],
 ]);
 
 /* A drag surface may only be claimed under 2.5.7 if its function is also

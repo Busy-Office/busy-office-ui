@@ -45,6 +45,13 @@ pin.
 
 ### Fixed
 
+- **Right-clicking a `[data-context-menu]` element now opens its menu.** On
+  macOS and Linux Chromium fires `contextmenu` while the button is still down,
+  and the menu's own light dismiss closed it on release, so a real right-click
+  showed nothing. `initContextMenu()` now opens a menu requested mid-press
+  after the release; Windows ordering and the keyboard menu key are unchanged.
+  Roadmap 377.1.
+
 - **A grouped quantity stays joined to its unit select.** With
   `initGroupedNumber()` on a named quantity field, the generated hidden input
   sat between the field and its `__unit-select` and split the joined control
