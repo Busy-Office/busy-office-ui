@@ -880,10 +880,12 @@ surfaced more:
    **Lane 2 of 4 — run `npm run report:css-repeats -w @busy-office/ui`** — rule bodies in
    the shipped CSS that appear more than once, keyed by their sorted declaration
    list. The standing verdicts are in "Settled: the visually-hidden recipe"
-   below, with the table of all eight; **the finding is the DELTA**, a new group
-   or an existing one that grew, never the count. Same reason as the other two
-   sweeps: deliberately not a gate (every current repeat is correct, so a gate
-   would fail the build on eight right answers), which makes this step the only
+   below, with the standing table (the command is the count; the table is the
+   verdicts); **the finding is the DELTA**, a new group, an existing one that
+   grew, or a standing group that DISSOLVED — exact-body keying can only show a
+   divergence that way. Same reason as the other two sweeps: deliberately not a
+   gate (every current repeat is correct, so a gate would fail the build on
+   right answers), which makes this step the only
    thing keeping it from rotting.
    **Lane 3 of 4 — run `npm run report:prose -w docs`** and record a verdict for any page
    the report flags — over 2x the CORPUS median, or over 2x its FAMILY median —
@@ -892,10 +894,11 @@ surfaced more:
    the only thing that keeps it from rotting.
 
    **The verdict set is an ENUMERATION, and it is the one list in this playbook
-   that may NOT be replaced by a command.** Sixteen pages carry a verdict:
+   that may NOT be replaced by a command.** Twenty pages carry a verdict:
    **158.1**'s twelve, **161.1**'s three (`/base/motion/`,
-   `/concepts/js-behaviors/`, `/concepts/design-language/`) and **178.3**'s
-   `/concepts/scale/`. Check membership against that enumeration, and **amend it
+   `/concepts/js-behaviors/`, `/concepts/design-language/`), **178.3**'s
+   `/concepts/scale/`, and **376.3**'s four (`/patterns/kanban/`,
+   `/reference/acr/`, `/components/file-upload/`, `/components/alerts/`). Check membership against that enumeration, and **amend it
    in the same commit as any round that records a new verdict** — nothing else
    keeps it true.
 
@@ -1588,7 +1591,12 @@ Raised twice as duplication (2026-08-24, 2026-08-25) and refused here so it
 stops being re-raised. `display: grid` + `grid-template-rows: 0fr/1fr` +
 `overflow: hidden` appears in `motion/motion.css`, `dashboard.css` and
 `richtext.css`. It is the same four declarations, and it is **not** removable
-duplication, for two reasons that compound:
+duplication, for two reasons that compound. **Correction, 376.2 (2026-09-24):**
+it stopped being the same four on 2026-08-19, six days before this was written —
+52.2 changed the widget copy's closed track to `minmax(0, 0fr)` because a bare
+`0fr` has an `auto` minimum and a padded child leaves a stub; the utility copy
+never got it. The ownership argument below still holds; the "identical" claim
+did not, and exact-body keying could only show it as a group vanishing:
 
 - **Selector ownership.** `.bo-motion-collapse` is a UTILITY: it works because
   the consumer puts it on their own markup. `.bo-widget__collapse` and
@@ -1633,7 +1641,7 @@ other two.
 
 **No gate.** "A comment explains this literal" is semantic, and roadmap 94.11
 paid for that lesson: the shape is checkable, the meaning is not. Every repeat
-below is CORRECT, so a gate would fail the build on eight rules that are all
+below is CORRECT, so a gate would fail the build on rules that are all
 right.
 
 ### The count is a command now, and the command disagreed with the paragraph
@@ -1669,7 +1677,7 @@ than as a list of blessed blocks:
 | the 9-line visually-hidden idiom | `.bo-visually-hidden`, `.bo-sidebar-nav__label`+`__heading`, `.bo-stepper__label` | the section above |
 | header row, 6 declarations | `.bo-widget__header`, `.bo-offcanvas__header` | two headers converging by taste, not one decision stored twice |
 | `display:flex / align-items:center / gap:space-1` | `.bo-breadcrumb li`, `.bo-richtext__group` | the cluster idiom on markup the component owns; a consumer cannot class an `<li>` the component generates the rhythm for |
-| `flex:1 / min-inline-size:0 / overflow-wrap:anywhere` | `.bo-combobox__option-label`, `.bo-file-list__name` | "a text cell that must shrink and wrap"; both are parts |
+| ~~`flex:1 / min-inline-size:0 / overflow-wrap:anywhere`~~ | `.bo-combobox__option-label`, `.bo-file-list__name` | **DISSOLVED by 373.1 (2026-09-19)** — the file name is now `flex: 1 1 12ch`, a measured fix (it read 0px wide at 390px) guarded by `check:claims`' file-upload rows case. Do not re-standardize it back onto `flex: 1` (376.1) |
 | disabled look | `:is(.bo-input, .bo-quantity__input):disabled`, `.bo-richtext--disabled` | sharing would mean `input.css` styling richtext's root |
 | `aria-current="page"` link | `.bo-sidebar-nav__link`, `.bo-tree__link` | two nav components, each styling its own link part |
 | joined-control radius reset | **x4** — twice each in `money.css`, `quantity.css` | see below |

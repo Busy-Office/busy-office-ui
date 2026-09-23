@@ -31,8 +31,9 @@
  * component PARTS whose hidden-ness is decided by a container query — there is
  * no markup a consumer could put the class on, and plain CSS cannot share a
  * rule body without also sharing a selector. A gate here would fail the build
- * on eight rules that are all right. What the count is FOR is the delta: a new
- * repeat, or a group that grows, is the signal to look.
+ * on rules that are all right. What the count is FOR is the delta: a new
+ * repeat, a group that grows, or a standing group that disappears (a member
+ * diverged — find out whether on purpose) is the signal to look.
  *
  * WHAT IS COUNTED, stated because a count is meaningless without it:
  *

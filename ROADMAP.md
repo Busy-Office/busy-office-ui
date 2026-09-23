@@ -320,6 +320,96 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 376 — Standardize sweep, **4 of 4 lanes**: one dead style and two false passages fixed, four prose verdicts recorded (enumeration 16 -> 20), one standing CSS group found DISSOLVED by a measured fix, and two shipped defects found BESIDE the lanes; the completeness critic also found two closed items resting on uncommitted work (2026-09-24)
+
+**Dispatched by rule 2** (`Standardize 13 / 4 OVERDUE`) after rule 1 cleared
+(375.9, 375.10). Each lane's figure, as the lane printed it
+(`scripts/loops/standardize_lanes.py`): lane 1 *"1 dead style attribute(s) on 1
+page(s)"* · lane 2 *"7 body(ies) appearing more than once"* · lane 3 *"flagged
+union … 17 page(s)"* · lane 4 *ratchet: ROADMAP.md 6 up, ENVIRONMENT.md 24 up*.
+Adjudicated by one agent per lane against the recorded verdicts, then a
+completeness critic that spot-checked 11 citations (all held).
+
+**The critic's cross-lane finding came first and landed first:** 373.3 and 373.4
+were `[x]` on hunks that were never committed (the ACR 2.5.7 row; DESIGN.md,
+`/base/primitives` and the Gallery drawer patch). Landed in `5d0146f5` /
+`24ca80b0`; HEAD then built green alone (journey checkpoint stashed out).
+
+1. [x] **376.1 — lane 1 + lane 2 records.** Lane 1: the one dead attribute
+       (`margin: 0` on the app-launch launcher heading, added by 373.5 after
+       the last sweep) removed in `2ff4ca61`; the rescan reads 0 dead
+       attributes and exactly Slice 345's 11 standing refusals. What the
+       figure does not cover: the scan never emulates the dark theme — base
+       rate measured 0 (no dead declaration changes verdict in dark), so no
+       instrument change. Lane 2: the standing `flex:1 / min-inline-size:0 /
+       overflow-wrap:anywhere` group DISSOLVED — `.bo-file-list__name` is now
+       `flex: 1 1 12ch`, 373.1's measured 390px fix, guarded by a claim; the
+       LOOPS.md table row says so and warns off re-standardizing. The count
+       "eight" is gone from LOOPS.md and the report's header (a value in a
+       playbook is the staleness this file keeps paying for).
+2. [ ] **P0 · 376.2 — `.bo-motion-collapse` keeps the bare `0fr` closed track
+       that 52.2 fixed in the widget copy only.** A bare `0fr` track has an
+       `auto` minimum, so a padded child leaves a stub (the dashboard copy
+       measured 32px before 52.2 changed it to `minmax(0, 0fr)`). The utility
+       ships the unfixed form (`motion/motion.css`), and LOOPS.md's Settled
+       section called the three copies identical after they had diverged.
+       - **Accept:** in a real browser, the utility's closed state with a
+         padded child measures a non-zero stub before the fix and 0 after, in
+         a `check:claims` case red-proved against the unfixed rule; the
+         Settled section's correction stays accurate.
+3. [x] **376.3 — lane 3 verdicts; the enumeration is 20.** Four newly flagged
+       pages, each classified by whether the PROSE or the THING was wrong:
+       `/patterns/kanban/` — HONEST COVERAGE (373.4's required focus section);
+       one stale paragraph (110.7 in the future tense, linked to the unrelated
+       `/patterns/staging`) removed in `2ff4ca61`. `/reference/acr/` — THE
+       INSTRUMENT (89% generated rows). `/components/file-upload/` — THE
+       INSTRUMENT (recipe fixed cost; authored prose 1.03x its family median).
+       `/components/alerts/` — THE INSTRUMENT for the flag (373.3's measured
+       in-flow region section); one false sentence ("the reason the earlier
+       attempt failed", an attempt that never shipped) removed in `2ff4ca61`.
+       LOOPS.md's enumeration amended in the same commit as these verdicts.
+       Also measured: `report:prose` counts ApiTable's hand-written halves
+       (the `js` cell, the `notes` list) as generated — richtext 492 words,
+       data-table 434, file-upload 275 — and no verdict flips at this
+       revision; recorded so the next flip is read with it in mind.
+4. [ ] **P0 · 376.4 — `initGroupedNumber` breaks the quantity/unit-select joint.**
+       It inserts its generated hidden input directly after the field
+       (`input.after(hidden)` in `grouped-number.ts`), so
+       `.bo-quantity__input:has(+ .bo-quantity__unit-select)` (374.1's joint)
+       no longer matches when a named quantity field also uses grouped
+       numbers — the lane's synthetic measurement: joined radii 0/0 and no gap
+       without the hidden input, 6px radii and an 8px gap with it.
+       - **Accept:** reproduced on real framework markup in a browser, then
+         fixed so the joint holds with and without `initGroupedNumber`,
+         asserted in `check:claims` and red-proved.
+5. [ ] **376.5 — the app-launch launcher hand-rolls a dialog header.** A
+       `form.bo-cluster` with inline padding plus an `<h2>` whose 18px comes
+       from the docs chrome's `.demo h2`, which a consumer's page will not
+       have — while `dialog.css` ships `.bo-dialog__header` / `__title`.
+       Adopting them CHANGES rendering (a 1px bottom border, 16/24 padding,
+       the md title size), so it is a decision, not a Standardize removal.
+       - **Accept:** either the launcher uses the shipped parts, verified live,
+         or the page records why a grid launcher's header differs. Refusing is
+         a satisfying outcome.
+6. [x] **376.6 — lane 4 verdicts.** CLAUDE.md changed accumulate class —
+       HONEST, cut by 375.2 (5,880 -> 3,227 words), 2 up since. ROADMAP.md:
+       167.1's premise ("growth here is managed") has been false since
+       2026-09-07 — no archive sweep since `3cb2381a`, 58,531 -> 150,288 words —
+       so the sweep runs in this slice (376.8). RESUME.md: its INSTRUMENT
+       premise ("rewritten every wake") no longer holds — since 2026-09-19 the
+       handover has been PREPENDED, and the 2026-09-09 hand-off below has
+       survived 7 commits byte for byte (43% of the file); recorded, not cut,
+       because pruning the handover is the next hand-off's job.
+7. [ ] **376.7 — the lane-4 ratchet counts any net shrink as a cut.**
+       `report_loop_prose.py`'s `ups_since_last_cut` treats `cur < prev` as a
+       cut, so a 52-word item close reads as ROADMAP.md's "last cut" while
+       its real cut was 81 steps back; ENVIRONMENT.md's "cut" was 7 words.
+       The block LOOPS.md says to read first is least trustworthy on exactly
+       the files lane 4 exists for.
+       - **Accept:** the ratchet distinguishes a real cut from noise (a named
+         floor, argued), a replay reports ROADMAP.md's last real cut at the
+         2026-09-07 sweep, and the change is red-proved.
+
 ## Slice 375 — owner-directed cleanup: the two-agent arrangement is retired, `CLAUDE.md` loses 45% to a reference file, and two defects are rescued from records that were about to become history (2026-09-22)
 
 **Owner instruction:** reduce development overhead and inconsistent decisions
