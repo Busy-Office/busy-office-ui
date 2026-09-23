@@ -20,29 +20,25 @@ survives none.
 
 ---
 
-## GOAL — set 2026-09-23. Clear every non-owner-blocked item in 373/374/375.
+## GOAL — set 2026-09-23 (second, owner-requested). Clear the three armed dispatcher rules, in rule order.
 
-**STATUS: 22 of 22 original items closed** (375.7, 375.5, 375.4 landed
-2026-09-23, commits `e7f69729`, `e41fddfb`, `0edae5c7`; pushed to origin at
-`e4243415`). **One item remains in scope, and it is new: P0 375.9**, filed by
-375.5's reproduction.
+The first 2026-09-23 goal (every non-owner-blocked item in 373/374/375) closed
+22 of 22 at `dcec6ea3`. This one is the dispatcher's own order, no reordering:
 
-**Next wake — dispatcher rule 1 fires on it (open P0).**
-
-1. **375.9 — any control below a data-table loses its first click while a
-   cell's error message is shown.** Reproduced 0 of 6 trusted presses on the
-   editable-grid demo's "+ Add line" (1440 and 390); blur-first control 6 of
-   6. Cause measured: `.bo-data-table-container`'s `padding-block-end:
-   calc(6lh + …)` reserve (data-table.css, the `:has(… :focus-within
-   .bo-form-field__message)` rule from 190.1) exists only while the focused
-   cell shows its message. The mousedown on Add blurs the cell, the reserve
-   collapses (container shrinks 142px), Add rises ~141px before the mouseup,
-   and `click` lands on `SECTION.demo`. **The row height does NOT change** —
-   173.2 holds; do not "fix" the row. Accept requires a `check:claims` case
-   with real mouse down/up, red-proved, and 173.2's and 190.1's properties
-   still true. Use `diagnosing-bugs` first (it is bug mode). The repro script
-   lived in this session's scratchpad and is gone; its method is written into
-   375.5's closure in ROADMAP.md.
+1. **Rule 1 — P0 375.9.** Any control below a data-table loses its first
+   click while a cell's error message is shown. Reproduced 0 of 6 trusted
+   presses; cause is `.bo-data-table-container`'s `padding-block-end:
+   calc(6lh + …)` reserve (data-table.css, 190.1's `:has(… :focus-within
+   .bo-form-field__message)` rule) collapsing on the blur the mousedown
+   causes. The row height does NOT change — 173.2 holds; do not "fix" the
+   row. Accept: `check:claims` case with real mouse down/up, red-proved;
+   173.2's and 190.1's properties still hold.
+2. **Rule 2 — Standardize, 8/4 overdue.** Four lanes via
+   `scripts/loops/standardize_lanes.py`; quote each lane's own figure;
+   multi-round until a clean pass.
+3. **Rule 3 — Objective grill of 373/374/375** (armed 3/3). Resolve every
+   label first (LOOPS.md §6 step 0), check `.roundtable/INDEX.md` for repeated
+   subjects, land a scored report in `.roundtable/`.
 
 **Owner-blocked, do not touch:** 374.4 (border-strong token re-value; Jev
 escalated it at 0.54, so it is a visual-weight preference), 373.6 (dock
