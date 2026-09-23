@@ -778,7 +778,7 @@ looks for overflow). Extended in 374.2.
          drift; verified live at 1440 and 390 in both themes (21 rows, summary
          accounts for all 21, no unstyled badge).
 
-7. [ ] **374.7 — `check:contrast`'s coverage guard cannot see an edge, and the
+7. [x] **374.7 — `check:contrast`'s coverage guard cannot see an edge, and the
        base rate says a gate would earn its keep.** The mechanism is 374.4's:
        `check-contrast.mjs` binds `fg` only on `d.prop === 'color'`, so a
        `border-color` declaration matches none of its branches and the three
@@ -813,6 +813,21 @@ looks for overflow). Extended in 374.2.
          fooled); if it does, `readme-facts` must agree with what
          `check:selftests` reports in the same commit, or `stamp-readme
          --check` fails the core build.
+       - **Closed 2026-09-23.** 26 edge pairings adjudicated: 15 exempt with a
+         stated reason, 5 in `EDGE_TODO` as debt against 374.4, the rest gated;
+         three state edges (calendar selected day, invalid field in a
+         data-table, active filter chip) went into `PAIRS` at 3:1 and pass,
+         taking it 37 -> 40 rows. Red-proved by injection with the injection
+         confirmed in the PARSED declaration list, and the staleness branch
+         red-proved itself on a mis-keyed exemption. Retagged
+         `@exact` -> `@heuristic` with a 6-case `--self-test` covering the two
+         defects the detector actually had — a LENGTH read as the edge colour
+         on 22 of 33 sites, and a local property read as a token, inventing a
+         pairing no element holds — and that retag forced the README
+         gate-count re-stamp it should have. Verified in a packages-only
+         context, not just a full checkout. Completion review 0.80; its weakest
+         criterion is the claim that a shape is the right enforceable property,
+         which is a judgement no measurement settles (94.11).
 
 ## Slice 373 — Owner direction 2026-09-19: a master prompt naming five workstreams (docs IA, app-shell contract, dropzone / reorder / dock / launcher, layout recipes); Phase 0 inventory finds **one capability existing-incomplete with two HIGH behaviour defects, two refused on record (dock, drag), and every other ask answered by composition** — 24 of 26 gap claims reproduce under an adversarial pass, and the baseline tree is green on every gate (2026-09-19)
 
