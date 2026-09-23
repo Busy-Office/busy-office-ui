@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-23 20:15 UTC
+Generated at: 2026-09-23 20:40 UTC
 
 ## Open items by slice
 
@@ -19,8 +19,6 @@ Generated at: 2026-09-23 20:15 UTC
   - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
 - **Slice 296** (1 open)
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
-- **Slice 320** (1 open)
-  - 320.3 — the same idiom, two values, in two shared components.
 - **Slice 335** (1 open)
   - 335.1 — The Discussions intake has never returned a non-empty list, in either environment.
 - **Slice 345** (1 open)
@@ -74,9 +72,9 @@ Generated at: 2026-09-23 20:15 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1756 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-09-24 04:15   ok
-  Objective     1 / 3 slice           since 2026-09-24 03:02   ok  [378]
+dispatch status — counter-triggered rules (1757 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-09-24 04:15   ok
+  Objective     2 / 3 slices          since 2026-09-24 03:02   ok  [320, 378]
   Optimize      3 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 144 sample(s), 8 of 47 name(s) paired across days]
   -> rule 5's newest comparable pair predates 3 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-19, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-19 (2026-09-22, 2026-09-23, 2026-09-24), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -110,7 +108,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-24 01:05 · Continue · bug · P0 375.10 — combobox options commit on mouse/touch (mousedown kept off the option); money currency combobox live · landed · 91254122
 - 2026-09-24 01:36 · Continue · bug · 373.3 + 373.4 remainders — uncommitted hunks behind two closed items (ACR 2.5.7 row, shell-band restatements, drawer patch) landed; HEAD builds green alone · landed · a1bc5663
 - 2026-09-24 01:46 · Standardize · sweep · Slice 376 — 4 of 4 lanes: 1 dead style removed, 2 false passages fixed, 4 prose verdicts (enum 16->20), dissolved css group recorded, P0 376.2 + 376.4 filed · landed · 85e8c6f5
 - 2026-09-24 01:47 · Standardize · sweep · 376.8 — archive sweep: 40 slices moved verbatim; live 15,977 -> 9,301 lines; share 56.7% -> 23.8% · landed · ce10de0d
@@ -120,6 +117,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-24 03:36 · Continue · bug · P0 377.1 — real right-click opens the context menu (opens after release when asked mid-press) · landed · 0ade896e
 - 2026-09-24 03:48 · Continue · bug · P0 377.2 — launcher re-filters on dialog close; grid matches field after Escape · landed · b4e592d3
 - 2026-09-24 04:15 · Standardize · sweep · 378 — Standardize sweep 4 of 4 lanes, all clean (lane 2 input touched by 376.2/376.4) · logged · 456f9966
+- 2026-09-24 04:40 · Continue · build · 320.3 — ClassRef chip spacing uses var(--bo-space-2) like ApiTable (6.4px -> 8px) · landed · 880c2b2b
 
 ## Sunset test
 
