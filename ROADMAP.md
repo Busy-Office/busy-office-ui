@@ -692,7 +692,7 @@ looks for overflow). Extended in 374.2.
          out; `border-control` for everything flattens the input/button
          hierarchy `color.css:29-31` deliberately built.
 
-5. [ ] **374.5 — `./css` resolves to the UNMINIFIED bundle, so this repo's
+5. [x] **374.5 — `./css` resolves to the UNMINIFIED bundle, so this repo's
        write-the-reasoning-inline doctrine is payload a consumer downloads.**
        Surfaced by 374.1: the seam fix's comments broke `check:size`.
        `css/index.css` measured 93.69 kB gz at HEAD, 97.24 with the tree's
@@ -709,6 +709,22 @@ looks for overflow). Extended in 374.2.
          header states outright that this row is a comment budget as well as a
          code one and what that is worth. Deciding it is fine as it stands, with
          the reason written down, closes this.
+       - **Closed 2026-09-23, by measuring rather than arguing.** index.css was
+         99.5 kB gz against index.min.css 15.4; stripping comments alone lands
+         at 17.1, so comments were **80.5 kB gz, 98% of the gap**, and
+         minification only 1.6. The build now strips them when emitting dist:
+         index.css 99.5 -> 16.7, rf-essentials 45.7 -> 8.2, whole shipped
+         payload **401.1 -> 185.8 kB gz**. No export path moved. `src/css` is
+         untouched — the doctrine was always about source.
+       - **The blanket strip was wrong and `check:deprecated-icons` caught it**,
+         failing with "found no deprecated glyphs in the shipped css to check".
+         It reads icon.css's four DEPRECATED blocks out of the SHIPPED artifact
+         on purpose: they are user-facing contract, not internal reasoning. The
+         rule became the CSS bang-comment convention — ordinary comments go,
+         bang comments stay — and anything that must reach dist now says so.
+         Five budget rows that existed to protect prose were re-based, including
+         the 97.3 -> 107.5 raise made the day before, recorded in place as
+         overturned. Completion review 0.85; regression risk 0.97.
 
 6. [x] **374.6 — the published conformance report overclaims in four rows, and
        the rows that are wrong are exactly the ones that interpolate nothing.**
