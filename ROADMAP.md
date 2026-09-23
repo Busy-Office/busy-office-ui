@@ -467,6 +467,15 @@ untracked or uncommitted, so the removal was a working-tree change.
          review is reported as a three-way signal with no cut at all. Finding
          that no clean cut exists is a satisfying outcome and should be written
          down rather than papered over with a rounder number.
+       - **The judge is framing-sensitive, measured 2026-09-23 and more
+         serious than the cut.** The SAME evidence for 373.7 scored **0.25**
+         when the payload opened by disclosing that an earlier review had
+         scored 0.35, and **0.48** when that sentence was removed and nothing
+         else changed. A 0.23 swing from a leading sentence is larger than the
+         0.04 the band was being asked to resolve. So the review payload is
+         part of the instrument: state the evidence, never the prior score, and
+         never what verdict is hoped for. Add a pair of framing variants to the
+         validation set so this is measured rather than remembered.
        - Until that lands the bands stay PROVISIONAL and the review stays
          advisory, exactly as `.roundtable/jev-rubrics.md` already says.
 
@@ -1187,7 +1196,7 @@ before quoting a change.
          follow `anchor-nav.ts:136` (one capture-phase document listener,
          resolve the scroller at event time).
 
-7. [ ] **373.7 — the six-intent recipe path exists; make its one router read
+7. [x] **373.7 — the six-intent recipe path exists; make its one router read
        its own data and name the validator in the AI path.** Every intent
        maps to a gated page: find-and-act → `list-report`; inspect one →
        `record-detail` / `object-page`; create-or-edit → `detail-form` /
@@ -1226,6 +1235,26 @@ before quoting a change.
          Completion review scored this **0.35** — at the "evidence does not
          support" boundary — which corrected a wake that had reported it as
          "one line short". Gap (b) is a measurement, not clerical.
+       - **Both gaps closed 2026-09-23.** (a) **The size delta is +556 bytes:
+         llms.txt goes 49,982 -> 50,538.** Measured, not inherited: the prior
+         figure was taken before three slices landed, so the baseline was
+         rebuilt by reverting only this item's five files
+         (`gen-llms.mjs`, `gen-suite-index.mjs`, `suite.json`,
+         `ai-assistants.astro`, `screen-kit.astro`), running the docs build, and
+         restoring them — 49,982 then 50,538, reproducing +556 against today's
+         HEAD. (b) The changed page was measured at desktop and 390, light and
+         dark: page overflow 0 and `__main` overflow 0 in all four, the paste-in
+         block contained within the viewport at both widths (342px at 390), and
+         its 356px horizontal scroll is `overflow-x: auto` — a scroll container
+         by design, not a layout break. Desktop emulation reported innerWidth
+         1600 rather than 1440 (the driver refuses that resize; `check:layout`
+         sweeps DESKTOP_WIDTH across 128 pages including this one), so the
+         desktop reading is "a desktop width", stated rather than rounded.
+       - **One observation, not a criterion failure:** the paste-in block now
+         carries SIX `##` sections while "Why these five things" explains five.
+         The criterion is about the why-list matching its own `<ol>`, which it
+         does (5 and 5). Whether the sixth section wants explaining is a
+         judgement, recorded here rather than silently closed.
 
 8. [ ] **373.8 — docs IA: collapse 17 sidebar groups into the prompt's seven
        (Start here / Foundations / Components / Patterns and layouts /
