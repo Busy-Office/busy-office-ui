@@ -5,13 +5,80 @@
  * ratio tables FROM dist/contrast.json, so published ratios cannot drift
  * (site-proposal grill F3: never hand-typed accessibility claims).
   *
- * @exact — computes contrast ratios. Exempt from --self-test: there is no
- * judgement to get wrong, and ceremony around a lookup is noise.
+ * @heuristic — RETAGGED 374.7. The ratio half is still equality and the
+ * literal-colour report still contributes nothing to the exit code, but the
+ * EDGE coverage half added by 374.7 rests on RECOGNISING that a declaration
+ * paints a boundary, from its property name. That can be fooled and was:
+ * reading the first `var()` took `--bo-border-width`, a LENGTH, as the edge
+ * colour on 22 of 33 sites, and reading a use site took the local
+ * `--bo-btn-border` as a token, inventing a pairing no element holds. Carries
+ * --self-test, which drives `edgePairOf` against inputs it must tell apart.
 */
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { contrastRatio } from './wcag.mjs';
+
+const EDGE_PROP = /^(border(-(block|inline)(-(start|end))?)?(-color)?|outline(-color)?)$/;
+const LOCAL_EDGE = /^--bo-[a-z-]*-border$/;
+const LOCAL_BG = /^--bo-[a-z-]*-bg$/;
+/* A container's edge is not what identifies it — its fill, its position and
+   its contents are, and the hairline only separates it from what it sits on.
+   One shared reason because it is genuinely one decision, applied per site
+   below so each remains a named entry rather than a token-wide waiver. */
+
+/* The recognition this gate rests on, in one place so `--self-test` can drive
+   it directly rather than through the filesystem. */
+export function edgePairOf(rule) {
+  let edge, ground;
+  const semantic = (v) => [...v.matchAll(/var\((--bo-(?:color|state)-[a-z0-9-]+)/g)].map((x) => x[1]);
+  rule.walkDecls((d) => {
+    if (LOCAL_EDGE.test(d.prop)) { edge = edge ?? semantic(d.value)[0]; return; }
+    if (LOCAL_BG.test(d.prop)) { ground = ground ?? semantic(d.value)[0]; return; }
+    if (EDGE_PROP.test(d.prop)) { edge = edge ?? semantic(d.value)[0]; return; }
+    if (/^background(-color)?$/.test(d.prop)) { ground = ground ?? semantic(d.value)[0]; }
+  });
+  return { edge, ground };
+}
+
+/* --self-test: drive `edgePairOf` against inputs it must classify correctly,
+   and exit non-zero if it cannot tell them apart. Every case below is one the
+   detector ACTUALLY got wrong while being built, plus the two it must keep
+   getting right, so this is a regression net rather than ceremony. */
+if (process.argv.includes('--self-test')) {
+  const { default: pc } = await import('postcss');
+  const one = (css) => { let out = null; pc.parse(css).walkRules((r) => { out = out ?? edgePairOf(r); }); return out; };
+  const cases = [
+    ['a LENGTH first in the shorthand is not the edge colour',
+      '.x{background:var(--bo-color-bg-surface);border:var(--bo-border-width) solid var(--bo-color-border-strong)}',
+      { edge: '--bo-color-border-strong', ground: '--bo-color-bg-surface' }],
+    ['a LOCAL prop at its USE site resolves to nothing — no phantom pairing',
+      '.x{background:var(--bo-color-accent-solid);border:1px solid var(--bo-btn-border)}',
+      { edge: undefined, ground: '--bo-color-accent-solid' }],
+    ['a LOCAL prop at its ASSIGNMENT contributes the token it is given',
+      '.x{--bo-btn-border:var(--bo-color-border-strong);--bo-btn-bg:var(--bo-color-bg-surface)}',
+      { edge: '--bo-color-border-strong', ground: '--bo-color-bg-surface' }],
+    ['a text colour is not an edge',
+      '.x{color:var(--bo-color-text-primary);background:var(--bo-color-bg-surface)}',
+      { edge: undefined, ground: '--bo-color-bg-surface' }],
+    ['outline counts as an edge',
+      '.x{background:var(--bo-color-bg-muted);outline:2px solid var(--bo-color-focus-ring)}',
+      { edge: '--bo-color-focus-ring', ground: '--bo-color-bg-muted' }],
+    ['a logical border longhand counts as an edge',
+      '.x{background:var(--bo-color-bg-surface);border-inline-start:1px solid var(--bo-color-border-default)}',
+      { edge: '--bo-color-border-default', ground: '--bo-color-bg-surface' }],
+  ];
+  let bad = 0;
+  for (const [name, css, want] of cases) {
+    const got = one(css);
+    const ok = got.edge === want.edge && got.ground === want.ground;
+    if (!ok) { bad++; console.error(`  FAIL ${name}\n       want ${JSON.stringify(want)}\n       got  ${JSON.stringify(got)}`); }
+  }
+  if (bad) { console.error(`contrast --self-test FAILED — ${bad} of ${cases.length} case(s)`); process.exit(1); }
+  console.log(`contrast --self-test passed — ${cases.length} cases covering edge recognition, including the two the detector got wrong while being built`);
+  process.exit(0);
+}
+
 
 const pkgRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 // The raw palette steps live in the generated scales.css since Slice 22;
@@ -87,6 +154,13 @@ const PAIRS = [
   ['--bo-color-text-primary', '--bo-color-bg-surface-raised', 4.5], // dialog/menu
   ['--bo-color-text-secondary', '--bo-color-bg-canvas', 4.5], // muted-on-canvas
   ['--bo-color-border-control', '--bo-color-bg-surface', 3],
+  /* Edge pairings surfaced by the 374.7 coverage extension. Each identifies a
+     STATE rather than bounding a container, so each is gated at 3:1 rather
+     than exempted: the calendar's selected day, an invalid field inside a
+     data-table, and an active filter chip. */
+  ['--bo-color-accent', '--bo-color-bg-selected', 3],
+  ['--bo-state-error-color', '--bo-color-bg-surface', 3],
+  ['--bo-color-accent', '--bo-color-accent-subtle', 3],
   // Seamless (WYSIWYG) cells: on a hovered/striped row the revealed
   // border is the ONLY editability affordance (grill 2026-08-16).
   ['--bo-color-border-control', '--bo-color-bg-hover', 3],
@@ -180,6 +254,72 @@ try {
 import { readdir } from 'node:fs/promises';
 import postcss from 'postcss';
 import { srcCssFiles } from './src-css-files.mjs';
+/* EDGE COVERAGE (roadmap 374.7). The guard below this reconciles TEXT pairs
+   against the CSS. It could not see an EDGE at all: it binds `fg` only when
+   `d.prop === 'color'`, so `border-color:` matched none of its branches and
+   the three `--bo-color-border-control` rows were hand-maintained with nothing
+   noticing a fourth. Measured: 30 edge pairings ship, 11 distinct, and exactly
+   one of them was in PAIRS.
+
+   WHAT THIS CAN AND CANNOT DECIDE. WCAG 1.4.11 asks 3:1 of the visual
+   information REQUIRED TO IDENTIFY a control. Whether an edge is required is a
+   question about the whole rendered element — its fill, its label, its icon,
+   its neighbours — and no regex over CSS answers it. `--bo-color-border-strong`
+   at 1.34:1 is `.bo-kbd`'s decorative keycap AND `.bo-btn--secondary`'s control
+   boundary: same token, same ratio, opposite verdicts. So the enforceable
+   property is a SHAPE, exactly `check:wrong-choice`'s bargain — every edge
+   pairing is in PAIRS at 3:1, or in EDGE_EXEMPT with a reason NAMING the other
+   channel that identifies the thing, or in EDGE_TODO as debt. What the reason
+   SAYS is a human call this gate does not pretend to make; whether one is
+   there is not.
+
+   TWO THINGS THE PROBE FOR THIS GOT WRONG FIRST, kept as the reason the
+   parsing is shaped the way it is. Taking the first `var()` read
+   `--bo-border-width` — a LENGTH — as the edge colour on 22 of 33 sites. And
+   taking a use site's token read `--bo-btn-border`, a local property, as the
+   edge, inventing `--bo-btn-border on accent-solid`: a pairing no element
+   holds, because `.bo-btn` sets the fill and `--secondary` sets the edge. So:
+   only semantic `--bo-color-*` / `--bo-state-*` tokens count, an assignment
+   contributes its VALUE, and a use site contributes only when it names a
+   semantic token directly. */
+const DIVIDER = 'container hairline: the box is identified by its fill, position and contents; the edge only separates it';
+const EDGE_EXEMPT = new Map([
+  ['badge:--bo-color-border-default|--bo-color-bg-muted', DIVIDER],
+  ['dashboard:--bo-color-border-default|--bo-color-bg-surface', DIVIDER],
+  ['dashboard:--bo-color-border-default|--bo-color-bg-muted', DIVIDER],
+  ['data-table:--bo-color-border-default|--bo-color-bg-surface', DIVIDER],
+  ['dialog:--bo-color-border-default|--bo-color-bg-muted', DIVIDER],
+  ['dropdown:--bo-color-border-default|--bo-color-bg-surface-raised', DIVIDER],
+  ['combobox:--bo-color-border-default|--bo-color-bg-surface-raised', DIVIDER],
+  ['filters:--bo-color-border-default|--bo-color-bg-surface', DIVIDER],
+  ['form:--bo-color-border-default|--bo-color-bg-surface', DIVIDER],
+  ['form:--bo-color-border-default|--bo-color-bg-canvas', DIVIDER],
+  ['navbar:--bo-color-border-default|--bo-color-bg-surface', DIVIDER],
+  ['richtext:--bo-color-border-default|--bo-color-bg-muted', DIVIDER],
+  ['sidebar-nav:--bo-color-border-default|--bo-color-bg-surface', DIVIDER],
+  ['kbd:--bo-color-border-strong|--bo-color-bg-muted',
+    'decorative keycap: the glyph inside is the content and the fill carries the key shape; nothing is operated here'],
+  ['segmented:--bo-color-border-default|--bo-color-bg-muted',
+    'track, not control: the options inside carry the selected state (fill + weight + aria-checked); the track edge only bounds them'],
+]);
+/* Debt, not a decision — an edge that SHOULD meet 3:1 and does not yet. Kept
+   apart from EDGE_EXEMPT for the reason check:wrong-choice keeps its TODO
+   apart: one list is where reasoned choices live and the other is where
+   unfinished work lives, and merging them is how an exemption map becomes a
+   place to hide reds. Every entry here is an interactive control boundary
+   where the fill does not identify the control (all measured 1.00-1.17:1
+   against their surroundings), so the edge is the only non-text channel.
+   Tracked as roadmap 374.4; this list shrinks as that lands. */
+const EDGE_TODO = new Map([
+  ['button:--bo-color-border-strong|--bo-color-bg-surface', '.bo-btn--secondary at 1.47:1 light / 1.70 dark — 374.4'],
+  ['file-upload:--bo-color-border-strong|--bo-color-bg-surface', '::file-selector-button, same recipe as btn--secondary — 374.4'],
+  ['file-upload:--bo-color-border-strong|--bo-color-bg-muted', '.bo-file-dropzone dashed edge at 1.34/1.45 — its own comment says the border is what makes the box droppable — 374.4'],
+  ['filters:--bo-color-border-strong|--bo-color-bg-muted', '.bo-chip at 1.34/1.45; partial — the label helps, the edge still carries the affordance'],
+  ['file-upload:--bo-color-accent-solid|--bo-color-bg-selected', 'dragover edge reads 1.82-2.36 in DARK across all six presets; light passes. Three-channel cue (dashed->solid, fill, edge), so a 1.4.11 miss on one channel'],
+]);
+const edgeUncovered = new Set();
+const edgeSeen = new Set();
+
 const IGNORE_BG = new Set([
   '--bo-color-bg-muted', // header cells carry secondary text, covered
 ]);
@@ -240,6 +380,19 @@ for (const dir of ['components', 'primitives']) {
       if (fg && bg && /text|accent|danger|warning|success/.test(fg) && /bg-/.test(bg) && !IGNORE_BG.has(bg)) {
         if (!KNOWN.has(PAIR_KEY(fg, bg))) uncovered.add(`${fg} on ${bg} (${rel})`);
       }
+
+      /* EDGE side. Same rule node, so the edge and the ground it sits on are
+         the ones an element actually holds together — no cross-rule
+         resolution, which is where the phantom pairing came from. */
+      const { edge, ground } = edgePairOf(rule);
+      // An edge painted in its own fill is mass, not a boundary — exact, not a judgement.
+      if (!edge || !ground || edge === ground) return;
+      const comp = rel.replace(/^src\/css\/[a-z]+\//, '').replace(/\/[^/]+$/, '');
+      const siteKey = `${comp}:${edge}|${ground}`;
+      edgeSeen.add(siteKey);
+      if (KNOWN.has(PAIR_KEY(edge, ground))) return;
+      if (EDGE_EXEMPT.has(siteKey) || EDGE_TODO.has(siteKey)) return;
+      edgeUncovered.add(`${edge} on ${ground} (${rel}) [site key: ${siteKey}]`);
     });
   }
 }
@@ -247,6 +400,28 @@ for (const dir of ['components', 'primitives']) {
 await mkdir(join(pkgRoot, 'dist'), { recursive: true });
 await writeFile(join(pkgRoot, 'dist/contrast.json'), JSON.stringify(report, null, 2));
 
+/* A stale entry is as bad as a missing one: an exemption whose site no longer
+   paints that pairing is a decision about nothing, and it would quietly widen
+   the gate. Same rung as check-wrong-choice's staleness check. */
+const staleEdge = [...EDGE_EXEMPT.keys(), ...EDGE_TODO.keys()].filter((k) => !edgeSeen.has(k));
+if (staleEdge.length) {
+  console.error(`\ncontrast EDGE list is stale: ${staleEdge.length} entr(y/ies) name a pairing that is no longer painted:`);
+  for (const k of staleEdge) console.error('  ' + k);
+  process.exit(1);
+}
+const emptyReason = [...EDGE_EXEMPT, ...EDGE_TODO].filter(([, why]) => !why || !why.trim());
+if (emptyReason.length) {
+  console.error(`\ncontrast EDGE entr(y/ies) carry no reason: ${emptyReason.map(([k]) => k).join(', ')}`);
+  process.exit(1);
+}
+if (edgeUncovered.size) {
+  console.error(`\ncontrast EDGE coverage gap: ${edgeUncovered.size} edge pairing(s) in CSS that are neither gated, exempt, nor tracked as debt:`);
+  for (const u of edgeUncovered) console.error('  ' + u);
+  console.error('  Add a PAIRS row at 3 if the edge identifies the control, or an EDGE_EXEMPT');
+  console.error('  entry naming the other channel that does, or an EDGE_TODO entry if it should');
+  console.error('  meet 3:1 and does not yet. What the reason says is yours; that one exists is not.');
+  process.exit(1);
+}
 if (uncovered.size) {
   console.error(`\ncontrast COVERAGE gap: ${uncovered.size} token pair(s) used in CSS but not in the checked PAIRS list:`);
   for (const u of uncovered) console.error('  ' + u);
@@ -257,7 +432,7 @@ if (failures) {
   process.exit(1);
 }
 console.log(
-  `contrast check passed — ${PAIRS.length} pairs x 2 themes, TOKEN-PAIR coverage verified against component CSS`
+  `contrast check passed — ${PAIRS.length} pairs x 2 themes, TOKEN-PAIR coverage verified against component CSS;\n  ${edgeSeen.size} edge pairing(s) adjudicated: ${EDGE_EXEMPT.size} exempt with a stated reason, ${EDGE_TODO.size} tracked as debt (roadmap 374.4), the rest gated`
 );
 console.log(
   `  NOT covered by that scan: ${literalDecls} declaration(s) in ${literalFiles.size} file(s) ` +
