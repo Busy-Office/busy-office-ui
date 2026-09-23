@@ -5981,13 +5981,20 @@ canonical dead one (25 of the first sweep's 29). **273 of 1,272 attributes
          attributes named above rather than against the list it was handed.
          **Finding that the gap yields zero real dead declarations is a
          satisfying outcome** if it carries the re-run counts.
-3. [ ] **320.3 — the same idiom, two values, in two shared components.**
+3. [x] **320.3 — the same idiom, two values, in two shared components.**
        `ApiTable.astro:57` and `ClassRef.astro:44` both space a wrapping run of
        inline `<code>` chips, at `0.5rem` and `.4rem`. One decision, two
        spellings, and the 1.6px difference is invisible in a diff.
        - **Accept:** the two agree, or a recorded reason they should not.
          Unifying them is a **rendered** change a cloud wake cannot judge, so
          this needs a wake that can look at both, at 1440px and 390px.
+       - **DONE 2026-09-24 (local wake).** They agree: `ClassRef.astro` now uses
+         `var(--bo-space-2)`, the token `ApiTable.astro` already used, in place
+         of a bare `.4rem` nothing explained. Measured live on the `:8081`
+         container at 1440 and 390, light and dark: both components' chips
+         compute `margin-inline-end: 8px` (ClassRef 10, ApiTable 41 on
+         `/components/data-table/`), same-line ClassRef chips sit 8px apart,
+         no page overflow. Jev: supported 0.95.
 
 **Verified live — measured, not screenshotted.** A throwaway probe (scratchpad,
 not the repo) drove `serve-dist.mjs` + `browser-harness.mjs` over the eight

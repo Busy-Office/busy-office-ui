@@ -41,7 +41,7 @@ const rows = c.classes.map((cls: string) => [cls, role(cls)]);
   </div>
   {(c.dataAttrs.length > 0 || c.ariaAttrs.length > 0) && (
     <p class="bo-u-text-muted" style="font-size: var(--bo-font-size-sm)">
-      State attributes: {[...c.dataAttrs, ...c.ariaAttrs].map((a: string) => <code style="margin-inline-end:.4rem">{a}</code>)}
+      State attributes: {[...c.dataAttrs, ...c.ariaAttrs].map((a: string) => <code style="margin-inline-end: var(--bo-space-2)">{a}</code>)}
     </p>
   )}
 </section>
