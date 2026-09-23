@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-23 21:23 UTC
+Generated at: 2026-09-23 22:38 UTC
 
 ## Open items by slice
 
@@ -70,14 +70,13 @@ Generated at: 2026-09-23 21:23 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1758 iterations logged)
+dispatch status — counter-triggered rules (1760 iterations logged)
   Standardize   2 / 4 Continue rounds since 2026-09-24 04:15   ok
-  Objective     3 / 3 slices          since 2026-09-24 03:02   OVERDUE  [320, 345, 378]
-  -> a counter is at or past its threshold; the dispatcher should pick it
-  Optimize      3 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 144 sample(s), 8 of 47 name(s) paired across days]
+  Objective     0 / 3 slices          since 2026-09-24 06:38   ok
+  Optimize      3 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 148 sample(s), 8 of 51 name(s) paired across days]
   -> rule 5's newest comparable pair predates 3 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-19, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-19 (2026-09-22, 2026-09-23, 2026-09-24), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
-     rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (39 of 47 name(s) have only one day and are not an input to a rule that compares two runs):
+     rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (43 of 51 name(s) have only one day and are not an input to a rule that compares two runs):
        claims                      5d  2026-09-07 176 count -> 2026-09-19 203 count  +27
        gates                       4d  2026-09-07 55 count -> 2026-09-09 56 count  +1
        dispatch-region-words       3d  2026-09-08 7492 words -> 2026-09-09 7484 words  -8
@@ -107,8 +106,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-24 01:46 · Standardize · sweep · Slice 376 — 4 of 4 lanes: 1 dead style removed, 2 false passages fixed, 4 prose verdicts (enum 16->20), dissolved css group recorded, P0 376.2 + 376.4 filed · landed · 85e8c6f5
-- 2026-09-24 01:47 · Standardize · sweep · 376.8 — archive sweep: 40 slices moved verbatim; live 15,977 -> 9,301 lines; share 56.7% -> 23.8% · landed · ce10de0d
 - 2026-09-24 02:02 · Continue · bug · P0 376.2 — motion collapse stub fixed; dashboard card animation restored (minmax both states) · landed · 6ef23624
 - 2026-09-24 02:14 · Continue · bug · P0 376.4 — quantity/unit joint skips a hidden input (initGroupedNumber) · landed · e1ba6e8d
 - 2026-09-24 03:02 · Objective · grill · Slice 377 — grill of 373-376: 47/47 claims hold; P0 377.1 + 377.2, revision-blind completion gate, adoption ~zero, owner calls 377.5/377.6 · logged · faf331b4
@@ -117,6 +114,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-24 04:15 · Standardize · sweep · 378 — Standardize sweep 4 of 4 lanes, all clean (lane 2 input touched by 376.2/376.4) · logged · 456f9966
 - 2026-09-24 04:40 · Continue · build · 320.3 — ClassRef chip spacing uses var(--bo-space-2) like ApiTable (6.4px -> 8px) · landed · 880c2b2b
 - 2026-09-24 05:23 · Continue · build · 345.1 — .bo-motion-spin owns display:inline-block; recipe spins in flow; demo glyph no longer orbits · landed · b29e4179
+- 2026-09-24 06:38 · Objective · grill · 379 — Objective grill of Slices 345, 378: 26 claims reproduce, 12 of 12 findings survive; hidden-spinner and ACR-grammar fixes, 345.1 migration note, four records corrected · logged · 2fad3cc7
+- 2026-09-24 06:38 · Meta · refusal · reverting 345.1 or narrowing it to inline elements — the block shapes it breaks are unused here and one declaration fixes them · refused · 2fad3cc7
 
 ## Sunset test
 

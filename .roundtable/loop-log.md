@@ -1764,3 +1764,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-24 04:15 · Standardize · sweep · 378 — Standardize sweep 4 of 4 lanes, all clean (lane 2 input touched by 376.2/376.4) · logged · 456f9966
 - 2026-09-24 04:40 · Continue · build · 320.3 — ClassRef chip spacing uses var(--bo-space-2) like ApiTable (6.4px -> 8px) · landed · 880c2b2b
 - 2026-09-24 05:23 · Continue · build · 345.1 — .bo-motion-spin owns display:inline-block; recipe spins in flow; demo glyph no longer orbits · landed · b29e4179
+- 2026-09-24 06:38 · Objective · grill · 379 — Objective grill of Slices 345, 378: 26 claims reproduce, 12 of 12 findings survive; hidden-spinner and ACR-grammar fixes, 345.1 migration note, four records corrected · logged · 2fad3cc7
+- 2026-09-24 06:38 · Meta · refusal · reverting 345.1 or narrowing it to inline elements — the block shapes it breaks are unused here and one declaration fixes them · refused · 2fad3cc7

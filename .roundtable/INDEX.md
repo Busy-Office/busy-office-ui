@@ -15,7 +15,7 @@ Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_
 - [`surface-baseline.md`](surface-baseline.md) — the scored-surface baseline
 - [`surface-review-rubric.md`](surface-review-rubric.md) — how a surface is scored
 
-## Findings — 210 snapshots, newest first
+## Findings — 211 snapshots, newest first
 
 A **·** marks a file nothing outside `.roundtable/` links to. That is not a defect: a grill can settle a question without anything needing to cite it afterwards. It is here so the uncited set stays visible instead of growing unnoticed.
 
@@ -29,6 +29,7 @@ A **·** marks a file nothing outside `.roundtable/` links to. That is not a def
 | — | [0.3.0 release brief — read in under a minute (2026-08-22)](release-0.3.0-brief.md) | ✓ |
 | — | [Suite score — the screen ledger](suite-score.md) | ✓ |
 | — | [Verification discipline — the worked examples](verification-discipline.md) | ✓ |
+| 2026-09-24 | [Objective grill — Slices 345, 378 (2026-09-24, local wake)](grill-objective-345-378-2026-09-24.md) | ✓ |
 | 2026-09-24 | [Objective grill — Slices 373, 374, 375, 376 (2026-09-24, local wake)](grill-objective-373-374-375-376-2026-09-24.md) | ✓ |
 | 2026-09-23 | [Should the launcher's text filter be extracted? — no, and here is the measurement](launcher-filter-extraction-2026-09-23.md) | ✓ |
 | 2026-09-21 | [Grill — putting Kev (kev-0.5b) into the loop: dispatcher, gate, first-level decision](grill-kev-in-the-loop-2026-09-21.md) | · |
@@ -243,4 +244,4 @@ The signature of a directory that has outgrown retrieval is the same subject inv
 
 Two files on one subject is usually a deliberate follow-up (a grill and its sign-off). Three is worth a look.
 
-— 218 files, 158 cited from outside, 61 uncited snapshots, 4 repeated subject(s).
+— 219 files, 159 cited from outside, 61 uncited snapshots, 4 repeated subject(s).
