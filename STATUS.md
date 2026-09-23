@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-23 12:46 UTC
+Generated at: 2026-09-23 16:42 UTC
 
 ## Open items by slice
 
@@ -50,20 +50,22 @@ Generated at: 2026-09-23 12:46 UTC
   - 373.8 — docs IA: collapse 17 sidebar groups into the prompt's seven (Start here / Foundations / Components / Patterns and layouts / Integration / Reference / Contributor and decision history). OWNER CALL.
 - **Slice 374** (1 open)
   - 374.4 — `.bo-btn--secondary` standing alone is identified almost entirely by a 1.47:1 border, the contrast gate structurally cannot see it, and the published ACR says it can.
+- **Slice 375** (1 open)
+  - 375.11 — what 375.9 measured and did not fix.
 - **Slice —** (2 open)
-  - P0 · 375.9 — any control below a grid loses its first click while a cell's error message is shown.
+  - P0 · 375.10 — a real mouse or touch press on a combobox option never commits it; only the keyboard works.
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1743 iterations logged)
-  Standardize  11 / 4 Continue rounds since 2026-09-22 20:55   OVERDUE
+dispatch status — counter-triggered rules (1746 iterations logged)
+  Standardize  12 / 4 Continue rounds since 2026-09-22 20:55   OVERDUE
   Objective     3 / 3 slices          since 2026-09-09 10:55   OVERDUE  [373, 374, 375]
   -> a counter is at or past its threshold; the dispatcher should pick it
-  Optimize      2 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 144 sample(s), 8 of 47 name(s) paired across days]
-  -> rule 5's newest comparable pair predates 2 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-19, not this one — record a metric or say the rule could not be evaluated.
-     the unit is DISTINCT LOG DATES after 2026-09-19 (2026-09-22, 2026-09-23), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
+  Optimize      3 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 144 sample(s), 8 of 47 name(s) paired across days]
+  -> rule 5's newest comparable pair predates 3 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-19, not this one — record a metric or say the rule could not be evaluated.
+     the unit is DISTINCT LOG DATES after 2026-09-19 (2026-09-22, 2026-09-23, 2026-09-24), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (39 of 47 name(s) have only one day and are not an input to a rule that compares two runs):
        claims                      5d  2026-09-07 176 count -> 2026-09-19 203 count  +27
        gates                       4d  2026-09-07 55 count -> 2026-09-09 56 count  +1
@@ -94,9 +96,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-23 19:11 · Continue · build · 374.5 — the default ./css export shipped the framework's inline reasoning: comments measured 80.5 kB gz, 98% of the gap to index.min.css. Build now strips them from dist (index.css 99.5->16.7, rf-essentials 45.7->8.2, whole payload 401.1->185.8 kB gz) while src/css keeps every word. Five budget rows re-based, including yesterday's 97.3->107.5 raise, recorded as overturned · landed · 6acbfe70
-- 2026-09-23 19:11 · Meta · refusal · a blanket comment strip — check:deprecated-icons caught that icon.css's four DEPRECATED blocks are read out of the SHIPPED artifact as user-facing contract, so the rule became the CSS bang-comment convention instead · refused · 6acbfe70
-- 2026-09-23 19:54 · Continue · build · 375.8 + 375.6 — validated the Jev threshold at n=20 (no clean cut exists: a true and a false case both read 0.81; 0.85 gives 0 false positives / 1 false negative, any cut <=0.80 flips that, so the asymmetry is what the cut buys) and refused 375.6 after re-measuring its premise: the duplicated CI build is 71s, 1.2 of ~14.7 machine-minutes, about 8% of the run · landed · de4cbaeb
 - 2026-09-23 19:54 · Meta · refusal · restructuring CI to build once and share dist — measured at 8% of the run, the large duplication is npm ci which setup-node already caches, shard 5 does not merely read dist, and the Accept's figures only exist after a real CI run · refused · de4cbaeb
 - 2026-09-23 20:12 · Continue · build · 373.9 refused with the count (the '<8ch at 390px' predicate is true of 125 of 128 pages; the premise IS true — check:layout passes on a 0px-wide name in a 714px row — but no threshold separates the defect from four-column tables, and the best predicate scores 0 true / 12 false positives) and 373.10's blind re-score of file-upload interaction HELD AT 3 · landed · f7bc8777
 - 2026-09-23 20:12 · Meta · refusal · building a vertical-collapse gate for 373.9 — 94.11's ceremony case in mirror image: there a predicate was uniformly true, here no threshold exists at all · refused · f7bc8777
@@ -104,6 +103,9 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-23 20:36 · Meta · refusal · 375.7's <12-char clause gate — base rate 0 of 39 after the fix · refused · e7f69729
 - 2026-09-23 20:40 · Continue · build · 375.5 — Qty-to-Add pointer path reproduced (0/6 direct, 6/6 blur-first); cause is the container reserve, not row height; filed P0 375.9 · triaged · e41fddfb
 - 2026-09-23 20:46 · Continue · build · 375.4 — check-sample-classes gate; the one live instance (bo-label, 33 days) fixed; 0 of 2,382 sample classes unknown · landed · 0edae5c7
+- 2026-09-24 00:42 · Continue · bug · P0 375.9 — anchored cell message + static fallback reserve; nothing resizes on focus/blur; 0 of 4944 corpus presses lost · landed · 986d6399
+- 2026-09-24 00:42 · Meta · refusal · 375.9 pointer-events:none on the floated message — fired the hidden Remove button · refused · 986d6399
+- 2026-09-24 00:42 · Meta · refusal · 375.9 delay/:active latch, reserve-follows-error, negative-margin overlap, static reserve everywhere · refused · 986d6399
 
 ## Sunset test
 

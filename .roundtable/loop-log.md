@@ -1749,3 +1749,6 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-23 20:36 · Meta · refusal · 375.7's <12-char clause gate — base rate 0 of 39 after the fix · refused · e7f69729
 - 2026-09-23 20:40 · Continue · build · 375.5 — Qty-to-Add pointer path reproduced (0/6 direct, 6/6 blur-first); cause is the container reserve, not row height; filed P0 375.9 · triaged · e41fddfb
 - 2026-09-23 20:46 · Continue · build · 375.4 — check-sample-classes gate; the one live instance (bo-label, 33 days) fixed; 0 of 2,382 sample classes unknown · landed · 0edae5c7
+- 2026-09-24 00:42 · Continue · bug · P0 375.9 — anchored cell message + static fallback reserve; nothing resizes on focus/blur; 0 of 4944 corpus presses lost · landed · 986d6399
+- 2026-09-24 00:42 · Meta · refusal · 375.9 pointer-events:none on the floated message — fired the hidden Remove button · refused · 986d6399
+- 2026-09-24 00:42 · Meta · refusal · 375.9 delay/:active latch, reserve-follows-error, negative-margin overlap, static reserve everywhere · refused · 986d6399
