@@ -12,8 +12,10 @@ for the plan, `LOOPS.md` for autonomous-work orchestration.
   `ROADMAP.md` holds what is OPEN; `ROADMAP-archive.md` holds closed slices
   verbatim, with a one-line pointer left behind. This is a **recurring sweep**:
   110.4 moved 83 slices, the live file grew back to 9,824 lines in three days,
-  and a second pass moved 44 more (→ 1,094). **It is 15,353 lines again as of
-  2026-09-22, so the sweep is overdue; 249.12 is the open item for its trigger.**
+  and a second pass moved 44 more (→ 1,094). **The twelfth sweep (376.8,
+  2026-09-24) took it from 15,977 lines back to 9,314; it regrows, so read
+  `roadmap_scope.py` rather than this sentence. 249.12 is the open item for its
+  trigger.**
   Splitting a markdown file is not
   what the database rule forbids — the archive is still markdown, still
   reviewed, still diffed. `check:slice-refs` keeps the citations pointing into it
