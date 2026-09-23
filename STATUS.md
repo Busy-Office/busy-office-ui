@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-23 19:02 UTC
+Generated at: 2026-09-23 19:36 UTC
 
 ## Open items by slice
 
@@ -66,8 +66,7 @@ Generated at: 2026-09-23 19:02 UTC
   - 377.12 — the preview's provenance is truthful.
   - 377.13 — 375.9's corpus figure is re-runnable.
   - 377.14 — the low items, one bundle.
-- **Slice —** (5 open)
-  - P0 · 377.1 — a real right-click does not open the context menu.
+- **Slice —** (4 open)
   - P0 · 377.2 — the app-launch launcher's filter desyncs after Escape.
   - OWNER · 377.5 — release the unreleased fixes, or record why not.
   - OWNER · 377.6 — is busy-office-erp the named first user?
@@ -76,8 +75,10 @@ Generated at: 2026-09-23 19:02 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1753 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-09-24 01:47   ok
+dispatch status — counter-triggered rules (1754 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-09-24 01:47   ok
+  !! 1 Objective-closing round(s) since the last Objective round and none names a slice.
+     At the measured 24% slice-less rate that is p=24.2% if the parser is fine — not yet evidence of one; a slice-less row is ordinary here.
   Objective     0 / 3 slices          since 2026-09-24 03:02   ok
   Optimize      3 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 144 sample(s), 8 of 47 name(s) paired across days]
   -> rule 5's newest comparable pair predates 3 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-19, not this one — record a metric or say the rule could not be evaluated.
@@ -112,7 +113,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-24 00:42 · Continue · bug · P0 375.9 — anchored cell message + static fallback reserve; nothing resizes on focus/blur; 0 of 4944 corpus presses lost · landed · 986d6399
 - 2026-09-24 00:42 · Meta · refusal · 375.9 pointer-events:none on the floated message — fired the hidden Remove button · refused · 986d6399
 - 2026-09-24 00:42 · Meta · refusal · 375.9 delay/:active latch, reserve-follows-error, negative-margin overlap, static reserve everywhere · refused · 986d6399
 - 2026-09-24 01:05 · Continue · bug · P0 375.10 — combobox options commit on mouse/touch (mousedown kept off the option); money currency combobox live · landed · 91254122
@@ -122,6 +122,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-24 02:02 · Continue · bug · P0 376.2 — motion collapse stub fixed; dashboard card animation restored (minmax both states) · landed · 6ef23624
 - 2026-09-24 02:14 · Continue · bug · P0 376.4 — quantity/unit joint skips a hidden input (initGroupedNumber) · landed · e1ba6e8d
 - 2026-09-24 03:02 · Objective · grill · Slice 377 — grill of 373-376: 47/47 claims hold; P0 377.1 + 377.2, revision-blind completion gate, adoption ~zero, owner calls 377.5/377.6 · logged · faf331b4
+- 2026-09-24 03:36 · Continue · bug · P0 377.1 — real right-click opens the context menu (opens after release when asked mid-press) · landed · 0ade896e
 
 ## Sunset test
 
