@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-23 17:05 UTC
+Generated at: 2026-09-23 17:36 UTC
 
 ## Open items by slice
 
@@ -58,8 +58,8 @@ Generated at: 2026-09-23 17:05 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1747 iterations logged)
-  Standardize  13 / 4 Continue rounds since 2026-09-22 20:55   OVERDUE
+dispatch status — counter-triggered rules (1748 iterations logged)
+  Standardize  14 / 4 Continue rounds since 2026-09-22 20:55   OVERDUE
   Objective     3 / 3 slices          since 2026-09-09 10:55   OVERDUE  [373, 374, 375]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      3 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 144 sample(s), 8 of 47 name(s) paired across days]
@@ -95,7 +95,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-23 20:12 · Continue · build · 373.9 refused with the count (the '<8ch at 390px' predicate is true of 125 of 128 pages; the premise IS true — check:layout passes on a 0px-wide name in a 714px row — but no threshold separates the defect from four-column tables, and the best predicate scores 0 true / 12 false positives) and 373.10's blind re-score of file-upload interaction HELD AT 3 · landed · f7bc8777
 - 2026-09-23 20:12 · Meta · refusal · building a vertical-collapse gate for 373.9 — 94.11's ceremony case in mirror image: there a predicate was uniformly true, here no threshold exists at all · refused · f7bc8777
 - 2026-09-23 20:36 · Continue · build · 375.7 — wrong-choice extraction takes the whole clause; 3 empty 'Not for' cells now carry their object · landed · e7f69729
 - 2026-09-23 20:36 · Meta · refusal · 375.7's <12-char clause gate — base rate 0 of 39 after the fix · refused · e7f69729
@@ -105,6 +104,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-24 00:42 · Meta · refusal · 375.9 pointer-events:none on the floated message — fired the hidden Remove button · refused · 986d6399
 - 2026-09-24 00:42 · Meta · refusal · 375.9 delay/:active latch, reserve-follows-error, negative-margin overlap, static reserve everywhere · refused · 986d6399
 - 2026-09-24 01:05 · Continue · bug · P0 375.10 — combobox options commit on mouse/touch (mousedown kept off the option); money currency combobox live · landed · 91254122
+- 2026-09-24 01:36 · Continue · bug · 373.3 + 373.4 remainders — uncommitted hunks behind two closed items (ACR 2.5.7 row, shell-band restatements, drawer patch) landed; HEAD builds green alone · landed · a1bc5663
 
 ## Sunset test
 
