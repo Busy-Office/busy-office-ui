@@ -37,9 +37,16 @@ pushed (`29365089`). Rule 1 is clear.
 **Rule 2 ran at 04:15:** Slice 378, 4 of 4 lanes, all clean. Counters now
 Standardize 0 / 4, Objective 1 / 3.
 
-**Next wake:** rules 1-3 have nothing; **rule 4** — the oldest open item
-across all slices that is not owner-blocked (read `ROADMAP.md`, skip the
-owner list below).
+**Rule 4 since then:** 320.3 (ClassRef chip spacing -> the ApiTable token)
+and 345.1 (`.bo-motion-spin` owns `display: inline-block`; the demo glyph no
+longer orbits) LANDED and pushed (`7d0ccc44`).
+
+**Next wake:** rule 4 again — the oldest open item not owner-blocked. **Skip
+335.1 unless the owner is live in the session:** its only remaining step is
+creating a throwaway public Discussion in the owner's repository, and a
+scheduled wake does not publish to a shared public space without someone to
+authorise it (the item's "filing one is allowed" was written by a wake, not
+the owner). Skipped 2026-09-24 05:03 for that reason.
 
 **Row-label trap, found by `dispatch_status.py`:** record rows that begin
 `P0 377.1 — …` name no slice to the rule-3 counter (it warns "none names a
