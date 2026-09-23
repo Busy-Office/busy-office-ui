@@ -22,30 +22,23 @@ survives none.
 
 ## GOAL — set 2026-09-23 (second, owner-requested). Clear the three armed dispatcher rules, in rule order.
 
-The first 2026-09-23 goal (every non-owner-blocked item in 373/374/375) closed
-22 of 22 at `dcec6ea3`. This one is the dispatcher's own order, no reordering:
+**STATUS 2026-09-24 02:20 — rules 1 and 2 cleared; rule 3 in flight.**
 
-1. **Rule 1 — P0 375.9.** Any control below a data-table loses its first
-   click while a cell's error message is shown. Reproduced 0 of 6 trusted
-   presses; cause is `.bo-data-table-container`'s `padding-block-end:
-   calc(6lh + …)` reserve (data-table.css, 190.1's `:has(… :focus-within
-   .bo-form-field__message)` rule) collapsing on the blur the mousedown
-   causes. The row height does NOT change — 173.2 holds; do not "fix" the
-   row. Accept: `check:claims` case with real mouse down/up, red-proved;
-   173.2's and 190.1's properties still hold.
-   **LANDED 2026-09-24** — anchored message + static fallback reserve,
-   dialog/offcanvas rest at `none`; +14 `check:claims` cases, each red-proved.
-   It filed **P0 375.10** (combobox options could not be picked by mouse or
-   touch) — LANDED 2026-09-24 as well. Rule 1 is clear; next is rule 2.
-   375.11 holds the measured residuals (Firefox unverified, classic-scrollbar
-   fallback, frozen columns) and is NOT a P0.
-
-2. **Rule 2 — Standardize, 8/4 overdue.** Four lanes via
-   `scripts/loops/standardize_lanes.py`; quote each lane's own figure;
-   multi-round until a clean pass.
-3. **Rule 3 — Objective grill of 373/374/375** (armed 3/3). Resolve every
-   label first (LOOPS.md §6 step 0), check `.roundtable/INDEX.md` for repeated
-   subjects, land a scored report in `.roundtable/`.
+- **Rule 1 (P0), cleared four times over:** 375.9 (anchored cell message +
+  static fallback; nothing resizes on focus/blur), 375.10 (combobox options
+  commit by mouse/touch), and — filed by the Standardize sweep — 376.2
+  (collapse stub + the dashboard card that had stopped animating) and 376.4
+  (grouped quantity keeps its unit joint). Plus the 373.3/373.4 remainders
+  (hunks behind two closed items that were never committed). All pushed.
+- **Rule 2 (Standardize), cleared:** Slice 376, 4 of 4 lanes, and the twelfth
+  archive sweep (376.8: 40 slices, ROADMAP.md 15,977 -> 9,314 lines).
+- **Rule 3 (Objective grill of 373/374/375/376), IN FLIGHT:** workflow
+  `wf_50c977f1-ac4` (4 finders + 4 adversarial verifiers). Output becomes
+  `.roundtable/grill-objective-373-374-375-376-2026-09-24.md` and a slice
+  for its findings. If a context clear lands first: re-run that grill from
+  its script; nothing of it is committed yet.
+- **Open, not P0:** 375.11 (375.9's residuals), 376.5 (launcher header
+  decision), 376.7 (ratchet counts noise as a cut).
 
 **UNCOMMITTED FILES, classified 2026-09-24 — do not trust an older label.**
 The 373.3 and 373.4 hunks that sat here (DESIGN.md, Gallery.astro,
