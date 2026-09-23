@@ -1754,3 +1754,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-24 00:42 · Meta · refusal · 375.9 delay/:active latch, reserve-follows-error, negative-margin overlap, static reserve everywhere · refused · 986d6399
 - 2026-09-24 01:05 · Continue · bug · P0 375.10 — combobox options commit on mouse/touch (mousedown kept off the option); money currency combobox live · landed · 91254122
 - 2026-09-24 01:36 · Continue · bug · 373.3 + 373.4 remainders — uncommitted hunks behind two closed items (ACR 2.5.7 row, shell-band restatements, drawer patch) landed; HEAD builds green alone · landed · a1bc5663
+- 2026-09-24 01:46 · Standardize · sweep · Slice 376 — 4 of 4 lanes: 1 dead style removed, 2 false passages fixed, 4 prose verdicts (enum 16->20), dissolved css group recorded, P0 376.2 + 376.4 filed · landed · 85e8c6f5

@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-23 17:36 UTC
+Generated at: 2026-09-23 17:46 UTC
 
 ## Open items by slice
 
@@ -52,15 +52,20 @@ Generated at: 2026-09-23 17:36 UTC
   - 374.4 — `.bo-btn--secondary` standing alone is identified almost entirely by a 1.47:1 border, the contrast gate structurally cannot see it, and the published ACR says it can.
 - **Slice 375** (1 open)
   - 375.11 — what 375.9 measured and did not fix.
-- **Slice —** (1 open)
+- **Slice 376** (2 open)
+  - 376.5 — the app-launch launcher hand-rolls a dialog header.
+  - 376.7 — the lane-4 ratchet counts any net shrink as a cut.
+- **Slice —** (3 open)
+  - P0 · 376.2 — `.bo-motion-collapse` keeps the bare `0fr` closed track that 52.2 fixed in the widget copy only.
+  - P0 · 376.4 — `initGroupedNumber` breaks the quantity/unit-select joint.
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1748 iterations logged)
-  Standardize  14 / 4 Continue rounds since 2026-09-22 20:55   OVERDUE
-  Objective     3 / 3 slices          since 2026-09-09 10:55   OVERDUE  [373, 374, 375]
+dispatch status — counter-triggered rules (1749 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-09-24 01:46   ok
+  Objective     4 / 3 slices          since 2026-09-09 10:55   OVERDUE  [373, 374, 375, 376]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      3 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 144 sample(s), 8 of 47 name(s) paired across days]
   -> rule 5's newest comparable pair predates 3 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-19, not this one — record a metric or say the rule could not be evaluated.
@@ -95,7 +100,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-23 20:12 · Meta · refusal · building a vertical-collapse gate for 373.9 — 94.11's ceremony case in mirror image: there a predicate was uniformly true, here no threshold exists at all · refused · f7bc8777
 - 2026-09-23 20:36 · Continue · build · 375.7 — wrong-choice extraction takes the whole clause; 3 empty 'Not for' cells now carry their object · landed · e7f69729
 - 2026-09-23 20:36 · Meta · refusal · 375.7's <12-char clause gate — base rate 0 of 39 after the fix · refused · e7f69729
 - 2026-09-23 20:40 · Continue · build · 375.5 — Qty-to-Add pointer path reproduced (0/6 direct, 6/6 blur-first); cause is the container reserve, not row height; filed P0 375.9 · triaged · e41fddfb
@@ -105,6 +109,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-24 00:42 · Meta · refusal · 375.9 delay/:active latch, reserve-follows-error, negative-margin overlap, static reserve everywhere · refused · 986d6399
 - 2026-09-24 01:05 · Continue · bug · P0 375.10 — combobox options commit on mouse/touch (mousedown kept off the option); money currency combobox live · landed · 91254122
 - 2026-09-24 01:36 · Continue · bug · 373.3 + 373.4 remainders — uncommitted hunks behind two closed items (ACR 2.5.7 row, shell-band restatements, drawer patch) landed; HEAD builds green alone · landed · a1bc5663
+- 2026-09-24 01:46 · Standardize · sweep · Slice 376 — 4 of 4 lanes: 1 dead style removed, 2 false passages fixed, 4 prose verdicts (enum 16->20), dissolved css group recorded, P0 376.2 + 376.4 filed · landed · 85e8c6f5
 
 ## Sunset test
 
