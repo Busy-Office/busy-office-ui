@@ -47,6 +47,16 @@ The first 2026-09-23 goal (every non-owner-blocked item in 373/374/375) closed
    label first (LOOPS.md §6 step 0), check `.roundtable/INDEX.md` for repeated
    subjects, land a scored report in `.roundtable/`.
 
+**UNCOMMITTED FILES, classified 2026-09-24 — do not trust an older label.**
+The 373.3 and 373.4 hunks that sat here (DESIGN.md, Gallery.astro,
+primitives.astro, extract-acr.mjs) were NOT owner checkpoint; they landed in
+`24ca80b0` / `5d0146f5`. What remains uncommitted is the owner's 2026-09-20
+procurement-journey checkpoint (examples/erp-suite/*, journey/, check-journey.mjs,
+screen-kit.astro, suite.json, gen-suite-index.mjs, erp-suite-gaps.md,
+package.json's suite:journey) and the 2026-09-21 Jev shadow gate
+(.gitignore line, scripts/loops/review_depth_gate.*, grill-kev-in-the-loop).
+Both await an owner decision to commit; HEAD builds green without them.
+
 **Owner-blocked, do not touch:** 374.4 (border-strong token re-value; Jev
 escalated it at 0.54, so it is a visual-weight preference), 373.6 (dock
 hide-on-upward-scroll; two refusals stand and the reversal is unwritten),

@@ -1300,6 +1300,7 @@ before quoting a change.
          and the Kanban case has no lexical marker (94.11).
 
 3. [x] **373.3 — the app-shell contract, on the page that already owns it, and
+       - **CORRECTION 2026-09-24 — part of this item's change was never committed** (DESIGN.md, /base/primitives and the Gallery drawer patch); it sat in the working tree, misfiled as owner checkpoint, so clean builds did not carry it. Landed in `24ca80b0`; found by the Standardize completeness critic.
        the two shipped CSS leaks the shell measurement found.** Measured on the
        fresh dist: (i) an `<dialog class="bo-offcanvas">` drawer holding a
        `bo-sidebar-nav` placed INSIDE a `.bo-app-shell` narrower than the rail
@@ -1336,6 +1337,7 @@ before quoting a change.
          without the APG keyboard model.
 
 4. [x] **373.4 — the shipped move/remove floor loses focus at completion, in
+       - **CORRECTION 2026-09-24 — part of this item's change was never committed** (the ACR 2.5.7 row in extract-acr.mjs); it sat in the working tree, misfiled as owner checkpoint, so clean builds did not carry it. Landed in `5d0146f5`; found by the Standardize completeness critic.
        the framework and in the copyable sample.** Measured with trusted keys:
        Enter on `tag-input`'s remove button → chip removed, `activeElement ===
        body` (`tag-input.ts` `removeTag` calls `tag.remove()` with no handoff);
