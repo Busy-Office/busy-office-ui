@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-23 17:47 UTC
+Generated at: 2026-09-23 18:02 UTC
 
 ## Open items by slice
 
@@ -55,16 +55,15 @@ Generated at: 2026-09-23 17:47 UTC
 - **Slice 376** (2 open)
   - 376.5 — the app-launch launcher hand-rolls a dialog header.
   - 376.7 — the lane-4 ratchet counts any net shrink as a cut.
-- **Slice —** (3 open)
-  - P0 · 376.2 — `.bo-motion-collapse` keeps the bare `0fr` closed track that 52.2 fixed in the widget copy only.
+- **Slice —** (2 open)
   - P0 · 376.4 — `initGroupedNumber` breaks the quantity/unit-select joint.
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1750 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-09-24 01:47   ok
+dispatch status — counter-triggered rules (1751 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-09-24 01:47   ok
   Objective     4 / 3 slices          since 2026-09-09 10:55   OVERDUE  [373, 374, 375, 376]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      3 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 144 sample(s), 8 of 47 name(s) paired across days]
@@ -100,7 +99,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-23 20:36 · Meta · refusal · 375.7's <12-char clause gate — base rate 0 of 39 after the fix · refused · e7f69729
 - 2026-09-23 20:40 · Continue · build · 375.5 — Qty-to-Add pointer path reproduced (0/6 direct, 6/6 blur-first); cause is the container reserve, not row height; filed P0 375.9 · triaged · e41fddfb
 - 2026-09-23 20:46 · Continue · build · 375.4 — check-sample-classes gate; the one live instance (bo-label, 33 days) fixed; 0 of 2,382 sample classes unknown · landed · 0edae5c7
 - 2026-09-24 00:42 · Continue · bug · P0 375.9 — anchored cell message + static fallback reserve; nothing resizes on focus/blur; 0 of 4944 corpus presses lost · landed · 986d6399
@@ -110,6 +108,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-24 01:36 · Continue · bug · 373.3 + 373.4 remainders — uncommitted hunks behind two closed items (ACR 2.5.7 row, shell-band restatements, drawer patch) landed; HEAD builds green alone · landed · a1bc5663
 - 2026-09-24 01:46 · Standardize · sweep · Slice 376 — 4 of 4 lanes: 1 dead style removed, 2 false passages fixed, 4 prose verdicts (enum 16->20), dissolved css group recorded, P0 376.2 + 376.4 filed · landed · 85e8c6f5
 - 2026-09-24 01:47 · Standardize · sweep · 376.8 — archive sweep: 40 slices moved verbatim; live 15,977 -> 9,301 lines; share 56.7% -> 23.8% · landed · ce10de0d
+- 2026-09-24 02:02 · Continue · bug · P0 376.2 — motion collapse stub fixed; dashboard card animation restored (minmax both states) · landed · 6ef23624
 
 ## Sunset test
 
