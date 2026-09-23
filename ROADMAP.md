@@ -384,7 +384,7 @@ were `[x]` on hunks that were never committed (the ACR 2.5.7 row; DESIGN.md,
        (the `js` cell, the `notes` list) as generated — richtext 492 words,
        data-table 434, file-upload 275 — and no verdict flips at this
        revision; recorded so the next flip is read with it in mind.
-4. [ ] **P0 · 376.4 — `initGroupedNumber` breaks the quantity/unit-select joint.**
+4. [x] **P0 · 376.4 — `initGroupedNumber` breaks the quantity/unit-select joint.**
        It inserts its generated hidden input directly after the field
        (`input.after(hidden)` in `grouped-number.ts`), so
        `.bo-quantity__input:has(+ .bo-quantity__unit-select)` (374.1's joint)
@@ -394,6 +394,17 @@ were `[x]` on hunks that were never committed (the ACR 2.5.7 row; DESIGN.md,
        - **Accept:** reproduced on real framework markup in a browser, then
          fixed so the joint holds with and without `initGroupedNumber`,
          asserted in `check:claims` and red-proved.
+       - **DONE 2026-09-24.** Reproduced on `/components/quantity/` (which
+         loads the behaviour): a named, grouped field beside a unit-select
+         measured 6px radii, a 1px edge and an 8px gap against the page's own
+         ungrouped control's 0/0/0. Fixed in CSS rather than JS — the joint now
+         also matches `+ [type="hidden"] + .bo-quantity__unit-select`, the
+         convention `money.css` already keys on (`:not([type="hidden"])`), and
+         it covers a server-rendered hidden input too; moving the hidden input
+         in JS would have fixed only this one writer. `check:claims` +1, red on
+         the unfixed build, green after; slice 374's joint claims still pass.
+         Live at 1440/390 light/dark. Jev round 2: supported 0.89 (A 0.94, B1
+         0.96, B2 0.93, B3 0.94); round 1 read 0.83 with B's halves unstated.
 5. [ ] **376.5 — the app-launch launcher hand-rolls a dialog header.** A
        `form.bo-cluster` with inline padding plus an `<h2>` whose 18px comes
        from the docs chrome's `.demo h2`, which a consumer's page will not

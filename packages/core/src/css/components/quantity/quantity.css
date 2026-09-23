@@ -163,15 +163,20 @@
      key off `+` adjacency, so an unexpected order simply produces two
      separate rounded controls rather than a mis-drawn joint. Fails soft,
      which is why this needs no guard. */
+  /* A hidden input may sit between the two (roadmap 376.4): initGroupedNumber
+     moves a named field's `name` onto a generated hidden input placed right
+     after it, and a server-rendered form may do the same. Hidden inputs render
+     nothing, so the joint skips one — the convention money.css already keys
+     on with `:not([type="hidden"])`. */
   .bo-quantity:not(:has(.bo-quantity__step))
-    .bo-quantity__input:has(+ .bo-quantity__unit-select) {
+    .bo-quantity__input:has(+ .bo-quantity__unit-select, + [type="hidden"] + .bo-quantity__unit-select) {
     border-start-end-radius: 0;
     border-end-end-radius: 0;
     border-inline-end: none;
   }
 
   .bo-quantity:not(:has(.bo-quantity__step))
-    .bo-quantity__input + .bo-quantity__unit-select {
+    :is(.bo-quantity__input + .bo-quantity__unit-select, .bo-quantity__input + [type="hidden"] + .bo-quantity__unit-select) {
     margin-inline-start: 0;
     border-start-start-radius: 0;
     border-end-start-radius: 0;

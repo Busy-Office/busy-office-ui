@@ -36,6 +36,11 @@ pin.
 
 ### Fixed
 
+- **A grouped quantity stays joined to its unit select.** With
+  `initGroupedNumber()` on a named quantity field, the generated hidden input
+  sat between the field and its `__unit-select` and split the joined control
+  into two rounded boxes. The joint now skips a hidden input. Roadmap 376.4.
+
 - **Collapses close all the way, and animate.** `.bo-motion-collapse` left a
   stub the height of its child's padding when closed, and the collapsible
   dashboard card snapped shut instead of animating. Both now use

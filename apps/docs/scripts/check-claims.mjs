@@ -3752,6 +3752,40 @@ const card = await collapseRun('[aria-controls="collapse-demo-body"]', '#collaps
 check('dashboard: a collapsible card animates closed rather than snapping, and closes to 0px (376.2)',
   card.open > 0 && card.closed === 0 && card.state === 'closed' && card.intermediate > 0, JSON.stringify(card));
 
+/* 376.4 — the qty | unit joint survives initGroupedNumber. The behaviour
+   moves a named field's `name` onto a generated hidden input placed right
+   after the field, which broke the `+` adjacency the joint keys off: two
+   rounded controls with a gap instead of one. The control is the page's own
+   ungrouped unit-select demo, measured in the same run. */
+await visit('/components/quantity/', { width: DESKTOP_WIDTH, height: 1200 });
+const joint = await page.evaluate(async () => {
+  const measure = (q) => {
+    const i = q.querySelector('.bo-quantity__input'), sel = q.querySelector('.bo-quantity__unit-select');
+    const ci = getComputedStyle(i), cs = getComputedStyle(sel);
+    return { inRadius: ci.borderStartEndRadius, inEdge: ci.borderInlineEndWidth, selRadius: cs.borderStartStartRadius,
+      gap: Math.round(sel.getBoundingClientRect().left - i.getBoundingClientRect().right),
+      hiddenBetween: i.nextElementSibling?.type === 'hidden' };
+  };
+  const control = [...document.querySelectorAll('.bo-quantity')].find((q) =>
+    q.querySelector('.bo-quantity__unit-select') && !q.querySelector('.bo-quantity__step') && !q.querySelector('[data-grouped]'));
+  const host = document.createElement('div');
+  host.innerHTML = `<div class="bo-quantity"><input class="bo-input bo-quantity__input" type="number" value="1250" step="1"
+    name="qty" data-grouped data-locale="en-US" aria-label="Quantity"><select class="bo-select bo-quantity__unit-select"
+    aria-label="Unit"><option>kg</option></select></div>`;
+  (control?.parentElement ?? document.querySelector('main')).append(host);
+  const q = host.firstElementChild;
+  q.querySelector('input').focus();
+  await new Promise((r) => setTimeout(r, 50));
+  q.querySelector('input').blur();
+  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  return { control: control ? measure(control) : null, grouped: measure(q) };
+});
+check('quantity: a grouped, named field keeps the qty | unit joint — same radii, edge and zero gap as the ungrouped control (376.4)',
+  !!joint.control && joint.grouped.hiddenBetween && joint.control.gap === 0 &&
+    joint.grouped.inRadius === joint.control.inRadius && joint.grouped.inEdge === joint.control.inEdge &&
+    joint.grouped.selRadius === joint.control.selRadius && joint.grouped.gap === joint.control.gap,
+  JSON.stringify(joint));
+
 /* /getting-started/htmx §5 (roadmap 200.6) — the page now claims three things
    a browser can settle, and the middle one is the whole reason the item
    exists:
