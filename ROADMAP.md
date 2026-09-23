@@ -1110,7 +1110,7 @@ before quoting a change.
          parameters are announcement strings); the reopen bars are quoted, not
          re-argued. No new "reorder" concept page (158.2).
 
-5. [ ] **373.5 — a searchable, viewport-filling launcher as a section of
+5. [x] **373.5 — a searchable, viewport-filling launcher as a section of
        `/patterns/app-launch`, with zero framework source change.** Composition:
        header ghost button with `data-dialog-trigger` + `initDialogs()` (modal,
        Escape, Tab loop, focus restore — `check-claims.mjs:2303` already asserts
@@ -1162,7 +1162,19 @@ before quoting a change.
          made true (launcher cases in `check-claims.mjs`, driven by real key and
          pointer events) or removed. Escape is either fixed or the page and this
          criterion say two presses are needed. Runtime search/filter behaviour
-         measured correct and is not in question. Decision review scored the
+         measured correct and is not in question.
+       - **Closed 2026-09-23.** Escape fixed with an explicit `dialog.close()`
+         on keydown (the native `type="search"` clear was consuming the key);
+         seven claims cases now drive open / search / keyword-only / no-match /
+         Escape / Close / the 390 wrap with real key and pointer events, taking
+         the suite 263 -> 270; the Escape case is red-proved by removing the
+         handler from the built bundle, with the injection confirmed landed and
+         the bundle restored byte-identical. The page's sentence now names what
+         actually runs. The 390 wrap is measured on the OPEN dialog rather than
+         left to `check:layout`, which cannot see a closed `<dialog>`. The
+         extraction question is recorded as a refusal in
+         `launcher-filter-extraction-2026-09-23.md`, with a third caller of the
+         same shape named as the reopen trigger. Completion review 0.89. Decision review scored the
          hold at **confidence 1.00**.
 
 6. [ ] **373.6 — App dock: hide on UPWARD scroll. OWNER CALL — two refusals
