@@ -36,6 +36,19 @@ pin.
 
 ### Fixed
 
+- **A press below a data-table no longer misses while a cell shows its error
+  message.** The table used to grow a 142px reserve under itself while an
+  invalid cell had focus and drop it on blur — and the mousedown on "+ Add
+  line" (or any control below) is what blurred the cell, so the control moved
+  before mouseup and the press did nothing. Now nothing resizes on focus or
+  blur: where CSS anchor positioning exists the message floats anchored to its
+  field (it still catches presses — pressing it dismisses it); elsewhere the
+  room is reserved permanently on grids that have an editable cell, which is a
+  visible empty band under such grids in those browsers. `.bo-dialog[open]`
+  and `.bo-offcanvas[open]` now rest at `transform`/`translate: none` instead
+  of an identity value, so they no longer trap fixed-position descendants.
+  Roadmap 375.9.
+
 - **The generated accessibility conformance report (`dist/acr.json`,
   `/reference/acr`) overclaimed in four rows.** An audit of all 21 criteria
   against the gate each one names found four overclaims and one unbacked

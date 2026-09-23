@@ -267,6 +267,9 @@ const markup = `<table class="bo-data-table" data-row-edit>
     granularity, but out of flow and shown on focus, because a message that sits
     in the row&rsquo;s flow grows the row and shifts every other cell in it
     (measured: 53px &rarr; 75px, and the two untouched inputs moved 11px).
+    Nothing grows or shrinks when the cell gains or loses focus either, so
+    pressing Add straight from the invalid cell adds the line instead of
+    missing a button that moved.
     Pick an option in the Item combobox: it marks the row
     dirty exactly like typing does (2026-08-15 fix — committing an option now
     fires a real <code>input</code> event, not just <code>bo:combobox-select</code>,

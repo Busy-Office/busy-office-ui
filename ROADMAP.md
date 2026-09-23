@@ -575,7 +575,7 @@ untracked or uncommitted, so the removal was a working-tree change.
          without it, a 0.23 swing, so `jev-rubrics.md` forbids putting a prior
          score or a hoped-for verdict in a payload.
 
-9. [ ] **P0 · 375.9 — any control below a grid loses its first click while a
+9. [x] **P0 · 375.9 — any control below a grid loses its first click while a
        cell's error message is shown.** Reproduced by 375.5 (0 of 6 trusted
        presses on the editable-grid demo's "+ Add line" landed). The cause is
        the container's reserve padding (`.bo-data-table-container:has(… :focus-within
@@ -592,6 +592,94 @@ untracked or uncommitted, so the removal was a working-tree change.
          (row height unchanged by a message) and so does 190.1's (a six-line
          message is not clipped by the container). Which shape removes the
          shift is the builder's call and is argued in the item, not assumed.
+       - **DONE 2026-09-24 — nothing resizes on focus or blur any more.**
+         The shape, argued: the reserve existed only because
+         `.bo-data-table-container` is `overflow: auto` and clips an
+         out-of-flow message, so either the room is permanent or the message
+         leaves the clip. Where anchor positioning exists (Chrome 129+,
+         Firefox 147+, Safari 26+) it leaves: the message is `position: fixed`,
+         anchored to its field, with a minimum width and flip fallbacks so a
+         right-hand column or a dialog does not squeeze it into a sliver
+         over its own field. Elsewhere the reserve is STATIC on any grid whose
+         body has an editable control. The open `.bo-dialog` / `.bo-offcanvas`
+         now rest at `transform`/`translate: none`, because any transform —
+         the identity included — made them the containing block that trapped
+         the fixed message.
+       - **Refused on measurement, so a later wake does not re-propose them:**
+         a delay or `:active` latch on the collapse (postpones the jump, needs
+         caveats per engine, and a press inside an iframe is invisible to
+         `:active`); a reserve that follows the error (moves the toggle to the
+         422 re-render, which lands mid-press — 10 of 16 lost); padding plus a
+         negative margin (feeds ancestor scroll overflow); a static reserve
+         everywhere (a permanent 142px band under every editable grid); and
+         `pointer-events: none` on the floated message, which fired the row's
+         hidden Remove button when the visible text was pressed. The message
+         keeps catching presses: pressing it dismisses it.
+       - Measured: `check:claims` +14 cases (real 60/900ms presses at 1440 and
+         390 on the demo and on a pasted copy of the canonical markup; a
+         counterfactual that re-injects the old reserve and must lose the
+         press; nothing moves on focus/blur and the row keeps its height
+         (173.2); a long message paints at every sample point (190.1, vertical
+         fit holds in both modes); dialog/offcanvas rest at `none`), each
+         red-proved by injection. Corpus sweep, 135 pages, 2834 valid targets:
+         0 of 4944 presses lost (baseline control lost 92 of 358).
+         Chrome 153 + WebKit 26.6: 0 hidden controls activated; every lost
+         press is one on a control the visible message covers.
+       - Not covered, filed as 375.11: Firefox unverified; fallback + classic
+         scrollbars + a long message from a non-first column still toggles a
+         horizontal scrollbar (the 196.1 residual); frozen-column cells paint
+         over the message (pre-existing); 400% zoom on a 320x256 viewport
+         partly covers the focused field (12/18 points, never entirely).
+       - Jev completion review, two rounds (the limit): per criterion A 0.92,
+         B 0.94, C 0.92, D 0.87; the overall "every criterion met" read 0.82
+         both rounds, in the middle band — it tracks the not-covered list
+         above, which is outside this item's Accept and is 375.11.
+
+10. [ ] **P0 · 375.10 — a real mouse or touch press on a combobox option never
+       commits it; only the keyboard works.** Found by 375.9's attack
+       workflow (side lens, unpatched CSS). `combobox.ts`'s `focusout`
+       handler closes the listbox at mousedown (focus goes to BODY, the
+       grid container or the dialog), so the click lands on a common
+       ancestor: 0 of 10 trusted presses committed on `/components/combobox/`
+       and inside `/patterns/editable-grid/` (60/0/900ms, touch), while
+       `element.click()` commits. On `/patterns/command-bar/` the same press
+       also CLOSES the palette (the click lands on the `<dialog>` and its
+       backdrop handler fires). Nothing catches it: the vitest cases use
+       `element.click()` and jsdom does not move focus on mousedown;
+       `check:claims` drives only the keyboard.
+       - **Accept:** a trusted mouse press and a touch tap on an option commit
+         it (`bo:combobox-select` fires, the input holds the option's label)
+         on `/components/combobox/`, inside `#eg-table` on
+         `/patterns/editable-grid/`, and on `/patterns/command-bar/` (where
+         the palette stays open until the commit) — asserted in
+         `check:claims` with real pointer input and red-proved against
+         today's build. The fix shape is the builder's, argued in the item;
+         the attack's simulation of a capture-phase `mousedown`
+         `preventDefault()` on enabled options committed 11 of 11. Also
+         settle whether `/components/money`'s currency combobox demo is
+         meant to be live (it never calls `initCombobox`).
+
+11. [ ] **375.11 — what 375.9 measured and did not fix.** Each is recorded
+       rather than silently accepted; each wants a measurement or a
+       decision, not necessarily a change.
+       - **Firefox is unverified** for both the anchored mode and the static
+         fallback — Playwright Firefox would not launch in this environment.
+       - **Fallback browsers + classic scrollbars:** a long message from a
+         field away from the container's inline start overflows it and
+         toggles its horizontal scrollbar only while focused — 15px of
+         movement and a lost press, 196.1's accepted residual now on a
+         press path. Needs classic-scrollbar measurement (every browser gate
+         runs with scrollbars hidden, so none of them can see this class).
+       - **Frozen-column cells:** the message is painted under later rows'
+         sticky cells and sticky totals (8/160 in first-row frozen cells),
+         identical before and after 375.9.
+       - **A loading table** (`opacity` on `[data-loading]`) traps the
+         message's z-index; 6 of 2834 corpus targets.
+       - **400% zoom on a 320x256 viewport:** the message partly covers its
+         focused field (12 of 18 sample points; never entirely).
+       - **Accept:** each is measured in the environment that can see it and
+         either fixed, or closed with the measurement and the reason it is
+         accepted.
 
 ## Slice 374 — the joined-control seam was spelled against the AUTHORED markup, not the RENDERED DOM: three trailing children defeat `:last-child`, the framework's own canonical quantity markup is one of them, and the defect shipped on **3 pages / 5 rendered views** while a gate that visits those exact elements measured only their focus rings (2026-09-22)
 

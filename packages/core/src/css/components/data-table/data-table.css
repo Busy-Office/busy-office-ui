@@ -545,13 +545,20 @@
      unreadable; with rows beneath it there was 122px to spare, so this is
      the LAST-ROW case, not a general one.
 
-     Reserve the room only while a message is actually shown. Padding sits
-     after the table, so no row moves and the numeric columns stay aligned —
-     the whole point of 173.2. The container itself grows for as long as the
-     field has focus, which is the accepted cost of not putting this in the
-     top layer (a `popover` would escape the clip, but this demo already has
-     five of them on the combobox cells and an error sharing an anchor with
-     an open listbox is a worse problem than a container that grows).
+     NOTHING HERE MAY RESIZE ON FOCUS OR BLUR (roadmap 375.9). 190.1 reserved
+     the room only while the field had focus, so the mousedown on any control
+     below the grid blurred the field, the container shrank 142px, the control
+     rose out from under the pointer before mouseup, and the press did
+     nothing: 0 of 6 trusted presses landed, at 60ms, 900ms and by touch.
+     Two mechanisms, neither of which toggles:
+
+     - Where anchor positioning exists, the message escapes the clip instead
+       (the anchored block after the message rule): no reserve at all.
+     - Elsewhere, the room is reserved on any grid whose body has an editable
+       control. That changes only when the grid gains its first control or
+       loses its last, which follows a completed press rather than landing
+       inside one. The visible cost is an empty band under such grids in
+       those browsers, and it is the price of a press that always lands.
 
      The reserve is sized to SIX LINES of the message box, not to one (roadmap
      190.1). The first version reserved 3.5rem — fitted, like the width cap
@@ -561,8 +568,12 @@
      it is the line count 190.1's Accept names, and `lh` makes it the
      message's OWN line box rather than a pixel guess that drifts when the
      density tokens move. */
-  .bo-data-table-container:has(.bo-form-field:focus-within .bo-form-field__message) {
-    padding-block-end: calc(6lh + var(--bo-space-4));
+  @media screen {
+    @supports not (position-area: block-end) {
+      .bo-data-table-container:has(tbody :is(input:not([type="checkbox"], [type="radio"], [type="hidden"]), select, textarea)) {
+        padding-block-end: calc(6lh + var(--bo-space-4));
+      }
+    }
   }
 
   .bo-data-table .bo-form-field:focus-within .bo-form-field__message {
@@ -608,6 +619,59 @@
        ground to stay readable — a bare floating string over table text is
        not. */
     box-shadow: var(--bo-shadow-sm);
+  }
+
+  /* The anchored escape (roadmap 375.9). `position: fixed` takes the message
+     out of the container's clip, and the anchor holds it to its field at
+     layout time, so nothing is reserved and nothing resizes. Only one field
+     has focus at a time, so the anchor name needs no scope.
+
+     The message now lies over whatever is beside the field, and it still
+     CATCHES a press, as it did inside the reserve: pressing it blurs the
+     field and dismisses it, never activates a control hidden underneath.
+     Passing presses through was tried and refused: a press on the visible
+     text fired the row's Remove button beneath it.
+
+     The minimum width is what makes the fallbacks work. Without it a field
+     in a right-hand column, or inside a dialog, gets a sliver of a box as
+     tall as the viewport that covers its own field; with it, a squeezed box
+     overflows and the browser flips it to the side that has room. */
+  @media screen {
+    @supports (position-area: block-end) {
+      .bo-data-table .bo-form-field:focus-within {
+        anchor-name: --bo-cell-message;
+      }
+
+      .bo-data-table .bo-form-field:focus-within .bo-form-field__message {
+        position: fixed;
+        position-anchor: --bo-cell-message;
+        /* self-: resolve against the field's own direction, so a dir=rtl
+           section inside an LTR page still aligns to the field's start. */
+        position-area: self-block-end span-self-inline-end;
+        position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline,
+          self-block-end span-all, self-block-start span-all;
+        /* Declared rather than left to the UA default, which the spec has
+           argued over: a field scrolled out of sight takes its message too. */
+        position-visibility: anchors-visible;
+        inset: auto;
+        /* max-content would run past the viewport edge, where a fixed box
+           cannot be scrolled to; auto wraps it to the room that is left. */
+        inline-size: auto;
+        min-inline-size: min(28ch, calc(100vw - 2 * var(--bo-space-4)));
+        /* Clear of the field's own focus ring, above or below. */
+        margin-block: calc(var(--bo-focus-ring-offset) + var(--bo-focus-ring-width));
+        margin-inline-end: var(--bo-space-2);
+        z-index: var(--bo-z-dropdown);
+      }
+    }
+  }
+
+  /* Printing reads the table, not a field's focus: a message left over from
+     whatever had focus would print on top of the content after the grid. */
+  @media print {
+    .bo-data-table .bo-form-field:focus-within .bo-form-field__message {
+      display: none;
+    }
   }
 
   /* Row states for workflow screens. Error rows also get a start border so

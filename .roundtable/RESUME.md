@@ -33,18 +33,12 @@ The first 2026-09-23 goal (every non-owner-blocked item in 373/374/375) closed
    causes. The row height does NOT change — 173.2 holds; do not "fix" the
    row. Accept: `check:claims` case with real mouse down/up, red-proved;
    173.2's and 190.1's properties still hold.
-   **IN FLIGHT (uncommitted, 2026-09-23 22:36):** fix written in
-   `data-table.css` — anchored pass-through message (`position: fixed` +
-   anchor, `pointer-events: none`, `@supports (position-area)`) plus a STATIC
-   reserve under `@supports not` on any grid whose tbody has an editable
-   native control. Four `check:claims` cases per width added after the 190.2
-   editable-grid block (press 60/900ms lands; counterfactual with the toggled
-   reserve re-injected must LOSE the press; nothing moves on focus/blur; long
-   message fully painted). One sentence added to `/patterns/editable-grid`.
-   Chosen by a 6-candidate design panel (all six broken by their verifiers)
-   + Jev 0.93; a 5-lens attack workflow (`wf_11293b44-c96`) was running.
-   NOT yet built, red-proved, verified live or Jev-reviewed. Side finding to
-   triage: a real mouse press on a combobox option reportedly does not commit.
+   **LANDED 2026-09-24** — anchored message + static fallback reserve,
+   dialog/offcanvas rest at `none`; +14 `check:claims` cases, each red-proved.
+   It filed **P0 375.10** (a real mouse/touch press on a combobox option never
+   commits — keyboard only), so rule 1 fires again: do 375.10 next, then rule 2.
+   375.11 holds the measured residuals (Firefox unverified, classic-scrollbar
+   fallback, frozen columns) and is NOT a P0.
 
 2. **Rule 2 — Standardize, 8/4 overdue.** Four lanes via
    `scripts/loops/standardize_lanes.py`; quote each lane's own figure;

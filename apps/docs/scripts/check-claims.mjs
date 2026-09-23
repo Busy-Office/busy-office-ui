@@ -214,6 +214,135 @@ check('editable-grid: aria-describedby resolves to the message while blurred',
   described.resolves && described.isTheMessage && described.hasText,
   JSON.stringify(described));
 
+/* 375.9 — "nothing here may resize on focus or blur" (data-table.css). The
+   reserve that used to toggle with focus lifted "+ Add line" 142px between
+   mousedown and mouseup, so a real press on it did nothing. Driven with real
+   mouse down/up at the button's own centre, read while the invalid cell has
+   focus — a settled-then-clicked check already passed while the bug shipped. */
+const TOGGLED_RESERVE = `.bo-data-table-container:has(.bo-form-field:focus-within .bo-form-field__message)
+  { padding-block-end: calc(6lh + var(--bo-space-4)) !important; }`;
+async function pressAddFromInvalidCell({ holdMs, inject = null }) {
+  const setup = await page.evaluate((css) => {
+    const add = document.getElementById('eg-add');
+    const section = add.closest('section');
+    const bad = section.querySelector('.bo-data-table [aria-invalid="true"]');
+    if (css) { const s = document.createElement('style'); s.id = 'claim-3759'; s.textContent = css; document.head.appendChild(s); }
+    add.scrollIntoView({ block: 'center' });
+    bad.focus();
+    const ctr = bad.closest('.bo-data-table-container');
+    const r = add.getBoundingClientRect();
+    return {
+      rows: section.querySelectorAll('.bo-data-table tbody tr').length,
+      focused: document.activeElement === bad,
+      padFocused: getComputedStyle(ctr).paddingBlockEnd,
+      x: r.left + r.width / 2, y: r.top + r.height / 2,
+    };
+  }, inject);
+  await page.mouse.move(setup.x, setup.y);
+  await page.mouse.down();
+  await new Promise((r) => setTimeout(r, holdMs));
+  await page.mouse.up();
+  await new Promise((r) => setTimeout(r, 300));
+  const rows = await page.evaluate(() => {
+    document.getElementById('claim-3759')?.remove();
+    return document.getElementById('eg-add').closest('section').querySelectorAll('.bo-data-table tbody tr').length;
+  });
+  return { ...setup, added: rows - setup.rows };
+}
+for (const width of WIDTHS) {
+  for (const holdMs of [60, 900]) {
+    await visit('/patterns/editable-grid/', { width, height: 900 });
+    const p = await pressAddFromInvalidCell({ holdMs });
+    check(`editable-grid @${width}: a real ${holdMs}ms press on "+ Add line", made while the invalid cell has focus, adds a line (375.9)`,
+      p.focused && p.added === 1, JSON.stringify(p));
+  }
+  /* The counterfactual, so this cannot pass by never reaching the failure
+     path: put 190.1's focus-toggled reserve back and the same press is lost. */
+  await visit('/patterns/editable-grid/', { width, height: 900 });
+  const cf = await pressAddFromInvalidCell({ holdMs: 60, inject: TOGGLED_RESERVE });
+  check(`editable-grid @${width}: with the focus-toggled reserve put back, the same press is lost (the stated reason)`,
+    cf.focused && cf.padFocused !== '0px' && cf.added === 0, JSON.stringify(cf));
+
+  /* Nothing moves on focus or blur, the row keeps its height (173.2), and a
+     long message is fully painted rather than clipped by the container
+     (190.1). Painted = hit-tests to the message at every sample point; the
+     message is pointer-events:none by design, so the probe restores hit
+     testing for itself only — pointer-events changes no layout. */
+  await visit('/patterns/editable-grid/', { width, height: 900 });
+  const geo = await page.evaluate(async () => {
+    const add = document.getElementById('eg-add');
+    const bad = add.closest('section').querySelector('.bo-data-table [aria-invalid="true"]');
+    const row = bad.closest('tr');
+    const msg = bad.closest('.bo-form-field').querySelector('.bo-form-field__message');
+    msg.textContent = 'Quantity exceeds the on-hand balance of 200 at warehouse WH-01 bin A-04-2, and the open reservation for sales order SO-44871 holds a further 120 against the same bin; reduce the quantity, split the line across bins A-04-2 and A-05-1, or raise a transfer order from WH-02 before posting this goods issue.';
+    add.scrollIntoView({ block: 'center' });
+    const frame = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    const blurred = { add: add.getBoundingClientRect().top, row: row.getBoundingClientRect().height };
+    bad.focus(); await frame();
+    const focused = { add: add.getBoundingClientRect().top, row: row.getBoundingClientRect().height };
+    const probe = document.createElement('style');
+    probe.textContent = '.bo-form-field__message, .bo-form-field__message * { pointer-events: auto !important; }';
+    document.head.appendChild(probe);
+    const pe = getComputedStyle(msg).pointerEvents;
+    const b = msg.getBoundingClientRect();
+    let hit = 0, tot = 0;
+    for (let yi = 0; yi < 12; yi++) for (let xi = 0; xi < 6; xi++) {
+      tot++;
+      const e = document.elementFromPoint(b.left + 3 + (b.width - 6) * xi / 5, b.top + 3 + (b.height - 6) * yi / 11);
+      if (e && (e === msg || msg.contains(e))) hit++;
+    }
+    probe.remove();
+    bad.blur(); await frame();
+    return { blurred, focused, afterBlur: add.getBoundingClientRect().top, msgH: Math.round(b.height), probePointerEvents: pe, hit, tot };
+  });
+  check(`editable-grid @${width}: focusing and blurring the invalid cell moves nothing below the grid and keeps the row height (375.9, 173.2)`,
+    geo.focused.add === geo.blurred.add && geo.afterBlur === geo.blurred.add && geo.focused.row === geo.blurred.row,
+    JSON.stringify(geo));
+  check(`editable-grid @${width}: a long cell message is fully painted, not clipped by the scroll container (190.1)`,
+    geo.probePointerEvents === 'auto' && geo.msgH > 60 && geo.hit === geo.tot, JSON.stringify(geo));
+}
+
+/* The same press on a COPY of the page's canonical markup — what a reader
+   pastes, rendered alone against the shipped bundle, scripts stripped. The
+   message shows while the cell has focus, and the press still reaches the
+   Add button rather than the message. */
+await visit('/patterns/editable-grid/');
+const sample = await page.evaluate(() =>
+  [...document.querySelectorAll('pre')].map((p) => p.textContent)
+    .find((t) => t.includes('data-line-add') && t.includes('line-1-qty-err')) ?? null);
+for (const width of WIDTHS) {
+  await page.setViewport({ width, height: 900 });
+  await page.goto(url('/'), { waitUntil: 'networkidle0' });
+  await page.setContent(`<!doctype html><html lang="en"><head><meta charset="utf-8">
+    <link rel="stylesheet" href="${url('/assets/busy-office-ui.min.css')}"></head>
+    <body style="padding: 16px">${(sample ?? '').replace(/<script[\s\S]*?<\/script>/g, '')}</body></html>`,
+  { waitUntil: 'load' }); // networkidle0 never settles on setContent here; load waits for the stylesheet
+  const s = await page.evaluate(async () => {
+    const add = document.querySelector('[data-line-add]');
+    const bad = document.querySelector('[aria-describedby="line-1-qty-err"]');
+    if (!add || !bad) return { missing: true };
+    window.__adds = 0;
+    add.addEventListener('click', () => { window.__adds++; });
+    bad.focus();
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    const msg = document.getElementById('line-1-qty-err');
+    const r = add.getBoundingClientRect();
+    return { shown: getComputedStyle(msg).display !== 'none', x: r.left + r.width / 2, y: r.top + r.height / 2, top: r.top };
+  });
+  if (!s.missing) {
+    await page.mouse.move(s.x, s.y);
+    await page.mouse.down();
+    await new Promise((r) => setTimeout(r, 60));
+    await page.mouse.up();
+    await new Promise((r) => setTimeout(r, 200));
+    Object.assign(s, await page.evaluate(() => ({
+      adds: window.__adds, topAfter: document.querySelector('[data-line-add]').getBoundingClientRect().top,
+    })));
+  }
+  check(`editable-grid canonical markup @${width}: pasted alone, a real press on "+ Add line" made while the invalid cell shows its message reaches the button (375.9)`,
+    !!sample && s.shown && s.adds === 1 && s.topAfter === s.top, JSON.stringify({ sampleFound: !!sample, ...s }));
+}
+
 // "Skip the swatch grid" — the 264-button bypass must land after the grid.
 await visit('/base/colors/');
 const skip = await page.evaluate(() => {
@@ -2615,6 +2744,25 @@ check(
   dlgReduced.opened && dlgReduced.opacity === '1',
   JSON.stringify(dlgReduced),
 );
+
+/* 375.9 — an open dialog or offcanvas must not be a containing block for
+   fixed descendants, or a grid cell's anchored error message is trapped and
+   clipped inside the panel. Any transform does that, the identity included,
+   so the resting value has to compute to `none` once the entrance settles. */
+for (const [path, trigger, id, prop] of [
+  ['/components/dialog/', '[data-dialog-trigger="approve-dialog"]', 'approve-dialog', 'transform'],
+  ['/components/offcanvas/', '[data-dialog-trigger="drawer-nav"]', 'drawer-nav', 'translate'],
+]) {
+  await visit(path);
+  await page.click(trigger);
+  await new Promise((r) => setTimeout(r, 700));
+  const rest = await page.evaluate((id, prop) => {
+    const d = document.getElementById(id);
+    return { open: d.open, [prop]: getComputedStyle(d)[prop] };
+  }, id, prop);
+  check(`${id}: once open and settled, its ${prop} computes to none, so it is not a containing block for fixed descendants (375.9)`,
+    rest.open && rest[prop] === 'none', JSON.stringify(rest));
+}
 
 /* 200.2 — button press feedback. `(hover: hover) and (pointer: fine)` is a
    DEVICE capability, not an input-modality signal: on a desktop it is true

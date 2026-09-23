@@ -117,7 +117,8 @@ const BUDGETS = {
   'css/index.min.css': { total: 16.7 },
   'css/rf-essentials.css': { total: 9.1 },   // 8.22 after the 374.5 comment strip
   'css/rf-essentials.min.css': { total: 8.4 },
-  'css/components/*.css': { total: 32.5, max: 2.4 },  // 29.57 / largest 2.15 after the 374.5 strip
+  // max 2.4 -> 2.6 (375.9): data-table.css reached 2.404 with the anchored cell message and its static fallback reserve, the fix for a lost press.
+  'css/components/*.css': { total: 32.5, max: 2.6 },  // 29.57 / largest 2.15 after the 374.5 strip
   'css/components/*.min.css': { total: 27.3, max: 2.2 },
   'css/brand-*.css': { total: 2.4, max: 0.45 },  // 2.15 / largest 0.37 after the strip
   'css/brand-*.min.css': { total: 1.9, max: 0.4 },

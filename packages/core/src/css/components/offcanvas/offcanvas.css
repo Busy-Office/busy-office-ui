@@ -117,7 +117,9 @@
     }
 
     .bo-offcanvas[open] {
-      translate: 0 0;
+      /* `none`, not `0 0`, so the open panel is not a containing block for
+         fixed descendants — same reason as .bo-dialog[open] (375.9). */
+      translate: none;
     }
 
     @starting-style {

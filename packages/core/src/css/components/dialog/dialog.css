@@ -69,7 +69,11 @@
 
     .bo-dialog[open] {
       opacity: 1;
-      transform: translateY(0) scale(1);
+      /* `none`, not the identity `translateY(0) scale(1)`: any transform makes
+         the dialog the containing block for fixed descendants, which traps a
+         grid cell's anchored error message inside it (roadmap 375.9). The
+         transition still interpolates to identity. */
+      transform: none;
     }
 
     @starting-style {
