@@ -1752,3 +1752,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-24 00:42 · Continue · bug · P0 375.9 — anchored cell message + static fallback reserve; nothing resizes on focus/blur; 0 of 4944 corpus presses lost · landed · 986d6399
 - 2026-09-24 00:42 · Meta · refusal · 375.9 pointer-events:none on the floated message — fired the hidden Remove button · refused · 986d6399
 - 2026-09-24 00:42 · Meta · refusal · 375.9 delay/:active latch, reserve-follows-error, negative-margin overlap, static reserve everywhere · refused · 986d6399
+- 2026-09-24 01:05 · Continue · bug · P0 375.10 — combobox options commit on mouse/touch (mousedown kept off the option); money currency combobox live · landed · 91254122
