@@ -47,6 +47,12 @@ survived, every one fixed or corrected in `2fad3cc7`
 (`.roundtable/grill-objective-345-378-2026-09-24.md`). Counters now
 Standardize 2 / 4, Objective 0 / 3.
 
+**Rule 4 at 07:06:** 346.1 LANDED (`f8856986`) — 13 of 59 superseding
+commits left a stale copy (17 sites, only 2 hidden by a wrap), so
+`scripts/loops/check_correction_sites.py` now lists the other copies of a
+superseded number and runs from `record_iteration.py` as a fourth REPORTED
+advisory. Counters: Standardize 3 / 4, Objective 1 / 3. **Next by age: 348.1.**
+
 **Next wake:** rule 4 again — the oldest open item not owner-blocked. **Skip
 335.1 unless the owner is live in the session:** its only remaining step is
 creating a throwaway public Discussion in the owner's repository, and a
@@ -80,8 +86,8 @@ hide-on-upward-scroll; two refusals stand and the reversal is unwritten),
 373.8 (docs IA, 17 groups to 7). Plus, outside these slices: 112.3/112.4,
 296.3, 369.1, 273.2.
 
-**Dispatcher counters (2026-09-24 06:38, `dispatch_status.py`):** Standardize
-2 / 4, Objective 0 / 3, 0 open P0. Re-read them; never trust this line.
+**Dispatcher counters (2026-09-24 08:04, `dispatch_status.py`):** Standardize
+3 / 4, Objective 1 / 3, 0 open P0. Re-read them; never trust this line.
 
 **A trap that has bitten twice — read before touching ROADMAP.md.** Build the
 staged content from HEAD BY CONSTRUCTION and write the same bytes to the
@@ -91,7 +97,7 @@ drifted, and a later `git add` silently reverted four closed items to `[ ]`.
 
 ## PLAN — work this order.
 
-**Base state.** `main` pushed after Slice 379's record. Last full run green
+**Base state.** `main` pushed after 346.1's record. Last full run green
 on this tree (2026-09-24 06:30): core build, 174 tests, docs build 0 FAIL,
 `check:claims` 300, `test:axe` 128 pages x 2 widths 0 violations,
 `check:layout` 128 pages. The files still uncommitted are the 2026-09-20 owner
