@@ -293,8 +293,9 @@ def report(all_rows, loop, threshold, unit):
         count = sum(1 for r in after if r["loop"] == "Continue")
         detail = ""
     else:
-        # Distinct slices touched since the last grill — what "a slice closed"
-        # means in practice, and countable from what the log already writes.
+        # Distinct slices touched since the last grill — work landed, not
+        # slices closed, which is now what rule 3's text says too (349.1) —
+        # countable from what the log already writes.
         # Which loops count is decided and measured at CLOSES_A_SLICE above.
         slices = sorted({
             s

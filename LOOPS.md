@@ -403,8 +403,19 @@ match to its full playbook below:
    round — Standardize", and the loop table says Standardize is "dispatched
    every 4th Continue round". Two statements against one; the counter
    preempts (2026-08-18).
-3. **THREE OR MORE slices closed since the last Objective**, **or user
-   asked**? → dispatch **Objective**.
+3. **THREE OR MORE slices with work landed since the last Objective** — named
+   by a building row; closed is not required — **or user asked**? → dispatch
+   **Objective**.
+
+   **Landed, not closed — decided 2026-09-24 (roadmap 349.1).** This line used
+   to say *closed*; the counter has always counted slices a building row
+   named. Replayed over the 103 past grills with a readable commit, of the 72
+   that armed on three such slices only 42 had three closed at dispatch, and
+   24% of every arming set was still open. The text never described the loop
+   that ran. Making the counter match it would have delayed 30 grills,
+   including Slice 377's, armed on four open slices, which found two shipped
+   P0 defects. Counting closed slices is also the regex §6 step 0 refuses;
+   that step narrows the set by hand instead.
 
    Moved above the queued build item on 2026-08-19, for exactly the reason
    Standardize was moved there: a *counter* can never fire while a rule that is
@@ -1313,11 +1324,11 @@ never dirties main.
 **Trigger:** dispatched at a milestone (e.g. pre-1.0), or on demand.
 **Heavy — not every wake.**
 
-0. **Narrow the arming set before grilling it.** Rule 3's text says *"slices
-   **closed** since the last Objective"*; `dispatch_status.py` counts distinct
-   slice numbers **named by Continue/Standardize rows** since the last Objective
-   row, so a slice with many rounds re-arms after each grill and the set can
-   name a slice an earlier grill already covered in full. Check
+0. **Narrow the arming set before grilling it.** Rule 3 counts distinct slice
+   numbers **named by Continue/Standardize/Polish rows** since the last
+   Objective row — work landed, not slices closed (349.1) — so a slice with many
+   rounds re-arms after each grill and the set can name a slice an earlier
+   grill already covered in full, or one still mid-build. Check
    `.roundtable/INDEX.md` first — it is generated, it lists every finding, and
    it reports its own **repeated subject** count — then state the honest scope
    in the write-up, naming what you dropped and why.

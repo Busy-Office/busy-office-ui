@@ -4269,7 +4269,7 @@ previous hand-off predicted: *"closing anything in a slice other than 324 or
 `325.2`. The counter armed anyway, to `Objective 3 / 3 OVERDUE [324, 325, 347]`
 — and **one of the three armed slices is open right now.**
 
-1. [ ] **349.1 — rule 3 counts slices a building loop TOUCHED, not slices that
+1. [x] **349.1 — rule 3 counts slices a building loop TOUCHED, not slices that
        closed, and the two have never been reconciled.** Step 2's rule 3 reads
        *"THREE OR MORE slices closed since the last Objective"*.
        `dispatch_status.py` never opens `ROADMAP.md`: it collects distinct
@@ -4339,6 +4339,24 @@ previous hand-off predicted: *"closing anything in a slice other than 324 or
          does not decide the item — a *touched* reading would count 350 too,
          and correctly — but it does show the divergence is live and growing,
          not a historical artefact of the 4.7% base rate.
+       - **DONE 2026-09-24 — the TEXT changes; the counter was right.** Base
+         rate now, with the command above: 281 slices named by a building row,
+         10 (3.6%) still open. Replaying all 107 past grills (103 with a
+         readable commit), with the counter's own `rows()`/`slice_of`, and
+         classing each armed slice from `ROADMAP.md` at the grill's parent: of
+         the 72 that armed on three touched slices, **only 42 had three
+         closed**, so 30 would not yet have fired under the text's reading, and
+         **24.0%** of all armed slices were open at dispatch. The replay agrees
+         with this item's own 2026-09-08 record (2 of 4 open). So the text
+         never described the loop that ran. The counter's reading is also the
+         better trigger: Slice 377's grill armed on four open slices and found
+         two shipped P0 defects, and counting closed slices is the regex §6
+         step 0 already refuses. Rule 3 now reads *"slices with work landed
+         since the last Objective — named by a building row; closed is not
+         required"*, with the figures beside it; §6 step 0 and the counter's
+         comment say the same. **The live count does not move** (Objective
+         1 / 3 [348] before and after); only text changed. Script and output:
+         `.roundtable/measure-349.1-2026-09-24.md`. Jev: supported 0.95.
 
 ## Slice 348 — `check:resume-slice-ids` reports a backticked DECIMAL FIGURE as a slice id, and files it under a heading that asserts an interpretation it cannot have earned (2026-09-08)
 
