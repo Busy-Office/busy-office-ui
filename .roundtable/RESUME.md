@@ -72,7 +72,12 @@ locally; §6's Exit requires the thesis section. Filed 381.1 and 381.2. 377.5
 now names **six** unreleased P0 fixes, including issue #1's promised one.
 Counters: Standardize 0 / 4, Objective 0 / 3.
 
-**Next wake:** rule 4 — the oldest open item not owner-blocked, 348.1.
+**Rule 4 at 11:02:** 348.1 LANDED (`bc79e235`) — the slice-id check's absent
+line is hedged (7 of its 127 firings held a figure), and LOOPS.md now says a
+report from it is the normal state (216 of 244 revisions). Counters:
+Standardize 1 / 4, Objective 1 / 3.
+
+**Next wake:** rule 4 — the oldest open item not owner-blocked, 349.1.
 
 **Lane-run note:** run the Standardize lanes on a build of HEAD without the
 owner's uncommitted screen-kit edits, which otherwise enter lane 3's total
@@ -106,8 +111,8 @@ hide-on-upward-scroll; two refusals stand and the reversal is unwritten),
 373.8 (docs IA, 17 groups to 7). Plus, outside these slices: 112.3/112.4,
 296.3, 369.1, 273.2.
 
-**Dispatcher counters (2026-09-24 10:38, `dispatch_status.py`):** Standardize
-0 / 4, Objective 0 / 3, 0 open P0. Re-read them; never trust this line.
+**Dispatcher counters (2026-09-24 11:07, `dispatch_status.py`):** Standardize
+1 / 4, Objective 1 / 3, 0 open P0. Re-read them; never trust this line.
 
 **A trap that has bitten twice — read before touching ROADMAP.md.** Build the
 staged content from HEAD BY CONSTRUCTION and write the same bytes to the
@@ -117,7 +122,7 @@ drifted, and a later `git add` silently reverted four closed items to `[ ]`.
 
 ## PLAN — work this order.
 
-**Base state.** `main` pushed after Slice 381's record. Last full run green
+**Base state.** `main` pushed after 348.1's record. Last full run green
 on this tree (2026-09-24 06:30): core build, 174 tests, docs build 0 FAIL,
 `check:claims` 300, `test:axe` 128 pages x 2 widths 0 violations,
 `check:layout` 128 pages. The files still uncommitted are the 2026-09-20 owner
