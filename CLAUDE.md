@@ -87,8 +87,7 @@ deliberate follow-ups.
 
 ## Jev — typed second opinion at two points (rubrics: `.roundtable/jev-rubrics.md`)
 
-Jev (`jevai.org`, MCP server `jevai`; `jev_review_completion` for the completion
-point, `jev_decide` for custom typed questions) answers typed
+Jev (`jev-ai.pro`, MCP tools `jev_evaluate` / `jev_route`) answers typed
 `noul`/`choice`/`score` questions with probabilities. Use it at exactly two
 points: **deciding between drafted alternatives**, and **reviewing whether
 evidence supports a completion claim**. Batch questions that share one evidence
@@ -102,8 +101,6 @@ a Jev outage is **UNVERIFIED, never PASS**. `noul` is a probability, not a
 confidence, and a `score` is a weighted mean over levels — not a confidence
 either. Thresholds (≥0.85 supports, ≤0.35 does not, between = unverified) are
 **provisional at n=5**; the rubric file carries the validation set to re-run.
-**They were measured on the previous Jev service (`jev-ai.pro`), not on `jevai.org`
-— re-run the set before trusting them there** (2026-09-25).
 
 ## Quality bar (every change meets it)
 

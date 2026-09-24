@@ -11,20 +11,16 @@ threshold is only meaningful for the wording it was measured on.
 
 ## What is actually installed (verified 2026-09-22)
 
-- **Changed 2026-09-25:** the stdio server `jev` (`jev-ai.pro`, tools
-  `jev_evaluate` / `jev_route`) was REMOVED. The installed server is now `jevai`,
-  user-scoped HTTP, `https://www.jevai.org/api/mcp` (use that exact `www` URL).
-  Everything below that names `jev_evaluate`, `jev_route` or the 0.85/0.35
-  thresholds was measured on the old service and has NOT been re-run here.
-- Tools: `jev_review_completion` (objective, completed_work, verification,
-  known_gaps -> `completion_probability` noul + a `status` choice),
-  `jev_route_task`, `jev_route_model`, `jev_guard_tool_call`, `jev_check_research`
-  and `jev_decide` (custom `state` + `questions`; its question shape is NOT the
-  old one — a `type`/`question` pair is rejected, it wants `instructions`). It
-  rate-limits ("Too many requests"): batch, and treat it as an outage, i.e.
-  UNVERIFIED.
-- Credentials: `JEV_API_KEY` in the shell environment (`~/.zshrc`), referenced by
-  the MCP config as `${JEV_API_KEY}`. **Nothing in this repo
+- MCP server `jev`, user-scoped stdio, `~/Projects/jev-mcp/.venv/bin/jev-mcp`.
+  (2026-09-25: briefly replaced by `jevai.org`'s hosted MCP, a different service
+  with different tools, then reverted by the owner the same day. `jev-ai.pro` has
+  no hosted MCP endpoint, so this stdio server is the way to reach it.)
+- Targets **`https://jev-ai.pro/api`**, `POST /v1/systemone`. Confirmed in
+  `client.py` (`DEFAULT_BASE`), not assumed.
+- Tools: `jev_evaluate` (batched, any mix of types) and `jev_route` (one choice
+  question plus a confidence threshold). There are no others.
+- Credentials: `JEV_AI_API_KEY`, from the environment or
+  `~/Projects/jev-mcp/.env`, which is gitignored there. **Nothing in this repo
   references or stores it**, and nothing here should.
 - **`kev` is a different service** (local, `127.0.0.1:8008`). Never substitute one
   for the other; they are separate MCP servers with separate tools.
@@ -48,7 +44,7 @@ escalating to a **Claude** model, not to a different Jev.
 Quote the field you used. A `score` and a `confidence` in the same answer are
 two different numbers and mixing them is a reporting defect.
 
-## Thresholds — VALIDATED at n=20 on the PREVIOUS service (jev-ai.pro); not re-run on jevai.org; still advisory
+## Thresholds — VALIDATED at n=20, still advisory
 
 Measured 2026-09-22 against five cases from this repo whose true answers were
 already established by measurement (see "Validation set" below). All five were
@@ -60,9 +56,8 @@ classified correctly.
 | `noul <= 0.35` | evidence does not support | do not claim completion |
 | `0.35 < noul < 0.85` | **UNVERIFIED** | gather the missing evidence, or escalate |
 
-For `choice`, use `jev_decide` (or the matching preset) and apply 0.8 to the
-returned `confidence` yourself — there is no `confidence_threshold` parameter —
-treating anything below it as "decide it yourself". For `score`, use the **level
+For `choice`, use `jev_route` with `confidence_threshold: 0.8` and treat
+`escalate: true` as "decide it yourself". For `score`, use the **level
 probabilities**, not the mean, and treat a top-level probability below 0.6 as
 unverified.
 
@@ -141,7 +136,7 @@ bigger than any distinction these bands are asked to make, so the payload is
 part of the instrument. State the evidence and the criteria; let the number
 come back cold.
 
-**"Completion review" MEANS calling `jev_review_completion`. It is not a vocabulary.**
+**"Completion review" MEANS calling `jev_evaluate`. It is not a vocabulary.**
 Writing PASS/FAIL/UNVERIFIED into a report without making the call is skipping
 the review, and that is exactly what happened on the first real opportunity
 (the 373.x batch, 2026-09-23) — the rubric's words were used in the agent
@@ -175,8 +170,8 @@ review did not run rather than reporting a verdict as though it had.
 ## Rubric 3 — DISPATCH (optional, off by default)
 
 Only when routing is genuinely ambiguous among **predefined** routes and the
-extra call is cheaper than deciding. `jev_route_task` or a `jev_decide` choice,
-0.8 applied to `confidence`, escalate below it. Not yet enabled: it needs a small comparison showing a real
+extra call is cheaper than deciding. `jev_route`, `confidence_threshold: 0.8`,
+escalate on `true`. Not yet enabled: it needs a small comparison showing a real
 reduction in time, cost or rework before it earns a place in the loop. Until
 then, the dispatcher rules in `LOOPS.md` decide.
 

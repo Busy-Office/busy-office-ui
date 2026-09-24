@@ -133,8 +133,8 @@ since 2026-08-16, now removed. Counters: Standardize 3 / 4, Objective 1 / 3
 day unit; `per_day_last`'s false reason is replaced by the measured day-close one
 (`dispatch_status.py --pairing-census`: 70 of 75 same-day pairs span a commit),
 and the comparable set labels its deltas DAY-CLOSE and marks `[k same-day]`.
-Jev completion review UNVERIFIED — `jevai` rate-limited twice; this session was
-started before the key existed, so its MCP tools are not loaded here. Counters:
+Jev completion review: first UNVERIFIED (`jevai.org` rate-limited), then run on
+`jev-ai.pro` after the owner reverted the service: 0.94 / 0.95 / 0.95 / 0.94. Counters:
 Standardize 1 / 4, Objective 1 / 3 [372]. Next by age among dispatchable items:
 read `STATUS.md` (375.11 is the oldest non-owner item after 372.1).
 
@@ -234,7 +234,7 @@ else is docs and records.
   gate in `jev-rubrics.md`: PASS needs the checks to pass AND the criteria
   supported; missing evidence is UNVERIFIED, not PASS.
 - **Before marking any item `[x]`, run the completion review — actually call
-  `jev_review_completion` (was `jev_evaluate`; the server changed 2026-09-25), one batched call per landing round — and quote the number in
+  `jev_evaluate`, one batched call per landing round — and quote the number in
   the commit. The rubric's vocabulary is not the review.** Skipped on the first
   round and it cost two wrong positions (373.7 read 0.35, not "one line short").
 - Land per item, smallest coherent commit each, so a bad one is revertable

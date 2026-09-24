@@ -2298,7 +2298,10 @@ in place, in the same commit `c5780113`.
          script and `LOOPS.md`: that window holds 72 commits and five loops.
          Not covered: the census compares naive stamps against a local clock
          and LISTS the UTC ones rather than correcting them; no self-test case
-         for the census itself.
+         for the census itself. Jev completion review (`jev_evaluate`, Rubric 2,
+         four claims batched, run after the service swap): **0.94 / 0.95 / 0.95 /
+         0.94** — all in the supports band. The earlier attempt on `jevai.org`
+         was rate-limited and did not run.
        - **Lane: cloud-takeable.** It is a Python module, a docstring, a
          self-test fixture and one sentence of `LOOPS.md`; no rendered evidence
          is involved.
