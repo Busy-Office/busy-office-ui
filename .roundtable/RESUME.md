@@ -129,6 +129,15 @@ errors). It found a stray "))}" rendered on the live /reference/tokens/ page
 since 2026-08-16, now removed. Counters: Standardize 3 / 4, Objective 1 / 3
 [362].
 
+**Wake of 2026-09-24 22:00-22:10:** 369.2 LANDED (`6a85e048`; the ten standalone
+pages' own unlayered `body` beat the layered reset, each now restates the print
+literals). Then rule 2: Slice 385 (`6ec0e8da`), Standardize 4 of 4 lanes on a
+clean worktree, plus the thirteenth archive sweep — 21 closed slices moved
+verbatim, ROADMAP.md 10,140 -> ~6,780 lines. Counters now Standardize 0 / 4,
+**Objective 3 / 3 OVERDUE [362, 369, 385]** — the next wake dispatches **rule 3**,
+the grill of 362.1, 369.2 and Slice 385. Nothing pushed this wake; CI still has
+not run `check:types`.
+
 **SESSION HANDED OFF 2026-09-24 ~22:00 — the owner is starting a new session.
 This session's loop is STOPPED; nothing is in flight, the tree is clean except
 the owner's own uncommitted files.** The next session starts at Step 0 here.
