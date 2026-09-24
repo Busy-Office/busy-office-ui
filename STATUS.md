@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-24 09:08 UTC
+Generated at: 2026-09-24 09:36 UTC
 
 ## Open items by slice
 
@@ -19,8 +19,7 @@ Generated at: 2026-09-24 09:08 UTC
   - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
 - **Slice 296** (1 open)
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
-- **Slice 352** (2 open)
-  - 352.1 — a missing `packages/core/dist` is reported as an application defect, in the exact words of a defect this repo has actually had.
+- **Slice 352** (1 open)
   - 352.2 — the two KEPT columns have no recorded method either, and the machine gap they imply is not one machine gap.
 - **Slice 353** (1 open)
   - 353.2 — `dispatch-region-words` is sampled by hand, under a convention the instrument does not use, and no sample records the commit it describes.
@@ -63,9 +62,10 @@ Generated at: 2026-09-24 09:08 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1771 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-09-24 09:16   ok
-  Objective     0 / 3 slices          since 2026-09-24 17:08   ok
+dispatch status — counter-triggered rules (1772 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-09-24 09:16   OVERDUE
+  Objective     1 / 3 slice           since 2026-09-24 17:08   ok  [352]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      3 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 148 sample(s), 8 of 51 name(s) paired across days]
   -> rule 5's newest comparable pair predates 3 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-19, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-19 (2026-09-22, 2026-09-23, 2026-09-24), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -98,7 +98,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-24 08:04 · Meta · refusal · a whitespace normaliser as the fix — the wrap hid 2 of the 17 stale copies · refused · f8856986
 - 2026-09-24 08:32 · Continue · build · 335.1 — Discussions intake proved end to end: owner-authorised throwaway discussion #3 appeared as 200 len 1, then deleted (200 len 0, 404, NOT_FOUND) · landed · 0756cafb
 - 2026-09-24 09:16 · Standardize · sweep · 380 — Standardize sweep 4/4 on a clean HEAD worktree: lanes 1-3 no delta; DESIGN.md HONEST re-decided (the control retired); 346.1's rule moved out of the dispatch region (7,643 -> 7,521 words) · landed · 741c9bea
 - 2026-09-24 10:38 · Objective · grill · 381 — Objective grill of 335.1, 346.1, Slice 380: 45 claims reproduce, 27 of 33 findings survive; record_iteration/check bugs fixed, lane-4 cut rule fixed, intake command fixed, 381.1-381.2 filed · logged · 60235d9c
@@ -108,6 +107,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-24 11:33 · Meta · refusal · making dispatch_status count CLOSED slices — it would have delayed 30 of 72 grills, and §6 step 0 already refuses the regex · refused · 03485ac9
 - 2026-09-24 12:01 · Continue · build · 350.1 — refused: rule 2 keeps counting Continue rounds (lane 4 had material on every multi-commit window); a no-input lane is written 'unchanged by construction' · refused · 661bc668
 - 2026-09-24 17:08 · Objective · grill · 382 — Objective grill of 348.1, 349.1, 350.1: 29 claims reproduce, 19 of 22 findings survive; slice-id hedge, rule-3 wording and §3 shortcut corrected · logged · 0ed584cd
+- 2026-09-24 17:36 · Continue · fix · 352.1 — po-app harness names an unbuilt packages/core/dist (4 missing files, build-state) instead of a select-all failure; red-proved by moving dist aside · landed · 135fb21b
 
 ## Sunset test
 
