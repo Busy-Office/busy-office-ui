@@ -10,7 +10,7 @@ const listen = `document.addEventListener("bo:row-save", (e) => {
   fetch(\`/pos/\${rowId}\`, { method: "PATCH", body: JSON.stringify(values) });
 });`;
 const fmt = (s: string) =>
-  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
    .replace(/`([^`]+)`/g, '<code>$1</code>');
 ---
 <Gallery title="Intent-event index" description="Every event the shipped behaviors dispatch, with its target, trigger and payload, generated from the source on each build. This is the integration API.">

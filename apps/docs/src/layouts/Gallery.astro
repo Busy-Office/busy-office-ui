@@ -576,7 +576,7 @@ const documentTitle = `${title} · busy-office-ui`;
       // (which never fires beforeprint) — that second path is what the
       // check-claims case actually exercises.
       const setPrintFolds = (on) => {
-        document.querySelectorAll('details.demo-pair__code').forEach((d) => {
+        document.querySelectorAll<HTMLDetailsElement>('details.demo-pair__code').forEach((d) => {
           if (on) {
             if (!d.open) { d.dataset.printOpened = ''; d.open = true; }
           } else if ('printOpened' in d.dataset) {

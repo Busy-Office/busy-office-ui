@@ -8,7 +8,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 // escape first, THEN backticks→<code> — event docs mention literal tags
 // (`<tr>`, `<input>`) that must never reach set:html raw
 const fmt = (s: string) =>
-  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
    .replace(/`([^`]+)`/g, '<code>$1</code>');
 const refresh = `// Bound table containers re-derive selection state automatically when an
 // htmx:after:swap bubbles through them. Any OTHER swap mechanism calls:

@@ -67,7 +67,7 @@ if (summary.reduce((n, [, v]) => n + v, 0) !== totalRows) throw new Error('acr.a
               <td>{c.name}</td>
               <td>{c.level}</td>
               <td><span class={`bo-badge ${verdictBadge[c.verdict]}`}>{c.verdict}</span></td>
-              <td set:html={c.remarks.replace(/</g, '&lt;').replace(/>/g, '&gt;')} />
+              <td set:html={c.remarks.replaceAll('<', '&lt;').replaceAll('>', '&gt;')} />
             </tr>
           ))}
         </tbody>

@@ -218,7 +218,7 @@ function showFieldError(input, id, text) {
     return max;
   }
 
-  const body = document.getElementById('rm-body');
+  const body = document.getElementById('rm-body') as HTMLTableSectionElement | null;
   let nextLine = 30;
   document.getElementById('rm-add')?.addEventListener('click', () => {
     if (!body || body.rows.length >= 6) return;

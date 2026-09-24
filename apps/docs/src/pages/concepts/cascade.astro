@@ -16,7 +16,7 @@ const layers = `/* declared once, first, in every dist file: */
 // framework's only statement of the z-index scale was a code comment,
 // which is how a page-level sticky bar shipped a bare `z-index: 2` with
 // nothing to check it against — roadmap 108, 2026-08-22).
-const zIndexFiles = import.meta.glob('../../../../../packages/core/src/css/tokens/z-index.css', {
+const zIndexFiles = import.meta.glob<string>('../../../../../packages/core/src/css/tokens/z-index.css', {
   query: '?raw',
   import: 'default',
   eager: true,

@@ -3196,7 +3196,7 @@ CLAUDE.md's criterion rule with a live cost: **the item embedded a prediction
 where it should have named a property.** Both are re-expressed below and in the
 gate header; no value is pinned any more.
 
-1. [ ] **362.1 — adopt `astro check` with `noUnusedLocals` for `apps/docs`.**
+1. [x] **362.1 — adopt `astro check` with `noUnusedLocals` for `apps/docs`.**
        `333.1`'s decision, filed rather than taken because the residual is 22
        type errors in 7 files, all of them DOM narrowing inside inline
        `<script>` blocks that readers copy — changing those changes published
@@ -3238,6 +3238,32 @@ gate header; no value is pinned any more.
          say so with the count that survived.
        - **Lane:** cloud-takeable. Node, config and prose; no browser, no
          screenshot.
+       - **DONE 2026-09-24 — adopted, and it found a live defect.**
+         `@astrojs/check` is a docs devDependency, and `apps/docs/tsconfig.json`
+         extends the base with `include: [".astro/types.d.ts", "src/**/*"]` and
+         `noUnusedLocals`. With `packages/core` built, that program is
+         **164 files**.
+         - **Before: 562 errors**, not the 22 recorded here. 515 were
+           Astro-parser errors in `events.astro`, `js-behaviors.astro` and
+           `acr.astro`: `/</g` regex literals that the checker's TSX transform
+           reads as a closing tag. They are now `replaceAll('<', …)`, with
+           identical output. `tokens.astro` held orphaned
+           `</tbody></table></div>))}` since `315fdece` (2026-08-16), which
+           **rendered a stray "))}" on the live /reference/tokens/ page**; it is
+           removed.
+         - **The rest were typing, and none was suppressed:**
+           `import.meta.glob<string>` for the raw-CSS imports, a heading-level
+           cast, and typed DOM selectors in page scripts (the Gallery layout,
+           htmx, detail-form and value-help). No copyable Demo string changed.
+         - **After: 0 errors, 26 hints, exit 0.** It runs as `check:types`
+           right after `check:repo` in the docs build, and it passed inside the
+           clean `npm ci` of the Containerfile build. The rebuilt `dist`
+           differs from the previous build only in the tokens page (stray text
+           1 → 0); every other page and every JS bundle is byte-identical.
+         - **Red-proof:** an injected unused local fails it with `ts(6133)`,
+           exit 1. CI has not run it yet.
+
+         Jev: supported 0.93.
 
 **NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
 wake has no Podman. **This slice owes none**: the only rendering change is the

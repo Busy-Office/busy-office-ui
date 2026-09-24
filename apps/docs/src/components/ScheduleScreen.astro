@@ -23,7 +23,7 @@ const monthMarkup = scheduleMonth(YEAR, MONTH);
    above this, where h3 would skip a level (axe heading-order, caught by
    CI's audit 2026-08-23). */
 const { detailHeadingLevel = 3 } = Astro.props;
-const DetailHeading = `h${detailHeadingLevel}`;
+const DetailHeading = `h${detailHeadingLevel}` as 'h2' | 'h3';
 ---
 {/* No wrapping element on purpose — the two children are one grid's worth
     of content, but each consumer (the compact embedded demo vs. the

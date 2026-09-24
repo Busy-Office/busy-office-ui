@@ -346,7 +346,7 @@ ${deliveryMonth(2026, 8)}
        ROW dirty, aggregating that into one "unsaved changes" badge is
        application state. */
     const feTable = document.querySelector('table[data-row-edit]');
-    const feBadge = document.querySelector('[data-any-dirty]');
+    const feBadge = document.querySelector<HTMLElement>('[data-any-dirty]');
     const feSync = () => { feBadge.hidden = !feTable.querySelector('tr[data-row-state="dirty"]'); };
     document.addEventListener('input', feSync);
     document.addEventListener('change', feSync);

@@ -25,13 +25,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
    stale. `.bo-app-shell` sets `container-name: bo-shell`; `sidebar-nav.css`
    is the only rule that queries it, and a second band throws below rather
    than being silently ignored. */
-const shellFiles = import.meta.glob('../../../../../packages/core/src/css/primitives/sidebar-layout.css', {
+const shellFiles = import.meta.glob<string>('../../../../../packages/core/src/css/primitives/sidebar-layout.css', {
   query: '?raw', import: 'default', eager: true,
 });
-const navFiles = import.meta.glob('../../../../../packages/core/src/css/components/sidebar-nav/sidebar-nav.css', {
+const navFiles = import.meta.glob<string>('../../../../../packages/core/src/css/components/sidebar-nav/sidebar-nav.css', {
   query: '?raw', import: 'default', eager: true,
 });
-const spaceFiles = import.meta.glob('../../../../../packages/core/src/css/tokens/space.css', {
+const spaceFiles = import.meta.glob<string>('../../../../../packages/core/src/css/tokens/space.css', {
   query: '?raw', import: 'default', eager: true,
 });
 const shellCssSrc = Object.values(shellFiles)[0];

@@ -245,14 +245,14 @@ const markup = `<!-- the field, and the control that opens the picker -->
 
   /* Demo-only filtering: six rows fit in the page, so this filters in the
      browser. A real picker asks the server — see the data contract above. */
-  const dialog = document.getElementById('vh-dialog');
+  const dialog = document.getElementById('vh-dialog') as HTMLDialogElement | null;
   if (dialog) {
-    const q = document.getElementById('vh-q');
-    const group = document.getElementById('vh-group');
+    const q = document.getElementById('vh-q') as HTMLInputElement;
+    const group = document.getElementById('vh-group') as HTMLSelectElement;
     const empty = document.getElementById('vh-empty');
     const count = document.getElementById('vh-count');
-    const field = document.getElementById('vh-material');
-    const rows = [...dialog.querySelectorAll('[data-vh-row]')];
+    const field = document.getElementById('vh-material') as HTMLInputElement;
+    const rows = [...dialog.querySelectorAll<HTMLElement>('[data-vh-row]')];
 
     const apply = () => {
       const term = (q.value || '').trim().toLowerCase();
@@ -267,7 +267,7 @@ const markup = `<!-- the field, and the control that opens the picker -->
       /* The filtered empty, not the no-data empty: the table is hidden with it
          so the reader is not left staring at a header row over nothing. */
       empty.hidden = shown !== 0;
-      dialog.querySelector('.bo-data-table-container').hidden = shown === 0;
+      dialog.querySelector<HTMLElement>('.bo-data-table-container').hidden = shown === 0;
       count.textContent = `${shown} of ${rows.length}`;
     };
 
