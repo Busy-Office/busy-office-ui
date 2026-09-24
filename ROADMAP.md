@@ -320,6 +320,45 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 388 — owner input: a capsule button and the button group with a usage guideline; grill the RF / rugged-device patterns as a journey (2026-09-25)
+
+Owner, verbatim: *"/components/button — capsule style button / group button
+--> with usage guideline. Grill Patterns: RF / rugged devices --> Might need app
+screen. Task screen can be better."* Two items; the grill is dispatched by rule 3
+("or user asked"), the button by the owner's request.
+
+1. [ ] **388.1 — a capsule (fully rounded) button shape that also works on a
+       button group, and a usage guideline on `/components/button`.** Slice 111
+       shipped `.bo-btn-group` / `--bar` but never decided the capsule shape.
+       - **Accept — the property, and refusing the shape is a satisfying
+         outcome.** EITHER a shape lands that passes the Objective's
+         less-for-more test (one general mechanism rather than a modifier for
+         one scenario — decided by a design panel that records the refused
+         alternatives), and it holds on a lone `.bo-btn`, an icon button, and a
+         joined `.bo-btn-group` (only the group's outer ends round; seams, the
+         focus ring and forced-colors follow the shape), with contrast,
+         target-size, axe and layout gates green and live screenshots at 1440
+         and 390 in both themes — OR the shape is refused with the reason
+         recorded. In BOTH cases `/components/button` gains a usage guideline:
+         when to use a group, a segmented control, a bar, or separate buttons,
+         and (if it ships) when a capsule is right and when it is not, each
+         with its "Not for" clause, demos through `Demo`, and a `check:claims`
+         case for any runtime claim the guideline makes.
+2. [ ] **388.2 — grill the RF / rugged-device family as a JOURNEY
+       (`/design-grill` flow mode).** Owner hypotheses to test, not to assume:
+       *an app screen may be missing* and *the task screens can be better*.
+       - **Accept — the property.** A report in `.roundtable/` that: reads the
+         earlier RF grills first (109.7's family grill 2026-08-22, the
+         coverage grill 2026-08-23, the device-coverage grill 2026-09-20) and
+         does not re-litigate what they settled without new evidence; walks the
+         family live on the container at a rugged-device viewport it names and
+         justifies, plus 390, both themes; gives a verdict per seam and per
+         task-screen element with a measurement beside each; answers BOTH owner
+         hypotheses explicitly (app screen needed or not, and why; which task
+         screen elements change), where "no change" is a satisfying answer if
+         the measurement supports it; and triages every actionable into
+         ROADMAP with its own Accept criteria.
+
 ## Slice 387 — residuals the 375.11 measurement found beyond its own list: two more lost-press paths from the message's horizontal overflow, and two layers that still cover a frozen cell's message (2026-09-25)
 
 Found by the skeptics of the 375.11 workflow; each measured, none fixed here.
