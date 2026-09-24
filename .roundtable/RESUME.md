@@ -94,7 +94,17 @@ missed that the counter ignores outcome; 350.1's no-input shortcut had the
 wrong inputs and skipped the figure comparison. All fixed. Counters:
 Standardize 3 / 4, Objective 0 / 3.
 
-**Next wake:** rule 4 — the oldest open item not owner-blocked, 352.1.
+**Rule 4 at 17:32:** 352.1 LANDED (`135fb21b`) — po-app's harness now names an
+unbuilt `packages/core/dist` (the missing files, and that it is build state)
+instead of letting a gate report a select-all defect; red-proved with `dist`
+moved aside. Counters: **Standardize 4 / 4 OVERDUE**, Objective 1 / 3.
+
+**Next wake:** rule 2 — the Standardize sweep. Run the lanes on a clean build
+of HEAD, per LOOPS.md §3 as corrected by Slice 382: the owner's uncommitted
+`apps/docs/src` edits must not enter lanes 1 and 3, and a symlinked worktree
+builds against the main checkout's `packages/core` (`ENVIRONMENT.md` §3c —
+give the worktree its own `npm ci` and run the realpath check). Base for the
+no-input shortcut: `741c9bea` (Slice 380, the last row quoting all four lanes).
 
 **Lane-run note:** run the Standardize lanes on a build of HEAD without the
 owner's uncommitted screen-kit edits, which otherwise enter lane 3's total
@@ -128,8 +138,8 @@ hide-on-upward-scroll; two refusals stand and the reversal is unwritten),
 373.8 (docs IA, 17 groups to 7). Plus, outside these slices: 112.3/112.4,
 296.3, 369.1, 273.2.
 
-**Dispatcher counters (2026-09-24 17:08, `dispatch_status.py`):** Standardize
-3 / 4, Objective 0 / 3, 0 open P0. Re-read them; never trust this line.
+**Dispatcher counters (2026-09-24 17:36, `dispatch_status.py`):** Standardize
+4 / 4 OVERDUE, Objective 1 / 3, 0 open P0. Re-read them; never trust this line.
 
 **A trap that has bitten twice — read before touching ROADMAP.md.** Build the
 staged content from HEAD BY CONSTRUCTION and write the same bytes to the
@@ -139,7 +149,7 @@ drifted, and a later `git add` silently reverted four closed items to `[ ]`.
 
 ## PLAN — work this order.
 
-**Base state.** `main` pushed after Slice 382's record. Last full run green
+**Base state.** `main` pushed after 352.1's record. Last full run green
 on this tree (2026-09-24 06:30): core build, 174 tests, docs build 0 FAIL,
 `check:claims` 300, `test:axe` 128 pages x 2 widths 0 violations,
 `check:layout` 128 pages. The files still uncommitted are the 2026-09-20 owner
