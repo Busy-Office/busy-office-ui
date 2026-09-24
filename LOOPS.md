@@ -307,7 +307,9 @@ curl -sS -o /dev/null -w '%{http_code}\n' -H "$H" "$R/not-a-real-route"
 answer mean anything.** An empty `[]` is what *"no open discussions"* looks
 like AND what an unserved route would look like; the `404` proves the `200 []`
 means **served and empty**. Verified identical in both environments
-(2026-09-07): `200 len 0` / `404` / `200 len 1`.
+(2026-09-07): `200 len 0` / `404` / `200 len 1`. Proved against a real item on
+2026-09-24 (335.1): a throwaway discussion appeared as `200 len 1` and was
+gone again once deleted.
 
 **The `gh` forms this file used to mandate DO NOT RUN in a cloud wake**
 (roadmap 302.1, and the wake that found it recorded *"Discussions were not

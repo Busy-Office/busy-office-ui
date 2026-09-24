@@ -626,12 +626,16 @@ what makes `len` mean *how many*. `has_discussions` on the repo object reads
 what identifies the `/discussions` family as **repository** discussions rather
 than the org/team endpoint of the same name.
 
-**Not red-proved, said plainly**: nothing has ever been filed in this repo's
-Discussions, so the route has never been observed returning a non-empty list.
-The controls above are the strongest evidence available without filing one.
-The day a discussion exists, re-run this and confirm it appears — until then
-the reading is *"a served route reports zero"*, not *"a route known to report
-correctly reports zero"*.
+**Proved end to end on 2026-09-24 (roadmap 335.1; a local wake, with the
+owner's authorisation in the session).** Until then nothing had ever been filed
+in this repo's Discussions, so the route had never returned a non-empty list
+and the controls above were the strongest evidence available. A throwaway Q&A
+discussion (#3) was created with GraphQL `createDiscussion` (local `gh` only; a
+cloud wake's GraphQL is refused, see 335.1). This exact command then read
+`200 len 1`, with #3's number, title and category. After `deleteDiscussion` it
+read `200 len 0` again, REST `/discussions/3` answered 404, and GraphQL answered
+NOT_FOUND. A zero from this route is now a route known to report correctly
+reporting zero.
 
 ---
 

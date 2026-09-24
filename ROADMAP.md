@@ -5369,7 +5369,7 @@ does not.
        it was **bypassed**, which the Accept explicitly names as a satisfying
        outcome. The config was not the thing that worked.
 
-1. [ ] **335.1 — The Discussions intake has never returned a non-empty list,
+1. [x] **335.1 — The Discussions intake has never returned a non-empty list,
        in either environment.** `332`'s REST fix is verified by controls (a
        404 on an unserved route, a known-content issues list) but never by an
        actual discussion, and `ENVIRONMENT.md` §8 says so outright.
@@ -5403,6 +5403,18 @@ does not.
          answers `404` with `documentation_url:
          rest/repos/discussions#get-a-discussion` — the family's own anchor is a
          *get* — which is weaker evidence and is all that was taken.
+       - **DONE 2026-09-24 — proved end to end, on a real item.** A local wake,
+         with the owner in the session authorising it (create, verify, delete).
+         Before: the intake command read `200 len 0`, and the `/not-a-real-route`
+         control read `404`. GraphQL `createDiscussion` filed #3 in Q&A,
+         *"[loop test 335.1] intake probe — will be deleted"*. The same REST
+         command then read **`200 len 1`**, with #3's number, title and category.
+         After `deleteDiscussion` it read `200 len 0` again, REST
+         `/discussions/3` answered 404, and GraphQL answered NOT_FOUND, so
+         nothing is left in the repository. `ENVIRONMENT.md` §8's "not
+         red-proved" paragraph is now the dated proof, and `LOOPS.md`'s intake
+         note says so. The cloud wake's GraphQL 403 still stands; it no longer
+         matters, since the proof exists. Jev: supported 0.95.
 
 ## Slice 334 — 315.3: `check:selftests` now RUNS each self-test, because the third rung of its own ladder was open — and the two costs that were expected to refuse it both measure zero (2026-09-07)
 
