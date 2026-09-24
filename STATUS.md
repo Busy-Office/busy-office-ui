@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-24 03:33 UTC
+Generated at: 2026-09-24 04:01 UTC
 
 ## Open items by slice
 
@@ -19,8 +19,6 @@ Generated at: 2026-09-24 03:33 UTC
   - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
 - **Slice 296** (1 open)
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
-- **Slice 350** (1 open)
-  - 350.1 — should rule 2's counter know whether its first three lanes have anything to read?
 - **Slice 352** (2 open)
   - 352.1 — a missing `packages/core/dist` is reported as an application defect, in the exact words of a defect this repo has actually had.
   - 352.2 — the two KEPT columns have no recorded method either, and the machine gap they imply is not one machine gap.
@@ -65,9 +63,10 @@ Generated at: 2026-09-24 03:33 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1769 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-09-24 09:16   ok
-  Objective     2 / 3 slices          since 2026-09-24 10:38   ok  [348, 349]
+dispatch status — counter-triggered rules (1770 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-09-24 09:16   ok
+  Objective     3 / 3 slices          since 2026-09-24 10:38   OVERDUE  [348, 349, 350]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      3 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 148 sample(s), 8 of 51 name(s) paired across days]
   -> rule 5's newest comparable pair predates 3 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-19, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-19 (2026-09-22, 2026-09-23, 2026-09-24), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -100,7 +99,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-24 06:38 · Meta · refusal · reverting 345.1 or narrowing it to inline elements — the block shapes it breaks are unused here and one declaration fixes them · refused · 2fad3cc7
 - 2026-09-24 08:04 · Continue · build · 346.1 — correction base rate: 13 of 59 superseding commits left a stale copy (17 sites, 2 wrap-only); check_correction_sites.py lists the copies (11/17 from the diff, 16 with --old), wired as a REPORTED advisory · landed · f8856986
 - 2026-09-24 08:04 · Meta · refusal · a whitespace normaliser as the fix — the wrap hid 2 of the 17 stale copies · refused · f8856986
 - 2026-09-24 08:32 · Continue · build · 335.1 — Discussions intake proved end to end: owner-authorised throwaway discussion #3 appeared as 200 len 1, then deleted (200 len 0, 404, NOT_FOUND) · landed · 0756cafb
@@ -110,6 +108,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-24 11:07 · Continue · build · 348.1 — slice-id check's ABSENT line hedged: 7 of 127 firings held a figure (15.0/15.10/0.0); 216 of 244 revisions fire, so LOOPS.md now calls a report the normal state · landed · bc79e235
 - 2026-09-24 11:33 · Continue · build · 349.1 — rule 3's text now says slices with work landed (the counter's reading): of 72 touched-armed grills only 42 had three closed; live count unchanged · landed · 03485ac9
 - 2026-09-24 11:33 · Meta · refusal · making dispatch_status count CLOSED slices — it would have delayed 30 of 72 grills, and §6 step 0 already refuses the regex · refused · 03485ac9
+- 2026-09-24 12:01 · Continue · build · 350.1 — refused: rule 2 keeps counting Continue rounds (lane 4 had material on every multi-commit window); a no-input lane is written 'unchanged by construction' · refused · 661bc668
 
 ## Sunset test
 
