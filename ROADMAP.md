@@ -320,23 +320,59 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
-## Slice 385 — Standardize sweep, 4 of 4 lanes on an isolated clean build, plus the thirteenth archive sweep: lanes 1-3 match their base, lane 4 is +26 body words with no cut, and 21 closed slices moved verbatim (ROADMAP.md 10,140 -> 6,726 lines) (2026-09-24)
+## Slice 386 — Objective grill of 362.1, 369.2 and Slice 385: 3 of 3 headline claims reproduce, and the defect is in the sweep's own write-up — it said the closed-history share fell to "~0" (measured 14.4%) and called lane 2 "unchanged by construction" while a lane-2 input had moved (2026-09-25)
+
+**Dispatched by rule 3**, `Objective 3 / 3 OVERDUE [362, 369, 385]`. Labels resolved
+by commit subject: `362` and `369` are ITEM ids (362.1, 369.2), `385` is a slice.
+No earlier grill covers any of them. Report:
+`.roundtable/grill-objective-362-369-385-2026-09-25.md`.
+
+- **Reproduced:** 362.1 — `astro check` 0 errors, wired into `docs:build`
+  (`check:types`), and the stray `))}` is absent from the visible text of the
+  built tokens page (raw grep reads 1, all inside minified JS — a structural
+  read, with the pre-fix source as the positive control). 369.2 — over ALL 139
+  built pages, print emulation, light and dark: 0 of 278 readings off
+  `#fff`/`#000`. Slice 385 — 21 slices byte-identical in the archive; 925
+  checkboxes both sides; open 33 -> 33.
+- **Defects, all in 385's write-up and all corrected in place:** the share is
+  14.4% (971 lines, 6 closed slices kept), not "~0"; the live file is 6,750
+  lines, not "~6,780"; lane 2 is NOT "unchanged by construction" because
+  `package-lock.json` (796 lines, astro check) is one of its inputs — the figure
+  held, which is the honest wording; the "+170 words is 362.1/384/369.2" line
+  was an attribution nobody measured.
+- **Framework code since Slice 384's grill:** `git diff --numstat eec86ae2 HEAD --
+  packages/core/src` lists 0 files. Adoption channels, the first user (377.6,
+  still an owner call) and comparators were NOT re-read this grill.
+
+1. [ ] **386.1 — nothing keeps the print reset true on a NEW standalone page.**
+       369.2's fix is ten copies of one block, and the ten exist because each
+       page builds its own `<html>` with an unlayered `body` rule. A page added
+       tomorrow repeats the loss silently.
+       - **Accept — the property.** EITHER a check reads print-emulated `body`
+         colours over every built page and fails on any that is not white/black
+         (base rate measured today: 0 of 139, so it cannot fail on this tree —
+         red-prove it with the rule removed), OR the ten are made to share one
+         source and the shape is refused with the reason recorded.
+
+## Slice 385 — Standardize sweep, 4 of 4 lanes on an isolated clean build, plus the thirteenth archive sweep: lanes 1-3 match their base, lane 4 is +26 body words with no cut, and 21 closed slices moved verbatim (ROADMAP.md 10,140 -> 6,726 lines; [corrected by Slice 386: 6,750 after this slice's own entry, and the closed-history share is 14.4%, not ~0]) (2026-09-24)
 
 **Dispatched by rule 2**, `Standardize 4 / 4 OVERDUE`. Built in a worktree of HEAD
 (`6a85e048`) with its own `npm ci`; docs build 0 FAIL. Base for §3's shortcut:
 Slice 383 (`330051e0`).
 
 - **Lane 1 (of 4):** *"0 dead style attribute(s) on 0 page(s); 1392 live"*.
-- **Lane 2 (of 4) — unchanged by construction:** `git diff --stat 330051e0 HEAD --
+- **Lane 2 (of 4) — figure equal to the base [corrected by Slice 386: NOT "unchanged by
+  construction" — `package-lock.json`, a lane-2 input, moved]:** `git diff --stat 330051e0 HEAD --
   packages/core/src/css` is empty and the figure equals the base's, *"74 source
   file(s) · 245 rule(s) … 234 distinct bodies · 7 body(ies) appearing more than
   once"*. `package-lock.json` did move (astro check, 362.1); the figure held.
 - **Lane 3 (of 4):** 119 pages, median 833, 119,246 words (Slice 383: 119,076);
   the same 17 flagged pages, all in §3's enumeration. Docs pages changed in the
-  window (362.1, 384, 369.2), so the +170 words is that, not drift.
+  window (362.1, 384, 369.2); [corrected by Slice 386: that the +170 words comes
+  from them was not measured].
 - **Lane 4 (of 4):** dispatch region 7,749 (Slice 383: 7,723); 1 of 16 sections
   moved, rule 3 +26 body words. Too small and too specific to cut.
-- **Archive sweep (closed-history share 43.6% -> ~0, past both trigger halves):**
+- **Archive sweep (closed-history share 43.6% -> 14.4% [corrected by Slice 386: written as ~0, unmeasured], past both trigger halves):**
   21 closed slices moved verbatim by a fence-aware splitter built from HEAD's
   bytes; 5 named by a still-open item stay (339, 348, 349, 353, 283). Each
   section re-found byte-identical in the archive by an independent regex
