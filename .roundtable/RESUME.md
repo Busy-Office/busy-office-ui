@@ -129,6 +129,19 @@ errors). It found a stray "))}" rendered on the live /reference/tokens/ page
 since 2026-08-16, now removed. Counters: Standardize 3 / 4, Objective 1 / 3
 [362].
 
+**Rule 4 at 05:53 (2026-09-25):** 375.11 PARTIAL (`0c6f319c`) — three of five
+grid-message residuals fixed (frozen cell, loading table + htmx bridge, classic
+scrollbar in the static fallback), each measured by a lens + independent skeptic
+workflow; `check:claims` 307 (+7), red-proved. The item stays OPEN: Firefox
+cannot launch on this machine (Playwright Firefox 155, "Could not find profile
+folder"), and 400% zoom's premise was false — it covers the field ENTIRELY, a
+2.4.11 AA failure; the proposed `@position-try` fix was refused (3 regressions),
+the skeptic's G2 variant is ungrilled. Slice 387 filed (387.1 two more
+overflow press paths; 387.2 covers over a frozen cell's message). Podman VM is
+started and `bo-docs-live` serves HEAD's build on :8081 (nginx listens on 80
+inside — map `-p 8081:80`). Counters: Standardize 2 / 4, Objective 2 / 3
+[372, 375]. Next: rule 4 — 375.11's zoom half is dispatchable (grill G2 first).
+
 **Rule 4 at 03:34 (2026-09-25):** 372.1 LANDED (`f866ad11`) — rule 5 keeps the
 day unit; `per_day_last`'s false reason is replaced by the measured day-close one
 (`dispatch_status.py --pairing-census`: 70 of 75 same-day pairs span a commit),

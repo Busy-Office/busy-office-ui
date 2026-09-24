@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-24 19:34 UTC
+Generated at: 2026-09-24 21:53 UTC
 
 ## Open items by slice
 
@@ -49,6 +49,9 @@ Generated at: 2026-09-24 19:34 UTC
   - 384.1 — lane 4's anchor and the rule-text generator.
 - **Slice 386** (1 open)
   - 386.1 — nothing keeps the print reset true on a NEW standalone page.
+- **Slice 387** (2 open)
+  - 387.1 — the message's horizontal overflow loses presses on two more paths.
+  - 387.2 — a frozen cell's message still has two covers above it.
 - **Slice —** (3 open)
   - OWNER · 377.5 — release the unreleased fixes, or record why not.
   - OWNER · 377.6 — is busy-office-erp the named first user?
@@ -57,9 +60,9 @@ Generated at: 2026-09-24 19:34 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1782 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-09-24 22:43   ok
-  Objective     1 / 3 slice           since 2026-09-25 02:49   ok  [372]
+dispatch status — counter-triggered rules (1784 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-09-24 22:43   ok
+  Objective     2 / 3 slices          since 2026-09-25 02:49   ok  [372, 375]
   Optimize      4 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 151 sample(s), 8 of 51 name(s) paired across days]
   -> rule 5's newest comparable pair predates 4 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-19, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-19 (2026-09-22, 2026-09-23, 2026-09-24, 2026-09-25), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -92,8 +95,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-24 18:04 · Standardize · sweep · 383 — Standardize sweep 4/4 on an isolated clean build: lane 2 unchanged by construction, lanes 1/3 match base, lane 4 cut 101 words of narrative (7,824 -> 7,723) · landed · 330051e0
-- 2026-09-24 19:03 · Continue · build · 352.2 — style-flush column kept: on a recorded M4 it reconciles like select-all (0.20/0.30 vs 0.18/0.28 of published; ~1x throttled); page says so with the command · landed · 37a704a2
 - 2026-09-24 19:32 · Continue · fix · 353.2 — dispatch-region-words recorded by the instrument with its commit (history mixed body/region figures; rule 5's pair read -8 for a -64 change) · landed · 633ff058
 - 2026-09-24 21:22 · Objective · grill · 384 — Objective grill of 352.1, 352.2, 353.2, Slice 383: 44 claims reproduce, 31 of 35 findings survive; flush ratio is Chrome-build-dependent, harness catches stale dist, metric sampling fixed; 384.1 filed · logged · eec86ae2
 - 2026-09-24 21:54 · Continue · build · 362.1 — astro check (noUnusedLocals) wired into the docs build: 562 -> 0 errors on 164 files; fixed a stray '))}' live on /reference/tokens/ since 2026-08-16 · landed · 2fc94372
@@ -102,6 +103,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-24 22:43 · Standardize · audit · prompt-audit of CLAUDE.md: three stale figures removed · landed · 2af651ff
 - 2026-09-25 02:49 · Objective · grill · Slice 386 — Objective grill of 362.1, 369.2, Slice 385 · landed · 53ffa54f
 - 2026-09-25 03:34 · Continue · build · 372.1 — rule 5 keeps the day unit; day-close reason measured, comparable set labelled · landed · f866ad11
+- 2026-09-25 05:53 · Continue · build · 375.11 — three of five grid-message residuals fixed (frozen, loading, classic scrollbar); zoom premise corrected; Slice 387 filed · landed · 0c6f319c
+- 2026-09-25 05:53 · Meta · refusal · 400% zoom last-resort @position-try: clips unbreakable tokens and adds a Tab stop at 100% zoom · refused · 0c6f319c
 
 ## Sunset test
 
