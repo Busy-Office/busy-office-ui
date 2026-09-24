@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-24 02:38 UTC
+Generated at: 2026-09-24 03:07 UTC
 
 ## Open items by slice
 
@@ -19,8 +19,6 @@ Generated at: 2026-09-24 02:38 UTC
   - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
 - **Slice 296** (1 open)
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
-- **Slice 348** (1 open)
-  - 348.1 — a kB figure in backticks is indistinguishable from a slice id by shape, and the "absent" bucket claims otherwise.
 - **Slice 349** (1 open)
   - 349.1 — rule 3 counts slices a building loop TOUCHED, not slices that closed, and the two have never been reconciled.
 - **Slice 350** (1 open)
@@ -69,9 +67,9 @@ Generated at: 2026-09-24 02:38 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1766 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-09-24 09:16   ok
-  Objective     0 / 3 slices          since 2026-09-24 10:38   ok
+dispatch status — counter-triggered rules (1767 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-09-24 09:16   ok
+  Objective     1 / 3 slice           since 2026-09-24 10:38   ok  [348]
   Optimize      3 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 148 sample(s), 8 of 51 name(s) paired across days]
   -> rule 5's newest comparable pair predates 3 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-19, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-19 (2026-09-22, 2026-09-23, 2026-09-24), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -104,7 +102,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-24 04:40 · Continue · build · 320.3 — ClassRef chip spacing uses var(--bo-space-2) like ApiTable (6.4px -> 8px) · landed · 880c2b2b
 - 2026-09-24 05:23 · Continue · build · 345.1 — .bo-motion-spin owns display:inline-block; recipe spins in flow; demo glyph no longer orbits · landed · b29e4179
 - 2026-09-24 06:38 · Objective · grill · 379 — Objective grill of Slices 345, 378: 26 claims reproduce, 12 of 12 findings survive; hidden-spinner and ACR-grammar fixes, 345.1 migration note, four records corrected · logged · 2fad3cc7
 - 2026-09-24 06:38 · Meta · refusal · reverting 345.1 or narrowing it to inline elements — the block shapes it breaks are unused here and one declaration fixes them · refused · 2fad3cc7
@@ -114,6 +111,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-24 09:16 · Standardize · sweep · 380 — Standardize sweep 4/4 on a clean HEAD worktree: lanes 1-3 no delta; DESIGN.md HONEST re-decided (the control retired); 346.1's rule moved out of the dispatch region (7,643 -> 7,521 words) · landed · 741c9bea
 - 2026-09-24 10:38 · Objective · grill · 381 — Objective grill of 335.1, 346.1, Slice 380: 45 claims reproduce, 27 of 33 findings survive; record_iteration/check bugs fixed, lane-4 cut rule fixed, intake command fixed, 381.1-381.2 filed · logged · 60235d9c
 - 2026-09-24 10:38 · Meta · refusal · unwiring the correction-site check inside the grill — 381.1 states a precision floor first, then measures · refused · 60235d9c
+- 2026-09-24 11:07 · Continue · build · 348.1 — slice-id check's ABSENT line hedged: 7 of 127 firings held a figure (15.0/15.10/0.0); 216 of 244 revisions fire, so LOOPS.md now calls a report the normal state · landed · bc79e235
 
 ## Sunset test
 
