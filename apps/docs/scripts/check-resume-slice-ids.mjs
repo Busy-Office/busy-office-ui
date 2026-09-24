@@ -247,10 +247,18 @@ console.log(
   `resume slice-ids: ROADMAP.md has ${open.length} open and ${closed.length} closed item(s) ` +
     `(both reconciled against a raw count of the file); RESUME.md names ${named.length}.`,
 );
+/* Hedged like the CLOSED bucket, because this one cannot check what it names
+   either (roadmap 348.1). Replayed over every RESUME.md revision since this
+   check landed, it fired on 127; 7 of those carried a figure shaped like an id
+   (`15.0`, `15.10` — gzip sizes — and `0.0`), and one real id (`185.2`) sat in
+   ROADMAP.md as a bullet rather than a checkbox. "Normally archived" was true
+   of the rest and asserted of all of them. */
 if (unknown.length) {
   console.log(
-    `  ${unknown.length} named id(s) are not in ROADMAP.md at all — normally archived, ` +
-      `not a finding: ${unknown.join(', ')}`,
+    `  ${unknown.length} backticked string(s) match no checkbox item in ROADMAP.md: ` +
+      `${unknown.join(', ')}\n` +
+      '  Usually an archived id; sometimes a figure shaped like one (a size, a version)\n' +
+      '  or an id written outside a checkbox. This check cannot tell which — you can.',
   );
 }
 if (!stale.length) {

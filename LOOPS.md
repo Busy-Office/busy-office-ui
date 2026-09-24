@@ -93,8 +93,12 @@ blocked-set rule 4 reads — and reconciles its own open/closed counts against a
 raw count of the file, refusing to print a verdict when they disagree. Its verb
 is **REPORTED**, not FAILED, and that is the whole distinction: it names ids
 worth re-reading and says outright it cannot tell a stale claim from a historical
-reference. On 2026-08-29 it fired on 8 of 86 revisions of `RESUME.md`, so a
-report is a signal rather than the normal state.
+reference. **A report is the normal state, not a signal** (roadmap 348.1):
+replayed with each revision's own `ROADMAP.md`, it fired on 216 of the 244
+`RESUME.md` revisions since it landed, because the hand-off keeps naming ids
+that have since closed. Read it for WHICH ids, never for whether it fired. (This
+sentence used to say 8 of 86 on 2026-08-29; no command was recorded, and
+replays of the revisions up to that day give 23 or 30 of 101.)
 
 A dirty tree is a finding, not a starting point — the previous wake was
 interrupted. Finish and land that slice before dispatching anything new, and

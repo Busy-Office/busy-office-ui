@@ -4347,7 +4347,7 @@ one incidental finding, in the shape Slice 347 used for the same situation — a
 defect surfaced by the wake's own recording step, in the advisory checks
 `record_iteration.py` runs after the commit.
 
-1. [ ] **348.1 — a kB figure in backticks is indistinguishable from a slice id
+1. [x] **348.1 — a kB figure in backticks is indistinguishable from a slice id
        by shape, and the "absent" bucket claims otherwise.** Recording this
        wake's iteration printed:
 
@@ -4404,6 +4404,29 @@ defect surfaced by the wake's own recording step, in the advisory checks
          that this check fired on **8 of 86** revisions on 2026-08-29 — that is
          the denominator to re-derive, and whether those 8 were ids or figures
          is exactly what nobody has looked at.
+       - **DONE 2026-09-24 — reworded, on the base rate.** Replayed with the
+         check's own code: each of the 244 `RESUME.md` revisions since it landed
+         (`cfb53521`), with that revision's `ROADMAP.md`, run beside the
+         committed script in a scratch tree. The ABSENT line printed on **127**,
+         and **7** of those carried a figure shaped like an id: `15.0` and
+         `15.10` (gzip sizes, 6 revisions) and `0.0` (a metric value, 1). The
+         other strings were real ids, but not all archived: `185.2` sat in
+         `ROADMAP.md` as a bullet, not a checkbox, so "not in ROADMAP.md at all"
+         was false for it too. An independent port of the four regexes agrees
+         on 244 of 244, and dropping `15.10` from it drops agreement to exactly
+         238. A 5.5% false reading is small, but the fix costs one line, so the
+         line now reads *"N backticked string(s) match no checkbox item in
+         ROADMAP.md"* and ends with the CLOSED bucket's hedge (*"This check
+         cannot tell which — you can."*); the printed output contains "normally
+         archived" 0 times, and `--self-test` passes 12 cases.
+         **The denominator did not reproduce, and it had propped up a false
+         sentence.** Replays of the revisions up to 2026-08-29 give 23 or 30 of
+         101, not 8 of 86, and no command was recorded. Since the check landed
+         it has exited 1 on **216 of 244** revisions, so LOOPS.md's *"a report is
+         a signal rather than the normal state"* was false; it now says a report
+         is the normal state, to be read for which ids. Jev: supported (A 0.93,
+         B 0.88, second round; the first read 0.79 / 0.04 on weaker evidence and
+         a claim that said "re-derived").
 
 ## Slice 347 — rule 5's missing DIRECTION is refused, and the reason is not that it is hard to record: supplying it makes rule 5 fire on the one metric it can act on, and the log's own same-timestamp companion samples refute that verdict. `324.1` closed on its Accept's second branch (2026-09-08)
 
