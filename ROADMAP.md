@@ -320,6 +320,41 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 383 — Standardize sweep, **4 of 4 lanes on an isolated clean build**, the first under Slice 382's corrected §3: lane 2 is unchanged by construction, lanes 1 and 3 match their base, and lane 4 cuts 101 words of today's own measurement narrative back out of the dispatch region (2026-09-24)
+
+**Dispatched by rule 2** (`Standardize 4 / 4 OVERDUE` — 348.1, 349.1, 350.1,
+352.1) after rule 1 read 0 open P0. **The build was isolated this time**: a
+worktree of HEAD (`67ba93f0`) with its own `npm ci`; `@busy-office/ui`
+realpath-resolves inside the worktree (`ENVIRONMENT.md` §3c's check), and the
+docs build stamps `dirty: false`. Base for §3's shortcut: `741c9bea` (Slice 380).
+
+- **Lane 2 — unchanged by construction.** `git diff --stat 741c9bea HEAD --
+  packages/core/src/css/ packages/core/scripts/report-css-repeats.mjs` is
+  empty, and the figure equals the base's: *"74 source file(s) · 245 rule(s)
+  with 3+ declarations · 234 distinct bodies · 7 body(ies) appearing more than
+  once"*.
+- **Lanes 1 and 3 — full verdict, no change.** Their input diff holds three
+  `apps/docs/scripts` files (`check-resume-slice-ids.mjs`, `check-slice-refs.mjs`,
+  `po-app-harness.mjs`), none in the build path. Lane 1 reads *"0 dead style
+  attribute(s) on 0 page(s)"* and 10 dead declarations on 8 pages, the standing
+  refusal set. Lane 3 reads 119,076 words and the same 17 flagged pages, all in
+  §3's enumeration (combobox, tabs and output-form enumerated and unflagged).
+- **Lane 4 — the dispatch region grew +340 body words in 4 of 16 sections since
+  the last cut, and all of it is today's own items:** Step 0 +102 (348.1 and
+  Slice 382's slice-id paragraph), Step 1 +90 (335.1's proof, Slice 381's
+  intake fix), rule 3 +148 net (349.1 and Slice 382; renamed, so it reads NEW
+  and GONE). The instruction stays. The measurement narrative written into
+  rule 3 and the slice-id paragraph is already carried by the ROADMAP closures
+  and the measure files, so it is cut back to pointers: **dispatch region
+  7,824 → 7,723 words, file −101**, a cut by the corrected rule (both shrink).
+  `ENVIRONMENT.md` (26 up) keeps its HONEST verdict; today's steps are two new
+  traps and a correction. `DESIGN.md` has not moved since Slice 380's verdict.
+- **The archive sweep was evaluated and declined:** `roadmap_scope.py` reads
+  closed-history share **3,606 / 9,942 = 36.3%**, well below the shares past
+  sweeps ran at; 249.12, the trigger, is still the owner's.
+
+Markdown only, so no rendered page changed and no screenshots are owed.
+
 ## Slice 382 — Objective grill of 348.1, 349.1, 350.1: 19 of 22 findings survive, every headline figure reproduces, and the closures got their own corrections wrong — 348.1 called a correct figure unreproducible, 349.1's new rule-3 wording still missed what the counter reads, and 350.1's shortcut skipped the comparison that would catch it (2026-09-24)
 
 **Dispatched by rule 3** (`Objective 3 / 3 OVERDUE [348, 349, 350]`) after rule

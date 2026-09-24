@@ -93,15 +93,11 @@ blocked-set rule 4 reads — and reconciles its own open/closed counts against a
 raw count of the file, refusing to print a verdict when they disagree. Its verb
 is **REPORTED**, not FAILED, and that is the whole distinction: it names ids
 worth re-reading and says outright it cannot tell a stale claim from a historical
-reference. **A report is the normal state, not a signal** (roadmap 348.1):
-replayed with each revision's own `ROADMAP.md`, it fired on 216 of the 244
-`RESUME.md` revisions after it landed, because the hand-off keeps naming ids
-that have since closed. Read it for WHICH ids, never for whether it fired. This
-sentence used to say 8 of 86 on 2026-08-29, and that figure was right: it
-reproduces exactly over the revisions up to `cfb53521`, and all 8 were real
-closed ids. The rate changed once the check ran. `record_iteration.py` prints
-its output only when it exits non-zero, so an ABSENT list with no CLOSED id
-beside it is never shown.
+reference. **A report is the normal state, not a signal** (roadmap 348.1): it
+fired on 216 of the 244 `RESUME.md` revisions after it landed (8 of 86
+before), because the hand-off keeps naming ids that have since closed — read
+it for WHICH ids. `record_iteration.py` shows its output only on a non-zero
+exit, so an ABSENT list with no CLOSED id beside it is never seen.
 
 A dirty tree is a finding, not a starting point — the previous wake was
 interrupted. Finish and land that slice before dispatching anything new, and
@@ -411,16 +407,12 @@ match to its full playbook below:
    included; closed is not required — **or user asked**? → dispatch
    **Objective**.
 
-   **Named, not closed — decided 2026-09-24 (roadmap 349.1, corrected by the
-   Slice 382 grill).** This line used to say *closed*; the counter has always
-   counted the slice a building row's label names, and it ignores the row's
-   outcome (Slice 382's own arming set included a refused row). Whether a
-   grill should need shipped work is 381.2's open question. The counter as
-   shipped at each past dispatch armed 63 grills on three named slices, and
-   only 28 of those had three closed at the time; 27% of all armed slices were
-   still open. A closed reading would have delayed 35 of them, each by 1-21
-   further log rows. Kept on the asymmetry §6 step 0 records: over-arming costs
-   a paragraph of narrowing, under-arming starves the loop.
+   **Named, not closed** (roadmap 349.1, corrected by Slice 382). The counter
+   credits the slice a building row's label names, whatever the row's outcome;
+   whether a grill should need shipped work is 381.2's question. It is kept on
+   the asymmetry §6 step 0 records: over-arming costs a paragraph of narrowing,
+   under-arming starves the loop. The replay behind it (28 of 63 past grills
+   had three slices closed) is `.roundtable/measure-349.1-2026-09-24.md`.
 
    Moved above the queued build item on 2026-08-19, for exactly the reason
    Standardize was moved there: a *counter* can never fire while a rule that is
