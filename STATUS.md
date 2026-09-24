@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-23 22:38 UTC
+Generated at: 2026-09-24 00:04 UTC
 
 ## Open items by slice
 
@@ -21,8 +21,6 @@ Generated at: 2026-09-23 22:38 UTC
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - **Slice 335** (1 open)
   - 335.1 — The Discussions intake has never returned a non-empty list, in either environment.
-- **Slice 346** (1 open)
-  - 346.1 — Slice 343 refused a whitespace normaliser on a caller census of counting INSTRUMENTS. The failure recurred the next wake in a population that census did not measure: a wake's own grep checking that a correction it just made landed everywhere.
 - **Slice 348** (1 open)
   - 348.1 — a kB figure in backticks is indistinguishable from a slice id by shape, and the "absent" bucket claims otherwise.
 - **Slice 349** (1 open)
@@ -70,9 +68,9 @@ Generated at: 2026-09-23 22:38 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1760 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-09-24 04:15   ok
-  Objective     0 / 3 slices          since 2026-09-24 06:38   ok
+dispatch status — counter-triggered rules (1762 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-09-24 04:15   ok
+  Objective     1 / 3 slice           since 2026-09-24 06:38   ok  [346]
   Optimize      3 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 148 sample(s), 8 of 51 name(s) paired across days]
   -> rule 5's newest comparable pair predates 3 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-19, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-19 (2026-09-22, 2026-09-23, 2026-09-24), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -106,8 +104,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-24 02:02 · Continue · bug · P0 376.2 — motion collapse stub fixed; dashboard card animation restored (minmax both states) · landed · 6ef23624
-- 2026-09-24 02:14 · Continue · bug · P0 376.4 — quantity/unit joint skips a hidden input (initGroupedNumber) · landed · e1ba6e8d
 - 2026-09-24 03:02 · Objective · grill · Slice 377 — grill of 373-376: 47/47 claims hold; P0 377.1 + 377.2, revision-blind completion gate, adoption ~zero, owner calls 377.5/377.6 · logged · faf331b4
 - 2026-09-24 03:36 · Continue · bug · P0 377.1 — real right-click opens the context menu (opens after release when asked mid-press) · landed · 0ade896e
 - 2026-09-24 03:48 · Continue · bug · P0 377.2 — launcher re-filters on dialog close; grid matches field after Escape · landed · b4e592d3
@@ -116,6 +112,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-24 05:23 · Continue · build · 345.1 — .bo-motion-spin owns display:inline-block; recipe spins in flow; demo glyph no longer orbits · landed · b29e4179
 - 2026-09-24 06:38 · Objective · grill · 379 — Objective grill of Slices 345, 378: 26 claims reproduce, 12 of 12 findings survive; hidden-spinner and ACR-grammar fixes, 345.1 migration note, four records corrected · logged · 2fad3cc7
 - 2026-09-24 06:38 · Meta · refusal · reverting 345.1 or narrowing it to inline elements — the block shapes it breaks are unused here and one declaration fixes them · refused · 2fad3cc7
+- 2026-09-24 08:04 · Continue · build · 346.1 — correction base rate: 13 of 59 superseding commits left a stale copy (17 sites, 2 wrap-only); check_correction_sites.py lists the copies (11/17 from the diff, 16 with --old), wired as a REPORTED advisory · landed · f8856986
+- 2026-09-24 08:04 · Meta · refusal · a whitespace normaliser as the fix — the wrap hid 2 of the 17 stale copies · refused · f8856986
 
 ## Sunset test
 
