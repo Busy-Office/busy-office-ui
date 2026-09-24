@@ -320,6 +320,80 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 381 — Objective grill of 335.1, 346.1 and Slice 380: 27 of 33 findings survive, every headline figure reproduces, and the defects shipped beside them — two bugs in 346.1's check, a verification recipe that was not isolated, and a loop that spent five hours on its own machinery while six P0 fixes waited on a release (2026-09-24)
+
+**Dispatched by rule 3** (`Objective 3 / 3 OVERDUE [335, 346, 380]`) after rule 1
+read 0 open P0. The labels 335 and 346 resolve to items closed in place
+(`0756cafb`; `f8856986` + `2428af86`), so the subjects are those two closures
+and Slice 380. Report: `.roundtable/grill-objective-335-346-380-2026-09-24.md`
+(4 finders + 4 adversarial verifiers, workflow `wf_516a8fb5-83a`; 45 claims
+reproduced, 33 findings, 27 survived, 6 refuted).
+
+**Fixed in this commit:**
+- `record_iteration.py` checked HEAD rather than the recorded commit, and the
+  check failed silently from outside the repository or on a bad sha. It now
+  passes the recorded commit, runs from the repository root, and a failed git
+  read exits 2 as "could not run".
+- `report_loop_prose.py` counted Slice 380's relocation as a cut, resetting
+  lane 4's baseline. A cut now shrinks the file too (`is_cut`, +4 self-test
+  cases; no past reading changes). The baseline is back at `4e6b83c1`.
+- LOOPS.md's intake spelled `$GITHUB_TOKEN`, which is unset locally: both
+  intakes answered 401 with `len` 3 while the 404 control passed. It now falls
+  back to `gh auth token` and prints each status, verified with the variable
+  unset (200 / 200 / 404).
+- ENVIRONMENT.md §3c: a worktree with symlinked `node_modules` builds against
+  the main checkout's `packages/core`, so Slice 380's "clean tree" was not.
+  The figures held only because that `packages/core` had no uncommitted
+  source. RESUME.md's lane-run note stops recommending the recipe.
+- LOOPS.md §6's Exit now requires the thesis section, with a framework-code
+  command that can see JS: 377.7's structural half.
+- `.roundtable/measure-346.1-2026-09-24.md` carries 346.1's commands and lists.
+  The pinned selection reproduces 1,062 and 231 at `04e08b9b`.
+- An 18th stale copy is annotated in the archive. The four uncommitted
+  adoption rows are committed.
+
+**Corrected in place:** 335.1's DONE block (the command that ran; a tombstone
+and a consumed number are left); 346.1's DONE block, rule, docstring and
+comments (18 sites; 10 of 17 on the superseded number itself; two of the
+verifiers' eight left copies; one odd `~~` paragraph hid about 10,700 lines;
+"at least 59, among the 231"; precision about 4 real sites in 234 printed);
+Slice 380 and the 167.1 note ("none is incident narrative" is false; the
+rules bucket is two build rules and one unit rule); 377.5 (six unreleased P0
+fixes, not four); 377.7 (channel windows, jsDelivr, current-version
+downloads, GitHub traffic); Slice 379's daily series and its report's command
+path.
+
+**Thesis:** npm `@busy-office/ui` 16 in 2026-09-15..21, 5 of them the current
+version; `create-ui` 12; jsDelivr 29 a month, 0 hits on any `dist/` file;
+GitHub 22 views / 7 uniques and 244 clones / 118 uniques (09-09..22); 0 stars,
+forks or non-owner items. Framework code since Slice 379: **0 lines** (`git
+diff --numstat 2fad3cc7 HEAD -- packages/core/src`), against 373 lines of loop
+tooling and 339 of records.
+
+1. [ ] **381.1 — the correction-site check: precision, coverage, or unwire it.**
+       Over the last 150 `ROADMAP.md` commits it printed 234 site lines, about 4
+       of them real stale copies; 12 of 19 mutations survive its self-test,
+       including the paths the published 10-of-17 rests on (commit-message
+       "not N", struck extraction, `--old`, strike masking, the exit code); it
+       cannot see an end-of-hunk replace, a struck bare number's context,
+       separators or units, or a copy that moved to `ROADMAP-archive.md`.
+       - **Accept:** state a precision floor before measuring. Then either
+         re-tune — suppress quotations inside the correcting section, search
+         both roadmap files, add a self-test case for each path — and re-measure
+         precision and recall on the same windows (the 150 commits, the 18
+         sites), or unwire it from `record_iteration.py` if it stays below the
+         floor. Unwiring on the number is a satisfying outcome.
+2. [ ] **381.2 — rule 3 arms on slices that shipped nothing.** This grill's
+       three subjects changed 0 lines under `packages/` or `apps/docs`, and it
+       still ran four finders and four verifiers. Before anything changes, the
+       base rate.
+       - **Accept:** over the last 20 Objective grills, count those whose armed
+         slices changed no shipped artefact (`git diff --numstat` of each
+         subject's commits against `packages/ apps/docs/src`), with the command
+         beside the count. Then decide: narrow such a grill to reproducing the
+         headlines plus the thesis section, count only shipping slices toward
+         rule 3, or leave it — refusing on the number is satisfying.
+
 ## Slice 380 — Standardize sweep, **4 of 4 lanes on a clean HEAD tree**: lanes 1-3 carry no delta; lane 4 re-decides `DESIGN.md` (HONEST on what it grew on, no longer "the control") and moves 346.1's correction rule out of the dispatch region (2026-09-24)
 
 **Dispatched by rule 2** (`Standardize 4 / 4 OVERDUE` — 320.3, 345.1, 346.1,
@@ -363,6 +437,15 @@ working tree. The worktree's build stamp reads dirty only for its three
     335.1 replacing a "not red-proved" limitation with its proof.
 
 Markdown only, so no rendered page changed and no screenshots are owed.
+
+[**Corrected by Slice 381:** the worktree was not isolated — with `node_modules`
+symlinked, `@busy-office/ui` resolved to the main checkout's `packages/core`,
+which happened to hold no uncommitted source (`ENVIRONMENT.md` §3c). "None is
+incident narrative" is false: `c073c360` adds a dated drift account and rule
+4's text a session aside, and the "+674 build rules" are two build rules and
+one unit-doctrine rule. HONEST stands on standing rules dominating. And the
+move to Operating rules read as a CUT to lane 4's instrument, resetting its
+baseline; `report_loop_prose.py` now requires the file to shrink too.]
 
 ## Slice 379 — Objective grill of Slices 345, 378: every headline figure reproduces at its own revision, and all twelve findings are in what shipped BESIDE the figure — 345.1's move of `display: inline-block` into the utility breaks a block spinner nobody measured, and 378 published totals read off a working tree (2026-09-24)
 
@@ -411,7 +494,8 @@ slowest-growing file).
 
 **Thesis (§6 step 1, the reading 377.7 asks for, recorded 05:50 with
 `record_metric.py`):** npm
-`@busy-office/ui` 16 downloads in the last week (daily 0, 2, 2, 1, 0, 0, 0),
+`@busy-office/ui` 16 downloads in the last week (daily 0, 2, 2, 1, 0, 0, 0
+[**Corrected by Slice 381:** those are 09-17..23, summing to 5; the 16 is 09-15..21]),
 `create-ui` 12; jsDelivr 41 hits a month; 0 stars, forks, or non-owner issues
 or discussions. Latest published is 0.8.0 (2026-09-06). Not visible to any of
 these: copies of `dist`, private mirrors, unpkg. Unchanged from Slice 377's
@@ -524,6 +608,10 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
        (2026-09-06). The one consumer pins 0.8.0 and vendors only the CSS, so
        375.9, 376.2, 376.4 and 374.5's 6x smaller default export are fixes it
        does not have. Publishing is owner-triggered. Either outcome closes it.
+       [**Corrected by Slice 381:** **six** P0 fixes are outside `v0.8.0`, 260 commits
+       back: 300.1 (issue #1's crash, closed on 2026-09-06 with the fix "on the
+       next release"; the published `bo-check-markup` still crashes), 375.9,
+       375.10, 376.2, 376.4 and 377.1.]
 6. [ ] **OWNER · 377.6 — is busy-office-erp the named first user?** Its ADR-0016
        names this package the reference implementation of its runtime-UI
        contract; nothing in this repo's steering documents names it. If yes:
@@ -540,6 +628,15 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          (adoption reading, the named user, comparators starting from SAP
          fundamental-styles) and the framework-code line count since the last
          grill, with its command.
+       - **The Exit half LANDED in Slice 381** (LOOPS.md §6, with
+         `git diff --numstat <sha> HEAD -- packages/core/src`, which sees JS;
+         the first command used named a `behaviors/` path that does not exist).
+         **The instrument half stays open, with four requirements the 381 grill
+         measured:** record each reading's window (npm's last week lags, and a
+         daily series beside it covered other days); record current-version
+         downloads (5 of 16 were 0.8.0); record jsDelivr hits to `dist/*`
+         files, since every hit so far was a README, package.json or script;
+         and add GitHub traffic, the only channel above zero.
 8. [ ] **377.8 — the ACR's 1.4.11 and 2.4.7 remarks derive from source.** 1.4.11
        still states the limitation 374.7 removed; both remarks are literals.
        - **Accept:** removing check-contrast's edge branch, or changing the
@@ -4461,6 +4558,17 @@ lane-3 claim holds too: `/patterns/output-form/` **is** one of 158.1's twelve, s
          **Not covered:** corrections recorded only in other files, and
          supersedes the readers judged non-numeric. Jev: supported (A 0.95,
          B 0.89).
+         [**Corrected by Slice 381:** **18** sites in 13 commits, not 17 — the check itself
+         listed `b7317ff9` L458, now annotated. Two of the verifiers' 8 extra
+         commits (`534c4593`, `411a6663`) did leave a copy, filing the
+         correction as an open item; the check misses both (out of sample, 1 of
+         3). "11 of the 17" is **10** on the superseded number itself, plus one
+         listed through a neighbouring figure. The strike mask: **one**
+         paragraph with an odd `~~` count, of 23 markers, hid about 10,700
+         lines (39,366-50,080). Precision, which this block omitted: about **4
+         real sites in 234 printed** over the last 150 commits (381.1). The
+         commands and lists the Accept asked for are in
+         `.roundtable/measure-346.1-2026-09-24.md`.]
 
 **Gates: all 17 cloud-runnable entry points green** on the committed tree, the
 list re-derived from `ci.yml` rather than read off a snapshot.
@@ -5459,6 +5567,12 @@ does not.
          red-proved" paragraph is now the dated proof, and `LOOPS.md`'s intake
          note says so. The cloud wake's GraphQL 403 still stands; it no longer
          matters, since the proof exists. Jev: supported 0.95.
+         [**Corrected by Slice 381:** the intake as LOOPS.md then spelled it used
+         `$GITHUB_TOKEN`, unset locally, and answered 401; what ran substituted
+         `gh auth token`, and LOOPS.md now spells that fallback. And "nothing is
+         left" is not quite true: no content is, but `/discussions/3`
+         intermittently serves a deleted-discussion page with HTTP 200, and #3
+         is consumed from the number sequence issues share.]
 
 ## Slice 334 — 315.3: `check:selftests` now RUNS each self-test, because the third rung of its own ladder was open — and the two costs that were expected to refuse it both measure zero (2026-09-07)
 

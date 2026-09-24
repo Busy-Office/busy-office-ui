@@ -4,15 +4,21 @@
 @heuristic — the verdict rests on RECOGNISING a superseded number in a diff, so it
 ships a --self-test.
 
-A commit that corrects a number in ROADMAP.md usually fixes the site it was
+A commit that corrects a number in ROADMAP.md often fixes the site it was
 looking at and leaves another copy standing. 346.1 measured it over the record:
-of 59 commits that strike or supersede a number in the file, 13 left at least one
-stale copy (17 sites, adversarially verified; the method is in ROADMAP 346.1).
-Only 2 of the 17 were hidden by a line wrap; the rest sat in a heading, a DONE
-line or another slice, where a plain grep finds them. So the cheap fix is not
-a normaliser, it is being SHOWN the other copies. Replayed on those 13 commits
-this lists 11 of the 17 from the diff alone, and 16 when the wake also names
-the old value with --old; the 17th was restated in different words.
+among the 231 commits that add a line naming a correction, at least 59 strike
+or supersede a number, and 13 of those left a stale copy (18 sites after Slice
+381's grill found one more; `.roundtable/measure-346.1-2026-09-24.md` carries
+the commands and lists). Only 2 were hidden by a line wrap; the rest sat in a
+heading, a DONE line or another slice. So the cheap fix is not a normaliser, it
+is being SHOWN the other copies. Replayed on the 17 sites 346.1 first counted,
+this lists 10 on the superseded number itself (11 counting one listed through
+a neighbouring figure) from the diff alone, and 16 with --old.
+
+Its PRECISION is low, and that is the known cost: over the last 150 ROADMAP
+commits it reported on 36 and printed 234 site lines, of which about 4 were
+real stale copies. Roadmap 381.1 owns re-tuning it or unwiring it. It reads
+ROADMAP.md only, so a copy that has moved to ROADMAP-archive.md is not listed.
 
 What it reads (default: the HEAD commit's change to ROADMAP.md):
   - a number replaced by a different number in the same hunk;
@@ -51,8 +57,9 @@ that these those with as from not no into than then so but if when which who wha
 all any each every one two three four five six seven eight nine ten per vs via
 only also still now same other more most less least before after over under'''.split())
 TOKEN = re.compile(r'[-+−]?\d[\d,]*(?:\.\d+)?%?|[A-Za-z][A-Za-z_-]*')
-# A strike never crosses a blank line (GFM). Unbounded, one stray `~~` masked
-# 9,613 lines of ROADMAP-archive.md and hid real copies (346.1's own red run).
+# A strike never crosses a blank line (GFM). Unbounded, the one paragraph with
+# an odd `~~` count (of 23 markers) masked about 10,700 lines of
+# ROADMAP-archive.md, 39,366-50,080, and hid real copies (346.1's own red run).
 STRUCK = re.compile(r'~~(?:(?!~~)(?!\n[ \t]*\n).)+?~~', re.S)
 CORRECTION = re.compile(r'(?i)correct|supersed|withdrawn|is wrong|first read')
 _NUMRX = r'(?:[-+−]?\d[\d,]*(?:\.\d+)?%?|' + '|'.join(sorted(NUMWORDS)) + r')'
@@ -69,8 +76,19 @@ CAP = 8
 
 
 def git(*args, repo='.'):
-    return subprocess.run(['git', '-C', repo, *args], capture_output=True, text=True,
-                          errors='replace').stdout
+    # Raises on failure: a bad sha or a cwd outside the repo used to read as
+    # "supersedes no number" and exit 0 — a check that cannot run must say so.
+    r = subprocess.run(['git', '-C', repo, *args], capture_output=True, text=True,
+                       errors='replace')
+    if r.returncode != 0:
+        print(f'check_correction_sites: could not run `git {" ".join(args)}`: '
+              f'{r.stderr.strip()}', file=sys.stderr)
+        sys.exit(2)
+    return r.stdout
+
+
+# The repository this script lives in, not the caller's cwd.
+REPO = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
 
 
 def clean(s):
@@ -292,7 +310,7 @@ def main(argv):
     path = argv[argv.index('--file') + 1] if '--file' in argv else 'ROADMAP.md'
     commit = argv[argv.index('--commit') + 1] if '--commit' in argv else 'HEAD'
     olds = [argv[i + 1] for i, a in enumerate(argv) if a == '--old']
-    repo = git('rev-parse', '--show-toplevel').strip() or '.'
+    repo = REPO
     rev, rows, report = check(repo, path, commit, '--worktree' in argv, olds)
     if not rows:
         print(f'check_correction_sites: {rev} supersedes no number in {path}')

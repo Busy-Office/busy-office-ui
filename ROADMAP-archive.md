@@ -20695,8 +20695,8 @@ net effect on `LOOPS.md` this wake is two paragraphs replaced and one added.
           hold a file near flat while everything around it grows, so the growth
           elsewhere is a property of those files and not of the era.
           [**Re-decided by Slice 380 (2026-09-24):** HONEST stands, on what the
-          file grew on — build rules, Non-goals and design decisions, no
-          incident narrative. "The control" is retired: by then it was +48.4%
+          file grew on — mostly build rules, Non-goals and design decisions,
+          with two dated narrative passages (Slice 381's correction). "The control" is retired: by then it was +48.4%
           since 2026-08-20, faster than `CLAUDE.md` and `ROADMAP.md`.]
 
        **THE DECISION: the cadence extends to these files; 158.2's INSTRUMENT
@@ -32029,7 +32029,9 @@ on the same day.
 **Not filed as an item** — Step 0c's decision is *accept collisions*, taken with
 the cost named, and the decision is the owner's. What is new is only that the
 cost is no longer hypothetical: the accepted figure is *"up to one wake's work,
-discarded"* and the measured figure for one day is **at least three wakes' work**.
+discarded"* and the measured figure for one day is **at least three wakes' work**
+[**Corrected by 346.1 (added by Slice 381):** at least four, per the 233.1
+triage].
 Recorded for the owner in `RESUME.md`'s Direction block, which is the one place
 the loop can say so; no fourth option is proposed here, because Step 0c already
 records three refusals with a measured reason each and inventing a fourth to fill

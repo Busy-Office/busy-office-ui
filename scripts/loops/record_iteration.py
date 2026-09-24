@@ -188,17 +188,22 @@ def main():
 
     # A FOURTH advisory check, and like the third below it can only run once
     # the commit exists (roadmap 346.1). Did a correction to ROADMAP.md reach
-    # every copy of the number? 13 of 59 superseding commits on record left
-    # one standing. It reads HEAD, which is the item's commit when this runs.
-    # REPORTED on the slice-id check's rule: it cannot tell a quotation from a
-    # stale copy.
+    # every copy of the number? At least 13 of the 59 superseding commits the
+    # 346.1 census found left one standing. It reads the RECORDED commit, not
+    # HEAD: a wake that records an earlier item with --commit would otherwise
+    # never have that item checked (Slice 381). REPORTED on the slice-id
+    # check's rule: it cannot tell a quotation from a stale copy.
     sites = os.path.join(os.path.dirname(__file__), "check_correction_sites.py")
     try:
-        r = subprocess.run([sys.executable, sites, "--commit", "HEAD"],
-                           capture_output=True, text=True)
+        r = subprocess.run([sys.executable, sites, "--commit", commit or "HEAD"],
+                           capture_output=True, text=True,
+                           cwd=os.path.join(os.path.dirname(__file__), "..", ".."))
         if r.returncode == 1:
             print("  (correction-site check REPORTED — see below)", file=sys.stderr)
             print((r.stdout or "") + (r.stderr or ""), file=sys.stderr)
+        elif r.returncode != 0:
+            print(f"  (warning: correction-site check could not run: {(r.stderr or '').strip()})",
+                  file=sys.stderr)
     except Exception as exc:  # noqa: BLE001 - same reason as above
         print(f"  (warning: correction-site check could not run: {exc})", file=sys.stderr)
 

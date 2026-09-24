@@ -290,18 +290,24 @@ surfaced since the last wake — in chat, added to `ROADMAP.md`'s backlog by
 someone else, or **filed on GitHub**. **Two intakes, and both are read every
 wake** (public since 0.1.0 shipped on npm):
 
-**Use the REST form. It is the only one that runs in BOTH environments**, and
-`$GITHUB_TOKEN` is already in the cloud container's environment (locally,
-`TOK=$(gh auth token)`):
+**Use the REST form. It is the only one that runs in BOTH environments**:
+`$GITHUB_TOKEN` is in the cloud container's environment, and locally the
+fallback reads `gh auth token`:
 
 ```
 R=https://api.github.com/repos/Busy-Office/busy-office-ui
-H="Authorization: bearer $GITHUB_TOKEN"
+H="Authorization: bearer ${GITHUB_TOKEN:-$(gh auth token)}"
 
-curl -sS -H "$H" "$R/issues?state=open"      # the issue intake
-curl -sS -H "$H" "$R/discussions"            # the discussion intake
+curl -sS -w '\nHTTP %{http_code}\n' -H "$H" "$R/issues?state=open"   # the issue intake
+curl -sS -w '\nHTTP %{http_code}\n' -H "$H" "$R/discussions"         # the discussion intake
 curl -sS -o /dev/null -w '%{http_code}\n' -H "$H" "$R/not-a-real-route"
 ```
+
+**Read the status before the length.** With no token the header is
+`bearer ` and both intakes answer `401 Bad credentials`, a JSON object whose
+`len` is 3, while the 404 control still answers 404 — it cannot see a bad token
+(Slice 381 grill, reproduced locally with `GITHUB_TOKEN` unset). A count is a
+`200` with a JSON array.
 
 **The third line is not decoration — it is the control that makes an empty
 answer mean anything.** An empty `[]` is what *"no open discussions"* looks
@@ -335,7 +341,7 @@ So the rule is: **each intake produces a count this wake, or the wake says
 which one it could not read and why.** Never report the triage step clear on an
 intake that was not opened. `ENVIRONMENT.md` §8 carries the substitute that
 works in the container, the controls that make an empty answer mean *zero*
-rather than *wrong route*, and the red-proof that is still owed.
+rather than *wrong route*, and the dated end-to-end proof (335.1).
 
 **Issues are for DEFECTS; Discussions are for everything that is not one yet**
 (enabled 2026-09-06, roadmap 297). The split is not bureaucracy — an issue
@@ -1354,7 +1360,13 @@ never dirties main.
 2. Evidence gate: a conclusion needs ≥2 independent sources to be `Evidence`, else
    `Hypothesis`; every claim carries counter-evidence.
 3. Feed findings back into the Roadmap loop's triage as re-prioritization, not as vibes.
-**Exit:** a scored report lands in `.roundtable/`.
+**Exit:** a scored report lands in `.roundtable/`, and it carries a **thesis
+section** (roadmap 377.7, this half landed by Slice 381): the adoption reading
+with each channel's window and what the channels cannot see; the named first
+user and its state; comparators, starting from SAP fundamental-styles; and the
+framework-code lines changed since the last grill, with the command beside the
+number (`git diff --numstat <last grill's sha> HEAD -- packages/core/src`). A
+grill that cannot take the reading says which channel it could not read.
 
 ---
 
@@ -1845,15 +1857,19 @@ than the two differing by design.
   rebuildable telemetry.
 - **A correction must reach every copy of the number** (roadmap 346.1; moved
   here from rule 4 by Slice 380, since a wake needs it when correcting, not
-  when deciding). Of 59 commits that struck or superseded a number in
-  `ROADMAP.md`, 13 left a stale copy standing (17 sites) — a heading, a DONE
-  line, another slice — and only 2 of the 17 were hidden by a line wrap. `record_iteration.py` runs
+  when deciding). Among the 231 commits that add a correction line to
+  `ROADMAP.md`, at least 59 struck or superseded a number, and 13 of those left
+  a stale copy standing (18 sites) — a heading, a DONE line, another slice.
+  Only 2 were hidden by a line wrap. `record_iteration.py` runs
   `scripts/loops/check_correction_sites.py` on the commit it records and lists
   the other places the old number still appears. Run it with `--worktree`
   before committing, and add `--old "<old spelling>"` when the correction
-  keeps the old text (a withdrawal, a refuted premise): the diff alone showed
-  11 of the 17, and naming the old value 16. It reports and never fails — a
-  quotation is fine, a restatement is a missed site.
+  keeps the old text (a withdrawal, a refuted premise): on the first 17 sites
+  the diff alone found 10 by their own number, and naming the old value 16.
+  Expect mostly false alarms — about 4 real sites in 234 printed lines over the
+  last 150 commits (381.1 owns that). It reports and never fails — a quotation
+  is fine, a restatement is a missed site. Commands and lists:
+  `.roundtable/measure-346.1-2026-09-24.md`.
 - **No longer session-scoped, and that is what made concurrency real** — this
   bullet used to read "these run while this session is open; closing it stops
   them. For durable cloud cadence, promote to `/schedule`." The promotion

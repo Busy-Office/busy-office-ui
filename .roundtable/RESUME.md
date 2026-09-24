@@ -68,9 +68,11 @@ Counters now Standardize 0 / 4, **Objective 3 / 3 OVERDUE [335, 346, 380]**.
 the thesis section and adoption reading 377.7 asks for. After it, rule 4
 resumes at 348.1.
 
-**Lane-run note:** run the Standardize lanes in a throwaway worktree of HEAD
-(`git worktree add --detach`, symlink the three `node_modules`), because the
-owner's uncommitted screen-kit edits otherwise enter lane 3's total (Slice 379).
+**Lane-run note:** run the Standardize lanes on a build of HEAD without the
+owner's uncommitted screen-kit edits, which otherwise enter lane 3's total
+(Slice 379). **Not the recipe Slice 380 used:** a worktree with symlinked
+`node_modules` builds against the main checkout's `packages/core`
+(`ENVIRONMENT.md` §3c has the check to run first).
 
 **Row-label trap, found by `dispatch_status.py`:** record rows that begin
 `P0 377.1 — …` name no slice to the rule-3 counter (it warns "none names a
@@ -669,6 +671,10 @@ hand: the staged diff re-read adversarially before committing.
 
 ## The open set is 24 — no P0
 
+> **Stale: this is the Slice 372 hand-off's reading (2026-09-09).** 345.1,
+> 346.1 and 335.1 have closed since, and 320.3 too. For the open set, read
+> `STATUS.md` or count the `N. [ ]` checkboxes (Slice 381).
+
 `roadmap_scope.py` at the slice commit and the raw checkbox count agree at
 **24**. Slice 372 closed **no** item and opened **one** (`372.1`), so the set is
 +1 on the previous hand-off's 23.
@@ -780,7 +786,8 @@ the two biggest.**
    increment `dry`. Not touched this wake; rule 6 was never reached.
 5. **`335.1` cannot be settled by any cloud wake.** A local wake can do it in
    one command, or the owner can file a throwaway Q&A discussion and let the
-   next wake read it.
+   next wake read it. **[Settled 2026-09-24: 335.1 closed on a real
+   discussion, `0756cafb`.]**
 
 **A sixth, carried forward unchanged: `362.1` will change published sample
 code.** Adopting `astro check` means resolving 22 DOM-narrowing errors inside

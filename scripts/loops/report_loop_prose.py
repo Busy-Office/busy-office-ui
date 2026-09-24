@@ -263,12 +263,21 @@ def region_words_at(rev):
     return _REGION_CACHE[rev]
 
 
-def last_region_cut():
-    """(sha, day) of the newest commit that REDUCED the dispatch region.
+def is_cut(region_prev, region_cur, file_prev, file_cur):
+    """A CUT removes words from LOOPS.md. Text moved out of the dispatch region
+    into the playbooks shrinks the region while the file stays or grows; that
+    is a relocation, and counting it as a cut resets the per-section baseline
+    and hides the growth a sweep is asked to attribute (roadmap 381: Slice
+    380's move read as the newest cut, and it is the only region reduction on
+    record where the file grew)."""
+    return region_cur < region_prev and file_cur < file_prev
 
-    The anchor for the per-section block: a delta since the last cut is what
-    tells a sweep whether the previous cut held, which is the question 308.1's
-    three branches turn on. `(None, None)` when the region has never shrunk.
+
+def last_region_cut():
+    """(sha, day) of the newest commit that CUT the dispatch region — see
+    `is_cut`. The anchor for the per-section block: a delta since the last cut
+    is what tells a sweep whether the previous cut held, which is the question
+    308.1's three branches turn on. `(None, None)` when there is none.
     """
     out = git("log", "--format=%x00%H %ad", "--date=format:%Y-%m-%d", "--", "LOOPS.md").stdout
     recs = [r.strip().split()[:2] for r in out.split("\x00") if r.strip()]  # newest first
@@ -277,7 +286,9 @@ def last_region_cut():
         if cur is None or prev is None:
             return None, None
         if cur < prev:
-            return sha, day
+            ft, fp = text_at(sha, "LOOPS.md"), text_at(prev_sha, "LOOPS.md")
+            if is_cut(prev, cur, len(fp.split()), len(ft.split())):
+                return sha, day
     return None, None
 
 
@@ -490,12 +501,20 @@ def self_test():
     if got is not None or not why:
         bad.append("    a missing `## Playbooks` anchor returned sections instead of a reason")
 
+    # A cut removes words; a move below the anchor is not one (roadmap 381).
+    for args, want, what in (((7643, 7521, 18762, 18781), False, "a relocation (region down, file up)"),
+                             ((7552, 7484, 18309, 18241), True, "an archive cut (both down)"),
+                             ((7532, 7354, 17815, 17786), True, "a partial move that still removed words"),
+                             ((7484, 7643, 18241, 18762), False, "growth")):
+        if is_cut(*args) is not want:
+            bad.append(f"    is_cut{args} should be {want}: {what}")
+
     if bad:
         print("report_loop_prose --self-test FAILED:", file=sys.stderr)
         print("\n".join(bad), file=sys.stderr)
         return 1
     print(f"report_loop_prose --self-test: "
-          f"{len(SELF_TEST) + len(SPLIT_SELF_TEST) + len(SECTION_SELF_TEST) + 3} "
+          f"{len(SELF_TEST) + len(SPLIT_SELF_TEST) + len(SECTION_SELF_TEST) + 3 + 4} "
           f"cases classified correctly")
     return 0
 
@@ -616,7 +635,7 @@ def main():
             body = sum(w for _, w in now_secs)
             heads = dispatch_heading_words(text_at("HEAD", "LOOPS.md"))
             print(f"\n    per-section BODY words (headings excluded — 339.1's convention),\n"
-                  f"    since the last commit that REDUCED the region ({cut_sha[:8]}, {cut_day}):")
+                  f"    since the last commit that CUT the region ({cut_sha[:8]}, {cut_day}; a move below the anchor is not a cut):")
             moved = 0
             for name, w in now_secs:
                 d = w - was.get(name, 0)

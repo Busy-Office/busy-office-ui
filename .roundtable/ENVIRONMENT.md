@@ -366,6 +366,29 @@ something re-runs. `check:formatting` reaching CI unrun on 2026-08-29 is the
 same failure by a different route (a list that did not name it); this one is a
 list that named it and an ORDER that ran it too early.
 
+## 3c. A WORKTREE WITH SYMLINKED `node_modules` IS NOT ISOLATED
+
+Found by the Slice 381 grill, on the recipe Slice 380 used and wrote into
+`RESUME.md`: `git worktree add --detach <dir> HEAD`, then symlink the repo's
+three `node_modules` into it. `@busy-office/ui` is an npm workspace link, so
+through the symlinked root `node_modules` it resolves to the **main checkout's**
+`packages/core`, not the worktree's. Every docs import of it — `api.json`,
+`acr.json`, `ClassRef`/`ApiTable`, the copied framework CSS lane 1 scans — then
+comes from the main checkout's `packages/core/dist`. The shared
+`apps/docs/node_modules` also carries the main checkout's `.astro`/`.vite`
+caches. Slice 380's figures held only because the main checkout's
+`packages/core` had no uncommitted source.
+
+**Check before trusting a worktree build**, from its `apps/docs`:
+
+```
+node -p "require('fs').realpathSync(require.resolve('@busy-office/ui/package.json'))"
+```
+
+The path must sit under the worktree. Giving the worktree its own install
+(`npm ci` inside it) should fix it; that is untested here, so run the check
+after it too.
+
 ## 4. `npx prettier` IS NOT THIS REPO'S FORMATTER
 
 No prettier config and no prettier dependency exists here. The style enforcers
@@ -631,11 +654,15 @@ owner's authorisation in the session).** Until then nothing had ever been filed
 in this repo's Discussions, so the route had never returned a non-empty list
 and the controls above were the strongest evidence available. A throwaway Q&A
 discussion (#3) was created with GraphQL `createDiscussion` (local `gh` only; a
-cloud wake's GraphQL is refused, see 335.1). This exact command then read
-`200 len 1`, with #3's number, title and category. After `deleteDiscussion` it
-read `200 len 0` again, REST `/discussions/3` answered 404, and GraphQL answered
-NOT_FOUND. A zero from this route is now a route known to report correctly
-reporting zero.
+cloud wake's GraphQL is refused, see 335.1). The intake, run with the owner's
+`gh auth token` in place of the `$GITHUB_TOKEN` that is unset locally (LOOPS.md
+now spells that fallback, Slice 381), then read `200 len 1`, with #3's number,
+title and category. After `deleteDiscussion` it read `200 len 0` again, REST
+`/discussions/3` answered 404, and GraphQL answered NOT_FOUND. No content is
+left, but not nothing: the web URL `/discussions/3` intermittently serves a
+"This discussion has been deleted" page with HTTP 200, and #3 is consumed from
+the number sequence issues share. A zero from this route is now a route known
+to report correctly reporting zero.
 
 ---
 

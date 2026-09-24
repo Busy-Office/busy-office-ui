@@ -142,3 +142,7 @@
 {"ts": "2026-09-09 02:50", "name": "gates", "value": 56.0, "unit": "count"}
 {"ts": "2026-09-09 09:44", "name": "dispatch-region-words", "value": 7484.0, "unit": "words"}
 {"ts": "2026-09-19 20:16", "name": "claims", "value": 203.0, "unit": "count"}
+{"ts": "2026-09-24 05:50", "name": "adoption-npm-ui-week", "value": 16.0, "unit": "downloads"}
+{"ts": "2026-09-24 05:50", "name": "adoption-npm-create-ui-week", "value": 12.0, "unit": "downloads"}
+{"ts": "2026-09-24 05:50", "name": "adoption-jsdelivr-month", "value": 41.0, "unit": "hits"}
+{"ts": "2026-09-24 05:50", "name": "adoption-nonowner-github", "value": 0.0, "unit": "items"}
