@@ -95,10 +95,13 @@ is **REPORTED**, not FAILED, and that is the whole distinction: it names ids
 worth re-reading and says outright it cannot tell a stale claim from a historical
 reference. **A report is the normal state, not a signal** (roadmap 348.1):
 replayed with each revision's own `ROADMAP.md`, it fired on 216 of the 244
-`RESUME.md` revisions since it landed, because the hand-off keeps naming ids
-that have since closed. Read it for WHICH ids, never for whether it fired. (This
-sentence used to say 8 of 86 on 2026-08-29; no command was recorded, and
-replays of the revisions up to that day give 23 or 30 of 101.)
+`RESUME.md` revisions after it landed, because the hand-off keeps naming ids
+that have since closed. Read it for WHICH ids, never for whether it fired. This
+sentence used to say 8 of 86 on 2026-08-29, and that figure was right: it
+reproduces exactly over the revisions up to `cfb53521`, and all 8 were real
+closed ids. The rate changed once the check ran. `record_iteration.py` prints
+its output only when it exits non-zero, so an ABSENT list with no CLOSED id
+beside it is never shown.
 
 A dirty tree is a finding, not a starting point — the previous wake was
 interrupted. Finish and land that slice before dispatching anything new, and
@@ -403,19 +406,21 @@ match to its full playbook below:
    round — Standardize", and the loop table says Standardize is "dispatched
    every 4th Continue round". Two statements against one; the counter
    preempts (2026-08-18).
-3. **THREE OR MORE slices with work landed since the last Objective** — named
-   by a building row; closed is not required — **or user asked**? → dispatch
+3. **THREE OR MORE distinct slices named by a Continue, Standardize or Polish
+   row since the last Objective** — whatever the row's outcome, a refusal
+   included; closed is not required — **or user asked**? → dispatch
    **Objective**.
 
-   **Landed, not closed — decided 2026-09-24 (roadmap 349.1).** This line used
-   to say *closed*; the counter has always counted slices a building row
-   named. Replayed over the 103 past grills with a readable commit, of the 72
-   that armed on three such slices only 42 had three closed at dispatch, and
-   24% of every arming set was still open. The text never described the loop
-   that ran. Making the counter match it would have delayed 30 grills,
-   including Slice 377's, armed on four open slices, which found two shipped
-   P0 defects. Counting closed slices is also the regex §6 step 0 refuses;
-   that step narrows the set by hand instead.
+   **Named, not closed — decided 2026-09-24 (roadmap 349.1, corrected by the
+   Slice 382 grill).** This line used to say *closed*; the counter has always
+   counted the slice a building row's label names, and it ignores the row's
+   outcome (Slice 382's own arming set included a refused row). Whether a
+   grill should need shipped work is 381.2's open question. The counter as
+   shipped at each past dispatch armed 63 grills on three named slices, and
+   only 28 of those had three closed at the time; 27% of all armed slices were
+   still open. A closed reading would have delayed 35 of them, each by 1-21
+   further log rows. Kept on the asymmetry §6 step 0 records: over-arming costs
+   a paragraph of narrowing, under-arming starves the loop.
 
    Moved above the queued build item on 2026-08-19, for exactly the reason
    Standardize was moved there: a *counter* can never fire while a rule that is
@@ -432,7 +437,7 @@ match to its full playbook below:
    a pattern rather than restate one slice, and the last useful grill covered
    two. The number is a judgement and is written down so it can be argued with.
 
-   **Which loops close a slice — decided 2026-08-28 (roadmap 161.4), amended
+   **Which loops' rows count toward rule 3 — decided 2026-08-28 (roadmap 161.4), amended
    2026-09-05 (roadmap 279.4).** `Continue`, `Standardize` **and `Polish`**.
    Excluded: `Roadmap` (a triage row plans a slice, it does not close one —
    Slice 162 is the live illustration, Roadmap-only and open), `Explore` (a
@@ -889,18 +894,23 @@ surfaced more:
    figure, so **a lane with no figure beside it in the write-up is one you
    cannot claim to have run.** What the figure MEANS is still yours.
 
-   **A lane whose inputs did not move is "unchanged by construction", and
-   saying so is the whole write-up for it** (roadmap 350.1). Lanes 1 and 3 read
-   `packages/core/src/css/` and `apps/docs/src/`; lane 2 reads only the first.
-   When `git diff --stat <last sweep's sha> HEAD -- <that lane's inputs>
-   <its instrument>` is empty, quote the empty diff and the lane's figure, and
-   skip the verdict work. That was 21 of 147 windows for lanes 1 and 3, and 61
-   for lane 2. **Rule 2 keeps counting Continue rounds** rather than testing for
-   input: lane 4 had material on every window of two or more commits (the
-   windows with nothing at all were second rounds of one sweep), a lane's
-   reading can move with no input change (Slice 345's lane 1 went 0 → 52 on an
-   instrument change), and "can this change move a lane" is semantic, so a
-   predicate would need a per-lane verdict nobody can check.
+   **A lane whose inputs did not move, and whose figure did not either, is
+   "unchanged by construction"** (roadmap 350.1, corrected by the Slice 382
+   grill). Lane 2 reads `packages/core/src/css/`. Lanes 1 and 3 read BUILT pages,
+   so their inputs are `packages/core/src/`, `packages/core/scripts/`,
+   `apps/docs/src/`, `apps/docs/scripts/` and `package-lock.json`. The base is
+   the last Standardize row whose write-up quotes all four lane figures. When
+   `git diff --stat <that sha> HEAD -- <the lane's inputs>` is empty AND the
+   build ran from a clean tree (uncommitted edits enter lanes 1 and 3; Slice 379
+   and `ENVIRONMENT.md` §3c), still run the lane and compare its figure with the
+   base's. **Equal:** quote the empty diff and the figure, and skip the verdict
+   work. **Different:** the environment or an unlisted input moved, and that is
+   a finding. **Rule 2 keeps counting Continue rounds** rather than testing for
+   input. Lane 4's files change on every multi-commit window by construction,
+   since every item and hand-off edits `ROADMAP.md` or `RESUME.md`. The windows
+   with no input at all hold no Continue row, so rule 2 cannot arm on them. And
+   "can this change move a lane" is semantic. Measurement and its corrections:
+   `.roundtable/measure-350.1-2026-09-24.md`.
 
    **Lane 1 of 4 — run `npm run scan:dead-style -w docs`** — inline declarations that change
    no computed value at all. It is not a CI gate on purpose (the walk costs ~2
@@ -1339,7 +1349,7 @@ never dirties main.
 
 0. **Narrow the arming set before grilling it.** Rule 3 counts distinct slice
    numbers **named by Continue/Standardize/Polish rows** since the last
-   Objective row — work landed, not slices closed (349.1) — so a slice with many
+   Objective row, whatever the row's outcome — not slices closed (349.1) — so a slice with many
    rounds re-arms after each grill and the set can name a slice an earlier
    grill already covered in full, or one still mid-build. Check
    `.roundtable/INDEX.md` first — it is generated, it lists every finding, and
@@ -1378,9 +1388,10 @@ never dirties main.
    else had made. Re-run the commands; the figures are snapshots.
 
    **Refused, so a later wake does not re-propose it:** making the counter count
-   *closed* slices means classifying slices by heading inside
-   `dispatch_status.py` — the sixth regex that script's own header refuses on
-   measurement, and 170 finding B refuses by name. The asymmetry decides it:
+   *closed* slices. Not because the classification cannot be written —
+   `roadmap_scope.py` already classifies slices by heading, and the "sixth
+   regex" `dispatch_status.py`'s header refuses is a log-row pattern (Slice
+   382); 170 finding B refused it by name. The asymmetry decides it:
    rule 3 sits above rule 4 so it cannot starve, so **over-arming costs one
    paragraph of scope-setting and under-arming costs a starved loop.**
 1. Run `round-table` on the product thesis: *is a CSS-first ERP framework the right

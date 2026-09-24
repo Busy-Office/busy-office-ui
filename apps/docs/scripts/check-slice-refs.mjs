@@ -113,7 +113,7 @@
  * unrelated items and this gate stayed green on both.
  *
  * The cost is not only that a reader lands on the wrong section.
- * `dispatch_status.py` collapses the slices closed since the last grill into a
+ * `dispatch_status.py` collapses the slices named since the last grill into a
  * `set()`, so a collision subtracts exactly one from rule 3's arming count —
  * red-proved by rewriting the colliding log row in a probe copy:
  * `['169', '170', '172']` (3) becomes `['169', '170', '172', '174']` (4).

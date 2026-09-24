@@ -53,7 +53,7 @@ print('last 10:')
 for o in known[-10:]: print('  ', o[0], 'armed', o[1], 'open', o[2])
 ```
 
-Output on 2026-09-24 (HEAD `bc79e235` plus 349.1's edits):
+Output on 2026-09-24 (run at `f679f63a`, the parent of 349.1's commit; the script's `last 10` lines omitted):
 
 ```
 107 Objective rows; 103 with a readable commit
@@ -66,3 +66,18 @@ Spot-check against the record: the 2026-09-08 10:59 row reads armed `[324,
 325, 347, 350]`, open `[325, 350]`, which is the "2 of 4 open" 349.1 wrote down
 at the time. **Not covered:** which of the 31 dispatches that armed on fewer
 than three touched slices were owner-requested grills; the log does not say.
+
+## Corrected by the Slice 382 grill
+
+- **These figures run TODAY's parser and loop set over history.** Against the
+  counter as shipped at each dispatch (each Objective row's preceding commit's
+  `scripts/loops` and log, run in a scratch tree), the reading is: 63 armed on
+  three named slices, **28** of those with three closed, **35** delayed under a
+  closed reading, and about **27%** of armed slices open. 9 of the 72 above
+  were not counter-armed at all (4 predate the counter).
+- **The delay has a size:** a forward walk fires every delayed grill within
+  1-21 further log rows; Slice 377's window fires 5 rows later.
+- **The counter ignores a row's outcome.** Rule 3's text now says so.
+- A slice whose heading is absent at the grill's parent is classed closed
+  here; one such case (164, the grill's own slice) was really open. This
+  does not move the headline counts.

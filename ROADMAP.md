@@ -320,6 +320,49 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 382 — Objective grill of 348.1, 349.1, 350.1: 19 of 22 findings survive, every headline figure reproduces, and the closures got their own corrections wrong — 348.1 called a correct figure unreproducible, 349.1's new rule-3 wording still missed what the counter reads, and 350.1's shortcut skipped the comparison that would catch it (2026-09-24)
+
+**Dispatched by rule 3** (`Objective 3 / 3 OVERDUE [348, 349, 350]`) after rule
+1 read 0 open P0. All three labels are items closed in place today (`bc79e235`,
+`03485ac9`, `661bc668`); Slice 351 grilled Slice 350's sweep, not 350.1's
+closure. All three changed loop scripts and text only — 381.2's open question,
+so the grill was kept to three finders and three adversarial verifiers
+(workflow `wf_e2bee258-01e`; 29 claims reproduced, 22 findings, 19 survived).
+Report: `.roundtable/grill-objective-348-349-350-2026-09-24.md`.
+
+**Fixed in this commit:**
+- The slice-id check's ABSENT hedge now carries the CLOSED bucket's staleness
+  instruction — an archived id is a closed one, and `175.4`, the check's
+  founding case, sat in that bucket. The hedge is a named constant with a
+  self-test case, red-proved by a copy that restores "normally archived", and
+  a second case pins the known `15.10` limitation. The header dates its
+  8-of-86 base rate and adds the post-landing 216 of 244.
+- LOOPS.md: the slice-id paragraph says 8 of 86 was right and the rate changed
+  at landing. Rule 3 now says what the counter reads (a named slice, whatever
+  the row's outcome), with the as-shipped replay (28 of 63; 35 delayed, each by
+  1-21 rows), kept on the asymmetry rather than a "regex" reason that was
+  wrong. §3's no-input shortcut lists lanes 1 and 3's real inputs, names its
+  base, requires a clean tree, and compares the skipped lane's figure with
+  the base's.
+- `check-slice-refs.mjs`'s comment, the "Which loops" heading and §6 step 0
+  stop saying "closed" for rule 3.
+
+**Corrected in place:** 348.1 (8 of 86 reproduces; 12 of 127 absent revisions
+held a non-archived string, not 7; the self-test could not fail on the change),
+349.1 (wording, the as-shipped figures, the delay's size, the refusal's reason)
+and Slice 349's heading, 350.1 (inputs, base, clean tree, the structural 100%,
+"second rounds of one sweep", the fitting case), and both measure files.
+
+**Thesis:** npm last week (09-15..21) `@busy-office/ui` 16, 5 of them 0.8.0;
+`create-ui` 12 — the same window as Slice 381, so no new reading; jsDelivr 29 a
+month; GitHub 0 stars, 0 forks, 0 discussions, 1 open issue (the owner's);
+traffic 20 views / 6 uniques and 367 clones / 132 uniques over GitHub's
+rolling 14 days. Framework code since Slice 381: **0 lines** in 11 commits
+(`git diff --numstat 60235d9c HEAD -- packages/core/src`). Unchanged: six P0
+fixes wait on 377.5.
+
+No new item: 381.1 and 381.2 already own the open questions.
+
 ## Slice 381 — Objective grill of 335.1, 346.1 and Slice 380: 27 of 33 findings survive, every headline figure reproduces, and the defects shipped beside them — two bugs in 346.1's check, a verification recipe that was not isolated, and a loop that spent five hours on its own machinery while six P0 fixes waited on a release (2026-09-24)
 
 **Dispatched by rule 3** (`Objective 3 / 3 OVERDUE [335, 346, 380]`) after rule 1
@@ -4275,8 +4318,18 @@ lanes 1-3.
          *unchanged by construction*, with the empty diff quoted. Script and
          output: `.roundtable/measure-350.1-2026-09-24.md`. Jev: 0.85, at the
          supported threshold.
+         [**Corrected by Slice 382:** the refusal stands; the rule beside it did not.
+         Lanes 1 and 3 read built pages, so their inputs include
+         `packages/core/src/`, both scripts trees and `package-lock.json`; the base
+         was ambiguous; uncommitted edits were invisible to the diff; and the
+         shortcut skipped the figure comparison that would catch an environment
+         move. §3 now fixes all four. "Lane 4 had material on every window" holds
+         by construction, and the 11 empty windows hold no Continue row rather
+         than being second rounds of one sweep. Slice 345's 0 → 52 had an
+         instrument change, so it did not answer the Accept's "cannot move"
+         case; no environment-only move is on record.]
 
-## Slice 349 — rule 3's text says "slices CLOSED"; its counter means "slices NAMED by a building row", and nothing has ever compared the two (2026-09-08)
+## Slice 349 — rule 3's text says "slices CLOSED"; its counter means "slices NAMED by a building row", and nothing has ever compared the two [**Corrected by Slice 382:** §6 step 0 had recorded the gap since `e721c20b`, 2026-08-29] (2026-09-08)
 
 **Found the way `LOOPS.md` says this counter is always found** — by a number
 disagreeing with something a human had just written down, read immediately
@@ -4374,6 +4427,15 @@ previous hand-off predicted: *"closing anything in a slice other than 324 or
          comment say the same. **The live count does not move** (Objective
          1 / 3 [348] before and after); only text changed. Script and output:
          `.roundtable/measure-349.1-2026-09-24.md`. Jev: supported 0.95.
+         [**Corrected by Slice 382:** "slices with work landed" still missed what the
+         counter reads: it credits the slice a row's label names, **whatever the
+         row's outcome** (a refused row armed Slice 382), and rule 3 now says
+         so. The 42 of 72 ran today's parser over history; the counter as shipped
+         at each dispatch reads **28 of 63**, with 35 delayed under a closed
+         reading, each by **1-21** further rows (Slice 377's by 5). "The regex
+         §6 step 0 refuses" was the wrong reason — `roadmap_scope.py` already
+         classifies slices — so the refusal now rests on the asymmetry alone.
+         "24% of every arming set" was a pooled figure.]
 
 ## Slice 348 — `check:resume-slice-ids` reports a backticked DECIMAL FIGURE as a slice id, and files it under a heading that asserts an interpretation it cannot have earned (2026-09-08)
 
@@ -4462,6 +4524,14 @@ defect surfaced by the wake's own recording step, in the advisory checks
          is the normal state, to be read for which ids. Jev: supported (A 0.93,
          B 0.88, second round; the first read 0.79 / 0.04 on weaker evidence and
          a claim that said "re-derived").
+         [**Corrected by Slice 382:** **8 of 86 does reproduce**, exactly, over the
+         revisions up to `cfb53521` with the header's recipe, and all 8 were real
+         closed ids; the "23 or 30 of 101" was a calendar-day window that took in
+         15 post-landing revisions. **12 of the 127** absent revisions held a
+         non-archived string, not 7: `288.1`/`288.2` sat as `###` headings on one.
+         The self-test cited here could not fail on the change; it now pins the
+         hedge and the `15.10` limit. And the hedge now carries the CLOSED
+         bucket's staleness instruction, since an archived id is a closed one.]
 
 ## Slice 347 — rule 5's missing DIRECTION is refused, and the reason is not that it is hard to record: supplying it makes rule 5 fire on the one metric it can act on, and the log's own same-timestamp companion samples refute that verdict. `324.1` closed on its Accept's second branch (2026-09-08)
 

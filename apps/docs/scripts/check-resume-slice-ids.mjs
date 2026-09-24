@@ -33,8 +33,13 @@
  *     revisions with both files: 86; fired (>=1 closed id named): 8 (9%)
  *     closed-count distribution: {0: 78, 1: 3, 2: 3, 3: 2}
  *
- * So it is neither dead nor always-on — 78 of 86 revisions report nothing, and
- * HEAD reports three (`173.2`, `185.1`, `186.2`, all historical references).
+ * At landing it was neither dead nor always-on — 78 of 86 revisions reported
+ * nothing, and HEAD reported three (`173.2`, `185.1`, `186.2`, all historical
+ * references). **That changed once it ran** (roadmap 348.1, re-measured
+ * 2026-09-24 with each revision's own ROADMAP.md): it fired on 216 of the 244
+ * revisions after it landed, so a report is now the normal state. The 8 of 86
+ * reproduces exactly over the revisions up to `cfb53521`; all 8 were real
+ * closed ids.
  * 186.1's own premise put this at "2 of 58 wake-ends (3%)"; that is a different
  * unit (wake-ends, not revisions) measured with a parser that could not derive
  * an id for an unnumbered item, so the two figures are not in conflict and
@@ -95,6 +100,22 @@ const BOLD_ID = /^\*\*([0-9]+\.[0-9]+)\b/;
  * quotes — from being read as slice 0.1.
  */
 const NAMED_ID = /`([0-9]{1,3}\.[0-9]{1,2})`/g;
+
+/**
+ * What the ABSENT line says about the strings it lists (roadmap 348.1, and the
+ * Slice 382 grill). It may not assert what they ARE: over the 127 revisions
+ * since this check landed where the line printed, 12 carried a string that was
+ * not an archived id — a figure shaped like one (`15.0`, `15.10`, `0.0`; 7
+ * revisions), `185.2` kept as a ROADMAP.md bullet (4), and `288.1`/`288.2` as
+ * `###` headings (1). And an archived id is a CLOSED id, so a hand-off calling
+ * one open is the staleness this check exists for — `175.4`, its founding case,
+ * sat in this bucket.
+ */
+export const ABSENT_HEDGE =
+  '  Usually an archived id — which is a CLOSED one, so re-read any claim that it is\n' +
+  '  open, as for the CLOSED bucket below. Sometimes a figure shaped like an id (a\n' +
+  '  size, a version) or an id written outside a checkbox. This check cannot tell\n' +
+  '  which — you can.';
 
 /**
  * Every checkbox item in `ROADMAP.md`, as `{ id, state, line, derived, bold }`.
@@ -176,6 +197,17 @@ if (process.argv.includes('--self-test')) {
     ['an unbackticked id is not named', namedIn('roadmap 190.1 says').length === 0],
     ['a version string is not read as a slice id', namedIn('`0.1.0` and `0.5.0`').length === 0],
     ['ids are deduplicated', namedIn('`186.1` then `186.1`').length === 1],
+    /* The limitation the ABSENT hedge exists for, pinned so it cannot be
+       "fixed" silently: a backticked decimal figure IS named (348.1). */
+    ['a backticked figure shaped like an id is named (known limit)', namedIn('prints `15.10`').join() === '15.10'],
+    /* The hedge must not assert what the strings are, and must carry the
+       CLOSED bucket's staleness instruction (348.1; Slice 382). */
+    [
+      'the ABSENT hedge asserts nothing and carries the staleness instruction',
+      !ABSENT_HEDGE.includes('normally archived') &&
+        ABSENT_HEDGE.includes('CLOSED') &&
+        ABSENT_HEDGE.includes('cannot tell'),
+    ],
   ];
   const bad = cases.filter(([, ok]) => !ok);
   for (const [what, ok] of cases) console.log(`  ${ok ? 'ok  ' : 'FAIL'}  ${what}`);
@@ -247,18 +279,12 @@ console.log(
   `resume slice-ids: ROADMAP.md has ${open.length} open and ${closed.length} closed item(s) ` +
     `(both reconciled against a raw count of the file); RESUME.md names ${named.length}.`,
 );
-/* Hedged like the CLOSED bucket, because this one cannot check what it names
-   either (roadmap 348.1). Replayed over every RESUME.md revision since this
-   check landed, it fired on 127; 7 of those carried a figure shaped like an id
-   (`15.0`, `15.10` — gzip sizes — and `0.0`), and one real id (`185.2`) sat in
-   ROADMAP.md as a bullet rather than a checkbox. "Normally archived" was true
-   of the rest and asserted of all of them. */
+/* Hedged, because this bucket cannot check what it names either — see
+   ABSENT_HEDGE for the measured cases. */
 if (unknown.length) {
   console.log(
     `  ${unknown.length} backticked string(s) match no checkbox item in ROADMAP.md: ` +
-      `${unknown.join(', ')}\n` +
-      '  Usually an archived id; sometimes a figure shaped like one (a size, a version)\n' +
-      '  or an id written outside a checkbox. This check cannot tell which — you can.',
+      `${unknown.join(', ')}\n` + ABSENT_HEDGE,
   );
 }
 if (!stale.length) {

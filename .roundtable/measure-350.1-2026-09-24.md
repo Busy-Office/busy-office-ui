@@ -60,3 +60,26 @@ a loop-read file changed in 136 windows; nothing to read in any lane: [('534f55c
 
 Every window with nothing to read in any lane is 0 or 1 commits wide: a second
 round of one sweep, not a separate rule-2 dispatch.
+
+## Corrected by the Slice 382 grill
+
+- **The input list was incomplete.** Lanes 1 and 3 read built pages, which
+  also depend on `packages/core/src/` (JS writes inline styles at load),
+  `packages/core/scripts/`, `apps/docs/scripts/` and `package-lock.json`.
+  LOOPS.md §3 now lists them. The counts above use the narrow list, and the
+  broad list was not re-measured; it can only lower the no-input counts.
+- **The windows open at every Standardize row**, but only 46 of 165 are
+  sweep-mode rows. On sweep boundaries there are 39 windows, with lanes 1
+  and 3 input-free on 8 and lane 2 on 18 (narrow list). §3 now names its base
+  as the last Standardize row that quotes all four lane figures.
+- **Instrument included, as the rule's own test**, over the 147 windows: lane 1
+  input-free on 19, lane 3 on 21, lane 2 on 60.
+- **"Lane 4 had material on every multi-commit window" holds by
+  construction:** every item and hand-off commit edits `ROADMAP.md` or
+  `RESUME.md`. The 11 windows with nothing to read hold no Continue row, so
+  rule 2 could not arm on them. It was not true that they were second rounds
+  of one sweep. The windows where rule 2 did arm with no lane input are 8.
+- **Slice 345's 0 -> 52 was an instrument change**, so it does not answer "what
+  a pass buys on a window that cannot move". §3 now compares each skipped
+  lane's figure with the base's, and a difference is a finding. No
+  environment-only move is on record: Hypothesis.
