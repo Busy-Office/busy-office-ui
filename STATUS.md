@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-24 10:04 UTC
+Generated at: 2026-09-24 11:03 UTC
 
 ## Open items by slice
 
@@ -19,8 +19,6 @@ Generated at: 2026-09-24 10:04 UTC
   - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
 - **Slice 296** (1 open)
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
-- **Slice 352** (1 open)
-  - 352.2 — the two KEPT columns have no recorded method either, and the machine gap they imply is not one machine gap.
 - **Slice 353** (1 open)
   - 353.2 — `dispatch-region-words` is sampled by hand, under a convention the instrument does not use, and no sample records the commit it describes.
 - **Slice 362** (1 open)
@@ -62,8 +60,8 @@ Generated at: 2026-09-24 10:04 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1773 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-09-24 18:04   ok
+dispatch status — counter-triggered rules (1774 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-09-24 18:04   ok
   Objective     2 / 3 slices          since 2026-09-24 17:08   ok  [352, 383]
   Optimize      3 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 148 sample(s), 8 of 51 name(s) paired across days]
   -> rule 5's newest comparable pair predates 3 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-19, not this one — record a metric or say the rule could not be evaluated.
@@ -97,7 +95,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-24 09:16 · Standardize · sweep · 380 — Standardize sweep 4/4 on a clean HEAD worktree: lanes 1-3 no delta; DESIGN.md HONEST re-decided (the control retired); 346.1's rule moved out of the dispatch region (7,643 -> 7,521 words) · landed · 741c9bea
 - 2026-09-24 10:38 · Objective · grill · 381 — Objective grill of 335.1, 346.1, Slice 380: 45 claims reproduce, 27 of 33 findings survive; record_iteration/check bugs fixed, lane-4 cut rule fixed, intake command fixed, 381.1-381.2 filed · logged · 60235d9c
 - 2026-09-24 10:38 · Meta · refusal · unwiring the correction-site check inside the grill — 381.1 states a precision floor first, then measures · refused · 60235d9c
 - 2026-09-24 11:07 · Continue · build · 348.1 — slice-id check's ABSENT line hedged: 7 of 127 firings held a figure (15.0/15.10/0.0); 216 of 244 revisions fire, so LOOPS.md now calls a report the normal state · landed · bc79e235
@@ -107,6 +104,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-24 17:08 · Objective · grill · 382 — Objective grill of 348.1, 349.1, 350.1: 29 claims reproduce, 19 of 22 findings survive; slice-id hedge, rule-3 wording and §3 shortcut corrected · logged · 0ed584cd
 - 2026-09-24 17:36 · Continue · fix · 352.1 — po-app harness names an unbuilt packages/core/dist (4 missing files, build-state) instead of a select-all failure; red-proved by moving dist aside · landed · 135fb21b
 - 2026-09-24 18:04 · Standardize · sweep · 383 — Standardize sweep 4/4 on an isolated clean build: lane 2 unchanged by construction, lanes 1/3 match base, lane 4 cut 101 words of narrative (7,824 -> 7,723) · landed · 330051e0
+- 2026-09-24 19:03 · Continue · build · 352.2 — style-flush column kept: on a recorded M4 it reconciles like select-all (0.20/0.30 vs 0.18/0.28 of published; ~1x throttled); page says so with the command · landed · 37a704a2
 
 ## Sunset test
 
