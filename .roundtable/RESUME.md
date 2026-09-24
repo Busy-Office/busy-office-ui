@@ -105,7 +105,12 @@ isolated clean build (worktree with its own `npm ci`, realpath check passed,
 base, lane 4 cut 101 words of today's narrative (7,824 -> 7,723). Counters:
 Standardize 0 / 4, Objective 2 / 3 [352, 383].
 
-**Next wake:** rule 4 — the oldest open item not owner-blocked, 352.2.
+**Rule 4 at 18:51:** 352.2 LANDED (`37a704a2`) — the data-table page's
+style-flush column is kept: on a recorded M4, two sittings put both columns at
+the same fraction of the published figures, and the page now says so with the
+command. Counters: Standardize 1 / 4, Objective 2 / 3 [352, 383].
+
+**Next wake:** rule 4 — the oldest open item not owner-blocked, 353.2.
 
 **Lane-run note:** run the Standardize lanes on a build of HEAD without the
 owner's uncommitted screen-kit edits, which otherwise enter lane 3's total
@@ -141,8 +146,8 @@ hide-on-upward-scroll; two refusals stand and the reversal is unwritten),
 373.8 (docs IA, 17 groups to 7). Plus, outside these slices: 112.3/112.4,
 296.3, 369.1, 273.2.
 
-**Dispatcher counters (2026-09-24 18:04, `dispatch_status.py`):** Standardize
-0 / 4, Objective 2 / 3, 0 open P0. Re-read them; never trust this line.
+**Dispatcher counters (2026-09-24 19:03, `dispatch_status.py`):** Standardize
+1 / 4, Objective 2 / 3, 0 open P0. Re-read them; never trust this line.
 
 **A trap that has bitten twice — read before touching ROADMAP.md.** Build the
 staged content from HEAD BY CONSTRUCTION and write the same bytes to the
@@ -152,7 +157,7 @@ drifted, and a later `git add` silently reverted four closed items to `[ ]`.
 
 ## PLAN — work this order.
 
-**Base state.** `main` pushed after Slice 383's record. Last full run green
+**Base state.** `main` pushed after 352.2's record. Last full run green
 on this tree (2026-09-24 06:30): core build, 174 tests, docs build 0 FAIL,
 `check:claims` 300, `test:axe` 128 pages x 2 widths 0 violations,
 `check:layout` 128 pages. The files still uncommitted are the 2026-09-20 owner
