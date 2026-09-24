@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-24 13:22 UTC
+Generated at: 2026-09-24 13:54 UTC
 
 ## Open items by slice
 
@@ -19,8 +19,6 @@ Generated at: 2026-09-24 13:22 UTC
   - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
 - **Slice 296** (1 open)
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
-- **Slice 362** (1 open)
-  - 362.1 — adopt `astro check` with `noUnusedLocals` for `apps/docs`.
 - **Slice 369** (2 open)
   - 369.1 — should printing from the DARK theme force the light palette? OWNER OR ARCHITECTURE CALL.
   - 369.2 — 10 of 128 pages never get the print reset on `body`.
@@ -60,9 +58,9 @@ Generated at: 2026-09-24 13:22 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1776 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-09-24 18:04   ok
-  Objective     0 / 3 slices          since 2026-09-24 21:22   ok
+dispatch status — counter-triggered rules (1777 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-09-24 18:04   ok
+  Objective     1 / 3 slice           since 2026-09-24 21:22   ok  [362]
   Optimize      3 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 149 sample(s), 8 of 51 name(s) paired across days]
   -> rule 5's newest comparable pair predates 3 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-19, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-19 (2026-09-22, 2026-09-23, 2026-09-24), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -95,7 +93,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-24 11:07 · Continue · build · 348.1 — slice-id check's ABSENT line hedged: 7 of 127 firings held a figure (15.0/15.10/0.0); 216 of 244 revisions fire, so LOOPS.md now calls a report the normal state · landed · bc79e235
 - 2026-09-24 11:33 · Continue · build · 349.1 — rule 3's text now says slices with work landed (the counter's reading): of 72 touched-armed grills only 42 had three closed; live count unchanged · landed · 03485ac9
 - 2026-09-24 11:33 · Meta · refusal · making dispatch_status count CLOSED slices — it would have delayed 30 of 72 grills, and §6 step 0 already refuses the regex · refused · 03485ac9
 - 2026-09-24 12:01 · Continue · build · 350.1 — refused: rule 2 keeps counting Continue rounds (lane 4 had material on every multi-commit window); a no-input lane is written 'unchanged by construction' · refused · 661bc668
@@ -105,6 +102,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-24 19:03 · Continue · build · 352.2 — style-flush column kept: on a recorded M4 it reconciles like select-all (0.20/0.30 vs 0.18/0.28 of published; ~1x throttled); page says so with the command · landed · 37a704a2
 - 2026-09-24 19:32 · Continue · fix · 353.2 — dispatch-region-words recorded by the instrument with its commit (history mixed body/region figures; rule 5's pair read -8 for a -64 change) · landed · 633ff058
 - 2026-09-24 21:22 · Objective · grill · 384 — Objective grill of 352.1, 352.2, 353.2, Slice 383: 44 claims reproduce, 31 of 35 findings survive; flush ratio is Chrome-build-dependent, harness catches stale dist, metric sampling fixed; 384.1 filed · logged · eec86ae2
+- 2026-09-24 21:54 · Continue · build · 362.1 — astro check (noUnusedLocals) wired into the docs build: 562 -> 0 errors on 164 files; fixed a stray '))}' live on /reference/tokens/ since 2026-08-16 · landed · 2fc94372
 
 ## Sunset test
 
