@@ -64,9 +64,15 @@ worktree of HEAD (lanes 1-3 no delta; DESIGN.md re-decided HONEST, "the
 control" retired; 346.1's correction rule moved to Operating rules).
 Counters now Standardize 0 / 4, **Objective 3 / 3 OVERDUE [335, 346, 380]**.
 
-**Next wake:** rule 3 — the Objective grill of Slices 335, 346 and 380, with
-the thesis section and adoption reading 377.7 asks for. After it, rule 4
-resumes at 348.1.
+**Rule 3 at 09:40:** Slice 381, the Objective grill of 335.1, 346.1 and Slice
+380 (`60235d9c`): 45 claims reproduce, 27 of 33 findings survived. Fixed:
+`record_iteration.py` now checks the recorded commit; the correction check
+fails loudly; lane 4's cut rule ignores relocations; the intake command runs
+locally; §6's Exit requires the thesis section. Filed 381.1 and 381.2. 377.5
+now names **six** unreleased P0 fixes, including issue #1's promised one.
+Counters: Standardize 0 / 4, Objective 0 / 3.
+
+**Next wake:** rule 4 — the oldest open item not owner-blocked, 348.1.
 
 **Lane-run note:** run the Standardize lanes on a build of HEAD without the
 owner's uncommitted screen-kit edits, which otherwise enter lane 3's total
@@ -80,8 +86,8 @@ slice"). Lead an item row with its id — `377.1 — P0: …` — so the counter
 read it.
 
 **Owner decisions now queued** — the two new ones are the grill's headline:
-**377.5** (release the eight unreleased fixes, four of them P0, or record why
-not) and **377.6** (is busy-office-erp the named first user?). Plus the
+**377.5** (release the unreleased fixes — six of them P0 per Slice 381 — or record
+why not) and **377.6** (is busy-office-erp the named first user?). Plus the
 standing set: 112.3/112.4, 296.3, 373.6, 373.8, 369.1, 273.2, 374.4.
 
 **UNCOMMITTED FILES, classified 2026-09-24 — do not trust an older label.**
@@ -100,8 +106,8 @@ hide-on-upward-scroll; two refusals stand and the reversal is unwritten),
 373.8 (docs IA, 17 groups to 7). Plus, outside these slices: 112.3/112.4,
 296.3, 369.1, 273.2.
 
-**Dispatcher counters (2026-09-24 09:16, `dispatch_status.py`):** Standardize
-0 / 4, Objective 3 / 3 OVERDUE, 0 open P0. Re-read them; never trust this line.
+**Dispatcher counters (2026-09-24 10:38, `dispatch_status.py`):** Standardize
+0 / 4, Objective 0 / 3, 0 open P0. Re-read them; never trust this line.
 
 **A trap that has bitten twice — read before touching ROADMAP.md.** Build the
 staged content from HEAD BY CONSTRUCTION and write the same bytes to the
@@ -111,7 +117,7 @@ drifted, and a later `git add` silently reverted four closed items to `[ ]`.
 
 ## PLAN — work this order.
 
-**Base state.** `main` pushed after Slice 380's record. Last full run green
+**Base state.** `main` pushed after Slice 381's record. Last full run green
 on this tree (2026-09-24 06:30): core build, 174 tests, docs build 0 FAIL,
 `check:claims` 300, `test:axe` 128 pages x 2 widths 0 violations,
 `check:layout` 128 pages. The files still uncommitted are the 2026-09-20 owner
