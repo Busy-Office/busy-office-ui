@@ -2648,7 +2648,7 @@ page.pdf({ printBackground: false })   # then inflateSync every stream and
        - **Lane: owner-blocked.** It is a palette-wide behaviour change with a
          visible print result, and no wake should take it unilaterally.
 
-3. [ ] **369.2 — 10 of 128 pages never get the print reset on `body`.**
+3. [x] **369.2 — 10 of 128 pages never get the print reset on `body`.**
        Measured this wake, both themes, under print emulation: the three
        `/components/demos/*` pages, the six `/patterns/rf/*` pages and
        `/patterns/schedule/full/` keep `body` at the theme's own
@@ -2663,6 +2663,17 @@ page.pdf({ printBackground: false })   # then inflateSync every stream and
          one line, OR the reset is made to win and the same ten are re-measured
          showing `body` at rgb(255,255,255) / rgb(0,0,0). A cloud wake can take
          this: it is a computed-style reading, not a rendered image.
+       - **DONE 2026-09-24.** The winning rule is each page's own inline,
+         UNLAYERED `body { background; color }`: an unlayered author rule beats
+         any `@layer` rule regardless of specificity, so `reset/index.css`'s
+         layered `@media print { body }` loses on exactly the ten pages that
+         build their own `<html>` (3 demos, 6 RF, schedule/full). Fixed by a
+         literal `@media print { body { background: #fff; color: #000 } }` in
+         each page's style block. Re-measured over a served build, print
+         emulation, light and dark: 20 of 20 read rgb(255,255,255) /
+         rgb(0,0,0); red-proof (deleting that rule at runtime) makes the
+         readings revert on every page, so the probe can fail. Not covered:
+         no `check-claims` case yet, so a new standalone page can regress it.
 
 ## Slice 368 — Objective grill of Slices 365, 366, 367: **45 of 50** published assertions reproduce, and the one substantive defect is a count taken over a population that was **7/15 one-line archive pointers** — an instrument that opened the stub instead of the body, which the slice's own red-proof structurally could not reach. The arming set needed resolving first: **all three** counter labels are item ids, and the hand-off resolved one (2026-09-09)
 

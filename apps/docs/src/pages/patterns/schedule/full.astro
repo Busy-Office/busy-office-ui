@@ -59,6 +59,9 @@ const socialDescription = 'The schedule calendar at full screen width, opened fr
           grid-template-columns: 1fr;
         }
       }
+      /* Print: this page's own unlayered body rule beats the layered reset
+         (roadmap 369.2), so restate the reset's literals here. */
+      @media print { body { background: #fff; color: #000; } }
     </style>
   </head>
   <body>

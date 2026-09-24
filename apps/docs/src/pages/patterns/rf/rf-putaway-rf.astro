@@ -30,6 +30,9 @@ const socialDescription = 'The RF putaway screen as an isolated document, loadin
         background: var(--bo-color-bg-canvas);
         color: var(--bo-color-text-primary);
       }
+      /* Print: this page's own unlayered body rule beats the layered reset
+         (roadmap 369.2), so restate the reset's literals here. */
+      @media print { body { background: #fff; color: #000; } }
     </style>
   </head>
   <body>
