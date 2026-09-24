@@ -568,17 +568,6 @@ match to its full playbook below:
      slice") fires on healthy states too, so a gate over it would be red on a
      correct tree.
 
-   **A correction must reach every copy of the number** (roadmap 346.1). Of 59
-   commits that struck or superseded a number in `ROADMAP.md`, 13 left a stale
-   copy standing (17 sites) — a heading, a DONE line, another slice — and only
-   2 of the 17 were hidden by a line wrap. `record_iteration.py` runs
-   `scripts/loops/check_correction_sites.py` on the commit it records and lists
-   the other places the old number still appears. Run it with `--worktree`
-   before committing, and add `--old "<old spelling>"` when the correction
-   keeps the old text (a withdrawal, a refuted premise): the diff alone showed
-   11 of the 17, and naming the old value 16. It reports and never fails — a
-   quotation is fine, a restatement is a missed site.
-
    **Oldest, not "current in-progress slice," as of 2026-08-19.** The old
    wording never defined "current," and in practice it meant "whichever
    slice a triage step just created" — because triage inserts near the top
@@ -1854,6 +1843,17 @@ than the two differing by design.
 - **Record every iteration** via `scripts/loops/record_iteration.py` (writes the
   markdown log + the `loops.db` mirror). Files are source of truth; the DB is
   rebuildable telemetry.
+- **A correction must reach every copy of the number** (roadmap 346.1; moved
+  here from rule 4 by Slice 380, since a wake needs it when correcting, not
+  when deciding). Of 59 commits that struck or superseded a number in
+  `ROADMAP.md`, 13 left a stale copy standing (17 sites) — a heading, a DONE
+  line, another slice — and only 2 of the 17 were hidden by a line wrap. `record_iteration.py` runs
+  `scripts/loops/check_correction_sites.py` on the commit it records and lists
+  the other places the old number still appears. Run it with `--worktree`
+  before committing, and add `--old "<old spelling>"` when the correction
+  keeps the old text (a withdrawal, a refuted premise): the diff alone showed
+  11 of the 17, and naming the old value 16. It reports and never fails — a
+  quotation is fine, a restatement is a missed site.
 - **No longer session-scoped, and that is what made concurrency real** — this
   bullet used to read "these run while this session is open; closing it stops
   them. For durable cloud cadence, promote to `/schedule`." The promotion

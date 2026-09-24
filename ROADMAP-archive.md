@@ -20694,6 +20694,10 @@ net effect on `LOOPS.md` this wake is two paragraphs replaced and one added.
           that is right, but it is the useful comparator: it shows the repo can
           hold a file near flat while everything around it grows, so the growth
           elsewhere is a property of those files and not of the era.
+          [**Re-decided by Slice 380 (2026-09-24):** HONEST stands, on what the
+          file grew on — build rules, Non-goals and design decisions, no
+          incident narrative. "The control" is retired: by then it was +48.4%
+          since 2026-08-20, faster than `CLAUDE.md` and `ROADMAP.md`.]
 
        **THE DECISION: the cadence extends to these files; 158.2's INSTRUMENT
        does not.** The cadence is a periodic read with a verdict, and that is

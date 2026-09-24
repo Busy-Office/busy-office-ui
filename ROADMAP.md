@@ -320,6 +320,50 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 380 — Standardize sweep, **4 of 4 lanes on a clean HEAD tree**: lanes 1-3 carry no delta; lane 4 re-decides `DESIGN.md` (HONEST on what it grew on, no longer "the control") and moves 346.1's correction rule out of the dispatch region (2026-09-24)
+
+**Dispatched by rule 2** (`Standardize 4 / 4 OVERDUE` — 320.3, 345.1, 346.1,
+335.1) after rule 1 read 0 open P0. The lanes ran with
+`scripts/loops/standardize_lanes.py` in a throwaway worktree of HEAD
+(`9b85eda1`), built from scratch. Slice 379 found 378's lane-3 totals carried
+the owner's uncommitted screen-kit words, and those edits are still in the
+working tree. The worktree's build stamp reads dirty only for its three
+`node_modules` symlinks.
+
+- **Lane 1** — *"0 dead style attribute(s) on 0 page(s)"*; per declaration 10
+  on 8 pages, Slice 345's refusal set less 345.1's, as at Slice 379.
+- **Lane 2** — *"7 body(ies) appearing more than once"* (74 · 245 · 234), as at
+  Slice 378. The window's one CSS declaration change, 345.1's `display:
+  inline-block`, is in a one-declaration rule, which cannot form a group
+  (`git diff 456f9966 HEAD -- packages/core/src/css`).
+- **Lane 3** — the same 17 pages flagged, every one in the 20-page enumeration
+  (combobox, tabs and output-form are enumerated and unflagged). Total
+  **119,076** words against 119,077 at `456f9966`; the −1 is consistent with
+  379's ACR verb (*"is a"* → *"are"*), not re-derived per page.
+- **Lane 4** — two findings, both acted on:
+  - **`DESIGN.md` re-decided**, the question Slice 379 left for this sweep. It is
+    24 up and never cut, +48.4% since 2026-08-20. The 12 commits behind its
+    +1,388 words sum exactly to the report's figure, and every one adds
+    standing architecture: three build rules (+674), the Non-goals section
+    (+331), the narrowed virtualiser decision (+145), and small data-table,
+    icon, release and shell corrections (+238). None is incident narrative.
+    **HONEST stands on that ground. "The control" is retired**: the file grows
+    faster than `CLAUDE.md` (+14.7%) and `ROADMAP.md` (+15.9%). Lane 4's
+    accumulation finding does not apply to it either, since it is read when
+    architecture is in play, not every wake. 167.1 in the archive carries the
+    note.
+  - **The dispatch region grew +159 body words in 3 of 16 sections** since its
+    last reduction (`4e6b83c1`), and all three are this morning's own items:
+    Step 0 +15 (346.1's fourth advisory), Step 1 +22 (335.1's proof), rule 4
+    +122 (346.1's correction rule). They are new rules, not regrowth, so there
+    is no cut. The correction rule is needed when correcting, though, not when
+    deciding, so it moves to Operating rules: dispatch region **7,643 →
+    7,521** words, file +19.
+  - `ENVIRONMENT.md` (25 up) keeps its HONEST verdict; its one new step is
+    335.1 replacing a "not red-proved" limitation with its proof.
+
+Markdown only, so no rendered page changed and no screenshots are owed.
+
 ## Slice 379 — Objective grill of Slices 345, 378: every headline figure reproduces at its own revision, and all twelve findings are in what shipped BESIDE the figure — 345.1's move of `display: inline-block` into the utility breaks a block spinner nobody measured, and 378 published totals read off a working tree (2026-09-24)
 
 **Dispatched by rule 3** (`Objective 3 / 3 OVERDUE [320, 345, 378]`) after rule 1
