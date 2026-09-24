@@ -123,10 +123,25 @@ po-app harness now catches a stale dist; metric sampling fixed; rule 5 reads
 STALE again, honestly (the names it can act on were last sampled 09-19).
 Filed 384.1. Counters: Standardize 2 / 4, Objective 0 / 3.
 
-**Next wake:** rule 4 — the oldest open item not owner-blocked, 362.1.
+**Rule 4 at 21:45:** 362.1 LANDED (`2fc94372`) — `astro check` with
+`noUnusedLocals` is now a docs build gate (`check:types`, 164 files, 562 -> 0
+errors). It found a stray "))}" rendered on the live /reference/tokens/ page
+since 2026-08-16, now removed. Counters: Standardize 3 / 4, Objective 1 / 3
+[362].
+
+**SESSION HANDED OFF 2026-09-24 ~22:00 — the owner is starting a new session.
+This session's loop is STOPPED; nothing is in flight, the tree is clean except
+the owner's own uncommitted files.** The next session starts at Step 0 here.
+
+**Next wake:** rule 4 — the oldest open item not owner-blocked, **369.2** (10
+of 128 pages never get the print reset on `body` — user-facing). One more
+Continue round brings rule 2 to 4 / 4.
 **The archive sweep is DUE at the next rule-2 sweep:** `roadmap_scope.py` read
 41.0% / 10,010 lines at Slice 384, past both halves of the 5,450-line / 40.6%
-trigger (Slice 383's decline rested on a wrong comparison).
+trigger. **Rule 5 reads STALE** honestly: the names it can act on (`claims`,
+`bundle-gz-kb`) were last sampled 09-19 / 09-03 — record one when measured, or
+say it could not be evaluated. **CI has not yet run the new `check:types`
+gate**; watch the first push's run.
 
 **Lane-run note:** run the Standardize lanes on a build of HEAD without the
 owner's uncommitted screen-kit edits, which otherwise enter lane 3's total
@@ -162,8 +177,8 @@ hide-on-upward-scroll; two refusals stand and the reversal is unwritten),
 373.8 (docs IA, 17 groups to 7). Plus, outside these slices: 112.3/112.4,
 296.3, 369.1, 273.2.
 
-**Dispatcher counters (2026-09-24 21:22, `dispatch_status.py`):** Standardize
-2 / 4, Objective 0 / 3, 0 open P0; rule 5 STALE. Re-read them; never trust this line.
+**Dispatcher counters (2026-09-24 21:54, `dispatch_status.py`):** Standardize
+3 / 4, Objective 1 / 3, 0 open P0; rule 5 STALE. Re-read them; never trust this line.
 
 **A trap that has bitten twice — read before touching ROADMAP.md.** Build the
 staged content from HEAD BY CONSTRUCTION and write the same bytes to the
@@ -173,7 +188,7 @@ drifted, and a later `git add` silently reverted four closed items to `[ ]`.
 
 ## PLAN — work this order.
 
-**Base state.** `main` pushed after Slice 384's record. Last full run green
+**Base state.** `main` pushed after 362.1's record (session handed off). Last full run green
 on this tree (2026-09-24 06:30): core build, 174 tests, docs build 0 FAIL,
 `check:claims` 300, `test:axe` 128 pages x 2 widths 0 violations,
 `check:layout` 128 pages. The files still uncommitted are the 2026-09-20 owner
