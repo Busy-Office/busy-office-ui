@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-24 18:49 UTC
+Generated at: 2026-09-24 19:34 UTC
 
 ## Open items by slice
 
@@ -21,8 +21,6 @@ Generated at: 2026-09-24 18:49 UTC
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - **Slice 369** (1 open)
   - 369.1 — should printing from the DARK theme force the light palette? OWNER OR ARCHITECTURE CALL.
-- **Slice 372** (1 open)
-  - 372.1 — rule 5's pairing keeps the last sample of each calendar day on a recorded reason that is false at 72 of 73 pairs, and the case cited for it is mislabelled.
 - **Slice 373** (2 open)
   - 373.6 — App dock: hide on UPWARD scroll. OWNER CALL — two refusals stand on the record and the reversal is not written down.
   - 373.8 — docs IA: collapse 17 sidebar groups into the prompt's seven (Start here / Foundations / Components / Patterns and layouts / Integration / Reference / Contributor and decision history). OWNER CALL.
@@ -59,21 +57,21 @@ Generated at: 2026-09-24 18:49 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1781 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-09-24 22:43   ok
-  Objective     0 / 3 slices          since 2026-09-25 02:49   ok
+dispatch status — counter-triggered rules (1782 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-09-24 22:43   ok
+  Objective     1 / 3 slice           since 2026-09-25 02:49   ok  [372]
   Optimize      4 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 151 sample(s), 8 of 51 name(s) paired across days]
   -> rule 5's newest comparable pair predates 4 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-19, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-19 (2026-09-22, 2026-09-23, 2026-09-24, 2026-09-25), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
-     rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (43 of 51 name(s) have only one day and are not an input to a rule that compares two runs):
-       dispatch-region-words       4d  2026-09-09 7484 words -> 2026-09-24 7749 words  +265
-       claims                      5d  2026-09-07 176 count -> 2026-09-19 203 count  +27
+     rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (43 of 51 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
+       dispatch-region-words       4d  2026-09-09 7484 words -> 2026-09-24 7749 words  +265   [3 same-day]
+       claims                      5d  2026-09-07 176 count -> 2026-09-19 203 count  +27   [1 same-day]
        gates                       4d  2026-09-07 55 count -> 2026-09-09 56 count  +1
        axe-violations              8d  2026-09-03 0 count -> 2026-09-06 0 count  +0   NEVER MOVED
-       bundle-gz-kb                5d  2026-08-17 11.7 kB -> 2026-09-03 15.1 kB  +3.4
-       ci-gates                    2d  2026-08-17 14 gates -> 2026-08-18 15 gates  +1
-       components                  3d  2026-08-15 25 count -> 2026-08-16 30 count  +5
-       behaviors_frozen            2d  2026-08-15 16 count -> 2026-08-16 18 count  +2
+       bundle-gz-kb                5d  2026-08-17 11.7 kB -> 2026-09-03 15.1 kB  +3.4   [2 same-day]
+       ci-gates                    2d  2026-08-17 14 gates -> 2026-08-18 15 gates  +1   [6 same-day]
+       components                  3d  2026-08-15 25 count -> 2026-08-16 30 count  +5   [3 same-day]
+       behaviors_frozen            2d  2026-08-15 16 count -> 2026-08-16 18 count  +2   [2 same-day]
      no direction is recorded with a sample, so the movement above is a reading and the regression verdict is the wake's. A name that has NEVER MOVED is either healthy or pinned by a gate — rule 5 cannot fire on it either way (`axe-violations` is 0 on every day because `test:axe` fails the build above 0).
      a direction is NOT recorded on purpose (roadmap 324.1): adding one makes rule 5 fire on `bundle-gz-kb`'s four consecutive rises, which the log's own same-timestamp `components` samples refute (0.400 -> 0.355 kB per component over that window). A rise with no denominator is growth. Where a name has a real threshold, use it — `check:size` gates the bundle at 16.7 kB gz, which is rule 5's budget clause, not its trend one.
 ```
@@ -94,7 +92,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-24 17:36 · Continue · fix · 352.1 — po-app harness names an unbuilt packages/core/dist (4 missing files, build-state) instead of a select-all failure; red-proved by moving dist aside · landed · 135fb21b
 - 2026-09-24 18:04 · Standardize · sweep · 383 — Standardize sweep 4/4 on an isolated clean build: lane 2 unchanged by construction, lanes 1/3 match base, lane 4 cut 101 words of narrative (7,824 -> 7,723) · landed · 330051e0
 - 2026-09-24 19:03 · Continue · build · 352.2 — style-flush column kept: on a recorded M4 it reconciles like select-all (0.20/0.30 vs 0.18/0.28 of published; ~1x throttled); page says so with the command · landed · 37a704a2
 - 2026-09-24 19:32 · Continue · fix · 353.2 — dispatch-region-words recorded by the instrument with its commit (history mixed body/region figures; rule 5's pair read -8 for a -64 change) · landed · 633ff058
@@ -104,6 +101,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-24 22:07 · Standardize · sweep · 385 — Standardize sweep 4 of 4 lanes + archive sweep, 21 slices moved · landed · 6ec0e8da
 - 2026-09-24 22:43 · Standardize · audit · prompt-audit of CLAUDE.md: three stale figures removed · landed · 2af651ff
 - 2026-09-25 02:49 · Objective · grill · Slice 386 — Objective grill of 362.1, 369.2, Slice 385 · landed · 53ffa54f
+- 2026-09-25 03:34 · Continue · build · 372.1 — rule 5 keeps the day unit; day-close reason measured, comparable set labelled · landed · f866ad11
 
 ## Sunset test
 

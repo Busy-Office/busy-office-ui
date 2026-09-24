@@ -129,6 +129,15 @@ errors). It found a stray "))}" rendered on the live /reference/tokens/ page
 since 2026-08-16, now removed. Counters: Standardize 3 / 4, Objective 1 / 3
 [362].
 
+**Rule 4 at 03:34 (2026-09-25):** 372.1 LANDED (`f866ad11`) — rule 5 keeps the
+day unit; `per_day_last`'s false reason is replaced by the measured day-close one
+(`dispatch_status.py --pairing-census`: 70 of 75 same-day pairs span a commit),
+and the comparable set labels its deltas DAY-CLOSE and marks `[k same-day]`.
+Jev completion review UNVERIFIED — `jevai` rate-limited twice; this session was
+started before the key existed, so its MCP tools are not loaded here. Counters:
+Standardize 1 / 4, Objective 1 / 3 [372]. Next by age among dispatchable items:
+read `STATUS.md` (375.11 is the oldest non-owner item after 372.1).
+
 **Wake of 2026-09-25 (goal: rule 3, then push):** Slice 386 LANDED — the grill of
 362.1, 369.2 and Slice 385. Headlines hold; 385's own write-up carried four wrong
 or unmeasured figures, corrected in place. Filed 386.1 (no gate keeps the print
