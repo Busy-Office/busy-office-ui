@@ -16,9 +16,9 @@
  * calls `startPoApp()` and gets one; nobody has to know that.
  */
 import { spawn, spawnSync } from 'node:child_process';
-import { rmSync, renameSync } from 'node:fs';
+import { existsSync, readFileSync, rmSync, renameSync } from 'node:fs';
 import { createServer } from 'node:http';
-import { join } from 'node:path';
+import { dirname, join, normalize } from 'node:path';
 import { REPO_ROOT } from './paths.mjs';
 
 const poAppDir = join(REPO_ROOT, 'examples/po-app');
@@ -62,6 +62,57 @@ export function installPoApp() {
   if (install.status !== 0) throw new Error(`npm install (examples/po-app) failed:\n${install.stderr}`);
 }
 
+/**
+ * The files po-app will serve from the INSTALLED package, checked before boot
+ * (roadmap 352.1). Without this, an unbuilt `packages/core` packs a tarball with
+ * no `dist`, po-app 404s its own behaviour bundle, and the first gate to notice
+ * says "the select-all did not select the rows" — the exact words of a real
+ * defect this repo has had, pointing at the wrong half of the system. It cost
+ * a wake a false P0 once.
+ *
+ * The list is DERIVED, never written out: every `/assets/<path>` server.mjs
+ * serves, plus every module `js/index.js` imports, transitively. So a new asset
+ * or behaviour is covered without editing this.
+ */
+export function missingUiAssets() {
+  const uiDist = join(poAppDir, 'node_modules', '@busy-office', 'ui', 'dist');
+  const server = readFileSync(join(poAppDir, 'server.mjs'), 'utf8');
+  const wanted = [...new Set([...server.matchAll(/\/assets\/([\w./-]+\.(?:js|css))/g)].map((m) => m[1]))];
+  const missing = [];
+  const seen = new Set();
+  const visit = (rel) => {
+    if (seen.has(rel)) return;
+    seen.add(rel);
+    const file = join(uiDist, rel);
+    if (!existsSync(file)) {
+      missing.push(`dist/${rel}`);
+      return;
+    }
+    if (!rel.endsWith('.js')) return;
+    for (const m of readFileSync(file, 'utf8').matchAll(/(?:from|import)\s*['"](\.{1,2}\/[^'"]+)['"]/g)) {
+      visit(normalize(join(dirname(rel), m[1])));
+    }
+  };
+  wanted.forEach(visit);
+  return { wanted, missing };
+}
+
+export function assertUiAssets() {
+  const { wanted, missing } = missingUiAssets();
+  if (wanted.length === 0) {
+    throw new Error('po-app-harness: found no /assets/ paths in examples/po-app/server.mjs — the asset check cannot run.');
+  }
+  if (missing.length) {
+    throw new Error(
+      `po-app-harness: the installed @busy-office/ui is missing ${missing.length} file(s) po-app serves:\n` +
+        missing.map((f) => `    ${f}`).join('\n') +
+        '\n  packages/core/dist is not built (npm pack ships whatever dist holds). Run\n' +
+        '  `npm run build -w @busy-office/ui` first. This is a BUILD-STATE problem, not an\n' +
+        '  app defect — do not read the gate failure that would follow as one (roadmap 352.1).',
+    );
+  }
+}
+
 const freePort = () =>
   new Promise((res) => {
     const s = createServer();
@@ -80,6 +131,7 @@ const freePort = () =>
  */
 export async function startPoApp({ install = true } = {}) {
   if (install) installPoApp();
+  assertUiAssets();
 
   const port = await freePort();
   const app = spawn(process.execPath, [join(poAppDir, 'server.mjs')], {

@@ -3769,7 +3769,7 @@ commit `2caaa16f` was green at `2026-09-08T11:04:54Z`**, and CI runs
 `check:po-app` **20 / 20**, and the probe's controls **1000/1000, 5000/5000,
 20000/20000**. Filed as `352.1`.
 
-1. [ ] **352.1 — a missing `packages/core/dist` is reported as an application
+1. [x] **352.1 — a missing `packages/core/dist` is reported as an application
        defect, in the exact words of a defect this repo has actually had.**
        `check:po-app` and `measure:stress` both boot the reference app from a
        freshly packed tarball, and neither asks whether that tarball contains
@@ -3787,6 +3787,20 @@ commit `2caaa16f` was green at `2026-09-08T11:04:54Z`**, and CI runs
          is a satisfying outcome and closes it by writing that down.
          Red-proving it means `rm -rf packages/core/dist` and watching the new
          message appear, not watching the old one fail.
+       - **DONE 2026-09-24.** `po-app-harness.mjs`'s `startPoApp()` now checks,
+         before booting, that the INSTALLED `@busy-office/ui` carries every file
+         po-app serves. The list is derived, not written out: each `/assets/`
+         path in `server.mjs`, plus every module `js/index.js` imports,
+         transitively. Both callers go through it (`check-po-app.mjs`, and
+         `measure-stress.mjs` including `--no-install`). The precondition is
+         real: `packages/core` has no `prepack`, so an unbuilt `dist` packs a
+         tarball without it. **Red-proof:** with `packages/core/dist` moved
+         aside, `check:po-app` exits 1 with *"the installed @busy-office/ui is
+         missing 4 file(s) po-app serves … packages/core/dist is not built …
+         This is a BUILD-STATE problem, not an app defect"*, and the log holds
+         "did not select" 0 times. `dist` moved back (179 files, identical
+         checksums) and the gate is green again: 20 behaviours. Jev: supported
+         0.96.
 
 2. [ ] **352.2 — the two KEPT columns have no recorded method either, and the
        machine gap they imply is not one machine gap.** Slice 352 kept
