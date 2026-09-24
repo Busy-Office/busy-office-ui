@@ -82,7 +82,16 @@ Standardize 1 / 4, Objective 1 / 3.
 past grills armed that way, only 42 had three slices closed). Counters:
 Standardize 2 / 4, Objective 2 / 3 [348, 349].
 
-**Next wake:** rule 4 — the oldest open item not owner-blocked, 350.1.
+**Rule 4 at 11:57:** 350.1 REFUSED on measurement (`661bc668`) — rule 2 keeps
+counting Continue rounds; lane 4 had material on every multi-commit window,
+and a no-input lane is now written "unchanged by construction". Counters:
+Standardize 3 / 4, **Objective 3 / 3 OVERDUE [348, 349, 350]**.
+
+**Next wake:** rule 3 — the Objective grill of 348.1, 349.1 and 350.1 (all
+three closed in place). None of the three changed a shipped artefact: they are
+loop scripts and text, which is exactly 381.2's open question. 381.2 is not
+decided, so rule 3 fires as written; §6 step 0 lets the grill narrow its scope
+honestly, and the thesis section is now required by §6's Exit.
 
 **Lane-run note:** run the Standardize lanes on a build of HEAD without the
 owner's uncommitted screen-kit edits, which otherwise enter lane 3's total
@@ -116,8 +125,8 @@ hide-on-upward-scroll; two refusals stand and the reversal is unwritten),
 373.8 (docs IA, 17 groups to 7). Plus, outside these slices: 112.3/112.4,
 296.3, 369.1, 273.2.
 
-**Dispatcher counters (2026-09-24 11:33, `dispatch_status.py`):** Standardize
-2 / 4, Objective 2 / 3, 0 open P0. Re-read them; never trust this line.
+**Dispatcher counters (2026-09-24 12:01, `dispatch_status.py`):** Standardize
+3 / 4, Objective 3 / 3 OVERDUE, 0 open P0. Re-read them; never trust this line.
 
 **A trap that has bitten twice — read before touching ROADMAP.md.** Build the
 staged content from HEAD BY CONSTRUCTION and write the same bytes to the
@@ -127,7 +136,7 @@ drifted, and a later `git add` silently reverted four closed items to `[ ]`.
 
 ## PLAN — work this order.
 
-**Base state.** `main` pushed after 349.1's record. Last full run green
+**Base state.** `main` pushed after 350.1's record. Last full run green
 on this tree (2026-09-24 06:30): core build, 174 tests, docs build 0 FAIL,
 `check:claims` 300, `test:axe` 128 pages x 2 widths 0 violations,
 `check:layout` 128 pages. The files still uncommitted are the 2026-09-20 owner
