@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-24 00:04 UTC
+Generated at: 2026-09-24 00:32 UTC
 
 ## Open items by slice
 
@@ -19,8 +19,6 @@ Generated at: 2026-09-24 00:04 UTC
   - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
 - **Slice 296** (1 open)
   - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
-- **Slice 335** (1 open)
-  - 335.1 — The Discussions intake has never returned a non-empty list, in either environment.
 - **Slice 348** (1 open)
   - 348.1 — a kB figure in backticks is indistinguishable from a slice id by shape, and the "absent" bucket claims otherwise.
 - **Slice 349** (1 open)
@@ -68,9 +66,10 @@ Generated at: 2026-09-24 00:04 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1762 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-09-24 04:15   ok
-  Objective     1 / 3 slice           since 2026-09-24 06:38   ok  [346]
+dispatch status — counter-triggered rules (1763 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-09-24 04:15   OVERDUE
+  Objective     2 / 3 slices          since 2026-09-24 06:38   ok  [335, 346]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      3 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 148 sample(s), 8 of 51 name(s) paired across days]
   -> rule 5's newest comparable pair predates 3 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-19, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-19 (2026-09-22, 2026-09-23, 2026-09-24), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -92,7 +91,6 @@ dispatch status — counter-triggered rules (1762 iterations logged)
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
 - 373.6 — App dock: hide on UPWARD scroll. OWNER CALL — two refusals stand on the record and the reversal is not written down.
-- 335.1 — The Discussions intake has never returned a non-empty list, in either environment.
 - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
 - 249.10 — SAP/Fiori terminology column for 249.7.
@@ -104,7 +102,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-24 03:02 · Objective · grill · Slice 377 — grill of 373-376: 47/47 claims hold; P0 377.1 + 377.2, revision-blind completion gate, adoption ~zero, owner calls 377.5/377.6 · logged · faf331b4
 - 2026-09-24 03:36 · Continue · bug · P0 377.1 — real right-click opens the context menu (opens after release when asked mid-press) · landed · 0ade896e
 - 2026-09-24 03:48 · Continue · bug · P0 377.2 — launcher re-filters on dialog close; grid matches field after Escape · landed · b4e592d3
 - 2026-09-24 04:15 · Standardize · sweep · 378 — Standardize sweep 4 of 4 lanes, all clean (lane 2 input touched by 376.2/376.4) · logged · 456f9966
@@ -114,6 +111,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-24 06:38 · Meta · refusal · reverting 345.1 or narrowing it to inline elements — the block shapes it breaks are unused here and one declaration fixes them · refused · 2fad3cc7
 - 2026-09-24 08:04 · Continue · build · 346.1 — correction base rate: 13 of 59 superseding commits left a stale copy (17 sites, 2 wrap-only); check_correction_sites.py lists the copies (11/17 from the diff, 16 with --old), wired as a REPORTED advisory · landed · f8856986
 - 2026-09-24 08:04 · Meta · refusal · a whitespace normaliser as the fix — the wrap hid 2 of the 17 stale copies · refused · f8856986
+- 2026-09-24 08:32 · Continue · build · 335.1 — Discussions intake proved end to end: owner-authorised throwaway discussion #3 appeared as 200 len 1, then deleted (200 len 0, 404, NOT_FOUND) · landed · 0756cafb
 
 ## Sunset test
 
