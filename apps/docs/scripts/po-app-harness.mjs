@@ -19,7 +19,7 @@ import { spawn, spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, rmSync, renameSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { dirname, join, normalize } from 'node:path';
-import { REPO_ROOT } from './paths.mjs';
+import { CORE_DIST, REPO_ROOT } from './paths.mjs';
 
 const poAppDir = join(REPO_ROOT, 'examples/po-app');
 
@@ -64,20 +64,52 @@ export function installPoApp() {
 
 /**
  * The files po-app will serve from the INSTALLED package, checked before boot
- * (roadmap 352.1). Without this, an unbuilt `packages/core` packs a tarball with
- * no `dist`, po-app 404s its own behaviour bundle, and the first gate to notice
- * says "the select-all did not select the rows" — the exact words of a real
- * defect this repo has had, pointing at the wrong half of the system. It cost
- * a wake a false P0 once.
+ * (roadmap 352.1, widened by the Slice 384 grill). Without this, an unbuilt or
+ * stale `packages/core` gives po-app a behaviour bundle that is missing or
+ * out of date, and the first gate to notice says "select-all on /pos checks
+ * every row" failed (or measure:stress: "the select-all did not select the
+ * rows") — the words of a real defect this repo has had, pointing at the wrong
+ * half of the system. It cost a wake a false P0 once.
  *
- * The list is DERIVED, never written out: every `/assets/<path>` server.mjs
- * serves, plus every module `js/index.js` imports, transitively. So a new asset
- * or behaviour is covered without editing this.
+ * Everything is DERIVED, never written out: every `/assets/<path>` server.mjs
+ * serves, every module `js/index.js` imports (transitively), and every name
+ * server.mjs imports from `/assets/js/index.js`, which the installed
+ * `index.js` must export. That last check is what catches a STALE dist — built,
+ * but before a behaviour was added. And it reconciles against the source: if
+ * server.mjs mentions `/assets/` somewhere the pattern cannot read as a literal
+ * path, it refuses rather than check a shorter list.
+ *
+ * The paths are options so the check can be red-proved on scratch copies.
  */
-export function missingUiAssets() {
-  const uiDist = join(poAppDir, 'node_modules', '@busy-office', 'ui', 'dist');
-  const server = readFileSync(join(poAppDir, 'server.mjs'), 'utf8');
-  const wanted = [...new Set([...server.matchAll(/\/assets\/([\w./-]+\.(?:js|css))/g)].map((m) => m[1]))];
+const stripJsComments = (src) => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:\\])\/\/.*$/gm, '$1');
+
+const exportedNames = (src) => {
+  const names = new Set();
+  for (const m of src.matchAll(/export\s*\{([^}]*)\}/g)) {
+    for (const part of m[1].split(',')) {
+      const bits = part.trim().split(/\s+as\s+/);
+      const name = (bits[1] ?? bits[0]).trim();
+      if (name) names.add(name);
+    }
+  }
+  for (const m of src.matchAll(/export\s+(?:async\s+)?(?:function\*?|const|let|var|class)\s+([\w$]+)/g)) names.add(m[1]);
+  return names;
+};
+
+export function missingUiAssets({
+  appDir = poAppDir,
+  coreDist = CORE_DIST,
+} = {}) {
+  const uiDist = join(appDir, 'node_modules', '@busy-office', 'ui', 'dist');
+  const server = readFileSync(join(appDir, 'server.mjs'), 'utf8');
+  const literal = [...server.matchAll(/\/assets\/([\w./-]+\.(?:js|css))/g)];
+  const wanted = [...new Set(literal.map((m) => m[1]))];
+  // Reconcile: every `/assets/` mention is a literal path, except the route
+  // handler that serves them (`path.startsWith('/assets/')`).
+  const mentions = server.split('/assets/').length - 1;
+  const handler = server.split("startsWith('/assets/')").length - 1;
+  const unparsed = mentions - handler - literal.length;
+
   const missing = [];
   const seen = new Set();
   const visit = (rel) => {
@@ -85,30 +117,72 @@ export function missingUiAssets() {
     seen.add(rel);
     const file = join(uiDist, rel);
     if (!existsSync(file)) {
-      missing.push(`dist/${rel}`);
+      missing.push(rel);
       return;
     }
     if (!rel.endsWith('.js')) return;
-    for (const m of readFileSync(file, 'utf8').matchAll(/(?:from|import)\s*['"](\.{1,2}\/[^'"]+)['"]/g)) {
+    const src = stripJsComments(readFileSync(file, 'utf8'));
+    for (const m of src.matchAll(/(?:from|import)\s*\(?\s*['"](\.{1,2}\/[^'"]+)['"]/g)) {
       visit(normalize(join(dirname(rel), m[1])));
     }
   };
   wanted.forEach(visit);
-  return { wanted, missing };
+
+  const imported = new Set();
+  for (const m of stripJsComments(server).matchAll(/import\s*\{([^}]*)\}\s*from\s*['"]\/assets\/js\/index\.js['"]/g)) {
+    for (const part of m[1].split(',')) {
+      const name = part.trim().split(/\s+as\s+/)[0].trim();
+      if (name) imported.add(name);
+    }
+  }
+  const installedIndex = join(uiDist, 'js', 'index.js');
+  const exported = existsSync(installedIndex) ? exportedNames(readFileSync(installedIndex, 'utf8')) : null;
+  const missingExports = exported ? [...imported].filter((n) => !exported.has(n)) : [];
+
+  // Name the cause from what can be observed, not from a guess.
+  let cause = null;
+  if (missing.length || missingExports.length) {
+    const coreIndex = join(coreDist, 'js', 'index.js');
+    const coreHasFiles = missing.every((rel) => existsSync(join(coreDist, rel)));
+    const coreHasExports = !missingExports.length ||
+      (existsSync(coreIndex) && missingExports.every((n) => exportedNames(readFileSync(coreIndex, 'utf8')).has(n)));
+    if (!existsSync(coreDist)) cause = 'not-built';
+    else if (coreHasFiles && coreHasExports) cause = 'stale-install';
+    else cause = 'stale-dist';
+  }
+  return { wanted, missing: missing.map((r) => `dist/${r}`), missingExports, unparsed, cause };
 }
 
-export function assertUiAssets() {
-  const { wanted, missing } = missingUiAssets();
+const CAUSE_TEXT = {
+  'not-built': 'packages/core/dist is not built (npm pack ships whatever dist holds). Run\n' +
+    '  `npm run build -w @busy-office/ui` first.',
+  'stale-install': "packages/core/dist has what po-app needs, but po-app's installed copy does not —\n" +
+    '  it is stale or missing. Drop `--no-install`, or let the harness reinstall.',
+  'stale-dist': 'packages/core/dist is partial or older than the source. Rebuild it with\n' +
+    '  `npm run build -w @busy-office/ui`.',
+};
+
+export function assertUiAssets(opts) {
+  const { wanted, missing, missingExports, unparsed, cause } = missingUiAssets(opts);
   if (wanted.length === 0) {
     throw new Error('po-app-harness: found no /assets/ paths in examples/po-app/server.mjs — the asset check cannot run.');
   }
-  if (missing.length) {
+  if (unparsed !== 0) {
     throw new Error(
-      `po-app-harness: the installed @busy-office/ui is missing ${missing.length} file(s) po-app serves:\n` +
-        missing.map((f) => `    ${f}`).join('\n') +
-        '\n  packages/core/dist is not built (npm pack ships whatever dist holds). Run\n' +
-        '  `npm run build -w @busy-office/ui` first. This is a BUILD-STATE problem, not an\n' +
-        '  app defect — do not read the gate failure that would follow as one (roadmap 352.1).',
+      `po-app-harness: server.mjs mentions /assets/ ${unparsed} time(s) more than it names a literal .js/.css path,\n` +
+        '  so the asset check cannot see every asset. Make the path literal, or teach missingUiAssets() to read it.',
+    );
+  }
+  if (missing.length || missingExports.length) {
+    const lines = [
+      ...missing.map((f) => `    missing file: ${f}`),
+      ...missingExports.map((n) => `    js/index.js does not export: ${n}`),
+    ];
+    throw new Error(
+      `po-app-harness: the installed @busy-office/ui cannot serve what po-app asks for:\n${lines.join('\n')}\n  ` +
+        CAUSE_TEXT[cause] +
+        '\n  This is a BUILD-STATE problem, not an app defect — do not read the gate failure\n' +
+        '  that would follow as one (roadmap 352.1).',
     );
   }
 }

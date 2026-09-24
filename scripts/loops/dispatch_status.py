@@ -768,6 +768,11 @@ def report_comparable(samples, dates):
     )
 
 
+# Names recorded by the loop's own machinery rather than by a wake choosing to
+# measure — excluded from the freshness verdict above, never from the listing.
+AUTO_SAMPLED = frozenset({"dispatch-region-words"})
+
+
 def report_metrics(all_rows):
     """Rule 5's input: how stale is the newest pair it could actually compare?"""
     samples = metric_samples()
@@ -794,7 +799,13 @@ def report_metrics(all_rows):
             f"sampled on two distinct days   NO LIVE INPUT"
         )
         return True
-    newest = max(pairs, key=lambda s: s["ts"])
+    # A name the loop samples AUTOMATICALLY cannot vouch for rule 5's freshness:
+    # dispatch-region-words is recorded on every Standardize row (roadmap 353.2),
+    # so it would reset this flag on every sweep while the names rule 5 can act
+    # on went unsampled for weeks (Slice 384's grill). It stays in the pairs
+    # listed below; it just does not decide ok/STALE.
+    judged = [s for s in pairs if s["name"] not in AUTO_SAMPLED] or pairs
+    newest = max(judged, key=lambda s: s["ts"])
     # DISTINCT log dates strictly after the pair, never a count of wakes. Several
     # wakes on one date age this by zero, and a wake on a fresh date ages it by
     # one however little it did. A hand-off read it the other way on 2026-09-04

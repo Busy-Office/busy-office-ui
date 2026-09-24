@@ -313,15 +313,19 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     column's 1 : 2.0 : 6.6. That does not show the old figures were wrong — it
     shows the disagreement cannot be diagnosed, because the two windows and the
     two machines both differ and no method was recorded to tell them apart. The
-    interaction columns are kept, because they <em>do</em> reconcile against that
-    probe, and they reconcile the same way. On a recorded machine (Apple M4,
-    Chrome 153, a 1440px viewport), two sittings of seven runs put select-all at
-    0.7 / 3.3 / 13.6 ms and the style flush at 9.9 / 46.4 / 185.8 ms across the
-    three row counts. That is the same fraction of the published figures for both
-    columns at each size (about 0.2&times; at 5k, 0.3&times; at 20k), and
-    0.9&ndash;1.1&times; for both under a 4&times; throttle. A faster machine
-    moves both columns together; an unrecorded window would not. For figures on
-    your own hardware, run <code>npm run measure:stress -w docs</code>.</p>
+    interaction columns are kept, read as one sitting's shape rather than a
+    constant. On an Apple M4 with Chrome 153 (1440px viewport), two sittings of
+    seven runs put select-all at 0.7 / 3.3 / 13.6 ms and the style flush at
+    9.9 / 46.4 / 185.8 ms across the three row counts, so the flush costs about 14
+    times select-all, close to the published table's 12&ndash;13. Run against the
+    2026-08-15 stylesheet the table was measured on, it matches at 12&ndash;13;
+    today's costs 5&ndash;11% more. <strong>The ratio depends on the browser
+    build:</strong> on Chrome 141 the same M4 puts the flush at 28&ndash;31 times
+    select-all, and a recorded four-core Xeon on Chrome 141 at 24&ndash;38. So the
+    style flush is the cost to watch, and its size depends on the machine and the
+    Chrome version. Measure yours with <code>npm run measure:stress -w docs --
+    --rows 1000,5000,20000 --repeat 7</code> (add <code>--throttle 4</code> for
+    the throttled rows).</p>
     <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table" data-density="compact">
         <thead><tr><th scope="col" class="bo-data-table__col--numeric">Rows</th><th scope="col" class="bo-data-table__col--numeric">Select-all</th><th scope="col" class="bo-data-table__col--numeric">Post-bulk-check style flush</th></tr></thead>
@@ -334,12 +338,15 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
         </tbody>
       </table>
     </div>
-    <p class="bo-u-text-muted">The 4×-throttle rows approximate older corporate
-    hardware (added after the decisions grill challenged the single-machine
-    evidence). Nothing steps: cost grows with row count and no cliff showed up in
-    either sitting. The recurring cost is the <em>bulk-select style
+    <p class="bo-u-text-muted">The 4×-throttle rows were added after the decisions
+    grill challenged the single-machine evidence. They read about the same as the
+    unthrottled rows, where a working 4× throttle multiplies both columns by about
+    4 on the M4, so they are a separate, unrecorded sitting rather than a throttle
+    of the one above. Nothing steps: cost grows with row count and no cliff showed
+    up in any sitting. The recurring cost is the <em>bulk-select style
     recalculation</em> (the selected-row tint re-evaluating per row) — it repeats
-    on EVERY bulk toggle, staying under 700 ms even throttled. The genuine pain
+    on EVERY bulk toggle, and it reaches about 0.8 s at 20k rows under a 4×
+    throttle on the M4 with today's stylesheet. The genuine pain
     point is initial render at 20k rows on slow hardware, and with the column
     above withdrawn the figure to quote is the probe's own: a defined render
     window of <strong>~4.1 s</strong> at 20k on a recorded four-core container,

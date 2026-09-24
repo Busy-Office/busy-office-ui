@@ -9,7 +9,7 @@
  *   npm run measure:stress -w docs
  *   npm run measure:stress -w docs -- --rows 1000,5000,20000 --repeat 7
  *   npm run measure:stress -w docs -- --rows 5000 --throttle 4
- *   npm run measure:stress -w docs -- --json > run.json
+ *   npm run -s measure:stress -w docs -- --json > run.json   # -s, or npm's banner lands in the file
  *
  * That command works **from a clean clone**, which is the other half of 309.5.
  * Slice 307 recorded its re-run as `node examples/po-app/server.mjs`; that

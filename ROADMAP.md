@@ -320,6 +320,59 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 384 — Objective grill of 352.1, 352.2, 353.2 and Slice 383: 31 of 35 findings survive; the data-table page's style-flush reading depends on the Chrome build, not the machine, and the po-app harness now catches a STALE dist, not only a missing one (2026-09-24)
+
+**Dispatched by rule 3** (`Objective 3 / 3 OVERDUE [352, 353, 383]`) after rule
+1 read 0 open P0; the owner asked for it at once rather than at the next wake.
+352.1, 352.2 and 353.2 were closed in place (`135fb21b`, `37a704a2`,
+`633ff058`); Slice 383 is `330051e0`. Workflow `wf_678cad48-73f` (4 finders +
+4 adversarial verifiers; 44 claims reproduced, 35 findings, 31 survived).
+Report: `.roundtable/grill-objective-352-353-383-2026-09-24.md`.
+
+**Fixed in this commit:**
+- **The data-table performance passage.** Its style flush costs about 14× select-all on
+  an M4 with Chrome 153, 28-31× on the same M4 with Chrome 141, and 24-38× on
+  a recorded Xeon with Chrome 141: the browser build moves it, which 352.2's
+  "a faster machine moves both columns together" hid. It matches the
+  published 12-13× only on the stylesheet the table was measured on (today's
+  costs 5-11% more). "Under 700 ms even throttled" is false today (about 0.8
+  s at 20k); the published throttled rows are not a 4× throttle of the
+  unthrottled sitting. The page now says all of that, with the full command.
+- **po-app's harness.** It now also checks that the installed `index.js`
+  exports every name `server.mjs` imports (a STALE dist passed the old check
+  and still produced the false select-all failure), names the cause from what
+  it can observe (not built / stale install / partial dist), and refuses if
+  `server.mjs` mentions `/assets/` somewhere it cannot parse. Each branch is
+  red-proved on scratch copies; `check:po-app` still passes 20 behaviours.
+- **The metric sampling.** `record_iteration.py` samples before it regenerates
+  `STATUS.md`, honours `--no-log`, and samples only when the recorded commit
+  is HEAD. Rule 5's freshness flag no longer counts the auto-sampled name, so
+  it reads STALE again, which is the truth for the names it can act on.
+- LOOPS.md §3's lane inputs gain the files the grill found missing, and a base
+  figure is quoted from the base's write-up. Rule 3's pointer says 28 of 63
+  has no committed command. `ENVIRONMENT.md` §3c records the tested `npm ci`
+  recipe. `measure-stress.mjs`'s JSON usage gains `-s`.
+
+**Corrected in place:** 352.1, 352.2, 353.2, open item 372.1's lead example,
+and Slice 383 (archive-sweep reason, attribution, build path).
+
+**Thesis:** npm (09-15..21) still 16 / 12; jsDelivr 29; GitHub 0 stars, 0
+forks; framework code since Slice 382 **0 lines** (`git diff --numstat
+0ed584cd HEAD -- packages/core/src`), 11 lines of docs. Six P0 fixes still wait
+on 377.5.
+
+1. [ ] **384.1 — lane 4's anchor and the rule-text generator.** A partial trim
+       resets both lane-4 anchors, so 239 of the 340 words that grew since the
+       previous full cut are now invisible to the next sweep's per-section
+       attribution and ratchet. The growth itself has a GENERATOR: closures and
+       grills write their replay figures into rule text (349.1, 348.1, 382,
+       383), which 308.1/339.1's third branch says no cut can hold against.
+       - **Accept:** measure how much of the dispatch region's growth since
+         `4e6b83c1` is measurement narrative versus instruction, then decide
+         either a high-water anchor in `report_loop_prose.py` or a charter line
+         ("replay figures go to measure files; rules carry the pointer"), with
+         the reason. Refusing both on the measurement is satisfying.
+
 ## Slice 383 — Standardize sweep, **4 of 4 lanes on an isolated clean build**, the first under Slice 382's corrected §3: lane 2 is unchanged by construction, lanes 1 and 3 match their base, and lane 4 cuts 101 words of today's own measurement narrative back out of the dispatch region (2026-09-24)
 
 **Dispatched by rule 2** (`Standardize 4 / 4 OVERDUE` — 348.1, 349.1, 350.1,
@@ -351,7 +404,16 @@ docs build stamps `dirty: false`. Base for §3's shortcut: `741c9bea` (Slice 380
   traps and a correction. `DESIGN.md` has not moved since Slice 380's verdict.
 - **The archive sweep was evaluated and declined:** `roadmap_scope.py` reads
   closed-history share **3,606 / 9,942 = 36.3%**, well below the shares past
-  sweeps ran at; 249.12, the trigger, is still the owner's.
+  sweeps ran at; 249.12, the trigger, is still the owner's. [**Corrected by Slice 384:** not
+  "well below": the lowest past sweeps ran at 37.1% (Slice 301) and 39.8%
+  (235.2), and the line half of the trigger (5,450 lines) was already crossed;
+  the decline rested on an unstated AND. HEAD now reads 41.0% / 10,010 lines,
+  past both halves. Also: Step 0's +102 is 346.1 +15, 348.1 +56 and Slice 382
+  +31; one of the three changed scripts (`check-slice-refs.mjs`) is a build gate,
+  its change a comment; §3's input lists were incomplete (fixed by Slice 384);
+  the base's figure was taken from memory, not from Slice 380's write-up; and
+  the 239 words of growth above the previous cut are now invisible to lane 4
+  (384.1).]
 
 Markdown only, so no rendered page changed and no screenshots are owed.
 
@@ -2355,7 +2417,9 @@ in place, in the same commit `c5780113`.
        a recorded reason that is false at 72 of 73 pairs, and the case cited for
        it is mislabelled.** Measured above. The consequence is not cosmetic: on
        **5 of 8** day-paired names the published movement occurred between no two
-       samples (`dispatch-region-words` −8 against a true −68), and the rule's own
+       samples (`dispatch-region-words` −8 against a true −68 [**Corrected by Slice 384:** 56 of
+       that gap is convention: 7,492 is a body figure, 7,484 a region one (353.2);
+       in one convention the day pair is −64, the sample pair −68]), and the rule's own
        two-consecutive-moves predicate **disagrees between the two readings on 3
        of 8**.
        - **Accept — the property, and finding the unit RIGHT is a satisfying
@@ -3657,6 +3721,14 @@ metric, is untouched and stays open.
          revision exits 1 and records nothing. Rule 5's newest pair is now
          region to region: 7,484 → 7,723, +239. LOOPS.md §3 says the old body
          samples must not be paired. Jev: supported 0.95.
+         [**Corrected by Slice 384:** the auto-sampled name kept rule 5's freshness
+         flag at ok while the names it can act on went unsampled; it no longer
+         counts toward the flag. The sampling ran after `STATUS.md` was
+         regenerated, ignored `--no-log`, and an older `--commit` recorded later
+         could become the day's reading; all three fixed. The four matches are
+         unique in time, not in value (other commits share those figures). And
+         372.1's lead example carries the same convention mix, now noted
+         there.]
 
 ## Slice 352 — `325.2` closed by WITHDRAWAL: the *Initial render* column's method is unrecoverable, and the measurement that decides it needs no knowledge of the missing machine — a machine gap is a roughly CONSTANT multiple, and this column's is 4.2x / 11.9x / 7.3x while its own neighbour's is 0.93x / 0.72x / 1.19x (2026-09-08)
 
@@ -3850,6 +3922,15 @@ commit `2caaa16f` was green at `2026-09-08T11:04:54Z`**, and CI runs
          "did not select" 0 times. `dist` moved back (179 files, identical
          checksums) and the gate is green again: 20 behaviours. Jev: supported
          0.96.
+         [**Corrected by Slice 384:** a STALE dist (built before a behaviour existed)
+         passed this check and still produced the false select-all failure; the
+         harness now also checks the installed `index.js` exports every name
+         `server.mjs` imports. "did not select 0 times" could not fail on
+         `check:po-app` (it is not that gate's text), and the red-proof never
+         reached the transitive walk; both are now red-proved on scratch copies,
+         along with a partial dist and an unparsable `/assets/` reference. The
+         message named "not built" even when only po-app's install was stale; it
+         now chooses the cause from what it can observe.]
 
 2. [x] **352.2 — the two KEPT columns have no recorded method either, and the
        machine gap they imply is not one machine gap.** Slice 352 kept
@@ -3889,6 +3970,17 @@ commit `2caaa16f` was green at `2026-09-08T11:04:54Z`**, and CI runs
          page now says that beside the table, with the machine, both columns'
          figures and the command; live at 1440/390 in light and dark, 0
          overflow. Jev: supported 0.95.
+         [**Corrected by Slice 384:** the verdict (keep) stands, but on the Accept's
+         other branch. The two workloads DO scale apart, by browser build: on the
+         same M4, Chrome 141 puts the flush at 28-31× select-all against Chrome
+         153's 14×, and the recorded Xeon (Chrome 141) read 24-38× at every row
+         count, not only at 20k. The published 12-13× is matched only on the
+         2026-08-15 stylesheet; today's costs 5-11% more. The throttled ratios
+         were derived, not independent, and the published throttled rows cannot
+         be a 4× throttle of that sitting. "Under 700 ms even throttled" is about
+         0.8 s today. The 20k flush spread varied 2-26% across later sittings, so
+         "under 8%" held for one. The page now says this and gives the full
+         command.]
 
 **The archive sweep was evaluated and declined on the measured trigger.**
 `roadmap_scope.py` read closed-history share **4,129 / 10,606 = 38.9%** at

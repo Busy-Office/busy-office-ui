@@ -411,8 +411,10 @@ match to its full playbook below:
    credits the slice a building row's label names, whatever the row's outcome;
    whether a grill should need shipped work is 381.2's question. It is kept on
    the asymmetry §6 step 0 records: over-arming costs a paragraph of narrowing,
-   under-arming starves the loop. The replay behind it (28 of 63 past grills
-   had three slices closed) is `.roundtable/measure-349.1-2026-09-24.md`.
+   under-arming starves the loop. Replayed with the counter as it shipped at
+   each past grill, only 28 of 63 had three slices closed; that figure comes
+   from Slice 382's grill and has no committed command (the committed replay,
+   `.roundtable/measure-349.1-2026-09-24.md`, runs today's counter: 42 of 72).
 
    Moved above the queued build item on 2026-08-19, for exactly the reason
    Standardize was moved there: a *counter* can never fire while a rule that is
@@ -888,10 +890,16 @@ surfaced more:
 
    **A lane whose inputs did not move, and whose figure did not either, is
    "unchanged by construction"** (roadmap 350.1, corrected by the Slice 382
-   grill). Lane 2 reads `packages/core/src/css/`. Lanes 1 and 3 read BUILT pages,
-   so their inputs are `packages/core/src/`, `packages/core/scripts/`,
-   `apps/docs/src/`, `apps/docs/scripts/` and `package-lock.json`. The base is
-   the last Standardize row whose write-up quotes all four lane figures. When
+   grill; inputs widened by Slice 384's). Lane 2 reads `packages/core/src/css/`
+   through `packages/core/scripts/report-css-repeats.mjs` and
+   `src-css-files.mjs`, plus `package-lock.json` (postcss). Lanes 1 and 3 read
+   BUILT pages, so their inputs are `packages/core/src/`,
+   `packages/core/scripts/`, `packages/core/package.json`,
+   `packages/core/postcss.config.cjs`, `apps/docs/src/`, `apps/docs/scripts/`,
+   `apps/docs/public/`, `apps/docs/astro.config.mjs`, `apps/docs/package.json`
+   and `package-lock.json`. The base is the last Standardize row whose write-up
+   quotes all four lane figures; quote the base's figure from that write-up,
+   with its slice, rather than from memory. When
    `git diff --stat <that sha> HEAD -- <the lane's inputs>` is empty AND the
    build ran from a clean tree (uncommitted edits enter lanes 1 and 3; Slice 379
    and `ENVIRONMENT.md` §3c), still run the lane and compare its figure with the

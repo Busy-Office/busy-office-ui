@@ -385,9 +385,11 @@ caches. Slice 380's figures held only because the main checkout's
 node -p "require('fs').realpathSync(require.resolve('@busy-office/ui/package.json'))"
 ```
 
-The path must sit under the worktree. Giving the worktree its own install
-(`npm ci` inside it) should fix it; that is untested here, so run the check
-after it too.
+The path must sit under the worktree. **Giving the worktree its own install
+fixes it — tested by Slice 383:** `npm ci` inside the worktree, then this check
+(the path resolved inside the worktree), then build core and docs there; the
+docs build stamped `dirty: false`. `npm ci` warns that some install scripts
+were not run; the builds and lanes still worked.
 
 ## 4. `npx prettier` IS NOT THIS REPO'S FORMATTER
 

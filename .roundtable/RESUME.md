@@ -620,7 +620,8 @@ commit shas and 5 distinct loops**.
 
 **What it costs:** on **5 of 8** day-paired names the published movement
 occurred between no two samples (`dispatch-region-words` **−8** against a true
-**−68**), and rule 5's own two-consecutive-moves predicate **disagrees between
+**−68** — 56 of that gap is convention, body against region; corrected by
+Slice 384), and rule 5's own two-consecutive-moves predicate **disagrees between
 the two readings on 3 of 8**. Filed as **`372.1`**, cloud-takeable, with the
 Accept written as a property — *deciding the day unit is right and only its
 justification wrong closes it just as well as changing the unit*.

@@ -130,6 +130,34 @@ def main():
     for text in args.also_refused:
         print(f"  + refused: {text}")
 
+    # dispatch-region-words is SAMPLED here, on every Standardize row (roadmap
+    # 353.2): from the instrument, with the commit in the row. It used to be
+    # taken by hand in two conventions 56 words apart, and no sample said which
+    # commit it described. Three guards from the Slice 384 grill: it runs BEFORE
+    # STATUS.md is regenerated (so the committed STATUS is not one sample
+    # behind); it honours --no-log (which promises not to touch the files); and
+    # it samples only when the recorded commit is HEAD, because rule 5 orders
+    # samples by time and an older commit recorded later would become the day's
+    # reading. Best-effort: a failure warns and never fails the recording.
+    if args.loop == "Standardize" and not args.no_log:
+        head = head_sha()
+        if commit and head and not head.startswith(commit[:7]) and not commit.startswith(head[:7]):
+            print(f"  (dispatch-region-words not sampled: the recorded commit {commit} is not HEAD {head})",
+                  file=sys.stderr)
+        else:
+            rlp = os.path.join(os.path.dirname(__file__), "report_loop_prose.py")
+            try:
+                r = subprocess.run([sys.executable, rlp, "--record", commit or "HEAD"],
+                                   capture_output=True, text=True,
+                                   cwd=os.path.join(os.path.dirname(__file__), "..", ".."))
+                if r.returncode == 0:
+                    print(f"  {r.stdout.strip()}")
+                else:
+                    print(f"  (warning: dispatch-region-words not recorded: {(r.stderr or r.stdout).strip()})",
+                          file=sys.stderr)
+            except Exception as exc:  # noqa: BLE001 - deliberately broad, see above
+                print(f"  (warning: dispatch-region-words not recorded: {exc})", file=sys.stderr)
+
     # Regenerate STATUS.md (roadmap 110.5) so it can never drift from what was
     # just recorded. Best-effort: a failure here must not fail the recording
     # itself, which is the operation that actually matters.
@@ -206,25 +234,6 @@ def main():
                   file=sys.stderr)
     except Exception as exc:  # noqa: BLE001 - same reason as above
         print(f"  (warning: correction-site check could not run: {exc})", file=sys.stderr)
-
-    # dispatch-region-words is SAMPLED here, on every Standardize row (roadmap
-    # 353.2): from the instrument, at the recorded commit, with the commit in the
-    # row. It used to be taken by hand in two conventions 56 words apart, and no
-    # sample said which commit it described. Best-effort like the checks around
-    # it: a failure warns and never fails the recording.
-    if args.loop == "Standardize":
-        rlp = os.path.join(os.path.dirname(__file__), "report_loop_prose.py")
-        try:
-            r = subprocess.run([sys.executable, rlp, "--record", commit or "HEAD"],
-                               capture_output=True, text=True,
-                               cwd=os.path.join(os.path.dirname(__file__), "..", ".."))
-            if r.returncode == 0:
-                print(f"  {r.stdout.strip()}")
-            else:
-                print(f"  (warning: dispatch-region-words not recorded: {(r.stderr or r.stdout).strip()})",
-                      file=sys.stderr)
-        except Exception as exc:  # noqa: BLE001 - same reason as above
-            print(f"  (warning: dispatch-region-words not recorded: {exc})", file=sys.stderr)
 
     # A THIRD advisory check, and it runs from here for a reason the other two
     # do not have: it can only work AFTER the commit (roadmap 283.2).
