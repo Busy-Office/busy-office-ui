@@ -1776,3 +1776,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-24 11:33 · Continue · build · 349.1 — rule 3's text now says slices with work landed (the counter's reading): of 72 touched-armed grills only 42 had three closed; live count unchanged · landed · 03485ac9
 - 2026-09-24 11:33 · Meta · refusal · making dispatch_status count CLOSED slices — it would have delayed 30 of 72 grills, and §6 step 0 already refuses the regex · refused · 03485ac9
 - 2026-09-24 12:01 · Continue · build · 350.1 — refused: rule 2 keeps counting Continue rounds (lane 4 had material on every multi-commit window); a no-input lane is written 'unchanged by construction' · refused · 661bc668
+- 2026-09-24 17:08 · Objective · grill · 382 — Objective grill of 348.1, 349.1, 350.1: 29 claims reproduce, 19 of 22 findings survive; slice-id hedge, rule-3 wording and §3 shortcut corrected · logged · 0ed584cd
