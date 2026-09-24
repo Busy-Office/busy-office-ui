@@ -12,14 +12,13 @@ for the plan, `LOOPS.md` for autonomous-work orchestration.
   `ROADMAP.md` holds what is OPEN; `ROADMAP-archive.md` holds closed slices
   verbatim, with a one-line pointer left behind. This is a **recurring sweep**:
   110.4 moved 83 slices, the live file grew back to 9,824 lines in three days,
-  and a second pass moved 44 more (→ 1,094). **The twelfth sweep (376.8,
-  2026-09-24) took it from 15,977 lines back to 9,314; it regrows, so read
-  `roadmap_scope.py` rather than this sentence. 249.12 is the open item for its
+  and a second pass moved 44 more (→ 1,094). **It regrows every few days,
+  so read `roadmap_scope.py` rather than this sentence. 249.12 is the open item for its
   trigger.**
   Splitting a markdown file is not
   what the database rule forbids — the archive is still markdown, still
   reviewed, still diffed. `check:slice-refs` keeps the citations pointing into it
-  resolvable (404 across 787 files today; the gate prints the live count).
+  resolvable (the gate prints the live count).
 - **Anything you SORT, FILTER or COUNT → a SQLite *mirror*.** `loops.db` (loop
   telemetry, and the roadmap backlog) and graphify's `graph.db` are **derived,
   rebuildable, and git-ignored**. Never the primary record.
@@ -359,4 +358,5 @@ the built artifact's DOM. Worked examples: `.roundtable/verification-discipline.
 - Don't hand-edit generated docs (api.json, contrast.json, behaviors.json, class
   index, llms.txt) — change the source and regenerate.
 - Don't commit derived mirrors (`loops.db`, `graph.db`) — they're git-ignored.
-- npm publishing: `@busy-office/ui` is LIVE (0.1.0, published 2026-08-15 by the owner). Every release from here is a real version bump with a CHANGELOG entry — contract-shape changes to stable behaviors are Breaking entries per the freeze-audit correction. Publishing remains owner-triggered.
+- npm publishing: `@busy-office/ui` is LIVE (first published 2026-08-15 by the owner; the current version is in
+  `packages/core/package.json`). Every release from here is a real version bump with a CHANGELOG entry — contract-shape changes to stable behaviors are Breaking entries per the freeze-audit correction. Publishing remains owner-triggered.
