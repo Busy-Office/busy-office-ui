@@ -59,8 +59,18 @@ session, authorised a throwaway discussion; #3 appeared in the REST intake as
 `200 len 1` and was deleted (`200 len 0`, 404, NOT_FOUND). Counters now
 **Standardize 4 / 4 OVERDUE**, Objective 2 / 3 [335, 346].
 
-**Next wake:** rule 2 — the Standardize sweep (4 of 4 lanes,
-`scripts/loops/standardize_lanes.py`). After it, rule 4 resumes at 348.1.
+**Rule 2 at 09:09:** Slice 380, the Standardize sweep, 4 of 4 lanes on a clean
+worktree of HEAD (lanes 1-3 no delta; DESIGN.md re-decided HONEST, "the
+control" retired; 346.1's correction rule moved to Operating rules).
+Counters now Standardize 0 / 4, **Objective 3 / 3 OVERDUE [335, 346, 380]**.
+
+**Next wake:** rule 3 — the Objective grill of Slices 335, 346 and 380, with
+the thesis section and adoption reading 377.7 asks for. After it, rule 4
+resumes at 348.1.
+
+**Lane-run note:** run the Standardize lanes in a throwaway worktree of HEAD
+(`git worktree add --detach`, symlink the three `node_modules`), because the
+owner's uncommitted screen-kit edits otherwise enter lane 3's total (Slice 379).
 
 **Row-label trap, found by `dispatch_status.py`:** record rows that begin
 `P0 377.1 — …` name no slice to the rule-3 counter (it warns "none names a
@@ -88,8 +98,8 @@ hide-on-upward-scroll; two refusals stand and the reversal is unwritten),
 373.8 (docs IA, 17 groups to 7). Plus, outside these slices: 112.3/112.4,
 296.3, 369.1, 273.2.
 
-**Dispatcher counters (2026-09-24 08:32, `dispatch_status.py`):** Standardize
-4 / 4 OVERDUE, Objective 2 / 3, 0 open P0. Re-read them; never trust this line.
+**Dispatcher counters (2026-09-24 09:16, `dispatch_status.py`):** Standardize
+0 / 4, Objective 3 / 3 OVERDUE, 0 open P0. Re-read them; never trust this line.
 
 **A trap that has bitten twice — read before touching ROADMAP.md.** Build the
 staged content from HEAD BY CONSTRUCTION and write the same bytes to the
@@ -99,7 +109,7 @@ drifted, and a later `git add` silently reverted four closed items to `[ ]`.
 
 ## PLAN — work this order.
 
-**Base state.** `main` pushed after 335.1's record. Last full run green
+**Base state.** `main` pushed after Slice 380's record. Last full run green
 on this tree (2026-09-24 06:30): core build, 174 tests, docs build 0 FAIL,
 `check:claims` 300, `test:axe` 128 pages x 2 widths 0 violations,
 `check:layout` 128 pages. The files still uncommitted are the 2026-09-20 owner
