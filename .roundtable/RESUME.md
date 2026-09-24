@@ -225,7 +225,7 @@ else is docs and records.
   gate in `jev-rubrics.md`: PASS needs the checks to pass AND the criteria
   supported; missing evidence is UNVERIFIED, not PASS.
 - **Before marking any item `[x]`, run the completion review — actually call
-  `jev_evaluate`, one batched call per landing round — and quote the number in
+  `jev_review_completion` (was `jev_evaluate`; the server changed 2026-09-25), one batched call per landing round — and quote the number in
   the commit. The rubric's vocabulary is not the review.** Skipped on the first
   round and it cost two wrong positions (373.7 read 0.35, not "one line short").
 - Land per item, smallest coherent commit each, so a bad one is revertable
