@@ -1785,3 +1785,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-24 21:54 · Continue · build · 362.1 — astro check (noUnusedLocals) wired into the docs build: 562 -> 0 errors on 164 files; fixed a stray '))}' live on /reference/tokens/ since 2026-08-16 · landed · 2fc94372
 - 2026-09-24 22:01 · Continue · build · 369.2 — print reset reaches the ten standalone docs pages · landed · 6a85e048
 - 2026-09-24 22:07 · Standardize · sweep · 385 — Standardize sweep 4 of 4 lanes + archive sweep, 21 slices moved · landed · 6ec0e8da
+- 2026-09-24 22:43 · Standardize · audit · prompt-audit of CLAUDE.md: three stale figures removed · landed · 2af651ff
+- 2026-09-25 02:49 · Objective · grill · Slice 386 — Objective grill of 362.1, 369.2, Slice 385 · landed · 53ffa54f

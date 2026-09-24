@@ -129,6 +129,14 @@ errors). It found a stray "))}" rendered on the live /reference/tokens/ page
 since 2026-08-16, now removed. Counters: Standardize 3 / 4, Objective 1 / 3
 [362].
 
+**Wake of 2026-09-25 (goal: rule 3, then push):** Slice 386 LANDED — the grill of
+362.1, 369.2 and Slice 385. Headlines hold; 385's own write-up carried four wrong
+or unmeasured figures, corrected in place. Filed 386.1 (no gate keeps the print
+reset true on a new standalone page). Counters: Standardize 0 / 4, Objective
+0 / 3, rule 5 still STALE. Next wake: rule 4 — oldest open item not owner-blocked
+(372.1 or 386.1; check `STATUS.md`). `test:axe` 128x2 clean, `check:layout` 128,
+core tests 174 green before the push.
+
 **Wake of 2026-09-24 22:00-22:10:** 369.2 LANDED (`6a85e048`; the ten standalone
 pages' own unlayered `body` beat the layered reset, each now restates the print
 literals). Then rule 2: Slice 385 (`6ec0e8da`), Standardize 4 of 4 lanes on a
