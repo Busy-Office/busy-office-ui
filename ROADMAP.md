@@ -4186,7 +4186,7 @@ commits changed some of it. A rule-2 firing on a no-input window still buys a
 lane-4 read and the archive-sweep evaluation above; what it does not buy is
 lanes 1-3.
 
-1. [ ] **350.1 — should rule 2's counter know whether its first three lanes have
+1. [x] **350.1 — should rule 2's counter know whether its first three lanes have
        anything to read?** Rule 2 counts **Continue rounds**; lanes 1-3 measure
        **artefacts**. The two are independent, and this wake is the demonstration:
        a full sweep dispatched onto a window in which `packages/core/src/css/**`
@@ -4258,6 +4258,23 @@ lanes 1-3.
          once. If it is refused instead, the reason now has to cover a lane
          whose reading was unmovable on **two in five** windows, which is a
          different question from the 14.4% this item was filed on.
+       - **DONE 2026-09-24 — REFUSED; rule 2 keeps counting Continue rounds.**
+         Re-measured at HEAD with the recorded command: 147 windows, lanes 1
+         and 3 without input on **21 (14.3%)**, lane 2 on **61 (41.5%)** — the
+         rate has not moved. What decides it is the sweep's other half: a
+         loop-read file changed on 136 of the 147 windows, and the 11 windows
+         with nothing to read in any lane are all 0 or 1 commits wide, second
+         rounds of one sweep rather than separate dispatches. So lane 4 and
+         the archive-sweep evaluation carry the cadence on every real
+         dispatch. A lane-1/2/3 pass on a no-input window buys the instrument
+         and environment check (Slice 345's lane 1 went 0 → 52 on an
+         instrument change) for the cost of the scripted run, and "can this
+         change move a lane" is semantic, as this item already said. To keep
+         the cost to the run, LOOPS.md §3 now says a lane whose inputs and
+         instrument have an empty diff since the last sweep is written as
+         *unchanged by construction*, with the empty diff quoted. Script and
+         output: `.roundtable/measure-350.1-2026-09-24.md`. Jev: 0.85, at the
+         supported threshold.
 
 ## Slice 349 — rule 3's text says "slices CLOSED"; its counter means "slices NAMED by a building row", and nothing has ever compared the two (2026-09-08)
 

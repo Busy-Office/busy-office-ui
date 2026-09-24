@@ -889,6 +889,19 @@ surfaced more:
    figure, so **a lane with no figure beside it in the write-up is one you
    cannot claim to have run.** What the figure MEANS is still yours.
 
+   **A lane whose inputs did not move is "unchanged by construction", and
+   saying so is the whole write-up for it** (roadmap 350.1). Lanes 1 and 3 read
+   `packages/core/src/css/` and `apps/docs/src/`; lane 2 reads only the first.
+   When `git diff --stat <last sweep's sha> HEAD -- <that lane's inputs>
+   <its instrument>` is empty, quote the empty diff and the lane's figure, and
+   skip the verdict work. That was 21 of 147 windows for lanes 1 and 3, and 61
+   for lane 2. **Rule 2 keeps counting Continue rounds** rather than testing for
+   input: lane 4 had material on every window of two or more commits (the
+   windows with nothing at all were second rounds of one sweep), a lane's
+   reading can move with no input change (Slice 345's lane 1 went 0 → 52 on an
+   instrument change), and "can this change move a lane" is semantic, so a
+   predicate would need a per-lane verdict nobody can check.
+
    **Lane 1 of 4 — run `npm run scan:dead-style -w docs`** — inline declarations that change
    no computed value at all. It is not a CI gate on purpose (the walk costs ~2
    min, and folding it into `check:layout` would mean mutating a trusted gate's
