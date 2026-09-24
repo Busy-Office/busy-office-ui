@@ -1773,3 +1773,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-24 10:38 · Objective · grill · 381 — Objective grill of 335.1, 346.1, Slice 380: 45 claims reproduce, 27 of 33 findings survive; record_iteration/check bugs fixed, lane-4 cut rule fixed, intake command fixed, 381.1-381.2 filed · logged · 60235d9c
 - 2026-09-24 10:38 · Meta · refusal · unwiring the correction-site check inside the grill — 381.1 states a precision floor first, then measures · refused · 60235d9c
 - 2026-09-24 11:07 · Continue · build · 348.1 — slice-id check's ABSENT line hedged: 7 of 127 firings held a figure (15.0/15.10/0.0); 216 of 244 revisions fire, so LOOPS.md now calls a report the normal state · landed · bc79e235
+- 2026-09-24 11:33 · Continue · build · 349.1 — rule 3's text now says slices with work landed (the counter's reading): of 72 touched-armed grills only 42 had three closed; live count unchanged · landed · 03485ac9
+- 2026-09-24 11:33 · Meta · refusal · making dispatch_status count CLOSED slices — it would have delayed 30 of 72 grills, and §6 step 0 already refuses the regex · refused · 03485ac9
