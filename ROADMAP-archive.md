@@ -16374,7 +16374,8 @@ source-digest re-entry all apply unchanged. One mechanism, more surfaces.
        kind is legitimate and tuning until scores look good is not.
 
        **The backlog the score exists to produce**, and it repeats the caption
-       finding INVERTED: 6 lists have no way to narrow the set — and the two
+       finding INVERTED: 6 lists have no way to narrow the set [**Corrected by 346.1:**
+       five — o2c/customer-invoices is a cross-tab] — and the two
        that do are both in P2P, the pilot module. P2P was *behind* on captions
        and *ahead* on filters. The pattern is not "the pilot is better", it is
        **whatever a module was iterated on, it has** — which is an argument for
@@ -21452,7 +21453,7 @@ gate.
        9/9, docs build, `check:claims` 154/154, `test:axe` 127 pages × 2
        widths zero violations.
 
-## Slice 204 — P0: `check:claims` turned CI red for three commits by asserting a claim the headless browser structurally cannot evaluate (2026-08-29)
+## Slice 204 — P0: `check:claims` turned CI red for three commits [**Corrected by 346.1:** five — 3 when measured, 5 by the time the fix pushed, per this slice's own body] by asserting a claim the headless browser structurally cannot evaluate (2026-08-29)
 
 **Found by a cloud wake dispatched onto 200.3, not reported to it.** The wake's
 first `check:claims` run came back red on a case in code its own diff does not
@@ -26315,7 +26316,8 @@ listed on 208.1.
        moved verbatim, `ROADMAP.md` 6,424 → 2,184, proved a lossless move by
        three assertions against the `HEAD` blobs (archive append-only prefix
        `True`; 0 of 4,272 lost lines missing; live gained only its 32 pointer
-       lines) and citation-neutral by `check:slice-refs` reading an identical
+       lines) [**Corrected by 346.1:** 2,301 lines, 4,250 lost lines by multiset
+       difference, and 127 gained, per 209.1] and citation-neutral by `check:slice-refs` reading an identical
        415 / 228 / 189 on both sides. `LOOPS.md`'s Standardize step 1 now
        numbers its four lanes, because 194, 197, 202 and 206 each ran three and
        206 called that "all three standing lanes"; a gate for it was refused on
@@ -30535,7 +30537,8 @@ Full report: `.roundtable/grill-objective-222-226-227-228-2026-08-31.md`.
        header stating it does not — and **both detectors report clean**. One
        synonym away from the wording it was written against, the gate is green
        on exactly what it exists to catch. BROAD is strictly worse than NARROW:
-       it buys two false positives and is blind to the same rewording.
+       it buys two false positives [**Corrected by 346.1:** seven, per 232.1] and is
+       blind to the same rewording.
 
        **The general form, which is why no third regex was attempted.** What
        separates *"the `--self-test` below is what that tag owes"* (correct)
@@ -32009,7 +32012,7 @@ loss.** `.roundtable/RESUME.md` at `d32b758c` says that wake dispatched rule 4 o
 predicates as a throwaway probe, red-proved them by injection"* before its own
 pre-commit fetch showed 229.3 already landed. So on 2026-08-31, **229.3 was built
 to completion three times by three wakes and landed once**, and 231.2 twice and
-landed once. That is not inferred from the log; it is written in three hand-offs,
+landed once [**Corrected by 346.1:** 231.2 was built three times, per the 233.1 triage]. That is not inferred from the log; it is written in three hand-offs,
 this one included.
 
 **So redundant coverage paid once and cost at least three times over, in one
@@ -36948,7 +36951,8 @@ Full report, with every command:
 
        - **Accept (property, not prediction):** every published figure in the
          narrowed scope is either re-derived with the command recorded, or named
-         as not re-derivable here with the reason. Met: 50 checked, 3 corrected
+         as not re-derivable here with the reason. Met: 50 checked [**Corrected by 346.1:**
+         60, the item's own tally], 3 corrected
          or filed, 2 named as out of reach (254's 2x branch needs a re-taken
          screenshot; the registry half of its Accept needs a publish).
        - **Not verified, and named rather than implied:** cloud wake — no
@@ -38781,7 +38785,7 @@ every page at 1440 and 390 and assert nothing overflows and every scroll region
 is reachable, and `test:axe` found no violation. Every other number above came
 from a gate or a probe executing in this container.
 
-## Slice 276 — Polish round on `inline-editing`: every arm on the surface reproduces, and the finding is in step 0's own source map — a surface's source set stopped at CSS, so 31 commits changed a behavior module with nothing to notice (2026-09-05)
+## Slice 276 — Polish round on `inline-editing`: every arm on the surface reproduces, and the finding is in step 0's own source map — a surface's source set stopped at CSS, so 31 commits changed a behavior module with nothing to notice [**Corrected by 346.1:** 51 commits across 9 surfaces, per 280.1] (2026-09-05)
 
 **Dispatcher trace, cloud wake.** Step 0: container **DETACHED** for the tenth
 wake running (`git branch --show-current` empty, `HEAD` at `e914399` =
@@ -44071,7 +44075,7 @@ over a property no artefact carries.
          wake to read; a finding that the substitute cannot yet be red-proved
          is recorded rather than glossed **(done — all three)**.
 
-## Slice 301 — Standardize sweep, 4 of 4 lanes: three clean, and lane 4 carried the eleventh archive sweep — 37.1% closed history down to 7.2%, the largest single move on record (2026-09-06)
+## Slice 301 — Standardize sweep, 4 of 4 lanes: three clean, and lane 4 carried the eleventh archive sweep — 37.1% closed history down to 7.2% [**Corrected by 346.1:** 8.4%, per Slice 304's correction in this slice], the largest single move on record (2026-09-06)
 
 **Dispatched by rule 2**, OVERDUE at `4 / 4` Continue rounds. Say `n of 4`:
 **4 of 4 lanes run.**
@@ -44147,7 +44151,7 @@ heading and broke no citation. Full docs and core builds green, 165 tests pass.
 sweep ran on lane 4's signal, as Slices 165 and 177 are precedent for, and the
 *trigger* remains unstated — this is now the eleventh sweep run on judgement.
 The case for settling it is stronger after this one, not weaker: the file went
-from 6,839 lines to 4,676 in a single move, and a threshold that fires at, say,
+from 6,839 lines to 4,676 [**Corrected by 346.1:** 4,738, per the correction block above] in a single move, and a threshold that fires at, say,
 40% closed history would have dispatched this three sweeps ago without anyone
 deciding each time. Left open, and left as the owner's call, because a
 threshold is a policy about how much history a wake should walk — not a
@@ -46927,7 +46931,8 @@ caught a live case in the session that had just re-read it.**
        the three fixes the Accept offered were not available**: `LOOPS.md`
        already spelled all four commands correctly and without `-s`, so there
        was no `-s` to drop; and the write-up rule is **4 of 15** sweeps old —
-       the `Lane K of 4` marker starts at Slice 345, and the other 11 narrate
+       the `Lane K of 4` marker starts at Slice 345 [**Corrected by 346.1:** 5 of 15, and
+       the marker does not start at 345, per Slice 368], and the other 11 narrate
        *"lanes 1-3 clean"* collectively, which by construction cannot say which
        lane printed what. Original text kept verbatim below.
 
@@ -49671,6 +49676,9 @@ node examples/po-app/server.mjs           # :8080
 /stress?n=5000  select-all   7 ms   (published 18 ms)
 ```
 
+[**Corrected by 346.1:** Slice 309 withdrew these two figures: the control was not
+wired, so they measured a no-op, not a re-run.]
+
 **Not slower — and that is exactly the problem.** These are different hardware,
 so the comparison is not valid in either direction. A wall-clock millisecond
 published without the machine that produced it is not a figure anyone can
@@ -49696,7 +49704,8 @@ table.**
 milliseconds, that the machine is not recorded, that the **shape** is what to
 read (roughly linear to 20k, select-all cheap, the style flush the real cost),
 and that re-running on other hardware in 2026-09 read 3 ms / 7 ms against the
-4 ms / 18 ms below. The harness is kept precisely so an adopter can get figures
+4 ms / 18 ms below. [**Corrected by 346.1:** 309.3 removed that re-run from the page,
+which now says it is withdrawn and why.] The harness is kept precisely so an adopter can get figures
 for their own hardware — which is what the page's existing re-open condition
 already assumes and never quite said.
 

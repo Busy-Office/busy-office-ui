@@ -4361,7 +4361,7 @@ for item — the check 345 said was stronger than the arithmetic, and it is. Its
 lane-3 claim holds too: `/patterns/output-form/` **is** one of 158.1's twelve, so
 `LOOPS.md`'s enumeration was owed no amendment and correctly received none.
 
-1. [ ] **346.1 — Slice 343 refused a whitespace normaliser on a caller census of
+1. [x] **346.1 — Slice 343 refused a whitespace normaliser on a caller census of
        counting INSTRUMENTS. The failure recurred the next wake in a population
        that census did not measure: a wake's own grep checking that a correction
        it just made landed everywhere.** 343's refusal stands on its own terms
@@ -4384,6 +4384,39 @@ lane-3 claim holds too: `/patterns/output-form/` **is** one of 158.1's twelve, s
          (94.11), and 343 already refused the shared-normaliser shape. The only
          checkable form is the narrow one above: a struck spelling that still
          occurs in the same file at the same commit.
+       - **DONE 2026-09-24 — common, so the cheap check is built; the wrap is
+         not the mechanism.** Of 1,062 commits touching `ROADMAP.md`, 231 add a
+         line naming a correction; read one by one (workflow `wf_b0aaa4ba-d7e`,
+         5 readers + 5 adversarial verifiers, each old spelling run through a
+         whitespace-normalised, strike-aware count of the file AT that commit),
+         **59 supersede a numeric claim** (a lower bound: the verifiers' 24
+         spot-checks found 8 more, none with a stale copy) and **13 of the 59
+         left one standing: 17 sites, all surviving verification.** Only **2 of
+         the 17** hide behind a wrap; the other 15 sit in a heading, a DONE line
+         or another slice, where a plain line grep finds them. So 343's refusal
+         of a normaliser stands on this evidence too, and what was missing is
+         being shown the other copies.
+         `scripts/loops/check_correction_sites.py` does that: it reads a
+         commit's (or the working tree's) change, finds the numbers it
+         superseded — replaced, struck, quoted in a correction, or "M, not N" —
+         and lists every other unstruck occurrence at that revision. Replayed on
+         the 13 commits it lists **11 of the 17** from the diff alone and **16**
+         with `--old "<old value>"` (the 17th restated "50 claims" as "50
+         checked"); on the last 150 commits it reports on 36, printing a median
+         of 5 sites. `--self-test` passes, and five mutations each make it fail.
+         It runs from `record_iteration.py` as a fourth REPORTED advisory, and
+         LOOPS.md tells a wake to run it before committing a correction. Not a
+         gate, as decided above.
+         **Found while measuring:** the strike mask crossed blank lines, and
+         23 unbalanced `~~` in `ROADMAP-archive.md` hid lines 39,366-50,080;
+         bounded to a paragraph (GFM), and re-running the 8 affected commits
+         changed no reading. **16 of the 17 stale copies were still standing
+         at HEAD** (the "4,429" had been rewritten since) and now carry a
+         `Corrected by 346.1` note: 17 notes, 5 here and 12 in the archive,
+         three of them headings kept identical to their archived twins.
+         **Not covered:** corrections recorded only in other files, and
+         supersedes the readers judged non-numeric. Jev: supported (A 0.95,
+         B 0.89).
 
 **Gates: all 17 cloud-runnable entry points green** on the committed tree, the
 list re-derived from `ci.yml` rather than read off a snapshot.
@@ -6061,7 +6094,8 @@ canonical dead one (25 of the first sweep's 29). **273 of 1,272 attributes
        The self-test's mixed control red-proves it, failing on
        exactly one of five assertions when the verdict is put back to the
        whole attribute.** Filed rather than built: it moves a headline
-       number five write-ups have quoted, and the scan is `@exact`, so it owes
+       number five write-ups have quoted [**Corrected by 346.1:** 17 sweeps quoted it,
+       per Slice 322's correction], and the scan is `@exact`, so it owes
        its own red-proof and new self-test cases discriminating a mixed
        attribute — which the current self-test, two single-declaration controls,
        cannot do.
@@ -6204,7 +6238,7 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
-## Slice 301 — Standardize sweep, 4 of 4 lanes: three clean, and lane 4 carried the eleventh archive sweep — 37.1% closed history down to 7.2%, the largest single move on record (2026-09-06)
+## Slice 301 — Standardize sweep, 4 of 4 lanes: three clean, and lane 4 carried the eleventh archive sweep — 37.1% closed history down to 7.2% [**Corrected by 346.1:** 8.4%, per Slice 304's correction in this slice], the largest single move on record (2026-09-06)
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
@@ -6739,7 +6773,7 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
-## Slice 276 — Polish round on `inline-editing`: every arm on the surface reproduces, and the finding is in step 0's own source map — a surface's source set stopped at CSS, so 31 commits changed a behavior module with nothing to notice (2026-09-05)
+## Slice 276 — Polish round on `inline-editing`: every arm on the surface reproduces, and the finding is in step 0's own source map — a surface's source set stopped at CSS, so 31 commits changed a behavior module with nothing to notice [**Corrected by 346.1:** 51 commits across 9 surfaces, per 280.1] (2026-09-05)
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
@@ -7656,7 +7690,9 @@ claimed.
        each row ending in a rendered screen.
 
        **MEASURED 2026-09-03 (cloud wake), and it re-scopes the item: THREE
-       rows lack a qualifying terminal page, not one.** This item said "the
+       rows lack a qualifying terminal page, not one.** [**Corrected by 346.1:** Slice 328
+       found this premise false — all three pages render live framework
+       elements, and nothing was missing.] This item said "the
        theming row currently has none". That premise is a wake-old measurement,
        so it was re-run before dispatching, per CLAUDE.md's premise rule — and
        it undercounts the same way the CTA figure did. Against the BUILT tree,
@@ -8524,7 +8560,7 @@ Closed — archived verbatim in `ROADMAP-archive.md`.
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
-## Slice 204 — P0: `check:claims` turned CI red for three commits by asserting a claim the headless browser structurally cannot evaluate (2026-08-29)
+## Slice 204 — P0: `check:claims` turned CI red for three commits [**Corrected by 346.1:** five — 3 when measured, 5 by the time the fix pushed, per this slice's own body] by asserting a claim the headless browser structurally cannot evaluate (2026-08-29)
 
 Closed — archived verbatim in `ROADMAP-archive.md`.
 
