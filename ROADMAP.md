@@ -3837,7 +3837,7 @@ commit `2caaa16f` was green at `2026-09-08T11:04:54Z`**, and CI runs
          checksums) and the gate is green again: 20 behaviours. Jev: supported
          0.96.
 
-2. [ ] **352.2 — the two KEPT columns have no recorded method either, and the
+2. [x] **352.2 — the two KEPT columns have no recorded method either, and the
        machine gap they imply is not one machine gap.** Slice 352 kept
        *Select-all* and *Post-bulk-check style flush* because select-all
        reconciles against the probe at 0.93x / 0.72x / 1.19x. The style flush
@@ -3856,6 +3856,25 @@ commit `2caaa16f` was green at `2026-09-08T11:04:54Z`**, and CI runs
          column the way the render one went. Note the probe's own n=20,000
          style-flush spread is **1,384.9-2,930.4 ms over 5 runs**, so any
          verdict here needs more than one sitting on each side.
+       - **DONE 2026-09-24 — KEPT: the two columns reconcile the same way.** Two
+         sittings of `npm run measure:stress -w docs -- --rows 1000,5000,20000
+         --repeat 7`, plus one with `--throttle 4`, on a recorded machine
+         (Apple M4, Chrome 153, 1440px viewport; every run's control selected
+         every row):
+         - **Unthrottled.** Select-all 0.7 / 3.3 / 13.6 ms and style flush
+           9.9 / 46.4 / 185.8 ms (sitting B within 0.2 ms and 4 ms). Against
+           the published figures, both columns sit at the same fraction at each
+           row count: 0.18 and 0.20 at 5k, 0.28 and 0.30 at 20k.
+         - **4× throttle.** Select-all ×0.87 / ×0.94, style flush ×1.12 /
+           ×1.14.
+
+         So the two workloads do not scale apart across these machines. The
+         earlier 3.62× rested on a probe run that spread 2.1× within its own
+         five runs, where these spread under 8%. A faster machine moves both
+         columns together, which an unrecorded window would not. The data-table
+         page now says that beside the table, with the machine, both columns'
+         figures and the command; live at 1440/390 in light and dark, 0
+         overflow. Jev: supported 0.95.
 
 **The archive sweep was evaluated and declined on the measured trigger.**
 `roadmap_scope.py` read closed-history share **4,129 / 10,606 = 38.9%** at

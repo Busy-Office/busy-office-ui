@@ -314,9 +314,14 @@ const wideRows = Array.from({ length: 10 }, (_, r) =>
     shows the disagreement cannot be diagnosed, because the two windows and the
     two machines both differ and no method was recorded to tell them apart. The
     interaction columns are kept, because they <em>do</em> reconcile against that
-    probe: select-all re-measures at 3.7 / 12.9 / 58.4 ms against the published
-    4 / 18 / 49 ms. For render figures on your own hardware, run
-    <code>npm run measure:stress -w docs</code>.</p>
+    probe, and they reconcile the same way. On a recorded machine (Apple M4,
+    Chrome 153, a 1440px viewport), two sittings of seven runs put select-all at
+    0.7 / 3.3 / 13.6 ms and the style flush at 9.9 / 46.4 / 185.8 ms across the
+    three row counts. That is the same fraction of the published figures for both
+    columns at each size (about 0.2&times; at 5k, 0.3&times; at 20k), and
+    0.9&ndash;1.1&times; for both under a 4&times; throttle. A faster machine
+    moves both columns together; an unrecorded window would not. For figures on
+    your own hardware, run <code>npm run measure:stress -w docs</code>.</p>
     <div class="bo-data-table-container" tabindex="0">
       <table class="bo-data-table" data-density="compact">
         <thead><tr><th scope="col" class="bo-data-table__col--numeric">Rows</th><th scope="col" class="bo-data-table__col--numeric">Select-all</th><th scope="col" class="bo-data-table__col--numeric">Post-bulk-check style flush</th></tr></thead>
