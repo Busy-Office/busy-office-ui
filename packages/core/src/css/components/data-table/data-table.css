@@ -572,6 +572,18 @@
     @supports not (position-area: block-end) {
       .bo-data-table-container:has(tbody :is(input:not([type="checkbox"], [type="radio"], [type="hidden"]), select, textarea)) {
         padding-block-end: calc(6lh + var(--bo-space-4));
+        /* The horizontal scrollbar's room is permanent too (roadmap 375.11).
+           A long message from a field away from the inline start passes the
+           scrollport (196.1), and with CLASSIC scrollbars that toggled a 15px
+           scrollbar on focus and blur: the blurring mousedown lifted
+           everything below by 15px, and a press in a control's bottom 15px
+           was lost (5 of 10 sweep points on a compact button, centre
+           included; Chrome 124, which has no anchor positioning). Overlay
+           scrollbars take no room, so this costs nothing there. The cost it
+           does have: an empty track under every editable grid in a fallback
+           browser with classic scrollbars, and that track cannot reveal the
+           clipped message, because pressing it blurs the field. */
+        overflow-x: scroll;
       }
     }
   }
@@ -582,6 +594,12 @@
     inset-block-start: 100%;
     inset-inline-start: 0;
     z-index: 1;
+    /* A shown message catches a press (375.9) even when an ancestor sets
+       `pointer-events: none` — the htmx bridge does, on `.htmx-request
+       [data-loading]`, without dimming anything, and a press on the visible
+       text then activated the control underneath: 6 of 6 at 320-390px
+       (roadmap 375.11). */
+    pointer-events: auto;
     /* Width, and the reason it is NOT a small character cap (roadmap 190.1).
        `18ch` was fitted to the one 21-character string this framework's own
        demo carries, and it is what turned a 101-character message into a
@@ -664,6 +682,34 @@
         z-index: var(--bo-z-dropdown);
       }
     }
+  }
+
+  /* A frozen cell is `position: sticky` with a z-index, so it is a stacking
+     context that TRAPS its own message: whatever z-index the message
+     declares orders it only inside the cell, and the next row's frozen cell
+     or the frozen totals cell (same z, later in the tree) painted over it —
+     72 of 72 measured cases (roadmap 375.11). The frozen cell that holds the
+     focused field goes one step above its peers and stays under the sticky
+     header, so it still slides beneath it on scroll. Scoped to the cells this
+     file makes sticky: on any other cell a z-index would CREATE the trap it
+     removes here, for a consumer cell set to `position: relative`. */
+  .bo-data-table--sticky-col :is(tbody, tfoot) > tr > :is(td, th):first-child:has(.bo-form-field:focus-within),
+  .bo-data-table[data-sticky-cols="2"] :is(tbody, tfoot) > tr > :is(td, th):nth-child(-n + 2):has(.bo-form-field:focus-within),
+  .bo-data-table[data-sticky-cols="3"] :is(tbody, tfoot) > tr > :is(td, th):nth-child(-n + 3):has(.bo-form-field:focus-within) {
+    z-index: calc(var(--bo-z-sticky-col) + 1);
+  }
+
+  /* A loading table hides a shown message without removing it (roadmap
+     375.11). The loading rule's `opacity` makes the table a stacking context
+     and its `pointer-events: none` is inherited, so a message shown while a
+     request is in flight was dimmed below 4.5:1, sat under later positioned
+     content, and passed a press on its text through to whatever lay beneath.
+     `opacity: 0` rather than `display: none`: the node stays in the
+     accessibility tree and its entrance animation does not replay after
+     every request; it returns when the attribute clears. */
+  .bo-data-table:is([data-loading="true"], [aria-busy="true"]) .bo-form-field:focus-within .bo-form-field__message {
+    opacity: 0;
+    pointer-events: none;
   }
 
   /* Printing reads the table, not a field's focus: a message left over from

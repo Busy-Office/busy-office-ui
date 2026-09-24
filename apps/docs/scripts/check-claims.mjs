@@ -343,6 +343,117 @@ for (const width of WIDTHS) {
     !!sample && s.shown && s.adds === 1 && s.topAfter === s.top, JSON.stringify({ sampleFound: !!sample, ...s }));
 }
 
+/* 375.11 — a frozen cell holding the focused field must not bury its own
+   message under the next row's frozen cell (same z-index, later in the tree).
+   Freezes the invalid cell's column at runtime, then counts sample points over
+   the message that hit-test to it; the probe forces hit testing on, as above.
+   The counterfactual pins the focused cell back to its peers' z-index. */
+async function frozenMessagePaint({ inject = null }) {
+  return page.evaluate(async (css) => {
+    const add = document.getElementById('eg-add');
+    const bad = add.closest('section').querySelector('.bo-data-table [aria-invalid="true"]');
+    const table = bad.closest('.bo-data-table');
+    // The demo ships ONE line: add a second through its own control, so a
+    // later row's frozen cell exists under the message.
+    add.click();
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    const col = bad.closest('td').cellIndex + 1;
+    if (col === 1) table.classList.add('bo-data-table--sticky-col'); else table.setAttribute('data-sticky-cols', String(col));
+    const style = document.createElement('style');
+    style.textContent = `.bo-form-field__message, .bo-form-field__message * { pointer-events: auto !important; } ${css ?? ''}`;
+    document.head.appendChild(style);
+    bad.scrollIntoView({ block: 'center' });
+    bad.focus();
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    const msg = bad.closest('.bo-form-field').querySelector('.bo-form-field__message');
+    const cell = bad.closest('td');
+    const b = msg.getBoundingClientRect();
+    let hit = 0, tot = 0;
+    for (let yi = 0; yi < 6; yi++) for (let xi = 0; xi < 6; xi++) {
+      tot++;
+      const e = document.elementFromPoint(b.left + 3 + (b.width - 6) * xi / 5, b.top + 3 + (b.height - 6) * yi / 5);
+      if (e && (e === msg || msg.contains(e))) hit++;
+    }
+    const nextFrozen = cell.closest('tr').nextElementSibling?.cells[col - 1];
+    const overlapsNext = !!nextFrozen && nextFrozen.getBoundingClientRect().top < b.bottom;
+    const out = { col, rows: table.tBodies[0].rows.length, sticky: getComputedStyle(cell).position, cellZ: getComputedStyle(cell).zIndex, overlapsNext, hit, tot };
+    style.remove();
+    return out;
+  }, inject);
+}
+for (const width of WIDTHS) {
+  await visit('/patterns/editable-grid/', { width, height: 900 });
+  const fz = await frozenMessagePaint({});
+  check(`editable-grid @${width}: with the invalid cell's column frozen, its message is painted over the next row's frozen cell, not under it (375.11)`,
+    fz.sticky === 'sticky' && fz.overlapsNext && fz.hit === fz.tot, JSON.stringify(fz));
+  await visit('/patterns/editable-grid/', { width, height: 900 });
+  const fzCf = await frozenMessagePaint({ inject: '.bo-data-table td:has(.bo-form-field:focus-within) { z-index: var(--bo-z-sticky-col) !important; }' });
+  check(`editable-grid @${width}: with the focused frozen cell held at its peers' z-index, the next row buries the message (the stated reason)`,
+    fzCf.sticky === 'sticky' && fzCf.overlapsNext && fzCf.hit < fzCf.tot, JSON.stringify(fzCf));
+}
+
+/* 375.11 — a loading table hides a shown message by opacity (it stays in the
+   accessibility tree and comes back), and a press where it was reaches what
+   is visible there. Separately, the htmx bridge sets `pointer-events: none`
+   on `.htmx-request [data-loading]` without dimming: the visible message must
+   still catch the press rather than pass it to the control beneath. */
+await visit('/patterns/editable-grid/', { width: NARROW_WIDTH, height: 900 });
+const gridLoading = await page.evaluate(async () => {
+  const frame = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  const bad = document.getElementById('eg-add').closest('section').querySelector('.bo-data-table [aria-invalid="true"]');
+  const table = bad.closest('.bo-data-table');
+  const msg = bad.closest('.bo-form-field').querySelector('.bo-form-field__message');
+  bad.scrollIntoView({ block: 'center' });
+  bad.focus(); await frame();
+  const b = msg.getBoundingClientRect();
+  const cx = b.left + b.width / 2, cy = b.top + b.height / 2;
+  const onMsg = () => { const e = document.elementFromPoint(cx, cy); return !!e && (e === msg || msg.contains(e)); };
+  const rest = { opacity: getComputedStyle(msg).opacity, catches: onMsg() };
+  table.setAttribute('data-loading', 'true'); await frame();
+  const busy = { opacity: getComputedStyle(msg).opacity, display: getComputedStyle(msg).display, catches: onMsg(), focused: document.activeElement === bad };
+  table.setAttribute('data-loading', 'false'); await frame();
+  const back = { opacity: getComputedStyle(msg).opacity };
+  // The bridge lives in the opt-in htmx integration stylesheet; load the
+  // shipped copy the docs serve, then put the table under a request.
+  const link = document.createElement('link');
+  link.rel = 'stylesheet'; link.href = '/suite/bo/htmx.min.css';
+  await new Promise((r) => { link.onload = r; link.onerror = r; document.head.appendChild(link); });
+  table.parentElement.classList.add('htmx-request'); await frame();
+  const bridge = { tablePointer: getComputedStyle(table).pointerEvents, opacity: getComputedStyle(msg).opacity, catches: onMsg() };
+  table.parentElement.classList.remove('htmx-request'); table.removeAttribute('data-loading');
+  return { rest, busy, back, bridge };
+});
+check(`editable-grid @${NARROW_WIDTH}: while the table loads, a shown cell message is hidden by opacity (still displayed, so still in the accessibility tree) and a press where it was passes to what is visible; it returns when loading clears (375.11)`,
+  gridLoading.rest.opacity === '1' && gridLoading.rest.catches && gridLoading.busy.focused && gridLoading.busy.opacity === '0'
+    && gridLoading.busy.display !== 'none' && !gridLoading.busy.catches && gridLoading.back.opacity === '1',
+  JSON.stringify(gridLoading));
+check(`editable-grid @${NARROW_WIDTH}: under the htmx bridge's \`pointer-events: none\`, the undimmed message still catches a press instead of passing it to the control beneath (375.11)`,
+  gridLoading.bridge.tablePointer === 'none' && gridLoading.bridge.opacity === '1' && gridLoading.bridge.catches,
+  JSON.stringify(gridLoading.bridge));
+
+/* 375.11 — in the static fallback the container's horizontal scrollbar room
+   is permanent, so a long message cannot toggle a classic scrollbar between
+   mousedown and mouseup. No gate can SEE this: every gate engine has anchor
+   positioning and hides scrollbars. So this pins the SHAPE in the shipped
+   stylesheet; the behaviour was measured in Chrome 124 with classic
+   scrollbars (18 of 42 toggles and a lost press at HEAD, 0 with the rule). */
+await visit('/patterns/editable-grid/');
+const fallbackShape = await page.evaluate(() => {
+  const found = [];
+  const walk = (rules, inNotSupports) => {
+    for (const r of rules) {
+      const not = r instanceof CSSSupportsRule ? /not\s*\(\s*position-area/.test(r.conditionText) : inNotSupports;
+      if (r.cssRules) walk(r.cssRules, not);
+      if (r instanceof CSSStyleRule && inNotSupports && r.selectorText.includes('.bo-data-table-container')
+          && r.style.paddingBlockEnd) found.push({ selector: r.selectorText.slice(0, 60), overflowX: r.style.overflowX });
+    }
+  };
+  for (const ss of document.styleSheets) { try { walk(ss.cssRules, false); } catch { /* cross-origin */ } }
+  return found;
+});
+check('data-table fallback reserve keeps its horizontal scrollbar room permanent (`overflow-x: scroll`), so a classic scrollbar cannot toggle under a press (375.11; shape only — no gate engine can see classic scrollbars)',
+  fallbackShape.length > 0 && fallbackShape.every((f) => f.overflowX === 'scroll'), JSON.stringify(fallbackShape));
+
 // "Skip the swatch grid" — the 264-button bypass must land after the grid.
 await visit('/base/colors/');
 const skip = await page.evaluate(() => {

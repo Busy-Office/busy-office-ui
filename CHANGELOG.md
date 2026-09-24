@@ -96,6 +96,22 @@ pin.
   of an identity value, so they no longer trap fixed-position descendants.
   Roadmap 375.9.
 
+- **A grid cell's error message could hide or pass a press through in three
+  more states.** A frozen column (`.bo-data-table--sticky-col`,
+  `[data-sticky-cols]`) trapped the focused cell's message under the next
+  row's frozen cell; that cell now sits one step above its frozen peers (and
+  still under the sticky header). A loading table (`[data-loading="true"]`,
+  `[aria-busy="true"]`) dimmed a shown message below 4.5:1 and let a press on
+  its text reach the control beneath; the message is now hidden by `opacity`
+  while loading (it stays in the accessibility tree and comes back when
+  loading clears), and a shown message catches presses even under the htmx
+  bridge's `pointer-events: none`. In browsers without anchor positioning, a
+  long message toggled a classic horizontal scrollbar between mousedown and
+  mouseup and the press was lost; the grid container now keeps that
+  scrollbar's room permanently (`overflow-x: scroll`), which shows an empty
+  track under editable grids in those browsers when scrollbars are classic.
+  Roadmap 375.11.
+
 - **The generated accessibility conformance report (`dist/acr.json`,
   `/reference/acr`) overclaimed in four rows.** An audit of all 21 criteria
   against the gate each one names found four overclaims and one unbacked

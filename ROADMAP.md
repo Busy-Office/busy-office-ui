@@ -320,6 +320,37 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 387 — residuals the 375.11 measurement found beyond its own list: two more lost-press paths from the message's horizontal overflow, and two layers that still cover a frozen cell's message (2026-09-25)
+
+Found by the skeptics of the 375.11 workflow; each measured, none fixed here.
+
+1. [ ] **387.1 — the message's horizontal overflow loses presses on two more
+       paths.** (a) Scroll then press, every scrollbar mode: after a
+       horizontal wheel to read a long message (scrollLeft ~70), the
+       blurring mousedown clamps scrollLeft to 0, the row's Remove button
+       slides ~70px, and the press lands on "Unit price" — lost at 60 and
+       900ms, at HEAD and with 375.11's rule. (b) The page's canonical markup
+       has no `.bo-data-table-container`, so with classic scrollbars at 390 a
+       303-character message toggles the VIEWPORT's scrollbar and a sticky
+       `.bo-form-actions` "Post" moves 15px: 2 of 7 top-band presses land.
+       375.9's Accept names the canonical markup.
+       - **Accept — the property.** A real press on a control that was visible
+         when the press began activates it, on both paths, measured where
+         each can be seen; OR each is accepted with the measurement and a
+         reason. The skeptic's reading: moving the message's overflow out of
+         the scroll container would close both and 196.1's residual at once.
+2. [ ] **387.2 — a frozen cell's message still has two covers above it.** Near
+       the viewport bottom the anchored message flips ABOVE a first-row
+       frozen field onto the sticky header (z 1100) and is 128-160 of 160
+       points hidden; and the sticky `.bo-form-actions` (1150) covers it 80 of
+       160 at the bottom. No z-index can fix either: a frozen cell above 1100
+       paints over the header when scrolled beneath it.
+       - **Accept — the property.** The message of a focused frozen field is
+         fully painted wherever the anchor places it, OR the case is
+         accepted with a reason. The candidate named by the skeptic is the
+         top layer (a popover message), which is a markup/JS change, so this
+         is a builder's decision to argue, not a CSS tweak.
+
 ## Slice 386 — Objective grill of 362.1, 369.2 and Slice 385: 3 of 3 headline claims reproduce, and the defect is in the sweep's own write-up — it said the closed-history share fell to "~0" (measured 14.4%) and called lane 2 "unchanged by construction" while a lane-2 input had moved (2026-09-25)
 
 **Dispatched by rule 3**, `Objective 3 / 3 OVERDUE [362, 369, 385]`. Labels resolved
@@ -1179,6 +1210,46 @@ untracked or uncommitted, so the removal was a working-tree change.
        - **Accept:** each is measured in the environment that can see it and
          either fixed, or closed with the measurement and the reason it is
          accepted.
+       - **PARTIAL 2026-09-25 — three of five fixed; the item stays open on
+         the other two.** Measured by a four-lens workflow, each lens followed
+         by an independent skeptic who re-measured and tried to refute it (all
+         four verdicts survived; three proposed fixes were amended by the
+         skeptic). Scripts: session scratchpad `r375/`, not in the repo.
+         - FIXED — frozen cells: 72/72 case-runs buried the message; the frozen
+           cell holding the focused field now sits one step above its peers,
+           scoped to the cells the file makes sticky (the broad selector
+           trapped consumer `position: relative` cells, 160 -> 80 of 160).
+         - FIXED — loading table: `opacity: 0; pointer-events: none` while
+           loading (not `display: none`, which replayed the entrance animation
+           and dropped the alert from the AX tree), plus `pointer-events: auto`
+           on a shown message, which also closes the htmx bridge's
+           pass-through (6/6 -> 0/6).
+         - FIXED — classic scrollbars: measured in Chrome 124 (no anchor
+           positioning) with classic scrollbars — 18/42 toggles and a lost
+           press at HEAD, 0/42 with `overflow-x: scroll` on the fallback
+           reserve. Cost recorded in the CSS: an empty track in those browsers,
+           which cannot reveal the clipped message.
+         - `check:claims` +7 (freeze + real hit-test at 1440/390 with a
+           counterfactual; loading, restore and htmx-bridge at 390; the
+           fallback shape). Red-proved: the four rules stripped from the built
+           CSS fail exactly the 5 fix claims; counterfactuals and 300 others
+           pass. Jev (Rubric 2): 0.95 / 0.89 / 0.96; "closable" 0.73 —
+           UNVERIFIED, correctly, since two residuals remain.
+         - STILL OPEN — **Firefox**: Playwright Firefox 155 (firefox-1543)
+           exits "Could not find profile folder" on Darwin 27.2, sandboxed or
+           not, launched directly too. Needs another machine or a stock
+           Firefox install.
+         - STILL OPEN, PREMISE CORRECTED — **400% zoom** is not "never
+           entirely": the 303-character message covers its field ENTIRELY
+           (18/18) in the approve dialog at 320x256, and at 9 of 25 scrolled
+           positions on the demo with 433 characters, so this fails WCAG
+           2.4.11 (AA), not only 2.4.12. The proposed last-resort
+           `@position-try` (capped, scrolling) was refused: it clips an
+           unbreakable token and adds a Tab stop at 100% zoom, leaves 0.4-1.7
+           line slivers near the top, and creates new partial covering. The
+           skeptic's variant (capped below/span-all with `min(5lh,100%)` and
+           `min(3lh,100%)` floors, `overflow-wrap: anywhere`) cleared its matrix
+           but is ungrilled.
 
 ## Slice 374 — the joined-control seam was spelled against the AUTHORED markup, not the RENDERED DOM: three trailing children defeat `:last-child`, the framework's own canonical quantity markup is one of them, and the defect shipped on **3 pages / 5 rendered views** while a gate that visits those exact elements measured only their focus rings (2026-09-22)
 
