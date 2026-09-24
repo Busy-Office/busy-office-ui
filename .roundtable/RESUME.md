@@ -115,10 +115,18 @@ recorded by the instrument (region figure, commit in the row) on every
 Standardize row; the hand-taken history mixed body and region figures.
 Counters: Standardize 2 / 4, **Objective 3 / 3 OVERDUE [352, 353, 383]**.
 
-**Next wake:** rule 3 — the Objective grill of 352.1/352.2, 353.2 and Slice
-383. 352.1 and 352.2 changed shipped surfaces (the po-app harness and the
-data-table page); 353.2 and 383 are loop machinery. §6's Exit requires the
-thesis section.
+**Rule 3 at 19:44 (owner-requested now):** Slice 384, the grill of 352.1,
+352.2, 353.2 and Slice 383 (`eec86ae2`): 31 of 35 findings survived. The
+data-table page's style-flush reading depends on the Chrome build (14x on
+Chrome 153, 28-31x on 141, same M4), not the machine — page corrected; the
+po-app harness now catches a stale dist; metric sampling fixed; rule 5 reads
+STALE again, honestly (the names it can act on were last sampled 09-19).
+Filed 384.1. Counters: Standardize 2 / 4, Objective 0 / 3.
+
+**Next wake:** rule 4 — the oldest open item not owner-blocked, 362.1.
+**The archive sweep is DUE at the next rule-2 sweep:** `roadmap_scope.py` read
+41.0% / 10,010 lines at Slice 384, past both halves of the 5,450-line / 40.6%
+trigger (Slice 383's decline rested on a wrong comparison).
 
 **Lane-run note:** run the Standardize lanes on a build of HEAD without the
 owner's uncommitted screen-kit edits, which otherwise enter lane 3's total
@@ -154,8 +162,8 @@ hide-on-upward-scroll; two refusals stand and the reversal is unwritten),
 373.8 (docs IA, 17 groups to 7). Plus, outside these slices: 112.3/112.4,
 296.3, 369.1, 273.2.
 
-**Dispatcher counters (2026-09-24 19:32, `dispatch_status.py`):** Standardize
-2 / 4, Objective 3 / 3 OVERDUE, 0 open P0. Re-read them; never trust this line.
+**Dispatcher counters (2026-09-24 21:22, `dispatch_status.py`):** Standardize
+2 / 4, Objective 0 / 3, 0 open P0; rule 5 STALE. Re-read them; never trust this line.
 
 **A trap that has bitten twice — read before touching ROADMAP.md.** Build the
 staged content from HEAD BY CONSTRUCTION and write the same bytes to the
@@ -165,7 +173,7 @@ drifted, and a later `git add` silently reverted four closed items to `[ ]`.
 
 ## PLAN — work this order.
 
-**Base state.** `main` pushed after 353.2's record. Last full run green
+**Base state.** `main` pushed after Slice 384's record. Last full run green
 on this tree (2026-09-24 06:30): core build, 174 tests, docs build 0 FAIL,
 `check:claims` 300, `test:axe` 128 pages x 2 widths 0 violations,
 `check:layout` 128 pages. The files still uncommitted are the 2026-09-20 owner
