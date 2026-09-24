@@ -639,8 +639,10 @@ def metric_samples():
 # RULE 5's PAIRING UNIT IS DISTINCT DAYS, NOT SAMPLE COUNT (roadmap 307.1,
 # 2026-09-07). Rule 5 asks whether a metric "regressed on TWO CONSECUTIVE runs",
 # and a run is a wake, not a line in the file. Until this changed, `counts[n] >=
-# 2` admitted a name recorded repeatedly inside ONE wake: `ci-wall-time` has 26
-# samples and they all fall inside 17 hours of 2026-08-18, and Slice 183's
+# 2` admitted a name recorded repeatedly inside ONE DAY: `ci-wall-time` has 26
+# samples and they all fall inside 17 hours of 2026-08-18 — a window holding 72
+# commits and five loops, so SEVERAL wakes, not one (roadmap 372.1 corrected
+# the "one wake" label this paragraph used to carry), and Slice 183's
 # dispatch record published `ci-wall-time` "flat at 275s" as a current reading
 # off exactly that burst.
 #
@@ -683,8 +685,21 @@ def by_name_dates(samples):
 def per_day_last(samples, name):
     """The last value recorded for `name` on each day, oldest day first.
 
-    The last and not the first: a wake that samples twice in one day is
-    correcting itself, and rule 5 compares what each run concluded.
+    The last because it is the DAY-CLOSE state: what the tree measured when
+    that date's work stopped. It is NOT a wake correcting itself — that reason
+    stood here until roadmap 372.1 measured it. Of 75 adjacent same-day sample
+    pairs, 70 have at least one commit between them, and 4 of the other 5 are
+    cloud samples stamped in UTC whose recording commit sits exactly +8h later
+    (log stamps are naive; 164.2 refused an offset). One pair, same minute, is
+    a genuine repeat. So an intra-day sample is usually a DIFFERENT tree, and
+    the series this returns reports day-close to day-close movement: whatever
+    moved between two samples on one day is folded in, not shown.
+
+    The unit stays a day (372.1 decided it): rule 5 asks about consecutive
+    RUNS, and a day is the coarsest unit that keeps one wake's burst from
+    counting as two, which is 307.1's reason and still true. Re-run:
+
+      python3 scripts/loops/dispatch_status.py --pairing-census
     """
     seen = {}
     for s in sorted((x for x in samples if x["name"] == name), key=lambda s: s["ts"]):
@@ -731,7 +746,9 @@ def report_comparable(samples, dates):
     print(
         f"     rule 5's comparable set — {len(paired)} name(s) sampled on 2+ distinct "
         f"days ({once} of {len(dates)} name(s) have only one day and are not an input "
-        f"to a rule that compares two runs):"
+        f"to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the "
+        f"last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose "
+        f"other samples are folded in, not shown:"
     )
     for name in paired:
         series = per_day_last(samples, name)
@@ -746,9 +763,11 @@ def report_comparable(samples, dates):
         delta = v1 - v0 if num(v0) and num(v1) else None
         shown = f"{delta:+g}" if delta is not None else "?"
         fmt = lambda v: f"{v:g}" if num(v) else str(v)
+        folded = sum(1 for s in samples if s["name"] == name and s["ts"][:10] in (d0, d1)) - 2
         print(
             f"       {name:<26} {len(dates[name]):>2}d  {d0} {fmt(v0)} {unit} -> "
             f"{d1} {fmt(v1)} {unit}  {shown}"
+            + (f"   [{folded} same-day]" if folded else "")
             + ("   NEVER MOVED" if constant else "")
         )
     print(
@@ -942,8 +961,9 @@ SKEW_SELF_TEST = [
 # OLD sample-count test got wrong, or one both tests must keep refusing.
 PAIRING_SELF_TEST = [
     # (samples as (ts, name), expected day-paired names)
-    # the case the item is about: a burst inside one wake is NOT two runs.
-    # `ci-wall-time`'s 26 samples are exactly this shape, all on 2026-08-18.
+    # the case the item is about: a burst inside one DAY is not a pair.
+    # `ci-wall-time`'s 26 samples are exactly this shape, all on 2026-08-18
+    # (several wakes, not one — 372.1; the day is still the unit).
     ([("2026-08-18 09:00", "ci-wall-time"),
       ("2026-08-18 17:40", "ci-wall-time"),
       ("2026-08-18 21:10", "ci-wall-time")], set()),
@@ -1005,9 +1025,46 @@ def self_test():
     return 0
 
 
+def pairing_census():
+    """372.1's measurement, re-runnable: adjacent same-day sample pairs, and how
+    many have a commit between them. A pair with none is either a genuine
+    repeat inside one wake, or a UTC-stamped cloud sample compared against
+    local-time commits (the log's stamps are naive, 164.2) — the listing names
+    each so a reader can tell which."""
+    import bisect
+    samples = metric_samples() or []
+    commits = sorted(c for c in subprocess.run(
+        ["git", "log", "--all", "--format=%cd", "--date=format-local:%Y-%m-%d %H:%M"],
+        capture_output=True, text=True, check=True,
+    ).stdout.split("\n") if c)
+    if not commits:
+        raise SystemExit("pairing census: git log returned no commits — cannot measure")
+    by = {}
+    for x in samples:
+        by.setdefault(x["name"], []).append(x)
+    pairs, spanned, none = 0, 0, []
+    for name, xs in by.items():
+        xs.sort(key=lambda x: x["ts"])
+        for a, b in zip(xs, xs[1:]):
+            if a["ts"][:10] != b["ts"][:10]:
+                continue
+            pairs += 1
+            if bisect.bisect_right(commits, b["ts"]) > bisect.bisect_right(commits, a["ts"]):
+                spanned += 1
+            else:
+                none.append(f"{name} {a['ts']} -> {b['ts']}")
+    print(f"pairing census — {len(samples)} sample(s), {pairs} adjacent same-day pair(s), "
+          f"{spanned} with >=1 commit between (local-time commit clock), {len(none)} without:")
+    for line in none:
+        print("  " + line)
+    return 0
+
+
 def main():
     if "--self-test" in sys.argv:
         return self_test()
+    if "--pairing-census" in sys.argv:
+        return pairing_census()
     all_rows = rows()
     if len(all_rows) < 2:
         print("dispatch status: loop-log.md has too few rows to say anything", file=sys.stderr)

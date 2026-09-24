@@ -2264,7 +2264,7 @@ in place, in the same commit `c5780113`.
 
 **Filed by this slice:**
 
-1. [ ] **372.1 — rule 5's pairing keeps the last sample of each calendar day on
+1. [x] **372.1 — rule 5's pairing keeps the last sample of each calendar day on
        a recorded reason that is false at 72 of 73 pairs, and the case cited for
        it is mislabelled.** Measured above. The consequence is not cosmetic: on
        **5 of 8** day-paired names the published movement occurred between no two
@@ -2283,6 +2283,22 @@ in place, in the same commit `c5780113`.
          wrong closes this just as well; so does deciding the reverse. What does
          not close it is leaving two numbers for one movement in one wake's
          record.
+       - **DONE 2026-09-25 — the day unit is RIGHT; its reason was wrong.**
+         Re-measured first: `dispatch_status.py --pairing-census` (new) reads 151
+         samples, **75** adjacent same-day pairs, **70** with a commit between.
+         Of the 5 without, 4 are cloud samples stamped in UTC (2026-09-01; each
+         recording commit sits exactly +8h later), so 1 is a genuine same-wake
+         repeat — the old reason is false at 74 of 75. The 72-of-73 filed figure
+         was on 143 samples and is not reproduced exactly. `per_day_last` now
+         states the day-close reason with that command; the `comparable set`
+         header says each delta is DAY-CLOSE to DAY-CLOSE and every row marks
+         `[k same-day]` samples folded in (counts checked against raw grep:
+         3, 1, 0). The unit stays a day on 307.1's reason, which still holds.
+         The "one wake" label on `ci-wall-time`'s burst is corrected in the
+         script and `LOOPS.md`: that window holds 72 commits and five loops.
+         Not covered: the census compares naive stamps against a local clock
+         and LISTS the UTC ones rather than correcting them; no self-test case
+         for the census itself.
        - **Lane: cloud-takeable.** It is a Python module, a docstring, a
          self-test fixture and one sentence of `LOOPS.md`; no rendered evidence
          is involved.

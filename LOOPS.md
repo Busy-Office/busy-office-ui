@@ -629,11 +629,13 @@ match to its full playbook below:
 
    **The pairing unit is DISTINCT DAYS, and the line now prints what the input
    SAYS as well as how stale it is** (roadmap 307.1, 2026-09-07). A name
-   sampled repeatedly inside one wake is not two runs — `ci-wall-time`'s 26
+   sampled repeatedly inside one day is not two runs — `ci-wall-time`'s 26
    samples all fall in 17 hours of 2026-08-18 — and counting samples read 13 of
    44 names as inputs where 7 qualify. Under the line's staleness verdict is a
    `comparable set` block: every day-paired name, its last two per-day readings
-   and the delta. It reports **movement, not a verdict**, because no direction
+   and the delta — **day-close to day-close** (the last sample of each day,
+   because it is the state the day ended on; `[k same-day]` marks samples folded
+   in, 372.1). It reports **movement, not a verdict**, because no direction
    is recorded with a sample — `claims` rising is the goal, `bundle-gz-kb`
    rising is the regression, and both are a positive delta. **A name marked
    `NEVER MOVED` cannot fire this rule**: `axe-violations` is 0 on all 8 of its
