@@ -525,7 +525,33 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--since", default="2026-08-20",
                     help="base day, YYYY-MM-DD (default 2026-08-20, 158.2's window)")
+    ap.add_argument("--record", nargs="?", const="HEAD", metavar="REV",
+                    help="record the dispatch region's words at REV (default HEAD) as "
+                         "the dispatch-region-words metric, with the commit, and exit")
     args = ap.parse_args()
+
+    if args.record:
+        # dispatch-region-words, from the instrument (roadmap 353.2). Its value is
+        # the region figure this report prints — headings INCLUDED, the same count
+        # as `loops_regions` — at a named revision. Before this, the metric was
+        # taken by hand in two conventions: the 2026-09-07/08 samples are the body
+        # figure (headings excluded, 56 lower) and the 2026-09-09 ones the region
+        # figure, so the pair rule 5 compared read -8 where the region fell by 64.
+        # record_iteration.py calls this for every Standardize row.
+        sha = git("rev-parse", "--short", args.record).stdout.strip()
+        t = text_at(sha, "LOOPS.md") if sha else None
+        r, why = loops_regions(t) if t is not None else (None, f"LOOPS.md absent at {args.record}")
+        if why or not r:
+            sys.exit(f"report_loop_prose --record: cannot measure the region at {args.record}: {why}")
+        rec = subprocess.run(
+            [sys.executable, os.path.join(os.path.dirname(__file__), "record_metric.py"),
+             "--name", "dispatch-region-words", "--value", str(r[0]), "--unit", "words",
+             "--commit", sha],
+            capture_output=True, text=True)
+        if rec.returncode != 0:
+            sys.exit(f"report_loop_prose --record: record_metric.py failed: {rec.stderr.strip()}")
+        print(f"recorded dispatch-region-words = {r[0]:,} words at {sha}")
+        return 0
 
     if git("rev-parse", "--is-shallow-repository").stdout.strip() == "true":
         sys.exit(

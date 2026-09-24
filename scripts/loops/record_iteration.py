@@ -207,6 +207,25 @@ def main():
     except Exception as exc:  # noqa: BLE001 - same reason as above
         print(f"  (warning: correction-site check could not run: {exc})", file=sys.stderr)
 
+    # dispatch-region-words is SAMPLED here, on every Standardize row (roadmap
+    # 353.2): from the instrument, at the recorded commit, with the commit in the
+    # row. It used to be taken by hand in two conventions 56 words apart, and no
+    # sample said which commit it described. Best-effort like the checks around
+    # it: a failure warns and never fails the recording.
+    if args.loop == "Standardize":
+        rlp = os.path.join(os.path.dirname(__file__), "report_loop_prose.py")
+        try:
+            r = subprocess.run([sys.executable, rlp, "--record", commit or "HEAD"],
+                               capture_output=True, text=True,
+                               cwd=os.path.join(os.path.dirname(__file__), "..", ".."))
+            if r.returncode == 0:
+                print(f"  {r.stdout.strip()}")
+            else:
+                print(f"  (warning: dispatch-region-words not recorded: {(r.stderr or r.stdout).strip()})",
+                      file=sys.stderr)
+        except Exception as exc:  # noqa: BLE001 - same reason as above
+            print(f"  (warning: dispatch-region-words not recorded: {exc})", file=sys.stderr)
+
     # A THIRD advisory check, and it runs from here for a reason the other two
     # do not have: it can only work AFTER the commit (roadmap 283.2).
     #

@@ -1057,9 +1057,11 @@ surfaced more:
    totals do not — quoting one against the other invents a delta that is not
    there. **The block prints both and asserts `body + headings = region`**
    (353.1), counting the headings from the text rather than as
-   `region − body`, which is a residual that agrees with itself. The one
-   reading still taken by hand under the other convention is the
-   `dispatch-region-words` metric — roadmap `353.2`.
+   `region − body`, which is a residual that agrees with itself. The
+   `dispatch-region-words` metric rule 5 reads is the REGION figure, headings
+   included, recorded by `record_iteration.py` on every Standardize row with
+   the commit beside it (`report_loop_prose.py --record`, roadmap 353.2). The
+   2026-09-07/08 samples are body figures, so do not pair them with later ones.
 2. For a wide sweep, `Workflow` fan-out — one agent per component, report drift.
 3. Consolidate to the shared pattern; never widen public API to do it.
 4. **Round check** — gates must stay green (stylelint naming is the enforcer);

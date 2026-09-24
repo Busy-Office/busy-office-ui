@@ -3625,7 +3625,7 @@ metric, is untouched and stays open.
        changes is that the next lane-4 round is handed the section by name
        instead of deriving it.
 
-2. [ ] **353.2 — `dispatch-region-words` is sampled by hand, under a convention
+2. [x] **353.2 — `dispatch-region-words` is sampled by hand, under a convention
        the instrument does not use, and no sample records the commit it
        describes.** 339.1's own text publishes the pair **7,476 → 7,298** while
        `report_loop_prose.py` prints **7,532 → 7,354** for those two commits —
@@ -3643,6 +3643,20 @@ metric, is untouched and stays open.
          wants, and writing that down, closes it just as well. Finding that the
          two conventions should stay separate is a satisfying outcome, not an
          off-plan one.
+       - **DONE 2026-09-24 — the instrument records it now, with the commit.**
+         The premise was worse than filed. Each of the four samples matches
+         exactly one `LOOPS.md` revision within minutes of it, and they split
+         between conventions: 7,298 and 7,492 are BODY figures (`f9e0f17d`,
+         `7e2c61c0`), while 7,552 and 7,484 are REGION figures (`f1e84a77`,
+         `4e6b83c1`). So the pair rule 5 compared read −8 where the region fell
+         by 64. Now `report_loop_prose.py --record [REV]` measures the region
+         (headings included, the figure the report prints) and passes it to
+         `record_metric.py`, which gains `--commit` and stores it in the jsonl
+         row. `record_iteration.py` runs it on every Standardize row, at the
+         recorded commit. First sample: **7,723 at `6d4fb0d4`**. A bad
+         revision exits 1 and records nothing. Rule 5's newest pair is now
+         region to region: 7,484 → 7,723, +239. LOOPS.md §3 says the old body
+         samples must not be paired. Jev: supported 0.95.
 
 ## Slice 352 — `325.2` closed by WITHDRAWAL: the *Initial render* column's method is unrecoverable, and the measurement that decides it needs no knowledge of the missing machine — a machine gap is a roughly CONSTANT multiple, and this column's is 4.2x / 11.9x / 7.3x while its own neighbour's is 0.93x / 0.72x / 1.19x (2026-09-08)
 

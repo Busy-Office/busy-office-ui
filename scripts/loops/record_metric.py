@@ -85,11 +85,19 @@ def main():
     ap.add_argument("--name", required=True)
     ap.add_argument("--value", required=True, type=float)
     ap.add_argument("--unit", default=None)
+    # The revision the value describes (roadmap 353.2). A sample with no
+    # revision beside it is read as current, and dispatch-region-words mixed
+    # two conventions for a week without anyone able to tell which sample was
+    # which. Stored in the jsonl row, the source of truth; the DB mirror
+    # keeps its four columns.
+    ap.add_argument("--commit", default=None)
     ap.add_argument("--no-log", action="store_true")
     args = ap.parse_args()
 
     ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     row = {"ts": ts, "name": args.name, "value": args.value, "unit": args.unit}
+    if args.commit:
+        row["commit"] = args.commit
 
     if not args.no_log:
         with open(METRICS, "a", encoding="utf-8") as f:
