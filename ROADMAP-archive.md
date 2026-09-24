@@ -51118,3 +51118,3501 @@ Objective grills for 18 days. That is the strongest case for a gate this ledger
 has assembled; it is still not Polish's to add. Filed for a Continue round with
 the detector and its red-proof already written, in
 `.roundtable/polish-state.md`'s entry for this round.
+
+## Slice 383 — Standardize sweep, **4 of 4 lanes on an isolated clean build**, the first under Slice 382's corrected §3: lane 2 is unchanged by construction, lanes 1 and 3 match their base, and lane 4 cuts 101 words of today's own measurement narrative back out of the dispatch region (2026-09-24)
+
+**Dispatched by rule 2** (`Standardize 4 / 4 OVERDUE` — 348.1, 349.1, 350.1,
+352.1) after rule 1 read 0 open P0. **The build was isolated this time**: a
+worktree of HEAD (`67ba93f0`) with its own `npm ci`; `@busy-office/ui`
+realpath-resolves inside the worktree (`ENVIRONMENT.md` §3c's check), and the
+docs build stamps `dirty: false`. Base for §3's shortcut: `741c9bea` (Slice 380).
+
+- **Lane 2 — unchanged by construction.** `git diff --stat 741c9bea HEAD --
+  packages/core/src/css/ packages/core/scripts/report-css-repeats.mjs` is
+  empty, and the figure equals the base's: *"74 source file(s) · 245 rule(s)
+  with 3+ declarations · 234 distinct bodies · 7 body(ies) appearing more than
+  once"*.
+- **Lanes 1 and 3 — full verdict, no change.** Their input diff holds three
+  `apps/docs/scripts` files (`check-resume-slice-ids.mjs`, `check-slice-refs.mjs`,
+  `po-app-harness.mjs`), none in the build path. Lane 1 reads *"0 dead style
+  attribute(s) on 0 page(s)"* and 10 dead declarations on 8 pages, the standing
+  refusal set. Lane 3 reads 119,076 words and the same 17 flagged pages, all in
+  §3's enumeration (combobox, tabs and output-form enumerated and unflagged).
+- **Lane 4 — the dispatch region grew +340 body words in 4 of 16 sections since
+  the last cut, and all of it is today's own items:** Step 0 +102 (348.1 and
+  Slice 382's slice-id paragraph), Step 1 +90 (335.1's proof, Slice 381's
+  intake fix), rule 3 +148 net (349.1 and Slice 382; renamed, so it reads NEW
+  and GONE). The instruction stays. The measurement narrative written into
+  rule 3 and the slice-id paragraph is already carried by the ROADMAP closures
+  and the measure files, so it is cut back to pointers: **dispatch region
+  7,824 → 7,723 words, file −101**, a cut by the corrected rule (both shrink).
+  `ENVIRONMENT.md` (26 up) keeps its HONEST verdict; today's steps are two new
+  traps and a correction. `DESIGN.md` has not moved since Slice 380's verdict.
+- **The archive sweep was evaluated and declined:** `roadmap_scope.py` reads
+  closed-history share **3,606 / 9,942 = 36.3%**, well below the shares past
+  sweeps ran at; 249.12, the trigger, is still the owner's. [**Corrected by Slice 384:** not
+  "well below": the lowest past sweeps ran at 37.1% (Slice 301) and 39.8%
+  (235.2), and the line half of the trigger (5,450 lines) was already crossed;
+  the decline rested on an unstated AND. HEAD now reads 41.0% / 10,010 lines,
+  past both halves. Also: Step 0's +102 is 346.1 +15, 348.1 +56 and Slice 382
+  +31; one of the three changed scripts (`check-slice-refs.mjs`) is a build gate,
+  its change a comment; §3's input lists were incomplete (fixed by Slice 384);
+  the base's figure was taken from memory, not from Slice 380's write-up; and
+  the 239 words of growth above the previous cut are now invisible to lane 4
+  (384.1).]
+
+Markdown only, so no rendered page changed and no screenshots are owed.
+
+## Slice 382 — Objective grill of 348.1, 349.1, 350.1: 19 of 22 findings survive, every headline figure reproduces, and the closures got their own corrections wrong — 348.1 called a correct figure unreproducible, 349.1's new rule-3 wording still missed what the counter reads, and 350.1's shortcut skipped the comparison that would catch it (2026-09-24)
+
+**Dispatched by rule 3** (`Objective 3 / 3 OVERDUE [348, 349, 350]`) after rule
+1 read 0 open P0. All three labels are items closed in place today (`bc79e235`,
+`03485ac9`, `661bc668`); Slice 351 grilled Slice 350's sweep, not 350.1's
+closure. All three changed loop scripts and text only — 381.2's open question,
+so the grill was kept to three finders and three adversarial verifiers
+(workflow `wf_e2bee258-01e`; 29 claims reproduced, 22 findings, 19 survived).
+Report: `.roundtable/grill-objective-348-349-350-2026-09-24.md`.
+
+**Fixed in this commit:**
+- The slice-id check's ABSENT hedge now carries the CLOSED bucket's staleness
+  instruction — an archived id is a closed one, and `175.4`, the check's
+  founding case, sat in that bucket. The hedge is a named constant with a
+  self-test case, red-proved by a copy that restores "normally archived", and
+  a second case pins the known `15.10` limitation. The header dates its
+  8-of-86 base rate and adds the post-landing 216 of 244.
+- LOOPS.md: the slice-id paragraph says 8 of 86 was right and the rate changed
+  at landing. Rule 3 now says what the counter reads (a named slice, whatever
+  the row's outcome), with the as-shipped replay (28 of 63; 35 delayed, each by
+  1-21 rows), kept on the asymmetry rather than a "regex" reason that was
+  wrong. §3's no-input shortcut lists lanes 1 and 3's real inputs, names its
+  base, requires a clean tree, and compares the skipped lane's figure with
+  the base's.
+- `check-slice-refs.mjs`'s comment, the "Which loops" heading and §6 step 0
+  stop saying "closed" for rule 3.
+
+**Corrected in place:** 348.1 (8 of 86 reproduces; 12 of 127 absent revisions
+held a non-archived string, not 7; the self-test could not fail on the change),
+349.1 (wording, the as-shipped figures, the delay's size, the refusal's reason)
+and Slice 349's heading, 350.1 (inputs, base, clean tree, the structural 100%,
+"second rounds of one sweep", the fitting case), and both measure files.
+
+**Thesis:** npm last week (09-15..21) `@busy-office/ui` 16, 5 of them 0.8.0;
+`create-ui` 12 — the same window as Slice 381, so no new reading; jsDelivr 29 a
+month; GitHub 0 stars, 0 forks, 0 discussions, 1 open issue (the owner's);
+traffic 20 views / 6 uniques and 367 clones / 132 uniques over GitHub's
+rolling 14 days. Framework code since Slice 381: **0 lines** in 11 commits
+(`git diff --numstat 60235d9c HEAD -- packages/core/src`). Unchanged: six P0
+fixes wait on 377.5.
+
+No new item: 381.1 and 381.2 already own the open questions.
+
+## Slice 380 — Standardize sweep, **4 of 4 lanes on a clean HEAD tree**: lanes 1-3 carry no delta; lane 4 re-decides `DESIGN.md` (HONEST on what it grew on, no longer "the control") and moves 346.1's correction rule out of the dispatch region (2026-09-24)
+
+**Dispatched by rule 2** (`Standardize 4 / 4 OVERDUE` — 320.3, 345.1, 346.1,
+335.1) after rule 1 read 0 open P0. The lanes ran with
+`scripts/loops/standardize_lanes.py` in a throwaway worktree of HEAD
+(`9b85eda1`), built from scratch. Slice 379 found 378's lane-3 totals carried
+the owner's uncommitted screen-kit words, and those edits are still in the
+working tree. The worktree's build stamp reads dirty only for its three
+`node_modules` symlinks.
+
+- **Lane 1** — *"0 dead style attribute(s) on 0 page(s)"*; per declaration 10
+  on 8 pages, Slice 345's refusal set less 345.1's, as at Slice 379.
+- **Lane 2** — *"7 body(ies) appearing more than once"* (74 · 245 · 234), as at
+  Slice 378. The window's one CSS declaration change, 345.1's `display:
+  inline-block`, is in a one-declaration rule, which cannot form a group
+  (`git diff 456f9966 HEAD -- packages/core/src/css`).
+- **Lane 3** — the same 17 pages flagged, every one in the 20-page enumeration
+  (combobox, tabs and output-form are enumerated and unflagged). Total
+  **119,076** words against 119,077 at `456f9966`; the −1 is consistent with
+  379's ACR verb (*"is a"* → *"are"*), not re-derived per page.
+- **Lane 4** — two findings, both acted on:
+  - **`DESIGN.md` re-decided**, the question Slice 379 left for this sweep. It is
+    24 up and never cut, +48.4% since 2026-08-20. The 12 commits behind its
+    +1,388 words sum exactly to the report's figure, and every one adds
+    standing architecture: three build rules (+674), the Non-goals section
+    (+331), the narrowed virtualiser decision (+145), and small data-table,
+    icon, release and shell corrections (+238). None is incident narrative.
+    **HONEST stands on that ground. "The control" is retired**: the file grows
+    faster than `CLAUDE.md` (+14.7%) and `ROADMAP.md` (+15.9%). Lane 4's
+    accumulation finding does not apply to it either, since it is read when
+    architecture is in play, not every wake. 167.1 in the archive carries the
+    note.
+  - **The dispatch region grew +159 body words in 3 of 16 sections** since its
+    last reduction (`4e6b83c1`), and all three are this morning's own items:
+    Step 0 +15 (346.1's fourth advisory), Step 1 +22 (335.1's proof), rule 4
+    +122 (346.1's correction rule). They are new rules, not regrowth, so there
+    is no cut. The correction rule is needed when correcting, though, not when
+    deciding, so it moves to Operating rules: dispatch region **7,643 →
+    7,521** words, file +19.
+  - `ENVIRONMENT.md` (25 up) keeps its HONEST verdict; its one new step is
+    335.1 replacing a "not red-proved" limitation with its proof.
+
+Markdown only, so no rendered page changed and no screenshots are owed.
+
+[**Corrected by Slice 381:** the worktree was not isolated — with `node_modules`
+symlinked, `@busy-office/ui` resolved to the main checkout's `packages/core`,
+which happened to hold no uncommitted source (`ENVIRONMENT.md` §3c). "None is
+incident narrative" is false: `c073c360` adds a dated drift account and rule
+4's text a session aside, and the "+674 build rules" are two build rules and
+one unit-doctrine rule. HONEST stands on standing rules dominating. And the
+move to Operating rules read as a CUT to lane 4's instrument, resetting its
+baseline; `report_loop_prose.py` now requires the file to shrink too.]
+
+## Slice 379 — Objective grill of Slices 345, 378: every headline figure reproduces at its own revision, and all twelve findings are in what shipped BESIDE the figure — 345.1's move of `display: inline-block` into the utility breaks a block spinner nobody measured, and 378 published totals read off a working tree (2026-09-24)
+
+**Dispatched by rule 3** (`Objective 3 / 3 OVERDUE [320, 345, 378]`) after rule 1
+read 0 open P0 and rule 2 read `2 / 4` (`dispatch_status.py`). **Narrowed:**
+320 was grilled by Slice 322; 345 is in scope because 345.1 closed today, not
+for its 2026-09-08 sweep.
+Report: `.roundtable/grill-objective-345-378-2026-09-24.md` (2 finders + 2
+adversarial verifiers, workflow `wf_528e77c3-118`; 26 claims reproduced, 12
+findings, 12 survived, 0 refuted).
+
+**What held:** `scan:dead-style` 10 on 8 at HEAD and 11 on 9 at 378's own
+revision (clean `git archive` builds of both); 345's "38 of 52 from four source
+lines" recounted from the built pages; all seven standing refusal premises
+re-measured; the pasted recipe rotating (8 distinct rects in 8, red at 1 under
+forced `display: inline`); lanes 2-4 of 378 on clean builds of four commits;
+320.3's 8px chip gap live, red at 6.4px on the pre-fix build.
+
+**Fixed in this commit:**
+- **A block spinner lost its layout** (medium). A sized `<div>` ring centred
+  with `margin-inline: auto` fell to the line start (offsetLeft 184 → 0), and
+  `<div class="bo-stack bo-motion-spin">` computed `inline-block`, not `flex`.
+  No shipped page uses either shape (`git grep bo-motion-spin`), and the change
+  is unreleased, so it stays, with a **Migration** note in the CHANGELOG naming
+  both shapes and the fix. A consumer's own `display: block` restores the ring
+  (probe: offsetLeft 189 = centred).
+- **An à-la-carte import un-hid a `hidden` spinner** (low): motion.css alone
+  gave `<span hidden>` `display: inline-block`. The rule is now
+  `.bo-motion-spin:not([hidden])`, and it stays `none` with or without the
+  reset.
+- **The ACR's 2.5.7 remark read "…combobox.ts, …context-menu.ts is a non-drag
+  match"**: the verb now follows the list length (`extract-acr.mjs`).
+- **LOOPS.md's Settled joined-control paragraph** quoted quantity's selector
+  from before 376.4; it now quotes the shipped one.
+- **AppTile's comment** said a badge is 37px tall; it measures 30px, so BOX's
+  `block-size` pads the initials box up rather than capping it down.
+
+**Corrected in place:** 345.1's closure (the demo box is 16×36, its rotating
+rect 16-40px; drift was measured by the glyph's text Range, and the
+bounding-rect centre could not fail; the demo carries a font size and a `<p>`
+the recipe does not); Slice 345's `inline-size: 100%` refusal reason (dead in
+block flow too; `login.astro`'s discriminator is `margin-inline: auto`, live
+only inside a flex or grid parent); Slice 378's lane 3 totals (a working-tree
+build, +135 uncommitted words) and lane 4's DESIGN.md premise (no longer the
+slowest-growing file).
+
+**Thesis (§6 step 1, the reading 377.7 asks for, recorded 05:50 with
+`record_metric.py`):** npm
+`@busy-office/ui` 16 downloads in the last week (daily 0, 2, 2, 1, 0, 0, 0
+[**Corrected by Slice 381:** those are 09-17..23, summing to 5; the 16 is 09-15..21]),
+`create-ui` 12; jsDelivr 41 hits a month; 0 stars, forks, or non-owner issues
+or discussions. Latest published is 0.8.0 (2026-09-06). Not visible to any of
+these: copies of `dist`, private mirrors, unpkg. Unchanged from Slice 377's
+reading: adoption cannot be told apart from zero, and 377.5/377.6 are still
+the owner's.
+
+No new item: every finding was fixed or corrected in this commit.
+
+## Slice 378 — Standardize sweep, **4 of 4 lanes, all clean**: the window touched every lane's input (two CSS fixes, a JS fix, prose), and no lane moved against the verdicts Slice 376 recorded that morning (2026-09-24)
+
+**Dispatched by rule 2** (`Standardize 4 / 4 OVERDUE` — 376.2, 376.4, 377.1,
+377.2) after rule 1 read 0 open P0. Each lane's own figure
+(`scripts/loops/standardize_lanes.py`):
+
+- **Lane 1** — *"0 dead style attribute(s) on 0 page(s)"*; per declaration 11
+  on 9 pages, exactly Slice 345's standing refusals (unchanged since 376.1).
+- **Lane 2** — *"7 body(ies) appearing more than once"*, the same seven groups
+  as Slice 376; the one textual change is 376.4's quantity joint, whose
+  selector now also matches `+ [type="hidden"] +` — same body, same x4
+  joined-control group the Settled table already rules on. **Not unchanged by
+  construction:** `git log --first-parent 85e8c6f5..HEAD -- packages/core/src/css`
+  lists 376.2 and 376.4, so the lane read changed input and found no new repeat.
+- **Lane 3** — the flagged union is the same 17 pages (every one in the
+  20-page enumeration), total 119,198 -> 119,212 words from the 376/377 prose
+  edits; no page crossed a line. [**Corrected by Slice 379:** both totals were
+  read from working-tree builds carrying 135 words of the owner's uncommitted
+  `/getting-started/screen-kit/` checkpoint. At the commits they are
+  **119,063 -> 119,077** (`7ee51901` → `456f9966`); the flagged set is the same
+  17 either way.]
+- **Lane 4** — LOOPS.md's dispatch region: 0 of 16 sections moved. ROADMAP.md
+  is 5 up since the 376.8 sweep (a real cut, `ce10de0d`). ENVIRONMENT.md 24 up
+  and DESIGN.md 24 up keep their standing verdicts (224.2 / 332.1 -> 361
+  HONEST; 167.1 item 5 HONEST, the control) — DESIGN.md's one new step is the
+  373.3 remainder, a correction. [**Corrected by Slice 379:** "the control"
+  was re-quoted without re-checking its premise. 167.1 called DESIGN.md the
+  control as "the slowest-growing file measured"; on the report this lane
+  read (its default window) it is +48.4%, against CLAUDE.md +14.7% and
+  ROADMAP.md +14.3%. The HONEST verdict is not re-decided here.]
+
+No consolidation, no new verdict, no item: a clean pass is the Exit (§3).
+
+## Slice 366 — `336.2` decided: **print the union** — and the base rate it was filed on is **1 of 7**, not 2 of 2: Slice 326 printed `union = 15` in its own entry and failed on the ENUMERATION instead, which no report line can prevent (2026-09-09)
+
+**Dispatched by rule 4**, on the oldest genuinely dispatchable open item. Rule 1
+no open P0 (`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0** across **26**
+open items); rule 2 `Standardize 1 / 4 ok`; rule 3 `Objective 1 / 3 ok [334]`;
+rule 5 `Optimize 0 wake-date(s) newer — ok`, EVALUATED not skipped: its
+comparable set's movers are `gates` (55 → 56, coverage growth, one pair) and
+`dispatch-region-words` (+60), neither a regression on two consecutive runs.
+Rules 6-8 not reached, so `polish_requeue.py --apply` was correctly NOT run.
+
+**Step 1 read both intakes, with `ENVIRONMENT.md` §8's controls:**
+`/issues?state=open` → `HTTP 200, len 1` — issue #2, `updated_at`
+**2026-09-06T15:10:34Z**, unmoved for a thirty-second consecutive hand-off;
+`/discussions` → `HTTP 200, len 0`; `/not-a-real-route` → `HTTP 404`, so the
+`200 []` means *served and empty*. No new untriaged input, so Step 1 committed
+nothing.
+
+### `335.1` is ahead of `336.2` in rule 4's order, and this wake measured its blocker instead of assuming it
+
+`335.1` is the oldest cloud-takeable item and its Accept allows filing a
+throwaway discussion to settle it. **The write path is refused in this session,
+and that is measured rather than inferred.** A repository discussion is created
+by the GraphQL `createDiscussion` mutation, and this session's GraphQL endpoint
+is refused outright:
+
+```
+curl -sS -H "Authorization: bearer $GITHUB_TOKEN" -H 'Content-Type: application/json' \
+  -d '{"query":"query { viewer { login } }"}' https://api.github.com/graphql
+  -> HTTP 403  "This GraphQL query is not enabled for this session — only the
+                pinned set of PR-review operations is served."
+```
+
+**Three different valid queries, three identical 403s** — `viewer`, a
+`repository { discussionCategories }` read, and a bare `__type` introspection —
+so the refusal is the endpoint, not one query. The repo object read with the
+same token reports `permissions {admin, maintain, push, triage, pull}` **all
+false**, and no `mcp__github__*` tool in this session's set touches discussions.
+
+**What was NOT measured, and deliberately so: whether a REST POST to
+`/discussions` would work.** The only probe that would settle it is a request
+that can create a real, public, outward-facing item in the owner's repository,
+and no owner is live in a scheduled wake to authorise one; a body crafted to
+fail is still that request. What the API says about itself is the weaker
+evidence taken instead, and it reproduces `ENVIRONMENT.md` §8's reading exactly:
+`/discussions/categories` → **HTTP 404** with
+`documentation_url: rest/repos/discussions#get-a-discussion` — the family's own
+anchor is a **get**. So this item's blocker is stated as *the GraphQL path is
+refused and the REST path is untested-by-choice*, not as *no write path exists*.
+
+So `335.1` stays **OPEN** and **gains** the Lane line it never had: it is
+neither owner-blocked nor browser-blocked but **cloud-blocked in the write
+sense** — a local wake, whose `gh auth token` carries the owner's own GraphQL
+access, can file the test discussion; a cloud wake cannot reach the mutation at
+all. That is exactly the naming `LOOPS.md` rule 4 demands, and the reason it is
+written into the item rather than only here is that this hand-off is rewritten
+wholesale every wake (169.3): **this is the first wake to reach `335.1` under
+rule 4, and without the Lane line the next cloud wake re-derives the same
+403.** Rule 4 therefore fell through to `336.2`, the next cloud-takeable item.
+
+### The Accept asks for the base rate re-measured at this revision, and it moved against the item
+
+`336.2` was filed on *"2 of the last 2 sweeps mishandled lane 3 — 326 on a stale
+enumeration, 332 on the population"*, with its own instruction that the wake
+taking it re-measure over however many sweeps exist by then. Seven do, and the
+enumeration is the log's, not a heading grep alone — `grep -oE '^## Slice [0-9]+
+— Standardize sweep' ROADMAP.md` and `grep -n ' · Standardize · '
+.roundtable/loop-log.md` agree on the same set:
+
+| sweep | what its lane-3 entry asserts cleanliness over |
+|---|---|
+| **326** | *"10 over 2x the corpus median (1,584); 11 over a family median; **union = 15**"* — correct |
+| **332** | *"10 over 2x … checked per page"* — **the corpus half only** ✗ |
+| **339** | *"the flagged union is **15**"* — correct |
+| **345** | *"the flagged union is **15** pages"*, the five family-only named — correct |
+| **350** | *"the flagged union is **15** pages"*, the five named, enumeration read out of the archive — correct |
+| **357** | *"the flagged union is **15** pages"*, on fresh medians (`798 / 959 / 114,124`) — correct |
+| **363** | *"the flagged union is **15**"*, enumeration re-derived from the archive — correct |
+
+**So the failure this item would remove occurred in 1 of 7, and 0 of the last
+5.** The filed premise is true of lane 3 *broadly* and false of *this* failure:
+Slice 326's own entry prints `union = 15` and its recorded finding is the stale
+`Verdicts to date` clause in `LOOPS.md` — a hand-maintained list, which printing
+a union cannot protect. **Read the premise as 1 of 2, not 2 of 2**, and the
+"for" argument in `336.2` is correspondingly weaker than filed.
+
+**What could NOT be measured, said plainly.** Whether the five correct sweeps
+*derived* the union or copied the previous sweep's phrasing is not recoverable
+from the record. Two of them ran the report fresh — 350 quotes the moved
+threshold `1,596` where 326 quotes `1,584`, and 357 publishes a moved mean and
+total — but that shows a fresh REPORT run, not a fresh union. The five
+family-only page paths are identical in 345, 350, 357 and 363, which is
+consistent with either. No claim is made either way.
+
+### Decided: print it — on the contract, not on the base rate
+
+The base rate argues against; the change was taken anyway, on a different ground
+that the re-measurement does not touch. `LOOPS.md` §3 lane 3 is a **two-clause**
+definition — *over 2x the CORPUS median, or over 2x its FAMILY median* — and the
+report answered the first clause under its most prominent line while the second
+lived inside a per-family breakdown. That is the shape `CLAUDE.md`'s storage
+doctrine names outright: **a derived artefact that under-reports is worse than
+none, because its number gets quoted.** Slice 332 quoted it.
+
+The Objective test it passes is principle 3's **rethink**: *reuse by
+copy-paste-modify means extract the reusable core*. Five consecutive sweeps
+hand-wrote the same union arithmetic and the same five URLs into their entries;
+that arithmetic now lives in the instrument.
+
+**What it costs, named.** Three printed lines where there were none, in a report
+whose growth `336.2`'s "against" clause is right to worry about — `LOOPS.md`
+`341.1` and `353.2` both have prose growth open. It is held to three by printing
+the count plus **only the family-only additions**: the corpus set is listed
+above it and is not repeated, so this is not the third list the item feared. The
+corpus headline also now names itself **one clause of the lane, not its
+population** — and *"half"*, the word `336.2` uses and this entry quotes, is
+itself imprecise for 10 of 15, which is why the shipped line does not use it.
+
+**Refused in the same breath, so it is not inferred from silence:** amending
+`LOOPS.md` §3 lane 3. Its text already states the two-clause definition
+correctly — the tool was the half-answer, not the playbook — and `LOOPS.md` is
+**byte-for-byte unchanged** by this slice.
+
+### Red-proved by discrimination, three ways, and each injection was confirmed to land
+
+A union line could be echoing either half or a constant `15`. Three probe copies
+in the same directory (`ENVIRONMENT.md`'s rule — never `git stash`), each
+injection grepped to confirm it changed exactly the intended line before the run:
+
+```
+corpus threshold x100  -> corpus  0 + family 11 - both  0 = 11   (11 additions listed)
+family threshold x100  -> corpus 10 + family  0 - both  0 = 10   (0 additions)
+family threshold x1.5  -> corpus 10 + family 27 - both 10 = 27   (17 additions)
+```
+
+Unmodified it reads `corpus 10 + family 11 − both 6 = **15**`, which reproduces
+the figure five sweeps published and the hand derivation
+(10 + 11 − 6). A line echoing the corpus count would read 10, 10, 10; one
+echoing the family count would read 11, 0, 27; a constant would read 15 three
+times. None of those is the output. The probes were deleted before the commit.
+
+1. [x] **336.2 — DONE, decided: print the union.** `report-prose.mjs` prints the
+       flagged union with its inclusion-exclusion arithmetic (`corpus + family −
+       both = union`) and the family-only additions, and the corpus headline
+       names itself as half the lane's population. The base rate is re-measured
+       at this revision as **1 of 7 / 0 of the last 5** and is recorded as
+       arguing AGAINST the change; the ground taken is the lane's two-clause
+       contract. The reasoning is in the script's own comment beside the code,
+       not only here.
+
+       **Reopen condition:** a sweep that asserts lane-3 cleanliness over a
+       population smaller than the printed union. That would mean the line is
+       being skipped rather than the arithmetic being hard, and the answer then
+       is not a fourth line.
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. **None are owed by this slice**, and that is structural
+rather than a judgement: `git diff --stat` was read, and the diff is one
+`apps/docs/scripts/*.mjs` report that is not a gate and not in `ci.yml`, plus
+`ROADMAP.md` prose. No CSS rule, no `.astro` file, no docs page, no generated
+artefact and no shipped JS is touched, so no rendered surface can have moved.
+`grep -n 'report-prose' .github/workflows/*.yml` returns **nothing** — it is a
+run-by-hand report, so not even a gate's output moves.
+
+The visual debts carried forward are unchanged and unspent, counted from the
+previous hand-off's own enumeration rather than carried as a number: Slice 352's
+two, Slice 345's two, and the four older — `292.4/292.5`, Slice 319, `320.3`,
+`310.1` — **eight**.
+
+## Slice 364 — Objective grill of Slices 360, 361, 362, 363: **73 of 78** published assertions reproduce, every headline figure and every verdict among them — and all **five** defects are again in a sentence that CHARACTERISES or CITES a measurement rather than in the measurement, which is **two consecutive grills, seven slices** (2026-09-09)
+
+**Dispatched by rule 3** at `Objective 4 / 3 slices OVERDUE [331, 332, 333, 341]`.
+Rule 1 found no open P0 (`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0**
+across **27** open items) and rule 2 read `Standardize 0 / 4 ok`, spent by Slice
+363 — exactly as that slice's hand-off predicted, re-read this wake rather than
+trusted. Cloud wake. **No collision:** `origin/main` read `4cfb8b2c` at Step 0
+and `4cfb8b2c` again at the mandated pre-commit fetch.
+
+**Step 1 — both intakes read, with `ENVIRONMENT.md` §8's controls:**
+`/issues?state=open` → HTTP 200 len **1**; `/discussions` → HTTP 200 len **0**;
+`/not-a-real-route` → **404**, the control that makes the `200 []` mean *served
+and empty*. Issue #2's `updated_at` is still `2026-09-06T15:10:34Z` — a
+**thirtieth** consecutive hand-off with no movement. Nothing to triage, so Step
+1 committed nothing.
+
+Full evidence, one table row per assertion:
+`.roundtable/grill-objective-360-361-362-363-2026-09-09.md`.
+
+### The arming set names ITEMS; the slices are 360-363 — and the narrowing needed a reading, not an assumption
+
+`dispatch_status.py`'s `SLICE_TOP` reads the leading id of each log row, and the
+four rows since the last `Objective` row lead with `331.1`, `332.1`, `333.1` and
+`341.1`. `grill-objective-315-332-333-2026-09-07.md` covers *Slices* 332 and
+333, which are **different objects** from items `332.1` and `333.1` — so the
+apparent overlap is not one. Checked rather than waved off: **no earlier grill
+covers Slices 360-363**, and nothing was dropped from scope.
+
+### The pattern, stated as a base rate rather than rediscovered
+
+Slice 359 recorded that all four of its defects were in a sentence
+characterising a measurement, and called that "192.1's shape three slices
+running". This grill's **five** defects are every one of them a
+characterisation, a citation, or a denominator — never a measurement that was
+taken wrong. **Said no more strongly than the two grills support: two
+consecutive grills, seven slices (356-358 and 360-363).** The obvious next
+claim — that the run extends back through the grills of 351 and 355 — was
+*not* measured, and Slice 355's own row names a defect that is not this shape
+(reading a series at the pre-commit tip is a measurement taken at the wrong
+revision, not a sentence about one). **Nothing is proposed for it.** *"This sentence characterises its own measurement correctly"* is
+semantic, which is `94.11`'s wall, and Slice 359 already refused exactly that
+gate; restating the refusal as a fifth loop-mechanics item is what `355.3` and
+`359.4` refuse.
+
+### The five defects
+
+- **A — Slice 362's ts-code tally is over all 50 diagnostics, not the 23
+  errors.** It stood one line under `Result (164 files): 23 errors, 0 warnings,
+  27 hints` and beside `ts(2307) 0` — which *is* an error-population statement —
+  and sums to **49**. Its two largest entries, `ts(7044)` 16 and `ts(6387)` 7,
+  are **hints**, so 23 of the 49 tallied are not part of the 22 `362.1` has to
+  clear. The errors alone are `ts(2339) 20 · ts(2322) 1 · ts(6133) 1 ·
+  ts(2551) 1 = 23`, which is what the slice's own prose already claims
+  ("every one is DOM narrowing inside an inline `<script>`"). Corrected in
+  place, both tallies labelled.
+- **B — `362.1`'s enabling tsconfig omits the `include`, which is
+  load-bearing.** `astro/tsconfigs/base` sets
+  `"include": ["${configDir}/.astro/types.d.ts", "${configDir}/**/*"]`, so the
+  config the item prescribes verbatim yields **377 files / 69 hints** where the
+  slice published **164 / 27** — 2.3x the program. The **error count is
+  unchanged** (22 post-deletion, 23 with the import restored, with the exact
+  published code tally), so the *decision* stands untouched; what does not
+  survive is the reproducibility of the baseline Accept (b) asks a later wake to
+  attribute a delta against. Also: `resolveJsonModule` is **already true** in
+  that base, so naming it as an addition misdescribes the extension. `362.1`
+  amended to name the property.
+- **C — Slice 361's "40 commits" is 67, and it reached the durable file.** The
+  claim is *"`^5.1.0` across all 40 commits touching `apps/docs/package.json`"*.
+  Every instrument tried returns **67** — plain, `--first-parent`, `--follow`,
+  `--no-merges`, and a count of distinct blobs — at Slice 361's own commit
+  `13545b20` as well as at HEAD, so it is not a drifted snapshot. **The property
+  is intact and stronger for it**: `^5.1.0` is the only value across all 67, so
+  the floating-minor argument is unaffected. It matters because the number was
+  copied into **`ENVIRONMENT.md` §3**, the durable file that audit existed to
+  fix — the one figure the audit got wrong is the one it made permanent.
+  Corrected in `ENVIRONMENT.md` (as the command, per CLAUDE.md's criterion
+  rule), in Slice 361, and in the landed `measure-332.1-…` report.
+- **D — `check-layout.mjs:112` is not where `serveDist`'s return shape is.**
+  The shape `{ server, port, base }` is right; line 112 is inside
+  `async function sweep`, at that slice's commit and at HEAD. The destructure is
+  line **26** and the return is `serve-dist.mjs:44`. Re-cited by symbol — a line
+  number into a live script is the weakest citation there is, which is why
+  `RESUME.md`'s charter already forbids `ROADMAP.md:NN`.
+- **E — Slice 363's one novel instrument is recorded nowhere.** Its
+  *"13 sentences at `HEAD` and 11 in this tree"* detector exists only as a prose
+  description, in `ROADMAP.md` and `RESUME.md` in the same words. A
+  reconstruction written to that description reads **11 → 10**; that is a
+  *different* regex, so it refutes nothing — it establishes that nothing can
+  tell the two apart, which is the finding. **The structural contrast is the
+  point:** 360, 361 and 362 each landed a `.roundtable/measure-*.md` carrying
+  its instruments verbatim (Slice 360 calls that "`321.1`'s lesson"), and this
+  grill *executed* two of them unchanged — the `331.1` prototype and the
+  `333.1` base-rate probe both reproduced to the digit. Slice 363 landed none.
+  Marked UNCHECKED in place. **No item filed and no gate proposed**: *"this
+  measurement is novel enough to need its instrument landed"* is a judgement,
+  which is `94.11` again.
+
+### What survives, which is nearly all of it
+
+Every verdict of the four slices reproduces on its own evidence: `331.1`'s
+refusal (26 of 26 rows, including all six controls and the 0-HTML-start-tags
+zero), Slice 361's *17 live / 1 dead* with the bare-`astro build` sentinel proof
+re-run from scratch (**224** files against a full build's **529**, 0 pagefind, no
+`llms.txt`, both sentinels removed), `333.1`'s choice of `tsconfig` over a gate
+(the probe's 8 self-tests all discriminate; **600 / 518 / 1,118** and the single
+`eventsManifest` hit reproduce by restoring the import and re-running, then
+**0 of 1,117** after), and `341.1`'s closure — whose 115 + 79 = 194 split was
+**re-derived from `7e2c61c0` alone**, without reading the item's prose, and
+closes exactly.
+
+### This wake's own first output was wrong, and the run caught it, not review
+
+The first `scan:dead-style` reported **10 dead on 8 pages, 1,121 / 1,453 / 249**
+— a clean disagreement with Slice 363 on all five numbers, which would have been
+the biggest finding here. It is contamination: the scan was running in the
+background when this wake moved `apps/docs/dist` aside for the `astro check`
+reproduction. Re-run with nothing else touching `dist`: **11 / 9 / 1,365 /
+1,813 / 345**, matching Slice 363 item for item including the seven dead kinds.
+The failure worth carrying is that the wrong reading was **plausible** — every
+number moved the same direction by roughly the same fraction, which reads like a
+real tree change. **A background measurement is a statement about the tree
+across its whole run, not at the moment it was launched**, which is
+`ENVIRONMENT.md`'s *"a gate you ran is a statement about the tree at the moment
+it ran"* one process at a time instead of one commit.
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. **This slice owes none**: its diff is `ROADMAP.md`,
+`.roundtable/**` and nothing else — no CSS rule, no docs page, no script and no
+`.astro` file changed, read off `git diff --stat` rather than assumed. The
+**eight** older visual debts carried in the hand-off are unchanged and unspent.
+
+1. [x] **364.1 — Objective grill of Slices 360-363 complete.** 73 of 78
+       published assertions reproduce, counted one per row of the report's
+       table. All five defects are a characterisation, a citation or a
+       denominator, not a measurement — the **second consecutive** grill to find
+       only that shape (Slice 359 was the first), which is seven slices, and no
+       stronger claim than the two grills support. Four corrected in place (A, B, C, D) and one marked UNCHECKED
+       in place (E); `362.1`'s enabling steps amended to name the `include`
+       property. **Nothing new filed and no gate proposed**, deliberately: every
+       one of the five would need a gate over what a sentence MEANS, which is
+       `94.11`'s wall and Slice 359's standing refusal.
+
+## Slice 362 — `333.1` decided: **`tsconfig`, not a gate** — and the base rate the item pinned as "0 of 152" is 0 of 600 *consts* but **1 of 1,118 frontmatter bindings**, a dead import live for **22 days** (2026-09-08)
+
+**Dispatched by rule 4.** Rule 1: no open P0 —
+`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0** across **28** open items.
+Rule 2 read `Standardize 3 / 4 ok`, rule 3 `Objective 2 / 3 ok [331, 332]`, so
+neither matched. Rule 4's oldest open item is Slice 15 and everything from
+there to `333.1` is blocked, by kind: **15** owner (AT runtime evidence on owner
+hardware), **112.3/112.4** owner briefs, **249.7/.10/.11/.12/.13** owner,
+**273.2** OWNER CALL, **296.3** OWNER CALL, **320.3** browser-blocked in the
+*screenshot* sense. `333.1` is the oldest cloud-takeable item, and it needs no
+browser: every reading below is a command's output.
+
+Rule 5 was read at Step 0b and would not have fired — `Optimize 0 wake-date(s)
+newer ok`, 8 of 47 names paired across days.
+
+**Step 1 — both intakes read, with §8's controls.** `/issues?state=open` → HTTP
+**200**, len **1** (#2, `updated_at` **2026-09-06T15:10:34Z**, unmoved for a
+twenty-eighth consecutive hand-off); `/discussions` → HTTP **200**, len **0**;
+`/not-a-real-route` → HTTP **404**, so the `200 []` means *served and empty*.
+No new input, so Step 1 committed nothing.
+
+### The premise was re-checked before it was used, and it holds exactly
+
+`333.1` says a first pass got the tsconfig situation wrong, so re-checking it is
+part of the criterion (CLAUDE.md). Every clause reproduces at this revision:
+
+```
+git ls-files '*tsconfig*'        -> packages/core/tsconfig.json, tsconfig.base.json
+tsconfig.base.json               -> "strict": true, and NO noUnusedLocals
+packages/core/tsconfig.json      -> "include": ["src/js/**/*.ts"]
+ls apps/docs/tsconfig.json       -> No such file or directory
+grep -rn 'astro check\|@astrojs/check' --include=package.json --include='*.yml'
+                                 -> no hit anywhere
+```
+
+One clause to add rather than correct: **`typescript` IS installed** (5.9.3),
+but only because `packages/core` declares it (`^5.6.3`) for stylelint; nothing
+in `apps/docs` reaches it. So the item's "no TypeScript configuration in this
+repo has ever looked at a docs `.astro` file" is right, and the compiler is
+already on disk — which is not the expensive part, as below.
+
+### The base rate, re-measured at this revision — and the population was wrong
+
+The scan is `scan-unused-const.mjs` (probe, not shipped): frontmatter split at
+the leading `---` pair, parsed with the TypeScript parser, every top-level
+`const` **and `import`** binding collected, then counted against AST references
+in the frontmatter plus word-boundary matches in the **comment-stripped**
+template. Comments are stripped on purpose — a binding whose only other
+occurrence is the comment explaining it is unused, and counting that mention as
+a use is CLAUDE.md's *"an assertion tripped on its own explanation"* pointing
+the other way.
+
+```
+152 tracked .astro file(s)
+frontmatter bindings: const 600, import 518, total 1,118
+never-used const  : 0 of 600      ← the item's figure, confirmed
+never-used import : 1 of 518      ← the item's figure did not cover this
+```
+
+**The single hit is live and old.** `apps/docs/src/pages/concepts/js-behaviors.astro:5`
+— `import eventsManifest from '@busy-office/ui/events';`, whose identifier
+occurs **once** in the whole file, its own import. History pins it exactly:
+
+```
+git log -S'eventsManifest' -- apps/docs/src/pages/concepts/js-behaviors.astro
+  9bb801ea  2026-08-15  Slice 14 item 2   -> 2 occurrences (import + a use)
+  bb4ece7c  2026-08-17  Slice 23 item 6   -> 1 occurrence  (the use left; the import stayed)
+```
+
+**22 days dead**, against the *"roughly a month to notice"* the item cites for
+the const case. So the answer to *"has the base rate moved off zero"* is: **not
+for the predicate as written, and yes for the predicate one AST node kind
+wider** — and the wider one is the same exact property, an identifier occurring
+only at its own declaration.
+
+### The detector was red-proved twice before either number was used
+
+- **Eight self-test cases, all discriminating**, including the three that would
+  otherwise make it a detector that cannot fail: a binding named **only inside
+  an HTML comment** must still be flagged; an import used only as a **component
+  tag** (`<Gallery … />`) must not be; one half of a destructured `const` unused
+  must flag that half alone.
+- **Injection into a real page.** `const savingMarkup = …` inserted after a
+  needle asserted to occur exactly once, into `apps/docs/src/pages/base/motion.astro`.
+  The injection was confirmed **structurally** rather than assumed: it lands at
+  **line 7**, and the frontmatter runs lines **1-66**, so it is not in a
+  comment; the binding count moved **600 → 601**; the scan reported exactly one
+  hit. Reverted, and the blob sha is back to `526f9b24`.
+
+  That page was chosen because `motion.astro` names `savingMarkup` in **three
+  prose comments** — the exact trap this repo has hit before. The scan flagged
+  it anyway, which is what the comment-stripping is for.
+
+### The `tsconfig` spike — and its first output was wrong in the expensive direction
+
+`@astrojs/check` was installed `--no-save` and an `apps/docs/tsconfig.json`
+written with `noUnusedLocals`. **The first run reported 101 errors, 76 of them
+`ts(2307)` "Cannot find module `@busy-office/ui/api` or its corresponding type
+declarations".** That reads as *the shipped package has no types for its
+subpath exports* — an adopter-facing product claim, and the most quotable thing
+this wake found.
+
+**It is wrong.** `packages/core/dist` did not exist: the workspace dependency
+had not been built in this container. After `npm run build -w @busy-office/ui`,
+with `resolveJsonModule` added (the JSON subpaths need it), the same command
+reports:
+
+```
+npx astro check   ->  Result (164 files): 23 errors, 0 warnings, 27 hints   [17s]
+  ts(2307)  0     ← all 76 were the unbuilt dist
+  ALL 50 diagnostics (errors AND hints), sums to 49:
+    ts(2339) 20 · ts(7044) 16 · ts(6387) 7 · ts(6133) 2 · 7043/6385/2551/2322 1 each
+    (the 50th carries no ts code: astro(4000) on src/pages/components/button.astro:107)
+  the 23 ERRORS alone:
+    ts(2339) 20 · ts(2322) 1 · ts(6133) 1 · ts(2551) 1
+```
+
+**CORRECTED by Slice 364.** The tally originally stood as one line directly
+under the `23 errors` result and beside `ts(2307) 0` — which *is* an
+error-population statement — so it read as the decomposition of the 23, and it
+sums to **49**. Its two largest entries, `ts(7044)` 16 and `ts(6387)` 7, are
+**hints, not errors**, so a wake sizing `362.1` off that line budgets 23
+diagnostics it never has to clear. The slice's prose below is right where the
+tally was not: *"every one is DOM narrowing inside an inline `<script>`"* is
+exactly what the errors-only row shows.
+
+Caught by asking what would make the number wrong before quoting it, not
+afterwards. Named here because the claim was one sentence from the hand-off.
+
+**What it catches that the scan does not**, on the built tree:
+
+```
+ts(6133) src/pages/concepts/js-behaviors.astro:5   'eventsManifest' … never read   ← same hit
+ts(6133) src/pages/patterns/comparison.astro:134   'i' … never read                ← template arrow param
+```
+
+Two independent instruments agreeing on `eventsManifest` is the reconciliation
+this repo asks for before a number is quoted. The second hit is outside the
+scan's population entirely.
+
+### The decision: `tsconfig`. The gate is REFUSED, and here is what each costs
+
+**`tsconfig` — chosen.** It is the ordinary tool, it is strictly wider (unused
+`let`, `function`, imports, template params, and 22 further type errors the
+scan cannot express), and the repo's own Objective prefers one general
+mechanism to a specific one. **What it costs, measured rather than forecast:**
+two devDependencies (`@astrojs/check` → `@astrojs/language-server`), a
+`tsconfig.json` that needs `resolveJsonModule` on top of `astro/tsconfigs/base`,
+**17s** of wall clock over 164 files, and **23 errors to clear before it can
+gate anything**. Of those 23, one is the import this slice deletes; the other
+**22 sit in 7 files** — `value-help` 9, `Gallery` 6, `htmx` 3, and one each in
+`ScheduleScreen`, `palettes`, `cascade`, `detail-form` — and every one is DOM
+narrowing inside an inline `<script>` (`Property 'value' does not exist on type
+'HTMLElement'`). That is **editing copyable sample code readers copy**, which is
+why it is a slice of its own and not a line in this one. Filed as `362.1`.
+
+**The gate — refused.** It would be exact rather than semantic, so 94.11's wall
+does not apply, and 310.1's precedent (a gate earning a clean base rate because
+the population held a violation a day earlier) fits this population better than
+it fitted that one — the violation is not a day old, it is in this commit. The
+refusal is not about whether it would work. It is that it duplicates a **subset**
+of a compiler flag whose remaining cost is now measured at 22 errors in 7 files
+rather than unknown, and it is not free: a 54th gate moves the two counts
+`derive-readme-facts.mjs` stamps onto the **npm front page** and forces a README
+re-stamp that `stamp-readme.mjs --check` gates inside the core build. Paying
+that to catch a proper subset of what the chosen tool catches is the wrong
+trade.
+
+**"Neither" — refused**, and the reason is the 22 days.
+
+### What these numbers do NOT cover
+
+The scan reads **top-level `const` and `import` bindings in `.astro`
+frontmatter** and nothing else: not `let`, `function` or `class`, not template
+scope, not inline `<script>` locals, and not `.mjs`/`.ts` anywhere in the repo.
+`astro check`'s two `ts(6133)` hits against the scan's one is that gap being
+visible, not the two instruments disagreeing.
+
+### Landed in this slice: the dead import is deleted, and the removal is proved render-neutral
+
+```
+before:  md5 a8e5762c946cf70dde4187b4698bd8e1   89,440 bytes   529 files in dist
+after :  md5 a8e5762c946cf70dde4187b4698bd8e1   89,440 bytes   529 files in dist
+```
+
+Both from a full `rm -rf apps/docs/dist && npm run docs:build` (never a bare
+`astro build` — `ENVIRONMENT.md` §3). Byte-identical is a suspiciously tidy
+result, so the comparison was **red-proved**: the same `cmp` against a
+*different* built page reports a difference, so the instrument discriminates.
+The scan re-run after the deletion reads **0 of 1,117**.
+
+### A correction owed to an open item: `334.1`'s pinned gate counts are stale
+
+`334.1` and `check-selftests.mjs`'s own header both say *"`scanGates()` reports
+**54 / 20 / 34** today, so counting this file as a heuristic gate makes it
+**55 / 21 / 34**"*. The live reading is now **55 / 21 / 34** — this build's own
+`self-test check passed — 55 gates classified: 21 heuristic (all self-tested;
+172 cases actually run), 34 exact`. `packages/core/scripts/check-print-tokens.mjs`
+is the only gate added since (`git diff --name-status ac4a9a0f..HEAD`).
+
+So the *forecast* value now equals the *current* value, and a wake reading
+`334.1` could reasonably conclude the retag has already happened. That is
+CLAUDE.md's criterion rule with a live cost: **the item embedded a prediction
+where it should have named a property.** Both are re-expressed below and in the
+gate header; no value is pinned any more.
+
+1. [x] **362.1 — adopt `astro check` with `noUnusedLocals` for `apps/docs`.**
+       `333.1`'s decision, filed rather than taken because the residual is 22
+       type errors in 7 files, all of them DOM narrowing inside inline
+       `<script>` blocks that readers copy — changing those changes published
+       sample code, which is a judgement about what the samples should teach,
+       not a lint fix. The enabling parts are mechanical: `@astrojs/check` as a
+       devDependency, an `apps/docs/tsconfig.json` extending
+       `astro/tsconfigs/base` with `noUnusedLocals` **and** `resolveJsonModule`,
+       and the command wired where the other docs gates run. **The dependency
+       on a BUILT `packages/core/dist` is load-bearing** — without it the same
+       command reports 76 phantom `ts(2307)`s, which this slice mistook for a
+       product defect for one round.
+       **AMENDED by Slice 364 — the `include` is load-bearing too, and this
+       item did not name it.** `astro/tsconfigs/base` sets
+       `"include": ["${configDir}/.astro/types.d.ts", "${configDir}/**/*"]`, so
+       extending it with nothing else makes the program the whole of
+       `apps/docs`: measured this wake, **377 files / 69 hints** against the
+       **164 / 27** recorded above, with the error count unchanged. Two of the
+       four published figures therefore do not reproduce from the config as
+       written here. `resolveJsonModule` is **already true** in that base, so
+       naming it as an addition misdescribes what is being extended. Stated as
+       a property rather than a config string, per CLAUDE.md's criterion rule:
+       **the committed tsconfig's `include` decides the program, so the
+       tsconfig and the file count it produces are recorded together**, and any
+       before/after error count (Accept (b)) is quoted with the file count of
+       the run that produced it.
+       - **Accept** — properties, not the values above, all of which are
+         snapshots to re-measure: (a) `npx astro check` exits **0** on a tree
+         where `packages/core` has been built, with the committed tsconfig;
+         (b) the error count before the change and after are both recorded,
+         from that same built state, so the delta is attributable; (c) each
+         inline-`<script>` narrowing is either a real improvement to what the
+         sample teaches, or is recorded as suppressed **with the reason** —
+         deciding that some of them should be suppressed rather than "fixed" is
+         a satisfying outcome; (d) the gate is verified in the narrowest
+         context that must run it, not only in CI (`LOOPS.md`'s own rule), and
+         if it cannot run somewhere it fails loudly there.
+       - **Refusing is a satisfying outcome** if the 22 turn out to be
+         load-bearing sample code whose narrowing would teach the wrong thing —
+         say so with the count that survived.
+       - **Lane:** cloud-takeable. Node, config and prose; no browser, no
+         screenshot.
+       - **DONE 2026-09-24 — adopted, and it found a live defect.**
+         `@astrojs/check` is a docs devDependency, and `apps/docs/tsconfig.json`
+         extends the base with `include: [".astro/types.d.ts", "src/**/*"]` and
+         `noUnusedLocals`. With `packages/core` built, that program is
+         **164 files**.
+         - **Before: 562 errors**, not the 22 recorded here. 515 were
+           Astro-parser errors in `events.astro`, `js-behaviors.astro` and
+           `acr.astro`: `/</g` regex literals that the checker's TSX transform
+           reads as a closing tag. They are now `replaceAll('<', …)`, with
+           identical output. `tokens.astro` held orphaned
+           `</tbody></table></div>))}` since `315fdece` (2026-08-16), which
+           **rendered a stray "))}" on the live /reference/tokens/ page**; it is
+           removed.
+         - **The rest were typing, and none was suppressed:**
+           `import.meta.glob<string>` for the raw-CSS imports, a heading-level
+           cast, and typed DOM selectors in page scripts (the Gallery layout,
+           htmx, detail-form and value-help). No copyable Demo string changed.
+         - **After: 0 errors, 26 hints, exit 0.** It runs as `check:types`
+           right after `check:repo` in the docs build, and it passed inside the
+           clean `npm ci` of the Containerfile build. The rebuilt `dist`
+           differs from the previous build only in the tokens page (stray text
+           1 → 0); every other page and every JS bundle is byte-identical.
+         - **Red-proof:** an injected unused local fails it with `ts(6133)`,
+           exit 1. CI has not run it yet.
+
+         Jev: supported 0.93.
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. **This slice owes none**: the only rendering change is the
+deletion of an import that reached the HTML zero times, and the built page is
+byte-identical before and after, which is a stronger statement than a
+screenshot comparison would be. The eight older visual debts carried in the
+hand-off are unchanged and unspent.
+
+## Slice 357 — Standardize sweep, 4 of 4 lanes, all clean — and the finding is that `350.1`'s "does this window have lane input" predicate is **not per-lane**: lanes 1 and 3 read the docs tree, lane 2 reads only the core stylesheets, so ORing the two inputs credits lane 2 with **41.7%** of windows it is structurally blind to (2026-09-08)
+
+**Dispatched by rule 2** at `Standardize 4 / 4 Continue rounds OVERDUE`, exactly
+as the previous hand-off's ⚠ block predicted — re-read this wake rather than
+trusted. Cloud wake. Rule 1 found no P0
+(`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0** across 31 open items).
+Rule 3 read `Objective 1 / 3 ok [356]` and sits **below** rule 2 anyway. Rules
+4-8 not reached. Rule 5's line read `ok` — **0** wake-dates newer than the
+newest pair, 8 of 47 names paired across days, and no name in the comparable
+set regresses on two consecutive runs.
+
+Step 0: container **DETACHED** again (`git branch --show-current` empty), trap
+1, fixed with `git checkout -B main origin/main` before any commit. Trap 2 clean
+in one `--unshallow` — **2,081** commits, no `shallow.lock`, and it again
+brought the tags (`git tag | wc -l` → **8**, run rather than assumed). Unlike
+the last several wakes `origin/main` arrived **not** as a forced update:
+`d876765..30d94cc`, a fast-forward onto the previous wake's own tip.
+
+**Step 1 — both intakes read, with the controls `ENVIRONMENT.md` §8 names:**
+`/issues?state=open` → HTTP 200 len **1**; `/discussions` → HTTP 200 len **0**;
+`/not-a-real-route` → **404**, the control that makes the `200 []` mean *served
+and empty*. Issue #2's `updated_at` is still `2026-09-06T15:10:34Z` — a
+**twenty-third** consecutive hand-off with no movement. Nothing new to triage,
+so Step 1 committed nothing.
+
+**The archive sweep was evaluated and declined, and the number is now the
+argument for taking it.** `roadmap_scope.py` at `30d94cc7` reports
+**5,307 / 11,564 = 45.9%**, 27 eligible targets, 13 named by a still-open item
+(236.2's report, read before concluding). That equals the previous hand-off's
+reading taken one commit earlier at `78e96150`, which is **expected rather than
+informative**: `30d94cc7` is that wake's recording commit and does not touch
+`ROADMAP.md`, so the four-wake rise (41.1 → 43.9 → 44.5 → 45.9) has had no
+opportunity to continue — it has not paused, it has not been sampled again. The
+revision is named because **this commit moves it, UPWARD**, and the first draft
+of this paragraph forecast the opposite: it said *"every line of this slice
+lands under an open heading, so the closed share falls."* Slice 357 closes its
+only item in the same commit, so it is a **closed** slice and all 238 of its
+lines land as closed history — `919d55d5` reads **5,525 / 11,802 = 46.8%**, up
+0.9pp. Recorded rather than quietly fixed, because it is CLAUDE.md's criterion
+rule biting inside a sweep: the prediction was checkable and wrong, and only
+re-running the script caught it. Re-run
+`python3 scripts/loops/roadmap_scope.py` at the commit rather than quoting this.
+It remains **4.4pp above `324.3`'s thirteenth sweep at 41.5%** and above
+every declined reading on record. Declined here for **scope, not the number**: a
+sweep is a hand-checked bulk edit one slice at a time (CLAUDE.md), and this
+wake's finding is a measurement with two red-proofs. `249.12`, the open
+**OWNER OR ARCHITECTURE CALL** on the archival trigger, is named for a
+**seventeenth** consecutive wake.
+
+### The four lanes — every reading measured this wake, none cited
+
+- **Lane 1 of 4 — `scan:dead-style`: on the refusal set, page for page, a
+  second time.** **0** dead attributes on **0** pages; **1,365** live
+  attributes, **1,813** declarations, **345** multi-declaration. Per
+  declaration: **11 dead on 9 pages** — `/patterns/` ×3, `amount` / `byline` /
+  `progress` (`inline-size: 100%`), `combobox` (`margin-block-start`),
+  `state-patterns` (`align-items`), `/base/motion/` (`display: inline-block`),
+  `/patterns/app-launch/` (`block-size: 2rem`), `/reference/tokens/`
+  (`inline-size:var(--bo-space-0)`). Byte-identical to Slice 350's reading,
+  **and this time that means something**: this window DID change lane 1's input
+  (two `apps/docs/src/` pages), so the reading is unchanged on inputs that
+  moved, not unchanged by construction. Every one is refused with its
+  measurement in Slice 345; `345.1` stays open and untouched.
+- **Lane 2 of 4 — `report:css-repeats`: no delta, and the delta could not have
+  existed.** **74** source files · **242** rules with 3+ declarations · **230**
+  distinct bodies · **8** bodies repeating — byte-identical to Slice 345's and
+  Slice 350's `74 / 242 / 230 / 8`. Checked against `LOOPS.md`'s settled table
+  **member for member**, not by the count. **This is the finding below**: lane
+  2's only input is `packages/core/src/css/`, last touched by `e4742fd4`
+  (2026-09-07, Slice 338) — **47** first-parent commits ago. That single commit
+  predates all three of the sweeps reading `74 / 242 / 230 / 8` (345, 350, 357),
+  so this third consecutive identical tuple was never available to be anything
+  else. (Slice 350's *"sixth consecutive identical reading"* is the run of
+  **8 repeating bodies**, a longer and different series — 345's own text records
+  the tuple moving `237 / 225 / 8` → `242 / 230 / 8` at that sweep.)
+- **Lane 3 of 4 — `report:prose`: every flagged page carries a verdict, and it
+  is the one lane that MOVED.** 119 documentation pages of 128 built · median
+  **798** · mean **959** · total **114,124** words, against Slice 350's
+  `798 / 956 / 113,787` — **+337 words**, from the two `apps/docs/src/` pages
+  this window touched (`data-table.astro`, `scale.astro`, both Slice 352's
+  withdrawal). The flagged union is **15** pages: the 10 over the corpus 2x
+  (1,596) plus `/base/motion/`, `/concepts/layouts/`, `/concepts/js-behaviors/`,
+  `/concepts/design-language/` and `/concepts/scale/` over a family 2x. Checked
+  against the ENUMERATION the lane mandates — **158.1's twelve**
+  (`data-table`, `richtext`, `which-pattern`, `form`, `editable-grid`,
+  `list-report`, `calendar`, `money`, `combobox`, `tabs`, `layouts`,
+  `output-form`), **161.1's three**, **178.3's `/concepts/scale/`** — all 15 are
+  members, and `/patterns/output-form/` is again the one non-flagged member.
+  **No page carries no verdict**, so nothing to record.
+- **Lane 4 of 4 — `report_loop_prose.py`: no file changed accumulate class, the
+  region is FLAT, and its RATIO fell without the region losing one word.** The
+  dispatch region reads **7,548** words at **41.8%** of the file. Slice 350
+  published **7,548 at 42.0%**, and the ratio moved on the **denominator**:
+  `1310b81a` (Slice 353) is the one commit in this window touching `LOOPS.md`,
+  and it took the file **17,980 → 18,046 (+66)** while leaving the region at
+  **7,548 exactly** — every word of it landed below `## Playbooks`, which is
+  where 353.1 replaced the hand-rolled recipe. Measured with
+  `git show <rev>:LOOPS.md` split on `## Playbooks` at both revisions, rather
+  than inferred from "the file looks unchanged": it is not unchanged, and the
+  *reading a wake acts on* is the one that is. This is the playbook's own
+  warning about reading the ratio arriving as a live case — a falling
+  percentage here is the file growing elsewhere, not the region shrinking. The
+  per-section attribution 353.1 added now prints
+  itself, and it **reproduces `341.1`'s series exactly** — `### Step 0c` at
+  **1,516** body words, **+194** since the last commit that reduced the region
+  (`f9e0f17d`), **1 of 16** sections moved, and the block's own assertion
+  `body 7,492 + 56 heading = 7,548` holds. That is two independently written
+  instruments agreeing: `341.1`'s figure was a hand-run per-revision series, the
+  block's is generated. **`341.1` is open and owns that question**; nothing is
+  proposed here.
+
+### The finding: `350.1`'s predicate is one predicate for three lanes that do not share an input set
+
+`350.1` asks whether rule 2's counter should know if lanes 1-3 have anything to
+read, and its base-rate command classifies a window by
+`packages/core/src/css/ OR apps/docs/src/`. **That is right for lanes 1 and 3
+and wrong for lane 2**, and this wake is the demonstration rather than a
+prediction: the window changed `apps/docs/src/` and not
+`packages/core/src/css/`, so the OR calls it *has lane input* — while lane 2
+could not have moved by a single number.
+
+**Which lane reads which tree is read off the code, not the header prose.**
+`report-css-repeats.mjs` imports `srcCssFiles, srcCssRoot as CSS` from
+`src-css-files.mjs`, whose `srcCssRoot` resolves to `packages/core/src/css`;
+`report-prose.mjs` and `scan-dead-style.mjs` both import `distPages(DIST)` and
+read built pages, whose text and computed values depend on **both** trees (the
+generated half of a docs page derives from the core CSS — `/concepts/which-pattern/`
+is 310 authored + 2,015 generated).
+
+**Red-proved by injection, with both controls, and the injections checked
+before the results were believed** (CLAUDE.md: a green red-proof is a defect in
+the injection until proven otherwise). The *same* three-declaration body —
+`list-style: none; margin: 0; padding: 0`, the x3 group already in the report —
+was injected once into each tree, each time asserted to be present exactly once
+in the file and outside any comment, and reverted with the count re-asserted at
+zero:
+
+| injected into | rules | repeats | that group |
+|---|---|---|---|
+| (baseline) | 242 | 8 | x3 |
+| `packages/core/src/css/components/badge/badge.css` | **243** | 8 | **x4**, listing the probe selector |
+| `apps/docs/src/pages/components/badge.astro` | 242 | 8 | x3 — **unmoved** |
+| (after both reverts) | 242 | 8 | x3 |
+
+The positive control moves the number and the negative control does not, on the
+identical declaration list — so the discrimination is the TREE, not the content.
+
+**The base rate, re-measured at execution time as `350.1`'s Accept requires**,
+by 350.1's own command at `30d94cc7`, extended to bucket the two trees
+separately instead of ORing them. 157 Standardize rows resolve to **140**
+distinct first-parent commits → 139 windows, windowed `a..b^` per `351.1`'s
+correction:
+
+```
+python3 - <<'PY'
+import re, subprocess
+def sh(*a): return subprocess.run(a, capture_output=True, text=True).stdout
+order = sh('git','rev-list','--first-parent','HEAD').split()
+pos = {c: i for i, c in enumerate(order)}
+full = {c[:n]: c for c in order for n in (7,8,9,10,40)}
+std, seen = [], set()
+for line in open('.roundtable/loop-log.md'):
+    if line.startswith('- ') and ' · Standardize · ' in line:
+        m = re.search(r' · ([0-9a-f]{7,40})\s*$', line.rstrip())
+        if m and full.get(m.group(1)) and full[m.group(1)] not in seen:
+            seen.add(full[m.group(1)]); std.append(full[m.group(1)])
+std.sort(key=lambda c: -pos[c])
+CORE, DOCS = 'packages/core/src/css/', 'apps/docs/src/'
+cnt = {'neither':0,'core_only':0,'docs_only':0,'both':0}; span = 0
+for a,b in zip(std, std[1:]):
+    commits = sh('git','rev-list','--first-parent',f'{a}..{b}^').split(); span += len(commits)
+    files = {f for c in commits for f in sh('git','show','--name-only','--format=',c).split('\n') if f}
+    hc = any(f.startswith(CORE) for f in files); hd = any(f.startswith(DOCS) for f in files)
+    cnt['both' if (hc and hd) else 'core_only' if hc else 'docs_only' if hd else 'neither'] += 1
+print(len(std)-1, 'windows, span', span, cnt)
+PY
+# 2026-09-08 at 30d94cc7: 139 windows, span 1869
+#   neither 20 (14.4%) · core_only 7 (5.0%) · docs_only 38 (27.3%) · both 74 (53.2%)
+```
+
+- **Lanes 1 and 3 are blind on `neither` = 20 of 139 (14.4%)** — which
+  reproduces `351.1`'s amended figure to the window, at a later commit.
+- **Lane 2 is blind on `neither + docs_only` = 58 of 139 (41.7%)** — **2.9x** the
+  **14.4%** `351.1` amended that rate to, and **4.1x** the **10.1%** `350.1`
+  itself records. The gap is entirely the 38 `docs_only` windows the OR hands it.
+
+  > **Amended 2026-09-08 (roadmap 359.2).** This read *"nearly **3x** the rate
+  > `350.1` records"* — which is `351.1`'s amended figure carrying `350.1`'s
+  > name, one bullet after the line that credits 14.4% to `351.1` correctly. The
+  > multiple was right and the attribution was not; against `350.1`'s own
+  > published rate the gap is **larger**, so nothing downstream moves.
+
+**Reconciled and discriminated before quoting** (CLAUDE.md). The four buckets
+partition — 20 + 7 + 38 + 74 = 139, asserted in the script rather than added by
+eye. The predicate is not uniformly true or false: all four buckets are
+non-empty and the largest is 53.2%, so this is not the *identical value across
+many inputs* tell. And the `a..b` form of the same command still returns
+`139 / 15 / 13 / span 2008` with an independent `git rev-list` span of **2008**
+— unmoved from what `351.1` published, so **the base rate has not drifted**;
+what changed is only that it is now split per lane.
+
+**What this does NOT say**, because the temptation is to over-read it: it is not
+a claim that 41.7% of lane-2 passes were wasted. Lane 2 is the cheapest of the
+four (a file walk, no browser, against the **123s** Slice 350 measured for lane
+1 in this container — cited, not re-timed here), and its
+step also re-checks the settled table member-for-member, which is a reading of
+the table and not of the tree. The claim is narrower and is about **evidence**:
+on those 58 windows *"no delta, a Nth consecutive identical reading"* is not a
+statement about the stylesheets.
+
+**Fixed where it is read, and nothing else was built.** `report-css-repeats.mjs`
+now closes with the tree it walked, derived from `srcCssRoot` rather than
+hand-typed, so the sweep reading the output is told what an unchanged reading
+can and cannot mean. **No gate** — *"this window could move this lane"* needs a
+diff read to answer (`350.1` measured that itself: a file-level predicate
+reported an instrument change on `scan-dead-style.mjs` that turned out to be
+comment-only), and roadmap 94.11 forbids gating a semantic property. **No new
+instrument, and no fourth lane** — the finding is a sentence of output on an
+existing report and an amendment to the open item that owns the decision.
+
+1. [x] **357.1 — DONE 2026-09-08. `350.1`'s Accept gains a third requirement,
+       and lane 2's report says what its own silence means.** Two changes, both
+       above: the per-lane base rate is recorded as an amendment on `350.1`
+       (which stays **open** — the decision is still unmade, and making it is
+       rule 4's, not a sweep's), and `report-css-repeats.mjs`'s closing note
+       names `packages/core/src/css` as the only tree that can move its numbers.
+       - **Verified:** the report's new line renders the path **derived** from
+         `srcCssRoot` (`packages/core/src/css`), not typed; both injections
+         above land and revert with their counts asserted; all 17 CI-runnable
+         entry points green.
+
+## Slice 352 — `325.2` closed by WITHDRAWAL: the *Initial render* column's method is unrecoverable, and the measurement that decides it needs no knowledge of the missing machine — a machine gap is a roughly CONSTANT multiple, and this column's is 4.2x / 11.9x / 7.3x while its own neighbour's is 0.93x / 0.72x / 1.19x (2026-09-08)
+
+**Dispatched by rule 4**, cloud wake, on the oldest still-open item no other
+kind of block covers. Step 0: container **DETACHED** again (trap 1;
+`git branch --show-current` **empty**, fixed with `git checkout -B main
+origin/main` before any commit), and `origin/main` again arrived as a **forced
+update** (`26447ba...2caaa16`). `HEAD` equalled `origin/main` at **`2caaa16f`**,
+which is the previous wake's own recording commit, so **no other dispatcher had
+landed anything between the two wakes**. Trap 2: the clone was shallow and this
+item's verdict is a history search, so it was unshallowed before any figure was
+taken — **2,070** commits at `HEAD`, no `shallow.lock`, and the unshallow again
+brought the tags (`git tag | wc -l` → **8**, run rather than assumed). Step 0b:
+`Standardize 0 / 4`, `Objective 0 / 3`, `Optimize 0 wake-date(s) newer` — all
+three `ok`, over 1,662 logged iterations. Step 1: both intakes read with
+`ENVIRONMENT.md` §8's controls (`/issues?state=open` **200 len 1**,
+`/discussions` **200 len 0**, `/not-a-real-route` **404**) — **no new input, so
+Step 1 committed nothing**; issue #2's `updated_at` is unmoved at
+`2026-09-06T15:10:34Z` for an **eighteenth** consecutive hand-off. Step 2: rule
+1 `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0** across 32 open items,
+rule 2 `0 / 4`, rule 3 `0 / 3`, rule 5 `ok` (not `STALE`), so **rule 4** — and
+every open item older than `325.2` was re-checked in the file rather than
+carried from the hand-off: Slice 15 (AT runtime evidence, owner hardware),
+`112.3`, `112.4`, `249.7`, `249.10`-`249.13`, `273.2`, `296.3` all
+owner-blocked, and `320.3` browser-blocked **in the screenshot sense** (its own
+Accept says so in as many words).
+
+### The search: four independent passes, and the method is not there
+
+`325.2`'s Accept makes *"the original method is recoverable"* and *"it is not"*
+equally satisfying, so the search is the work. Each pass covers something the
+others cannot, and every command is written next to its claim:
+
+```
+git log --all --oneline -S'85 ms'   -S'558 ms'   -S'3,783'      # where the figures enter
+git log --all --diff-filter=AD --name-only -- '*stress*'        # was a probe ever kept?
+git log --all --format='%h|%s|%b' | grep -in 'forced.layout\|performance.now\|domContentLoaded'
+grep -rn 'forced-layout\|forced layout\|hidden-tab' ROADMAP.md ROADMAP-archive.md .roundtable/*.md
+```
+
+- **The figures enter at `4fbe1afe`** (2026-08-15 12:11 +0800, *"Long-term item:
+  virtualization hooks — measured, closed as won't-build"*), and the two
+  throttled rows at **`961fd043`** (13:01 +0800, the decisions grill). Both
+  commits record the numbers. **Neither records a window**, in the message or
+  in the diff — and `4fbe1afe`'s entire diff is three files: `ROADMAP.md`, the
+  docs section, and the `/stress` route in `examples/po-app/server.mjs`, which
+  contains **no timing code at all**.
+- **No probe was ever kept beside them.** `--diff-filter=AD` over every ref
+  returns exactly one file in the repository's history — this repo's *current*
+  `apps/docs/scripts/measure-stress.mjs`, added by `82dc60e6` on **2026-09-07**,
+  three weeks later.
+- **Over all 2,070 commits, the grep finds two hits**, one about an unrelated
+  sweep. The one that is about this measurement is the whole surviving record:
+  *"the first measurement pass misread a 45s 'renderer freeze' at 5k rows — it
+  was a hidden-tab artifact (background tabs never fire rAF and don't run
+  layout), not the page; re-measured with synchronous forced-layout reads."*
+- **In tracked prose it survives once**, archived at `ROADMAP-archive.md:16244`,
+  identical text.
+
+**That fragment is a diagnostic aside, not a definition, and the distinction is
+the item.** It says how one artefact was ruled out and hints that the reading
+ended in a forced layout. It names **no start point, no end point and no
+machine** — so no later run can know whether it is measuring the same thing.
+Recoverable: **no**.
+
+### The measurement that decides it needs no knowledge of the missing machine
+
+The obvious objection to withdrawing is that the docs page already carries a
+caveat — *"read the shape rather than the absolute figures"* — and a shape is
+supposed to survive an unknown machine. **It does not survive an unknown
+window**, and one re-run shows it without ever needing to know what machine the
+2026-08-15 sitting used.
+
+`npm run measure:stress -w docs -- --rows 1000,5000,20000 --repeat 5`, medians
+over 5 runs, controls **1000/1000, 5000/5000, 20000/20000 checked**, machine
+recorded by the probe (Intel Xeon @ 2.80GHz, 4 cores, 15.7 GB, linux x64,
+node v22.22.2, `Chrome/141.0.7390.37`, throttle 1, viewport 1440):
+
+| n | published (2026-08-15) | this run | ratio |
+|---|---|---|---|
+| render 1,000 | 85 ms | `render-dcl` 357.1 ms | **4.20x** |
+| render 5,000 | 174 ms | 2,073.1 ms | **11.91x** |
+| render 20,000 | 558 ms | 4,092.9 ms | **7.33x** |
+| select-all 1,000 | 4 ms | 3.7 ms | **0.93x** |
+| select-all 5,000 | 18 ms | 12.9 ms | **0.72x** |
+| select-all 20,000 | 49 ms | 58.4 ms | **1.19x** |
+
+**A machine gap is a roughly constant multiple; a method gap is not.** The
+select-all column — measured on the same page, in the same run, on the same two
+machines — reproduces at **0.93x / 0.72x / 1.19x**, which is what "a different
+machine" looks like. The render column reads **4.20x / 11.91x / 7.33x**, which
+is not a multiple at all. Stated at the strength the evidence carries: this does
+**not** prove the 2026-08-15 render figures were wrong. It proves the
+disagreement is **undiagnosable** — the two windows differ (the probe's spans
+`responseEnd`→`domContentLoadedEventEnd`, so it carries parsing the response and
+the reference app's own subresources), the two machines differ, and with no
+method recorded nothing can separate them. The shapes disagree too — published
+**1 : 2.05 : 6.57**, probe **1 : 5.81 : 11.46** — so *"read the shape"* is a
+fallback that cannot be checked either.
+
+**And the page shipped a contradiction, which is checkable without any
+judgement.** `/components/data-table` said *"the harness is kept precisely so
+you can get figures for **your** hardware"* directly above a column that
+`measure-stress.mjs`'s own header says its render figures are **NOT** comparable
+to. Two shipped documents in this repository, pointing opposite ways about one
+column, and the reader is the one who pays.
+
+### The verdict, and the third branch refused with its reason
+
+`325.2`'s Accept admits a third reading — *a shape-only column kept undefined,
+admissible only if it says what a reader is supposed to do with it*. **Refused**,
+because the reader cannot do the thing the page told them to: the shape is not
+checkable, and the one instrument the page points at produces a different one.
+So the second branch, **withdrawal, the way the 2026-09 re-run was withdrawn** —
+called out on the page rather than deleted, because the lesson is the reusable
+part.
+
+What changed:
+
+- **`/components/data-table`** — the *Initial render* column is out of the
+  table; a withdrawal paragraph carries the five figures it held
+  (85 / 174 / 558 ms, and 1,625 / 3,783 ms throttled), why they are withdrawn,
+  and the re-measurement above. The guidance sentence that rested on the
+  withdrawn `~3.8 s` is **re-based on a figure anyone can re-derive**: the
+  probe's defined render window at 20k reads **~4.1 s** on the recorded
+  four-core container, larger there than every other cost measured beside it, so
+  *"the genuine pain point is initial render at 20k on slow hardware"* survives
+  on evidence rather than on the withdrawn number. `Render and scroll scale
+  linearly with no cliff` is softened to what both sittings actually show —
+  cost grows with row count and nothing steps — because the linearity claim
+  rested on the withdrawn column.
+- **`/concepts/scale`** — the same column removed from the duplicate table, with
+  a note pointing at the full withdrawal.
+- **`measure-stress.mjs`** — the header paragraph that existed to say *"not
+  comparable to the Initial render column"* now records the withdrawal and the
+  `--diff-filter=AD` search behind it, instead of pointing at a column that is
+  gone.
+
+**The two kept columns are kept on the evidence above, not by default** —
+select-all reconciles. The style flush is the one loose end and it is filed
+below rather than waved through.
+
+### This wake's own instrument was wrong first, on schedule — and it cost a false P0
+
+The **first** `measure:stress` run failed its own control on **6 of 6** runs
+(`0/1000 checked`, `0/5000 checked`), and `check:po-app` then failed **3 of 20
+behaviours**, including *"the shared page template inits data-tables: select-all
+on /pos checks every row"*. That is the **exact signature** of the real
+2026-08-23 → 2026-09-07 defect Slice 309 found, in the same words, on a gate CI
+runs — which reads as a P0 that preempts the whole dispatch.
+
+**It was neither.** `packages/core/dist` did not exist, because the wake had not
+yet run `npm run build -w @busy-office/ui`, so `npm pack -w @busy-office/ui`
+shipped the reference app a tarball with **no behaviour bundle in it**. The
+cross-check that settled it before any diagnosis was written: **CI on this exact
+commit `2caaa16f` was green at `2026-09-08T11:04:54Z`**, and CI runs
+`check:po-app`. After `npm run build -w @busy-office/ui` and
+`rm -rf examples/po-app/node_modules examples/po-app/busy-office-ui.tgz`:
+`check:po-app` **20 / 20**, and the probe's controls **1000/1000, 5000/5000,
+20000/20000**. Filed as `352.1`.
+
+1. [x] **352.1 — a missing `packages/core/dist` is reported as an application
+       defect, in the exact words of a defect this repo has actually had.**
+       `check:po-app` and `measure:stress` both boot the reference app from a
+       freshly packed tarball, and neither asks whether that tarball contains
+       the behaviour bundle. When it does not, the failure text is *"the
+       select-all did not select the rows"* — indistinguishable from the real
+       break, and the wrong half of the system to go looking in. It cost this
+       wake a false P0 and was settled only by a green CI run on the same
+       commit.
+       - **Accept** — the property, not a predicted fix: a wake that boots the
+         reference app with an unbuilt `packages/core` is told **which** of the
+         two it is. Either `po-app-harness.mjs` asserts the packed tarball
+         carries the behaviour bundle before booting and names that when it
+         does not, **or** a recorded reason it should not — measuring that the
+         precondition cannot occur in any environment a wake actually runs in
+         is a satisfying outcome and closes it by writing that down.
+         Red-proving it means `rm -rf packages/core/dist` and watching the new
+         message appear, not watching the old one fail.
+       - **DONE 2026-09-24.** `po-app-harness.mjs`'s `startPoApp()` now checks,
+         before booting, that the INSTALLED `@busy-office/ui` carries every file
+         po-app serves. The list is derived, not written out: each `/assets/`
+         path in `server.mjs`, plus every module `js/index.js` imports,
+         transitively. Both callers go through it (`check-po-app.mjs`, and
+         `measure-stress.mjs` including `--no-install`). The precondition is
+         real: `packages/core` has no `prepack`, so an unbuilt `dist` packs a
+         tarball without it. **Red-proof:** with `packages/core/dist` moved
+         aside, `check:po-app` exits 1 with *"the installed @busy-office/ui is
+         missing 4 file(s) po-app serves … packages/core/dist is not built …
+         This is a BUILD-STATE problem, not an app defect"*, and the log holds
+         "did not select" 0 times. `dist` moved back (179 files, identical
+         checksums) and the gate is green again: 20 behaviours. Jev: supported
+         0.96.
+         [**Corrected by Slice 384:** a STALE dist (built before a behaviour existed)
+         passed this check and still produced the false select-all failure; the
+         harness now also checks the installed `index.js` exports every name
+         `server.mjs` imports. "did not select 0 times" could not fail on
+         `check:po-app` (it is not that gate's text), and the red-proof never
+         reached the transitive walk; both are now red-proved on scratch copies,
+         along with a partial dist and an unparsable `/assets/` reference. The
+         message named "not built" even when only po-app's install was stale; it
+         now chooses the cause from what it can observe.]
+
+2. [x] **352.2 — the two KEPT columns have no recorded method either, and the
+       machine gap they imply is not one machine gap.** Slice 352 kept
+       *Select-all* and *Post-bulk-check style flush* because select-all
+       reconciles against the probe at 0.93x / 0.72x / 1.19x. The style flush
+       does not reconcile the same way: published `negligible` / 231 ms / 610 ms
+       against the probe's **89.2 / 345.1 / 2,206.7 ms** — **1.49x at 5k and
+       3.62x at 20k**, on the same run, from the same sitting, where select-all
+       read ~1x. Layout-bound work legitimately scaling differently from
+       JS-bound work across two machines is a live explanation and is not
+       measured; so is the same missing-window problem the render column was
+       withdrawn for.
+       - **Accept** — the property: whichever it is, it is recorded with the
+         command that shows it. Finding that the two workloads legitimately
+         scale apart by that much across these machines is a satisfying outcome
+         and closes it by writing that down beside the column; finding they do
+         not is equally satisfying and closes it by withdrawing the style-flush
+         column the way the render one went. Note the probe's own n=20,000
+         style-flush spread is **1,384.9-2,930.4 ms over 5 runs**, so any
+         verdict here needs more than one sitting on each side.
+       - **DONE 2026-09-24 — KEPT: the two columns reconcile the same way.** Two
+         sittings of `npm run measure:stress -w docs -- --rows 1000,5000,20000
+         --repeat 7`, plus one with `--throttle 4`, on a recorded machine
+         (Apple M4, Chrome 153, 1440px viewport; every run's control selected
+         every row):
+         - **Unthrottled.** Select-all 0.7 / 3.3 / 13.6 ms and style flush
+           9.9 / 46.4 / 185.8 ms (sitting B within 0.2 ms and 4 ms). Against
+           the published figures, both columns sit at the same fraction at each
+           row count: 0.18 and 0.20 at 5k, 0.28 and 0.30 at 20k.
+         - **4× throttle.** Select-all ×0.87 / ×0.94, style flush ×1.12 /
+           ×1.14.
+
+         So the two workloads do not scale apart across these machines. The
+         earlier 3.62× rested on a probe run that spread 2.1× within its own
+         five runs, where these spread under 8%. A faster machine moves both
+         columns together, which an unrecorded window would not. The data-table
+         page now says that beside the table, with the machine, both columns'
+         figures and the command; live at 1440/390 in light and dark, 0
+         overflow. Jev: supported 0.95.
+         [**Corrected by Slice 384:** the verdict (keep) stands, but on the Accept's
+         other branch. The two workloads DO scale apart, by browser build: on the
+         same M4, Chrome 141 puts the flush at 28-31× select-all against Chrome
+         153's 14×, and the recorded Xeon (Chrome 141) read 24-38× at every row
+         count, not only at 20k. The published 12-13× is matched only on the
+         2026-08-15 stylesheet; today's costs 5-11% more. The throttled ratios
+         were derived, not independent, and the published throttled rows cannot
+         be a 4× throttle of that sitting. "Under 700 ms even throttled" is about
+         0.8 s today. The 20k flush spread varied 2-26% across later sittings, so
+         "under 8%" held for one. The page now says this and gives the full
+         command.]
+
+**The archive sweep was evaluated and declined on the measured trigger.**
+`roadmap_scope.py` read closed-history share **4,129 / 10,606 = 38.9%** at
+`2caaa16f`, with 20 eligible targets, **11** of them named by a still-open item
+(236.2's report, read before concluding). Below every trigger the last sweeps
+used — the tenth dispatched at 55.1%, the eleventh at 56.7%, the twelfth
+declined at 40.6%, the thirteenth taken at 41.5%. **`249.12` is named for a
+TWELFTH consecutive wake**; nothing is proposed here. Re-run the script at your
+own commit — this wake's own text raises the denominator, not the ratio's
+numerator, because every line it adds lands under an **open** heading.
+
+**NOT VERIFIED, said plainly — and this wake DOES add visual debt.** No
+1440/390 light-and-dark screenshots: a cloud wake has no Podman. Two docs tables
+lose a column (`/components/data-table` 4 → 3, `/concepts/scale` 3 → 2) and four
+paragraphs change, so **"does it look right" is genuinely unchecked** — column
+widths redistribute, and the `4x CPU throttle` badge now sits in a two-column
+table on `/concepts/scale`. What IS checked is every structural property the
+whole-tree gates assert, listed in the commit. A local wake should look at both
+pages at 1440 and 390 in both themes; until then this is debt, not verification.
+
+## Slice 351 — Objective grill of Slices 324, 325, 347, 350: 63 of 65 assertions reproduce to the digit, and the finding is that the base rate `350.1` tells a later wake to re-run counts a sweep's OWN conversions as inputs it had to read (2026-09-08)
+
+**Dispatched by rule 3**, cloud wake, at `Objective 4 / 3 slices OVERDUE [324,
+325, 347, 350]`. Step 0: container **DETACHED** again (trap 1;
+`git branch --show-current` empty, fixed with `git checkout -B main
+origin/main` before any commit), and `origin/main` again arrived as a **forced
+update** (`26447ba...0ab8a56`) — `0ab8a56` being the previous wake's own tip, so
+no other dispatcher had landed anything between the two wakes. Trap 2 clean in
+one `--unshallow` (**2,068** commits, no `shallow.lock`), and it again brought
+the tags (`git tag | wc -l` → **8**, run rather than assumed) — the finding here
+is a history measurement over 139 commit windows, so the clone was deepened
+before any figure was taken. Step 1: both intakes read with `ENVIRONMENT.md`
+§8's controls — `/issues?state=open` **200 len 1**, `/discussions` **200 len
+0**, `/not-a-real-route` **404** — issue #2's `updated_at` unmoved at
+`2026-09-06T15:10:34Z` for a **seventeenth** consecutive hand-off, so no new
+input and Step 1 committed nothing. Step 2: rule 1 no P0
+(`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0** across 31 open items),
+rule 2 `0 / 4` (spent by Slice 350), **rule 3** OVERDUE. Rules 4-8 not reached.
+**Rule 5 was not reached and would not have fired** — its line reads `ok`, not
+`STALE`: 0 wake-dates newer than the newest pair, 8 of 47 names paired across
+days.
+
+**Scope, per `LOOPS.md` §6 step 0: four of four, nothing dropped.** No earlier
+grill names 324, 325, 347 or 350 —
+`grep -hoE '^## Slice [0-9]+ — Objective grill of [^:—]*' ROADMAP.md ROADMAP-archive.md`
+returns 346→{322,342}, 341→{316,319,339}, 337→{297}, 336→{315,332,333} and back;
+none names any of these four. `.roundtable/INDEX.md` reports **4 repeated
+subject(s)** across 200 files at dispatch, and this grill adds no repeat. Two of
+the armed four are still **open** (325 via `325.2`, 350 via `350.1`) — the same
+2-of-4 divergence the previous hand-off measured on this same arming set, which
+is what `349.1` is open about and is not a reason to skip them: their closed
+items were audited and the open items' Accepts were read, not judged. Slice 347
+is audited **with** Slice 324, its body being almost entirely `324.1`'s closure.
+
+**Every verdict in all four slices survives.** `324.1`'s refusal of a rule-5
+direction, `324.2`'s refusal of both its escape hatches, `324.3`'s archive
+sweep, `325.1`'s refusal of the citation gate and `347.1`'s `absent` fix are
+each correct, and each measurement they turn on reproduces — including
+`324.2`'s **98-byte** README lag, which still reads 98 at this tree. The full
+65-row table, the two smaller defects and this grill's own two wrong instruments
+are in `.roundtable/grill-objective-324-325-347-350-2026-09-08.md`.
+
+### The finding: the predicate, not the number
+
+Slice 350's probe windows the log's Standardize commits as `a..b` and asks
+whether any commit in the window touched `packages/core/src/css/**` or
+`apps/docs/src/**`. **`b` is the sweep's own commit.** A sweep that converts a
+dead style lands its conversion inside its own window, so the window is
+classified *has lane input* on the strength of the sweep's OUTPUT rather than on
+anything the sweep had to read.
+
+The slice says exactly this in prose, about the one window it checked by hand —
+*"exactly one of its 16 commits touching a lane input — `161ede68`, **the
+sweep's own conversions**"* — and does not carry it back into the command.
+Re-run with the window a sweep could actually see when it started (`a..b^`),
+same log, same input paths:
+
+```
+windows=139
+  published predicate (a..b, INCLUDES the sweep commit): no-input=15 (10.8%)
+  what the sweep could SEE (a..b^, excludes its own commit): no-input=20 (14.4%)
+  windows classified has-input ONLY by the sweep's own commit: 5
+  those sweeps: 15f9bbc1 91677655 cdd7c07e 0768f09f 161ede68
+```
+
+**Discriminated by hand on two of the five** — in each, the only lane-input
+commit in the window is the sweep's own (`cdd7c07e` 1 file, `161ede68` 6). So
+the rate `350.1` is a decision about is **14.4%, not 10.1%**, understated by a
+third and in the direction that weakens the item's own case.
+
+**And the wake's own recording moved the published number before the wake
+ended.** `350.1`'s Accept says *"the figures are snapshots and **this commit
+does not move them** (it touches no lane input), but a later one will."* Read at
+each revision rather than from the working tree:
+
+```
+81f6281c  138 windows  14 no-input (10.1%)  13 no-both  span 1994   <- Step 0 tip
+6996a39   138          14 (10.1%)           13          1994        <- the slice's OWN commit
+65de70c   139          15 (10.8%)           13          2008        <- the SAME WAKE's recording
+0ab8a56   139          15 (10.8%)           13          2008        <- HEAD
+```
+
+True of the commit, false of the wake, and the parenthesis has the reason
+backwards: `record_iteration.py` appends a row carrying the sweep's sha, which
+**adds one window** — and that window is a no-input one exactly when the sweep is
+the kind `350.1` is about. Touching no lane input is what makes the wake move the
+numerator, not what stops it. `no-both` stays 13 because that window did touch an
+instrument (`6cfe380c`, comment-only) — the slice's own classification arriving
+as a control. The general form: **a figure published from inside a sweep is
+always one window short of the sweep publishing it**, because the window only
+exists once the wake records. `ENVIRONMENT.md` says where to *read* a figure;
+nothing said a wake's own last mandated step can move one it published three
+commits earlier.
+
+1. [x] **351.1 — the base-rate command `350.1` hands forward should window on
+       what the sweep could SEE, or say why it does not.** `a..b` includes the
+       sweep's own commit; `a..b^` is what the sweep had to read. The two
+       disagree on **5 of 139** windows and on the headline rate (10.8% vs
+       14.4%). This does not decide `350.1` — that item is still filed, not
+       decided — it decides which number `350.1` is decided on.
+
+       **DECIDED 2026-09-09 (Slice 370, Standardize sweep): the change is
+       ACCEPTED, and the command in `350.1` now windows `a..b^`**, with the
+       reason and both readings beside it. `350.1` itself is untouched and still
+       open — this decided which number it is decided on, which is all it
+       claimed to do.
+       - **What settled it was the spot-check `350.1` already carried in prose.**
+         That paragraph names `161ede68`'s only lane-input commit as *"the
+         sweep's own conversions"*, so `a..b` classifies that window as **has
+         lane input** on the strength of the sweep's own OUTPUT. Re-verified by
+         hand at `421afd15` on two of the five disagreeing windows:
+         `f9e0f17d..161ede68` is 16 commits, **15 of which touch no lane input**,
+         the 16th being the sweep; `d3bb443f..cdd7c07e` is the sweep's own single
+         `Gallery.astro`. The confound is the mechanism, not one window's
+         accident. The admissible counter-argument the Accept named — that a
+         sweep's own conversions ARE evidence the window had material — dies on
+         exactly this: it would make the predicate answer *"did the sweep change
+         anything"*, which is not `350.1`'s question and is knowable without it.
+       - **Both predicates re-measured at execution time**, unshallowed first
+         (`git rev-parse --is-shallow-repository` → `false`, 2,108 commits);
+         quoting nothing from above. At `421afd15`, 141 windows:
+         `a..b` **15** no-input (10.6%) / 13 also no-instrument / span **2037**;
+         `a..b^` **20** no-input (14.2%) / 18 / span **1896**.
+       - **The base rate moved in its DENOMINATOR only** — the counts 15 and 20
+         are identical to the pair this item published (measured by the Slice 351
+         grill at **`65de70c`**, not at `81f6281c`, whose own reading is the
+         earlier `14 of 138`), and the disagreement set
+         is **the same five windows** (`15f9bbc1`, `91677655`, `cdd7c07e`,
+         `0768f09f`, `161ede68`), reproduced rather than carried. The rate shift
+         (10.8%→10.6%, 14.4%→14.2%) is 139→141 windows and nothing else.
+       - **Reconciled twice before quoting** (CLAUDE.md): the `a..b` span sums to
+         **2037**, equal to an independent `git rev-list --first-parent
+         <oldest>..<newest>`; and `a..b^` is **exactly 141 lower**, one dropped
+         commit per window, which is the arithmetic the change predicts.
+       - **Verified as the ARTEFACT, not as the diff**: the amended block was
+         extracted back out of `ROADMAP.md` by content (asserting exactly one
+         block matches — the naive "first block" pick found **6** candidates) and
+         executed, printing `141 windows; 20 …; span 1896`, the figures written
+         beside it. A caret count over the extracted block read **3** where the
+         code has 2 — the third is this decision's own explanatory comment, the
+         "assertion tripped by its own explanation" shape, checked rather than
+         assumed.
+       - **No gate**, as both items said: what changed is which commit range a
+         command uses, and that is a one-line edit.
+       - **Accept — the property, not a predicted outcome:** the command
+         published in `350.1` is amended in place (236.2 permits amending, and
+         the slice is live) so that a later wake re-running it gets the
+         see-able window, **or** the reason for keeping `a..b` is written beside
+         it. **Refusing the change is a satisfying outcome** if the reason is
+         stated — an argument that a sweep's own conversions ARE evidence the
+         window had lane material is admissible, and would then have to say what
+         `350.1` is measuring, since it is no longer *"could three of the four
+         lanes have moved"*.
+       - **Re-measure both predicates at execution time rather than quoting the
+         figures above** — they are snapshots, and by construction the next
+         Standardize row moves the denominator. The probe is in the grill report;
+         it needs the clone unshallowed first (`git rev-parse
+         --is-shallow-repository` must read `false`) or the window walk silently
+         truncates at 50 commits.
+       - **No gate is proposed and the reason is the same one `350.1` gives:**
+         classifying this very window needed a diff read, so *"this change could
+         move a lane's reading"* is semantic (94.11). What is checkable is which
+         commit range the command uses, and that is a one-line edit, not a gate.
+       - **Finding the base rate has MOVED is a satisfying outcome**, not an
+         off-plan one — the premise is a measurement, so re-checking it is part
+         of the criterion (`LOOPS.md`'s rule on premises).
+
+**Two smaller things are recorded in the grill report and neither carries an
+item, each for a stated reason.** `325.1`'s `git grep measure:stress` census
+names **five of the six** paths that command returns at the commit publishing it
+(`f4da2fe8`) — the omitted one is a `.roundtable/` grill report, the same kind as
+the roadmap prose it does name, so the refusal it supports is untouched; the
+remedy is to paste `git grep -l` output rather than a prose list, which is a
+habit and not a mechanism. And `324.3` cited two revisions correctly and
+**`67fc6659` no longer resolves** on an unshallowed clone — the sha did not
+survive into `main`, which is Step 0c's known shape rather than an error in the
+slice — while its figures all reproduce at `3cb2381a` (closed 67→52, archive
+714→730, open 26→26, headings 306→306, lines 8,188→6,476). That was nearly
+filed as an item on a census reporting **9** dead sha citations in `ROADMAP.md`;
+reading the context of each showed **eight are blob digests or deliberately
+bogus values written into red-proofs**, so the real corpus is **one** and a gate
+would be ceremony whose discriminator — *is this 8-hex token a revision or a
+digest?* — is `348.1`'s open problem one token-shape over.
+
+**This grill's own two instruments were wrong first, on schedule.** The sha
+census over-counted **5x** by matching on token shape, which is what turned that
+observation from an item into a refusal; and the `absent` red-proof came back
+**green** on its first run because the worktree it ran in had no
+`packages/core/dist`, so `--verify-stamps` bails at *"api.json is missing"*
+before reading a stamp — the injection landed in the file and the gate never
+reached it. Re-run in the built tree it goes red exactly once, on exactly the
+injected row, with the unmodified control passing either side.
+
+**NOT VERIFIED VISUALLY, and none is owed.** No 1440/390 light-and-dark
+screenshots — a cloud wake has no Podman. The diff is `ROADMAP.md`, one new
+`.roundtable/` report and the hand-off: no CSS, no docs page, no component and
+no script changed, so nothing rendered can move. Slice 345's two visual debts
+and the six older ones are unchanged and unspent.
+
+## Slice 350 — Standardize sweep, 4 of 4 lanes, all clean — and the sweep's own dispatch is the finding: rule 2's counter counts ROUNDS, lanes 1-3 measure ARTEFACTS, and **10.1% of windows can move neither** (2026-09-08)
+
+**Dispatched by rule 2** at `Standardize 4 / 4 Continue rounds OVERDUE`, exactly
+as the previous hand-off's ⚠ block predicted — re-read this wake rather than
+trusted. Cloud wake. Rule 1 found no P0
+(`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0** across 30 open items).
+Rule 3 was `Objective 3 / 3 OVERDUE [324, 325, 347]` and is evaluated **below**
+rule 2, so the grill waits one more wake. Rules 4-8 not reached. Rule 5's line
+read `ok`, not STALE — **0** wake-dates newer than the newest pair, 8 of 47
+names paired across days.
+
+Step 0: container **DETACHED** again (`git branch --show-current` empty), trap 1,
+fixed with `git checkout -B main origin/main` before any commit; `origin/main`
+again arrived as a **forced update** (`26447ba...81f6281`). Trap 2 clean in one
+`--unshallow` — **2,065** commits, no `shallow.lock`, and it again brought the
+tags (`git tag | wc -l` → **8**, run rather than assumed). **No collision** — the
+pre-commit `git fetch origin main` found `origin/main` unmoved at `81f6281c`,
+which is the previous wake's own tip.
+
+**Step 1 — both intakes read, with the controls `ENVIRONMENT.md` §8 names:**
+`/issues?state=open` → HTTP 200 len **1**; `/discussions` → HTTP 200 len **0**;
+`/not-a-real-route` → **404**, the control that makes the `200 []` mean *served
+and empty*. Issue #2's `updated_at` is still `2026-09-06T15:10:34Z` — a
+**sixteenth** consecutive hand-off with no movement. Nothing new to triage, so
+Step 1 committed nothing.
+
+**The archive sweep was evaluated and declined on the measured trigger.**
+`roadmap_scope.py` at `81f6281c` reports closed-history share
+**4,129 / 10,216 = 40.4%**, 20 eligible targets, 10 of them named by a still-open
+item (236.2's report, read before concluding). 252.1 dispatched the tenth sweep
+at **55.1%**, 272.1 the eleventh at **56.7%**, 279.3 declined the twelfth at
+**40.6%**, `324.3` took the thirteenth at **41.5%**. 40.4% is below every one of
+those. The revision is named because this commit moves it: every line of this
+slice lands under an **open** heading, so the closed share falls further — the
+deliberate absence of a line count here is `ENVIRONMENT.md`'s rule applied to
+the one figure an edit invalidates as it writes it. Re-run
+`python3 scripts/loops/roadmap_scope.py` at the commit. `249.12`, the open **OWNER OR ARCHITECTURE CALL** on the archival
+trigger, is now named for a **tenth** consecutive wake; nothing is proposed here.
+
+### The four lanes, all clean — measured, not cited
+
+- **Lane 1 of 4 — `scan:dead-style`: on the refusal set, page for page.**
+  **0** dead attributes on **0** pages; **1,365** live attributes, **1,813**
+  declarations, **345** multi-declaration. Per declaration: **11 dead on 9
+  pages**. Slice 345 reconciled its re-run against the eleven refusals it had
+  just written; this run reconciles the same eleven *and* their page
+  distribution, which 345 did not publish: `/patterns/` ×3 (PatternPreview's
+  accent), `amount` / `byline` / `progress` (`inline-size: 100%`), `combobox`
+  (`margin-block-start`), `state-patterns` (`align-items`), `/base/motion/`
+  (`display: inline-block`), `/patterns/app-launch/` (`block-size: 2rem`),
+  `/reference/tokens/` (`inline-size:var(--bo-space-0)`) — 3 + 8 across 9 pages.
+  Every one is refused with its measurement in Slice 345. **Nothing converted
+  this wake**, and `345.1` (should `.bo-motion-spin` own its `display:
+  inline-block`?) stays open and untouched — a component CSS change is not a
+  Standardize-sweep edit, which is why 345 filed it rather than building it.
+- **Lane 2 of 4 — `report:css-repeats`: no delta, a sixth consecutive identical
+  reading.** 74 source files · **242** rules with 3+ declarations · **230**
+  distinct bodies · **8** bodies repeating — byte-identical to Slice 345's
+  `74 / 242 / 230 / 8`. Checked against `LOOPS.md`'s settled table **member for
+  member**, not by the count: the x4 joined-control radius reset is still two
+  components spelling one decision twice each, and no group is new or grew.
+- **Lane 3 of 4 — `report:prose`: every flagged page carries a verdict.** 119
+  documentation pages of 128 built · median **798** · mean **956** · total
+  **113,787** words. The flagged union is **15** pages — the 10 over the corpus
+  2x (1,596) plus `/base/motion/`, `/concepts/layouts/`,
+  `/concepts/js-behaviors/`, `/concepts/design-language/` and `/concepts/scale/`
+  over a family 2x. Checked against the ENUMERATION the lane mandates, read out
+  of the archive rather than assumed: **158.1's twelve** are `data-table`,
+  `richtext`, `which-pattern`, `form`, `editable-grid`, `list-report`,
+  `calendar`, `money`, `combobox`, `tabs`, `layouts`, `output-form`; **161.1's
+  three** and **178.3's `/concepts/scale/`** make sixteen. All 15 flagged pages
+  are members, and the one non-flagged member is `/patterns/output-form/`, as in
+  345. **No page carries no verdict**, so nothing to record.
+- **Lane 4 of 4 — `report_loop_prose.py`: no file changed accumulate class.**
+  The `ratchet` block reads `LOOPS.md 1 up, last cut f9e0f17d (2026-09-07)`; the
+  dispatch region is **7,548** words at **42.0%** of the file — *flat* against
+  Slice 345's 7,548, which is expected, since no commit since has touched
+  `LOOPS.md`. Not attributed per section (308.1/339.1), and it does not need to
+  be: a flat number is not a regrowth reading either.
+
+  **`CLAUDE.md`'s ratchet reads `33 up / 0 down, never cut`, and that is the one
+  row with a stated reopen condition — so it was executed rather than waved at.**
+  167.1's condition is *"reopen if an eighth [`can this detector fail`] section
+  is added without folding"*. Split on `^## `, `CLAUDE.md` holds **16** sections
+  at `81f6281c` and **7** of them are that subject (red-proving/injection,
+  first output, reported number, heuristic self-test, base rate, CI-only,
+  structural assertion) — **2,414 of 5,687 body words, 42.4%**. **No eighth.**
+  The share is reported at HEAD only and is deliberately NOT compared to 167.1's
+  `1,893 / 4,600`, which was not re-derived at its own commit
+  (`ENVIRONMENT.md`'s *a figure describing a commit is read from THAT commit*) —
+  the condition is a COUNT of sections, and the count is what was checked.
+  The watch itself was retired by **193.1** ("fold nothing, retire the watch")
+  and the question re-raised and re-verdicted **HONEST** by **284.2**, which put
+  the file's entire removable surface at **181 words (3.1%)** on two red-proved
+  instruments. Settled; not re-raised.
+
+### The finding: the sweep was dispatched onto a window three of its lanes could not see
+
+All four lanes reading identically to a sweep four hours old is not a
+coincidence, and asking *what would make this wrong* is what produced the item
+below. **No commit between the last Standardize and this one touched anything
+lanes 1-3 read.** The window `161ede68..HEAD` is 13 commits and 12 distinct
+files; `packages/core/src/css/**` and `apps/docs/src/**` contribute **zero** of
+them.
+
+**The obvious objection is real and has a live example one window back**, which
+is why the predicate is not "inputs changed": a lane's reading can also move
+because its **instrument** changed. `cdfcb129` (320.2) rewrote
+`scan-dead-style.mjs`'s verdict from per-attribute to per-declaration, and Slice
+345's lane 1 duly opened at **52 dead on unchanged inputs**. This window *does*
+touch that same file — `6cfe380c`, Slice 346's grill — so the file-level test
+cannot classify it, and the diff had to be read: **24 lines added, 0 of them
+outside the header block comment, 0 deleted.** The executable code is identical,
+so lanes 1-3 could not have moved.
+
+**The base rate, over the whole log** — `.roundtable/loop-log.md`'s 156
+Standardize rows resolve to **139 distinct commits on first-parent `main`**
+(1,660 of 1,660 rows parsed; 0 shas unresolvable), giving 138 windows:
+
+```
+python3 - <<'PY'
+import re, subprocess
+def sh(*a): return subprocess.run(a, capture_output=True, text=True).stdout
+order = sh('git','rev-list','--first-parent','HEAD').split()
+pos = {c: i for i, c in enumerate(order)}
+full = {c[:n]: c for c in order for n in (7, 8, 9, 10, 40)}
+std, seen = [], set()
+for line in open('.roundtable/loop-log.md'):
+    if line.startswith('- ') and ' · Standardize · ' in line:
+        m = re.search(r' · ([0-9a-f]{7,40})\s*$', line.rstrip())
+        if m and full.get(m.group(1)) and full[m.group(1)] not in seen:
+            seen.add(full[m.group(1)]); std.append(full[m.group(1)])
+std.sort(key=lambda c: -pos[c])
+INPUTS = ('packages/core/src/css/', 'apps/docs/src/')
+INSTR = ('apps/docs/scripts/scan-dead-style.mjs',
+         'apps/docs/scripts/report-prose.mjs',
+         'packages/core/scripts/report-css-repeats.mjs')
+noin = noboth = span = 0
+for a, b in zip(std, std[1:]):
+    # `{b}^`, NOT `{b}` — the window is what the sweep could SEE, and its own
+    # commit did not exist when it ran (351.1, decided 2026-09-09).
+    files = {f for c in sh('git','rev-list','--first-parent',f'{a}..{b}^').split()
+               for f in sh('git','show','--name-only','--format=',c).split('\n') if f}
+    span += len(sh('git','rev-list','--first-parent',f'{a}..{b}^').split())
+    hi = any(f.startswith(INPUTS) for f in files)
+    noin += not hi
+    noboth += not hi and not any(f in INSTR for f in files)
+print(len(std)-1, 'windows;', noin, 'with no lane input change;', noboth,
+      'with no input AND no instrument change; span', span)
+PY
+# 2026-09-08 at 81f6281c, windowed a..b:  138 windows; 14 no-input (10.1%); 13 also no-instrument (9.4%); span 1994
+# 2026-09-09 at 421afd15, windowed a..b^: 141 windows; 20 no-input (14.2%); 18 also no-instrument (12.8%); span 1896
+#   the same run windowed a..b reads 15 (10.6%) / 13 (9.2%) / span 2037, which
+#   reconciles to `git rev-list --first-parent <oldest>..<newest>` = 2037; a..b^
+#   is exactly 141 lower, one dropped commit per window.
+```
+
+**Reconciled against an independent count before quoting** (CLAUDE.md): the 138
+window sizes sum to **1,994**, and `git rev-list --first-parent <oldest
+Standardize>..<newest>` is **1,994** — equal, so no window is double-counted or
+dropped. **The instrument discriminates**: 124 of 138 windows *do* carry an
+input change, up to 16 commits' worth, so this is not the "identical value
+across many inputs" tell. A hand spot-check of the newest closed window
+(`f9e0f17d..161ede68`) shows exactly one of its 16 commits touching a lane
+input — `161ede68`, the sweep's own conversions.
+
+**⚠ THE FIGURES IN THIS PARAGRAPH AND IN THE BLOCK'S FIRST COMMENT LINE ARE
+`a..b` READINGS; THE COMMAND ABOVE NO LONGER WINDOWS THAT WAY** (351.1, decided
+2026-09-09). They are kept as the historical reading at `81f6281c`, not
+re-derived, because they are what 350.1's argument was written against — but a
+wake re-running the block now gets the `a..b^` line instead, and the two are
+**not** comparable. The spot-check sentence immediately above is the whole
+reason for the change: it names `161ede68`'s only lane-input commit as *the
+sweep's own conversions*, so under `a..b` that window is classified **has lane
+input** on the strength of the sweep's own OUTPUT. Re-verified by hand at
+`421afd15` on both disagreeing windows — `f9e0f17d..161ede68` (16 commits, 15
+touching no lane input, the 16th being the sweep) and `d3bb443f..cdd7c07e` (the
+sweep's own single `Gallery.astro`) — so the confound is the mechanism, not an
+artefact of one window. That is CLAUDE.md's *reconcile against the SOURCE, not
+against the argument* one level up: a predicate that reads the sweep's own
+commit cannot see past its own caller.
+
+**The base rate MOVED only in its denominator, which 351.1 names as a satisfying
+outcome.** Re-measured at `421afd15`: the no-input COUNTS are **15** (`a..b`)
+and **20** (`a..b^`), identical to the pair the Slice 351 grill published at
+**`65de70c`** — *not* to the `14 of 138` in the comment line above, which is
+`81f6281c`'s own reading one window earlier, exactly the "a sweep's figure is
+one window short of the sweep publishing it" effect that amendment records. The
+rates move (10.8% → 10.6%, 14.4% → 14.2%) purely because the denominator grew
+139 → 141. The disagreement set is **the same five windows** — `15f9bbc1`, `91677655`,
+`cdd7c07e`, `0768f09f`, `161ede68` — reproduced independently rather than
+carried.
+
+**The cost is measured, not asserted**: lane 1 alone is **123s** of wall clock in
+this container (`date`-bracketed re-run of `npm run scan:dead-style -w docs`),
+on top of the docs build from a cleared `dist` that it requires.
+
+**Lane 4 is not affected and that is what keeps this a question rather than a
+defect.** It reads the loop-machinery markdown, and every one of this window's 13
+commits changed some of it. A rule-2 firing on a no-input window still buys a
+lane-4 read and the archive-sweep evaluation above; what it does not buy is
+lanes 1-3.
+
+1. [x] **350.1 — should rule 2's counter know whether its first three lanes have
+       anything to read?** Rule 2 counts **Continue rounds**; lanes 1-3 measure
+       **artefacts**. The two are independent, and this wake is the demonstration:
+       a full sweep dispatched onto a window in which `packages/core/src/css/**`
+       and `apps/docs/src/**` were untouched and the one instrument that moved
+       moved only its comments. This is `349.1`'s shape one rule up and it is
+       **not the same defect** — 349.1 is a counter that counts something other
+       than what its rule's text says; here the counter counts exactly what the
+       text says, and the text's unit simply does not predict whether three of
+       the four lanes have input. Filed by the sweep it describes.
+       - **Accept:** a decision recorded either way, with the base rate
+         **re-measured at execution time** by the command above rather than
+         quoted from here — the figures are snapshots and this commit does not
+         move them (it touches no lane input), but a later one will.
+         - If rule 2 gains an input test, it must name **both** things that make
+           a lane's reading movable — the inputs and the lane's own instrument —
+           and `cdfcb129`/Slice 345 is the case it must still dispatch, since
+           that window's lane 1 went 0 → 52 with no input change at all.
+         - If it is refused, the reason names what a lane-1/2/3 pass buys on a
+           window that cannot move it, and says whether lane 4 plus the
+           archive-sweep evaluation carry the cadence on their own.
+         - **Refusing is a satisfying outcome, and so is finding the base rate
+           has moved** — the premise here is a measurement, so re-checking it is
+           part of the criterion (`LOOPS.md`'s rule on premises), not a courtesy.
+       - **No gate is proposed, and the reason is measured rather than stylistic.**
+         A file-level predicate could not classify this very window: it reports an
+         instrument change that turned out to be comment-only, so the verdict
+         needed the diff read. *"This change can move a lane's reading"* is
+         semantic — roadmap 94.11's rule — and the checkable shape is the wrong
+         one here, so the honest options are a decision in `LOOPS.md`'s text or a
+         **report**, never a build gate.
+       - **AMENDED 2026-09-08 by the Slice 351 grill (236.2), on two counts.
+         The figures above reproduce exactly at the revision they name; the
+         predicate behind them and the stability forecast beside them do not.**
+         - **The base rate is 14.4%, not 10.1%, on what a sweep could SEE.** The
+           command windows as `a..b`, and `b` is the sweep's own commit — so a
+           sweep that converts a dead style is classified *has lane input* on its
+           own OUTPUT. Windowed as `a..b^`: **20 of 139 no-input (14.4%)** against
+           the published predicate's 15 of 139 (10.8%), disagreeing on **5**
+           windows (`15f9bbc1`, `91677655`, `cdd7c07e`, `0768f09f`, `161ede68`),
+           two of them discriminated by hand. `161ede68` is the window the
+           paragraph above already names as *"the sweep's own conversions"* — the
+           confound was seen in prose and left in the command. Which predicate
+           this item is decided on is **`351.1`**.
+         - **"This commit does not move them" is true of the commit and false of
+           the wake.** `record_iteration.py` appends a row carrying this sweep's
+           sha, which adds one window — a **no-input** one, precisely because the
+           sweep touched no lane input. Read at each revision: `81f6281c` and
+           `6996a39` both 138 / 14 / 13 / span 1994; `65de70c`, this wake's own
+           recording commit, 139 / **15** / 13 / span 2008; HEAD the same. The
+           parenthesised reason is backwards, and the general form is that **a
+           figure published from inside a sweep is always one window short of the
+           sweep publishing it.**
+       - **AMENDED 2026-09-08 by the Slice 357 sweep, on a third count: the
+         predicate is not per-lane, and lane 2 is the one it mis-serves.** The
+         command ORs `packages/core/src/css/` with `apps/docs/src/`, but
+         `report-css-repeats.mjs` reads **only** the first (`srcCssRoot`), while
+         lanes 1 and 3 read built pages and so depend on both. Bucketed
+         separately at `30d94cc7`, `a..b^`: `neither` **20** · `core_only`
+         **7** · `docs_only` **38** · `both` **74**, summing to 139. So lanes 1
+         and 3 are blind on **20 of 139 (14.4%)** — this item's figure,
+         reproduced — and **lane 2 on 58 of 139 (41.7%)**, the 38 `docs_only`
+         windows being ones the OR credits it with. Red-proved by injecting the
+         *same* three-declaration body into each tree: core moves the report
+         242 → 243 and the group x3 → x4, docs moves nothing. Slice 357 carries
+         the command, the controls and the partition assertion.
+       - **So if rule 2 gains an input test it must name THREE things, not
+         two** — the inputs, the lane's own instrument, and **which lane**;
+         a single window-level verdict cannot be right for all three lanes at
+         once. If it is refused instead, the reason now has to cover a lane
+         whose reading was unmovable on **two in five** windows, which is a
+         different question from the 14.4% this item was filed on.
+       - **DONE 2026-09-24 — REFUSED; rule 2 keeps counting Continue rounds.**
+         Re-measured at HEAD with the recorded command: 147 windows, lanes 1
+         and 3 without input on **21 (14.3%)**, lane 2 on **61 (41.5%)** — the
+         rate has not moved. What decides it is the sweep's other half: a
+         loop-read file changed on 136 of the 147 windows, and the 11 windows
+         with nothing to read in any lane are all 0 or 1 commits wide, second
+         rounds of one sweep rather than separate dispatches. So lane 4 and
+         the archive-sweep evaluation carry the cadence on every real
+         dispatch. A lane-1/2/3 pass on a no-input window buys the instrument
+         and environment check (Slice 345's lane 1 went 0 → 52 on an
+         instrument change) for the cost of the scripted run, and "can this
+         change move a lane" is semantic, as this item already said. To keep
+         the cost to the run, LOOPS.md §3 now says a lane whose inputs and
+         instrument have an empty diff since the last sweep is written as
+         *unchanged by construction*, with the empty diff quoted. Script and
+         output: `.roundtable/measure-350.1-2026-09-24.md`. Jev: 0.85, at the
+         supported threshold.
+         [**Corrected by Slice 382:** the refusal stands; the rule beside it did not.
+         Lanes 1 and 3 read built pages, so their inputs include
+         `packages/core/src/`, both scripts trees and `package-lock.json`; the base
+         was ambiguous; uncommitted edits were invisible to the diff; and the
+         shortcut skipped the figure comparison that would catch an environment
+         move. §3 now fixes all four. "Lane 4 had material on every window" holds
+         by construction, and the 11 empty windows hold no Continue row rather
+         than being second rounds of one sweep. Slice 345's 0 → 52 had an
+         instrument change, so it did not answer the Accept's "cannot move"
+         case; no environment-only move is on record.]
+
+## Slice 346 — Objective grill of Slices 322, 342: 20 of 22 assertions reproduce, and **both defects are a recurrence of something Slice 322 had just filed** — the next slice published a load-bearing number with no command, and the round closing its item missed the third copy of a correction because the phrase wraps (2026-09-08)
+
+**Dispatched by rule 3**, cloud wake, at `Objective 4 / 3 slices OVERDUE
+[320, 322, 323, 342]`. Step 0: container **DETACHED** again
+(`git branch --show-current` empty), `ENVIRONMENT.md` trap 1, fixed with
+`git checkout -B main origin/main` before any commit; `origin/main` again a
+**forced update** (`26447ba...6d6f5af`). Trap 2 clean in one `--unshallow`, no
+`shallow.lock`, and it again brought the tags — `git tag | wc -l` → **8**, §2's
+mandated count, run rather than assumed. Trap 1c respected: `CHROME_PATH`
+exported in the same command as `scan:dead-style` and every browser-driven gate.
+
+Rule 1: no open P0 — `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0**
+across the 30 open items. Step 1 read **both** intakes in the REST form with
+`ENVIRONMENT.md` §8's controls (`/issues?state=open` → 200 len **1**, issue #2,
+`updated_at` unmoved at `2026-09-06T15:10:34Z` for a **twelfth** consecutive
+hand-off; `/discussions` → 200 len **0**; `/not-a-real-route` → **404**, the
+control that makes the `200 []` mean *served and empty*) and triaged nothing, so
+Step 1 committed nothing. Rule 2 `Standardize 0 / 4` did not match. **Rule 3
+matched.** Rules 4-8 not reached; rule 5's line read `ok`, and no name in its
+comparable set regresses on two consecutive day-pairs.
+
+**Scope, per §6 step 0 — two of the four, and the drop is named.** Slices
+**320** and **323** are each already the named subject of a 2026-09-07 grill
+report, so they were dropped rather than re-grilled; **322** and **342** were
+kept. Slice 322 is itself a grill, so this is a grill of a grill. Slice **345**
+is in scope only as `342.1`'s closure — the round that met or missed the Accept
+342 filed. Full report:
+`.roundtable/grill-objective-322-342-2026-09-08.md`.
+
+### The through-line: Slice 322 filed two rules about writing numbers down, and the two slices after it broke both
+
+Neither defect touches a verdict — 342's refusal is right, 345's conversion is
+right, and every number either turns on reproduces. What failed is the audit
+trail, in the two specific ways the immediately preceding grill had named.
+
+- **Defect A — the wrapped correction.** `161ede68` says **FOUR** in its
+  subject, in Slice 345's heading and in its body, and **five** in the closing
+  annotation the same commit wrote on `342.1`. Five is wrong under both readings
+  345's own table supports (`14 + 10 + 10 + 4` from four lines, **plus three
+  one-offs** = four idiom lines, or seven in total); the nearest true *five*
+  counts **files**. The hand-off records two of the three sites being corrected —
+  the third survived because `grep 'five source lines'` returns **0** on a
+  phrase that wraps as `five source` / `lines`. That is `322.3`'s mechanism, one
+  wake after Slice 343 refused a shared normaliser for it.
+- **Defect B — the missing command.** Slice 342 wrote *"The refusal and the
+  command are in the script's header"*; the header held the refusal, the number
+  and *"Re-measure before assuming it still holds"*, and **no command**. So it
+  asserted the fix for 322's Defect B in the same sentence that committed it.
+  Re-measuring took a fresh instrument whose **first output was wrong** — a
+  raw-text scan reads `1 of 30,485` on an HTML-entity `;` inside `url()` that
+  the browser never sees. Decoded: **0 of 30,485** against the published 0 of
+  30,483, so the refusal stands. Both corrected in place at Slice 342 per 236.2,
+  originals struck, and the command has been **added** to the header and
+  red-proved by injection (0 → 1).
+
+**Five of this grill's own instruments were wrong on their first output, by
+THREE different mechanisms** — and the split is stated because *"all of them the
+same way"* was the first thing written and is false. **Two by the wrap**: the
+greps used to find Defect A and to locate Defect B's text, which is the
+strongest evidence `346.1`'s population is real. **One by a token boundary**:
+`\bdocs-list\b` matches inside `docs-list-bare`, the exact bug 322's own report
+names. **One by HTML entities**: Defect B's base rate. And **one merely scoped
+differently** — a hand-written re-derivation of the `1,433` blast radius
+returned 11 against the published 17, and what settled it in one run was that
+Slice 322 *had recorded its command*, which returns the seventeen exactly. That
+is the counterfactual Defect B destroys. Each was caught by reconciling against
+a differently-shaped second reading before the number was used.
+
+### What held — 20 of 22
+
+**Slice 322 — 9 of 9**, several exact. The recorded blast-radius command returns
+precisely the published seventeen; Defect B's corpus re-reads `2 + 8 + 0 = 10`
+figures on 9 lines at `8beee329`; `322.2`'s correction survived the archive move
+with both commands; `.docs-list` 59 / `.docs-list-bare` 40 at `7dacd80b~1` and
+60 / 41 at `7dacd80b` reproduce exactly under a class-token matcher; `<Related`
+116, `<ApiTable` 40, `data-api-notes` on 39 built pages; Slice 305's five named
+classes ship and the two invented ones do not; `*gauntlet-a*` is still 0
+commits; `--bo-space-0` still has no use but its definition. The 161
+decomposition is verified in two terms of three — the `5 page-level sites` term
+was not re-derived and is reported as such.
+
+**Slice 342 — 6 of 8** (A and B are the failures): two verdicts per attribute,
+`deadAttrLiveDecl` 0, the print branch still **6** at the declaration unit and
+correctly unmoved by 345, the base rate, no importer of the scan, and the
+red-proof probe absent.
+
+**Slice 345 as `342.1`'s closure — 5 of 5, exact.** The re-run reads
+`11 dead declarations on 9 pages`, `1,854 → 1,813` (−41), `357 → 345` (−12),
+attributes `1,365 → 1,365`, and the eleven it names are the eleven refused, item
+for item — the check 345 said was stronger than the arithmetic, and it is. Its
+lane-3 claim holds too: `/patterns/output-form/` **is** one of 158.1's twelve, so
+`LOOPS.md`'s enumeration was owed no amendment and correctly received none.
+
+1. [x] **346.1 — Slice 343 refused a whitespace normaliser on a caller census of
+       counting INSTRUMENTS. The failure recurred the next wake in a population
+       that census did not measure: a wake's own grep checking that a correction
+       it just made landed everywhere.** 343's refusal stands on its own terms
+       and is **not reopened** — 1 of 14 published phrase-counts changes, and a
+       helper module still has no importer. What is unmeasured is the *other*
+       use: Defect A above, plus three of this grill's own four instruments,
+       are all a hand-check rather than a published count, and all four missed a
+       wrapped phrase. n = 4 in one wake is a rate, not a base rate.
+       - **Accept** — the property, not a prediction: **measure the base rate
+         first** (94.11), over the record rather than over this wake. For each
+         commit that strikes or supersedes a number in `ROADMAP.md`, check
+         whether the superseded spelling still occurs elsewhere in that file **at
+         that commit**, whitespace-normalised. Report the count with the command
+         beside it. **If it has happened once or twice, recording the refusal
+         with the number is a satisfying outcome** and nothing is built; if it is
+         common, the cheap thing is a `scripts/loops/` check a wake runs before
+         committing a correction — not a gate.
+       - **Not a gate, decided rather than deferred.** *"This correction was
+         applied everywhere it should be"* is semantic in the general case
+         (94.11), and 343 already refused the shared-normaliser shape. The only
+         checkable form is the narrow one above: a struck spelling that still
+         occurs in the same file at the same commit.
+       - **DONE 2026-09-24 — common, so the cheap check is built; the wrap is
+         not the mechanism.** Of 1,062 commits touching `ROADMAP.md`, 231 add a
+         line naming a correction; read one by one (workflow `wf_b0aaa4ba-d7e`,
+         5 readers + 5 adversarial verifiers, each old spelling run through a
+         whitespace-normalised, strike-aware count of the file AT that commit),
+         **59 supersede a numeric claim** (a lower bound: the verifiers' 24
+         spot-checks found 8 more, none with a stale copy) and **13 of the 59
+         left one standing: 17 sites, all surviving verification.** Only **2 of
+         the 17** hide behind a wrap; the other 15 sit in a heading, a DONE line
+         or another slice, where a plain line grep finds them. So 343's refusal
+         of a normaliser stands on this evidence too, and what was missing is
+         being shown the other copies.
+         `scripts/loops/check_correction_sites.py` does that: it reads a
+         commit's (or the working tree's) change, finds the numbers it
+         superseded — replaced, struck, quoted in a correction, or "M, not N" —
+         and lists every other unstruck occurrence at that revision. Replayed on
+         the 13 commits it lists **11 of the 17** from the diff alone and **16**
+         with `--old "<old value>"` (the 17th restated "50 claims" as "50
+         checked"); on the last 150 commits it reports on 36, printing a median
+         of 5 sites. `--self-test` passes, and five mutations each make it fail.
+         It runs from `record_iteration.py` as a fourth REPORTED advisory, and
+         LOOPS.md tells a wake to run it before committing a correction. Not a
+         gate, as decided above.
+         **Found while measuring:** the strike mask crossed blank lines, and
+         23 unbalanced `~~` in `ROADMAP-archive.md` hid lines 39,366-50,080;
+         bounded to a paragraph (GFM), and re-running the 8 affected commits
+         changed no reading. **16 of the 17 stale copies were still standing
+         at HEAD** (the "4,429" had been rewritten since) and now carry a
+         `Corrected by 346.1` note: 17 notes, 5 here and 12 in the archive,
+         three of them headings kept identical to their archived twins.
+         **Not covered:** corrections recorded only in other files, and
+         supersedes the readers judged non-numeric. Jev: supported (A 0.95,
+         B 0.89).
+         [**Corrected by Slice 381:** **18** sites in 13 commits, not 17 — the check itself
+         listed `b7317ff9` L458, now annotated. Two of the verifiers' 8 extra
+         commits (`534c4593`, `411a6663`) did leave a copy, filing the
+         correction as an open item; the check misses both (out of sample, 1 of
+         3). "11 of the 17" is **10** on the superseded number itself, plus one
+         listed through a neighbouring figure. The strike mask: **one**
+         paragraph with an odd `~~` count, of 23 markers, hid about 10,700
+         lines (39,366-50,080). Precision, which this block omitted: about **4
+         real sites in 234 printed** over the last 150 commits (381.1). The
+         commands and lists the Accept asked for are in
+         `.roundtable/measure-346.1-2026-09-24.md`.]
+
+**Gates: all 17 cloud-runnable entry points green** on the committed tree, the
+list re-derived from `ci.yml` rather than read off a snapshot.
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. **None are owed by this slice**, and that is structural
+rather than a judgement call: the diff is `ROADMAP.md`, the grill report, the
+hand-off, and a **comment-only** change to `apps/docs/scripts/scan-dead-style.mjs`
+— a script that is not a build step, not a gate and not imported anywhere,
+re-verified this wake by the same command Slice 342 used. No CSS rule, no docs
+page and no component changed, so nothing rendered can move. **Slice 345's two
+visual debts are still owed** — `/patterns/output-form` in print, and the RF tile
+grid on `/patterns/rf/rf-landing-rf/` at both widths — as are the six older ones.
+
+## Slice 345 — Standardize sweep, 4 of 4 lanes. 342.1 closed with a verdict per SITE: **38 of the 52 dead declarations came from FOUR source lines**, and the eleven that remain are the eleven that were refused — the re-run lands on exactly the refusal set, not merely on the arithmetic (2026-09-08)
+
+**Dispatched by rule 2** at `Standardize 4 / 4 Continue rounds OVERDUE` — the
+counter the previous hand-off predicted, re-read this wake rather than trusted.
+Rule 1 found no P0 (`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0** across
+30 open items); rule 3 was `Objective 3 / 3 OVERDUE [320, 322, 323]` and is
+evaluated **below** rule 2, so the grill waits one more wake. Cloud wake. Step 0:
+container **DETACHED** again (trap 1), fixed with `git checkout -B main
+origin/main` before any commit; trap 2 clean in one `--unshallow`, tags again
+arrived with it (`git tag | wc -l` → **8**, run rather than assumed). **No
+collision** — the pre-commit `git fetch origin main` found `origin/main` unmoved
+at `c369b054`.
+
+**Step 1 — both intakes read, with the controls `ENVIRONMENT.md` §8 names:**
+`/issues?state=open` → HTTP 200 len **1**; `/discussions` → HTTP 200 len **0**;
+`/not-a-real-route` → **404**, the control that makes the `200 []` mean *served
+and empty*. Issue #2's `updated_at` is still `2026-09-06T15:10:34Z` — an
+**eleventh** consecutive hand-off with no movement. Nothing new to triage, so
+Step 1 committed nothing.
+
+### The three lanes with no finding, one line each
+
+- **Lane 2 of 4 — `report:css-repeats`: no delta.** 74 files · **242** rules with
+  3+ declarations · **230** distinct bodies · **8** bodies repeating, against the
+  recorded `237 / 225 / 8` of 2026-08-28. Rules and distinct bodies both moved
+  +5, so the five new rules are five new *bodies*: **no group is new and no group
+  grew.** All eight match the settled table in `LOOPS.md` member-for-member,
+  the x4 joined-control radius reset still two components rather than four.
+- **Lane 3 of 4 — `report:prose`: every flagged page carries a verdict.** The
+  flagged union is **15** pages (10 over the corpus 2x, plus `/base/motion/`,
+  `/concepts/layouts/`, `/concepts/js-behaviors/`, `/concepts/design-language/`,
+  `/concepts/scale/` over a family 2x). Checked against the ENUMERATION the lane
+  mandates — 158.1's twelve, 161.1's three, 178.3's `/concepts/scale/` — all 15
+  are members; `/patterns/output-form/` is the sixteenth verdict and is no longer
+  flagged. **No page carries no verdict**, so nothing to record.
+- **Lane 4 of 4 — `report_loop_prose.py`: no file changed accumulate class.**
+  The `ratchet` block reads `LOOPS.md 1 up, last cut f9e0f17d (2026-09-07)`; the
+  dispatch region is **7,548** words, 42.0% of the file, still growing faster
+  than the file. That is a rising number and **not a regrowth reading** until
+  attributed per section (308.1/339.1) — not attributed this wake, and said so
+  rather than concluded. `339.1` is open and owns that question.
+
+### Lane 1 of 4 — `scan:dead-style`, and it IS the finding: `342.1`
+
+The scan opened at **52 dead declarations on 13 pages** (1,365 live attributes,
+1,854 declarations, 357 multi-declaration). 342.1's Accept asks for a verdict per
+site and a reconciled re-run, so the first thing built was the per-site view the
+shipped scan does not print: a throwaway probe copying its verdict logic verbatim
+and emitting one row per site. **It reconciles at 52 rows against the scan's 52**
+before any verdict was written — the instrument check, taken first.
+
+**41 CONVERTED, and 38 of them come from FOUR source lines** — counted rather
+than rounded: 14 + 10 + 10 + 4 sites from one line each, fanned out by a `map()`
+or a shared component, plus **three one-off lines** on `/patterns/output-form`.
+That ratio is the shape of the finding: this was never 13 pages of drift, it was
+four idioms multiplied by their generators and one page with three of its own.
+
+| n | site | source | why it was dead |
+|---|---|---|---|
+| 14 | `color: var(--bo-color-accent)` on every app tile's mark | `AppTile.astro:43` (`MARK`, inherited by `BOX`) | the component renders its OWN `<a class="bo-widget">` one line below, and the framework reset carries `a { color: var(--bo-color-accent) }` (`reset/index.css:73`). Measured in **both** themes: icon and its `a.bo-widget` parent read `rgb(15,118,110)` light and `rgb(45,212,191)` dark. `app-launch.astro`'s copyable `<pre>` sample carried the same declaration and moved in the same commit, so the demo and the markup a reader copies do not diverge |
+| 10 | `margin: 0` on the payload `<ul>` | `reference/events.astro:44` | restates the reset's `* { margin: 0 }` — the original sweep's own headline case |
+| 10 | `display:inline-block` on the spacing swatch | `reference/tokens.astro:153` | the swatch is a flex item of `.bo-cluster`, so it is blockified; computed `display` reads `block` either way |
+| 4 | `display: block` on the task label | `RfTaskMenu.astro:33` | flex child of `a.bo-widget`. Its `color: var(--bo-color-text-primary)` on the same attribute is **live** and stays — it opts the label OUT of the reset's link accent |
+| 3 | `margin: 0` ×2, `padding: 0` ×1 | `patterns/output-form.astro` | restatements of the reset / a `<div>`'s own default, measured dead in **screen AND print** — which is the whole reason this scan emulates both media |
+
+**11 REFUSED, each with the measurement that refuses it.** These are not "not
+got to"; every one is dead *here* and load-bearing somewhere the scan cannot see:
+
+- **3 · `color` on `PatternPreview.astro:35`'s tile fragment** — the accent
+  originates at an `a.bo-widget` **outside** the fragment, supplied by
+  `patterns/index.astro:28`. The ancestor chain was walked to establish that,
+  in both themes. A caller that does not wrap it in a link loses the colour.
+- **3 · `inline-size: 100%` on the demo widget** (`amount`, `byline`,
+  `progress`) — dead only against `section.demo`'s flex stretch. The identical
+  `inline-size: 100%; max-inline-size: 24rem` idiom on `patterns/login.astro:31`
+  is **not** reported dead, which is the discrimination: the pair is the portable
+  form and the docs container is what makes it redundant. [**Corrected by
+  Slice 379:** the reason is false, and was when written. The three are dead
+  in plain block flow too (288 → 288, 384 → 384, 256 → 256 px), and login's
+  rule is not identical: it adds `margin-inline: auto`, which is what makes it
+  live, and only inside a flex or grid parent. The verdict to keep them
+  stands: they are the portable half of the pair, live wherever a flex or
+  grid parent does not stretch the widget, which is login's case.]
+- **1 · `margin-block-start` on combobox's static listbox** — the component's own
+  copy sits inside `@supports (anchor-name: --a) and (anchor-scope: --a)`
+  (`combobox.css:55-69`). Dead in a browser that supports anchor positioning;
+  **live on the fallback path**, which is exactly where the demo has to hold up.
+- **1 · `align-items: center` on state-patterns' skeleton** — it is inside
+  `const skeletonCard`, rendered through `<Demo code={skeletonCard} />`. 292.8's
+  rule: a declaration inside a copyable template literal is out of scope.
+- **1 · `display: inline-block` on `/base/motion`'s spinner** — dead only because
+  `section.demo` is a flex container; it is what makes `.bo-motion-spin` transform
+  in ordinary inline flow, which is the case a reader will actually have.
+- **1 · `block-size: 2rem` on `AppTile`'s `BOX`** — the box exists to PIN the
+  mark's height when there is no icon glyph. It is dead only because the current
+  glyph happens to be exactly 2rem tall, and AppTile's own comment already ties
+  its `font-size: 2rem` and this `block-size` together.
+- **1 · `inline-size:var(--bo-space-0)` on the zero swatch** — the generated
+  uniform form of the other nine, and the swatch's SUBJECT is the token's width.
+  Zero is the value being shown; special-casing it out of the `map()` would make
+  the one swatch that means "no space" the one swatch that declares nothing.
+
+**The reconciliation is the part worth keeping, and it is stronger than the
+arithmetic.** The re-run reports **11 dead declarations on 9 pages** — `52 − 41`,
+which any miscount would also satisfy — but the eleven it names are, item for
+item, the eleven refused above: `3× inline-size: 100%`, `3× color`,
+`1× display: inline-block`, `1× margin-block-start`, `1× align-items: center`,
+`1× block-size: 2rem`, `1× inline-size:var(--bo-space-0)`. Two independent
+totals move with it: declarations inside live attributes **1,854 → 1,813**
+(−41, one per conversion) and multi-declaration attributes **357 → 345** (−12,
+exactly the conversions that left a single declaration behind — the ten event
+lists and output-form's two). Attribute count is **1,365 → 1,365**: no attribute
+was emptied, so nothing became a `style=""` for the next sweep to trip over.
+
+**Verified against the RENDERED artefact, not the diff** (CLAUDE.md's bulk-edit
+rule): the built site was rebuilt from a cleared `dist` and re-scanned in a real
+browser, and the whole-tree gates that assert layout properties — `check:layout`
+(128 pages, no overflow at 390 or 150% zoom), `check:scroll` (914 containers) and
+`test:axe` (128 × 2, zero violations) — all pass. **The edits were made by hand,
+one block at a time**, never by regex, because four of the five files mix live
+markup with copyable samples.
+
+**One cost, recorded rather than smoothed over.** The first attempt at the
+`events.astro` comment put a `{/* … */}` block **inside a ternary expression**,
+which is not a children position; `astro build` failed with
+`Expected "}" but found "$$render"` pointing at a line 11 below the edit. Caught
+by the build, not by review — the sibling of the compiler trap `ENVIRONMENT.md`
+already carries about hoisted imports.
+
+1. [x] **345.1 — should `.bo-motion-spin` own its `display: inline-block`?**
+       Raised by lane 1's refusal above and NOT built here — a component CSS
+       change is not a Standardize-sweep edit. The utility only works on a
+       transformable box, so every consumer who puts it on an inline `<span>`
+       must add the declaration by hand; `/base/motion`'s own demo does, and it
+       reads dead there only because the demo section is a flex container. That
+       is the Objective's first accept test verbatim — *it lets a consumer delete
+       code*.
+       - **Accept:** a decision recorded either way. If it moves into
+         `motion.css`, `/base/motion`'s inline declaration goes with it and
+         `scan:dead-style`'s remaining count agrees with whatever the change
+         makes true. If it is refused, the reason names what an inline-block
+         default would break for a consumer who wants a block or flex spinner.
+         **Refusing is a satisfying outcome.**
+       - **DONE 2026-09-24 — moved in.** The page's own copyable recipe (a bare
+         `<span class="bo-motion-spin">`) did not rotate in ordinary flow — and
+         its COMPUTED `transform` animated all the while, so a computed-style
+         check passes a spinner that never turns; the box's bounding rect is
+         what shows rotation (1 distinct rect in 6 samples before, 5-6 after).
+         A consumer wanting a block or flex spinner keeps their own `display`
+         (unlayered author CSS beats the utility layer); a rotating box should
+         shrink-wrap its glyph anyway. The demo's inline declaration went with
+         it: `scan:dead-style` 11 on 9 pages -> **10 on 8**, that declaration
+         exactly. **Found beside it:** the live demo span was a stretched flex
+         item, 342px wide, so its glyph orbited the box's centre (true before
+         and after); the demo is now inside a `<p>` as the claim case pastes
+         the recipe, 0px glyph drift, live at 1440/390 light/dark.
+         [**Corrected by Slice 379:** the demo box is **16×36px**; "32-36px"
+         was one read of the rotating rect, which spans 16-40px. The drift
+         figure holds, but only when measured by the glyph's text Range: the
+         bounding-rect centre reads 0 on the old orbiting demo too, so it cannot
+         fail. The demo also carries a font size the recipe does not.]
+         `check:claims` +1 (the pasted recipe visibly rotates), red before.
+         CHANGELOG entry. Jev: supported 0.94 (A 0.98, B 0.92).
+
+**Gates: all 17 cloud-runnable entry points green** on the committed tree, plus
+`check:selftests` (55 gates: 21 heuristic, 34 exact), `check:viewport-forks` and
+`check:vendor-names` run directly at its real path (**614** files — a passing
+gate, not a census; the walk includes `examples/` installs).
+
+**NOT VERIFIED, said plainly.** No 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. **This commit changes rendered pages**, so unlike the last
+two wakes it does carry visual debt, and it is named rather than implied: five
+docs sources changed (`AppTile.astro`, `RfTaskMenu.astro`, `events.astro`,
+`tokens.astro`, `output-form.astro`, plus `app-launch.astro`'s sample). Every
+removal is *proven* computed-style-neutral by the instrument that found it — in
+screen and print, and for the accent colour in light and dark — and the three
+whole-tree browser gates pass, so nothing measurable moved. What a cloud wake
+still cannot do is LOOK at `/patterns/output-form` in print or at the RF tile
+grid. **A local wake should glance at those two.**
+
+## Slice 343 — 322.3: a whitespace-normalising helper is REFUSED on the base rate and on a caller count of zero — 1 of 14 published phrase-counts changes, and the two consumers that could have needed it were already safe (2026-09-08)
+
+**Dispatched by rule 4** on `322.3`, the oldest still-open cloud-takeable item,
+cloud wake. Rule 1: no open P0 — `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md`
+reads **0** across the 32 open items. Step 1 read **both** intakes with
+`ENVIRONMENT.md` §8's controls in one run (`/issues?state=open` -> 200 len **1**,
+issue #2, `updated_at` unmoved at `2026-09-06T15:10:34Z` for a **ninth**
+consecutive hand-off; `/discussions` -> 200 len **0**; `/not-a-real-route` ->
+**404**) and triaged nothing: no new input, so Step 1 committed nothing. Rule 2
+`Standardize 2 / 4` did not match; rule 3 `Objective 1 / 3 [320]` did not match.
+Rules 5-8 not reached. Pre-commit `git fetch origin main` found `origin/main`
+unmoved at `dd69b3e5` — **no collision this wake**.
+
+### The answer: REFUSE, on three measurements rather than one
+
+322.3's Accept set the fork on the base rate — *if few change, a helper is
+ceremony and recording the refusal with the number is a satisfying outcome; if
+many do, ship one shared normaliser in `scripts/loops/` and name its callers.*
+Few change, and the second half of that sentence turns out to be the stronger
+refusal: **there are no callers to name.**
+
+**1 — the base rate. 1 of 14 re-derivable published phrase-counts changes, and
+it is the known defect the item was filed for.**
+
+**Read at `dd69b3e5`, the parent of this commit, and the revision is named
+because `327.2`'s effect fires here too**: writing the table below adds two
+fresh occurrences of its own lane-C phrase, so the same run against this commit
+reads **5 / 10** rather than 3 / 8. **The Δ is unchanged at +5 and so is every
+verdict** — but a wake re-running the command and getting 5 / 10 cannot
+otherwise tell a moved corpus from a mistake.
+
+| lane | line | ws | Δ | phrase |
+|---|---|---|---|---|
+| A recorded-command | 10 | 10 | +0 | `without folding` |
+| A recorded-command | 9 | 9 | +0 | `RECURRENCE HISTORY` |
+| A recorded-command | 7 | 7 | +0 | `closed slices carrying` |
+| A recorded-command | 1 | 1 | +0 | `5 of 6` |
+| B prose page-path | 18 / 10 / 8 / 7 / 4 / 3 / 3 / 37 / 11 | = | +0 | the nine page paths Slices 326/327/339 count |
+| C known defect | 3 | **8** | **+5** | `1,433 live inline declarations` |
+
+- **9 of the 14 count an identifier with no whitespace** — a page path — and
+  therefore *provably* cannot differ. Measured rather than asserted from the
+  property, which is why they are in the table.
+- **5 could differ; 1 does.** The four lane-A phrases are also 0-of-4 when
+  re-run at their own publishing revisions (`git blame` -> `83192cd1`,
+  `7e861867` x3), not only at `HEAD`.
+
+**2 — the caller count is zero, and that is what settles it.** Twenty files
+name the corpus; the ones that actually count over it are all safe already:
+
+- every other consumer is a **line-anchored structural parse**
+  (`generate_status.py`, `roadmap_scope.py`, the rule-1 P0 check — **41 of the
+  62** recorded grep sites at `dd69b3e5`; this slice's own dispatcher trace
+  makes it 42 of 63, same self-contamination as the table), where line-based
+  *is* the correct semantics, because it is counting lines;
+- `check-slice-refs.mjs` matches `/\broadmap\s+(\d{1,3}…)/gi` against
+  **whole-file text**, and `\s` spans a newline. It is not accidentally safe —
+  it demonstrably catches the **7 of 149** citations a per-line form misses
+  (`ROADMAP-archive.md` 66 -> 68, `LOOPS.md` 48 -> 53);
+- `report_reopen_conditions.py`'s needle is four **single words**
+  (`reopen|re-open|re-raise|revisit`), which cannot straddle anything.
+
+A shared normaliser in `scripts/loops/` would be a module with no importers,
+which is 94.11's ceremony test failing on the first question it asks.
+
+**3 — the failure is RARE but SEVERE, and saying only "rare" would be the
+misleading half.** On the one case that does change, an independently-shaped
+re-derivation (120-character window, attributed to the containing `## Slice`)
+reads **12 slices line-based against 19 whitespace-normalised** — the per-line
+form misses **7, i.e. 37%**. That is why the answer is a practice note and not
+a shrug. The membership differs from Slice 322's published 17 because the
+window is wider and now includes the corrective slices themselves; **322's
+figure is not contradicted here**, and it cannot be, for exactly the reason
+`327.2` names — recording a count changes what it measures.
+
+### The reusable half: this wake's own harvester had the bug
+
+Third instance in three days, and found the same way `LOOPS.md` says this class
+always is — an instrument disagreeing with something already written down. The
+first harvest was a per-line scan for recorded greps and read **58** sites; the
+same regex over the whitespace-normalised text reads **62**. It missed **4 of
+62 (6.5%)** — named rather than counted, since a line number here goes stale
+the moment this slice is inserted: the two `^## Slice … Objective grill of …`
+heading greps (one per file, both wrapping between the pattern and its target
+list) and two rule-1 P0 greps in the same shape. Corrected before any figure
+above was taken.
+
+**The instrument is red-proved by discrimination**, not by a bare pass: it
+reports `DIFFERS +5` on the known positive (`1,433 live inline declarations`),
+and `same` on two negatives — a wrappable phrase that happens not to wrap
+(`closed slices carrying`, 7/7) and a phrase with no whitespace at all
+(`ROADMAP-archive.md`, 409/409). A comparator that returned "same" everywhere
+would have been indistinguishable from a passing run.
+
+### The command, which is the thing both defects lacked
+
+```
+# count a literal phrase over the corpus both ways; Δ≠0 means the phrase wraps
+python3 - "$PHRASE" <<'EOF'
+import re, sys
+p = sys.argv[1]
+for f in ("ROADMAP.md", "ROADMAP-archive.md"):
+    t = open(f, encoding="utf-8").read()
+    lb = sum(l.count(p) for l in t.split("\n"))
+    wn = re.sub(r"\s+", " ", t).count(re.sub(r"\s+", " ", p).strip())
+    print(f"{f:20} line={lb:4} ws={wn:4} {'DIFFERS' if lb != wn else 'same'}")
+EOF
+```
+
+**Take any multi-word phrase-count this way.** The rule that falls out of the
+table is sharper than "normalise everything": a count of an **identifier**
+(a page path, a class, a slice id) is safe per-line and 9 of 14 published
+counts are of exactly that; a count of a **phrase with a space in it** is not,
+and is the only case worth the second reading.
+
+1. [x] **343.1 — 322.3 answered: refused, with the base rate (1 of 14; 1 of 5
+       wrappable), the caller count (0), and the severity on the one case that
+       changes (12 vs 19, 37% missed).** The command is recorded above and is
+       re-runnable in seconds, which is the omission both motivating defects
+       shared.
+
+**Gates: all 17 cloud-runnable entry points green** on the committed tree.
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. **None are owed by this slice**, and that is structural
+rather than a judgement call: the diff is **markdown only** — `ROADMAP.md` and
+the hand-off. No CSS, no `.astro`, no script and no docs page changed, so no
+rendering can move. The visual debts carried forward are unchanged and unspent.
+
+## Slice 342 — 320.2: `scan:dead-style` judges each declaration on its own, and the blind spot was not empty — **52 dead declarations** were hiding behind live siblings, invisible to every sweep that has ever read this instrument (2026-09-08)
+
+**Dispatched by rule 4** on the oldest still-open cloud-takeable item, cloud
+wake. Step 0: container **DETACHED** again (`git branch --show-current` empty),
+`ENVIRONMENT.md` trap 1, fixed with `git checkout -B main origin/main` before
+any commit; `origin/main` again arrived as a **forced update**
+(`26447ba...e214bd7`). Trap 2 clean in one `--unshallow`, no `shallow.lock`,
+and it again brought the tags — `git tag | wc -l` -> **8**, §2's mandated count,
+run rather than assumed. Trap 1c respected: `CHROME_PATH` exported in the same
+command as every browser-driven gate.
+
+Rule 1: no open P0 — `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` -> **0**.
+Step 1 read **both** intakes with `ENVIRONMENT.md` §8's controls
+(`/discussions` -> 200 len **0**; `/not-a-real-route` -> **404**;
+`/issues?state=open` -> 200 len **1**, issue #2, `updated_at` unmoved at
+2026-09-06T15:10:34Z, already triaged) and triaged nothing: no new input.
+Rule 2 `Standardize 1 / 4` did not match. Rule 3 `Objective 0 / 3` did not
+match — spent by Slice 341. **Rule 4 matched.** Rule 5 was not reached, and its
+line reads `ok` rather than STALE for the first time in a while: the comparable
+set carries `dispatch-region-words 7298 -> 7492`, a **single** pair, and one
+pair cannot fire a rule that needs two consecutive.
+
+**The archive sweep was evaluated and declined, on the trigger the last two
+sweeps actually used.** `roadmap_scope.py` at `e214bd7d` reports closed-history
+share **2,946 / 8,908 = 33.1%** with 13 eligible targets. 252.1 dispatched the
+tenth sweep at **55.1%** and 272.1 the eleventh at **56.7%**; 279.3 declined the
+twelfth at **40.6%**. 33.1% is below every one of those, so sweeping here would
+be a wake lowering the threshold by its own initiative — which is precisely what
+`249.12`, the open **OWNER OR ARCHITECTURE CALL** on the archival trigger,
+exists to prevent. Re-run the script; these are snapshots and this commit moves
+them.
+
+### What 320.2 asked for, and what it turned out to be worth
+
+The scan's verdict joined every property an attribute names into ONE string, so
+an attribute was dead only if **all** of its declarations were. Slice 320
+red-proved the gap on injected controls and filed it rather than building it,
+because closing it moves a headline number that (per Slice 322's correction)
+**17 sweeps had quoted** — 208 through 314, none of them correctly. There are
+now two verdicts per attribute:
+
+- the **attribute** verdict, byte-for-byte the old logic, so the series stays
+  comparable;
+- the **declaration** verdict — drop one declaration, leave the siblings in
+  place, and read back only the properties that declaration names.
+
+**The finding is that the blind spot was not empty.** 320.2's Accept says
+outright that *"finding that the gap yields zero real dead declarations is a
+satisfying outcome"*. It does not:
+
+```
+before   0 dead style attribute(s) on 0 page(s); 1365 live; 1854 declaration(s); 357 multi
+after    0 dead style attribute(s) on 0 page(s); 1365 live; 1854 declaration(s); 357 multi
+         per declaration — 52 dead declaration(s) on 13 page(s)
+         reconciliation — 52 of those sit in 50 attribute(s) the attribute verdict
+                          calls LIVE, out of 357 multi-declaration attribute(s);
+                          0 dead attribute(s) hold a declaration that reads live alone
+```
+
+**The reconciliation is against the re-measured corpus, not against the number
+this item was handed.** 320.2 cites *"the 273 attributes named above"*; 273 was
+Slice 320's reading on 2026-09-07 against 1,272 attributes, and the tree has
+moved since — today it is **357 of 1,365**, which Slice 332's grill independently
+recorded as `0 dead / 1,365 live / 357 multi` on the same corpus. Reconciling
+against the stale 273 would have been the *"reconciles against its own caller"*
+failure CLAUDE.md's storage doctrine names.
+
+Two internal checks hold, and both could have failed:
+
+- **All 52 sit inside live attributes.** They must, and it is checked rather
+  than assumed: a dead declaration in a *single*-declaration attribute would
+  make that attribute dead, and the attribute count is still **0**.
+- **`deadAttrLiveDecl` is 0** — no attribute that reads dead as a whole holds a
+  declaration that reads live alone. That disagreement is possible in principle
+  and is now reported rather than waved away.
+
+**Reconciled against an independent count before quoting** (CLAUDE.md), and the
+first instrument for it was wrong, which is the base rate arriving on schedule:
+a per-page grep was written that conflated the *global* `by dead declaration`
+tally with the *per-page* list, and reported `raw=0` against `scan said 10`.
+Corrected to a whole-`dist` declaration census, every dead count is bounded above
+by what is actually present:
+
+| declaration | present in `dist` | called dead |
+|---|---|---|
+| `display:inline-block` | 10 | 10 |
+| `color: var(--bo-color-accent)` | 19 | **17** |
+| `margin: 0` | 12 | 12 |
+| `display: block` | 7 | **4** |
+| `inline-size: 100%` | 6 | **3** |
+| `inline-size:var(--bo-space-0)` | 1 | 1 |
+| `display: inline-block` | 1 | 1 |
+
+**The three splits are the discriminating evidence, not the three matches.** The
+same declaration text is dead in some places and live in others, which is what a
+per-*element* verdict must produce; had every row read `dead == present`, that
+would be the "identical value across many inputs" tell this repo treats as a
+defect until proven otherwise.
+
+**The print branch also stopped reading as a branch that never runs.** At the
+attribute unit it reports **0** dead-on-screen-but-live-in-print, every sweep,
+forever. At the declaration unit it reports **6** — the same both-media rule,
+finer input, and the first non-zero this instrument has produced there.
+
+### The red-proof, and it is precise rather than broad
+
+Per the standing rule that a green red-proof is a defect in the injection, the
+injection was verified before the result was believed: a throwaway copy of the
+script in `apps/docs/scripts/` had its per-declaration verdict replaced by the
+attribute one, with the target's occurrence count asserted as exactly **1**
+before the replace and the marker asserted present after.
+
+```
+- mixed control's dead declaration read live — 'margin: 0' inside
+  'padding: 40px; margin: 0' → dead=false. This is exactly what judging the
+  attribute AS A WHOLE produces (roadmap 320.2)                          rc=1
+```
+
+**Exactly one of the five controls failed** — the live control, the dead
+control, the mixed attribute and the mixed live declaration all still passed.
+That matters because `ENVIRONMENT.md` already carries the sibling trap: *a
+red-proof that goes red TOO BROADLY certifies nothing either*. The probe file
+was deleted and its absence confirmed (`ls apps/docs/scripts | grep -c redproof`
+-> **0**, `git status --short` showing only the one modified file).
+
+The mixed control is `padding: 40px; margin: 0` rather than Slice 320's
+`margin: 40px; padding: 0`, deliberately: `margin: 0` is dead for a reason this
+script's **existing** dead control already proves (the reset's `* { margin: 0 }`),
+whereas a `<p>`'s zero padding is an assumption about the docs cascade that
+nothing here had tested.
+
+1. [x] **342.1 — DONE 2026-09-08 (Slice 345). 41 converted from ~~five source
+       lines~~ FOUR source lines plus three one-offs, 11 refused per site, and
+       the re-run lands on exactly the refusal set. The 52 are a lane-1
+       finding, not this item's to spend.**
+
+       > **CORRECTED 2026-09-08 by Slice 346 (Objective grill): "five source
+       > lines" is wrong under both readings Slice 345's own body supports**,
+       > and it was written by the same commit (`161ede68`) whose subject,
+       > heading and body all say **FOUR**. 345's table decomposes the 41 as
+       > `14 + 10 + 10 + 4` from four lines, **plus three one-off lines** on
+       > `/patterns/output-form` — so the honest count is four idiom lines, or
+       > seven lines in total. Neither is five. The nearest true "five" in that
+       > slice counts **files**, not lines (its NOT-VERIFIED block), which is
+       > what makes this read as a conflation that outlived the correction.
+       >
+       > **Why the hand-check that fixed the other two sites missed this one:**
+       > the phrase wraps here as `five source` / `lines`, so a line-based
+       > `grep 'five source lines'` over `ROADMAP.md` returns **0** while the
+       > text is plainly there. That is `322.3`'s mechanism exactly, one wake
+       > after Slice 343 refused a shared normaliser for it — correctly, on a
+       > caller census of counting *instruments*, which is a population this
+       > use is not in. Filed as `346.1`; **343's refusal is not reopened.**
+       >
+       > **Read at `6d6f5af`, the parent of this commit — and NO figure for
+       > *this* commit is published, deliberately.** `327.2`'s effect fires
+       > here in its strongest form: this correction, and Slice 346's entry
+       > about it, both contain the phrases they count, so every attempt to
+       > state the current value changes it. Two were written and both were
+       > stale before the edit finished (`3 4` → `5 5` → `6 5`), which is the
+       > regress, not three mistakes. **The property is stable and the value is
+       > not:** whitespace-normalised sees every occurrence, line-based misses
+       > exactly the wrapped one — at `6d6f5af` that is the *only* occurrence,
+       > so it sees **0 of 1**. Re-run against a named revision, never the tree.
+       >
+       > ```
+       > git show 6d6f5af:ROADMAP.md > /tmp/r.md
+       > python3 -c "import re; s=re.sub(r'\s+',' ',open('/tmp/r.md').read()); \
+       >   print(s.count('five source lines'), s.count('FOUR source lines'))"
+       > #  1 2        whitespace-normalised
+       > grep -c 'five source lines' /tmp/r.md   #  0   <- the miss
+       > grep -c 'FOUR source lines' /tmp/r.md   #  2
+       > ```
+       `scan:dead-style` is a report the Standardize sweep consumes; 320.2 was
+       scoped to the instrument, and fixing 13 pages inside it would mix an
+       instrument change with a corpus change in one commit and widen the item.
+       The 52 need judgement per site, not a regex: `/reference/tokens/` and
+       `/reference/events/` are generated swatch/table pages, and 292.8's rule
+       puts a declaration inside a copyable template literal out of scope.
+       - **Accept:** lane 1 of the next Standardize sweep records a verdict for
+         every dead declaration the scan reports — converted, or refused with a
+         reason — and the re-run count is reconciled against the count it
+         started from. **Finding that most are out of scope is a satisfying
+         outcome** if it carries the per-site reasons.
+
+**Refused inside this round, measured rather than argued:** a depth-aware
+declaration splitter, so a `;` inside a `url()` or a quoted value cannot break
+the parse. Base rate first, per 94.11: **0 of 30,483** style attributes in the
+built site carry one, so the predicate distinguishes nothing today, and shipping
+it would move a headline number for a case that does not exist. ~~The refusal and
+the command are in the script's header so the next wake re-measures instead of
+rebuilding it.~~
+
+> **CORRECTED 2026-09-08 by Slice 346 (Objective grill): the refusal was in the
+> header; the COMMAND was not.** What `scan-dead-style.mjs` carried was the
+> number and the sentence *"Re-measure before assuming it still holds"* —
+> `grep -nE '30,?483|python3|node -e|grep -r' apps/docs/scripts/scan-dead-style.mjs`
+> returns the one line holding the figure and nothing else. So this slice
+> asserted the fix for Slice 322's **Defect B** — *a load-bearing number with no
+> command beside it* — in the same sentence that committed the defect, one
+> slice after that grill filed it.
+>
+> **The cost is demonstrated rather than argued.** Re-measuring needed an
+> instrument written from scratch, and its first output was **wrong**: a
+> raw-text scan reports **1 of 30,485**, because `/components/icon/` carries
+> `--bo-icon-src: url('data:image/svg+xml,<svg xmlns=&quot;…')` and the `;`
+> closing `&quot;` sits inside the `url()` in the file text, while the browser —
+> the unit this script actually splits — never sees it. Decoded, the figure is
+> **0 of 30,485** against the published 0 of 30,483. **The refusal itself
+> stands**; only the claim about where to find its command does not.
+>
+> **Fixed rather than only recorded:** the command is now in that header, with
+> the entity trap named, and it was red-proved by injection before being written
+> down — injecting `url(data:image/svg+xml;base64,…)` into one built page takes
+> it from 0 to 1, so it is a detector that can fail rather than one that reports
+> a clean tree because it cannot see.
+
+**Gates: all 17 cloud-runnable entry points green** on the committed tree.
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. **None are owed**, and that is structural rather than a
+judgement call: the diff is one `.mjs` scan script that is not a build step, not
+a gate, and not imported anywhere. Checked rather than asserted —
+`grep -rln scan-dead-style` finds it in `apps/docs/package.json` (its own entry)
+and, as **prose in a header comment**, in `check-viewport-forks.mjs` and
+`viewports.mjs`; neither imports it, and `check:viewport-forks` passes on the
+edited tree (76 docs scripts, no literal spelling of 390/1440 outside
+`viewports.mjs` — this script's one `DESKTOP_WIDTH` use is untouched). No CSS
+rule, no docs page and no component changed, so no rendering can move.
+
+## Slice 338 — 316.1 built: `check:print-tokens` ships red-proved, the exemption list it was expected to need is refused on a measurement, and the gap it CANNOT see is filed rather than quietly widened (2026-09-08)
+
+**Dispatched by rule 4**, cloud wake. Step 0: container **DETACHED** again
+(`git branch --show-current` empty), `ENVIRONMENT.md` trap 1, fixed with
+`git checkout -B main origin/main` before any commit; `origin/main` again
+arrived as a **forced update** (`26447ba...0ba54ba`), carrying Slice 337, which
+the previous hand-off predates. Trap 2 clean in one `--unshallow`, no
+`shallow.lock`, and it again brought the tags; `git tag | wc -l` → **8**.
+
+Rule 1: no open P0 — `grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` reads **0**
+across the 31 open items. Step 1 read **both** intakes with `ENVIRONMENT.md`
+§8's controls in one run — `/discussions` → 200 len **0**; `/not-a-real-route`
+→ **404**, so the zero is a served zero; `/issues?state=open` → 200 len **1**,
+issue #2, `updated_at` still `2026-09-06T15:10:34Z` and already triaged as
+`300.2` — and triaged nothing: no new input, so Step 1 committed nothing.
+Rule 2 `Standardize 3 / 4 … ok`; rule 3 `Objective 0 / 3 … ok`, spent by 337.
+Rule 5 reports **STALE** (`1 wake-date(s) newer`), so per `LOOPS.md` it **could
+not be evaluated** and is not reported clear. **Rule 4 dispatched Continue,
+build mode**, on `316.1` — the oldest still-open item that any wake can take.
+Everything older was re-derived from its own item text rather than carried from
+the hand-off: Slice 15 (owner hardware), `112.3`/`112.4` (owner briefs),
+`249.7` (its own text holds it for `249.10`, owner vocabulary),
+`249.10`–`249.13`, `273.2`, `296.3` — all **OWNER CALL**.
+
+### The base rate reproduced, and the denominator did not
+
+`316.1`'s own text says *"Re-run the base rate first; it is a snapshot."* Under
+its stated narrow property list (`color|background|background-color|
+border-color|fill|stroke|outline-color`) it reproduces **exactly**: **11
+literal, 0 token**, across **6** files, with the per-file tally matching to the
+digit — `approval-workflow` 1, `badge` 2, `data-table` 2, `stepper` 3,
+`print/index.css` 1, `reset/index.css` 2.
+
+**The shipped gate counts 14, and that is a different population, not a
+disagreement.** Adding the `border` shorthand finds three more —
+`badge.css:115`, `data-table.css:815`, `stepper.css:95`, every one a `border:
+… solid <literal>`. The wide list is the right denominator for the gate,
+because `border: 1px solid var(--bo-color-border)` inside `@media print` is
+exactly the regression and the narrow list cannot see it. Both numbers, and
+which is which, are in the gate's header — Slice 336's three defects were every
+one of them a number faithfully reading a different population than the noun
+beside it named, and this is that lesson applied on the next wake rather than
+discovered by the next grill. **Neither number is the verdict**; the verdict is
+the **0**, and it is identical under both lists.
+
+### The anticipated exemption list is REFUSED, on a measurement
+
+`316.1` named the likeliest reason to refuse the gate: *"a blanket ban is wrong
+for a fill whose colour IS content (`print-color-adjust: exact` markers), which
+would need the exemption list this repo's other gates carry."* All three such
+rules were read:
+
+| rule | file | declares |
+|---|---|---|
+| `.bo-icon` | `icon.css:296` | `-webkit-print-color-adjust`, `print-color-adjust` |
+| `.bo-timeline__marker, .bo-stepper__marker` | `print/index.css:91` | `print-color-adjust` |
+| `.bo-u-print-exact` | `print/index.css:113` | `-webkit-print-color-adjust`, `print-color-adjust` |
+
+**None of them restates a colour inside `@media print` at all**, and that is
+structural rather than lucky: the entire point of `print-color-adjust: exact`
+is to preserve the colour the ordinary cascade already gave the element, so an
+exact-fill rule has no reason to name a colour a second time. So the exemption
+is not needed, and shipping an empty exemption map "just in case" would be the
+ceremony 94.11 refuses. If a real case ever arrives the gate goes red and the
+exemption is argued deliberately — the right way for that decision to be made,
+rather than silently exercised.
+
+### The predicate is the token reference, not a property allowlist
+
+The first draft keyed on a list of colour-bearing properties. That list is an
+escape hatch with a live example one hop away: `approval-workflow.css:69` sets
+`--bo-timeline-marker-fg: var(--bo-color-text-muted)`, a **custom property** no
+such list names. Written inside `@media print` it is the identical regression
+and the identical 2.54:1, and the allowlist would have passed it. `--bo-color-*`
+is a colour family by definition, so keying on the token reference loses nothing
+and closes the door. It is red-proved in both places — self-test case 3, and a
+live injection into a real component file (below).
+
+1. [x] **338.1 — DECIDED 2026-09-09 (Slice 369): REFUSED on its named
+       instance, with the measurement.** `.bo-timeline__marker` prints at
+       **5.66:1** at worst, not the 2.54:1 below — `print-color-adjust: exact`
+       keeps its disc, so the glyph never meets white paper. The premise being
+       false was the Accept's own satisfying outcome. The base rate the other
+       branch asked for was measured anyway and the gap is **framework-wide,
+       not narrow** (19,511 of 26,817 painted text fills below AA on 125 of
+       128 pages, dark theme), so the *word* in the gate header is wrong even
+       though the *example* is. And this item's Accept named the wrong
+       instrument: a computed-style reading over-states every ratio and gets
+       `--bo-color-accent` qualitatively wrong, because Chrome rewrites light
+       text on the way to paper. Filed forward as `369.1` and `369.2`.
+       Original text kept below.
+
+       **338.1 — the gap `check:print-tokens` cannot see: a theme token that
+       reaches paper through the ORDINARY CASCADE.** FILED, not built. The
+       gate catches a token *restated* inside `@media print`. The mechanism it
+       misses is specificity, not any print property:
+       `reset/index.css:96` ships
+       `@media print { body { background: #fff; color: #000 } }`, which covers
+       everything that INHERITS its colour — most text, which is why this is a
+       narrow gap and not a framework-wide one. It does not cover an element
+       that sets its own colour, because `body { color: #000 }` loses to any
+       more specific rule. `.bo-timeline__marker` is such an element:
+       `approval-workflow.css:106` sets `color: var(--bo-timeline-marker-fg)`,
+       and `:69` defines that as `var(--bo-color-text-muted)` — the token
+       298.1 measured at **2.54:1 on white paper**. Nothing inside
+       `@media print` overrides it.
+
+       **The source path above is grepped. The printed contrast is NOT
+       measured** — saying so rather than letting a source trace imply a
+       rendered result, and it is why this is filed rather than folded into
+       the gate: a source scan is the wrong instrument, a computed-style
+       reading under print emulation is the right one, and a cloud wake can
+       take that (`ENVIRONMENT.md`'s "can run" list).
+       - **Accept — the property, and finding the premise FALSE is a
+         satisfying outcome.** Re-measure first, under print emulation on the
+         built site in the dark theme, exactly as 298.1 did: read the computed
+         `color` of a rendered `.bo-timeline__marker` and its contrast against
+         the printed background. Then EITHER the reading is a real
+         below-AA value and this closes with the fix plus its base rate — how
+         many elements set their own colour from a `--bo-color-*` token and
+         are not overridden in print — OR the reading is benign (the UA, the
+         reset, or the marker's own background rescues it) and this closes as
+         **refused with the measurement**, and the gate header's "what this
+         does not see" paragraph is corrected to say so. Do not widen
+         `check:print-tokens` on the strength of the source trace alone.
+
+## Slice 335 — 297.1 answered: both issues landed in the right channel, and the router that was supposed to put them there was never used (2026-09-08)
+
+**Dispatched by rule 4** as the oldest item that is not owner-blocked. `297.1`
+became answerable only recently: it needed a real filed item, and Slice 332
+had to fix the intake command before a wake could reliably read one.
+
+**Its Accept asked for the property, not a happy answer**: *"one wake reports
+on a real filed item, naming which intake it arrived in and whether that was
+the right one. Finding that the router sent it to the wrong place is a
+satisfying outcome."* The measurement is better than either branch it
+anticipated.
+
+### The channel was right. The router was bypassed.
+
+Two issues exist, `#1` (closed) and `#2` (open). Both belong in Issues on
+substance — `#1` is a defect with a pasted repro, `#2` is a feature request
+carrying the real ERP scenario the template asks for. **So the channel choice
+was correct both times.**
+
+**But neither used a template.** Measured on the API rather than inferred:
+
+```
+curl .../issues?state=all   ->  #1 labels: NONE   body starts "## What happens"
+                                #2 labels: NONE   body starts "## The gap"
+```
+
+`bug_report.yml` declares `labels: ["bug"]` and `feature_request.yml` declares
+`labels: ["enhancement"]`, and **GitHub applies those automatically to anything
+filed through the form**. Zero labels on both is therefore not a tidiness
+detail — it is proof the forms were never rendered. `blank_issues_enabled:
+true` is what let them through.
+
+**So the six enforced fields never fired.** The bug form would have demanded
+Version, Browser + version, Theme, Density, a minimal HTML repro, and
+expected-vs-actual. Issue `#1` supplied a version, a repro and exact command
+output **voluntarily** — which is the finding's sharpest edge: the intake
+produced excellent input, and **the machinery I built is not what made it
+good.** A disciplined reporter was.
+
+### The verdict on `blank_issues_enabled`
+
+**Left `true`, deliberately.** Both real issues are *better* than the form
+would have produced — `#1` reasons about why the rough edge is worth fixing
+and quotes the tool's own docstring; a six-field form has nowhere to put that.
+Forcing every reporter through a form to protect against the ones who would
+under-report is the ceremony this repo's base-rate rule refuses, and the
+measured base rate here is **2 of 2 filed well without it**. The templates
+stay as a floor for someone who needs the prompts, not a gate on someone who
+does not.
+
+### What is still untested, stated rather than quietly closed
+
+- **The Issues-vs-Discussions router has still never been exercised.** Both
+  issues were filed by the owner's own agent, which had no reason to consult a
+  contact link. A stranger choosing a door remains unobserved.
+- **The Discussions half is untested twice over.** Zero have been filed, and
+  until Slice 332 the command that reads them **could not run in a cloud
+  wake** — so a discussion filed any time before yesterday would have been
+  silently missed by most wakes. The intake was broken for the whole period
+  `297.1` was open waiting to test it.
+
+1. [x] **297.1 — DONE.** A real filed item is reported, naming the intake it
+       arrived in (Issues, twice, correctly) and whether the routing worked —
+       it was **bypassed**, which the Accept explicitly names as a satisfying
+       outcome. The config was not the thing that worked.
+
+1. [x] **335.1 — The Discussions intake has never returned a non-empty list,
+       in either environment.** `332`'s REST fix is verified by controls (a
+       404 on an unserved route, a known-content issues list) but never by an
+       actual discussion, and `ENVIRONMENT.md` §8 says so outright.
+       - **Accept** — the property: the day a discussion exists, a wake re-runs
+         the REST command and confirms it appears with its number and title,
+         then records that the intake is proved end-to-end. **Filing one to
+         test it is explicitly allowed** and is cheaper than waiting — a
+         throwaway Q&A discussion, checked, then closed, would settle it. What
+         is NOT allowed is closing this on the controls alone; they prove the
+         route is served, not that a real item surfaces.
+       - **Lane, measured 2026-09-09 (Slice 366) rather than assumed:
+         CLOUD-BLOCKED in the WRITE sense — a LOCAL wake can take it.** The
+         Accept's own escape hatch, filing a throwaway discussion, is a GraphQL
+         `createDiscussion` mutation, and this session's GraphQL endpoint
+         answers **HTTP 403** — *"only the
+         pinned set of PR-review operations is served"* — to all three of
+         `viewer`, a `repository { discussionCategories }` read and a bare
+         `__type` introspection, so the refusal is the endpoint and not one
+         query. The repo object read with the same token reports
+         `permissions {admin, maintain, push, triage, pull}` all **false**, and
+         no `mcp__github__*` tool in a cloud session touches discussions. A
+         local wake's `gh auth token` carries the owner's own GraphQL access, so
+         **this is the third kind of block `LOOPS.md` rule 4 asks a wake to
+         name**, not owner-blocked and not browser-blocked. A cloud wake that
+         reaches this item should record the fall-through and take the next one
+         rather than re-deriving the 403.
+         **Whether a REST POST would work is untested BY CHOICE**, said plainly
+         rather than folded into the block: the only probe is a request that can
+         create a real public item in the owner's repository, and a scheduled
+         wake has no live owner to authorise one. `/discussions/categories`
+         answers `404` with `documentation_url:
+         rest/repos/discussions#get-a-discussion` — the family's own anchor is a
+         *get* — which is weaker evidence and is all that was taken.
+       - **DONE 2026-09-24 — proved end to end, on a real item.** A local wake,
+         with the owner in the session authorising it (create, verify, delete).
+         Before: the intake command read `200 len 0`, and the `/not-a-real-route`
+         control read `404`. GraphQL `createDiscussion` filed #3 in Q&A,
+         *"[loop test 335.1] intake probe — will be deleted"*. The same REST
+         command then read **`200 len 1`**, with #3's number, title and category.
+         After `deleteDiscussion` it read `200 len 0` again, REST
+         `/discussions/3` answered 404, and GraphQL answered NOT_FOUND, so
+         nothing is left in the repository. `ENVIRONMENT.md` §8's "not
+         red-proved" paragraph is now the dated proof, and `LOOPS.md`'s intake
+         note says so. The cloud wake's GraphQL 403 still stands; it no longer
+         matters, since the proof exists. Jev: supported 0.95.
+         [**Corrected by Slice 381:** the intake as LOOPS.md then spelled it used
+         `$GITHUB_TOKEN`, unset locally, and answered 401; what ran substituted
+         `gh auth token`, and LOOPS.md now spells that fallback. And "nothing is
+         left" is not quite true: no content is, but `/discussions/3`
+         intermittently serves a deleted-discussion page with HTTP 200, and #3
+         is consumed from the number sequence issues share.]
+
+## Slice 333 — 310.2: the five unrendered markup consts are deleted, and the reason is not tidiness — 3 of the 5 had already drifted from the showcase they describe (2026-09-07)
+
+**Dispatched by rule 4**, on the oldest genuinely dispatchable open item.
+Rule 1 no open P0 (`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0**);
+rule 2 `Standardize 0 / 4 ok` — Slice 332 reset it at `14:24:44Z`, roughly six
+minutes before this wake's first fetch, so the hand-off this wake read (written
+at `534b097a`, two commits back) telling it *"the next wake dispatches rule 2"*
+was already out of date; the counters were re-read rather than trusted. Rule 3
+`Objective 1 / 3 ok`; rule 5 `Optimize 0 wake-date(s) newer — ok`, so it was
+EVALUATED and does not fire. Rule 4's oldest open item is Slice 15, and
+everything from there to `310.2` is owner- or input-blocked, re-derived from
+each item's own text rather than carried from the hand-off: **15** NEEDS-RUNTIME
+(owner hardware), **112.3** "BLOCKED ON OWNER BRIEFS", **112.4** blocked on
+112.3's verdict, **249.7** holds its remaining rows for 249.10 (owner
+vocabulary) with its first Accept clause already executed, **249.10-13** each
+`OWNER CALL`, **273.2** `OWNER CALL` in its own heading, **296.3**
+`OWNER CALL`, **297.1** waits on a filer who is not the owner. `310.2` is the
+oldest cloud-takeable one, and its own Lane line says it is cloud-takeable
+**in its delete form**.
+
+### The premise reproduces exactly
+
+```
+for c in toastMarkup menuMarkup rowMarkup savingMarkup removeMarkup; do
+  echo "$c $(grep -o "$c" apps/docs/src/pages/base/motion.astro | wc -l)"; done
+#  each 1 — the declaration itself
+```
+
+And in the built page, each const's own comment text — `Entrance: a toast
+arrives from the top edge`, and the four siblings — occurs **0** times in
+`dist/base/motion/index.html`. The page ships **4** `<pre><code>` blocks, all
+from the other four consts (entrance, collapse, pulse, spin).
+
+### The deciding measurement: they are a second copy, and it has already rotted
+
+The reason to delete rather than render is not that the code is dead. It is
+that these five were a **hand-maintained second copy of markup the page
+already renders live** in its "In context" section — the shape CLAUDE.md's
+recipe forbids in one sentence: *"`Demo` renders a preview **and** its copyable
+code from ONE string — never write the preview and code twice."* The predicted
+consequence of writing it twice is drift, and the drift is here. Measured
+against the BUILT page's own DOM, not the source diff:
+
+| const | source declares | the page renders | |
+|---|---|---|---|
+| `toastMarkup` | `<div class="bo-alert bo-alert--success bo-motion-slide-in-block-start">` | same | MATCHES |
+| `menuMarkup` | `<div class="bo-motion-scale-in">` | `<div class="bo-motion-scale-in bo-alert">` (+ `role="group"`, `<p>` not `<div class="bo-card">`) | **DIFFERS** |
+| `rowMarkup` | `<tr class="bo-motion-pulse-once">` | `<tr class="">` — the class is applied by JS via `data-motion-class`, which is the *point* of that showcase | **DIFFERS** |
+| `savingMarkup` | `<button class="bo-btn" … aria-busy="true">` + spinner span | identical after driving the click; inner markup equal after whitespace collapse | MATCHES |
+| `removeMarkup` | `<tr class="bo-motion-fade-out">…</tr>` | `<div class="bo-alert bo-motion-fade-out">Line 30 — Anode kit</div>` | **DIFFERS** |
+
+**3 of 5.** Rendering them — the other half of the Accept — would have shipped
+three copyable samples that contradict the live showcase standing beside them.
+That is worse than shipping nothing, and it is the answer to the item's own
+"either rendered or deleted".
+
+**The probe was wrong on its first run, and the failure is the one this repo
+names.** v1's claim table was hand-transcribed, and its `removeMarkup` row
+carried the *rendered* value in the "const claims" column — so it reported
+`MATCHES` for a pair that differs. The instrument agreed with itself because
+both columns came from the same side. v2 parses the const out of the source
+with a regex whose failure throws, so the left column cannot be typed wrong,
+and it carries a **control**: `entranceMarkup` IS rendered and must come back
+`MATCHES`, which it does. 3-of-5 with a passing control discriminates; 5-of-5
+would not have.
+
+### Is this a class of defect? Measured: no — one page, and now zero
+
+```
+# frontmatter `const <name> = ` whose identifier occurs once in its own file
+5 never-used const(s) across 152 .astro files   (before — all five on motion.astro)
+0 never-used const(s) across 152 .astro files   (after)
+```
+
+So it is a one-page problem, not a pattern. **No gate was built** — see 333.1.
+
+### Verifying the removal: the raw grep is the WRONG check here
+
+The Accept says *"re-run the count above afterwards; it must read 0 for every
+name that remains"*. Run literally it reads **2, 2, 2, 3, 2** — because the
+comment this edit wrote to explain the deletion legitimately names all five
+consts. That is CLAUDE.md's *"verifying a removal: assert on structure, never
+on raw text"*, arriving in the criterion itself rather than in a script. The
+structural forms both read clean:
+
+- **comment-stripped identifier count** on the page: `0` for each of the five,
+  and `2` for each of the four that legitimately remain (declared + rendered)
+  — the controls are what make the zeros mean something.
+- **the frontmatter's own declaration list**: `base, classes, DESC, INTENT,
+  entranceMarkup, collapseMarkup, pulseMarkup, spinMarkup`.
+
+### NOT VERIFIED does not apply to this one, and that is measured rather than argued
+
+A cloud wake has no Podman, so no 1440/390 light-and-dark screenshots were
+taken. **They are not owed here**: the built page is **byte-identical** before
+and after — `md5sum` `f8886e3e9ee20f6464ae9545cd44d7aa` on both, 87,802 bytes
+each, from a fresh `rm -rf apps/docs/dist && npm run docs:build` (all 139
+built pages rewritten, mtimes 14:34:21-24Z). Which is the expected consequence
+of deleting strings that reached the HTML zero times, and the two facts
+corroborate each other.
+
+Byte-identical is a suspiciously tidy number, so the comparison was
+red-proved: `diff` of the same saved page against a *different* built page
+reports a difference, so the instrument discriminates.
+
+### Two things kept rather than deleted with the consts
+
+- **The `--grid`-not-`--settings` reasoning (roadmap 292.9)** sat in a comment
+  above `savingMarkup`. The live "Saving…" swap in the page's own `<script>`
+  makes the identical choice, so deleting the const would have deleted the only
+  record of why. Re-homed onto that handler, trimmed to the half that is still
+  true, and it now says outright that it is the last site carrying the choice.
+- **`check-deprecated-icons.mjs`'s header** used `savingMarkup` as its worked
+  example of why phase 1 (SOURCE) is not redundant with phase 2 (DIST) — "a
+  copyable string a page declares but does not render". That example no longer
+  exists. The header now says the coverage claim is **prospective**, gives the
+  before/after base rate, and warns against reading the empty population as
+  evidence the phase is redundant. Found by grepping the const names repo-wide
+  before editing, which is the step that keeps a snapshot in a comment from
+  going stale silently.
+
+### The gap this leaves, stated rather than left to be rediscovered
+
+The "In context" section now carries **no copyable block**, alone among the
+page's sections. That is recorded in a template-adjacent comment in
+`motion.astro` itself, with the condition for closing it: render preview and
+code from one string, never re-add a hand-copy. Doing that adds `<pre>` blocks
+to a built page — the half `310.2`'s own Lane line assigns to a local wake.
+
+1. [x] **333.1 — should a gate forbid a never-used frontmatter `const` in an
+       `.astro` page? DECIDED 2026-09-08 (Slice 362): `tsconfig`, not a gate.**
+       The base rate was re-measured at that revision and the item's population
+       was too narrow — **0 of 600** consts, but **1 of 518** imports, a dead
+       `eventsManifest` import live for **22 days**. `astro check` +
+       `noUnusedLocals` catches it and more; the enabling work is `362.1`. The
+       gate is refused for duplicating a subset of a compiler flag at the cost
+       of a README re-stamp on the npm front page. Original text kept below.
+       Not built in this item, and the reason is that the
+       evidence points both ways and neither direction is this item's to
+       settle. **For**: the predicate is *exact*, not semantic — an identifier
+       occurring once in its own file — so 94.11's wall does not apply, the
+       failure took roughly a month to notice, and it produced three drifted
+       samples. `310.1`'s own precedent is the strongest argument: a gate there
+       earned its place at a clean base rate *because the population had held a
+       violation a day earlier*, which is exactly this population. **Against**:
+       the base rate after this fix is **0 of 152**, so an empty exemption map
+       would be the gate's steady state from birth, and the ordinary tool for
+       it is `noUnusedLocals`, which nothing here sets. **Say precisely what
+       the tsconfig situation is, because a first pass here got it wrong and
+       the correction changes the argument**: `tsconfig.base.json` and
+       `packages/core/tsconfig.json` both exist (`strict: true`, no
+       `noUnusedLocals`), but the core one's `include` is `src/js/**/*.ts`, and
+       `apps/docs/` has **no `tsconfig.json`** and no `astro check` step — so
+       no TypeScript configuration in this repo has ever looked at a docs
+       `.astro` file. The cheaper fix may still be a compiler flag plus the
+       config that would make it apply, rather than a 54th gate; that is more
+       than a one-line change, which is part of what this item weighs.
+       - **Accept** — the property, not a predicted outcome: one wake records
+         which of the three it is (gate / `tsconfig` / neither) **with the
+         base rate re-measured at that revision**, and says what the choice
+         costs. **Deciding to build nothing is a satisfying outcome**, and so
+         is finding the base rate has moved off zero.
+       - **Lane**: cloud-takeable — the scan, the `tsconfig` spike and the
+         decision are all text and node.
+
+## Slice 324 — rule 5's pairing test counted SAMPLES, so a 26-sample afternoon read as a series; re-scoped to distinct days its actionable input set is one metric, and the reason nobody records that one was a premise this wake refuted (2026-09-07)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again (trap 1;
+`git branch --show-current` empty, fixed with `git checkout -B main
+origin/main` before any commit). `origin/main` again arrived as a **forced
+update** (`26447ba...97a3137`). Trap 2 clean in one `--unshallow` (**2,006**
+commits, no `shallow.lock`), and it again brought the tags — the
+**thirty-seventh** consecutive container to do so; `git tag | wc -l` → **8**.
+Step 0b counters read `Standardize 2/4`, `Objective 1/3 [323]`, `Optimize 1
+wake-date newer STALE`. Step 1: both intakes read with `ENVIRONMENT.md` §8's
+controls (`/discussions` 200 len 0, `/not-a-real-route` 404, `/issues?state=open`
+200 len 1) — **issues 1 open, discussions 0 open**, issue #2's `updated_at`
+unmoved at `2026-09-06T15:10:34Z`, so **no new input and Step 1 committed
+nothing**. Step 2: rule 1 no P0, rule 2 `2/4`, rule 3 `1/3`, **rule 4** on the
+oldest still-open item no other kind of block covers — `307.1`, every older
+open item being owner-, browser- or input-blocked (re-checked in the file, not
+carried from the hand-off).
+
+**Rule 5 was the subject of this wake and could not be evaluated as a rule** —
+its line reads a genuine `STALE`, which is no input. That is the item, not an
+obstacle to it.
+
+### The narrowing, and each step is a different mechanism
+
+`44 names → 7 day-paired → 3 alive → 1 actionable.` The full measurement, the
+command that reproduces it, the base-rate replay and the red-proof are in
+`307.1` above, closed by this slice. **A fifth step was drafted — `→ 0
+samplable`, on a refusal row's "no generator anywhere" — and refuted inside
+this wake**: the generator exists, it simply does not carry the metric's name,
+so a grep for the name could never find it. The two findings that outlive the
+re-scoping are filed below; neither is fixed by it, and both are what stop
+rule 5 from firing once its input is honest.
+
+1. [x] **324.1 — DONE, on the Accept's SECOND branch. No direction is recorded,
+       and the reason is not that it is hard: supplying it would make rule 5
+       fire on the one metric it can act on, and that verdict is wrong.**
+       Measured 2026-09-08 (cloud wake, Slice 347) at `5543979`.
+
+       **The measure-first answer is 1 of 8, so the unit-convention escape
+       hatch is dead.** Of the eight day-paired names only `bundle-gz-kb` (`kB`)
+       is directional from its unit. `count` is carried by **14** names,
+       including `axe-violations` (lower-better, pinned at 0 because `test:axe`
+       fails the build above 0 — mechanical, not judged) and `claims`
+       (higher-better — the original text below calls its rise *"the goal"*).
+       One unit, both directions, both anchors mechanical. And the unit is not
+       even stable per name: `axe-violations` was recorded as `pages` through
+       2026-08-30 and as `count` from 2026-08-31.
+
+       ```
+       python3 - <<'PY'
+       import json, collections
+       S=[json.loads(l) for l in open('.roundtable/loop-metrics.jsonl') if l.strip()]
+       days=collections.defaultdict(set); u2n=collections.defaultdict(set)
+       for s in S: days[s['name']].add(s['ts'][:10]); u2n[s['unit']].add(s['name'])
+       print(sum(1 for n in days if len(days[n])>=2), 'day-paired'); print(sorted(u2n['count']))
+       PY
+       ```
+
+       **A per-sample field is also the wrong SHAPE.** Direction is constant per
+       name, so a field on the sample is one fact stored in every sample and
+       free to disagree with itself — 140 of them at `5543979`, none of which
+       could ever carry it.
+
+       **What settles it: rule 5 has been satisfiable since 2026-08-16 and only
+       the missing direction hid that.** Four day-paired names already carry two
+       or more consecutive same-direction day-pairs — `bundle-gz-kb` (4),
+       `claims` (3), `components` (2), `gates` (2). Apply directions and exactly
+       one reads as a regression: `bundle-gz-kb`, 7.2 → 9.6 → 10.8 → 11.7 →
+       15.1 kB, four consecutive rises.
+
+       It is not a regression. The log co-recorded `components` at the **same
+       timestamp** as `bundle-gz-kb` three times — the recording wake's own
+       pairing, not this one's:
+
+       ```
+       2026-08-13 23:06    7.20 kB / 18 = 0.400 kB per component
+       2026-08-15 19:05    9.60 kB / 25 = 0.384
+       2026-08-16 02:24    9.93 kB / 28 = 0.355
+       2026-09-08 live    15.10 kB / 40 = 0.378   check:size at HEAD
+       ```
+
+       Absolute **+110%**; normalised **−5.6%**, and not monotone. Today's 40 is
+       two independent instruments agreeing (`ls packages/core/src/css/components`
+       and `api.json`'s `components` key). **Robustness control:** taking
+       2026-08-16's LAST values instead of the co-located ones (10.8 kB / 30 =
+       0.360) leaves the fall intact, so it is not an artifact of which same-day
+       sample was picked. **Denominator caveat, said plainly:** `index.min.css`
+       also carries primitives, utilities and tokens, so 0.378 is a rough
+       per-component cost — a control on the trend's direction, not a budget.
+
+       **And rule 5's OTHER clause already covers this name, better.** *"or a
+       size budget breached outright"* is mechanical: `check:size` gates
+       `css/index.min.css` at 16.7 kB gz, reads **15.10** today, and prints
+       per-bucket headroom (tightest 110 bytes, `css/brand-navy.min.css`). A
+       budget knows the threshold; a delta does not.
+
+       **Verdict: no `--direction` flag and no per-name registry.** Base rate —
+       a registry would cover 8 names, of which one can currently satisfy "two
+       consecutive", and that one is better served by a budget that already
+       exists. That is 94.11's ceremony test answered with a number. The reason
+       is written where the two wakes who need it read it: `report_comparable`'s
+       closing note (printed at Step 0b every wake) and `record_metric.py`'s
+       docstring (read by a wake recording a sample).
+
+       **What would reopen it:** a day-paired name with two or more consecutive
+       same-direction pairs, a lower-better direction, and **no budget gate
+       covering it**. `dispatch-region-words` is the live candidate — `326.3`
+       treats its growth as the concern — and it has one day-pair, so a third
+       day of sampling would make it the first such name.
+
+       **Not verified visually, and none is owed:** the diff is `ROADMAP.md`,
+       two `scripts/loops/*.py` files and the hand-off. No CSS, no docs page and
+       no component changed, so nothing rendered can move.
+
+       *Original text, kept verbatim per 236.2 — the Accept below is what this
+       item was judged against:*
+
+       **a sample records no DIRECTION, so even a fresh, well-paired
+       metric cannot yield a verdict.** `record_metric.py` writes `{ts, name,
+       value, unit}`. On this tree `claims` rises 35 → 169 (the goal) and
+       `bundle-gz-kb` rises 7.2 → 15.1 kB (the regression) and both are a
+       positive delta on a number. `dispatch_status.py` now prints the movement
+       and says outright that the verdict is the wake's, which is honest and is
+       not the same as rule 5 being answerable by the dispatcher.
+       - **Accept** — the property: either a sample carries which direction is
+         a regression and the line states a verdict where it can, or the
+         reason a direction cannot be recorded is written down where the next
+         wake reads it. **Concluding that the reader supplies the direction and
+         that the printed movement is the right stopping point is a satisfying
+         outcome** — 132 existing samples carry none, and a field only future
+         samples fill leaves the three live names undirected either way.
+       - Measure before building: how many of the day-paired names have a
+         direction that is *obvious from the unit alone* (`kB`, `ms` — lower
+         better) versus one that needs a per-name declaration. If the answer is
+         "all of them from the unit", the field is ceremony and the fix is a
+         unit convention.
+
+2. [x] **324.2 — DONE. The definition is written where a wake recording a
+       sample reads it, and the item's own headline is refuted: the 0.3 kB band
+       is narrower than EVERY move rule 5 reads, by 3x to 11.3x.** Both of the
+       Accept's escape hatches — re-pointing the name at the deterministic
+       minified byte count, or retiring it — are **refused on the measurement**,
+       not preferred against. The series is not noise-limited.
+
+       **The measure-first step ran first, and it killed the item's own shrink
+       branch.** *"A series taken entirely at one offset has no cross-environment
+       problem at all, and that would shrink this item to one sentence."* It is
+       not one offset. `git blame --line-porcelain -- .roundtable/loop-metrics.jsonl`
+       (164.2's method) resolves all 140 lines, and the 11 `bundle-gz-kb`
+       samples are **9 at `+0800` and 2 at `+0000`** — the last two, 2026-09-03,
+       are the cloud lane. The series is genuinely cross-environment, so the
+       item had to be answered rather than shrunk.
+
+       **The headline premise does not reproduce under any pairing.** Rule 5
+       pairs the LAST reading of each distinct day (307.1), so the moves it
+       reads are the day-pair ones:
+
+       | pairing | moves | below the 0.3 kB band |
+       |---|---|---|
+       | **day-pair — what rule 5 actually reads** | +2.4, +1.2, +0.9, +3.4 kB | **0 of 4** (3.0x, 4.0x, 8.0x, 11.3x the band) |
+       | first-of-day | +2.6, +0.33, +1.67, +3.5 | 0 of 4 |
+       | sample-to-sample | ten moves | 5 of 10 |
+       | within-day only | six moves | 5 of 6 |
+
+       Nothing here is "three of four". The two readings that *are* mostly
+       sub-band are within-day and sample-to-sample noise — moves rule 5 never
+       reads. The likely origin of the wrong figure is reading one of those two
+       and reporting it as the day-pair count; the enumeration is in the wake's
+       transcript command, re-runnable against the jsonl.
+
+       **Cross-environment gzip drift measured for the first time here, and it
+       is UNDER 0.1 kB.** The repo has always asserted this drift exists — one
+       real CI failure, 2026-08-16 — and has never measured its magnitude, so
+       "the 0.3 kB cross-environment floor" in this item's own Accept was a
+       chosen band read back as a measurement. The reading:
+
+       - `a9403f42` (2026-08-29) was stamped `92 kB minified (15.0 kB gzipped)`
+         by a wake whose author-tz is `+0800`.
+       - The same tree rebuilt in a cloud container (`+0000`, node 22.22.2,
+         zlib 1.3.1) gives **93,785 minified bytes** and **15,334 gzip bytes =
+         14.975 kB**, printing the same `15.0`.
+       - **The minifier is not a confound**: every CSS toolchain package is
+         version-identical to that commit's own `package-lock.json` — cssnano
+         7.1.9, postcss 8.5.26, autoprefixer 10.5.4, postcss-nesting 13.0.2,
+         postcss-import 16.1.1, postcss-custom-media 11.0.6 — compared one by
+         one rather than assumed. gzip is the only variable left.
+       - **Stated as a BOUND, not a value.** The other environment's exact byte
+         count is unrecoverable; only the tenth-of-a-kB stamp survives. So the
+         claim is `|drift| < 0.1 kB` at **n = 1** — under a third of the band —
+         and explicitly not "drift is zero".
+
+       **A second thing fell out, and it is the part of the Accept that had no
+       obvious answer: WHICH ARTIFACT.** Two published figures for this exact
+       quantity disagree right now. `check:size` prints `15.10`; both READMEs
+       publish `15.0`. Neither is wrong — `stamp-readme.mjs` keeps an existing
+       in-tolerance string rather than re-stamping, precisely so a rebuild
+       elsewhere makes no no-op diff — but it means **the README lags the
+       artifact by up to the full 0.3 kB band, and lags it by 98 bytes today.**
+       A wake that recorded the README's number would be recording a stale
+       sample with no way to tell. That trap is now written down beside the
+       command that avoids it.
+
+       **Where it is written: `record_metric.py`'s docstring, and nowhere
+       else.** That is the file a wake recording a sample opens, which is
+       exactly what the Accept names. **`dispatch_status.py` was deliberately
+       NOT extended** — `326.3` is open on the dispatch region's growth
+       (+1,101 words in two days), and 324.1's note already stands there; a
+       second copy would grow the region this loop is currently worried about,
+       to serve a reader who is not recording anything.
+
+       **Why gzip stays.** The reason the Accept gave for keeping it — gzip is
+       what users download — is about the BUDGET, and that reason survives
+       intact: `check:size` gates `css/index.min.css` at 16.7 kB gz against
+       15.10 live and prints its tightest headroom in bytes every run. What
+       `bundle-gz-kb` lacks for rule 5 is not resolution, it is a
+       **denominator**, which is `324.1` immediately above and already settled
+       there. Switching the name to minified bytes would trade the
+       consumer-facing meaning for a precision the measurement above says was
+       never the problem.
+
+       **Not verified visually, and none is owed:** the diff is `ROADMAP.md`,
+       `scripts/loops/record_metric.py` (a docstring) and the hand-off. No CSS,
+       no docs page and no component changed, so nothing rendered can move.
+       `record_metric.py` is a CLI, not a build step or a gate.
+
+       *Original text, kept verbatim per 236.2 — the Accept below is what this
+       item was judged against:*
+
+       **`bundle-gz-kb` is the only metric rule 5 can act on, its
+       generator exists, and its noise floor is wider than three of its four
+       historical moves.** The "no generator" premise died in `307.1` above:
+       `check:size` prints `css/index.min.css … 15.10 kB gz` and
+       `stamp-readme.mjs` stamps the same figure into both READMEs, matching
+       the newest hand-recorded sample (15.1, 2026-09-03). What remains is the
+       part a grep never reached — `GZIP_TOLERANCE_KB = 0.3` exists because the
+       same bytes gzip differently across Node builds, and the two dispatchers
+       run different containers.
+       - **Accept** — the property: the metric's definition is written down
+         where a wake recording it will read it (which artifact, which command,
+         which environment), AND the record says what delta is large enough to
+         mean anything against the 0.3 kB cross-environment floor. **Concluding
+         that a gzip-byte series cannot support a cross-environment
+         two-consecutive verdict, and re-pointing the name at the minified byte
+         count (`93 kB`, deterministic) or retiring it, is a satisfying
+         outcome** — the reason to keep gzip is that gzip is what users
+         download, and that reason is about the BUDGET, which `check:size`
+         already gates, not about rule 5.
+       - **Do not re-baseline the existing 11 samples**, and do not record a
+         sample to un-STALE the line before the convention is written down —
+         that is what 2026-09-04 refused, and its stated reason being wrong
+         does not make the action right.
+       - Measure first: which of the 11 samples were taken on which
+         dispatcher's clock (`git blame --line-porcelain` on
+         `loop-metrics.jsonl` gives the author offset per line, the method
+         164.2 established). A series taken entirely at one offset has no
+         cross-environment problem at all, and that would shrink this item to
+         one sentence.
+
+3. [x] **324.3 — DONE. Archive sweep, taken from inside the dispatch because
+       `249.12`'s stated trigger crossed BOTH halves for the first time — and
+       its first attempt silently truncated a slice.** `roadmap_scope.py` read
+       **8,188 lines / 41.5%** after this wake's own item closed, against the
+       trigger the hand-offs carry (*"past 5,450 lines / 40.6%"*). Thirteen
+       consecutive wakes had declined on the share half; with both halves past,
+       the AND-vs-OR question `249.12` is open on no longer decides anything,
+       so `LOOPS.md` rule 4's own instruction — *if this rule is walking
+       thousands of lines, triage the sweep and run it* — applies unambiguously.
+
+       **15 slices moved** (321, 318, 317, 314, 313, 312, 311, 308, 306, 305,
+       304, 303, 302, 301, 300), each byte-identical in the archive, each
+       leaving the pointer line. The 4 remaining targets — 307, 298, 292, 283 —
+       are every one of them **named by a still-open item** (236.2's pins), so
+       nothing eligible was left behind. Reconciled both ways, read at the
+       commit rather than the working tree (`25b9fdd3` → `67fc6659`): live
+       closed items **67 → 52** and archive **714 → 730** — 16 moved, and the
+       live side keeps a 52nd because this entry is itself a new `[x]`; open
+       **26 → 26** unchanged; slice headings **306 → 306**; live lines
+       **8,188 → 6,476**; share **41.5% → 24.6%**.
+
+       **The finding is the first attempt, and it is CLAUDE.md's bulk-edit rule
+       landing with its own reconciliation clause.** Section boundaries were
+       taken as *any line starting with `## `*. That is wrong here:
+       `report_loop_prose.py`'s output contains a row spelled
+       `## the loops table   214   214   214`, and Slices 309 and 308 each quote
+       one **inside a code fence**. So the mover cut Slice 308's body at that
+       row, archived the first half, and left the remainder in the live file
+       under a heading that is not a heading — after which `roadmap_scope.py`
+       read **17 slice sections, 12 open / 12 closed** where the raw file has
+       306 / 26 / 52, and seven whole slices (15, 112, 249, 273, 294, 296, 297)
+       vanished from the OPEN set rule 4 reads.
+
+       **The verification passed anyway, and the reason is the rule: a
+       reconciliation that re-uses the parser it is checking cannot fail.** The
+       byte-identity check was written with the same section splitter, so it
+       compared a truncated body against a truncated body and reported *"ALL 15
+       OK"*. What caught it was an INDEPENDENT instrument — `roadmap_scope.py`,
+       which is fence-aware — disagreeing with a number that had just been
+       written down by hand. Reverted whole (`git checkout --`, not a patch),
+       re-run fence-aware, and re-verified against that same independent
+       instrument: the OPEN set after the sweep is identical to the OPEN set
+       before it, name for name.
+
+       **The mover now refuses rather than truncating**: it toggles fence depth,
+       treats `## ` at depth zero only, asserts the file's fences balance, and
+       asserts each moved section's own fence count is even — the condition that
+       would mean a fence spans a section boundary. All three are asserts, not
+       filters, per *prefer an assertion that fails loudly over a replace that
+       silently matches nothing*.
+
+## Slice 320 — Standardize sweep, 4 of 4 lanes: two shared components carried the LAST inline spellings of two classes a 2026-08-17 sweep created to replace them, and lane 1's own headline number counts attributes while saying "declarations" (2026-09-07)
+
+**Dispatcher trace, cloud wake.** Step 0: container **DETACHED** again
+(`git branch --show-current` empty), `ENVIRONMENT.md` trap 1, fixed with
+`git checkout -B main origin/main` before any commit; `origin/main` again
+arrived as a **forced update** (`26447ba...e3de656`). Trap 2 clean in one
+`--unshallow` (**1,998** commits, no `shallow.lock`), and it again brought the
+tags — the **thirty-third** consecutive container to do so; `git tag | wc -l`
+-> **8**. Trap 1c did not bite (`CHROME_PATH` exported in the same command as
+every browser-driven gate).
+
+Rule 1: no open P0 — `grep -nE '^\s*[0-9]+\. \[ \]' ROADMAP.md | grep -i P0`
+returns nothing across the 25 open items. Step 1 read **both** intakes with
+`ENVIRONMENT.md` §8's controls in one run (`/discussions` -> 200 len **0**;
+`/not-a-real-route` -> **404**; `/issues?state=open` -> 200 len **1**, issue #2,
+already triaged as `300.2`) and triaged nothing: no new input. **Rule 2
+matched** — `dispatch_status.py` read `Standardize 4 / 4 Continue rounds …
+OVERDUE`. Rule 3 `1 / 3 slice … ok [304]` did not match. Rules 4-8 not reached.
+Rule 5 reports **STALE** (`1 wake-date(s) newer`), so per `LOOPS.md` it **could
+not be evaluated** and is not reported clear; `306.1` is the open item saying
+why a cloud wake cannot drive it to `ok`.
+
+**All four lanes ran; saying `n of 4` per the playbook. This is 4 of 4.**
+
+| lane | command | result |
+|---|---|---|
+| 1 dead-style | `npm run scan:dead-style -w docs` | **0 dead** of **1,433**, and the unit of that 1,433 is the finding — see below |
+| 2 css-repeats | `npm run report:css-repeats -w @busy-office/ui` | **8 repeated bodies**, `LOOPS.md`'s table exactly; 74 files · 242 rules · 230 distinct |
+| 3 report:prose | `npm run report:prose -w docs` | **0 unverdicted** — 118 pages · median 792 · **112,297** words; 10 over the corpus median, 11 over a family median, union **15** |
+| 4 loop-prose | `python3 scripts/loops/report_loop_prose.py` | no finding — `git diff --stat 4e0248ed..HEAD -- LOOPS.md` is **empty**, so 308.1's per-section attribution still stands and re-deriving it would be the re-derivation that rule exists to prevent |
+
+**Lane 2's membership is unchanged group-for-group**, not merely unchanged in
+count: all eight bodies match `LOOPS.md`'s table one-for-one, and the
+joined-control `x4` group is still **two** components, so its stated reopen
+trigger — a THIRD — is unmet. **Lane 3's corpus moved and the flagged set did
+not**: `111,907 -> 112,297` words (+390 since Slice 314), median 792 unchanged,
+the same **15** pages, none entering unverdicted.
+
+### The finding — a 2026-08-17 consolidation that stopped at `pages/`
+
+`Gallery.astro`'s own `is:global` block carries two docs-local classes whose
+comments record what they replaced: `.docs-list` was *"an identical inline
+`style="padding-inline-start: 1.25rem"` repeated 37 times across 27 pages"*,
+and `.docs-list-bare` was *"`style="list-style: none; padding: 0"` repeated 14
+times"*, both from the Standardize sweep of 2026-08-17.
+
+Every one of those 51 inline copies is gone from `pages/`. **Two survived, and
+both are in the shared components that render INTO those pages** — the exact
+directory Slice 314 established was outside 292.8's scope, one property over:
+
+```
+grep -rnE 'style="[^"]*padding-inline-start:\s*1\.25rem' apps/docs/src --include='*.astro'
+grep -rnE 'style="[^"]*list-style:\s*none[^"]*padding:\s*0'  apps/docs/src --include='*.astro'
+  # ApiTable.astro:74 and Related.astro:14 — and, in Gallery.astro, only the
+  # two COMMENTS quoting the strings the classes replaced.
+```
+
+`.docs-list` is used by class in **59** files and `.docs-list-bare` in **40**,
+so this is a one-off surviving beside a settled pattern, which is what this loop
+means by drift. Both now use the class.
+
+### 314.2 — closed here, because this sweep's own scan reached its sites independently
+
+314.2 asked for a verdict on the non-zero spacing literals and an explicit
+decision on `--bo-space-0`. The counts were re-run rather than quoted, with an
+instrument restricted to inline `style=` **attributes** — a `<style>`-block
+declaration is a stylesheet rule, not an inline one-off, and a raw grep for
+`padding:` conflates them.
+
+| site | verdict |
+|---|---|
+| `ApiTable.astro:74` `padding-inline-start: 1.25rem` | **converted** — to `.docs-list`, not to `var(--bo-space-5)`. A class that already owns the decision beats tokenising a one-off. |
+| `Related.astro:14` `list-style: none; padding: 0` | **converted** — to `.docs-list-bare`. |
+| `ApiTable.astro:57` `margin-inline-end: 0.5rem` | **converted** — `var(--bo-space-2)`, exact. |
+| `detail-form.astro` x3 `font-weight: 400` | **converted** — `var(--bo-font-weight-normal)`, exact. This is 314.2's whole `font-weight` row. |
+| `base/primitives.astro` x4 `margin-block-start: 1.5rem` | **refused** — all four are INSIDE a template literal, i.e. copyable samples, which 292.8's own live-markup rule puts out of scope. `1.5rem` does equal `--bo-space-6`, so the refusal is about the site, not the value: the page's subject is the primitives' gap knobs, and a token spelling in the sample teaches a second thing the sample is not about. |
+| `ClassRef.astro:44` `margin-inline-end:.4rem` | **refused, and it files 320.3** — `0.4rem` is off-scale (between `--bo-space-1` 0.25rem and `--bo-space-2` 0.5rem), so any swap is a rendered change, which is the judgement 314.1 recorded for its own `2rem`. |
+| every zero (`margin: 0`, `padding: 0`, `margin-block-end: 0`) | **refused. `--bo-space-0` is never the right spelling of a zero**, and the evidence is that nothing has ever used it: `grep -rn -- '--bo-space-0\b' packages/core/src apps/docs/src` excluding its own definition returns **0**. A reset is not a scale step. |
+
+The classifier that split "copyable sample" from "live markup" is backtick
+parity to the match OFFSET, and it was **wrong on its first version** — parity
+to the start of the LINE misreads a line that OPENS a template literal, which
+is `combobox.astro:61`. Red-proved on two controls before any verdict rested on
+it (`primitives.astro:30` INSIDE, `combobox.astro:61` INSIDE), per this repo's
+own base rate that an instrument's first output is not evidence.
+
+### And a second class of inline one-off nothing had a name for
+
+A knob set to exactly the value the consuming rule already falls back to.
+`.bo-cluster` is `gap: var(--bo-cluster-gap, var(--bo-space-2))`, and six
+elements set `--bo-cluster-gap: var(--bo-space-2)` (or `--bo-grid-min: 16rem`,
+`.bo-grid`'s own fallback) on top of it.
+
+**Base rate measured before treating it as a finding** (94.11): **6 of 47
+inline custom-property declarations (12.8%)** — neither 0% nor 100%, so the
+predicate distinguishes. All six are live markup, none nested inside another
+cluster or grid that sets the knob, so removing them cannot uncover an
+inherited value. After: **0 of 41**.
+
+### The instrument defect — lane 1's headline number is not what it says
+
+`scan:dead-style` printed **"1,433 live inline declaration(s)"**. `live += 1`
+fires once per element carrying `[style]`, so 1,433 was **attributes**. Measured
+on one page set on one day: **1,272 attributes holding 1,677 declarations**, a
+**24.2%** under-report, and the wrong noun has been quoted as a declaration
+count in ~~five consecutive sweep write-ups (214, 284, 290, 301, 314)~~ and in the
+script's own header.
+
+> **CORRECTED 2026-09-07 by Slice 322 (Objective grill): the blast radius is
+> `17` sweeps, not five, and the five named are not a consecutive run.** Every
+> Standardize sweep from **208** onward quoted it — 208, 214, 230, 235, 237,
+> 244, 252, 255, 257, 263, 274, 284, 290, 293, 301, 308, 314 — all 17
+> classified as sweeps from their own headings, none of them anything else.
+> The struck list omitted ten sweeps sitting *between* 214 and 314, which is
+> what makes "consecutive" false as well as low. The true statement is
+> stronger than the published one: **no sweep has ever quoted this number
+> correctly.** The command, recorded here because the original carried none:
+>
+> ```
+> # whitespace-normalised — a LINE-based grep is what produced the undercount
+> python3 - <<'PY'
+> import re
+> pat = re.compile(r'1,?433[^.\n]{0,40}live inline\s+decl', re.I|re.S)
+> for f in ['ROADMAP.md','ROADMAP-archive.md']:
+>     txt=open(f).read()
+>     heads=[(m.start(), m.group(1)) for m in re.finditer(r'^## Slice (\d+)', txt, re.M)]
+>     own=lambda p: max([n for s,n in heads if s<=p], key=lambda _:0, default=None)
+>     print(f, sorted({[n for s,n in heads if s<=m.start()][-1]
+>                      for m in pat.finditer(txt)}, key=int))
+> PY
+> ```
+>
+> **The grill's own first instrument made the same mistake and that is the
+> reusable part.** A line-based scan returned 16 of the 17 and missed exactly
+> **301**, whose `live inline` / `declarations` straddle a newline. This repo's
+> prose wraps at ~78 columns, so a phrase-count taken per line silently drops
+> every wrapped instance — filed as `322.3`.
+
+**The unit is also a detection gap, and it is red-proved rather than reasoned.**
+The verdict joins every property the attribute names into ONE string, so an
+attribute is dead only if ALL of its declarations are. That probe's own logic,
+run verbatim over three injected elements:
+
+```
+live   style="margin: 40px"                 <- the script's own live control
+DEAD   style="margin: 0"                    <- the script's own dead control
+live   style="margin: 40px; padding: 0"     <- the gap
+```
+
+The hidden `padding: 0` is exactly the case the script's header calls the
+canonical dead one (25 of the first sweep's 29). **273 of 1,272 attributes
+(21.5%)** carry more than one declaration and are in that blind spot.
+
+1. [x] **320.1 — the output says what it counts, and prints the number it was
+       missing.** Both figures now print, so the historical series stays
+       comparable rather than being silently redefined, and the multi-declaration
+       count publishes the blind spot's size beside the verdict that cannot see
+       into it. The corrected line reproduces an independent probe exactly —
+       `1272 / 1677 / 273` from both — which is the reconciliation against
+       something independent that CLAUDE.md asks for before a number is quoted.
+2. [x] **320.2 — judge each declaration separately, so a dead one cannot hide
+       behind a live sibling. DONE 2026-09-08, Slice 342 — and the gap was NOT
+       empty: 52 dead declarations in 50 of the 357 multi-declaration
+       attributes, on 13 pages, invisible to every sweep that has read this
+       instrument — the 17 Slice 322 enumerated (208 through 314) among them.
+       The self-test's mixed control red-proves it, failing on
+       exactly one of five assertions when the verdict is put back to the
+       whole attribute.** Filed rather than built: it moves a headline
+       number five write-ups have quoted [**Corrected by 346.1:** 17 sweeps quoted it,
+       per Slice 322's correction], and the scan is `@exact`, so it owes
+       its own red-proof and new self-test cases discriminating a mixed
+       attribute — which the current self-test, two single-declaration controls,
+       cannot do.
+       - **Accept:** the scan reports a per-declaration dead count; its
+         self-test gains a mixed case and **fails when that case is judged as a
+         whole**; and the run's own before/after is reconciled against the 273
+         attributes named above rather than against the list it was handed.
+         **Finding that the gap yields zero real dead declarations is a
+         satisfying outcome** if it carries the re-run counts.
+3. [x] **320.3 — the same idiom, two values, in two shared components.**
+       `ApiTable.astro:57` and `ClassRef.astro:44` both space a wrapping run of
+       inline `<code>` chips, at `0.5rem` and `.4rem`. One decision, two
+       spellings, and the 1.6px difference is invisible in a diff.
+       - **Accept:** the two agree, or a recorded reason they should not.
+         Unifying them is a **rendered** change a cloud wake cannot judge, so
+         this needs a wake that can look at both, at 1440px and 390px.
+       - **DONE 2026-09-24 (local wake).** They agree: `ClassRef.astro` now uses
+         `var(--bo-space-2)`, the token `ApiTable.astro` already used, in place
+         of a bare `.4rem` nothing explained. Measured live on the `:8081`
+         container at 1440 and 390, light and dark: both components' chips
+         compute `margin-inline-end: 8px` (ClassRef 10, ApiTable 41 on
+         `/components/data-table/`), same-line ClassRef chips sit 8px apart,
+         no page overflow. Jev: supported 0.95.
+
+**Verified live — measured, not screenshotted.** A throwaway probe (scratchpad,
+not the repo) drove `serve-dist.mjs` + `browser-harness.mjs` over the eight
+affected pages, reading 13 computed properties for every element:
+
+| comparison | elements | key-set diffs | computed differences |
+|---|---|---|---|
+| before vs after, unmodified | 12,593 | 0 | **0** |
+| `.docs-list`/`.docs-list-bare` forced, **before** tree | 12,593 | 0 | 38 |
+| `.docs-list`/`.docs-list-bare` forced, **after** tree | 12,593 | 0 | **107** |
+| `--bo-space-2` -> 37px, before vs after | 12,593 | 0 | **60** |
+| `--bo-font-weight-normal` -> 123, before vs after | 12,593 | 0 | **3** |
+
+The no-op row alone proves nothing — it is also what an edit that never landed
+produces — so the override rows are what discriminate. Forcing the two classes
+moves **38** elements in the before tree (the pages' own existing uses, 3 pages)
+and **107** in the after tree (**8** pages), the **+69** being the two `<ul>`s
+this round rewired plus what inherits `list-style-type` from them. The
+font-weight override moves **exactly 3**, all `SPAN`s on `/patterns/detail-form/`
+— the three sites edited, no more.
+
+**And the re-scan reconciles to the element, which is what caught the unit
+defect.** Lane 1 re-run reads **1,433 -> 1,272**, a drop of **161**. Predicted
+from the source sites: Related's `<ul>` renders **116** times and ApiTable's
+notes `<ul>` **40**, plus the 5 page-level sites = **161**, exact. It reconciles
+**only** in the element unit — the first prediction, in declarations, said 392
+and was wrong by 231. A hand-derived number disagreeing with the instrument is
+what this repo says to investigate rather than quote, and here the instrument
+was right and its LABEL was wrong.
+
+**Gates: all 17 cloud-runnable entry points green** on the committed tree, the
+list re-derived from `ci.yml` rather than read off a snapshot (the two
+documented set differences still hold: `check:ci-ignores` is covered by
+`check:repo`, and `npm run test -w @busy-office/ui` is CI's
+`npx vitest run --root packages/core`).
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a cloud
+wake has no Podman. What that would add is *"does it look right"*; what is
+claimed instead is that **nothing rendered changed**, asserted over 12,593
+elements' computed values on eight pages plus `check:layout`, `check:scroll` and
+`test:axe` across the whole built site. The claim is structural: every converted
+value is byte-equal to the literal it replaces, and every removed declaration
+restated a fallback the consuming rule already carries, so a visual difference
+would require a class or a token to differ from its own definition. **320.3 is
+the one item here that genuinely needs a rendered image, and it is left OPEN for
+that reason rather than guessed at.**
