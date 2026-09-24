@@ -72,9 +72,10 @@ hardened at **11:42:09Z** (`18791d5`, 172.1) and demoted at **12:26:17Z**
 (`33fb89e`, 169.4) — **44 minutes, two consecutive wakes, neither naming the
 other.**
 
-**THREE advisory checks now run from the same place, so expect up to three
+**FOUR advisory checks now run from the same place, so expect up to four
 stderr blocks** (roadmap 186.1, 2026-08-29; the third added by 283.2,
-2026-09-05). The third is `polish_requeue.py --verify-stamps`, and it lives here
+2026-09-05; the fourth, `check_correction_sites.py`, by 346.1, 2026-09-24,
+which like the third reads the commit just made). The third is `polish_requeue.py --verify-stamps`, and it lives here
 rather than at Polish step 0 for a reason the other two do not have: **it can
 only work after the commit.** A `--stamp` taken at the end of a round digests
 the working tree; if the round then edits that surface's source again before

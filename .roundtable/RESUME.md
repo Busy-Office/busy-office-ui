@@ -4,9 +4,10 @@
 > toolchain that works.** It used to live in this file. It does not any more
 > (roadmap 169.3, 2026-08-28), because this file is rewritten wholesale every
 > wake and that is where corrections go to die. `LOOPS.md` Step 0 names both
-> files, and **three** advisory checks run from `record_iteration.py` — the
-> charter check, `check:resume-slice-ids`, and `polish_requeue.py
-> --verify-stamps`. All three REPORT; none fails a build (roadmap 175.3). Run
+> files, and **four** advisory checks run from `record_iteration.py` — the
+> charter check, `check:resume-slice-ids`, `polish_requeue.py
+> --verify-stamps`, and `check_correction_sites.py` (346.1). All four REPORT;
+> none fails a build (roadmap 175.3). Run
 > them against the file as it now stands rather than trusting a stale reading.
 
 The wake prompt says *"don't assume prior-turn state"*. This file is how a wake
