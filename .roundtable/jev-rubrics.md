@@ -161,9 +161,12 @@ review did not run rather than reporting a verdict as though it had.
 
 - A failed check is **FAIL**. A high `noul` does not lift it, and neither does a
   stronger model's opinion.
-- **A Jev outage is UNVERIFIED, never PASS.** Both failure modes raise rather
-  than returning a default (connection error; `401 Unauthorized`), so a missing
-  answer is visible — report it as UNVERIFIED and say the review did not run.
+- **A Jev outage is UNVERIFIED, never PASS.** The client raises on both failure
+  modes (connection error; `401 Unauthorized`), but the MCP tools CATCH that and
+  return `{"error": "…"}` as an ordinary result with no `answers` key
+  (`~/Projects/jev-mcp/src/jev_mcp/server.py`, the `except JevError` in each
+  tool; corrected 2026-09-25). So check for `error` before reading a number, and
+  report that case as UNVERIFIED: the review did not run.
 - Jev adds a second opinion on whether the evidence bears on the claim. That is
   all it adds.
 
