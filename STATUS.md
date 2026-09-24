@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-24 01:16 UTC
+Generated at: 2026-09-24 02:38 UTC
 
 ## Open items by slice
 
@@ -58,6 +58,9 @@ Generated at: 2026-09-24 01:16 UTC
   - 377.12 — the preview's provenance is truthful.
   - 377.13 — 375.9's corpus figure is re-runnable.
   - 377.14 — the low items, one bundle.
+- **Slice 381** (2 open)
+  - 381.1 — the correction-site check: precision, coverage, or unwire it.
+  - 381.2 — rule 3 arms on slices that shipped nothing.
 - **Slice —** (3 open)
   - OWNER · 377.5 — release the unreleased fixes, or record why not.
   - OWNER · 377.6 — is busy-office-erp the named first user?
@@ -66,10 +69,9 @@ Generated at: 2026-09-24 01:16 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1764 iterations logged)
+dispatch status — counter-triggered rules (1766 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-09-24 09:16   ok
-  Objective     3 / 3 slices          since 2026-09-24 06:38   OVERDUE  [335, 346, 380]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-09-24 10:38   ok
   Optimize      3 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 148 sample(s), 8 of 51 name(s) paired across days]
   -> rule 5's newest comparable pair predates 3 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-19, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-19 (2026-09-22, 2026-09-23, 2026-09-24), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -102,8 +104,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-24 03:48 · Continue · bug · P0 377.2 — launcher re-filters on dialog close; grid matches field after Escape · landed · b4e592d3
-- 2026-09-24 04:15 · Standardize · sweep · 378 — Standardize sweep 4 of 4 lanes, all clean (lane 2 input touched by 376.2/376.4) · logged · 456f9966
 - 2026-09-24 04:40 · Continue · build · 320.3 — ClassRef chip spacing uses var(--bo-space-2) like ApiTable (6.4px -> 8px) · landed · 880c2b2b
 - 2026-09-24 05:23 · Continue · build · 345.1 — .bo-motion-spin owns display:inline-block; recipe spins in flow; demo glyph no longer orbits · landed · b29e4179
 - 2026-09-24 06:38 · Objective · grill · 379 — Objective grill of Slices 345, 378: 26 claims reproduce, 12 of 12 findings survive; hidden-spinner and ACR-grammar fixes, 345.1 migration note, four records corrected · logged · 2fad3cc7
@@ -112,6 +112,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-24 08:04 · Meta · refusal · a whitespace normaliser as the fix — the wrap hid 2 of the 17 stale copies · refused · f8856986
 - 2026-09-24 08:32 · Continue · build · 335.1 — Discussions intake proved end to end: owner-authorised throwaway discussion #3 appeared as 200 len 1, then deleted (200 len 0, 404, NOT_FOUND) · landed · 0756cafb
 - 2026-09-24 09:16 · Standardize · sweep · 380 — Standardize sweep 4/4 on a clean HEAD worktree: lanes 1-3 no delta; DESIGN.md HONEST re-decided (the control retired); 346.1's rule moved out of the dispatch region (7,643 -> 7,521 words) · landed · 741c9bea
+- 2026-09-24 10:38 · Objective · grill · 381 — Objective grill of 335.1, 346.1, Slice 380: 45 claims reproduce, 27 of 33 findings survive; record_iteration/check bugs fixed, lane-4 cut rule fixed, intake command fixed, 381.1-381.2 filed · logged · 60235d9c
+- 2026-09-24 10:38 · Meta · refusal · unwiring the correction-site check inside the grill — 381.1 states a precision floor first, then measures · refused · 60235d9c
 
 ## Sunset test
 

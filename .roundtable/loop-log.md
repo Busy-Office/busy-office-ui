@@ -1770,3 +1770,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-24 08:04 · Meta · refusal · a whitespace normaliser as the fix — the wrap hid 2 of the 17 stale copies · refused · f8856986
 - 2026-09-24 08:32 · Continue · build · 335.1 — Discussions intake proved end to end: owner-authorised throwaway discussion #3 appeared as 200 len 1, then deleted (200 len 0, 404, NOT_FOUND) · landed · 0756cafb
 - 2026-09-24 09:16 · Standardize · sweep · 380 — Standardize sweep 4/4 on a clean HEAD worktree: lanes 1-3 no delta; DESIGN.md HONEST re-decided (the control retired); 346.1's rule moved out of the dispatch region (7,643 -> 7,521 words) · landed · 741c9bea
+- 2026-09-24 10:38 · Objective · grill · 381 — Objective grill of 335.1, 346.1, Slice 380: 45 claims reproduce, 27 of 33 findings survive; record_iteration/check bugs fixed, lane-4 cut rule fixed, intake command fixed, 381.1-381.2 filed · logged · 60235d9c
+- 2026-09-24 10:38 · Meta · refusal · unwiring the correction-site check inside the grill — 381.1 states a precision floor first, then measures · refused · 60235d9c
