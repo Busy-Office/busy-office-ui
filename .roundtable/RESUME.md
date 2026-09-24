@@ -110,7 +110,15 @@ style-flush column is kept: on a recorded M4, two sittings put both columns at
 the same fraction of the published figures, and the page now says so with the
 command. Counters: Standardize 1 / 4, Objective 2 / 3 [352, 383].
 
-**Next wake:** rule 4 — the oldest open item not owner-blocked, 353.2.
+**Rule 4 at 19:29:** 353.2 LANDED (`633ff058`) — `dispatch-region-words` is now
+recorded by the instrument (region figure, commit in the row) on every
+Standardize row; the hand-taken history mixed body and region figures.
+Counters: Standardize 2 / 4, **Objective 3 / 3 OVERDUE [352, 353, 383]**.
+
+**Next wake:** rule 3 — the Objective grill of 352.1/352.2, 353.2 and Slice
+383. 352.1 and 352.2 changed shipped surfaces (the po-app harness and the
+data-table page); 353.2 and 383 are loop machinery. §6's Exit requires the
+thesis section.
 
 **Lane-run note:** run the Standardize lanes on a build of HEAD without the
 owner's uncommitted screen-kit edits, which otherwise enter lane 3's total
@@ -146,8 +154,8 @@ hide-on-upward-scroll; two refusals stand and the reversal is unwritten),
 373.8 (docs IA, 17 groups to 7). Plus, outside these slices: 112.3/112.4,
 296.3, 369.1, 273.2.
 
-**Dispatcher counters (2026-09-24 19:03, `dispatch_status.py`):** Standardize
-1 / 4, Objective 2 / 3, 0 open P0. Re-read them; never trust this line.
+**Dispatcher counters (2026-09-24 19:32, `dispatch_status.py`):** Standardize
+2 / 4, Objective 3 / 3 OVERDUE, 0 open P0. Re-read them; never trust this line.
 
 **A trap that has bitten twice — read before touching ROADMAP.md.** Build the
 staged content from HEAD BY CONSTRUCTION and write the same bytes to the
@@ -157,7 +165,7 @@ drifted, and a later `git add` silently reverted four closed items to `[ ]`.
 
 ## PLAN — work this order.
 
-**Base state.** `main` pushed after 352.2's record. Last full run green
+**Base state.** `main` pushed after 353.2's record. Last full run green
 on this tree (2026-09-24 06:30): core build, 174 tests, docs build 0 FAIL,
 `check:claims` 300, `test:axe` 128 pages x 2 widths 0 violations,
 `check:layout` 128 pages. The files still uncommitted are the 2026-09-20 owner
