@@ -301,6 +301,8 @@ const EDGE_EXEMPT = new Map([
     'decorative keycap: the glyph inside is the content and the fill carries the key shape; nothing is operated here'],
   ['segmented:--bo-color-border-default|--bo-color-bg-muted',
     'track, not control: the options inside carry the selected state (fill + weight + aria-checked); the track edge only bounds them'],
+  ['scan:--bo-color-text-primary|--bo-color-success', 'transient scan-flash frame, composited at <=0.3 opacity for ~700ms, so a token pair is not what renders; its visibility against the wash is asserted in RENDERED pixels by check:claims (389.4), and the verdict also reaches the live region'],
+  ['scan:--bo-color-text-primary|--bo-color-danger', 'transient scan-flash frame, composited at <=0.3 opacity for ~700ms, so a token pair is not what renders; its visibility against the wash is asserted in RENDERED pixels by check:claims (389.4), and the verdict also reaches the live region'],
 ]);
 /* Debt, not a decision — an edge that SHOULD meet 3:1 and does not yet. Kept
    apart from EDGE_EXEMPT for the reason check:wrong-choice keeps its TODO

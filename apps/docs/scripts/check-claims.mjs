@@ -46,7 +46,7 @@ import { serveDist } from './serve-dist.mjs';
 import { gate } from './gate-report.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { DIST, REPO_ROOT } from './paths.mjs';
-import { WIDTHS, DESKTOP_WIDTH, NARROW_WIDTH } from './viewports.mjs';
+import { WIDTHS, DESKTOP_WIDTH, NARROW_WIDTH, RF_WIDTH } from './viewports.mjs';
 import { contrastRatio, composite } from '../../../packages/core/scripts/wcag.mjs';
 import { createRequire } from 'node:module';
 import { readFile, writeFile, mkdtemp, rm, cp } from 'node:fs/promises';
@@ -4770,6 +4770,81 @@ check(
   differs(verdictShape) && differs(verdictShapeFc),
   JSON.stringify({ verdictShape, verdictShapeFc }),
 );
+
+/* 389.4 — the case above compares COMPUTED geometry, and it passed while
+   the frame was invisible: painted in the wash's own hue over a border-box
+   wash, the frame measured 1.00:1 against it in every ok/error x light/dark
+   case. So this reads RENDERED pixels: a one-pixel row across the left edge
+   of the pick screen, with the flash frozen at its first frame, decoded in
+   the page through a canvas (no image library). Accepted must show one band;
+   rejected must show band, gap, band — the geometry, not the hue. */
+async function flashRow(theme, reduced) {
+  await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: reduced ? 'reduce' : 'no-preference' }]);
+  await visit("/patterns/rf/rf-pick-rf/", { width: RF_WIDTH, height: 640 });
+  // Let the theme switch's colour transitions FINISH before stamping, and
+  // freeze only the flash: pausing every animation froze the page at its
+  // light colours mid-transition, so a "dark" reading was not dark.
+  await page.evaluate(async (t) => {
+    document.documentElement.setAttribute('data-theme', t);
+    await Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {})));
+  }, theme);
+  const row = {};
+  for (const v of ['ok', 'error']) {
+    await page.evaluate((v) => {
+      document.body.dataset.scanResult = v;
+      document.getAnimations().filter((a) => a.animationName === 'bo-scan-flash')
+        .forEach((a) => { a.pause(); a.currentTime = 0; });
+    }, v);
+    const shot = await page.screenshot({ clip: { x: 0, y: 590, width: 60, height: 1 }, encoding: 'base64' });
+    await page.evaluate(() => { delete document.body.dataset.scanResult; });
+    row[v] = await page.evaluate(async (b64) => {
+      const img = new Image();
+      img.src = `data:image/png;base64,${b64}`;
+      await img.decode();
+      const c = document.createElement('canvas'); c.width = img.width; c.height = 1;
+      const ctx = c.getContext('2d'); ctx.drawImage(img, 0, 0);
+      const d = ctx.getImageData(0, 0, img.width, 1).data;
+      const s = img.width / 60; // device pixels per CSS pixel
+      const lum = (x) => {
+        const i = Math.round(x * s) * 4;
+        const f = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
+        return 0.2126 * f(d[i]) + 0.7152 * f(d[i + 1]) + 0.0722 * f(d[i + 2]);
+      };
+      const ratio = (a, b) => { const x = lum(a), y = lum(b); return +((Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05)).toFixed(2); };
+      return { edge: ratio(3, 40), gap: ratio(9, 40), outer2: ratio(15, 40) };
+    }, shot);
+  }
+  return row;
+}
+const flashRows = {};
+for (const theme of ['light', 'dark']) for (const reduced of [false, true]) {
+  flashRows[`${theme}/${reduced ? 'reduced' : 'animated'}`] = await flashRow(theme, reduced);
+}
+await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'no-preference' }]);
+const SEEN = 1.1; // a band this far from the wash is visible; 1.00 is "identical"
+check('scan verdict in RENDERED pixels: accepted shows one frame band and rejected shows band-gap-band against the wash, in light and dark, animated and reduced-motion (389.4)',
+  Object.values(flashRows).every(({ ok, error }) =>
+    ok.edge >= SEEN && ok.gap < 1.05 && ok.outer2 < 1.05 && error.edge >= SEEN && error.gap >= SEEN && error.outer2 >= SEEN),
+  JSON.stringify(flashRows));
+
+/* Under forced colours the frame is the ONLY visible cue, so it must stay
+   for the stamp's life: an animation outranks a declared opacity, and the
+   frame used to fade to 0.002 within ~555ms. */
+await visit("/patterns/rf/rf-pick-rf/", { width: RF_WIDTH, height: 640 });
+const fcSession2 = await page.createCDPSession();
+await fcSession2.send('Emulation.setEmulatedMedia', { features: [{ name: 'forced-colors', value: 'active' }] });
+const fcFrame = await page.evaluate(async () => {
+  document.body.dataset.scanResult = 'error';
+  await new Promise((r) => setTimeout(r, 500));
+  const cs = getComputedStyle(document.body, '::after');
+  const out = { opacity: cs.opacity, width: cs.borderTopWidth, animation: cs.animationName };
+  delete document.body.dataset.scanResult;
+  return out;
+});
+await fcSession2.send('Emulation.setEmulatedMedia', { features: [] });
+await fcSession2.detach();
+check('scan frame under forced colours stays fully opaque through the stamp\'s life (500ms in), not faded by the flash animation (389.4)',
+  fcFrame.opacity === '1' && fcFrame.width === '18px', JSON.stringify(fcFrame));
 
 // Sync-state slot (127.1): "Click it in this demo to cycle the four
 // states" — both channels must move together, and the glyphs must differ

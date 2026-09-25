@@ -112,6 +112,16 @@ pin.
   track under editable grids in those browsers when scrollbars are classic.
   Roadmap 375.11.
 
+- **The scan flash told accepted from rejected by hue alone.** Its frame was
+  painted in the wash's own colour over a wash that filled it, so on screen
+  the frame WAS the wash (measured 1.00:1 in every case), and under forced
+  colours the running animation faded the frame out within about half a
+  second. The frame is now neutral (the text colour) and the wash stops at its
+  inner edge: accepted shows one thin band, rejected a thick doubled band, in
+  both themes and with reduced motion; under forced colours the frame stays
+  for the stamp's whole life. Visual change only — the attribute contract
+  (`data-scan-result="ok|error"`) is unchanged. Roadmap 389.4.
+
 - **The generated accessibility conformance report (`dist/acr.json`,
   `/reference/acr`) overclaimed in four rows.** An audit of all 21 criteria
   against the gate each one names found four overclaims and one unbacked

@@ -44,19 +44,27 @@
        looking at the rack, not the screen — and this file carries its own
        reduced-motion override below. */
     animation: bo-scan-flash 600ms var(--bo-motion-easing-standard) forwards;
+    /* The wash stops at the frame's inner edge. With the default border-box
+       clip it filled the frame and the double rule's gap, so on screen the
+       frame was the wash — pixel-identical in every ok/error x light/dark
+       case, and the verdict was carried by hue alone (roadmap 389.4). */
+    background-clip: padding-box;
   }
 
   body[data-scan-result="ok"]::after {
-    background: var(--bo-color-success);
-    /* A quiet edge: accepted is the common case and must not startle. */
-    border: 6px solid var(--bo-color-success);
+    background-color: var(--bo-color-success); /* not the shorthand: it would reset the clip above */
+    /* A quiet edge: accepted is the common case and must not startle. The
+       frame is NEUTRAL (the text colour), not the verdict's hue: the hue is
+       the wash's job, the frame's is to be seen against it, and a frame in
+       the wash's own hue measured 1.00:1 against it (389.4). */
+    border: 6px solid var(--bo-color-text-primary);
   }
 
   body[data-scan-result="error"]::after {
-    background: var(--bo-color-danger);
+    background-color: var(--bo-color-danger); /* not the shorthand: it would reset the clip above */
     /* Three times the mass and a doubled rule — legible in peripheral
        vision and to a viewer who cannot separate the two hues. */
-    border: 18px double var(--bo-color-danger);
+    border: 18px double var(--bo-color-text-primary);
   }
 
   @keyframes bo-scan-flash {
@@ -84,6 +92,9 @@
     body[data-scan-result]::after {
       background: none;
       border-color: Highlight;
+      /* An animation outranks a declared value, so without this the frame
+         still faded 0.30 -> 0.002 inside the stamp's life (389.4). */
+      animation: none;
       opacity: 1;
     }
   }

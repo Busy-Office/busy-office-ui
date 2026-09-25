@@ -33,7 +33,9 @@ const canonical = `<input class="bo-input bo-input--code" data-scan-input data-s
   <p class="demo-note">
     The visible half of a barcode scan, for a user whose eyes are on the
     <em>rack</em>: a ~600ms viewport wash — green on capture, red when your
-    validation rejects the code — paired, always, with the
+    validation rejects the code — inside a neutral frame that carries the
+    verdict without colour: one thin band when accepted, a thick doubled band
+    when rejected. It is paired, always, with the
     <code>data-scan-status</code> live region
     <a href={base + '/patterns/goods-receipt'}>the RF patterns</a> already
     link, so the cue is two-channel by construction. The device's beep and

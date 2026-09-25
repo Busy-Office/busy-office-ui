@@ -52,6 +52,14 @@ export const NARROW_WIDTH = 390;
 export const DESKTOP_WIDTH = 1440;
 
 /**
+ * The rugged-handheld case: the RF scanner floor study's fixture width (a
+ * 5-inch 720p device at DPR 2, 360x640 CSS px), which the RF journey grill
+ * (roadmap 388.2) measured at. Not part of WIDTHS — only the RF screens are
+ * judged here, and only by the claims that need a handheld.
+ */
+export const RF_WIDTH = 360;
+
+/**
  * Both widths every full sweep runs at, desktop first.
  *
  * Ordered deliberately: gates that leave a page at the last width (or name a

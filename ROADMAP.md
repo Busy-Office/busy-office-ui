@@ -419,7 +419,7 @@ removal or rewording; one shipped framework defect (389.4).
          only with a recorded reason and a measured alternative
          visible cue.
 
-4. [ ] **389.4 — P0 · scan.css: ok and error differ by more than hue on screen, or the claim is corrected.**
+4. [x] **389.4 — P0 · scan.css: ok and error differ by more than hue on screen, or the claim is corrected.**
        Three lenses pixel-sampled the frame band: it is identical to
        the wash in every ok/error × light/dark case, animated and
        reduced-motion. The cause is background-clip: border-box. The
@@ -446,6 +446,23 @@ removal or rewording; one shipped framework defect (389.4).
            the non-hue channel.
          The CHANGELOG entry matches the real compatibility impact of
          whichever change ships, with the reasoning.
+       - **DONE 2026-09-25 — the first outcome: the frame now carries the
+         verdict.** Cause confirmed: a frame in the wash's own hue over a
+         border-box wash, and under forced colours an animation that outranks
+         the declared `opacity: 1`. Fix: a NEUTRAL frame
+         (`--bo-color-text-primary`), the wash clipped to the padding box
+         (`background-color`, because the `background` shorthand in the state
+         rules reset the clip — found when the first build still read 1.00),
+         and `animation: none` under forced colours. `check:claims` +2 read
+         RENDERED pixels (a 1px screenshot row decoded through a canvas at
+         RF_WIDTH, the theme's transitions awaited — the first version paused
+         them and measured "dark" at light colours) and the forced-colours
+         frame at 500ms. Red-proved: HEAD's rules in the built CSS read 1.00
+         everywhere and opacity 0.009; both claims failed, 307 others passed;
+         309/309 with the fix. Live screenshots 1440/390 x light/dark x
+         ok/error. Contrast edge gate: the two frame pairs are EDGE_EXEMPT
+         with the pixel claim named as the check. CHANGELOG: visual change,
+         attribute contract unchanged. Jev (Rubric 2): 0.96 / 0.87 / 0.97.
 
 5. [ ] **389.5 — Join the RF track: per-type routing that the links, the prose and the Back exits agree on.**
        - rf-list-rf has 0 inbound links, and a walk from the menu
