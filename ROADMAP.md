@@ -1545,6 +1545,17 @@ superseded once a named item has landed or the owner has acted.
            line. Red-prove this with a 2-minute cap.
          - **Hold counter.** Each hold records `hold-wakes`, and
            `dispatch_status.py` prints the running count.
+       - **PARTIAL 2026-09-25 — built; the real-hold measurement is still
+         owed.** `scripts/loops/inflight.py open|status|hold|close`: `--self-test`
+         11 cases (status 0/3/4, refused second open, hold row, close, reopen),
+         and FAILED naming the cap case when the cap comparison was disabled in
+         a copy. The cap, live on a scratch RESUME with a background task and
+         `cap=2`: status 3 until the real 2-minute mark, then 4; TaskStop; the
+         partial output kept (27 of 60 lines, unchanged 11s later); close ->
+         status 0. `dispatch_status.py` prints the hold count. LOOPS.md Step 0
+         runs `inflight.py hold` second, after the guard. The zoom workflow
+         (375.11) was opened as the first real line (cap 90 — O17's budget is
+         still open). **Owed:** the tool-call count of one real hold wake.
 3. [ ] **393.3 — the backlog mirror reports every kind of wait, and prints the
        oldest dispatchable item.**
        Milestone: M1 · Phase: 0

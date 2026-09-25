@@ -50,6 +50,21 @@ commit.** A local wake also lists the sessions of the cloud routine
 the owner about any session active in the last 24 hours. Roadmap 393.1; owner
 decision O1 (2026-09-25).
 
+**SECOND: `python3 scripts/loops/inflight.py hold`** (roadmap 393.2). One
+workflow at a time; its line sits under RESUME.md `## In flight`.
+- **Exit 0 — nothing in flight:** continue with this Step.
+- **Exit 3 — a workflow is in flight under its cap: this is a HOLD.** The
+  command has already logged the hold (`.roundtable/hold-wakes.jsonl`;
+  `dispatch_status.py` prints the count). Dispatch nothing, read nothing else,
+  schedule the next wake and stop — a hold is the guard, this command and the
+  wakeup, nothing more. The workflow's completion notification, not the timer,
+  is what should wake the loop to land its result.
+- **Exit 4 — past its cap:** stop the workflow (TaskStop its task id), keep its
+  partial output at the line's `out`, record `--outcome logged` naming what did
+  not finish, then `inflight.py close`, and continue.
+- **Launching a workflow** is `inflight.py open --wf … --item … --cap … --session
+  … --out … --paths …` first; landing its result ends with `inflight.py close`.
+
 `.roundtable/RESUME.md` **and `.roundtable/ENVIRONMENT.md`**, then `git status`.
 The wake prompt says *don't assume prior-turn state*, which only works if state a
 wake needs is written down rather than remembered. `RESUME.md` carries the two

@@ -1060,6 +1060,23 @@ def pairing_census():
     return 0
 
 
+def report_holds():
+    """Hold wakes (roadmap 393.2): a wake that found a workflow in flight under
+    its cap and dispatched nothing. Counted from the raw file, never from a
+    summary, and the in-flight line is printed so the hold has a subject."""
+    import os
+    path = os.path.join(os.path.dirname(METRICS), 'hold-wakes.jsonl')
+    try:
+        with open(path, encoding='utf-8') as f:
+            rows = [json.loads(l) for l in f if l.strip()]
+    except FileNotFoundError:
+        rows = []
+    today = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d')
+    n_today = sum(1 for r in rows if r.get('ts', '').startswith(today))
+    print(f"  Holds         {len(rows)} hold-wake(s) recorded, {n_today} today (UTC dates)   "
+          f"[inflight.py hold; .roundtable/hold-wakes.jsonl]")
+
+
 def main():
     if "--self-test" in sys.argv:
         return self_test()
@@ -1080,6 +1097,7 @@ def main():
     # line above. It is reported here because Step 0b is the one moment every
     # wake looks at dispatcher inputs (roadmap 184.1).
     report_metrics(all_rows)
+    report_holds()
     return 0
 
 

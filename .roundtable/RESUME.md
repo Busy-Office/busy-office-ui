@@ -21,6 +21,9 @@ survives none.
 
 ---
 
+## In flight
+wf=wf_119441a0-2bb item=375.11 started=2026-09-25T12:43:34Z cap=90 session=1dbfe40a out=/Users/thepfmind/.claude/projects/-Users-thepfmind-Projects-busy-office-ui/1dbfe40a-17f6-4a1d-a447-12cd87bce187/subagents/workflows/wf_119441a0-2bb/journal.jsonl paths=packages/core/src/css/components/data-table/data-table.css,apps/docs/scripts/check-claims.mjs
+
 ## ⚠ CLOUD WAKE 2026-09-25 04:07-06:0x — collided TWICE, closed no queue item, landed one filed finding
 
 **This section is APPENDED, not a rewrite.** Everything below it is the local
@@ -700,7 +703,7 @@ trusting the sha in the paragraph below.
   with every assertion in the new block passing and an error that names only
   `Runtime.callFunctionOn`. The no-JS dropzone claim is therefore LAST.
 
-## In flight: nothing
+## Hand-off of 2026-09-09 (history) — nothing was in flight then
 
 Last updated 2026-09-09 (**cloud** wake, scheduled routine). Working tree clean
 at hand-off apart from this file, `ROADMAP.md`, the new grill report,
