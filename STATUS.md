@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-25 05:14 UTC
+Generated at: 2026-09-25 05:32 UTC
 
 ## Open items by slice
 
@@ -81,6 +81,12 @@ Generated at: 2026-09-25 05:14 UTC
   - 389.24 — The data-table cell-link focus ring is clipped on the first and last rows.
 - **Slice 391** (1 open)
   - 391.1 — settle why `check:claims` is red here and green on CI at the same commit, and record which environment is telling the truth.
+- **Slice 392** (5 open)
+  - 392.1 — P0 · a second scan verdict inside a live flash never shows.
+  - 392.2 — a pressed toggle differs from an unpressed one by colour alone in normal colours.
+  - 392.3 — a `--bar` label with one word wider than its slot paints past its button.
+  - 392.4 — rule 3 reset without the thesis section, twice; and a design-grill reset it.
+  - 392.5 — the comparator deltas are recorded nowhere a later grill reads them.
 - **Slice —** (3 open)
   - OWNER · 377.5 — release the unreleased fixes, or record why not.
   - OWNER · 377.6 — is busy-office-erp the named first user?
@@ -89,16 +95,13 @@ Generated at: 2026-09-25 05:14 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1793 iterations logged)
+dispatch status — counter-triggered rules (1794 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-09-25 12:20   ok
-  Objective     4 / 3 slices          since 2026-09-25 08:13   OVERDUE  [388, 389, 390, 391]
-  -> a counter is at or past its threshold; the dispatcher should pick it
-  Optimize      4 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 152 sample(s), 8 of 51 name(s) paired across days]
-  -> rule 5's newest comparable pair predates 4 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-19, not this one — record a metric or say the rule could not be evaluated.
-     the unit is DISTINCT LOG DATES after 2026-09-19 (2026-09-22, 2026-09-23, 2026-09-24, 2026-09-25), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
+  Objective     0 / 3 slices          since 2026-09-25 13:32   ok
+  Optimize      0 wake-date(s) newer   since 2026-09-25 05:14   ok   [newest pair: claims; 153 sample(s), 8 of 51 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (43 of 51 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
+       claims                      6d  2026-09-19 203 count -> 2026-09-25 311 count  +108
        dispatch-region-words       5d  2026-09-24 7749 words -> 2026-09-25 7775 words  +26   [2 same-day]
-       claims                      5d  2026-09-07 176 count -> 2026-09-19 203 count  +27   [1 same-day]
        gates                       4d  2026-09-07 55 count -> 2026-09-09 56 count  +1
        axe-violations              8d  2026-09-03 0 count -> 2026-09-06 0 count  +0   NEVER MOVED
        bundle-gz-kb                5d  2026-08-17 11.7 kB -> 2026-09-03 15.1 kB  +3.4   [2 same-day]
@@ -125,7 +128,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-25 05:53 · Meta · refusal · 400% zoom last-resort @position-try: clips unbreakable tokens and adds a Tab stop at 100% zoom · refused · 0c6f319c
 - 2026-09-25 07:11 · Roadmap · triage · 388 — owner input triaged: 388.1 capsule button + group guideline, 388.2 RF journey grill · triaged · f9c82ed5
 - 2026-09-25 08:13 · Objective · grill · 388.2 — RF journey grill (design-grill flow): H1 no new pattern, H2 yes; 25 findings as Slice 389 · landed · e76a8f90
 - 2026-09-25 08:38 · Continue · fix · 389.4 — P0: scan flash frame carries the verdict in rendered pixels; forced-colours frame stays · landed · 1b19d6e9
@@ -135,6 +137,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-25 04:42 · Roadmap · triage · Slice 391 — cloud wake collided TWICE (Step 0c 6 and 7: rule 4 on 336.2 against a 159-commit-stale Step 0, verdicts DISAGREED; rule 2's sweep against Slice 390, same finding same number). Both discards checked, both returned nothing. Filed 391.1: check:claims 3 of 311 red here at b0401326, deterministic over two runs on Chromium 141, while CI reports success on the same sha · triaged · 3b24cc94
 - 2026-09-25 04:42 · Meta · refusal · rewriting RESUME.md wholesale — a cloud wake that lost both dispatches must not clobber the winner's handover; appended instead · refused · 3b24cc94
 - 2026-09-25 05:14 · Continue · bug · 391.2 — check:claims' SC 2.5.7 file-chooser wait 5s -> 15s. Failed on CI at 2 of 4 observed runs (88ba16bb, 07aef5bf; both markdown-only diffs, byte-identical payload, geometry block healthy). The one permitted re-run came back green and that green was refuted by the next push — a single passing re-run is not evidence of rarity. Patience raised, assertion unchanged (opened===true still required); not skipped, disabled or quarantined. CI green on 45aa4d1d · landed · 45aa4d1d
+- 2026-09-25 13:32 · Objective · grill · Slice 392 — Objective grill of 388.1, 389.4, Slice 390 (renumbered from 391, collision 8); P0 392.1 filed · landed · e8ac9844
 
 ## Sunset test
 

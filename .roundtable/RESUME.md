@@ -92,6 +92,16 @@ current. `391.1` is the only thing this wake added to it.
 
 ## GOAL — set 2026-09-23 (second, owner-requested): COMPLETE 2026-09-24 03:02.
 
+**LOCAL /loop session, 2026-09-25 ~13:30 (the owner's machine):** Slice 392 LANDED
+(`e8ac9844`) — the Objective grill of 388.1, 389.4 and Slice 390, with the thesis
+section; renumbered from 391 because the cloud dispatcher landed its own Slice
+391 first (collision 8). **P0 392.1 is open** (a second scan verdict inside a
+live flash never shows) — rule 1 next. **Two dispatchers are live:** the cloud
+routine `trig_019aw8tDjiYxC3ejSFd5wYZY` is DISABLED, but two of its 09-09
+sessions (`cse_01WUJ1Kgz…`, `cse_019nfzi…`) became active again today and are
+dispatching; the local session runs `/loop`. Three collisions today (6, 7, 8).
+Owner: pick one dispatcher. Also: issue #2 was refused 09-07 and never told.
+
 Cleared in rule order and pushed (`ae053854`): **rule 1** — 375.9, 375.10,
 376.2, 376.4, plus the 373.3/373.4 remainders; **rule 2** — Slice 376 (4 of 4
 lanes) and the 376.8 archive sweep (ROADMAP.md 15,977 -> 9,314 lines);
