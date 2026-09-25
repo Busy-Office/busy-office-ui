@@ -60,6 +60,17 @@ not all re-run, because the tree this wake ships is markdown only and
 `docs:build` is the gate that reads `ROADMAP.md`/`LOOPS.md`/`.roundtable/**`.
 **Said plainly rather than implied.**
 
+**CI went red on this wake's own push and is green again — read `391.2` before
+re-raising it.** `88ba16bb` failed `check:claims` **1 of 311** on CI, and the one
+was NOT any of this container's three: it was the SC 2.5.7 file-chooser case
+timing out at 5,000 ms. One `rerun_failed_jobs` (the only re-run `LOOPS.md`
+allows) came back **green on the identical commit**, so `main` is green and the
+case is confirmed intermittent. Filed as `391.2` with the rate left to measure —
+not skipped, not quarantined. **It also sharpens `391.1` rather than weakening
+it:** CI executed the gate at that sha and reported *no sticky-table failure at
+all*, so the three this container fails are absent from CI's output, not merely
+unreached.
+
 **NOT VERIFIED:** no 1440/390 light-and-dark screenshots — a cloud wake has no
 Podman. None are owed; no CSS, `.astro`, docs page or generated artefact is in
 the diff.

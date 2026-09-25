@@ -373,7 +373,33 @@ so it is executed rather than skipped, and the run listing for
 `b04013266eac9c718c1b2fed8d80d8d1bfcae65e` reads `CI completed success
 2026-09-25T04:26:17Z`.
 
-**This is not a regression introduced by this wake**, and that is a set
+**CORRECTED after this slice's own push, and the correction makes the finding
+sharper rather than weaker.** CI on `88ba16bb` — this wake's commit, a
+**markdown-only** diff — came back `failure`, so the sentence above ("CI reports
+success") is true of `b0401326` and **not** of every sha. What CI reported is
+`claims check FAILED — 1 of 311`, and the one is a **different case entirely**:
+
+```
+FAIL SC 2.5.7 alternative: a single real mouse click on the dropzone's visible hint …
+     {"opened":false,"chooserErr":"Waiting for `FileChooser` failed: 5000ms exceeded"}
+```
+
+Two things follow, and they point in opposite directions:
+
+- **The container-vs-CI divergence is CONFIRMED, not weakened.** CI executed the
+  gate at this sha and reported **no sticky-table failure at all** — the three
+  this container fails deterministically are absent from CI's output while CI is
+  busy failing something else. So it is not that CI never got that far.
+- **A second, separate finding: CI's file-chooser case is flaky.** A 5,000 ms
+  timeout waiting for a native `FileChooser` is a timing assertion, the diff that
+  "caused" it is four markdown files, and `b0401326` passed the identical case
+  minutes earlier. **One re-run was spent, which is all `LOOPS.md` allows, and it
+  came back `completed success` on the identical commit** (run `36095606397`,
+  `rerun_failed_jobs`, green at `04:55:23Z`) — so `main` is green and the case is
+  confirmed intermittent rather than assumed to be. *"Flake" is still not a root
+  cause*, so it is filed as `391.2` rather than waved off.
+
+**This wake did not introduce either failure**, and that is a set
 membership argument rather than a guess: the gate reads `apps/docs/dist` and
 `scripts/check-claims.mjs`, and this wake's whole diff is `ROADMAP.md`,
 `LOOPS.md`, `LOOPS-archive.md` and this hand-off — no CSS, no `.astro`, no
@@ -418,6 +444,26 @@ intersection during **backward** scroll.
          first thing to read.
        - **Lane**: cloud-takeable for the measurement; the CI half needs only
          the run/job API, which a cloud wake has.
+
+2. [ ] **391.2 — `check:claims`'s SC 2.5.7 file-chooser case fails
+       intermittently ON CI, and its failure mode is a bare timeout.** Observed
+       on `88ba16bb`, whose diff is four markdown files, minutes after
+       `b0401326` passed the same case:
+       `{"opened":false,"chooserErr":"Waiting for FileChooser failed: 5000ms exceeded"}`.
+       The geometry block in the same payload is healthy — `isLabel: true`,
+       `inputHidden: true`, `pointIsOnInput: false`, `pointInViewport: true` —
+       so the click landed where the case intends and only the chooser event
+       did not arrive.
+       - **Accept** — the property: one wake establishes the rate (how many of
+         the last N CI runs of this case failed, from the run/job API rather
+         than from memory) and either raises the wait with the reason, makes
+         the case assert something that is not a race, or records that the
+         rate is low enough to leave alone. **Leaving it alone with a measured
+         rate is a satisfying outcome**; what is not allowed is calling it a
+         flake without the rate, which is `LOOPS.md`'s own rule.
+       - **Do NOT skip, disable or quarantine the case** — the standing rule.
+       - **Lane**: cloud-takeable; the rate is an API read and the wait is one
+         constant in `check-claims.mjs`.
 
 **NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a
 cloud wake has no Podman. **None are owed**, read off `git diff --stat` rather
