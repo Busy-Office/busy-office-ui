@@ -653,11 +653,80 @@
      The minimum width is what makes the fallbacks work. Without it a field
      in a right-hand column, or inside a dialog, gets a sliver of a box as
      tall as the viewport that covers its own field; with it, a squeezed box
-     overflows and the browser flips it to the side that has room. */
+     overflows and the browser flips it to the side that has room.
+
+     A message too tall for EITHER side of its field (roadmap 375.11). With
+     no option fitting, the browser shifted the box back into the viewport,
+     on top of the field it describes: WCAG 2.4.11 (AA). At 400% zoom
+     (320x256) the focused field was covered ENTIRELY in 88 of 360 arrivals
+     (six layouts, six message lengths, five scroll positions, Tab and
+     click), and at 100% on a 320x568 phone in 16 of 360. So the two
+     full-width options are capped, each to the LARGER of the room on its
+     own side (100%) and the room on the other side (the viewport less its
+     own room and the field). A message that fits somewhere is never capped,
+     and one that fits nowhere goes, capped, to the roomier side: 0 of 360 at
+     both sizes, and 0 of 3660 steps scrolled while focused (HEAD: 1015).
+
+     Each piece was measured by changing it:
+     - Capped to the larger room, not to its own: while the page scrolls, the
+       browser keeps the last option that still fits, and a box capped to its
+       own room always fits, so it shrank as its field neared the edge (no
+       line at all in 687 of 3660 steps at 400%). Capped to the larger room,
+       it stops fitting once the other side is roomier, and the browser moves
+       it.
+     - `- 2rem` on the option tried LAST: 100dvh counts a classic horizontal
+       page scrollbar, and the fixed box's containing block does not, so the
+       other side's room was overstated by 15px. With the two rooms within
+       15px of each other, neither option fitted and the field was covered
+       again: 66 of 369 arrivals at 400% in a dialog, 1 of 369 at 320x568,
+       and 0 with the allowance. The first capped option has already failed
+       before this one is tried, so the allowance never caps a message that
+       fits. Put on both options (one rule plus its `flip-block`), it did cap
+       such a message, 4 of 496 in a sweep of lengths and positions, which is
+       why these are two rules.
+     - Not a min-block-size floor with calc-size(): Chromium-only, and with
+       that declaration dropped, the capped option took messages that fit
+       whole elsewhere: 26 of 360 at 400%, 6 of them down to zero lines, and
+       42 of 360 at 320x568.
+     - Not overflow: clip: no Tab stop, but the cut lines cannot be reached
+       at all (778 lines in 132 of 360 arrivals at 400%).
+     - Chrome 153 never tries a sixth fallback, so the capped options REPLACE
+       the plain full-width ones. For a message that fits, a cap changes
+       nothing, so they act as those options.
+
+     The cost, stated: a capped message scrolls, and Chrome makes a
+     scrolling box a Tab stop. Tab from the field lands IN the message, with
+     its focus ring, and the message is still shown because focus is still
+     inside the field. The arrow keys scroll it, and the next Tab moves on. A
+     wheel over it scrolls it without moving focus. Only a message taller
+     than both sides of its field is capped: 133 of 360 arrivals at 400%, 22
+     of 360 at 320x568 (the 687-character message only), and none at
+     390x844 or 1440x900.
+
+     `overflow-wrap: anywhere`: an unbreakable token (a bin path, a document
+     key) ran past the viewport edge and was cut in 60 of 360 arrivals, at
+     400% and at 390px alike. Inside a scroller it would also scroll
+     sideways. */
   @media screen {
     @supports (position-area: block-end) {
       .bo-data-table .bo-form-field:focus-within {
         anchor-name: --bo-cell-message;
+      }
+
+      @position-try --bo-cell-message-below {
+        position-area: self-block-end span-all;
+        max-block-size: max(
+          100% - 2 * (var(--bo-focus-ring-offset) + var(--bo-focus-ring-width)),
+          100dvh - 100% - anchor-size(self-block) - 2 * (var(--bo-focus-ring-offset) + var(--bo-focus-ring-width))
+        );
+      }
+
+      @position-try --bo-cell-message-above {
+        position-area: self-block-start span-all;
+        max-block-size: max(
+          100% - 2 * (var(--bo-focus-ring-offset) + var(--bo-focus-ring-width)),
+          100dvh - 100% - anchor-size(self-block) - 2 * (var(--bo-focus-ring-offset) + var(--bo-focus-ring-width)) - max(2rem, 40px)
+        );
       }
 
       .bo-data-table .bo-form-field:focus-within .bo-form-field__message {
@@ -667,7 +736,7 @@
            section inside an LTR page still aligns to the field's start. */
         position-area: self-block-end span-self-inline-end;
         position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline,
-          self-block-end span-all, self-block-start span-all;
+          --bo-cell-message-below, --bo-cell-message-above;
         /* Declared rather than left to the UA default, which the spec has
            argued over: a field scrolled out of sight takes its message too. */
         position-visibility: anchors-visible;
@@ -680,6 +749,15 @@
         margin-block: calc(var(--bo-focus-ring-offset) + var(--bo-focus-ring-width));
         margin-inline-end: var(--bo-space-2);
         z-index: var(--bo-z-dropdown);
+        overflow-y: auto;
+        overflow-wrap: anywhere;
+        /* The caps above are the BORDER box's room: without the reset's
+           border-box, padding and border pushed a capped box past its room,
+           no option fitted, and the field was covered as at HEAD (39 of 180;
+           0 with this). The allowance is px-floored because a classic page
+           scrollbar does not scale with rem: `- 2rem` alone failed at a 17px
+           scrollbar or a 12px root (roadmap 375.11's verifier). */
+        box-sizing: border-box;
       }
     }
   }

@@ -141,6 +141,15 @@ pin.
   briefly removes and re-adds the attribute, which a `MutationObserver` on
   `<body>` will see. Roadmap 392.1.
 
+- **At 400% zoom a grid cell's error message could cover its focused field
+  entirely** (WCAG 2.4.11). When the message fitted on neither side of the
+  field, the browser shifted it back onto the field. The two full-width
+  fallbacks are now capped to the larger room on either side, so the message
+  goes to the roomier side and scrolls inside itself when it is taller than
+  that room — a scrolling message is then one Tab stop, which is how its
+  hidden lines stay reachable by keyboard. Messages that fit are unchanged.
+  The message also declares `box-sizing: border-box`. Roadmap 375.11.
+
 - **The generated accessibility conformance report (`dist/acr.json`,
   `/reference/acr`) overclaimed in four rows.** An audit of all 21 criteria
   against the gate each one names found four overclaims and one unbacked

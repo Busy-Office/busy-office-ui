@@ -3690,7 +3690,23 @@ untracked or uncommitted, so the removal was a working-tree change.
            exits "Could not find profile folder" on Darwin 27.2, sandboxed or
            not, launched directly too. Needs another machine or a stock
            Firefox install.
-         - STILL OPEN, PREMISE CORRECTED — **400% zoom** is not "never
+         - **FIXED 2026-09-25 — 400% zoom** (the half below). A design panel
+           (G2 refined vs R2), a judge re-measuring both over 6 layouts x 6
+           lengths x 5 positions x Tab/click, and an adversarial verifier.
+           Landed: R2 — both full-width fallbacks capped to the LARGER room
+           on either side, with a `- max(2rem, 40px)` scrollbar allowance on
+           the option tried last and `box-sizing: border-box` on the message
+           (the verifier's two fixes: `- 2rem` alone failed at 17px scrollbars
+           or a 12px root; without border-box nothing changed, 39/180).
+           Entirely covered: 0 of 360 (HEAD 88). `check:claims` +2: the
+           approve dialog at 320x256 DPR 4, 303 characters, 5 positions — 0
+           entirely covered; the old fallback list put back covers 4 of 5.
+           Claims 317, axe, layout, 175 tests green; live at 1440/390 x
+           light/dark (no change there) and 320x256. Size budget +0.1 kB.
+           Jev: 0.94 / 0.92. **Residual, recorded:** classic scrollbars of
+           21px or more (15/65 at 24px in a dialog); near-fit Tab stops that
+           scroll only padding at 568x320 / 640x360 (10-17 of 738).
+         - STILL OPEN, PREMISE CORRECTED (history) — **400% zoom** is not "never
            entirely": the 303-character message covers its field ENTIRELY
            (18/18) in the approve dialog at 320x256, and at 9 of 25 scrolled
            positions on the demo with 433 characters, so this fails WCAG

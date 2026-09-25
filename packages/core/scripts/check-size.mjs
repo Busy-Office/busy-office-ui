@@ -118,9 +118,11 @@ const BUDGETS = {
   'css/rf-essentials.css': { total: 9.1 },   // 8.22 after the 374.5 comment strip
   'css/rf-essentials.min.css': { total: 8.4 },
   // max 2.4 -> 2.6 (375.9): data-table.css reached 2.404 with the anchored cell message and its static fallback reserve, the fix for a lost press.
-  'css/components/*.css': { total: 32.5, max: 2.6 },  // 29.57 / largest 2.15 after the 374.5 strip
+  // max 2.6 -> 2.7 (375.11 zoom half): data-table.css reached 2.62 with the two capped @position-try rules that stop a message covering its field at 400% zoom (a WCAG 2.4.11 AA failure).
+  'css/components/*.css': { total: 32.5, max: 2.7 },  // 29.57 / largest 2.15 after the 374.5 strip
   // max 2.2 -> 2.3 (375.11): data-table.min.css reached 2.25 with the scoped frozen-cell raise, the loading-table hide and the fallback's permanent scrollbar — a trapped message and two lost/misdirected presses. Trims considered widened the selector past the cells the file makes sticky.
-  'css/components/*.min.css': { total: 27.3, max: 2.3 },
+  // max 2.3 -> 2.4 (375.11 zoom half): data-table.min.css reached 2.37, same two @position-try rules.
+  'css/components/*.min.css': { total: 27.3, max: 2.4 },
   'css/brand-*.css': { total: 2.4, max: 0.45 },  // 2.15 / largest 0.37 after the strip
   'css/brand-*.min.css': { total: 1.9, max: 0.4 },
   'css/*.css': { total: 6.8, max: 2.6 },  // 6.12 / largest 2.28 after the strip

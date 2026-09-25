@@ -60,6 +60,13 @@ export const DESKTOP_WIDTH = 1440;
 export const RF_WIDTH = 360;
 
 /**
+ * 400% zoom on a 1280x1024 window: a 320x256 CSS-px viewport (WCAG 1.4.10's
+ * reflow case). Roadmap 375.11 measured a grid cell's message covering its
+ * focused field ENTIRELY here. Only the claims that need it use it.
+ */
+export const ZOOM_400 = { width: 320, height: 256 };
+
+/**
  * Both widths every full sweep runs at, desktop first.
  *
  * Ordered deliberately: gates that leave a page at the last width (or name a

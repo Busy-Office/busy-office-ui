@@ -46,7 +46,7 @@ import { serveDist } from './serve-dist.mjs';
 import { gate } from './gate-report.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
 import { DIST, REPO_ROOT } from './paths.mjs';
-import { WIDTHS, DESKTOP_WIDTH, NARROW_WIDTH, RF_WIDTH } from './viewports.mjs';
+import { WIDTHS, DESKTOP_WIDTH, NARROW_WIDTH, RF_WIDTH, ZOOM_400 } from './viewports.mjs';
 import { contrastRatio, composite } from '../../../packages/core/scripts/wcag.mjs';
 import { createRequire } from 'node:module';
 import { readFile, writeFile, mkdtemp, rm, cp } from 'node:fs/promises';
@@ -430,6 +430,64 @@ check(`editable-grid @${NARROW_WIDTH}: while the table loads, a shown cell messa
 check(`editable-grid @${NARROW_WIDTH}: under the htmx bridge's \`pointer-events: none\`, the undimmed message still catches a press instead of passing it to the control beneath (375.11)`,
   gridLoading.bridge.tablePointer === 'none' && gridLoading.bridge.opacity === '1' && gridLoading.bridge.catches,
   JSON.stringify(gridLoading.bridge));
+
+/* 375.11 (zoom half) — at 400% zoom a long cell message must never cover its
+   focused field ENTIRELY (WCAG 2.4.11, AA). With no fallback fitting, the
+   browser used to shift the message back onto the field: the approve dialog
+   with a 303-character message was covered at 4 of 5 scroll positions. A
+   5x5 hit-test grid over the field at each position; the counterfactual puts
+   the old fallback list back and must see the field covered again. */
+const ZOOM_MSG = 'Quantity exceeds the on-hand balance of 200 at warehouse WH-01 bin A-04-2, and the open reservation for sales order SO-44871 holds a further 120 against the same bin; reduce the quantity, split the line across bins A-04-2 and A-05-1, or raise a transfer order from WH-02 before posting this goods issue.';
+const ZOOM_OLD = '.bo-data-table .bo-form-field:focus-within .bo-form-field__message { position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline, self-block-end span-all, self-block-start span-all !important; max-block-size: none !important; overflow-y: visible !important; }';
+async function zoomCoverage(inject) {
+  await visit('/components/dialog/', { ...ZOOM_400 });
+  await page.setViewport({ ...ZOOM_400, deviceScaleFactor: 4 });
+  const MSG = ZOOM_MSG;
+  return page.evaluate(async (msg, css) => {
+    const frame = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    document.querySelector('[data-dialog-trigger="approve-dialog"]').click();
+    await new Promise((r) => setTimeout(r, 800));
+    const d = document.getElementById('approve-dialog');
+    const rows = [1, 2, 3].map((k) => `<tr><td>Line ${k}</td><td><div class="bo-form-field" style="margin-block-end:0"><input class="bo-input bo-input--numeric" type="number" value="${k === 2 ? 450 : 10 + k}" aria-label="Quantity ${k}" ${k === 2 ? 'id="zq" aria-invalid="true" aria-describedby="zq-err"' : ''}>${k === 2 ? `<span class="bo-form-field__message" id="zq-err">${msg}</span>` : ''}</div></td></tr>`).join('');
+    const h = document.createElement('div');
+    h.innerHTML = `<div class="bo-data-table-container"><table class="bo-data-table"><thead><tr><th scope="col">Item</th><th scope="col">Qty</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+    (d.querySelector('.bo-dialog__body') || d).appendChild(h);
+    if (css) { const s = document.createElement('style'); s.textContent = css; document.head.appendChild(s); }
+    const f = document.getElementById('zq'), m = document.getElementById('zq-err');
+    let sc = f.parentElement;
+    while (sc && !(/(auto|scroll)/.test(getComputedStyle(sc).overflowY) && sc.scrollHeight > sc.clientHeight + 1)) sc = sc.parentElement;
+    sc = sc || document.scrollingElement;
+    const out = [];
+    for (const frac of [0, 0.25, 0.5, 0.75, 1]) {
+      f.blur(); await frame();
+      const pr = sc === document.scrollingElement ? { top: 0, bottom: innerHeight } : (() => { const r = sc.getBoundingClientRect(); return { top: Math.max(0, r.top), bottom: Math.min(innerHeight, r.bottom) }; })();
+      const fh = f.getBoundingClientRect().height;
+      const want = pr.top + frac * Math.max(0, pr.bottom - pr.top - fh);
+      const cur = f.getBoundingClientRect().top;
+      if (sc === document.scrollingElement) scrollBy(0, cur - want); else sc.scrollTop += cur - want;
+      await frame();
+      f.focus({ preventScroll: true }); await frame(); await frame();
+      const r = f.getBoundingClientRect();
+      let on = 0, cov = 0;
+      for (let i = 0; i < 5; i++) for (let j = 0; j < 5; j++) {
+        const x = r.left + 2 + (r.width - 4) * i / 4, y = r.top + 2 + (r.height - 4) * j / 4;
+        if (x < 0 || y < 0 || x >= innerWidth || y >= innerHeight) continue;
+        on++; const e = document.elementFromPoint(x, y);
+        if (e && (e === m || m.contains(e))) cov++;
+      }
+      out.push({ frac, on, cov, entire: on > 0 && cov === on, shown: getComputedStyle(m).display !== 'none' });
+    }
+    return out;
+  }, MSG, inject);
+}
+const zoomFixed = await zoomCoverage(null);
+const zoomOld = await zoomCoverage(ZOOM_OLD);
+await page.setViewport({ width: DESKTOP_WIDTH, height: 1000 });
+const entire = (a) => a.filter((x) => x.entire).length;
+check('editable grid cell message at 400% zoom (320x256) never covers its focused field entirely, at 5 scroll positions in the approve dialog (375.11)',
+  zoomFixed.length === 5 && zoomFixed.every((x) => x.on > 0) && entire(zoomFixed) === 0, JSON.stringify(zoomFixed));
+check('with the old fallback list put back, the same message covers the field entirely (the stated reason)',
+  entire(zoomOld) >= 1, JSON.stringify(zoomOld));
 
 /* 375.11 — in the static fallback the container's horizontal scrollbar room
    is permanent, so a long message cannot toggle a classic scrollbar between
