@@ -304,6 +304,78 @@ The two cost figures differ and do not conflict: the loser costed 7 → **21**
 pages (every unswept vocabulary page, +173.7%), the winner 7 → **14** (only the
 claim-making ones, +86%). Different proposals, same refusal.
 
+**Collision 6 — `336.2` (rule 4), the cloud routine against a local session,
+2026-09-25.** Every earlier entry is two dispatchers working within hours. This
+one is **159 commits and sixteen days** wide, and the container could not see
+any of it at Step 0: `git fetch origin main` reported `d876765..1e756a5` and
+`git ls-remote --heads origin main` independently answered `1e756a5d`. The two
+checks **agreed on a tip that was already sixteen days stale**. `ENVIRONMENT.md`
+§1 names `ls-remote` as *"the authority on what is pushed"*; it was consulted,
+and it was not wrong so much as **answering a different question** — what origin
+says now, not whether a dispatcher is mid-flight. The mandated pre-commit fetch
+returned `6dc65428..c76a841e`.
+
+**The verdicts DISAGREED, which is new.** Collision 5 banked two dispatchers
+reaching the same conclusion by different instruments as evidence that the
+queue's determinism extends into the answer. This is the counter-example: on
+`336.2` the winner decided **print the union** and the loser decided **refuse**.
+It is not a contradiction — Slice 366 says outright *"the base rate argues
+against; the change was taken anyway, on a different ground"* — so the two wakes
+agreed on the evidence and split on the weighing. Determinism reaches the
+**pick** and the **evidence**, and stops short of the **judgement**.
+
+**"Check the loser's output before discarding" ran and returned NOTHING, a
+second consecutive time.** The loser's distinctive result was that Slice 366's
+base-rate population (*"Seven do"*) counts sweeps in `ROADMAP.md`, where a closed
+slice leaves a one-line pointer **whose heading survives verbatim** — so the grep
+366 cites returns 53 in the live file alone. Real, and Slice **368**, the grill
+two commits later, had already filed it as *"a count taken over a population that
+was 7/15 one-line archive pointers"*. The instruction still earns its place on
+collision 3 and on being cheap; the record now shows it confirming a discard more
+often than rescuing work.
+
+**What the loser produced that is worth keeping is its own errors**, per
+collision 3's precedent — three instrument defects in one wake, every one caught
+by an implausible denominator rather than by review:
+
+- A census keyed on the loop log's Standardize rows returned `21 of 52`: the row
+  parser credits an **item id** where a slice is meant, and 31 of the "sweeps"
+  predate Slice 158, which created lane 3.
+- A second pass filtered on `'npm run' not in line` and silently dropped every
+  table-row sweep (214, 235, 284, 290, 293, 308, 314, 320), whose rows carry the
+  command inline.
+- A third merged both roadmap files with `setdefault`, appending each closed
+  slice's **archive body** to its **live pointer** and attributing it to
+  `ROADMAP.md`. It reported **0** lane-3 readings in the archive, where the
+  previous pass had reported **0** in the live file. **Two opposite zeroes from
+  one question** is what exposed it — `ENVIRONMENT.md`'s *compare the sets, not
+  the counts*, one level up.
+
+**Collision 7 — the rule-2 Standardize sweep, both dispatchers, 2026-09-25.**
+The loser re-dispatched after collision 6 and collided again about forty minutes
+later, on a **different rule**. Both ran the sweep, both found lane 3's single
+new flag (`/components/button/` at 1,806 words, 2.2x the corpus median, crossing
+on 388.1's which-one guideline), both verdicted it as the page's subject rather
+than its prose, both amended §3's enumeration `20 → 21`, and both wrote
+`## Slice 390`. This is collision 5's shape — same rule-driven pick, same
+conclusion, independently reached — with the addition that the *verdict text*
+converged too.
+
+The winner's write-up strictly dominated and the discard was clean: it ran in an
+isolated worktree with its own `npm ci` and a realpath check, read lane 2 as a
+`+1 rule / +1 body` delta against Slice 385's `245 · 234 · 7` rather than as an
+unchanged reading, cut a narrative caption on the button page that the loser had
+not looked for, and recorded the archive share at `1,193 / 7,532 = 15.8%`.
+
+**What the pair of them says about the fetch rule.** The pre-commit fetch caught
+both, exactly as designed, and both still cost a wake — because the rule fires
+*after* the work, which collision 5 already recorded. What is new is the
+frequency: a wake that finds the fetch has moved has learned that **another
+dispatcher is demonstrably active right now**, so its next dispatch is likely to
+collide as well. The inline rule added to `LOOPS.md` for this is to prefer work
+no second dispatcher can duplicate — this section's own record, and the hand-off
+— over re-entering a queue someone else is visibly working.
+
 ### The three refused alternatives, with the measurement behind each
 
 **Three options refused, each for a measured reason:**

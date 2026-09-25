@@ -176,6 +176,30 @@ work`, `a rebase`, `a renumber`, `caught early — nothing`:
    strictly dominated, and had independently found the loser's one distinctive
    result. That is a negative result for that instruction, not a reason to drop
    it: the check is cheap and this time it said discard. **cost: a wake's work.**
+6. **`336.2` (rule 4), the cloud routine against a local session, 2026-09-25** —
+   the first collision measured in **days rather than hours**: the container's
+   Step 0 `fetch` and `ls-remote` **agreed** on `1e756a5d` while the real tip was
+   **159 commits and 16 days** further on, so the wake ran rule 4 against a queue
+   whose item had been decided that same night. Both wakes reached a verdict and
+   they **DISAGREE** — the loser refused on a base rate, the winner (Slice 366)
+   printed the union on the contract, having recorded that its own base rate
+   argued against. **cost: a wake's work.**
+7. **The rule-2 Standardize sweep, both dispatchers, 2026-09-25** — the loser
+   re-dispatched after collision 6, ran the sweep, and collided again ~40
+   minutes later on the **same lane-3 finding** (`/components/button/` newly
+   flagged, verdicted as the owner's which-one guideline), the same enumeration
+   amendment `20 → 21`, and independently the same number `## Slice 390`. Two
+   collisions in one wake, on two different rules. **cost: a wake's work.**
+
+**Two collisions in ONE wake is what a 159-commit stale Step 0 buys**, and it is
+the argument for reading the fetch's *range* rather than only its result: `git
+fetch` printing `d876765..1e756a5` looks identical whether the remote is one
+commit ahead or sixteen days, and `ls-remote` agreed with it. Neither check is
+wrong; both answer *"what does origin say now"*, and neither answers *"is a
+dispatcher mid-flight"*. **A wake that finds the pre-commit fetch has moved
+should expect to lose its NEXT dispatch too** — the other dispatcher is
+demonstrably active — and should prefer work no second dispatcher can duplicate
+(this section's own record, the hand-off) over re-entering the queue.
 
 **A new collision adds a LINE here and its forensics to `LOOPS-archive.md`** —
 274.2's charter, which collisions 3 and 4 did not follow, and applying it late is

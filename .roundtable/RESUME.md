@@ -21,6 +21,54 @@ survives none.
 
 ---
 
+## ⚠ CLOUD WAKE 2026-09-25 04:07-06:0x — collided TWICE, closed no queue item, landed one filed finding
+
+**This section is APPENDED, not a rewrite.** Everything below it is the local
+session's hand-off and is still the current state of the queue; this wake had no
+business overwriting it, because it landed no queue work. **A cloud wake that
+loses both its dispatches must not clobber the winner's handover** — the
+wholesale-rewrite convention assumes the writer is the wake that advanced the
+queue.
+
+**What happened.** The container's Step 0 saw `1e756a5d`, **159 commits and 16
+days stale** — `git fetch origin main` and `git ls-remote --heads origin main`
+independently *agreed* on it. Rule 4 dispatched to `336.2`, ran it to a verdict
+(**refuse**), and the mandated pre-commit fetch found `c76a841e`: Slice 366 had
+decided it the same night, the other way (**print the union**). Re-dispatched;
+rule 2 read `Standardize 4 / 4 OVERDUE`, ran the sweep to a verdict, and
+collided again ~40 minutes later with **Slice 390** — same lane-3 finding
+(`/components/button/`), same verdict, same enumeration bump, same slice
+number. Both discards were checked before being made (Step 0c's rule) and both
+returned **nothing**: the first loser's distinctive result was already landed by
+Slice 368, and the second winner's write-up strictly dominated.
+
+**Recorded as Step 0c collisions 6 and 7**, with forensics in
+`LOOPS-archive.md`, per 274.2's charter. Collision 6 is the first where the two
+dispatchers **disagreed on the verdict**; collision 7 is the first time one wake
+collided twice on two different rules.
+
+**What this wake landed that is not a duplicate:** Slice **391**, filing
+`391.1` — `check:claims` fails **3 of 311** in this container at `b0401326`
+(two runs, same three sticky-table cases, Chromium 141.0.7390.37) while **CI
+reports `success` on that exact sha**. No local wake can see this. It is NOT
+caused by this wake: the gate reads `apps/docs/dist` + `check-claims.mjs`, and
+this wake's whole diff is four markdown files.
+
+**Gates: `docs:build` green; `check:claims` is RED here and that is the filed
+finding, not a regression this wake introduced.** The other CI entry points were
+not all re-run, because the tree this wake ships is markdown only and
+`docs:build` is the gate that reads `ROADMAP.md`/`LOOPS.md`/`.roundtable/**`.
+**Said plainly rather than implied.**
+
+**NOT VERIFIED:** no 1440/390 light-and-dark screenshots — a cloud wake has no
+Podman. None are owed; no CSS, `.astro`, docs page or generated artefact is in
+the diff.
+
+**For the next wake:** the queue state below is the local session's and is
+current. `391.1` is the only thing this wake added to it.
+
+---
+
 ## GOAL — set 2026-09-23 (second, owner-requested): COMPLETE 2026-09-24 03:02.
 
 Cleared in rule order and pushed (`ae053854`): **rule 1** — 375.9, 375.10,

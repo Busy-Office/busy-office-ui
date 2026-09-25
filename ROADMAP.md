@@ -320,6 +320,111 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 391 — a cloud wake that collided TWICE, and the one thing it can see that no local wake can: `check:claims` fails **3 of 311** in this container at a commit CI reports `success` on (2026-09-25)
+
+**This slice files a finding and records two collisions. It closes no queue
+item**, because both items it dispatched to were taken by the other dispatcher
+first. The dispatch trace and the discards are in `LOOPS.md` Step 0c
+(collisions 6 and 7) with forensics in `LOOPS-archive.md`; they are not
+restated here.
+
+**Dispatch, re-derived at each tip rather than carried.** Rule 1: no open P0
+(`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md` → **0**). Rule 4 matched at the
+stale tip and ran `336.2` to a verdict; rule 2 matched at the next tip
+(`Standardize 4 / 4 OVERDUE`) and ran the sweep to a verdict. **Both were
+already landed** — Slice 366 sixteen days earlier and Slice 390 forty minutes
+earlier — and both discards were checked before being made, per Step 0c.
+
+**Step 1 read both intakes with `ENVIRONMENT.md` §8's controls:**
+`/issues?state=open` → `200 len 1` (issue #2, `updated_at`
+**2026-09-06T15:10:34Z**, unmoved); `/discussions` → `200 len 0`;
+`/not-a-real-route` → `404`, the control that makes the `200 []` mean *served
+and empty*. No new untriaged input, so Step 1 committed nothing.
+
+**Rule 5 is STALE and is therefore NOT reported clear**, per its own text:
+`Optimize 4 wake-date(s) newer — STALE`, its newest comparable pair (`claims`,
+2026-09-19) predating four distinct log dates. Any regression verdict quoted
+from it describes the tree of 2026-09-19.
+
+### The finding: a gate that is green on CI and red here, on the same sha
+
+Measured at `b0401326` after `rm -rf apps/docs/dist` and a full
+`npm run build -w @busy-office/ui && npm run docs:build`, both rc=0:
+
+```
+npm run check:claims -w docs
+  claims check FAILED — 3 of 311 documented behaviours do not hold
+    FAIL  sticky table: the real list-report exemplar — every expected row control focused …
+    FAIL  sticky table: density declared on the TABLE (container left default) …
+    FAIL  sticky table: container-spacious exact-match case (144px reserved == 144px header) …
+```
+
+**It is deterministic, not a flake, and that was measured before anything was
+concluded from it**: two consecutive runs in this container both report
+`3 of 311`, the same three cases. The browser here is **Chromium
+141.0.7390.37** (`$CHROME_PATH --version`, read rather than inferred from the
+`chromium-1194` path) — the same major build Slice 384 found a reading to
+depend on, which is why the Chrome-build candidate below is named first among
+equals rather than last.
+
+**CI ran the same gate on the same commit and reports `success`** — `ci.yml`
+line 158 is `npm run check:claims -w docs && npm run check:formatting -w docs`,
+so it is executed rather than skipped, and the run listing for
+`b04013266eac9c718c1b2fed8d80d8d1bfcae65e` reads `CI completed success
+2026-09-25T04:26:17Z`.
+
+**This is not a regression introduced by this wake**, and that is a set
+membership argument rather than a guess: the gate reads `apps/docs/dist` and
+`scripts/check-claims.mjs`, and this wake's whole diff is `ROADMAP.md`,
+`LOOPS.md`, `LOOPS-archive.md` and this hand-off — no CSS, no `.astro`, no
+script. The dist it read was built from unmodified source at `b0401326`.
+
+**The three `NOT VERIFIED` button rows in the same output are NOT part of this**
+— they are `ENVIRONMENT.md` §6b's standing container fact (`(hover: hover) and
+(pointer: fine)` reads false in headless Chrome) and are correct output.
+
+**What the failures have in common, stated as a reading and not a diagnosis:**
+all three are sticky-table cases, all three pass `badForward` and fail only
+`badBackward`, and every failing entry has `isExpected: true` and `hasSize:
+true` with a non-empty `hits` array at a specific `scrollTop`. So the header
+geometry the setup block asserts is intact (`headerGeometryOk: true`,
+`headerHeightSum` 30 and 144 as the case names say) and what differs is the
+intersection during **backward** scroll.
+
+1. [ ] **391.1 — settle why `check:claims` is red here and green on CI at the
+       same commit, and record which environment is telling the truth.**
+       Three candidate causes, none tested by this wake and none to be assumed:
+       the container's 15px classic-scrollbar reservation
+       (`ENVIRONMENT.md` §6c, which is exactly a scroll-geometry offset and is
+       already known to feed wrap-sensitive measurements); a **Chrome build**
+       difference between `/opt/pw-browsers/chromium-1194` here and whatever
+       `resolve-chrome.mjs` finds on the runner (Slice 384 already established
+       that a reading in this repo can depend on the Chrome build rather than
+       the machine); or a real defect that CI's environment happens to mask.
+       - **Accept** — the property, not a predicted outcome: one wake reports
+         (a) the Chrome version each environment resolves, read from each rather
+         than inferred, (b) whether the three cases execute on CI at all, from
+         the job log rather than from the workflow file, and (c) which side's
+         geometry is correct, with the number that decides it. **Finding that
+         the container is wrong and the framework is fine is a satisfying
+         outcome**, and so is finding a real sticky-header defect that CI cannot
+         see. If it is environmental, `ENVIRONMENT.md` gains the entry — a gate
+         that is red for the environment rather than for the tree must say so in
+         its own output, which is this repo's standing rule and is not satisfied
+         by a note in a hand-off.
+       - **Determinism is already established** — two runs, same three cases —
+         so the wake taking this starts at the cause, not at a re-run. The
+         container's browser is **Chromium 141.0.7390.37**; the runner's is the
+         first thing to read.
+       - **Lane**: cloud-takeable for the measurement; the CI half needs only
+         the run/job API, which a cloud wake has.
+
+**NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a
+cloud wake has no Podman. **None are owed**, read off `git diff --stat` rather
+than assumed: the diff is `ROADMAP.md`, `LOOPS.md`, `LOOPS-archive.md` and
+`.roundtable/RESUME.md`. No CSS, no `.astro`, no docs page, no shipped JS, no
+generated artefact.
+
 ## Slice 390 — Standardize sweep, 4 of 4 lanes on an isolated clean build: lanes 1 and 2 carry no new finding, lane 3 flags `/components/button/` (the new which-one guideline) and gets a verdict, lane 4's +52 is two sentences of new instruction (2026-09-25)
 
 **Dispatched by rule 2**, `Standardize 4 / 4 OVERDUE`. Worktree of HEAD
