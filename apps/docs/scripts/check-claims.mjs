@@ -4923,6 +4923,80 @@ await fcSession2.detach();
 check('scan frame under forced colours stays fully opaque through the stamp\'s life (500ms in), not faded by the flash animation (389.4)',
   fcFrame.opacity === '1' && fcFrame.width === '18px', JSON.stringify(fcFrame));
 
+/* 392.1 — a verdict stamped while a flash is live must show. The stamp used
+   to change ok -> error (or ok -> ok) under a RUNNING body::after animation,
+   which never restarts on a same-name animation: an error arriving 400ms
+   after an ok peaked at opacity 0.02, and at 620ms at 0 — the attribute said
+   error and the screen showed nothing. The goods-receipt data contract's
+   404 path (a server round trip) lands exactly there. Driven through the
+   REAL paths: real scans (Enter) on the pick screen, and the page's own
+   imported flashScanResult for a late verdict. Each second stamp is frozen
+   ~30ms later and its rendered row compared with a FRESH stamp's. */
+async function secondStampRow(theme, drive) {
+  await visit('/patterns/rf/rf-pick-rf/', { width: RF_WIDTH, height: 640 });
+  await page.evaluate(async (t) => {
+    document.documentElement.setAttribute('data-theme', t);
+    await Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {})));
+  }, theme);
+  const scan = async (code) => {
+    await page.click('#pick-scan', { clickCount: 3 });
+    await page.keyboard.type(code);
+    await page.keyboard.press('Enter');
+  };
+  const late = (kind, ms) => page.evaluate(async (kind, ms) => {
+    // The page's own module: find the loaded scan-input chunk and the export
+    // that stamps the result (minified names change between builds).
+    const url = performance.getEntriesByType('resource').map((e) => e.name).find((n) => /\/scan-input\.[^/]*\.js$/.test(n));
+    const mod = await import(url);
+    const flash = Object.values(mod).find((f) => typeof f === 'function' && /scanResult/.test(String(f)) && /setTimeout/.test(String(f)) && !/addEventListener/.test(String(f)));
+    await new Promise((r) => setTimeout(r, ms));
+    flash(kind);
+  }, kind, ms);
+  await drive({ scan, late });
+  await new Promise((r) => setTimeout(r, 30));
+  const frozen = await page.evaluate(() => {
+    const a = document.getAnimations().find((x) => x.animationName === 'bo-scan-flash');
+    if (a) a.pause();
+    return { stamp: document.body.dataset.scanResult ?? null, t: a ? Math.round(a.currentTime) : null };
+  });
+  const shot = await page.screenshot({ clip: { x: 0, y: 590, width: 60, height: 1 }, encoding: 'base64' });
+  const row = await page.evaluate(async (b64) => {
+    const img = new Image(); img.src = `data:image/png;base64,${b64}`; await img.decode();
+    const c = document.createElement('canvas'); c.width = img.width; c.height = 1;
+    const ctx = c.getContext('2d'); ctx.drawImage(img, 0, 0);
+    const d = ctx.getImageData(0, 0, img.width, 1).data; const s = img.width / 60;
+    const lum = (x) => { const i = Math.round(x * s) * 4; const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }; return 0.2126 * f(d[i]) + 0.7152 * f(d[i + 1]) + 0.0722 * f(d[i + 2]); };
+    const ratio = (a, b) => { const x = lum(a), y = lum(b); return +((Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05)).toFixed(3); };
+    return { edge: ratio(3, 40), gap: ratio(9, 40) };
+  }, shot);
+  return { ...frozen, ...row };
+}
+const secondStamp = {};
+for (const theme of ['light', 'dark']) {
+  const r = {};
+  r.freshError = await secondStampRow(theme, async ({ scan }) => { await scan('B-99-99'); });
+  r.freshOk = await secondStampRow(theme, async ({ scan }) => { await scan('A-01-04'); });
+  r.rescanError400 = await secondStampRow(theme, async ({ scan }) => { await scan('A-01-04'); await new Promise((x) => setTimeout(x, 400)); await scan('B-99-99'); });
+  r.rescanOk650 = await secondStampRow(theme, async ({ scan }) => { await scan('A-01-04'); await new Promise((x) => setTimeout(x, 650)); await scan('MAT-4471'); });
+  r.lateError150 = await secondStampRow(theme, async ({ scan, late }) => { await scan('A-01-04'); await late('error', 150); });
+  r.lateError620 = await secondStampRow(theme, async ({ scan, late }) => { await scan('A-01-04'); await late('error', 620); });
+  // the goods-receipt contract's shape: the verdict after a server round trip
+  r.roundTrip250 = await secondStampRow(theme, async ({ scan, late }) => { await scan('A-01-04'); await late('error', 250); });
+  r.roundTrip400 = await secondStampRow(theme, async ({ scan, late }) => { await scan('A-01-04'); await late('error', 400); });
+  // repeats: the same verdict again inside a live stamp
+  r.repeatOk300 = await secondStampRow(theme, async ({ scan }) => { await scan('A-01-04'); await new Promise((x) => setTimeout(x, 300)); await scan('MAT-4471'); });
+  r.repeatError300 = await secondStampRow(theme, async ({ scan }) => { await scan('B-99-99'); await new Promise((x) => setTimeout(x, 300)); await scan('B-99-98'); });
+  r.repeatError650 = await secondStampRow(theme, async ({ scan }) => { await scan('B-99-99'); await new Promise((x) => setTimeout(x, 650)); await scan('B-99-98'); });
+  secondStamp[theme] = r;
+}
+const near = (a, b) => Math.abs(a - b) <= 0.05;
+check('scan: a verdict stamped while a flash is live shows as a fresh one — rescans at 400/650ms, repeats at 300/650ms, late errors at 150/620ms and 250/400ms round trips all render within 0.05 of a fresh stamp, both themes (392.1)',
+  Object.values(secondStamp).every((r) =>
+    ['rescanError400', 'lateError150', 'lateError620', 'roundTrip250', 'roundTrip400', 'repeatError300', 'repeatError650'].every((k) => r[k].stamp === 'error' && near(r[k].edge, r.freshError.edge) && near(r[k].gap, r.freshError.gap))
+    && ['rescanOk650', 'repeatOk300'].every((k) => r[k].stamp === 'ok' && near(r[k].edge, r.freshOk.edge))
+    && r.freshError.gap > 1.1 && r.freshOk.edge > 1.1),
+  JSON.stringify(secondStamp));
+
 // Sync-state slot (127.1): "Click it in this demo to cycle the four
 // states" — both channels must move together, and the glyphs must differ
 // by SHAPE across states (never colour-only).

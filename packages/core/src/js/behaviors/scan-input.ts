@@ -40,7 +40,18 @@ let flashTimer: ReturnType<typeof setTimeout> | undefined;
  * terminator proves CAPTURE, never validity.
  */
 export function flashScanResult(kind: 'ok' | 'error', message?: string): void {
-  document.body.dataset.scanResult = kind;
+  const { body } = document;
+  // A stamp inside a live one must RESTART the flash (roadmap 392.1). The
+  // animation is on body::after and keeps its name across ok/error, so a
+  // changed value alone never restarts it: an error arriving 400ms after an
+  // ok painted at 2% opacity, and at 620ms not at all — the late server
+  // verdict the goods-receipt contract describes. Drop the stamp, flush
+  // style so the pseudo-element goes, then stamp again.
+  if (body.dataset.scanResult !== undefined) {
+    delete body.dataset.scanResult;
+    void body.offsetWidth;
+  }
+  body.dataset.scanResult = kind;
   clearTimeout(flashTimer);
   // Timer, not animationend: reduced-motion swaps the animation for a
   // static wash (scan.css), and a listener that never fires would leave

@@ -329,7 +329,7 @@ fundamental-styles deltas, framework-code numstat). Corrections applied in
 place to 377.5, 388.1, Slice 390, CHANGELOG, `/components/scan`,
 `/components/button`, LOOPS.md.
 
-1. [ ] **392.1 — P0 · a second scan verdict inside a live flash never shows.**
+1. [x] **392.1 — P0 · a second scan verdict inside a live flash never shows.**
        `body::after` keeps its animation when the stamp changes ok -> error or
        ok -> ok, so it never restarts: an error 150ms after an ok peaks at
        opacity 0.208, at 400ms 0.019, at 620ms 0 — the attribute says error
@@ -346,6 +346,25 @@ place to 377.5, 388.1, Slice 390, CHANGELOG, `/components/scan`,
          0.05 of a fresh stamp's, both themes. A `check:claims` case, seen to
          fail today. OR a design reason to keep no-restart is recorded AND
          `/components/scan` stops claiming "'error' overrides a live ok".
+       - **DONE 2026-09-25 — the flash restarts on every stamp.**
+         `flashScanResult()` now drops a live stamp, flushes style
+         (`body.offsetWidth`) and stamps again, so `body::after` gets a new
+         animation; `/components/scan`'s "error overrides a live ok" is now
+         true. `check:claims` case through REAL paths (Enter scans on the pick
+         screen, and the page's own imported `flashScanResult`), light and
+         dark, each second stamp frozen ~30ms in and compared with a fresh one.
+         Accept delays -> cases: ok-then-error 150 / 400 / 620 (`lateError150`,
+         `roundTrip400`, `lateError620`, plus the capture-path
+         `rescanError400`); repeat ok 300 / 650 (`repeatOk300`,
+         `rescanOk650`); repeat error 300 / 650 (`repeatError300`,
+         `repeatError650`); round trip 250 / 400 (`roundTrip250`,
+         `roundTrip400`). RED on the pre-fix build in every case (e.g.
+         roundTrip400 t=433ms, 1.006 vs fresh 1.201; repeatError650 1.00);
+         GREEN after, t=17-33ms and within 0.01 of fresh, on dist and live on
+         :8081. vitest: a MutationObserver sees five mutations for ok, error,
+         error (red-proved). CHANGELOG notes the removal is observable. Jev
+         (Rubric 2): fixed 0.94; "every delay covered" 0.81 — the unverified
+         band, recorded as such; the mapping above is the evidence for it.
 2. [ ] **392.2 — a pressed toggle differs from an unpressed one by colour
        alone in normal colours.** Fill 1.043:1 light / 1.363:1 dark, text
        2.339:1 / 1.416:1; weight, outline, shadow identical. The richtext

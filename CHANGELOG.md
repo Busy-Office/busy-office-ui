@@ -131,6 +131,16 @@ pin.
   mid-blend and its focus ring in Highlight. Normal colours are unchanged.
   Roadmap 388.1.
 
+- **A scan verdict stamped while a flash was still running did not show.**
+  `flashScanResult()` changed `data-scan-result` in place, and the flash's
+  animation (same name for ok and error) never restarts on a changed value:
+  a rejection arriving 400ms after an accepted scan painted at about 2%
+  opacity, and at 620ms not at all — the late server verdict a goods-receipt
+  flow produces — and rescans within the stamp's life never flashed. Every
+  stamp now restarts the flash. No API change; a stamp inside a live one now
+  briefly removes and re-adds the attribute, which a `MutationObserver` on
+  `<body>` will see. Roadmap 392.1.
+
 - **The generated accessibility conformance report (`dist/acr.json`,
   `/reference/acr`) overclaimed in four rows.** An audit of all 21 criteria
   against the gate each one names found four overclaims and one unbacked

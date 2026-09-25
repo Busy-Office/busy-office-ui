@@ -46,4 +46,28 @@ describe('flashScanResult + data-scan-flash (126.2 — scan-result flash)', () =
     expect(document.body.dataset.scanResult).toBeUndefined();
     vi.useRealTimers();
   });
+
+  it('a stamp inside a live one RESTARTS the flash: the stamp is removed before the new one lands (392.1)', async () => {
+    // A same-name animation on body::after never restarts on a value change,
+    // so a late error painted nothing. jsdom cannot run CSS animations; what
+    // it CAN see is the mechanism the browser needs — the attribute leaving
+    // before it returns. The browser behaviour is a check:claims case.
+    vi.useFakeTimers();
+    const seen: Array<string | null> = [];
+    const mo = new MutationObserver((recs) => {
+      for (const r of recs) seen.push(r.oldValue); // the value BEFORE each mutation, captured at mutation time
+    });
+    mo.observe(document.body, { attributes: true, attributeOldValue: true, attributeFilter: ['data-scan-result'] });
+    ui.flashScanResult('ok');
+    ui.flashScanResult('error');
+    ui.flashScanResult('error');
+    await Promise.resolve();
+    mo.disconnect();
+    // set ok, remove ok, set error, remove error, set error — five mutations; an
+    // in-place overwrite would be three: [null, 'ok', 'error']
+    expect(seen).toEqual([null, 'ok', null, 'error', null]);
+    vi.advanceTimersByTime(800);
+    expect(document.body.dataset.scanResult).toBeUndefined();
+    vi.useRealTimers();
+  });
 });
