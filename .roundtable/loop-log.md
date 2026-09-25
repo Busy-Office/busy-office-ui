@@ -1790,3 +1790,8 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-25 03:34 · Continue · build · 372.1 — rule 5 keeps the day unit; day-close reason measured, comparable set labelled · landed · f866ad11
 - 2026-09-25 05:53 · Continue · build · 375.11 — three of five grid-message residuals fixed (frozen, loading, classic scrollbar); zoom premise corrected; Slice 387 filed · landed · 0c6f319c
 - 2026-09-25 05:53 · Meta · refusal · 400% zoom last-resort @position-try: clips unbreakable tokens and adds a Tab stop at 100% zoom · refused · 0c6f319c
+- 2026-09-25 07:11 · Roadmap · triage · 388 — owner input triaged: 388.1 capsule button + group guideline, 388.2 RF journey grill · triaged · f9c82ed5
+- 2026-09-25 08:13 · Objective · grill · 388.2 — RF journey grill (design-grill flow): H1 no new pattern, H2 yes; 25 findings as Slice 389 · landed · e76a8f90
+- 2026-09-25 08:38 · Continue · fix · 389.4 — P0: scan flash frame carries the verdict in rendered pixels; forced-colours frame stays · landed · 1b19d6e9
+- 2026-09-25 09:00 · Continue · build · 388.1 — capsule refused by design panel; button which-one guideline; aria-pressed forced-colours fix; 389.25 closed · landed · a1b3969b
+- 2026-09-25 09:00 · Meta · refusal · capsule button shape (setting token, --capsule modifier): a pill is a status here; hit area and forced-colours collision measured · refused · a1b3969b

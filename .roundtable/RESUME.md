@@ -129,6 +129,17 @@ errors). It found a stray "))}" rendered on the live /reference/tokens/ page
 since 2026-08-16, now removed. Counters: Standardize 3 / 4, Objective 1 / 3
 [362].
 
+**Owner input 2026-09-25 ~07:00, worked through by 09:00:** triaged as Slice 388.
+388.2 (RF journey grill, design-grill flow mode) LANDED (`e76a8f90`): no new
+app-screen pattern (wire what exists), task screens need work — 25 findings as
+Slice 389, all surviving a challenger. 389.4 (P0, scan flash hue-only) LANDED
+(`1b19d6e9`). 388.1 LANDED (`a1b3969b`): the capsule was REFUSED by a design
+panel (reopen condition recorded) — **tell the owner, who asked for it by
+name** — and the which-one guideline shipped, with an aria-pressed
+forced-colours fix; 389.25 closed. Filed 388.3, 388.4. Counters: **Standardize
+4 / 4 OVERDUE**, Objective 2 / 3 [388, 389]. Next wake: rule 2 (Standardize
+sweep). The Podman container on :8081 serves `a1b3969b`'s build.
+
 **Rule 4 at 05:53 (2026-09-25):** 375.11 PARTIAL (`0c6f319c`) — three of five
 grid-message residuals fixed (frozen cell, loading table + htmx bridge, classic
 scrollbar in the static fallback), each measured by a lens + independent skeptic

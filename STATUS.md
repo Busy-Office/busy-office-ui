@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-24 21:53 UTC
+Generated at: 2026-09-25 01:00 UTC
 
 ## Open items by slice
 
@@ -52,6 +52,33 @@ Generated at: 2026-09-24 21:53 UTC
 - **Slice 387** (2 open)
   - 387.1 — the message's horizontal overflow loses presses on two more paths.
   - 387.2 — a frozen cell's message still has two covers above it.
+- **Slice 388** (2 open)
+  - 388.3 — the segmented control's checked option draws an author-colour focus ring under forced colours.
+  - 388.4 — two docs follow-ups from 388.1's panel, not re-measured.
+- **Slice 389** (23 open)
+  - 389.1 — Every RF task screen accepts a wedge scan on arrival without stealing the docs reader's focus.
+  - 389.2 — RF task screens complete the task, or stop claiming to.
+  - 389.3 — A rejected scan's reason stays readable after the flash.
+  - 389.5 — Join the RF track: per-type routing that the links, the prose and the Back exits agree on.
+  - 389.6 — The journey's RF step exits to an RF home.
+  - 389.7 — The journey's RF confirm and failure verdict are in view at a rugged viewport.
+  - 389.8 — Goods receipt shows the decision: which delivery, its expected lines, one completing action, in worker language.
+  - 389.9 — On goods receipt, tapping a control never costs the next scan.
+  - 389.10 — Goods-receipt quantity: captured after the scan, per line, with out-of-range values refused visibly.
+  - 389.11 — Count: the menu, the screen and the state table agree.
+  - 389.12 — Pick shows which scan it expects next.
+  - 389.13 — Decide once where the RF exception bar sits.
+  - 389.14 — RF frame guidance on the existing pages: who owns each app-level slot.
+  - 389.15 — Decide what a wedge scan does on the menu and the queue.
+  - 389.16 — Every class an RF document uses has a rule in the profile it loads.
+  - 389.17 — Decide whether putaway verifies the pallet as well as the bin.
+  - 389.18 — The receiving log reads at the glove tier, and its headers say what the cells hold.
+  - 389.19 — The task-menu count badge is sized to its content.
+  - 389.20 — The RF queue drops a column and a tab stop that carry nothing, and names itself.
+  - 389.21 — RF docs pages: screen first, figures true, promised states buildable from the profile.
+  - 389.22 — Count and putaway on-screen wording and emphasis.
+  - 389.23 — Pick identifiers do not break inside themselves at the 320 px floor.
+  - 389.24 — The data-table cell-link focus ring is clipped on the first and last rows.
 - **Slice —** (3 open)
   - OWNER · 377.5 — release the unreleased fixes, or record why not.
   - OWNER · 377.6 — is busy-office-erp the named first user?
@@ -60,9 +87,10 @@ Generated at: 2026-09-24 21:53 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1784 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-09-24 22:43   ok
-  Objective     2 / 3 slices          since 2026-09-25 02:49   ok  [372, 375]
+dispatch status — counter-triggered rules (1789 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-09-24 22:43   OVERDUE
+  Objective     2 / 3 slices          since 2026-09-25 08:13   ok  [388, 389]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      4 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 151 sample(s), 8 of 51 name(s) paired across days]
   -> rule 5's newest comparable pair predates 4 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-19, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-19 (2026-09-22, 2026-09-23, 2026-09-24, 2026-09-25), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -95,16 +123,16 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-24 19:32 · Continue · fix · 353.2 — dispatch-region-words recorded by the instrument with its commit (history mixed body/region figures; rule 5's pair read -8 for a -64 change) · landed · 633ff058
-- 2026-09-24 21:22 · Objective · grill · 384 — Objective grill of 352.1, 352.2, 353.2, Slice 383: 44 claims reproduce, 31 of 35 findings survive; flush ratio is Chrome-build-dependent, harness catches stale dist, metric sampling fixed; 384.1 filed · logged · eec86ae2
-- 2026-09-24 21:54 · Continue · build · 362.1 — astro check (noUnusedLocals) wired into the docs build: 562 -> 0 errors on 164 files; fixed a stray '))}' live on /reference/tokens/ since 2026-08-16 · landed · 2fc94372
-- 2026-09-24 22:01 · Continue · build · 369.2 — print reset reaches the ten standalone docs pages · landed · 6a85e048
-- 2026-09-24 22:07 · Standardize · sweep · 385 — Standardize sweep 4 of 4 lanes + archive sweep, 21 slices moved · landed · 6ec0e8da
 - 2026-09-24 22:43 · Standardize · audit · prompt-audit of CLAUDE.md: three stale figures removed · landed · 2af651ff
 - 2026-09-25 02:49 · Objective · grill · Slice 386 — Objective grill of 362.1, 369.2, Slice 385 · landed · 53ffa54f
 - 2026-09-25 03:34 · Continue · build · 372.1 — rule 5 keeps the day unit; day-close reason measured, comparable set labelled · landed · f866ad11
 - 2026-09-25 05:53 · Continue · build · 375.11 — three of five grid-message residuals fixed (frozen, loading, classic scrollbar); zoom premise corrected; Slice 387 filed · landed · 0c6f319c
 - 2026-09-25 05:53 · Meta · refusal · 400% zoom last-resort @position-try: clips unbreakable tokens and adds a Tab stop at 100% zoom · refused · 0c6f319c
+- 2026-09-25 07:11 · Roadmap · triage · 388 — owner input triaged: 388.1 capsule button + group guideline, 388.2 RF journey grill · triaged · f9c82ed5
+- 2026-09-25 08:13 · Objective · grill · 388.2 — RF journey grill (design-grill flow): H1 no new pattern, H2 yes; 25 findings as Slice 389 · landed · e76a8f90
+- 2026-09-25 08:38 · Continue · fix · 389.4 — P0: scan flash frame carries the verdict in rendered pixels; forced-colours frame stays · landed · 1b19d6e9
+- 2026-09-25 09:00 · Continue · build · 388.1 — capsule refused by design panel; button which-one guideline; aria-pressed forced-colours fix; 389.25 closed · landed · a1b3969b
+- 2026-09-25 09:00 · Meta · refusal · capsule button shape (setting token, --capsule modifier): a pill is a status here; hit area and forced-colours collision measured · refused · a1b3969b
 
 ## Sunset test
 
