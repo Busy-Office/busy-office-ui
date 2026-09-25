@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-25 05:32 UTC
+Generated at: 2026-09-25 06:12 UTC
 
 ## Open items by slice
 
@@ -81,8 +81,7 @@ Generated at: 2026-09-25 05:32 UTC
   - 389.24 — The data-table cell-link focus ring is clipped on the first and last rows.
 - **Slice 391** (1 open)
   - 391.1 — settle why `check:claims` is red here and green on CI at the same commit, and record which environment is telling the truth.
-- **Slice 392** (5 open)
-  - 392.1 — P0 · a second scan verdict inside a live flash never shows.
+- **Slice 392** (4 open)
   - 392.2 — a pressed toggle differs from an unpressed one by colour alone in normal colours.
   - 392.3 — a `--bar` label with one word wider than its slot paints past its button.
   - 392.4 — rule 3 reset without the thesis section, twice; and a design-grill reset it.
@@ -95,9 +94,9 @@ Generated at: 2026-09-25 05:32 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1794 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-09-25 12:20   ok
-  Objective     0 / 3 slices          since 2026-09-25 13:32   ok
+dispatch status — counter-triggered rules (1795 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-09-25 12:20   ok
+  Objective     1 / 3 slice           since 2026-09-25 13:32   ok  [392]
   Optimize      0 wake-date(s) newer   since 2026-09-25 05:14   ok   [newest pair: claims; 153 sample(s), 8 of 51 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (43 of 51 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
        claims                      6d  2026-09-19 203 count -> 2026-09-25 311 count  +108
@@ -128,7 +127,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-25 07:11 · Roadmap · triage · 388 — owner input triaged: 388.1 capsule button + group guideline, 388.2 RF journey grill · triaged · f9c82ed5
 - 2026-09-25 08:13 · Objective · grill · 388.2 — RF journey grill (design-grill flow): H1 no new pattern, H2 yes; 25 findings as Slice 389 · landed · e76a8f90
 - 2026-09-25 08:38 · Continue · fix · 389.4 — P0: scan flash frame carries the verdict in rendered pixels; forced-colours frame stays · landed · 1b19d6e9
 - 2026-09-25 09:00 · Continue · build · 388.1 — capsule refused by design panel; button which-one guideline; aria-pressed forced-colours fix; 389.25 closed · landed · a1b3969b
@@ -138,6 +136,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-25 04:42 · Meta · refusal · rewriting RESUME.md wholesale — a cloud wake that lost both dispatches must not clobber the winner's handover; appended instead · refused · 3b24cc94
 - 2026-09-25 05:14 · Continue · bug · 391.2 — check:claims' SC 2.5.7 file-chooser wait 5s -> 15s. Failed on CI at 2 of 4 observed runs (88ba16bb, 07aef5bf; both markdown-only diffs, byte-identical payload, geometry block healthy). The one permitted re-run came back green and that green was refuted by the next push — a single passing re-run is not evidence of rarity. Patience raised, assertion unchanged (opened===true still required); not skipped, disabled or quarantined. CI green on 45aa4d1d · landed · 45aa4d1d
 - 2026-09-25 13:32 · Objective · grill · Slice 392 — Objective grill of 388.1, 389.4, Slice 390 (renumbered from 391, collision 8); P0 392.1 filed · landed · e8ac9844
+- 2026-09-25 14:12 · Continue · fix · 392.1 — P0: a scan verdict stamped while a flash is live restarts the flash · landed · a16d4ff3
 
 ## Sunset test
 

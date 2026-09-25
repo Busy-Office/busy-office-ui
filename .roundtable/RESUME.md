@@ -92,6 +92,11 @@ current. `391.1` is the only thing this wake added to it.
 
 ## GOAL — set 2026-09-23 (second, owner-requested): COMPLETE 2026-09-24 03:02.
 
+**LOCAL /loop, rule 1 at ~14:40 (2026-09-25):** P0 392.1 LANDED — every scan stamp
+restarts the flash; claims 315, red-proved per delay; live on :8081. No open P0.
+Next: rule 4 (oldest dispatchable), or rule 2 at 4/4. The cloud dispatcher
+did not move `origin` during this wake.
+
 **LOCAL /loop session, 2026-09-25 ~13:30 (the owner's machine):** Slice 392 LANDED
 (`e8ac9844`) — the Objective grill of 388.1, 389.4 and Slice 390, with the thesis
 section; renumbered from 391 because the cloud dispatcher landed its own Slice
