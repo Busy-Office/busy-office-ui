@@ -141,8 +141,8 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1809 iterations logged)
-  Standardize  10 / 4 Continue rounds since 2026-09-25 12:20   OVERDUE
+dispatch status — counter-triggered rules (1811 iterations logged)
+  Standardize  11 / 4 Continue rounds since 2026-09-25 12:20   OVERDUE
   Objective     3 / 3 slices          since 2026-09-25 13:32   OVERDUE  [375, 392, 393]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 153 sample(s), 8 of 51 name(s) paired across days]
@@ -245,8 +245,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-25 22:03 · Continue · build · 393.2 — one real hold measured at 2 tool calls; in-flight protocol closed · landed · 3c142f20
-- 2026-09-25 22:03 · Continue · build · 393.3 — backlog mirror: every kind of wait, own-line markers reconciled, oldest dispatchable computed (375.11) · landed · 3c142f20
 - 2026-09-25 22:03 · Meta · refusal · marking 394.13 owner-blocked for one O15-dependent Accept bullet — a marker would hold the whole item · refused · 3c142f20
 - 2026-09-25 22:47 · Continue · build · 393.4 — milestone.py and rule M: code computes the milestone's next item; dispatch_status byte-identical while inactive; rule M = simulate_rule_m.py 43/43 · landed · 06cccc7d
 - 2026-09-25 22:47 · Meta · refusal · refusing on a DRAFT milestone's malformed field in dispatch_status — the owner fills a DRAFT over several edits; milestone.py's CLI reports it · refused · 06cccc7d
@@ -255,6 +253,8 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-25 23:33 · Meta · refusal · 392.4: design-grill rows resetting rule 3 — they grill a screen, not the armed slices' claims · refused · a4f4fd13
 - 2026-09-26 00:04 · Continue · build · 393.6 — routes.json + route telemetry; recorder preflight and column read-back; tier none→top per §5 (owner to confirm) · landed · 887ac04c
 - 2026-09-26 00:04 · Meta · refusal · 393.6: refusing a none tier — §5 and O14 say it runs on top; the Accept's wording is superseded, owner asked to confirm · refused · 887ac04c
+- 2026-09-26 01:08 · Continue · build · 393.7 — rule D: triggers replayed, item lint re-measured, planner output contract, frequency limits · landed · 62652720
+- 2026-09-26 01:08 · Meta · refusal · 393.7: dropping the lint's instrument clause — the Accept names it; kept with a revisit condition (2 of the first 5 bounces executable as written) · refused · 62652720
 
 ## Sunset test
 

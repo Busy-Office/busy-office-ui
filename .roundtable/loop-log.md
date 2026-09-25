@@ -1815,3 +1815,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-25 23:33 · Meta · refusal · 392.4: design-grill rows resetting rule 3 — they grill a screen, not the armed slices' claims · refused · a4f4fd13
 - 2026-09-26 00:04 · Continue · build · 393.6 — routes.json + route telemetry; recorder preflight and column read-back; tier none→top per §5 (owner to confirm) · milestone=M1 route=build tier=top model=claude-opus-5-5 first-try=reworked · landed · 887ac04c
 - 2026-09-26 00:04 · Meta · refusal · 393.6: refusing a none tier — §5 and O14 say it runs on top; the Accept's wording is superseded, owner asked to confirm · refused · 887ac04c
+- 2026-09-26 01:08 · Continue · build · 393.7 — rule D: triggers replayed, item lint re-measured, planner output contract, frequency limits · milestone=M1 route=build tier=top model=claude-opus-5-5 first-try=reworked · landed · 62652720
+- 2026-09-26 01:08 · Meta · refusal · 393.7: dropping the lint's instrument clause — the Accept names it; kept with a revisit condition (2 of the first 5 bounces executable as written) · refused · 62652720
