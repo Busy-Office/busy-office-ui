@@ -90,6 +90,23 @@ current. `391.1` is the only thing this wake added to it.
 
 ---
 
+## GOAL — set 2026-09-25 by the owner: the M0 BOOTSTRAP (loop readiness for Milestone M1)
+
+Owner decisions O1-O4 (recorded in ROADMAP.md's `## Milestone M1`):
+**O1** one dispatcher — the local /loop only; the owner archives the cloud
+sessions of `trig_019aw8t…` (two were active today). **O2** the owner's
+uncommitted work is parked on `park/owner-checkpoint-2026-09-20` (`a9a2d9bb`,
+24 files, byte-checked) and main's tree is clean. **O3** run Slice 393's items
+393.1-393.10 in their `After:` order and STOP; **rules 2 and 3 are paused until
+393.10 lands**; cap **12 wakes** — at the cap, stop and report even if unfinished.
+**O4** CLAUDE.md's naming rule is widened (every published name names a shape).
+Before starting M0, land the in-flight item (375.11's zoom half) if its workflow
+has finished. Milestone M1 stays DRAFT until 393.10 re-scores the loop at mean
+>= 3.0 and the owner fills O5-O18. Draft and grill record:
+`.roundtable/milestone-draft-2026-09-25/`.
+
+M0 wakes used: 0 / 12.
+
 ## GOAL — set 2026-09-23 (second, owner-requested): COMPLETE 2026-09-24 03:02.
 
 **LOCAL /loop, rule 1 at ~14:40 (2026-09-25):** P0 392.1 LANDED — every scan stamp

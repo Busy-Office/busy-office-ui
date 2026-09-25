@@ -334,13 +334,34 @@ Not gated but expected where they have something to say: keyboard
 walkthrough, print behaviour, scaling notes. `/patterns/list-report`
 is the exemplar.
 
-**A pattern is NAMED and FRAMED for its SHAPE; the domain appears only as
-demo data** (owner rule, 2026-08-22, Slice 109). `object-page` demoing
-PO-88213 is the model: generic name, generic anatomy, realistic PO as the
-demo so the screen looks credible. Never name a pattern for its sample
-domain (`invoice-list` was the one violation — renamed `list-report`), and
-never add per-domain demo variants ("the same pattern as an invoice") —
-that is re-photographing, which the coverage doctrine refuses.
+**Every name the framework publishes names a SHAPE; the domain appears only
+as demo data and as search words** (owner rule 2026-08-22, Slice 109; widened
+by the owner on 2026-09-25 from patterns to every published name, milestone
+decision O4). `object-page` demoing PO-88213 is the model: generic name,
+generic anatomy, realistic PO as the demo so the screen looks credible.
+- **What counts as a published name:** classes, parts, modifiers, tokens,
+  behaviours, component directories, `@category` values, pattern ids,
+  `data-bo-*` values, package and export names, and docs slugs under
+  `/patterns/`, `/components/` and `/concepts/`. None of them contains a
+  module, department, process-area or industry word (Finance, Sales,
+  Distribution, o2c, AP…).
+- **The swap test:** a job word is shape vocabulary only if it names one
+  distinct interaction AND stays true when the demo data moves to another
+  module. `goods-receipt` passes; `invoice-list` failed and was renamed
+  `list-report` — and a month later still had 162 references in 94 files,
+  which is what a published name costs to take back.
+- **Module words live in three places and nowhere else:** demo data in
+  `examples/erp-suite/<module>/` (the reference app — free to design, outside
+  semver); the generated job index (job → other words people use → module
+  facets → pattern id → worked screen); and the consumer's own app names. A
+  "module layout" is a generated view of those, never a namespace. Never add
+  per-domain demo variants — that is re-photographing, which the coverage
+  doctrine refuses.
+- **A layout a module needs that no pattern covers is a new SHAPE.** It is
+  born with its final shape name and a pre-stable `@status` (the word is owner
+  decision O7, pending), and is promoted by deleting that line — no rename, no
+  path change — once it survives Objective §3's ≥2 independent compositions,
+  counted by code as distinct job-and-pattern pairs, never by module label.
 
 Write for a first-time user: plain verbs, one component / many settings, and note the
 two-channel cue wherever colour carries meaning.
