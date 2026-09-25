@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-25 01:00 UTC
+Generated at: 2026-09-25 04:20 UTC
 
 ## Open items by slice
 
@@ -87,15 +87,15 @@ Generated at: 2026-09-25 01:00 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1789 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-09-24 22:43   OVERDUE
-  Objective     2 / 3 slices          since 2026-09-25 08:13   ok  [388, 389]
+dispatch status — counter-triggered rules (1790 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-09-25 12:20   ok
+  Objective     3 / 3 slices          since 2026-09-25 08:13   OVERDUE  [388, 389, 390]
   -> a counter is at or past its threshold; the dispatcher should pick it
-  Optimize      4 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 151 sample(s), 8 of 51 name(s) paired across days]
+  Optimize      4 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 152 sample(s), 8 of 51 name(s) paired across days]
   -> rule 5's newest comparable pair predates 4 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-19, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-19 (2026-09-22, 2026-09-23, 2026-09-24, 2026-09-25), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (43 of 51 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
-       dispatch-region-words       4d  2026-09-09 7484 words -> 2026-09-24 7749 words  +265   [3 same-day]
+       dispatch-region-words       5d  2026-09-24 7749 words -> 2026-09-25 7775 words  +26   [2 same-day]
        claims                      5d  2026-09-07 176 count -> 2026-09-19 203 count  +27   [1 same-day]
        gates                       4d  2026-09-07 55 count -> 2026-09-09 56 count  +1
        axe-violations              8d  2026-09-03 0 count -> 2026-09-06 0 count  +0   NEVER MOVED
@@ -123,7 +123,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-24 22:43 · Standardize · audit · prompt-audit of CLAUDE.md: three stale figures removed · landed · 2af651ff
 - 2026-09-25 02:49 · Objective · grill · Slice 386 — Objective grill of 362.1, 369.2, Slice 385 · landed · 53ffa54f
 - 2026-09-25 03:34 · Continue · build · 372.1 — rule 5 keeps the day unit; day-close reason measured, comparable set labelled · landed · f866ad11
 - 2026-09-25 05:53 · Continue · build · 375.11 — three of five grid-message residuals fixed (frozen, loading, classic scrollbar); zoom premise corrected; Slice 387 filed · landed · 0c6f319c
@@ -133,6 +132,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-25 08:38 · Continue · fix · 389.4 — P0: scan flash frame carries the verdict in rendered pixels; forced-colours frame stays · landed · 1b19d6e9
 - 2026-09-25 09:00 · Continue · build · 388.1 — capsule refused by design panel; button which-one guideline; aria-pressed forced-colours fix; 389.25 closed · landed · a1b3969b
 - 2026-09-25 09:00 · Meta · refusal · capsule button shape (setting token, --capsule modifier): a pill is a status here; hit area and forced-colours collision measured · refused · a1b3969b
+- 2026-09-25 12:20 · Standardize · sweep · 390 — Standardize sweep 4 of 4 lanes; /components/button verdict; icon caption narrative cut · landed · 1d0046c3
 
 ## Sunset test
 

@@ -129,6 +129,11 @@ errors). It found a stray "))}" rendered on the live /reference/tokens/ page
 since 2026-08-16, now removed. Counters: Standardize 3 / 4, Objective 1 / 3
 [362].
 
+**Rule 2 at ~09:40 (2026-09-25, first /loop wake):** Slice 390 LANDED — Standardize
+sweep 4 of 4 on a clean worktree; `/components/button/` verdicted (the which-one
+guideline) and one narrative caption cut; archive not due (15.8%). The loop is
+SELF-PACED in the owner's session (`/loop`); the cloud routine stays disabled.
+
 **Owner input 2026-09-25 ~07:00, worked through by 09:00:** triaged as Slice 388.
 388.2 (RF journey grill, design-grill flow mode) LANDED (`e76a8f90`): no new
 app-screen pattern (wire what exists), task screens need work — 25 findings as
