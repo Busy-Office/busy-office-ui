@@ -119,8 +119,10 @@ pin.
   second. The frame is now neutral (the text colour) and the wash stops at its
   inner edge: accepted shows one thin band, rejected a thick doubled band, in
   both themes and with reduced motion; under forced colours the frame stays
-  for the stamp's whole life. Visual change only — the attribute contract
-  (`data-scan-result="ok|error"`) is unchanged. Roadmap 389.4.
+  for the stamp's whole life. The attribute contract
+  (`data-scan-result="ok|error"`) is unchanged; one behaviour did change: under
+  forced colours the flash no longer runs an animation, so `animationstart` /
+  `animationend` no longer fire there. Roadmap 389.4.
 
 - **A pressed toggle button had no visible state under forced colours.**
   `.bo-btn[aria-pressed="true"]` and an unpressed button computed identically,

@@ -215,9 +215,10 @@ const oneShape = `<div class="bo-cluster" id="g-shape">
     <h2>Toggle buttons — several on at once</h2>
     <Demo code={toggles} />
     <p class="bo-u-text-muted"><code>aria-pressed</code> carries the state
-    to assistive tech, and the pressed button reads as pressed on screen —
-    including under forced colours, where it takes the system's own
-    Highlight pair. Use a toggle when options combine (Bold and Italic can
+    to assistive tech; under forced colours the pressed button takes the
+    system's own Highlight pair. In normal colours the pressed fill differs
+    from the unpressed one by colour alone, which is a known gap (roadmap
+    392.2), so do not rely on it as the only cue yet. Use a toggle when options combine (Bold and Italic can
     both be on); use a segmented control when exactly one is on.</p>
   </section>
 
@@ -232,11 +233,12 @@ const oneShape = `<div class="bo-cluster" id="g-shape">
   </section>
 
   <section class="demo">
-    <h2>One shape — a pill is a status, not an action</h2>
+    <h2>One shape — a pill is never a command button</h2>
     <Demo code={oneShape} />
     <p class="bo-u-text-muted">There is no capsule button. Here a pill is a
-    status or a token — this badge, a filter chip, a tag — and the rounded
-    rectangle is what says "this does something". At this size the two share
+    status, a token or a link to one — this badge, a filter chip, a tag and
+    its remove control — and the rounded rectangle is what says "this runs a
+    command". At this size the two share
     height, text size and weight, so the corners are what tells them apart.
     <strong>Not for</strong> a pill the reader clicks to filter a list: that
     is a <a href={base + '/components/filters'}>chip</a>.</p>

@@ -190,6 +190,12 @@ work`, `a rebase`, `a renumber`, `caught early — nothing`:
    flagged, verdicted as the owner's which-one guideline), the same enumeration
    amendment `20 → 21`, and independently the same number `## Slice 390`. Two
    collisions in one wake, on two different rules. **cost: a wake's work.**
+8. **Slice 391's NUMBER, the cloud routine (its own Slice 391, a CI-vs-container
+   `check:claims` finding) against the local /loop session (rule 3's Objective
+   grill of 388.1 / 389.4 / 390), 2026-09-25** — different rules and different
+   work, as collision 4; the local grill was pushed second, renumbered to
+   **Slice 392** (items 392.1-392.5, one docs caption reference) on a clean
+   worktree of the winner's tip and landed intact. **cost: a renumber.**
 
 **Two collisions in ONE wake is what a 159-commit stale Step 0 buys**, and it is
 the argument for reading the fetch's *range* rather than only its result: `git
@@ -970,7 +976,7 @@ surfaced more:
    that may NOT be replaced by a command.** Twenty-one pages carry a verdict:
    **158.1**'s twelve, **161.1**'s three (`/base/motion/`,
    `/concepts/js-behaviors/`, `/concepts/design-language/`), **178.3**'s
-   `/concepts/scale/`, and **376.3**'s four (`/patterns/kanban/`,
+   `/concepts/scale/`, **376.3**'s four (`/patterns/kanban/`,
    `/reference/acr/`, `/components/file-upload/`, `/components/alerts/`), and
    **390**'s `/components/button/`. Check membership against that enumeration, and **amend it
    in the same commit as any round that records a new verdict** — nothing else

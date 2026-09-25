@@ -320,6 +320,69 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 392 — Objective grill of 388.1, 389.4/389.25 and Slice 390: 41 of 59 claims reproduce, 22 of 28 findings survive (plus 12 the skeptics found), and the headline is a P0 the fix it grilled could not see — a second scan verdict inside a live flash never shows (2026-09-25)
+
+**Dispatched by rule 3** (renumbered from 391: a cloud wake landed its own Slice 391 first — collision, LOOPS.md Step 0c), `Objective 3 / 3 OVERDUE [388, 389, 390]`. Report:
+`.roundtable/grill-objective-388-389-390-2026-09-25.md` (with the thesis
+section: adoption indistinguishable from zero, first user's state,
+fundamental-styles deltas, framework-code numstat). Corrections applied in
+place to 377.5, 388.1, Slice 390, CHANGELOG, `/components/scan`,
+`/components/button`, LOOPS.md.
+
+1. [ ] **392.1 — P0 · a second scan verdict inside a live flash never shows.**
+       `body::after` keeps its animation when the stamp changes ok -> error or
+       ok -> ok, so it never restarts: an error 150ms after an ok peaks at
+       opacity 0.208, at 400ms 0.019, at 620ms 0 — the attribute says error
+       and the screen shows nothing. Rescans every 650ms: scans 2 and 3 never
+       flash. The goods-receipt data contract's 404 path (a server round trip)
+       hits exactly this, and with 389.3 open no other visible cue exists.
+       Predates 389.4 (126.2's structure); 389.4's claim pins currentTime=0
+       and cannot see it.
+       - **Accept — the property.** A stamp inside a live one restarts the
+         flash: through the REAL behaviour (Enter + `flashScanResult`), ok then
+         error at 150/400/620ms, a repeat ok and a repeat error at 300 and
+         650ms, and the goods-receipt shape (error after a 250 and 400ms round
+         trip) — the rendered band/gap 30ms after the second stamp is within
+         0.05 of a fresh stamp's, both themes. A `check:claims` case, seen to
+         fail today. OR a design reason to keep no-restart is recorded AND
+         `/components/scan` stops claiming "'error' overrides a live ok".
+2. [ ] **392.2 — a pressed toggle differs from an unpressed one by colour
+       alone in normal colours.** Fill 1.043:1 light / 1.363:1 dark, text
+       2.339:1 / 1.416:1; weight, outline, shadow identical. The richtext
+       toolbar's Bold uses the same pair. Violates "every state signal is
+       two-channel". (Forced colours was fixed by 388.1.)
+       - **Accept — the property.** In both themes a
+         `.bo-btn[aria-pressed="true"]` differs from an unpressed one by a
+         non-colour cue, or by >= 3:1 in some channel, asserted by a
+         `check:claims` case that fails on today's CSS; the RF profile's
+         budget is re-argued if the fix lands there.
+3. [ ] **392.3 — a `--bar` label with one word wider than its slot paints past
+       its button.** 'Kommissionierung' 15px, 'Wareneingangsbestätigung' 49px
+       past at 390; heights stay 52, so the text overlays the next slot. The
+       page and the CSS say a long label wraps and never clips.
+       - **Accept — the property.** A `check:claims` case gives a bar member a
+         single word wider than its slot at 1440 and 390 and asserts equal
+         widths, a taller member, and no text rect past its button — red on
+         today's CSS. `.bo-form-actions > .bo-btn` measured the same way.
+4. [ ] **392.4 — rule 3 reset without the thesis section, twice; and a
+       design-grill reset it.** Slice 386 read no adoption channel it could
+       have read; 388.2 (a design-grill logged as Objective) has no thesis
+       section and dropped the armed set `[372, 375]`.
+       - **Accept — the property.** An Objective row resets rule 3 only if
+         its report has §6's four thesis parts (each read, or naming the
+         channel and the error that stopped the read) — replaying 384, 386
+         and 388.2 through the check refuses all three; OR §6 is amended to
+         exempt owner-asked design-grills, and the exemption says what they
+         must log instead.
+5. [ ] **392.5 — the comparator deltas are recorded nowhere a later grill
+       reads them.** This grill measured five against fundamental-styles
+       (two Evidence for each side, two BO candidates refuted).
+       - **Accept — the property.** One maintained place lists BO's deltas
+         against fundamental-styles, each marked Evidence (2+ sources) or
+         Hypothesis with its counter-evidence; any doc that argues BO's case
+         on generated AI docs or on density names the FS counterpart or drops
+         the argument.
+
 ## Slice 391 — a cloud wake that collided TWICE, and the one thing it can see that no local wake can: `check:claims` fails **3 of 311** in this container at a commit CI reports `success` on (2026-09-25)
 
 **This slice files a finding and records two collisions. It closes no queue
@@ -523,6 +586,9 @@ it; core and docs builds green (0 FAIL). Base: Slice 385 (`6ec0e8da`).
   sections moved: rule 3 +26 (already read at 385) and rule 5 +26 — 372.1's
   day-close sentence, new instruction a wake needs to read the comparable
   set correctly. No cut: removing it would remove instruction, not narrative.
+  [**Corrected by Slice 392:** that holds for rule 5 only. Rule 3's +26 is
+  Slice 384's provenance rewrite of a replay figure (28 of 63 / 42 of 72) —
+  the rule-text generator open item 384.1 names — and is left to 384.1.]
 - **Archive sweep: not due.** `roadmap_scope.py`: 1,193 / 7,532 = 15.8%.
 
 ## Slice 389 — findings of the RF journey grill (388.2): the app screen exists but is not wired, and the task screens neither take the first scan nor finish a task (2026-09-25)
@@ -1121,7 +1187,12 @@ screen. Task screen can be better."* Two items; the grill is dispatched by rule 
          page; two judges; a synthesis that re-measured) chose the refusal:
          28 and 28 against the setting's 21/23 and the modifier's 17/18.
          Measured grounds: every fully rounded shape outside the tokens (8 of
-         8) is a status, token or marker, never an action, and under forced
+         8) is a status, token or marker, never an action [**corrected by Slice
+         392:** 6 of the 8 are statuses/tokens/markers and 2 are REMOVE buttons
+         (`.bo-chip__remove`, `.bo-tag-input__remove`), and `.bo-chip` renders
+         as a link on 117 of 128 pages — a pill is never a COMMAND button here,
+         but it is already a link and a remove control; the other three grounds
+         reproduced], and under forced
          colours a `--sm` secondary capsule and a `.bo-badge` compute the same
          in every property but the radius; a capsule is invisible at rest on
          the ghost variants (0 px changed); it cuts an icon button's
@@ -1139,7 +1210,7 @@ screen. Task screen can be better."* Two items; the grill is dispatched by rule 
          under forced colours** (pressed and unpressed computed identically) —
          now the system Highlight pair, no transition, ring in Highlight. The
          RF profile budget went 40 -> 41 kB for it (65 characters over; reason
-         in `build-rf-essentials.mjs`). `check:claims` +6, each seen to fail
+         in `build-rf-essentials.mjs`). `check:claims` +5 [corrected by Slice 392: +6 counted the flashRow change], each seen to fail
          on a broken build (314/314 green). Jev (Rubric 2): 0.97 / 0.91 / 0.91.
 3. [ ] **388.3 — the segmented control's checked option draws an author-colour
        focus ring under forced colours.** Found by 388.1's panel: rgb(13,148,136)
@@ -1494,7 +1565,19 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
        [**Corrected by Slice 381:** **six** P0 fixes are outside `v0.8.0`, 260 commits
        back: 300.1 (issue #1's crash, closed on 2026-09-06 with the fix "on the
        next release"; the published `bo-check-markup` still crashes), 375.9,
-       375.10, 376.2, 376.4 and 377.1.]
+       375.10, 376.2, 376.4 and 377.1.] [**Corrected by Slice 392:** **seven** P0
+       fixes (adds 389.4) among 16 Fixed entries under Unreleased, 313 commits
+       back (`git log --oneline v0.8.0..HEAD | wc -l`, 2026-09-25). And the
+       premise about the consumer was wrong: busy-office-erp (private, last push
+       2026-09-09) has NO package.json; its spike 6
+       (`spikes/06-runtime-ui/render.py`, `UI_VERSION = "0.8.0"`) vendors
+       `index.min.css`, `htmx.min.css` and `dist/api.json` from the tarball and
+       validates with `check-markup.mjs`. Its five committed spike-6 screens use
+       none of the classes or scripts the six CSS/JS P0 fixes touch, and the
+       `index.min.css` it vendors was already comment-free at 0.8.0; the one
+       unreleased fix its workflow touched is 300.1 (issue #1). Any case for
+       releasing rests on users no channel can see. The release stays the
+       owner's call.]
 6. [ ] **OWNER · 377.6 — is busy-office-erp the named first user?** Its ADR-0016
        names this package the reference implementation of its runtime-UI
        contract; nothing in this repo's steering documents names it. If yes:

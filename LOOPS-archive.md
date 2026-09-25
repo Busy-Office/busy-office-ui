@@ -462,3 +462,19 @@ after it (`copy-suite`, `highlight-code`, `scope-search-index`, `pagefind`,
 with zero pagefind artefacts and no `llms.txt`. A dist-reading gate then measures
 an incomplete site that looks built. §3 now describes that instead, which is why
 this is an archived *correction* rather than a deletion.
+
+## Collision 8 — Slice 391's number (2026-09-25, forensics)
+
+The local /loop session committed its Objective grill as Slice 391 (`1cb36652`,
+items 391.1-391.5) and its push was rejected: `origin/main` had moved five
+commits (`3b24cc94..9669b24f`), including the cloud routine's own
+`## Slice 391` and items 391.1/391.2. The two wakes ran different rules, so
+nothing was duplicated. The loser kept a backup branch
+(`backup/grill-391-local`), rebuilt its grill on a clean worktree of
+`9669b24f` rather than rebasing in the main checkout (which carries the
+owner's uncommitted files), renumbered by matching `391\.` and the section
+heading and counting hits (ROADMAP section 5, report 7, button page 1; one
+correction split across a line break and missed by the regex, caught by a
+diff grep), and moved `main` with `git reset --keep`. Both loop-log row sets
+are kept.
+
