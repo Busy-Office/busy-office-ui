@@ -173,6 +173,14 @@ def main():
             subprocess.run([sys.executable, gen], check=True, capture_output=True)
         except Exception as exc:  # noqa: BLE001 - deliberately broad, see above
             print(f"  (warning: {label} regeneration failed: {exc})", file=sys.stderr)
+            # The generator's own reason, not just its exit status: a refusal
+            # names the malformed marker, and dropping it left the next wake a
+            # stale file and no clue why (393.3's verification).
+            reason = getattr(exc, "stderr", None) or getattr(exc, "stdout", None)
+            if reason:
+                text = reason.decode("utf-8", "replace") if isinstance(reason, bytes) else reason
+                for line in text.strip().splitlines():
+                    print(f"    {line}", file=sys.stderr)
 
     # RESUME.md's own checks run HERE, not in `check:repo` (roadmap 169.4).
     # The ORIGINAL reason is now false and is recorded as such rather than

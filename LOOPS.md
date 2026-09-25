@@ -591,6 +591,39 @@ match to its full playbook below:
    - **agent-blocked** — needs a second agent, which §3b step 4's blind
      re-score requires and some sessions are not permitted to spawn.
 
+   **The markers, and where the answer is computed** (roadmap 393.3,
+   2026-09-25). `STATUS.md` prints `oldest dispatchable: <id>`, which is this
+   rule's pick computed by `generate_status.py`. It also lists each kind of
+   blocked separately. The markers it reads:
+   - **owner-blocked:** `BLOCKED ON`, `OWNER CALL`, `OWNER OR <X> CALL` (X
+     may be several words), `OWNER ·`, `NEEDS-RUNTIME` or a bare capitalised
+     `BLOCKED` anywhere in the item's prose. `UNBLOCKED` does not count.
+     Wrapping onto a new line is fine. A marker inside a code span or fence
+     does not count; `STATUS.md` lists those items separately so a wrong call
+     is visible. A `Route: owner` line also counts.
+   - **browser-blocked:** `NEEDS-BROWSER`. It is listed but does not hold the
+     item, because the one dispatcher is local.
+   - **dependency-blocked:** an `After: <id>[, <id>]` line. The item is held
+     while any target is open.
+   - **parked:** a `Parked: M1 — …` line. The item is held only while that
+     milestone is ACTIVE.
+
+   `Milestone:`, `Route:` and `Track:` lines are parsed too. Each own-line
+   marker sits on its own indented line inside an item. An item's body ends
+   at the next item, heading or `---` rule. Every run reconciles the parsed
+   markers against a loose raw line count of `ROADMAP.md`, one that ignores
+   case, bullets and bold. Any of these makes it refuse to write:
+   - a malformed, unindented or fenced marker;
+   - a marker outside any item;
+   - an `After:` target that resolves in neither `ROADMAP.md` nor the
+     archive;
+   - an `After:` cycle.
+
+   **An item that is blocked must carry a marker.** When the pick was first
+   computed it chose 249.7, whose prose says it waits on 249.10 (an owner
+   call) and which had no marker. 374.4, 389.6 and 389.7 had none either.
+   Before you quote a pick, read every free item older than it.
+
    **This distinction was written into `RESUME.md` and did not survive the next
    rewrite** — grep found it gone within a day, which is 169.3's lesson landing
    again: that file is rewritten wholesale every wake and is where corrections

@@ -1,0 +1,1437 @@
+[
+ {
+  "id": "104.1",
+  "label": "clarify",
+  "probe": "base",
+  "answer": {
+   "model": "typesafe-ai/jev",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "no_choice",
+     "confidence": 0.94,
+     "probabilities": {
+      "owner_or_business_choice": 0,
+      "choice_settled_by_check": 0.04,
+      "no_choice": 0.96,
+      "design_choice_unsettled": 0
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.04
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "instrument_result",
+     "confidence": 0.97,
+     "probabilities": {
+      "judgement_or_approval": 0,
+      "instrument_result": 0.98,
+      "nothing_stated": 0,
+      "artifact_exists": 0.02
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 851,
+    "output_tokens": 133
+   },
+   "_wall_ms": 740
+  }
+ },
+ {
+  "id": "112.5",
+  "label": "clarify",
+  "probe": "base",
+  "answer": {
+   "model": "typesafe-ai/jev",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "no_choice",
+     "confidence": 0.88,
+     "probabilities": {
+      "no_choice": 0.92,
+      "design_choice_unsettled": 0.06,
+      "owner_or_business_choice": 0.01,
+      "choice_settled_by_check": 0.01
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.66
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "artifact_exists",
+     "confidence": 0.93,
+     "probabilities": {
+      "instrument_result": 0,
+      "artifact_exists": 0.95,
+      "judgement_or_approval": 0,
+      "nothing_stated": 0.05
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 782,
+    "output_tokens": 133
+   },
+   "_wall_ms": 816
+  }
+ },
+ {
+  "id": "123.1",
+  "label": "clarify",
+  "probe": "base",
+  "answer": {
+   "model": "typesafe-ai/jev",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "design_choice_unsettled",
+     "confidence": 0.43,
+     "probabilities": {
+      "choice_settled_by_check": 0.1,
+      "design_choice_unsettled": 0.57,
+      "no_choice": 0,
+      "owner_or_business_choice": 0.33
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.96
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "nothing_stated",
+     "confidence": 0.46,
+     "probabilities": {
+      "nothing_stated": 0.6,
+      "instrument_result": 0.08,
+      "artifact_exists": 0.05,
+      "judgement_or_approval": 0.27
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 763,
+    "output_tokens": 137
+   },
+   "_wall_ms": 753
+  }
+ },
+ {
+  "id": "123.2",
+  "label": "clarify",
+  "probe": "base",
+  "answer": {
+   "model": "typesafe-ai/jev",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "owner_or_business_choice",
+     "confidence": 0.98,
+     "probabilities": {
+      "choice_settled_by_check": 0,
+      "owner_or_business_choice": 0.99,
+      "no_choice": 0,
+      "design_choice_unsettled": 0.01
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.96
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "judgement_or_approval",
+     "confidence": 0.27,
+     "probabilities": {
+      "nothing_stated": 0.4,
+      "judgement_or_approval": 0.45,
+      "artifact_exists": 0.15,
+      "instrument_result": 0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 741,
+    "output_tokens": 140
+   },
+   "_wall_ms": 688
+  }
+ },
+ {
+  "id": "145.4",
+  "label": "clarify",
+  "probe": "base",
+  "answer": {
+   "model": "jev-1.13.0",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "owner_or_business_choice",
+     "confidence": 0.99,
+     "probabilities": {
+      "design_choice_unsettled": 0.01,
+      "choice_settled_by_check": 0,
+      "no_choice": 0,
+      "owner_or_business_choice": 0.99
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.3
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "nothing_stated",
+     "confidence": 0.29,
+     "probabilities": {
+      "judgement_or_approval": 0.31,
+      "nothing_stated": 0.47,
+      "artifact_exists": 0.09,
+      "instrument_result": 0.13
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 816,
+    "output_tokens": 136
+   },
+   "_wall_ms": 546
+  }
+ },
+ {
+  "id": "249.6",
+  "label": "clarify",
+  "probe": "base",
+  "answer": {
+   "model": "typesafe-ai/jev",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "choice_settled_by_check",
+     "confidence": 0.39,
+     "probabilities": {
+      "choice_settled_by_check": 0.55,
+      "no_choice": 0.36,
+      "design_choice_unsettled": 0.08,
+      "owner_or_business_choice": 0.01
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.05
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "instrument_result",
+     "confidence": 0.98,
+     "probabilities": {
+      "judgement_or_approval": 0,
+      "instrument_result": 0.98,
+      "artifact_exists": 0.02,
+      "nothing_stated": 0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 880,
+    "output_tokens": 137
+   },
+   "_wall_ms": 634
+  }
+ },
+ {
+  "id": "249.7",
+  "label": "clarify",
+  "probe": "base",
+  "answer": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "choice_settled_by_check",
+     "probabilities": {
+      "choice_settled_by_check": 0.9,
+      "design_choice_unsettled": 0,
+      "no_choice": 0.08,
+      "owner_or_business_choice": 0.02
+     },
+     "confidence": 0.87
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.53
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "instrument_result",
+     "probabilities": {
+      "artifact_exists": 0,
+      "instrument_result": 1,
+      "judgement_or_approval": 0,
+      "nothing_stated": 0
+     },
+     "confidence": 1
+    }
+   },
+   "usage": {
+    "input_tokens": 889,
+    "output_tokens": 137
+   },
+   "_wall_ms": 578
+  }
+ },
+ {
+  "id": "373.5",
+  "label": "clarify",
+  "probe": "base",
+  "answer": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "design_choice_unsettled",
+     "probabilities": {
+      "choice_settled_by_check": 0.02,
+      "design_choice_unsettled": 0.95,
+      "owner_or_business_choice": 0.02,
+      "no_choice": 0.01
+     },
+     "confidence": 0.93
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.11
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "instrument_result",
+     "probabilities": {
+      "instrument_result": 1,
+      "artifact_exists": 0,
+      "judgement_or_approval": 0,
+      "nothing_stated": 0
+     },
+     "confidence": 1
+    }
+   },
+   "usage": {
+    "input_tokens": 884,
+    "output_tokens": 136
+   },
+   "_wall_ms": 795
+  }
+ },
+ {
+  "id": "373.7",
+  "label": "clarify",
+  "probe": "base",
+  "answer": {
+   "model": "typesafe-ai/jev",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "no_choice",
+     "confidence": 0.7,
+     "probabilities": {
+      "no_choice": 0.77,
+      "owner_or_business_choice": 0.21,
+      "design_choice_unsettled": 0.01,
+      "choice_settled_by_check": 0.01
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.59
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "artifact_exists",
+     "confidence": 0.62,
+     "probabilities": {
+      "judgement_or_approval": 0.03,
+      "instrument_result": 0.24,
+      "artifact_exists": 0.72,
+      "nothing_stated": 0.01
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 897,
+    "output_tokens": 133
+   },
+   "_wall_ms": 539
+  }
+ },
+ {
+  "id": "350.1",
+  "label": "clarify",
+  "probe": "base",
+  "answer": {
+   "model": "typesafe-ai/jev",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "choice_settled_by_check",
+     "confidence": 0.97,
+     "probabilities": {
+      "owner_or_business_choice": 0,
+      "design_choice_unsettled": 0.02,
+      "choice_settled_by_check": 0.98,
+      "no_choice": 0
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.3
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "instrument_result",
+     "confidence": 0.85,
+     "probabilities": {
+      "artifact_exists": 0.02,
+      "judgement_or_approval": 0.08,
+      "nothing_stated": 0,
+      "instrument_result": 0.9
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 1045,
+    "output_tokens": 137
+   },
+   "_wall_ms": 579
+  }
+ },
+ {
+  "id": "307.1",
+  "label": "clarify",
+  "probe": "base",
+  "answer": {
+   "model": "jev-1.13.0",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "design_choice_unsettled",
+     "confidence": 0.6,
+     "probabilities": {
+      "choice_settled_by_check": 0.15,
+      "design_choice_unsettled": 0.7,
+      "no_choice": 0,
+      "owner_or_business_choice": 0.15
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.11
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "instrument_result",
+     "confidence": 0.34,
+     "probabilities": {
+      "nothing_stated": 0.23,
+      "judgement_or_approval": 0.25,
+      "artifact_exists": 0.01,
+      "instrument_result": 0.51
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 879,
+    "output_tokens": 136
+   },
+   "_wall_ms": 504
+  }
+ },
+ {
+  "id": "274.2",
+  "label": "clarify",
+  "probe": "base",
+  "answer": {
+   "model": "jev-1.13.0",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "choice_settled_by_check",
+     "confidence": 0.61,
+     "probabilities": {
+      "design_choice_unsettled": 0.04,
+      "no_choice": 0.24,
+      "choice_settled_by_check": 0.72,
+      "owner_or_business_choice": 0
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.39
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "judgement_or_approval",
+     "confidence": 0.61,
+     "probabilities": {
+      "artifact_exists": 0.06,
+      "instrument_result": 0.2,
+      "nothing_stated": 0.02,
+      "judgement_or_approval": 0.72
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 883,
+    "output_tokens": 142
+   },
+   "_wall_ms": 628
+  }
+ },
+ {
+  "id": "144.2",
+  "label": "owner",
+  "probe": "base",
+  "answer": {
+   "model": "typesafe-ai/jev",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "choice_settled_by_check",
+     "confidence": 0.77,
+     "probabilities": {
+      "no_choice": 0,
+      "owner_or_business_choice": 0,
+      "design_choice_unsettled": 0.16,
+      "choice_settled_by_check": 0.84
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.9
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "instrument_result",
+     "confidence": 0.72,
+     "probabilities": {
+      "nothing_stated": 0.07,
+      "judgement_or_approval": 0.06,
+      "instrument_result": 0.79,
+      "artifact_exists": 0.08
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 841,
+    "output_tokens": 137
+   },
+   "_wall_ms": 617
+  }
+ },
+ {
+  "id": "173.2",
+  "label": "owner",
+  "probe": "base",
+  "answer": {
+   "model": "typesafe-ai/jev",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "owner_or_business_choice",
+     "confidence": 0.99,
+     "probabilities": {
+      "design_choice_unsettled": 0,
+      "no_choice": 0,
+      "choice_settled_by_check": 0.01,
+      "owner_or_business_choice": 0.99
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.71
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "nothing_stated",
+     "confidence": 0.41,
+     "probabilities": {
+      "judgement_or_approval": 0.17,
+      "instrument_result": 0.26,
+      "nothing_stated": 0.56,
+      "artifact_exists": 0.01
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 872,
+    "output_tokens": 136
+   },
+   "_wall_ms": 612
+  }
+ },
+ {
+  "id": "145.1",
+  "label": "execute",
+  "probe": "base",
+  "answer": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "choice_settled_by_check",
+     "probabilities": {
+      "no_choice": 0.04,
+      "owner_or_business_choice": 0,
+      "design_choice_unsettled": 0,
+      "choice_settled_by_check": 0.96
+     },
+     "confidence": 0.95
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.83
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "instrument_result",
+     "probabilities": {
+      "nothing_stated": 0,
+      "artifact_exists": 0.02,
+      "judgement_or_approval": 0,
+      "instrument_result": 0.98
+     },
+     "confidence": 0.97
+    }
+   },
+   "usage": {
+    "input_tokens": 904,
+    "output_tokens": 137
+   },
+   "_wall_ms": 647
+  }
+ },
+ {
+  "id": "54.3",
+  "label": "execute",
+  "probe": "base",
+  "answer": {
+   "model": "typesafe-ai/jev",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "design_choice_unsettled",
+     "confidence": 0.57,
+     "probabilities": {
+      "no_choice": 0,
+      "owner_or_business_choice": 0.09,
+      "design_choice_unsettled": 0.68,
+      "choice_settled_by_check": 0.23
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.43
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "artifact_exists",
+     "confidence": 0.75,
+     "probabilities": {
+      "nothing_stated": 0.03,
+      "artifact_exists": 0.8200000000000001,
+      "instrument_result": 0,
+      "judgement_or_approval": 0.15
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 850,
+    "output_tokens": 136
+   },
+   "_wall_ms": 705
+  }
+ },
+ {
+  "id": "292.8",
+  "label": "execute",
+  "probe": "base",
+  "answer": {
+   "model": "typesafe-ai/jev",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "choice_settled_by_check",
+     "confidence": 0.94,
+     "probabilities": {
+      "choice_settled_by_check": 0.95,
+      "owner_or_business_choice": 0.02,
+      "no_choice": 0.01,
+      "design_choice_unsettled": 0.02
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.09
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "instrument_result",
+     "confidence": 1,
+     "probabilities": {
+      "nothing_stated": 0,
+      "judgement_or_approval": 0,
+      "artifact_exists": 0,
+      "instrument_result": 1
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 894,
+    "output_tokens": 137
+   },
+   "_wall_ms": 539
+  }
+ },
+ {
+  "id": "52.2",
+  "label": "execute",
+  "probe": "base",
+  "answer": {
+   "model": "typesafe-ai/jev",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "no_choice",
+     "confidence": 0.73,
+     "probabilities": {
+      "owner_or_business_choice": 0,
+      "design_choice_unsettled": 0.05,
+      "choice_settled_by_check": 0.15,
+      "no_choice": 0.8
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.74
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "instrument_result",
+     "confidence": 1,
+     "probabilities": {
+      "nothing_stated": 0,
+      "artifact_exists": 0,
+      "instrument_result": 1,
+      "judgement_or_approval": 0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 875,
+    "output_tokens": 133
+   },
+   "_wall_ms": 641
+  }
+ },
+ {
+  "id": "226.1",
+  "label": "execute",
+  "probe": "base",
+  "answer": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "choice_settled_by_check",
+     "probabilities": {
+      "owner_or_business_choice": 0,
+      "choice_settled_by_check": 0.99,
+      "no_choice": 0.01,
+      "design_choice_unsettled": 0
+     },
+     "confidence": 0.99
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.11
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "instrument_result",
+     "probabilities": {
+      "judgement_or_approval": 0.01,
+      "nothing_stated": 0,
+      "artifact_exists": 0,
+      "instrument_result": 0.99
+     },
+     "confidence": 0.98
+    }
+   },
+   "usage": {
+    "input_tokens": 888,
+    "output_tokens": 137
+   },
+   "_wall_ms": 784
+  }
+ },
+ {
+  "id": "352.1",
+  "label": "execute",
+  "probe": "base",
+  "answer": {
+   "model": "jev-1.13.0",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "choice_settled_by_check",
+     "confidence": 0.97,
+     "probabilities": {
+      "owner_or_business_choice": 0,
+      "no_choice": 0.02,
+      "design_choice_unsettled": 0.01,
+      "choice_settled_by_check": 0.97
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.09
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "instrument_result",
+     "confidence": 0.57,
+     "probabilities": {
+      "judgement_or_approval": 0.04,
+      "instrument_result": 0.67,
+      "nothing_stated": 0.01,
+      "artifact_exists": 0.28
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 874,
+    "output_tokens": 137
+   },
+   "_wall_ms": 857
+  }
+ },
+ {
+  "id": "109.16",
+  "label": "execute",
+  "probe": "base",
+  "answer": {
+   "model": "typesafe-ai/jev",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "no_choice",
+     "confidence": 0.56,
+     "probabilities": {
+      "choice_settled_by_check": 0.3,
+      "design_choice_unsettled": 0.02,
+      "no_choice": 0.66,
+      "owner_or_business_choice": 0.02
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.12
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "artifact_exists",
+     "confidence": 0.83,
+     "probabilities": {
+      "instrument_result": 0.02,
+      "artifact_exists": 0.88,
+      "judgement_or_approval": 0.06,
+      "nothing_stated": 0.04
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 777,
+    "output_tokens": 133
+   },
+   "_wall_ms": 607
+  }
+ },
+ {
+  "id": "352.2",
+  "label": "execute",
+  "probe": "base",
+  "answer": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "choice_settled_by_check",
+     "probabilities": {
+      "design_choice_unsettled": 0,
+      "owner_or_business_choice": 0,
+      "choice_settled_by_check": 1,
+      "no_choice": 0
+     },
+     "confidence": 1
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.37
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "artifact_exists",
+     "probabilities": {
+      "instrument_result": 0.39,
+      "judgement_or_approval": 0.03,
+      "artifact_exists": 0.57,
+      "nothing_stated": 0.01
+     },
+     "confidence": 0.42
+    }
+   },
+   "usage": {
+    "input_tokens": 898,
+    "output_tokens": 137
+   },
+   "_wall_ms": 1441
+  }
+ },
+ {
+  "id": "278.3",
+  "label": "execute",
+  "probe": "base",
+  "answer": {
+   "model": "jev-1.13.0",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "choice_settled_by_check",
+     "confidence": 0.36,
+     "probabilities": {
+      "no_choice": 0.32,
+      "choice_settled_by_check": 0.53,
+      "owner_or_business_choice": 0.01,
+      "design_choice_unsettled": 0.14
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.1
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "judgement_or_approval",
+     "confidence": 0.71,
+     "probabilities": {
+      "instrument_result": 0.09,
+      "artifact_exists": 0.11,
+      "judgement_or_approval": 0.78,
+      "nothing_stated": 0.02
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 861,
+    "output_tokens": 142
+   },
+   "_wall_ms": 701
+  }
+ },
+ {
+  "id": "184.1",
+  "label": "execute",
+  "probe": "base",
+  "answer": {
+   "model": "typesafe-ai/jev",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "choice_settled_by_check",
+     "confidence": 0.56,
+     "probabilities": {
+      "owner_or_business_choice": 0,
+      "design_choice_unsettled": 0,
+      "choice_settled_by_check": 0.67,
+      "no_choice": 0.33
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.11
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "instrument_result",
+     "confidence": 0.99,
+     "probabilities": {
+      "nothing_stated": 0,
+      "artifact_exists": 0,
+      "judgement_or_approval": 0,
+      "instrument_result": 1
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 949,
+    "output_tokens": 137
+   },
+   "_wall_ms": 1623
+  }
+ },
+ {
+  "id": "40.4",
+  "label": "execute",
+  "probe": "base",
+  "answer": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "choice_settled_by_check",
+     "probabilities": {
+      "no_choice": 0,
+      "choice_settled_by_check": 0.98,
+      "design_choice_unsettled": 0.02,
+      "owner_or_business_choice": 0
+     },
+     "confidence": 0.97
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.5
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "instrument_result",
+     "probabilities": {
+      "nothing_stated": 0.01,
+      "artifact_exists": 0.19,
+      "judgement_or_approval": 0.04,
+      "instrument_result": 0.76
+     },
+     "confidence": 0.68
+    }
+   },
+   "usage": {
+    "input_tokens": 828,
+    "output_tokens": 137
+   },
+   "_wall_ms": 920
+  }
+ },
+ {
+  "id": "298.1",
+  "label": "execute",
+  "probe": "base",
+  "answer": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "choice_settled_by_check",
+     "probabilities": {
+      "design_choice_unsettled": 0,
+      "no_choice": 0,
+      "owner_or_business_choice": 0,
+      "choice_settled_by_check": 1
+     },
+     "confidence": 1
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.65
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "judgement_or_approval",
+     "probabilities": {
+      "judgement_or_approval": 0.48,
+      "artifact_exists": 0.15,
+      "instrument_result": 0.36,
+      "nothing_stated": 0.01
+     },
+     "confidence": 0.31
+    }
+   },
+   "usage": {
+    "input_tokens": 821,
+    "output_tokens": 142
+   },
+   "_wall_ms": 540
+  }
+ },
+ {
+  "id": "123.1",
+  "label": "clarify",
+  "probe": "framed",
+  "answer": {
+   "model": "typesafe-ai/jev",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "design_choice_unsettled",
+     "confidence": 0.62,
+     "probabilities": {
+      "design_choice_unsettled": 0.72,
+      "no_choice": 0,
+      "choice_settled_by_check": 0.13,
+      "owner_or_business_choice": 0.15
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.97
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "nothing_stated",
+     "confidence": 0.32,
+     "probabilities": {
+      "judgement_or_approval": 0.37,
+      "instrument_result": 0.09,
+      "nothing_stated": 0.49,
+      "artifact_exists": 0.05
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 784,
+    "output_tokens": 137
+   },
+   "_wall_ms": 603
+  }
+ },
+ {
+  "id": "249.7",
+  "label": "clarify",
+  "probe": "framed",
+  "answer": {
+   "model": "jev-1.13.0",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "choice_settled_by_check",
+     "confidence": 0.88,
+     "probabilities": {
+      "no_choice": 0.07,
+      "owner_or_business_choice": 0.02,
+      "design_choice_unsettled": 0,
+      "choice_settled_by_check": 0.91
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.66
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "instrument_result",
+     "confidence": 1,
+     "probabilities": {
+      "nothing_stated": 0,
+      "judgement_or_approval": 0,
+      "instrument_result": 1,
+      "artifact_exists": 0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 910,
+    "output_tokens": 137
+   },
+   "_wall_ms": 943
+  }
+ },
+ {
+  "id": "173.2",
+  "label": "owner",
+  "probe": "framed",
+  "answer": {
+   "model": "jev-1.13.0",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "owner_or_business_choice",
+     "confidence": 0.98,
+     "probabilities": {
+      "no_choice": 0,
+      "design_choice_unsettled": 0,
+      "owner_or_business_choice": 0.99,
+      "choice_settled_by_check": 0.01
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.79
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "judgement_or_approval",
+     "confidence": 0.29,
+     "probabilities": {
+      "artifact_exists": 0.01,
+      "judgement_or_approval": 0.47000000000000003,
+      "instrument_result": 0.28,
+      "nothing_stated": 0.24
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 893,
+    "output_tokens": 140
+   },
+   "_wall_ms": 839
+  }
+ },
+ {
+  "id": "54.3",
+  "label": "execute",
+  "probe": "framed",
+  "answer": {
+   "model": "jev-1.13.0",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "design_choice_unsettled",
+     "confidence": 0.29,
+     "probabilities": {
+      "design_choice_unsettled": 0.47,
+      "no_choice": 0,
+      "owner_or_business_choice": 0.15,
+      "choice_settled_by_check": 0.38
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.58
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "artifact_exists",
+     "confidence": 0.82,
+     "probabilities": {
+      "judgement_or_approval": 0.12,
+      "instrument_result": 0,
+      "artifact_exists": 0.86,
+      "nothing_stated": 0.02
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 871,
+    "output_tokens": 136
+   },
+   "_wall_ms": 716
+  }
+ },
+ {
+  "id": "40.4",
+  "label": "execute",
+  "probe": "framed",
+  "answer": {
+   "model": "typesafe-ai/jev",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "choice_settled_by_check",
+     "confidence": 0.98,
+     "probabilities": {
+      "choice_settled_by_check": 0.98,
+      "owner_or_business_choice": 0,
+      "no_choice": 0,
+      "design_choice_unsettled": 0.02
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.42
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "instrument_result",
+     "confidence": 0.66,
+     "probabilities": {
+      "nothing_stated": 0,
+      "judgement_or_approval": 0.02,
+      "artifact_exists": 0.23,
+      "instrument_result": 0.75
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 849,
+    "output_tokens": 137
+   },
+   "_wall_ms": 615
+  }
+ },
+ {
+  "id": "298.1",
+  "label": "execute",
+  "probe": "framed",
+  "answer": {
+   "model": "jev-1.13.0",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "choice_settled_by_check",
+     "confidence": 1,
+     "probabilities": {
+      "no_choice": 0,
+      "choice_settled_by_check": 1,
+      "owner_or_business_choice": 0,
+      "design_choice_unsettled": 0
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.72
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "instrument_result",
+     "confidence": 0.45,
+     "probabilities": {
+      "nothing_stated": 0.01,
+      "instrument_result": 0.59,
+      "artifact_exists": 0.13,
+      "judgement_or_approval": 0.27
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 842,
+    "output_tokens": 137
+   },
+   "_wall_ms": 738
+  }
+ },
+ {
+  "id": "112.5",
+  "label": "clarify",
+  "probe": "repeat",
+  "answer": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "no_choice",
+     "probabilities": {
+      "owner_or_business_choice": 0.01,
+      "no_choice": 0.93,
+      "choice_settled_by_check": 0.01,
+      "design_choice_unsettled": 0.05
+     },
+     "confidence": 0.9
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.67
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "artifact_exists",
+     "probabilities": {
+      "nothing_stated": 0.05,
+      "artifact_exists": 0.95,
+      "judgement_or_approval": 0,
+      "instrument_result": 0
+     },
+     "confidence": 0.93
+    }
+   },
+   "usage": {
+    "input_tokens": 782,
+    "output_tokens": 133
+   },
+   "_wall_ms": 898
+  }
+ },
+ {
+  "id": "144.2",
+  "label": "owner",
+  "probe": "repeat",
+  "answer": {
+   "model": "jev-1.13.0",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "choice_settled_by_check",
+     "confidence": 0.72,
+     "probabilities": {
+      "no_choice": 0,
+      "choice_settled_by_check": 0.8,
+      "design_choice_unsettled": 0.2,
+      "owner_or_business_choice": 0
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.89
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "instrument_result",
+     "confidence": 0.72,
+     "probabilities": {
+      "nothing_stated": 0.07,
+      "instrument_result": 0.8,
+      "artifact_exists": 0.06,
+      "judgement_or_approval": 0.07
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 841,
+    "output_tokens": 137
+   },
+   "_wall_ms": 477
+  }
+ },
+ {
+  "id": "352.2",
+  "label": "execute",
+  "probe": "repeat",
+  "answer": {
+   "model": "typesafe-ai/jev",
+   "answers": {
+    "decision": {
+     "type": "choice",
+     "choice": "choice_settled_by_check",
+     "confidence": 1,
+     "probabilities": {
+      "owner_or_business_choice": 0,
+      "design_choice_unsettled": 0,
+      "no_choice": 0,
+      "choice_settled_by_check": 1
+     }
+    },
+    "waits_on": {
+     "type": "noul",
+     "noul": 0.37
+    },
+    "done_evidence": {
+     "type": "choice",
+     "choice": "artifact_exists",
+     "confidence": 0.42,
+     "probabilities": {
+      "artifact_exists": 0.56,
+      "nothing_stated": 0.01,
+      "judgement_or_approval": 0.02,
+      "instrument_result": 0.41
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 898,
+    "output_tokens": 137
+   },
+   "_wall_ms": 753
+  }
+ }
+]

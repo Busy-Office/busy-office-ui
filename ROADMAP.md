@@ -711,7 +711,8 @@ Module items that fan out wait on `393.12`.
            Verify it there, the narrowest context that must run it, not only in
            CI.
          - **Base rate.** Measure it before wiring the gate, and quote it. The
-           seat-A scanner (committed with P5) measured 0 of 1,039 on 2026-09-25.
+           seat-A scanner (`name_scan.py`; P5 was said to commit it and had not, so
+           393.3 did) measured 0 of 1,039 on 2026-09-25.
            Re-measure it here, because a gate with a base rate of 0 cannot fail
            on this tree.
          - **Self-test.** It catches injected module names and passes real shape
@@ -1525,7 +1526,7 @@ superseded once a named item has landed or the owner has acted.
          two sessions active today were reported to the owner to archive
          (the API cannot archive them). Limit: a cloud session that ignores
          LOOPS.md is not stopped by this — archiving is the owner's half.
-2. [ ] **393.2 — the in-flight protocol: one workflow at a time, a hold that reads
+2. [x] **393.2 — the in-flight protocol: one workflow at a time, a hold that reads
        nothing, and a wall-time cap.**
        Milestone: M1 · Phase: 0
        Route: build
@@ -1556,7 +1557,16 @@ superseded once a named item has landed or the owner has acted.
          runs `inflight.py hold` second, after the guard. The zoom workflow
          (375.11) was opened as the first real line (cap 90 — O17's budget is
          still open). **Owed:** the tool-call count of one real hold wake.
-3. [ ] **393.3 — the backlog mirror reports every kind of wait, and prints the
+       - **DONE 2026-09-25: one real hold measured at 2 tool calls.** The
+         timer wake at 21:42 (local) found 393.3's verification workflow
+         (`wf_8f75ecde-897`) in flight at 5 of its 45 minutes. It made one
+         Bash call (`step0_guard.py`, then `inflight.py hold`, exit 3) and one
+         `ScheduleWakeup`, and dispatched nothing. `hold-wakes.jsonl` gained
+         its first row (13:42:07Z), and `dispatch_status.py` counts it. The
+         workflow then finished and woke the loop through its task
+         notification, not a timer. The limit is: one hold, in one session,
+         so this measures the protocol, not a rate.
+3. [x] **393.3 — the backlog mirror reports every kind of wait, and prints the
        oldest dispatchable item.**
        Milestone: M1 · Phase: 0
        Route: build
@@ -1568,7 +1578,8 @@ superseded once a named item has landed or the owner has acted.
 
            Replay it on the ROADMAP.md of the commit before this item. It must
            flag every item a wide-marker audit flags, and the command and its
-           output are quoted. The audit (`blocked_audit.py`, committed by P5)
+           output are quoted. The audit (`blocked_audit.py`; committed by 393.3,
+           since P5 had not)
            found 6 disagreements on 2026-09-25: 377.5, 377.6, 373.8, 369.1,
            249.12, and 374.4, which has no marker. An item whose `Route:` is
            `owner` counts as owner-blocked whatever its prose says, so the
@@ -1592,6 +1603,87 @@ superseded once a named item has landed or the owner has acted.
            - `Parked` holds under ACTIVE and releases under CLOSED;
            - a wrapped owner marker is flagged;
            - deleting one `After:` line fails the reconcile.
+       - **DONE 2026-09-25.** `generate_status.py` parses the owner markers
+         with whitespace collapsed and code removed. It also reads the five
+         own-line markers and the `TAG · ` title prefix (`OWNER ·`, `P0 ·`).
+         Checks:
+         - The markers reconcile against a loose raw line count (130 = 130).
+         - The mirror's `After:` targets reconcile against a second, line-walk
+           count of the source (114 = 114).
+         - An unresolved target or a cycle refuses the write.
+
+         STATUS.md prints `oldest dispatchable: 375.11` and lists
+         owner-blocked (23), dependency-blocked (35, two of them also
+         owner-blocked), parked (0), browser-blocked (0, marker
+         `NEEDS-BROWSER`) and markers quoted only in code (393.3's own
+         Accept).
+         - **The replay, quoted.** The audit is
+           `.roundtable/milestone-m1-2026-09-25/blocked_audit.py --roadmap
+           <b69129d0's ROADMAP.md>`.
+           - With the old parser first on `PYTHONPATH` (the header gives the
+             commands): `disagreements: 6`. They are 377.5 and 377.6 (both
+             `None`: the `OWNER ·` prefix left them un-numbered), 373.8,
+             369.1, 249.12, and 393.3 `(only inside code)`.
+           - With the new parser on the same file: `disagreements: 1`, which
+             is 393.3, correctly not flagged.
+
+           The run that first used the audit's shim loaded the NEW parser and
+           printed 1 for "before". It was caught because 1 contradicted the
+           recorded 6, and fixed (`sys.path.append`).
+         - **The premise was wrong in one name.** The Accept lists 374.4 among
+           the audit's six. The audit cannot flag an item with no marker: its
+           sixth was 393.3, a mention inside code. 374.4 was found by reading
+           it, and it now carries an `OWNER CALL`.
+         - **Fixtures, confirmed in a scratch mirror.**
+           `generate_status.py --self-test` has 38 cases, including the four
+           the Accept names. The After-deletion case goes through the real
+           path: the parse loses a target, and `sync_mirror` refuses it
+           against the source.
+           - Red-proved by 22 injections into copies, each asserted to match
+             once. Every one failed naming its case, or refused before any
+             case ran (the mirror writing no `after`).
+           - 15 of the injections came from the verification below. On the
+             first fixture, the pick could ignore owner and Parked holds with
+             every case green.
+         - **Adversarial verification** (workflow `wf_8f75ecde-897`: 4 lenses
+           and a critic, all "holds with defects"). Fixed:
+           - the printed pick was **249.7**, an item waiting on the owner's
+             249.10 that carried no marker (now `After: 249.10`, so the pick is
+             375.11, and no free item is older);
+           - 389.6 and 389.7 need check-journey, which exists only on the
+             parked checkpoint branch (now `BLOCKED ON` P2);
+           - naive backtick pairing hid a prose marker after an indented fence
+             or a double-backtick span;
+           - near-miss spellings (`after:`, `- After:`, `**After:**`, column
+             0, fenced) were dropped silently;
+           - a marker under `### ` or after `---` held the item above it;
+           - `P0 ·` ids did not parse;
+           - `UNBLOCKED` counted as a marker, and a multi-word
+             `OWNER OR X Y CALL` did not;
+           - a second `Parked:` line was ignored;
+           - `After:` cycles were not detected;
+           - an undotted id crashed the pick;
+           - `record_iteration.py` swallowed the generator's reason for
+             refusing.
+         - **Left, with reasons.** 394.13's single O15-dependent Accept bullet
+           is not marked, because a marker holds the whole item and the rest
+           can proceed. The Slice-389 items that 396.12 absorbs get their
+           `After:` from 393.9's realignment, not here. 375.11's remaining
+           Firefox half needs an engine that did not launch last time. No
+           marker kind says so, and a wake may retry it.
+         - **Jev, rubric 2** (advisory, not a gate). Bullets 1-4 scored
+           0.82 / 0.80 / 0.93 / 0.83, and the pick scored 0.92. That leaves
+           three in the unverified band. The likely reasons, stated rather
+           than argued away:
+           - bullet 1 excludes one audit hit (393.3), by design;
+           - bullet 4's "deleting one `After:` line" is tested by deleting
+             it from the PARSE, because deleting it from the source rightly
+             just releases the item.
+         - Four artefacts the draft said P5 committed had not been committed
+           (`blocked_audit.py`, `name_scan.py`, `queue_screen.gate.json`,
+           `pilot_results.json`). They were copied from scratch and
+           committed, and the two roadmap lines claiming otherwise were
+           corrected.
 4. [ ] **393.4 — `milestone.py` and rule M: code computes the milestone's next
        item.**
        Milestone: M1 · Phase: 0
@@ -2304,6 +2396,9 @@ removal or rewording; one shipped framework defect (389.4).
          exit, and is red-proved by reverting the exit.
          Alternatively, the journey README records why the desktop is
          the intended home. The owner commits the checkpoint first.
+       - BLOCKED ON the owner's 09-20 checkpoint (precondition P2). O2 parked
+         it on `park/owner-checkpoint-2026-09-20`, and check-journey exists
+         only there. Marker added by 393.3, 2026-09-25.
 
 7. [ ] **389.7 — The journey's RF confirm and failure verdict are in view at a rugged viewport.**
        At 360x640, after a capture, Confirm receipt sits at 689-741 px.
@@ -2325,6 +2420,9 @@ removal or rewording; one shipped framework defect (389.4).
          reverting one fix. If the premise that check-journey lacks
          such a viewport turns out false on re-checking, that is a
          valid finding.
+       - BLOCKED ON the owner's 09-20 checkpoint (precondition P2), as
+         for 389.6: check-journey exists only on the parked branch. Marker
+         added by 393.3, 2026-09-25.
 
 8. [ ] **389.8 — Goods receipt shows the decision: which delivery, its expected lines, one completing action, in worker language.**
        goods-receipt-rf has 0 KV rows (pick 4, putaway 3, count 3), and
@@ -3930,6 +4028,11 @@ looks for overflow). Extended in 374.2.
          chips, blockquote, data-table outline) onto their own token is one way
          out; `border-control` for everything flattens the input/button
          hierarchy `color.css:29-31` deliberately built.
+       - **OWNER CALL — which token shape** (split the token, or repoint the
+         three sites), as the Jev escalation above left it. The ACR half,
+         which publishes 1.4.11 as Supports, is covered by 377.8. The marker
+         was added by 393.3 on 2026-09-25. Before that the item carried none,
+         so the backlog mirror listed it as dispatchable.
 
 5. [x] **374.5 — `./css` resolves to the UNMINIFIED bundle, so this repo's
        write-the-reasoning-inline doctrine is payload a consumer downloads.**
@@ -7530,6 +7633,11 @@ claimed.
          dropped, and finding the seed empty is a satisfying outcome, not an
          off-plan one)**; then, if a table ships at all, deleting a row from
          it turns its search arm red.
+       - **Held on 249.10** (marker added by 393.3, 2026-09-25). The item
+         says it is "still waiting on 249.10", which is an owner call, and
+         Slices 353 and 369 both counted it as owner-blocked. It carried no
+         marker, so the first computed `oldest dispatchable` picked it.
+       After: 249.10
 
 8. [x] **249.8 — Component tagline + category, generated from the CSS
        header.** `/* @tagline … @category … */` in each component's CSS

@@ -1,0 +1,89 @@
+{
+  "gate": "queue-screen",
+  "version": 0,
+  "mode": "shadow",
+  "purpose": "Screen the ONE roadmap item that dispatcher code has already selected, before an executor is launched on it: execute it on its declared Lane, or send it to the planner first. It never selects, orders, skips, closes, admits or approves an item, and in shadow it acts on nothing.",
+  "state_shape": {
+    "item": {
+      "text": "Item title + up to ~700 chars of context + the Accept block, whitespace-normalised, status marker and bold stripped, no sentence describing the repo, no prior verdict, <= 1500 chars"
+    }
+  },
+  "max_state_chars": 1500,
+  "questions": {
+    "decision": {
+      "type": "choice",
+      "exhaustive": true,
+      "instructions": {
+        "question": "Which describes the choice item.text leaves open?",
+        "inspect": "item.text"
+      },
+      "criteria": {
+        "no_choice": "It states one change or measurement to make; no alternatives are left to choose between.",
+        "choice_settled_by_check": "It allows two or more outcomes and names the measurement, count or check whose result decides between them.",
+        "design_choice_unsettled": "It leaves a choice between designs or approaches open and names nothing that decides it.",
+        "owner_or_business_choice": "It says the owner, a user or the business must decide, pick, approve or be asked; or it leaves a product scope, release or business-policy choice open."
+      }
+    },
+    "done_evidence": {
+      "type": "choice",
+      "exhaustive": true,
+      "instructions": {
+        "question": "What does item.text name as the evidence that the work is done?",
+        "inspect": "item.text"
+      },
+      "criteria": {
+        "instrument_result": "A command, check case, gate, test, count or measurement, and the result it must show.",
+        "artifact_exists": "Only that a page, file, section, table or record is written or exists.",
+        "judgement_or_approval": "A quality, an agreement, a review or someone's approval.",
+        "nothing_stated": "No done condition is stated."
+      }
+    },
+    "waits_on": {
+      "type": "noul",
+      "instructions": {
+        "question": "Does item.text say the work must wait until something else happens first: another item, research, a grill, a verdict, a brief, a release, a decision or hardware?",
+        "inspect": "item.text"
+      },
+      "criteria": {
+        "true": {
+          "what": "The text says the work waits for, is blocked on, happens after, or starts only once something else lands or is decided.",
+          "examples": ["Once the shell research lands: propose the app-frame anatomy.", "Written after the 112.3 verdict."]
+        },
+        "false": {
+          "what": "The text describes work that can start now, even if it cites earlier items as background.",
+          "examples": ["322.3 measured the corpus; now make the sweep script re-runnable."]
+        }
+      }
+    }
+  },
+  "rules": [
+    { "if": { "fact": "decision:owner_or_business_choice", "gte": 0.45 }, "then": "ask-owner" },
+    { "if": { "fact": "done_evidence:nothing_stated", "gte": 0.15 }, "then": "sharpen" },
+    { "if": { "fact": "waits_on", "gte": 0.85 }, "then": "sharpen" }
+  ],
+  "default": "execute",
+  "unreachable": "sharpen",
+  "actions": {
+    "execute": {
+      "rank": 0,
+      "reversible": true,
+      "does": "Dispatcher launches the executor profile named by the item's Lane: line (lanes.json). A wrong call costs one executor wake and a revert."
+    },
+    "sharpen": {
+      "rank": 1,
+      "reversible": true,
+      "does": "Dispatcher launches the planner (strongest permitted tier, fresh context) on this one item. It returns a ROADMAP diff (Accept naming a property and its instrument, Lane, After) or 'executable as written'. It never builds."
+    },
+    "ask-owner": {
+      "rank": 1,
+      "reversible": true,
+      "does": "Planner writes the decision as an OWNER CALL with options and a recommendation, the item is parked, the owner is notified, and code selects the next dispatchable item. A wrong call costs the owner a glance."
+    }
+  },
+  "calibration": {
+    "model": "jev-latest (GET /v1/models: 'currently jev-1.13.0', 2026-09-25); response model field reads 'typesafe-ai/jev'",
+    "labels": "none admitted. Pilot only: 26 historical items (14 re-planned, 12 built as written), thresholds read off the same cases = TUNE-GRADE. The pilot cases may go into tune, never into the holdout.",
+    "threshold_from": "pilot_results.json: owner_or_business_choice 0.99 on 3 positives vs max 0.09 (0.15 framed) on 12 executes; nothing_stated 0.23-0.60 on 5 positives vs max 0.04; waits_on NOT separable (execute 145.1 at 0.83, positive 144.2 at 0.90 then 0.89 on repeat). Each cut is the pilot cut minus the 0.05 jitter guard band measured in review_depth_gate.json.",
+    "note": "The waits_on rule is shadow-only by design: its long-term replacement is an After: field that code reads. Prose-invariance was probed on 6 cases: owner_or_business is stable at the extremes; nothing_stated moved 0.56 -> 0.24 and waits_on moved up to +0.15 when one framing sentence was added, so the production state must never carry framing, and invariance is a mandatory step before calibration."
+  }
+}

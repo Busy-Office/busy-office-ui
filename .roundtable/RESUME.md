@@ -107,7 +107,10 @@ has finished. Milestone M1 stays DRAFT until 393.10 re-scores the loop at mean
 >= 3.0 and the owner fills O5-O18. Draft and grill record:
 `.roundtable/milestone-draft-2026-09-25/`.
 
-M0 wakes used: 2 / 12 (393.1 landed; 393.2 partial — a real hold count owed).
+M0 wakes used: 3 / 12 (393.1, 393.2 and 393.3 landed; holds are counted
+separately as `hold-wakes`, per the milestone's Budget note, and 1 hold is
+recorded). Next: 393.4 (`milestone.py` and rule M), which is `After: 393.3`
+and now dispatchable.
 
 ## GOAL — set 2026-09-23 (second, owner-requested): COMPLETE 2026-09-24 03:02.
 

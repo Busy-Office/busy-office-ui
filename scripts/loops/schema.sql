@@ -33,7 +33,18 @@ CREATE TABLE IF NOT EXISTS roadmap_items (
   item_id  TEXT PRIMARY KEY,         -- "145.1", or the title for named items
   slice    TEXT,                     -- "145", or NULL when the item is named
   title    TEXT NOT NULL,
-  blocked  INTEGER NOT NULL DEFAULT 0,  -- says BLOCKED ON / OWNER CALL / NEEDS-RUNTIME
+  blocked  INTEGER NOT NULL DEFAULT 0,  -- owner-blocked: BLOCKED ON / OWNER CALL / OWNER OR X CALL / OWNER · / NEEDS-RUNTIME / Route: owner
+  -- The own-line markers (roadmap 393.3). A table whose columns differ from
+  -- these is dropped and rebuilt by generate_status.py; it is derived.
+  after        TEXT NOT NULL DEFAULT '',   -- every `After:` target, ", "-joined (reconciled against the source)
+  after_open   TEXT NOT NULL DEFAULT '',   -- `After:` targets still open, ", "-joined; non-empty = dependency-blocked
+  parked       TEXT NOT NULL DEFAULT '',   -- `Parked:` milestone id
+  parked_held  INTEGER NOT NULL DEFAULT 0, -- 1 while that milestone is ACTIVE
+  browser      INTEGER NOT NULL DEFAULT 0, -- NEEDS-BROWSER
+  milestone    TEXT NOT NULL DEFAULT '',
+  phase        TEXT NOT NULL DEFAULT '',
+  route        TEXT NOT NULL DEFAULT '',
+  track        TEXT NOT NULL DEFAULT '',
   synced   TEXT NOT NULL             -- "YYYY-MM-DD HH:MM" of the rebuild
 );
 CREATE INDEX IF NOT EXISTS roadmap_items_slice ON roadmap_items(slice);

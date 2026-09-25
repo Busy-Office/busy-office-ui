@@ -2,7 +2,11 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-25 13:15 UTC
+Generated at: 2026-09-25 14:03 UTC
+
+oldest dispatchable: 375.11 — what 375.9 measured and did not fix.
+
+Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, open `After:` target or held `Parked:` line holds. A GOAL in `.roundtable/RESUME.md` or an ACTIVE milestone's rule M can override it. A named item without a number has no age to rank by; any that nothing holds is listed here instead of being dropped.
 
 ## Open items by slice
 
@@ -31,9 +35,11 @@ Generated at: 2026-09-25 13:15 UTC
 - **Slice 376** (2 open)
   - 376.5 — the app-launch launcher hand-rolls a dialog header.
   - 376.7 — the lane-4 ratchet counts any net shrink as a cut.
-- **Slice 377** (10 open)
+- **Slice 377** (12 open)
   - 377.3 — the completion gate cannot see a revision.
   - 377.4 — pointer coverage, named per behaviour.
+  - 377.5 — release the unreleased fixes, or record why not.
+  - 377.6 — is busy-office-erp the named first user?
   - 377.7 — an adoption reading at every Objective grill, and §6's exit requires the thesis section.
   - 377.8 — the ACR's 1.4.11 and 2.4.7 remarks derive from source.
   - 377.9 — re-decide 375.6 on real CI timings.
@@ -86,9 +92,7 @@ Generated at: 2026-09-25 13:15 UTC
   - 392.3 — a `--bar` label with one word wider than its slot paints past its button.
   - 392.4 — rule 3 reset without the thesis section, twice; and a design-grill reset it.
   - 392.5 — the comparator deltas are recorded nowhere a later grill reads them.
-- **Slice 393** (11 open)
-  - 393.2 — the in-flight protocol: one workflow at a time, a hold that reads nothing, and a wall-time cap.
-  - 393.3 — the backlog mirror reports every kind of wait, and prints the oldest dispatchable item.
+- **Slice 393** (9 open)
   - 393.4 — `milestone.py` and rule M: code computes the milestone's next item.
   - 393.5 — milestone rows move the counters the way the rules say (folds 392.4 and 381.2).
   - 393.6 — routes: the roadmap names which model does each item (owner answer 1), and telemetry records who did it.
@@ -137,9 +141,7 @@ Generated at: 2026-09-25 13:15 UTC
 - **Slice 397** (2 open)
   - 397.1 — the first real run: the first need Configuration or Distribution logs walks the component lifecycle as far as its fill.
   - 397.2 — EXIT: close Milestone M1.
-- **Slice —** (3 open)
-  - OWNER · 377.5 — release the unreleased fixes, or record why not.
-  - OWNER · 377.6 — is busy-office-erp the named first user?
+- **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
@@ -161,12 +163,12 @@ dispatch status — counter-triggered rules (1799 iterations logged)
        behaviors_frozen            2d  2026-08-15 16 count -> 2026-08-16 18 count  +2   [2 same-day]
      no direction is recorded with a sample, so the movement above is a reading and the regression verdict is the wake's. A name that has NEVER MOVED is either healthy or pinned by a gate — rule 5 cannot fire on it either way (`axe-violations` is 0 on every day because `test:axe` fails the build above 0).
      a direction is NOT recorded on purpose (roadmap 324.1): adding one makes rule 5 fire on `bundle-gz-kb`'s four consecutive rises, which the log's own same-timestamp `components` samples refute (0.400 -> 0.355 kB per component over that window). A rise with no denominator is growth. Where a name has a real threshold, use it — `check:size` gates the bundle at 16.7 kB gz, which is rule 5's budget clause, not its trend one.
-  Holds         0 hold-wake(s) recorded, 0 today (UTC dates)   [inflight.py hold; .roundtable/hold-wakes.jsonl]
+  Holds         1 hold-wake(s) recorded, 1 today (UTC dates)   [inflight.py hold; .roundtable/hold-wakes.jsonl]
 ```
 
 ## Owner-blocked
 
-Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
+Open items carrying an owner marker (`BLOCKED ON`, `OWNER CALL`, `OWNER OR <X> CALL`, `OWNER ·`, `NEEDS-RUNTIME`, or `Route: owner`) — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
 - 396.13 — OWNER CALL: the form the remaining modules take (full module sets, or job rows plus screens only where a new shape is needed), decided on 396.5's result.
 - 394.1 — OWNER CALL: naming doctrine. Every published name names a shape (owner answer 2; roundtable 2026-09-25).
@@ -174,15 +176,81 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 394.3 — OWNER CALL: a release boundary before any experimental part merges (377.5).
 - 394.16 — OWNER CALL: promote the queue screen, keep it in shadow, or retire it.
 - 394.18 — OWNER CALL: declare the queue screen as Jev's third point (O13), say what may leave the machine, and choose its mode before promotion.
+- 389.6 — The journey's RF step exits to an RF home.
+- 389.7 — The journey's RF confirm and failure verdict are in view at a rugged viewport.
+- 377.5 — release the unreleased fixes, or record why not.
+- 377.6 — is busy-office-erp the named first user?
+- 374.4 — `.bo-btn--secondary` standing alone is identified almost entirely by a 1.47:1 border, the contrast gate structurally cannot see it, and the published ACR says it can.
 - 373.6 — App dock: hide on UPWARD scroll. OWNER CALL — two refusals stand on the record and the reversal is not written down.
+- 373.8 — docs IA: collapse 17 sidebar groups into the prompt's seven (Start here / Foundations / Components / Patterns and layouts / Integration / Reference / Contributor and decision history). OWNER CALL.
+- 369.1 — should printing from the DARK theme force the light palette? OWNER OR ARCHITECTURE CALL.
 - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
 - 249.10 — SAP/Fiori terminology column for 249.7.
 - 249.11 — "Migrate an existing admin UI" path.
+- 249.12 — Archival trigger for `ROADMAP.md`.
 - 249.13 — Reconsider demo-first/spec-last (the proposal's B1), explicitly, not as a ratification.
 - 112.3 — the pattern-fit pilot. BLOCKED ON OWNER BRIEFS + FOUR ANSWERS (grilled 2026-08-29 at the owner's request; full report `.roundtable/grill-112.3-pilot-still-worth-it-2026-08-29.md`).
 - 112.4 — Screen Contract layer. BLOCKED ON 112.3's verdict.
 - AT runtime evidence
+
+## Dependency-blocked
+
+Open items with an `After:` target still open. Each releases when its last target closes. An item that is also owner-blocked says so: its dependency outlasts the owner's answer.
+
+- 397.1 — after 394.4, 394.5, 394.6, 394.7, 394.8, 394.17, 396.3, 396.4
+- 397.2 — after 393.11, 393.12, 394.1, 394.2, 394.3, 394.4, 394.5, 394.6, 394.7, 394.8, 394.9, 394.10, 394.11, 394.12, 394.13, 394.14, 394.15, 394.17, 394.18, 395.1, 395.2, 396.1, 396.2, 396.3, 396.4, 396.5, 396.6, 396.7, 396.8, 396.9, 396.10, 396.11, 396.12, 396.13, 397.1
+- 396.1 — after 394.1, 394.2, 394.9
+- 396.2 — after 394.10
+- 396.3 — after 395.1, 396.1, 396.2, 394.8, 394.9, 393.12
+- 396.4 — after 396.3
+- 396.5 — after 396.2, 396.3, 396.4, 397.1
+- 396.6 — after 396.13
+- 396.7 — after 396.13
+- 396.8 — after 396.13
+- 396.9 — after 396.13
+- 396.10 — after 396.13
+- 396.11 — after 394.2, 396.13
+- 396.12 — after 395.1, 394.2
+- 396.13 — after 396.5 (also owner-blocked)
+- 395.1 — after 394.1, 394.2, 394.11, 393.12
+- 395.2 — after 395.1, 394.7
+- 394.4 — after 394.1
+- 394.5 — after 394.4
+- 394.6 — after 394.4
+- 394.7 — after 394.4, 394.5
+- 394.9 — after 394.1, 394.2
+- 394.10 — after 394.9
+- 394.14 — after 394.12, 394.13, 394.18, 393.4
+- 394.15 — after 394.14
+- 394.16 — after 394.15 (also owner-blocked)
+- 394.17 — after 394.4, 394.5, 394.6, 394.7, 394.8
+- 393.5 — after 393.4
+- 393.6 — after 393.4
+- 393.7 — after 393.4, 393.6
+- 393.8 — after 393.4
+- 393.9 — after 393.4
+- 393.10 — after 393.4, 393.5, 393.6, 393.7, 393.8, 393.9
+- 393.12 — after 393.11
+- 249.7 — after 249.10
+
+## Parked
+
+Open items with a `Parked:` line. Held only while that milestone is ACTIVE.
+
+(none)
+
+## Browser-blocked
+
+Open items marked `NEEDS-BROWSER`: they need Podman and screenshots, so a local wake can take them and a cloud wake cannot (LOOPS.md rule 4). Listed, not held — the one dispatcher is local.
+
+(none)
+
+## Owner markers quoted only in code
+
+Open items whose only owner marker sits inside a code span or fence, so they are NOT counted as owner-blocked. Usually an item describing the markers; if one is really blocked, write its marker in prose.
+
+(none)
 
 ## Last 10 iterations
 
