@@ -2,11 +2,11 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-25 14:03 UTC
+Generated at: 2026-09-25 14:47 UTC
 
 oldest dispatchable: 375.11 — what 375.9 measured and did not fix.
 
-Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, open `After:` target or held `Parked:` line holds. A GOAL in `.roundtable/RESUME.md` or an ACTIVE milestone's rule M can override it. A named item without a number has no age to rank by; any that nothing holds is listed here instead of being dropped.
+Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, open `After:` target or held `Parked:` line holds — and, while a milestone is ACTIVE, that the milestone does not tag (rule M dispatches those; `dispatch_status.py` prints its pick). The one standing GOAL, the owner's M0 bootstrap (O3), overrides it until 393.10 closes. A named item without a number has no age to rank by; any that nothing holds is listed here instead of being dropped.
 
 ## Open items by slice
 
@@ -92,8 +92,7 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 392.3 — a `--bar` label with one word wider than its slot paints past its button.
   - 392.4 — rule 3 reset without the thesis section, twice; and a design-grill reset it.
   - 392.5 — the comparator deltas are recorded nowhere a later grill reads them.
-- **Slice 393** (9 open)
-  - 393.4 — `milestone.py` and rule M: code computes the milestone's next item.
+- **Slice 393** (8 open)
   - 393.5 — milestone rows move the counters the way the rules say (folds 392.4 and 381.2).
   - 393.6 — routes: the roadmap names which model does each item (owner answer 1), and telemetry records who did it.
   - 393.7 — rule D: when there is no task, or an item is unclear, the loop goes to the planner (owner answer 1: "which is bigger target").
@@ -221,16 +220,12 @@ Open items with an `After:` target still open. Each releases when its last targe
 - 394.7 — after 394.4, 394.5
 - 394.9 — after 394.1, 394.2
 - 394.10 — after 394.9
-- 394.14 — after 394.12, 394.13, 394.18, 393.4
+- 394.14 — after 394.12, 394.13, 394.18
 - 394.15 — after 394.14
 - 394.16 — after 394.15 (also owner-blocked)
 - 394.17 — after 394.4, 394.5, 394.6, 394.7, 394.8
-- 393.5 — after 393.4
-- 393.6 — after 393.4
-- 393.7 — after 393.4, 393.6
-- 393.8 — after 393.4
-- 393.9 — after 393.4
-- 393.10 — after 393.4, 393.5, 393.6, 393.7, 393.8, 393.9
+- 393.7 — after 393.6
+- 393.10 — after 393.5, 393.6, 393.7, 393.8, 393.9
 - 393.12 — after 393.11
 - 249.7 — after 249.10
 

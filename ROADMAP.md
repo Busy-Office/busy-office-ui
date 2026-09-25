@@ -1684,7 +1684,7 @@ superseded once a named item has landed or the owner has acted.
            `pilot_results.json`). They were copied from scratch and
            committed, and the two roadmap lines claiming otherwise were
            corrected.
-4. [ ] **393.4 — `milestone.py` and rule M: code computes the milestone's next
+4. [x] **393.4 — `milestone.py` and rule M: code computes the milestone's next
        item.**
        Milestone: M1 · Phase: 0
        Route: build
@@ -1722,6 +1722,82 @@ superseded once a named item has landed or the owner has acted.
          - **LOOPS.md.** Step 2 carries rule M and rule D in the positions prompt
            §4 gives. The prose "In flight" and GOAL override (LOOPS.md:630-633)
            is retired with a dated line.
+       - **DONE 2026-09-25.** `scripts/loops/milestone.py` (`@heuristic`,
+         `--self-test`) parses the milestone fields, ignoring `#` comments, and
+         computes the verdict. `dispatch_status.py` prints the eight lines
+         while a milestone is ACTIVE.
+         - **No change when inactive.** Against HEAD's `dispatch_status.py`,
+           run in a git worktree of HEAD at the same moment, the output is
+           byte-identical: 2,398 bytes, sha1 `49b3bb930178`. One verifier
+           measured the same hash independently. The first comparison, run
+           from a non-git scratch root, differed by one line, the clock-skew
+           note that needs `git blame`. That is an artefact of the
+           environment, not of the change.
+         - **The path can print.** In scratch roots with M1 set ACTIVE:
+           - with the OWNER fields left in, it exits 1 with `milestone
+             REFUSED — M1 is ACTIVE with unfilled field(s): …` at the top of
+             stdout, and STATUS.md embeds the refusal;
+           - filled in, and with a scratch `routes.json`, it prints all eight
+             lines, and rule M picks 393.4.
+         - **Against the reference simulator.** `milestone.py --compare`, rule
+           M run to exhaustion over the live M1 slices, reads **IDENTICAL, 43
+           / 43** entries with `simulate_rule_m.py`, from `(394.1) (394.2)
+           (394.3) (394.18) 393.4 … 396.11 397.2`. The self-test also runs
+           both simulators on a synthetic set of slices and checks both
+           against a hand-derived order.
+         - **Fixtures and red-proof.** The fixtures cover every refusal the
+           Accept names, the structural ones, and the five fixtures the Accept
+           lists. 46 injections, each asserted to match once, all fail the
+           self-test. Against the FIRST self-test, the verifiers' own 23
+           injections survived (lens 3's count, which overlaps lens 1's four),
+           so the fixtures were rebuilt. Two of the 46 then still survived,
+           and those fixtures were tightened.
+         - **Adversarial verification** (`wf_98ab6e84-eb8`: 3 lenses and a
+           critic, all "holds with defects", about 30 findings). What was fixed:
+           - D1 fired whenever no M1 item was free, even with rule 4 holding
+             work. It now fires only when nothing is dispatchable, §7's whole
+             backlog.
+           - "Blocked by the owner" did not walk `After:` chains, so a chain
+             ending at a free non-M1 item deadlocked. The chains are now
+             walked: an owner end falls through, a free end is dispatched, and
+             a parked end is a stall.
+           - `Precedence: after` switched rule M off. It now prints a fallback,
+             an id that resolves nowhere refuses, and rule 4 passes over M1
+             items while a milestone is ACTIVE (§4 rule 6).
+           - The budget counted rows, with no ACTIVE-date window, and ignored
+             `Stop`.
+           - Row tags were searched in free text.
+           - A refusal was invisible in STATUS.md, and LOOPS.md halted on it
+             only after rules 1-3. It is now in Step 0b.
+           - A malformed or duplicated heading, or orphan tags, turned rule M
+             off silently.
+           - `interleave 1/1` and `1/01`, impossible dates, and `TBD` were
+             accepted.
+           - The MODULES parse had no raw count.
+           - The generated STATUS caption still named the retired GOAL
+             override.
+         - **Jev, rubric 2** (advisory): bullets 1-6 scored 0.89, 0.93, 0.93,
+           0.93, 0.77 and 0.95. The fixtures bullet sits in the unverified band.
+           Its likely reason is the refinement stated above: the Accept's "no
+           dispatchable M1 item prints DIRECTION GAP" became §7's whole-backlog
+           D1. Where the milestone has no free item and rule 4 does, it now
+           prints `stalled … rule 4 runs`, which the verification showed is
+           what §7 means.
+         - **One decision, stated.** A DRAFT's malformed field is reported by
+           `milestone.py`'s CLI (exit 1). It is not a `dispatch_status`
+           refusal, because the owner fills a DRAFT over several edits and
+           nothing dispatches from it. Structural problems refuse whatever
+           the status, because they could hide an ACTIVE milestone.
+         - **Left, with reasons.**
+           - D3, D4 and the once-per-24h limit are 393.7's.
+           - `routes.json` is 393.6's, so today an ACTIVE M1 refuses on its
+             absence. That is correct: the milestone cannot activate before
+             393.10 anyway.
+           - The Done-test behind D2 is approximated by "the exit item has not
+             closed".
+           - Nothing outside `dispatch_status` runs `--self-test`, but the
+             fixtures run on every ACTIVE read, following the precedent in
+             `rebuild_from_log.py`.
 5. [ ] **393.5 — milestone rows move the counters the way the rules say (folds
        392.4 and 381.2).**
        Milestone: M1 · Phase: 0

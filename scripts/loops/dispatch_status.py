@@ -1086,19 +1086,46 @@ def main():
     if len(all_rows) < 2:
         print("dispatch status: loop-log.md has too few rows to say anything", file=sys.stderr)
         return 0
+    # The milestone report is computed FIRST, so a refusal can sit at the top
+    # of the output and silence the "should pick it" line below — the wake
+    # reads this text, and it must not direct a dispatch the exit code forbids
+    # (393.4's verification). With no ACTIVE milestone both are empty and the
+    # output is byte-identical to what it was before milestones existed.
+    ms_lines, ms_refusal = milestone_report(all_rows)
     print(f"dispatch status — counter-triggered rules ({len(all_rows)} iterations logged)")
+    if ms_refusal:
+        print(f"  milestone     REFUSED — {ms_refusal}")
+        print("  -> a refused milestone report is a finding: report it and dispatch nothing but an open P0 (LOOPS.md Step 0b)")
     any_overdue = False
     for loop, (threshold, unit) in RULES.items():
         any_overdue |= report(all_rows, loop, threshold, unit)
     if any_overdue:
-        print("  -> a counter is at or past its threshold; the dispatcher should pick it")
+        print("  -> a counter is at or past its threshold; the dispatcher should pick it" if not ms_refusal else
+              "  -> a counter is at or past its threshold, but the milestone report REFUSED, so it is not dispatched")
     # Rule 5 is not a counter — it reads a different file and can be stale rather
     # than overdue — so it prints after the two counters and does not feed the
     # line above. It is reported here because Step 0b is the one moment every
     # wake looks at dispatcher inputs (roadmap 184.1).
     report_metrics(all_rows)
     report_holds()
+    for line in ms_lines:
+        print(line)
+    if ms_refusal:
+        print(f"  milestone     REFUSED — {ms_refusal}", file=sys.stderr)
+        return 1
     return 0
+
+
+def milestone_report(all_rows):
+    """(lines, refusal) for the ACTIVE milestone (roadmap 393.4): milestone,
+    rule M, interleave, skipped, blocked, direction, budget, reconcile. Both are
+    empty with no ACTIVE milestone. `--cloud` marks a cloud wake, which cannot
+    take a NEEDS-BROWSER item."""
+    import milestone
+    try:
+        return milestone.status_lines(rows=all_rows, cloud="--cloud" in sys.argv), None
+    except milestone.Refuse as e:
+        return [], str(e)
 
 
 if __name__ == "__main__":

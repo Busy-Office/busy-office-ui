@@ -378,11 +378,13 @@ def _id_key(iid):
     return (int(m.group(1)), int(m.group(2) or 0), m.group(3))
 
 
-def oldest_dispatchable(items):
+def oldest_dispatchable(items, exclude_milestones=()):
     """Dispatcher rule 4's pick: the oldest open NUMBERED item nothing holds.
     A named item has no age to rank by; render() lists any free one beside
-    the pick rather than dropping it silently."""
-    free = [it for it in items if it["id"] and not blocked_kind(it)]
+    the pick rather than dropping it silently. While a milestone is ACTIVE its
+    items are rule M's, not rule 4's (the prompt's §4, rule 6)."""
+    free = [it for it in items if it["id"] and not blocked_kind(it)
+            and it["milestone"] not in exclude_milestones]
     return min(free, key=lambda it: _id_key(it["id"])) if free else None
 
 
@@ -414,7 +416,14 @@ def dispatch_counters():
     out = subprocess.run(
         [sys.executable, script], capture_output=True, text=True, cwd=ROOT
     )
-    return out.stdout.strip() or "(dispatch_status.py produced no output)"
+    text = out.stdout.strip() or "(dispatch_status.py produced no output)"
+    if out.returncode != 0:
+        # A refusal is part of the status: embedding only stdout used to write
+        # STATUS.md as if nothing were wrong (393.4's verification).
+        text += f"\n(dispatch_status.py exited {out.returncode})"
+        if out.stderr.strip():
+            text += "\n" + out.stderr.strip()
+    return text
 
 
 def log_row_count():
@@ -562,7 +571,8 @@ def render(now_str):
     unranked = [it for it in rich if not it["id"] and not blocked_kind(it)]
     parked_all = [it for it in rich if it["parked"]]
     browser = [it for it in rich if it["browser"]]
-    oldest = oldest_dispatchable(rich)
+    active = [k for k, v in milestone_status(_read(ROADMAP)).items() if v == "ACTIVE"]
+    oldest = oldest_dispatchable(rich, exclude_milestones=active)
     for it in quoted:
         # Said aloud, never silent: a marker seen only inside code is not
         # counted, and a wrong call here would hide an owner decision. It is
@@ -596,8 +606,10 @@ def render(now_str):
     out.append("")
     out.append(
         "Dispatcher rule 4's pick, computed: the oldest open item that no owner "
-        "marker, open `After:` target or held `Parked:` line holds. A GOAL in "
-        "`.roundtable/RESUME.md` or an ACTIVE milestone's rule M can override it. "
+        "marker, open `After:` target or held `Parked:` line holds — and, while a "
+        "milestone is ACTIVE, that the milestone does not tag (rule M dispatches "
+        "those; `dispatch_status.py` prints its pick). The one standing GOAL, the "
+        "owner's M0 bootstrap (O3), overrides it until 393.10 closes. "
         "A named item without a number has no age to rank by; any that nothing "
         "holds is listed here instead of being dropped."
     )
@@ -858,6 +870,13 @@ def self_test():
     closed_items, _ = mirror(PICK.replace("Status: ACTIVE", "Status: CLOSED"), label="PICK under CLOSED")
     old_c = oldest_dispatchable(closed_items)
     expect("under CLOSED the Parked item becomes the pick", old_c is not None and old_c["id"] == "3.1")
+    act_pick = PICK.replace("5. [ ] **3.10 — free, and younger than 3.4 as a number.**",
+                            "5. [ ] **3.10 — free, and younger than 3.4 as a number.**\n"
+                            "6. [ ] **3.0 — the oldest, tagged M1.**\n       Milestone: M1 · Phase: 1\n       Route: build")
+    a_items = parse_roadmap(act_pick)
+    a_old = oldest_dispatchable(a_items, exclude_milestones=["M1"])
+    expect("while M1 is ACTIVE rule 4 passes over its items (rule M's), so the pick stays 3.4",
+           a_old is not None and a_old["id"] == "3.4" and oldest_dispatchable(a_items)["id"] == "3.0")
     und = PICK.replace("4. [ ] **3.4 — free.**", "4. [ ] **3 — an undotted id.**\n6. [ ] **3.4 — free.**")
     und_items = parse_roadmap(und)
     try:

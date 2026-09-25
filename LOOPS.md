@@ -162,6 +162,21 @@ Not a gate, deliberately. A stale counter is information for whoever is
 dispatching; failing a build over it would block the very work the loop exists
 to do.
 
+**The one exit that stops a wake: a refused milestone report** (roadmap 393.4,
+2026-09-25). While a milestone is ACTIVE, the same command prints the
+milestone's lines (rule M, below). If it cannot decide, it exits non-zero,
+puts `milestone     REFUSED — <why>` at the top of its output, and
+withholds the "should pick it" line. Examples: an unfilled field, a route not
+in `routes.json`, markers that do not reconcile, or a malformed milestone
+heading. **That is a finding. Report the REFUSED line and dispatch nothing,
+including rules 2 and 3.** The one exception is an open P0 (rule 1), which is
+never parked. The fix is the owner's edit or a roadmap correction, not a
+dispatch. With no ACTIVE milestone nothing here changes: the output is
+byte-identical and the exit is 0. A DRAFT's own field problems are reported
+by `python3 scripts/loops/milestone.py`, not here, because the owner fills a
+DRAFT over several edits. A cloud wake runs it with `--cloud`, so a
+`NEEDS-BROWSER` item is held.
+
 ### Step 0c — Two dispatchers share this queue, and collisions are ACCEPTED
 
 Decided 2026-08-28 (roadmap 162.1). Two dispatchers reading one `ROADMAP.md`
@@ -564,7 +579,52 @@ match to its full playbook below:
    The counts, the commands and the reopen condition are in `dispatch_status.py`
    beside `SLICE_TOP`, so a sixth discovery is not re-reported as a new bug.
 
+   **M. Only while a milestone is ACTIVE: rule M** (roadmap 393.4, 2026-09-25).
+   Code decides this rule, not the reader. `python3 scripts/loops/dispatch_status.py`
+   prints the `milestone`, `rule M`, `interleave`, `skipped`, `blocked`,
+   `direction`, `budget` and `reconcile` lines, computed by
+   `scripts/loops/milestone.py`. **Dispatch the `rule M` line's item to its
+   `Route:`.** An item with no `Route:` is a defect-track item outside the
+   milestone, and it runs rule 4's playbook (Continue, build). A refused
+   report never reaches this rule: Step 0b stops the wake first.
+   - The pick is the oldest open item tagged `Milestone: Mn` that no owner
+     marker, open `After:` target or held `Parked:` line holds. On a cloud
+     wake (`--cloud`), a `NEEDS-BROWSER` item is held too.
+   - When no milestone item is free, the code walks each `After:` chain to
+     its end:
+     - **Every end is an owner decision** ("blocked by the owner"): rule D
+       does not run, and rule 4 is restricted to `Track: defect`. Name the
+       ends.
+     - **An end is free**, outside the milestone: rule M dispatches it,
+       because the milestone waits on it.
+     - **Otherwise the milestone is stalled** on a parked or browser-held
+       end: rule 4 runs.
+   - `Precedence: interleave 1/N track=defect`: after N-1 milestone dispatch
+     rows since the last defect row, the next dispatch goes to the oldest
+     dispatchable `Track: defect` item. The rows are tagged by 393.5; untagged
+     and Meta rows do not count.
+   - `Precedence: after <id>`: rule 4 runs first until `<id>` closes. Rule M's
+     pick is printed as the fallback for a wake where rule 4 has nothing.
+   - While a milestone is ACTIVE, **rule 4 passes over its items**. They are
+     rule M's, and `STATUS.md`'s `oldest dispatchable` excludes them.
+   - `budget` counts distinct milestone wakes since the ACTIVE date. It stops
+     rule M only when `budget` is in the `Stop` field.
 
+   With no ACTIVE milestone the report prints none of these lines, and this
+   rule and rule D do not exist. The prompt's §4 is the full statement
+   (`.roundtable/milestone-draft-2026-09-25/4-prompt.md`).
+
+   **D. Only while a milestone is ACTIVE: rule D, the planner.** When the
+   `direction` line reads `DIRECTION GAP <trigger>`, dispatch the `planner`
+   route: one `Roadmap · plan|direction` commit that sharpens items or files
+   an owner decision, and never builds. Today the code fires two triggers:
+   - **D1:** nothing is dispatchable at all. The milestone is stalled and
+     rule 4 has no item either, which is §7's "whole backlog" scope.
+   - **D2:** no milestone item is open while its exit item has not closed.
+     This stands in for §7's Done-test clause.
+
+   D3 (unclear direction), D4 (drift) and the once-per-24h limit are left
+   for 393.7. The planner route's contract is 393.6's `routes.json`.
 
 4. **Build item queued anywhere in the backlog** — the OLDEST still-open item
    across all slices, not the newest? → dispatch **Continue**, build mode.
@@ -695,10 +755,26 @@ match to its full playbook below:
    self-documented time cost (roadmap 53.2: a free removal window that
    closes at the 0.2.0 publish) — sat untouched despite being open the whole
    time. Found by the Objective grill built to catch exactly this shape of
-   bug (roadmap 56-61 grill). `RESUME.md`'s "In flight" section is the one
+   bug (roadmap 56-61 grill). ~~`RESUME.md`'s "In flight" section is the one
    legitimate override — a slice genuinely mid-build wins even if it isn't
    oldest — but check whether it is actually current before trusting it; it
-   has gone stale before.
+   has gone stale before.~~
+
+   **Retired 2026-09-25 (roadmap 393.4): the prose "In flight" override, and
+   a RESUME GOAL as a dispatch mechanism.** Neither is read as an override any
+   more:
+   - A workflow in flight is one structured line that `inflight.py` checks at
+     Step 0 (393.2). While it is under its cap, the wake holds; it does not
+     dispatch the in-flight slice again.
+   - While a milestone is ACTIVE, the next milestone item is rule M's
+     computed pick. It is not a GOAL written into RESUME.md.
+
+   **One standing exception, named so it is not mistaken for the mechanism:**
+   the owner's M0 bootstrap (decision O3 in ROADMAP.md's `## Milestone M1`)
+   dispatches 393.5-393.10 in `After:` order until 393.10 closes. It runs
+   through its RESUME GOAL, capped at `m0-wakes`, because M1 is not ACTIVE
+   yet and rule M cannot run. No new GOAL may be written as a dispatch
+   override.
 5. **A tracked metric regressed on TWO CONSECUTIVE runs** (bundle size, gate
    coverage, a number from `record_metric.py` trending the wrong way), **or a
    size budget breached outright**? → dispatch **Optimize**.
