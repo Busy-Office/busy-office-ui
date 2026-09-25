@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-25 04:42 UTC
+Generated at: 2026-09-25 05:14 UTC
 
 ## Open items by slice
 
@@ -89,9 +89,9 @@ Generated at: 2026-09-25 04:42 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1792 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-09-25 12:20   ok
-  Objective     3 / 3 slices          since 2026-09-25 08:13   OVERDUE  [388, 389, 390]
+dispatch status — counter-triggered rules (1793 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-09-25 12:20   ok
+  Objective     4 / 3 slices          since 2026-09-25 08:13   OVERDUE  [388, 389, 390, 391]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      4 wake-date(s) newer   since 2026-09-19 20:16   STALE   [newest pair: claims; 152 sample(s), 8 of 51 name(s) paired across days]
   -> rule 5's newest comparable pair predates 4 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-19, not this one — record a metric or say the rule could not be evaluated.
@@ -125,7 +125,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-25 05:53 · Continue · build · 375.11 — three of five grid-message residuals fixed (frozen, loading, classic scrollbar); zoom premise corrected; Slice 387 filed · landed · 0c6f319c
 - 2026-09-25 05:53 · Meta · refusal · 400% zoom last-resort @position-try: clips unbreakable tokens and adds a Tab stop at 100% zoom · refused · 0c6f319c
 - 2026-09-25 07:11 · Roadmap · triage · 388 — owner input triaged: 388.1 capsule button + group guideline, 388.2 RF journey grill · triaged · f9c82ed5
 - 2026-09-25 08:13 · Objective · grill · 388.2 — RF journey grill (design-grill flow): H1 no new pattern, H2 yes; 25 findings as Slice 389 · landed · e76a8f90
@@ -135,6 +134,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-25 12:20 · Standardize · sweep · 390 — Standardize sweep 4 of 4 lanes; /components/button verdict; icon caption narrative cut · landed · 1d0046c3
 - 2026-09-25 04:42 · Roadmap · triage · Slice 391 — cloud wake collided TWICE (Step 0c 6 and 7: rule 4 on 336.2 against a 159-commit-stale Step 0, verdicts DISAGREED; rule 2's sweep against Slice 390, same finding same number). Both discards checked, both returned nothing. Filed 391.1: check:claims 3 of 311 red here at b0401326, deterministic over two runs on Chromium 141, while CI reports success on the same sha · triaged · 3b24cc94
 - 2026-09-25 04:42 · Meta · refusal · rewriting RESUME.md wholesale — a cloud wake that lost both dispatches must not clobber the winner's handover; appended instead · refused · 3b24cc94
+- 2026-09-25 05:14 · Continue · bug · 391.2 — check:claims' SC 2.5.7 file-chooser wait 5s -> 15s. Failed on CI at 2 of 4 observed runs (88ba16bb, 07aef5bf; both markdown-only diffs, byte-identical payload, geometry block healthy). The one permitted re-run came back green and that green was refuted by the next push — a single passing re-run is not evidence of rarity. Patience raised, assertion unchanged (opened===true still required); not skipped, disabled or quarantined. CI green on 45aa4d1d · landed · 45aa4d1d
 
 ## Sunset test
 
