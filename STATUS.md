@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-25 12:44 UTC
+Generated at: 2026-09-25 13:15 UTC
 
 ## Open items by slice
 
@@ -145,9 +145,9 @@ Generated at: 2026-09-25 12:44 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1798 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-09-25 12:20   OVERDUE
-  Objective     2 / 3 slices          since 2026-09-25 13:32   ok  [392, 393]
+dispatch status — counter-triggered rules (1799 iterations logged)
+  Standardize   5 / 4 Continue rounds since 2026-09-25 12:20   OVERDUE
+  Objective     3 / 3 slices          since 2026-09-25 13:32   OVERDUE  [375, 392, 393]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-09-25 05:14   ok   [newest pair: claims; 153 sample(s), 8 of 51 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (43 of 51 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
@@ -186,7 +186,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-25 09:00 · Meta · refusal · capsule button shape (setting token, --capsule modifier): a pill is a status here; hit area and forced-colours collision measured · refused · a1b3969b
 - 2026-09-25 12:20 · Standardize · sweep · 390 — Standardize sweep 4 of 4 lanes; /components/button verdict; icon caption narrative cut · landed · 1d0046c3
 - 2026-09-25 04:42 · Roadmap · triage · Slice 391 — cloud wake collided TWICE (Step 0c 6 and 7: rule 4 on 336.2 against a 159-commit-stale Step 0, verdicts DISAGREED; rule 2's sweep against Slice 390, same finding same number). Both discards checked, both returned nothing. Filed 391.1: check:claims 3 of 311 red here at b0401326, deterministic over two runs on Chromium 141, while CI reports success on the same sha · triaged · 3b24cc94
 - 2026-09-25 04:42 · Meta · refusal · rewriting RESUME.md wholesale — a cloud wake that lost both dispatches must not clobber the winner's handover; appended instead · refused · 3b24cc94
@@ -196,6 +195,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-25 20:24 · Roadmap · triage · M1 milestone triaged as DRAFT; Slice 393 (M0) approved as bootstrap; owner O1-O4 applied (one dispatcher, park, cap 12, naming rule) · triaged · c8d2ccb7
 - 2026-09-25 20:34 · Continue · build · 393.1 — one dispatcher: Step 0 guard (HALT, checkout, foreign commits) · landed · b17b36e7
 - 2026-09-25 20:44 · Continue · build · 393.2 — in-flight protocol (partial): inflight.py + Step 0 hold + cap; cap proven live at 2 min (test task stopped, 33 of 60 lines unfinished) · landed · 8fcf50c2
+- 2026-09-25 21:15 · Continue · build · 375.11 — zoom half fixed: grid message never covers its field at 400% (0/360); Firefox half open · landed · 24b4cb69
 
 ## Sunset test
 
