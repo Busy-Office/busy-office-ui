@@ -1817,3 +1817,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-26 00:04 · Meta · refusal · 393.6: refusing a none tier — §5 and O14 say it runs on top; the Accept's wording is superseded, owner asked to confirm · refused · 887ac04c
 - 2026-09-26 01:08 · Continue · build · 393.7 — rule D: triggers replayed, item lint re-measured, planner output contract, frequency limits · milestone=M1 route=build tier=top model=claude-opus-5-5 first-try=reworked · landed · 62652720
 - 2026-09-26 01:08 · Meta · refusal · 393.7: dropping the lint's instrument clause — the Accept names it; kept with a revisit condition (2 of the first 5 bounces executable as written) · refused · 62652720
+- 2026-09-26 01:44 · Continue · build · 393.8 — bounded RESUME (75 lines, 4 sections, cap red-proved), one wake prompt, milestone progress; read cost moved to 393.13 · milestone=M1 route=build tier=top model=claude-opus-5-5 first-try=reworked · landed · 144d2398
+- 2026-09-26 01:44 · Meta · refusal · 393.8: closing the read-cost clause on a modelled figure — no milestone wake exists; moved to 393.13 (Jev 0.08) · refused · 144d2398

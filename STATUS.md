@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-25 17:43 UTC
+Generated at: 2026-09-25 17:44 UTC
 
 oldest dispatchable: 375.11 — what 375.9 measured and did not fix.
 
@@ -141,8 +141,8 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1811 iterations logged)
-  Standardize  11 / 4 Continue rounds since 2026-09-25 12:20   OVERDUE
+dispatch status — counter-triggered rules (1813 iterations logged)
+  Standardize  12 / 4 Continue rounds since 2026-09-25 12:20   OVERDUE
   Objective     3 / 3 slices          since 2026-09-25 13:32   OVERDUE  [375, 392, 393]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 153 sample(s), 8 of 51 name(s) paired across days]
@@ -255,8 +255,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-25 22:03 · Meta · refusal · marking 394.13 owner-blocked for one O15-dependent Accept bullet — a marker would hold the whole item · refused · 3c142f20
-- 2026-09-25 22:47 · Continue · build · 393.4 — milestone.py and rule M: code computes the milestone's next item; dispatch_status byte-identical while inactive; rule M = simulate_rule_m.py 43/43 · landed · 06cccc7d
 - 2026-09-25 22:47 · Meta · refusal · refusing on a DRAFT milestone's malformed field in dispatch_status — the owner fills a DRAFT over several edits; milestone.py's CLI reports it · refused · 06cccc7d
 - 2026-09-25 23:33 · Continue · build · 393.5 — milestone rows move the counters (folds 392.4 thesis-gated rule-3 reset, 381.2 base rate 4 of 20) · landed · a4f4fd13
 - 2026-09-25 23:33 · Meta · refusal · 381.2: counting only shipping slices toward rule 3 — a counter change with five recorded starvations; narrowing the grill instead · refused · a4f4fd13
@@ -265,6 +263,8 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 00:04 · Meta · refusal · 393.6: refusing a none tier — §5 and O14 say it runs on top; the Accept's wording is superseded, owner asked to confirm · refused · 887ac04c
 - 2026-09-26 01:08 · Continue · build · 393.7 — rule D: triggers replayed, item lint re-measured, planner output contract, frequency limits · landed · 62652720
 - 2026-09-26 01:08 · Meta · refusal · 393.7: dropping the lint's instrument clause — the Accept names it; kept with a revisit condition (2 of the first 5 bounces executable as written) · refused · 62652720
+- 2026-09-26 01:44 · Continue · build · 393.8 — bounded RESUME (75 lines, 4 sections, cap red-proved), one wake prompt, milestone progress; read cost moved to 393.13 · landed · 144d2398
+- 2026-09-26 01:44 · Meta · refusal · 393.8: closing the read-cost clause on a modelled figure — no milestone wake exists; moved to 393.13 (Jev 0.08) · refused · 144d2398
 
 ## Sunset test
 

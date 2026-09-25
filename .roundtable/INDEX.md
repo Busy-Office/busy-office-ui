@@ -12,6 +12,7 @@ Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_
 - [`erp-suite-gaps.md`](erp-suite-gaps.md) — the gap ledger the ERP suite exists to fill
 - [`loop-log.md`](loop-log.md) — every iteration, appended by record_iteration.py
 - [`polish-state.md`](polish-state.md) — the Polish round ledger (LOOPS.md §3b)
+- [`resume-history.md`](resume-history.md) — hand-offs moved out of RESUME.md, verbatim (393.8)
 - [`surface-baseline.md`](surface-baseline.md) — the scored-surface baseline
 - [`surface-review-rubric.md`](surface-review-rubric.md) — how a surface is scored
 
@@ -250,4 +251,4 @@ The signature of a directory that has outgrown retrieval is the same subject inv
 
 Two files on one subject is usually a deliberate follow-up (a grill and its sign-off). Three is worth a look.
 
-— 225 files, 168 cited from outside, 58 uncited snapshots, 4 repeated subject(s).
+— 226 files, 169 cited from outside, 58 uncited snapshots, 4 repeated subject(s).
