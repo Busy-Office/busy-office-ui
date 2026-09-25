@@ -320,6 +320,549 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 389 — findings of the RF journey grill (388.2): the app screen exists but is not wired, and the task screens neither take the first scan nor finish a task (2026-09-25)
+
+Report: `.roundtable/design-grill-flow-rf-2026-09-25.md`. Six lenses on the live
+container at 360x640 (the floor study's fixture) and 390x844, both themes; a
+challenger re-measured all 25 and **25 survived**. **Owner hypothesis 1 ("might
+need an app screen") — NO new pattern or surface:** rf-landing already is the
+RF home; what is missing is the wiring (389.5, 389.6) and slot guidance
+(389.14); per-screen app chrome was measured and refused at 360x640 (task
+content at 27.3%, scan field at 54.8%, Confirm below the fold). **Hypothesis 2
+("task screens can be better") — YES, on all four**, almost all by composition,
+removal or rewording; one shipped framework defect (389.4).
+
+1. [ ] **389.1 — Every RF task screen accepts a wedge scan on arrival without stealing the docs reader's focus.**
+       A wedge scan (keys then Enter) sent right after tapping a menu
+       tile is lost on pick, putaway and count: focus is on body, 0
+       bo:scan events, the status is empty. This held in 4 of 4
+       viewport × theme runs. It is captured on goods receipt, the only
+       screen with autofocus. Control: after one tap, pick captures it.
+       check:claims' only scan case clicks the field first, so this was
+       never tested. Goods receipt's autofocus has a cost: on load it
+       moves the docs page's focus into the iframe, and at 390 the h1
+       is out of view. rf-pick's embed leaves focus on body.
+       - **Accept — the property.**
+         Each RF task document is loaded top-level by a real menu-
+         tile click at 360x640. A wedge scan sent with no tap is then
+         captured, measured live on the built mirrors. Each page's
+         Markup sample shows the markup that makes this happen. A
+         check:claims case drives the scan from the tile, and it is
+         seen to fail when one screen's mechanism is removed. On each
+         hosting docs page, the load-time activeElement and scroll
+         position are measured. Either focus stays in the parent
+         document, or the accepted cost is recorded. A screen that
+         deliberately needs a different entry focus says why on its
+         page. The profile's size does not change.
+
+2. [ ] **389.2 — RF task screens complete the task, or stop claiming to.**
+       There are 0 forms in 6 of 6 RF documents. Primary actions: pick
+       0, goods receipt 0, putaway 0, count 1.
+       - Pick: Enter, Skip item and Report short change neither the URL
+         nor the text and open 0 dialogs. With JS off, Enter does
+         nothing.
+       - Count: Submit does nothing.
+       - Putaway: after a match the only way on is Back, and a later
+         wrong scan shows 'Confirmed' and an error at the same time.
+       - Goods receipt: Skip item and Report short cause 0 DOM
+         mutations.
+       The pages' States and No-JS rows claim 'the form still posts on
+       Enter', 'Enter posts the scan' and 'Report short opens the
+       reason path'. The journey's receiving screen completes with 1
+       form and 1 primary action, and moves focus to a return link.
+       - **Accept — the property.**
+         For each RF task mirror, each runtime claim in States, No-JS
+         and Anatomy either happens when driven with real keys at
+         360x640 and 390x844 in both themes, or is reworded to what
+         the demo does. Each surviving claim has a check:claims case
+         seen to fail on today's markup.
+         Where the demo completes a task:
+         - the done state names what was recorded and moves focus to
+           a way on (next line, next HU, or the task menu);
+         - a screen that takes a typed quantity commits from Enter
+           and from one tap.
+         On every screen:
+         - at most one action is visually primary;
+         - a short has exactly one entry path;
+         - each bar control does something visible, or its caption
+           says the app owns it;
+         - no reachable state shows a confirmation and a rejection
+           for the same item at once.
+         Each task page states in one line how it commits and why.
+         Profile headroom is measured before and after, and no CSS is
+         added.
+
+3. [ ] **389.3 — A rejected scan's reason stays readable after the flash.**
+       On 4 of 4 docs task screens, the reason for a rejected scan
+       lives only in a 1x1 clipped live region. Examples: 'Wrong bin:
+       B-07-13 — this HU goes to B-07-12' and 'Wrong scan: B-99-99 —
+       expected A-01-04 or MAT-4471'. Visible text is identical at +80,
+       +800 and +1000 ms, and aria-invalid is null. The comparator is
+       proven: it registers putaway's confirmation reveal. On goods
+       receipt, a rejected first scan deletes the empty-state row, and
+       'ZZZ-000-NOT-ON-PO' was logged as received. The journey keeps
+       'Item not accepted…' visible with aria-invalid=true, using
+       profile classes only (0 style tags).
+       - **Accept — the property.**
+         On every RF task mirror at 360x640, in both themes, at least
+         1 s after a rejected scan:
+         - a sighted user can read what was rejected and why,
+           measured by a visible-text comparator proven against a
+           control;
+         - the field exposes the invalid state programmatically;
+         - the live region still announces it;
+         - the rejection has removed no existing row and no empty
+           state.
+         The demo or its caption says which codes it treats as
+         unexpected. Contrast gates stay green, and no profile CSS is
+         added. Keeping the reason screen-reader-only is acceptable
+         only with a recorded reason and a measured alternative
+         visible cue.
+
+4. [ ] **389.4 — P0 · scan.css: ok and error differ by more than hue on screen, or the claim is corrected.**
+       Three lenses pixel-sampled the frame band: it is identical to
+       the wash in every ok/error × light/dark case, animated and
+       reduced-motion. The cause is background-clip: border-box. The
+       controls (an injected border, forced colours, padding-box) show
+       the bands, so the sampler can see a frame. The ok and error
+       washes differ by only 1.26:1 in light and 1.08:1 in dark; for
+       deuteranopia the difference is ΔE76 3.8 and 1.8. With forced
+       colours and animation on, frame opacity falls from 0.30 to 0.002
+       within 555 ms. The check-claims flash case (about lines
+       4722-4768) passes by comparing computed border width and style.
+       scan.css's header says the FRAME, not the hue, carries the
+       verdict.
+       - **Accept — the property.**
+         First, a check that judges rendered pixels fails against
+         today's scan.css; a control proves it can see same-colour
+         bands. Then one of two outcomes:
+         - In rendered pixels, ok and error differ by a cue other
+           than hue, in light and dark, animated and reduced-motion,
+           and the forced-colours frame stays visible for the stamp's
+           whole lifetime.
+         - Or scan.css's header, /components/scan and the claims case
+           stop claiming the frame carries the verdict outside forced
+           colours, and name the persistent visible text (389.3) as
+           the non-hue channel.
+         The CHANGELOG entry matches the real compatibility impact of
+         whichever change ships, with the reasoning.
+
+5. [ ] **389.5 — Join the RF track: per-type routing that the links, the prose and the Back exits agree on.**
+       - rf-list-rf has 0 inbound links, and a walk from the menu
+         reaches 5 of 6 fixture pages.
+       - rf-landing's contract routes every tile through GET
+         /rf/tasks/:type, but 0 of 4 tiles do.
+       - The task contracts use /next for pick, putaway and count (1
+         each) and not for goods receipt (0).
+       - The queue's rows cover 3 task types, although it claims to
+         serve one.
+       - 0 of 4 tapped identifiers appear at the destination, and two
+         POs share one URL.
+       - The queue has no link back to the menu.
+       - All 6 iframe titles say 'its links walk the whole track', and
+         135.2's closed Accept is false for 1 of 6 pages.
+       - The goods-receipt page's Related links reach 0 of its 5
+         siblings.
+       - In-screen Back is a forward push to the menu, so system Back
+         then returns to the task just left.
+       - **Accept — the property.**
+         First re-check which task contracts need the worker to
+         choose; today only receiving does.
+         - Each pattern page states, per task type, whether its tile
+           opens the queue or the next task, and the live links do
+           exactly that. Check by reading both.
+         - Every kept fixture page is reachable from the menu and has
+           an exit, shown by a link walk reconciled against the
+           RfTaskMenu and RfTaskQueue sources.
+         - Each linked queue row's identifier appears on the screen
+           it opens; otherwise the row is not a link.
+         - Where Back from a queue-opened task goes, and whether the
+           Back label names its destination, is decided and recorded.
+           A live walk supports the decision and also records where
+           system Back lands.
+         - Iframe titles, openers, Related links and the 135.2 record
+           all match the census.
+         Demoting the queue, with the bridge-screen reason on its
+         page, also satisfies this.
+
+6. [ ] **389.6 — The journey's RF step exits to an RF home.**
+       Both RF exits ('Back to my work' and 'Return to my work') go to
+       purchasing.html#queues. That page loads index.css, whose floor
+       is Chrome/Edge 119 against RF's 108, at comfortable density. At
+       360x640 it has a 135 px header (21.1% of the height), a table
+       overflowing by 29 px, and focus on body. The only visible queue
+       link is approval work. The README's rule is 'RF loads rf-
+       essentials.css alone'.
+       **Challenger:** "the only visible queue link is approval work"
+       holds only for an unapproved order; approved-partly-received
+       shows 'Receive PO-1042', complete shows 0 links.
+       - **Accept — the property.**
+         Every exit from the journey's RF step that means 'back to my
+         work' lands on a page that meets all of these:
+         - it loads only the RF profile, at spacious density;
+         - it has no horizontal overflow at 360x640;
+         - RF work is its first actionable;
+         - focus lands on a named control;
+         - it is composed from the existing task-menu markup, with no
+           example CSS and no new framework API.
+         check-journey asserts the stylesheet and density at the
+         exit, and is red-proved by reverting the exit.
+         Alternatively, the journey README records why the desktop is
+         the intended home. The owner commits the checkpoint first.
+
+7. [ ] **389.7 — The journey's RF confirm and failure verdict are in view at a rugged viewport.**
+       At 360x640, after a capture, Confirm receipt sits at 689-741 px.
+       After a failed send, 'Connection lost before sending' sits at
+       y=774 and focus stays on quantity. Both are below the 640 fold,
+       and both are in view at 390x844. The scan field starts at 351 px
+       (54.8%), below a 74 px header, a 60 px title and an 88 px KV
+       block. check-journey only uses 1440x900, 390x844, 1440 and 390
+       wide at 900 high, and 390x420.
+       - **Accept — the property.**
+         check-journey measures the RF step at a rugged viewport it
+         names and justifies. At that viewport, two things are in
+         view without scrolling: the confirm action after an accepted
+         scan, and the failure verdict after a failed send. The
+         verdict can be the text itself, or a viewport-level cue with
+         a programmatic channel. The fix removes or demotes chrome
+         above the task rather than adding CSS; or the chrome stays,
+         with its measured cost recorded. The check is red-proved by
+         reverting one fix. If the premise that check-journey lacks
+         such a viewport turns out false on re-checking, that is a
+         valid finding.
+
+8. [ ] **389.8 — Goods receipt shows the decision: which delivery, its expected lines, one completing action, in worker language.**
+       goods-receipt-rf has 0 KV rows (pick 4, putaway 3, count 3), and
+       its first visible text is 'Scan barcode'. Opening it from
+       'PO-88213 · Dock 4' or 'PO-88190 · Dock 2' lands on a screen
+       that names neither. It shows 0 expected lines, a duplicate scan
+       adds a second row, and it has 0 primary actions. The device
+       shows 'No scans yet — try the live demo above.' rf-pick's opener
+       says every RF screen shares the KV header.
+       - **Accept — the property.**
+         Loaded top-level at 360x640 in both themes, the screen meets
+         all of these:
+         - its first visible text names the delivery;
+         - each expected line shows received against ordered;
+         - a matching scan updates its line, so a repeat scan changes
+           one line and not the row count;
+         - exactly one visually primary action completes the receipt,
+           reachable without scrolling;
+         - every visible string states the worker's meaning and does
+           not refer to the docs page;
+         - it uses only rf-essentials members and no new CSS, checked
+           by a census and the served-CSS check.
+         The shared-header claim matches the built mirrors, checked
+         by counting .bo-kv in the built output. Re-scoping goods
+         receipt as a scan-behaviour demo, with the reason recorded,
+         is an acceptable outcome.
+
+9. [ ] **389.9 — On goods receipt, tapping a control never costs the next scan.**
+       After a tap on +, the scanner's Enter presses + (quantity 2 to
+       3) and 0 rows are added. With focus in quantity, the scan is
+       lost and the field reports badInput. After tapping Skip item or
+       Report short, the next scan is lost. Control: the same wedge
+       sent from the scan field adds 1 row. The States table says the
+       field holds focus permanently.
+       - **Accept — the property.**
+         After a real tap on each control (steppers, quantity, every
+         bar button), a wedge scan produces a scan outcome (a line
+         update or a visible rejection) and changes no other value.
+         This is measured with page.mouse and page.keyboard at
+         360x640. A control that cannot meet this is removed, with
+         the reason recorded. The States row matches what the screen
+         does.
+
+10. [ ] **389.10 — Goods-receipt quantity: captured after the scan, per line, with out-of-range values refused visibly.**
+       A quantity of 6 was applied to 2 different lines. A typed 0 was
+       logged as 0, and 20000 was logged although max is 9999. An empty
+       quantity was silently logged as 1. None of these showed a
+       warning. Receiving 3 units took 3 taps plus 1 scan, against 1
+       scan plus 2 keys in the journey.
+       - **Accept — the property.**
+         A quantity entered for one line never applies to another
+         line unless it is re-entered. A quantity outside the line's
+         allowed range records nothing and is flagged both visibly
+         and programmatically. The States table's over-receipt row
+         matches what the screen does. Measured live in both themes.
+
+11. [ ] **389.11 — Count: the menu, the screen and the state table agree.**
+       The Count tile's aria-label says '0 open', yet it opens an
+       active 'PI-2026-081 · bin 4 of 30', and the queue lists CC-3092
+       as Queued. Before the bin scan, quantity and Submit are both
+       enabled, and typing 7 then Submit changes nothing. A right-bin
+       scan changes no visible text, and focus stays on the scan field.
+       Enter in quantity does nothing. The page claims the count stays
+       closed until the right bin, Submit is disabled until a figure
+       exists, it is 'a plain form', and it has steppers.
+       - **Accept — the property.**
+         For every menu tile, the open count on the tile agrees with
+         what its destination opens, checked by walking all four
+         tiles. A zero tile leads to the documented empty state,
+         which has a way back. Each count States or Anatomy row
+         either holds when driven with real keys or is reworded.
+         Examples: quantity and Submit cannot be used before the
+         right bin; focus moves to quantity after it; Enter commits.
+         Each surviving claim has a check:claims case seen to fail on
+         today's markup.
+
+12. [ ] **389.12 — Pick shows which scan it expects next.**
+       The label 'Scan bin, then item' and the placeholder 'Scan
+       A-01-04…' do not change after the bin is accepted. Checked 1 s
+       after the bin, item and wrong scans, the visible text had not
+       changed in any of the three cases. Scanning the item before the
+       bin is accepted with a flash of ok. The States table claims 'the
+       field names what it expects'.
+       - **Accept — the property.**
+         One second after each wedge scan, visible text states the
+         verdict. After the bin is accepted, it names the item as the
+         next scan. This is measured by a comparator proven against a
+         control. A scan out of order is either rejected with a
+         visible reason, or the page stops claiming an order. The
+         change is in the demo's consumer validation, with no
+         framework change.
+
+13. [ ] **389.13 — Decide once where the RF exception bar sits.**
+       The bar is position: static on 4 of 4 task screens. On goods
+       receipt it moves from 274 to 531 px over 10 scans, and leaves
+       the viewport at scan 13 (360x640) and scan 20 (390x844). A dock
+       injected in the browser holds it at 588-640. On pick, 252 px
+       (39.4%) is empty below the bar. button.css and ScanToReceive
+       both say a real screen docks the bar; the isolated document is
+       the real screen, and it does not. Soft-keyboard occlusion has
+       not been measured. approval.astro's 390 px card also uses --bar.
+       - **Accept — the property.**
+         One decision covers all the RF task screens. It is measured
+         at 360x640 and 320x533 with quantity focused, checking
+         overlap, that every control is reachable, and that the
+         focused element stays in view. It is also measured after
+         enough scans to overflow the first screenful. The isolated
+         documents, ScanToReceive's comment and the docs guidance
+         then all say the same thing. The --bar rule does not change.
+         'Keep it in flow and drop the docking advice' or 'put the
+         log last' are acceptable outcomes if measured.
+
+14. [ ] **389.14 — RF frame guidance on the existing pages: who owns each app-level slot.**
+       app-frame's Not-for says RF runs 'with no frame at all'. As a
+       result, the journey had to invent a 74 px identity/exit header,
+       a 60 px title and a desktop exit. No RF document (0 of 6) and no
+       journey screen shows who is signed in or offers a way to end the
+       session, although the menu's content depends on the signed-in
+       role. The menu leaves 64.1% of the 360x640 screen empty.
+       **Challenger:** that the journey 'had to invent' its header is
+       inference, not measurement; its header does show the site,
+       lacking only the user and a sign-out.
+       - **Accept — the property.**
+         rf-landing states who owns each app-level slot:
+         - the slots are identity/site, where-am-I, exit, key legend,
+           connection, scan feedback, session end and docked bar;
+         - each is owned by the menu, by an existing task-screen
+           slot, or is refused with a citation (R2-Q3, 126).
+         app-frame's Not-for points to this guidance. If identity or
+         sign-out is added to the menu, 4-6 tiles stay fully visible
+         at 320x533, and only rf-essentials members are used (check-
+         markup finds no new class). Any runtime claim gets a
+         check:claims case. The owner declining session end as app-
+         owned, with that recorded, also satisfies this.
+
+15. [ ] **389.15 — Decide what a wedge scan does on the menu and the queue.**
+       From a fresh load, a scan does nothing and gives no feedback.
+       After history Back, focus sits on the last opened tile or row,
+       and a PO scan reopens Pick; this happens on both screens. A
+       browser-only spike showed an autofocused native GET field
+       catches fresh-load scans, with or without JS, but not scans
+       after history Back (4 of 4 runs went to the wrong task).
+       initScanInput has no pageshow handler.
+       - **Accept — the property.**
+         Both pages state what a scan does on that screen, based on a
+         live run with real keys, both from a fresh load and after
+         history Back. Then one of two outcomes:
+         - a scan-to-open composition sends a scan to the scanned
+           task on both paths, with a check:claims case driving real
+           keys;
+         - or a design panel refuses it, with the reason recorded.
+         Either way, the wrong-task behaviour is documented in the
+         States table. No new component is added unless the panel
+         records why composition failed.
+
+16. [ ] **389.16 — Every class an RF document uses has a rule in the profile it loads.**
+       bo-u-tabular has 0 rules in rf-essentials: on pick, font-
+       variant-numeric computes to 'normal', while on /components/kv it
+       is 'tabular-nums'. 4 of 6 RF documents carry a class with no
+       rule:
+       - pick and count: bo-u-tabular;
+       - putaway: bo-u-tabular and bo-u-text-muted;
+       - goods receipt: bo-u-text-muted.
+       check-markup validates against the full api.json, so it cannot
+       see this. PickScreen's header claims it uses 'ONLY profile
+       members'. The profile has 179 characters of headroom.
+       - **Accept — the property.**
+         An instrument reads the BUILT RF mirrors and the BUILT
+         profile, and reports, per document, any class token with no
+         matching selector. It is proven to fail on today's bo-u-
+         tabular. Each reported class is then either removed, added
+         to the profile with its byte cost measured against the
+         budget, or listed with a reason (for example, a JS hook).
+         The documents' own membership claims match what the
+         instrument reports.
+
+17. [ ] **389.17 — Decide whether putaway verifies the pallet as well as the bin.**
+       Scanning the pallet's own label gives 'Wrong bin: HU-100234'.
+       The screen checks 1 value, the bin, and handles the pallet with
+       a 'Wrong HU' button that does nothing when clicked. Pick checks
+       both bin and item through one field.
+       - **Accept — the property.**
+         A recorded decision, one of two:
+         - Putaway checks both the moved HU and the destination
+           through its one scan field. The Wrong HU button is
+           removed, and the bar and element census are re-measured.
+         - Or the system-directed shape, with no HU scan, is kept and
+           the reason is stated on the page. Scanning an HU label
+           then produces a message that names what was scanned,
+           instead of 'Wrong bin'.
+
+18. [ ] **389.18 — The receiving log reads at the glove tier, and its headers say what the cells hold.**
+       Log rows are 28 px with 11.7 px code text at 320, 360, 390 and
+       480 px wide, against 49 px and 14.4 px at 520 and above. The
+       cause is the @container bo-table 30rem rule, which applies
+       because the container has no data-density. Adding data-
+       density="spacious" gives 49 px rows (red-proved). The 'Received'
+       column holds a clock time. The 109.7 report gives column count
+       as the reason rf-list escapes this; the real reason is
+       RfTaskQueue's explicit data-density.
+       **Challenger:** rows measure 48.5 px, not 49.
+       - **Accept — the property.**
+         At 360x640, the log's row height and code font size match
+         the screen's spacious tier, or a recorded reason explains
+         the compact choice. Every column header names what its cells
+         contain. Every table under patterns/rf/ is re-checked for
+         the same missing opt-out by measuring row heights, not by
+         reading source. The reasoning in the 109.7 report is
+         corrected.
+
+19. [ ] **389.19 — The task-menu count badge is sized to its content.**
+       On rf-landing-rf the badge is 158 px wide in a 160 px tile (0.99
+       of the tile), with the number left-aligned, so it reads as an
+       empty field. It measures 138 of 140 px at 320 and 173 of 175 px
+       at 390. With align-self:center it shrinks to 25.9 px (red-
+       proof). App-launch badges are 33-39 px. rf-landing's Markup
+       sample reproduces the stretch.
+       - **Accept — the property.**
+         In the fixture and in the page's Markup sample, the badge's
+         rendered width follows its content, not the tile. Measured
+         at 320, 360 and 390 in both themes. The fix adds no bytes to
+         rf-essentials unless the budget is argued. Every other page
+         that puts a .bo-badge directly in a .bo-widget is re-
+         measured and either unchanged or fixed.
+
+20. [ ] **389.20 — The RF queue drops a column and a tab stop that carry nothing, and names itself.**
+       The Status column has only 2 distinct values: 3 of 4 rows say
+       'Queued', and 'Next' repeats row 1's position. At 320 it forces
+       2 of 4 labels to wrap into 73 px rows; with it hidden the rows
+       are 49 px. The container's tabindex=0 is a focus stop on a
+       region that never overflows (scrollWidth equals clientWidth at
+       320, 360 and 390, and the instrument does see an injected
+       overflow). It costs one extra keypress and takes the first D-pad
+       Down. No visible title names the queue.
+       - **Accept — the property.**
+         Every column in the RF queue carries information that row
+         position does not, checked by counting distinct values per
+         column in the rendered fixture. From load, every Tab stop
+         leads either to something actionable or to a region whose
+         scrollWidth exceeds its clientWidth at 320, 360 and 390. The
+         first visible text names what the queue is. Keeping either
+         one with a recorded reason (for example axe's scrollable-
+         region rule, or a slot for exception statuses) also
+         satisfies this.
+
+21. [ ] **389.21 — RF docs pages: screen first, figures true, promised states buildable from the profile.**
+       Where the device screen starts:
+       - goods receipt: y=749 of 900 at 1440 (rf-pick: 426);
+       - rf-landing and rf-list: 942 and 899 px at 390, which removing
+         the preamble brings to at most 546 and 643;
+       - putaway and count: 746 and 765 of 844 at 390.
+       Other findings:
+       - The goods-receipt, putaway, count, landing and list pages
+         narrate roadmap history (131.1, 135.1, 135.2).
+       - A 14-link profile list is repeated on 3 pages.
+       - Goods receipt's Scan-feedback section repeats
+         /components/scan.
+       - Stale figures: '128×42px' measures 162.8x48; 'not in this
+         demo' is out of date; '3-4 tiles' is a 2-column layout.
+       - The Loading rows promise a skeleton, but bo-skeleton appears 0
+         times in the profile.
+       **Challenger:** rf-pick narrates roadmap history too — 6 of 6
+       pages, not 5.
+       - **Accept — the property.**
+         At 390 and 1440, in both themes, each page's device screen
+         starts within the first viewport, or the page records why
+         what comes before it has to be there. No page narrates
+         roadmap history, and restated content becomes a link. Every
+         pixel or count figure matches a live measurement at the
+         width it names, or is removed in favour of the gate that
+         guards it. Every visual state a States table names can be
+         built from classes in the served profile (grep each one); if
+         not, it is reworded. The rf-essentials budget gate stays
+         green.
+
+22. [ ] **389.22 — Count and putaway on-screen wording and emphasis.**
+       The count hint 'Blind count — …' takes 2 lines (36 px) at 360,
+       and the page already says 'blind' 4 times. The primary label
+       'Submit count' wraps to 2 lines at 320, 360 and 390, and 'Item
+       not found' wraps at 360 and 390. Emphasis differs by screen:
+       putaway bolds its scan target, count bolds nothing, and pick
+       bolds a quantity. Count's anatomy calls the bar that holds
+       Submit an 'Exception bar'.
+       **Challenger:** 'Item not found' also wraps at 320, and 'Report
+       short' wraps at all three widths.
+       - **Accept — the property.**
+         No worker-facing text on the count screen explains the docs'
+         rationale. One stated emphasis rule is applied the same way
+         on putaway, count and pick. The primary action's label fits
+         on one line at 360 and 390, or the wrap is kept with a
+         recorded reason. Anatomy names match what each region
+         contains.
+
+23. [ ] **389.23 — Pick identifiers do not break inside themselves at the 320 px floor.**
+       At 320x533, MAT-4471 takes 2 line boxes; at 360 and 390 it takes
+       1. 135.3 documented 320-800 as the supported range. The no-wrap
+       utility is not in the profile, which has 179 characters of
+       headroom.
+       - **Accept — the property.**
+         At every documented RF width, no identifier on the pick
+         screen (bin, item code, task id) breaks inside itself,
+         measured by counting line boxes per identifier at every
+         width. The fix's cost to the profile budget is measured.
+         Refusing is acceptable if the documented range is changed to
+         match.
+
+24. [ ] **389.24 — The data-table cell-link focus ring is clipped on the first and last rows.**
+       Pixel sampling of the focus ring, in both themes:
+       - row 1: top edge 0% visible, covered by the sticky thead;
+       - row 4: bottom edge 0% visible, clipped by the container;
+       - rows 2-3: 100% on every edge.
+       Controls: a landing tile reads 95%, an unfocused row reads 0%.
+       - **Accept — the property.**
+         A keyboard-focused .bo-data-table__cell-link shows its ring
+         on all four edges for the first and last body rows, in both
+         themes, verified by pixel-sampling the rendered page.
+         Alternatively, the three-sided ring is judged against WCAG
+         2.4.7 and 2.4.11 as acceptable, with the reasoning recorded.
+
+25. [ ] **389.25 — Input to 388.1: state the edge contrast of a joined bar in the glove tier.**
+       On the same screen, the bar buttons' edges measure 1.41:1 in
+       light and 1.90:1 in dark, while the steppers and fields measure
+       4.63:1 and 7.44:1. Under the glare model (g=0.25) the bar edges
+       fall to 1.30 and 1.16. The three joined targets read as a single
+       strip.
+       - **Accept — the property.**
+         388.1's button-group guideline states the edge and seam
+         contrast of a joined group and of --bar, measured in both
+         themes. Either the bar's target edges meet 3:1 non-text
+         contrast, or the guideline records why the labels alone
+         identify each target. A new modifier is not an acceptable
+         outcome.
+
 ## Slice 388 — owner input: a capsule button and the button group with a usage guideline; grill the RF / rugged-device patterns as a journey (2026-09-25)
 
 Owner, verbatim: *"/components/button — capsule style button / group button
@@ -344,7 +887,7 @@ screen. Task screen can be better."* Two items; the grill is dispatched by rule 
          and (if it ships) when a capsule is right and when it is not, each
          with its "Not for" clause, demos through `Demo`, and a `check:claims`
          case for any runtime claim the guideline makes.
-2. [ ] **388.2 — grill the RF / rugged-device family as a JOURNEY
+2. [x] **388.2 — grill the RF / rugged-device family as a JOURNEY
        (`/design-grill` flow mode).** Owner hypotheses to test, not to assume:
        *an app screen may be missing* and *the task screens can be better*.
        - **Accept — the property.** A report in `.roundtable/` that: reads the
@@ -358,6 +901,14 @@ screen. Task screen can be better."* Two items; the grill is dispatched by rule 
          screen elements change), where "no change" is a satisfying answer if
          the measurement supports it; and triages every actionable into
          ROADMAP with its own Accept criteria.
+       - **DONE 2026-09-25.** Report
+         `.roundtable/design-grill-flow-rf-2026-09-25.md`; earlier RF grills
+         read first. Viewport 360x640 DPR 2 (the floor study's fixture) plus
+         390x844, both themes. Per-seam and per-element verdicts carry their
+         measurements. H1: no new pattern — wire what exists; H2: yes, 25
+         actionables filed as Slice 389, all re-measured by a challenger and
+         all surviving; its 10 corrections to the report are applied and
+         listed there.
 
 ## Slice 387 — residuals the 375.11 measurement found beyond its own list: two more lost-press paths from the message's horizontal overflow, and two layers that still cover a frozen cell's message (2026-09-25)
 
