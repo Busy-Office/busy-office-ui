@@ -146,8 +146,8 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1802 iterations logged)
-  Standardize   7 / 4 Continue rounds since 2026-09-25 12:20   OVERDUE
+dispatch status — counter-triggered rules (1804 iterations logged)
+  Standardize   8 / 4 Continue rounds since 2026-09-25 12:20   OVERDUE
   Objective     3 / 3 slices          since 2026-09-25 13:32   OVERDUE  [375, 392, 393]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-09-25 05:14   ok   [newest pair: claims; 153 sample(s), 8 of 51 name(s) paired across days]
@@ -249,8 +249,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-25 05:14 · Continue · bug · 391.2 — check:claims' SC 2.5.7 file-chooser wait 5s -> 15s. Failed on CI at 2 of 4 observed runs (88ba16bb, 07aef5bf; both markdown-only diffs, byte-identical payload, geometry block healthy). The one permitted re-run came back green and that green was refuted by the next push — a single passing re-run is not evidence of rarity. Patience raised, assertion unchanged (opened===true still required); not skipped, disabled or quarantined. CI green on 45aa4d1d · landed · 45aa4d1d
-- 2026-09-25 13:32 · Objective · grill · Slice 392 — Objective grill of 388.1, 389.4, Slice 390 (renumbered from 391, collision 8); P0 392.1 filed · landed · e8ac9844
 - 2026-09-25 14:12 · Continue · fix · 392.1 — P0: a scan verdict stamped while a flash is live restarts the flash · landed · a16d4ff3
 - 2026-09-25 20:24 · Roadmap · triage · M1 milestone triaged as DRAFT; Slice 393 (M0) approved as bootstrap; owner O1-O4 applied (one dispatcher, park, cap 12, naming rule) · triaged · c8d2ccb7
 - 2026-09-25 20:34 · Continue · build · 393.1 — one dispatcher: Step 0 guard (HALT, checkout, foreign commits) · landed · b17b36e7
@@ -259,6 +257,8 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-25 22:03 · Continue · build · 393.2 — one real hold measured at 2 tool calls; in-flight protocol closed · landed · 3c142f20
 - 2026-09-25 22:03 · Continue · build · 393.3 — backlog mirror: every kind of wait, own-line markers reconciled, oldest dispatchable computed (375.11) · landed · 3c142f20
 - 2026-09-25 22:03 · Meta · refusal · marking 394.13 owner-blocked for one O15-dependent Accept bullet — a marker would hold the whole item · refused · 3c142f20
+- 2026-09-25 22:47 · Continue · build · 393.4 — milestone.py and rule M: code computes the milestone's next item; dispatch_status byte-identical while inactive; rule M = simulate_rule_m.py 43/43 · landed · 06cccc7d
+- 2026-09-25 22:47 · Meta · refusal · refusing on a DRAFT milestone's malformed field in dispatch_status — the owner fills a DRAFT over several edits; milestone.py's CLI reports it · refused · 06cccc7d
 
 ## Sunset test
 
