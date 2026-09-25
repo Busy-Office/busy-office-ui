@@ -143,8 +143,8 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1804 iterations logged)
-  Standardize   8 / 4 Continue rounds since 2026-09-25 12:20   OVERDUE
+dispatch status — counter-triggered rules (1807 iterations logged)
+  Standardize   9 / 4 Continue rounds since 2026-09-25 12:20   OVERDUE
   Objective     3 / 3 slices          since 2026-09-25 13:32   OVERDUE  [375, 392, 393]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-09-25 05:14   ok   [newest pair: claims; 153 sample(s), 8 of 51 name(s) paired across days]
@@ -246,9 +246,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-25 14:12 · Continue · fix · 392.1 — P0: a scan verdict stamped while a flash is live restarts the flash · landed · a16d4ff3
-- 2026-09-25 20:24 · Roadmap · triage · M1 milestone triaged as DRAFT; Slice 393 (M0) approved as bootstrap; owner O1-O4 applied (one dispatcher, park, cap 12, naming rule) · triaged · c8d2ccb7
-- 2026-09-25 20:34 · Continue · build · 393.1 — one dispatcher: Step 0 guard (HALT, checkout, foreign commits) · landed · b17b36e7
 - 2026-09-25 20:44 · Continue · build · 393.2 — in-flight protocol (partial): inflight.py + Step 0 hold + cap; cap proven live at 2 min (test task stopped, 33 of 60 lines unfinished) · landed · 8fcf50c2
 - 2026-09-25 21:15 · Continue · build · 375.11 — zoom half fixed: grid message never covers its field at 400% (0/360); Firefox half open · landed · 24b4cb69
 - 2026-09-25 22:03 · Continue · build · 393.2 — one real hold measured at 2 tool calls; in-flight protocol closed · landed · 3c142f20
@@ -256,6 +253,9 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-25 22:03 · Meta · refusal · marking 394.13 owner-blocked for one O15-dependent Accept bullet — a marker would hold the whole item · refused · 3c142f20
 - 2026-09-25 22:47 · Continue · build · 393.4 — milestone.py and rule M: code computes the milestone's next item; dispatch_status byte-identical while inactive; rule M = simulate_rule_m.py 43/43 · landed · 06cccc7d
 - 2026-09-25 22:47 · Meta · refusal · refusing on a DRAFT milestone's malformed field in dispatch_status — the owner fills a DRAFT over several edits; milestone.py's CLI reports it · refused · 06cccc7d
+- 2026-09-25 23:33 · Continue · build · 393.5 — milestone rows move the counters (folds 392.4 thesis-gated rule-3 reset, 381.2 base rate 4 of 20) · landed · a4f4fd13
+- 2026-09-25 23:33 · Meta · refusal · 381.2: counting only shipping slices toward rule 3 — a counter change with five recorded starvations; narrowing the grill instead · refused · a4f4fd13
+- 2026-09-25 23:33 · Meta · refusal · 392.4: design-grill rows resetting rule 3 — they grill a screen, not the armed slices' claims · refused · a4f4fd13
 
 ## Sunset test
 
