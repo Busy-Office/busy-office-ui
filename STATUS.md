@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-25 06:12 UTC
+Generated at: 2026-09-25 12:24 UTC
 
 ## Open items by slice
 
@@ -86,6 +86,58 @@ Generated at: 2026-09-25 06:12 UTC
   - 392.3 — a `--bar` label with one word wider than its slot paints past its button.
   - 392.4 — rule 3 reset without the thesis section, twice; and a design-grill reset it.
   - 392.5 — the comparator deltas are recorded nowhere a later grill reads them.
+- **Slice 393** (12 open)
+  - 393.1 — one committer: a wake halts on a HALT file or on a foreign commit.
+  - 393.2 — the in-flight protocol: one workflow at a time, a hold that reads nothing, and a wall-time cap.
+  - 393.3 — the backlog mirror reports every kind of wait, and prints the oldest dispatchable item.
+  - 393.4 — `milestone.py` and rule M: code computes the milestone's next item.
+  - 393.5 — milestone rows move the counters the way the rules say (folds 392.4 and 381.2).
+  - 393.6 — routes: the roadmap names which model does each item (owner answer 1), and telemetry records who did it.
+  - 393.7 — rule D: when there is no task, or an item is unclear, the loop goes to the planner (owner answer 1: "which is bigger target").
+  - 393.8 — a bounded hand-off, one wake prompt, and the milestone's read set.
+  - 393.9 — apply the realignment markers to the 65 open items. They stay inert until the milestone is ACTIVE.
+  - 393.10 — re-score the loop; the owner activates the milestone only at "watch".
+  - 393.11 — a close is verified on HEAD alone (folds 377.3).
+  - 393.12 — worktree isolation and fan-in, as code.
+- **Slice 394** (18 open)
+  - 394.1 — OWNER CALL: naming doctrine. Every published name names a shape (owner answer 2; roundtable 2026-09-25).
+  - 394.2 — OWNER CALL: the app, the module list and the device classes (folds 377.6; owner answer 3).
+  - 394.3 — OWNER CALL: a release boundary before any experimental part merges (377.5).
+  - 394.4 — the experimental tier: `@status experimental` and `@decide` in the registration header, and where the build puts the part.
+  - 394.5 — `bo-check-markup` (the shipped bin) sees experimental parts and placeholders.
+  - 394.6 — docs, llms.txt and the sidebar show the status in words, in both directions.
+  - 394.7 — every experimental part has an open decision item, the count stays under the cap, and every marked use loads its stylesheet.
+  - 394.8 — the placeholder, the ledger, and the second-use rule (resolves GAP-21).
+  - 394.9 — the job index: every worked screen declares its pattern and its job, and `jobs.json` is generated (folds 249.7's "also called").
+  - 394.10 — the shape layer ships: llms.txt points at the worked screens, and the package exports patterns, jobs and llms.txt.
+  - 394.11 — the reference-delta record (folds 392.5).
+  - 394.12 — Jev hygiene: the rubric describes the fields as measured (folds 377.10).
+  - 394.13 — the queue-screen calibration set, built from ROADMAP history.
+  - 394.14 — the queue screen (JQ): the gate, the script, stability probes and calibration, in shadow.
+  - 394.15 — the queue screen runs beside every milestone dispatch, and its outcomes are joined.
+  - 394.16 — OWNER CALL: promote the queue screen, keep it in shadow, or retire it.
+  - 394.17 — the incubation recipe: `new:component --experimental`, a CLAUDE.md "How to incubate a component" section, and the triage wording.
+  - 394.18 — OWNER CALL: declare the queue screen as Jev's third point (O13), say what may leave the machine, and choose its mode before promotion.
+- **Slice 395** (2 open)
+  - 395.1 — the app frame end to end: shell, home, launch, navigation for the closed module list, profile and settings.
+  - 395.2 — the module landing: compose `workspace`, or admit it as an experimental pattern.
+- **Slice 396** (13 open)
+  - 396.1 — `check:shape-names`: no published name contains a module word.
+  - 396.2 — pre-register the A/B test: do agents build better from job rows or from a full module set?
+  - 396.3 — Configuration layouts
+  - 396.4 — Distribution layouts
+  - 396.5 — run the A/B test, and put the result in front of the owner.
+  - 396.6 — Production Planning layouts
+  - 396.7 — Finance layouts.
+  - 396.8 — Sales layouts.
+  - 396.9 — Inventory layouts.
+  - 396.10 — Procurement layouts.
+  - 396.11 — the owner's further modules, one item each.
+  - 396.12 — rugged-device task layouts
+  - 396.13 — OWNER CALL: the form the remaining modules take (full module sets, or job rows plus screens only where a new shape is needed), decided on 396.5's result.
+- **Slice 397** (2 open)
+  - 397.1 — the first real run: the first need Configuration or Distribution logs walks the component lifecycle as far as its fill.
+  - 397.2 — EXIT: close Milestone M1.
 - **Slice —** (3 open)
   - OWNER · 377.5 — release the unreleased fixes, or record why not.
   - OWNER · 377.6 — is busy-office-erp the named first user?
@@ -94,7 +146,7 @@ Generated at: 2026-09-25 06:12 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1795 iterations logged)
+dispatch status — counter-triggered rules (1796 iterations logged)
   Standardize   2 / 4 Continue rounds since 2026-09-25 12:20   ok
   Objective     1 / 3 slice           since 2026-09-25 13:32   ok  [392]
   Optimize      0 wake-date(s) newer   since 2026-09-25 05:14   ok   [newest pair: claims; 153 sample(s), 8 of 51 name(s) paired across days]
@@ -115,6 +167,12 @@ dispatch status — counter-triggered rules (1795 iterations logged)
 
 Open items whose text mentions "owner" — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
 
+- 396.13 — OWNER CALL: the form the remaining modules take (full module sets, or job rows plus screens only where a new shape is needed), decided on 396.5's result.
+- 394.1 — OWNER CALL: naming doctrine. Every published name names a shape (owner answer 2; roundtable 2026-09-25).
+- 394.2 — OWNER CALL: the app, the module list and the device classes (folds 377.6; owner answer 3).
+- 394.3 — OWNER CALL: a release boundary before any experimental part merges (377.5).
+- 394.16 — OWNER CALL: promote the queue screen, keep it in shadow, or retire it.
+- 394.18 — OWNER CALL: declare the queue screen as Jev's third point (O13), say what may leave the machine, and choose its mode before promotion.
 - 373.6 — App dock: hide on UPWARD scroll. OWNER CALL — two refusals stand on the record and the reversal is not written down.
 - 296.3 — OWNER CALL: is "secure" in scope for this framework at all?
 - 273.2 — §3b step 5 mandates `dry++` on a round whose score does not move, and no round has ever done it. OWNER CALL.
@@ -127,7 +185,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-25 08:13 · Objective · grill · 388.2 — RF journey grill (design-grill flow): H1 no new pattern, H2 yes; 25 findings as Slice 389 · landed · e76a8f90
 - 2026-09-25 08:38 · Continue · fix · 389.4 — P0: scan flash frame carries the verdict in rendered pixels; forced-colours frame stays · landed · 1b19d6e9
 - 2026-09-25 09:00 · Continue · build · 388.1 — capsule refused by design panel; button which-one guideline; aria-pressed forced-colours fix; 389.25 closed · landed · a1b3969b
 - 2026-09-25 09:00 · Meta · refusal · capsule button shape (setting token, --capsule modifier): a pill is a status here; hit area and forced-colours collision measured · refused · a1b3969b
@@ -137,6 +194,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-25 05:14 · Continue · bug · 391.2 — check:claims' SC 2.5.7 file-chooser wait 5s -> 15s. Failed on CI at 2 of 4 observed runs (88ba16bb, 07aef5bf; both markdown-only diffs, byte-identical payload, geometry block healthy). The one permitted re-run came back green and that green was refuted by the next push — a single passing re-run is not evidence of rarity. Patience raised, assertion unchanged (opened===true still required); not skipped, disabled or quarantined. CI green on 45aa4d1d · landed · 45aa4d1d
 - 2026-09-25 13:32 · Objective · grill · Slice 392 — Objective grill of 388.1, 389.4, Slice 390 (renumbered from 391, collision 8); P0 392.1 filed · landed · e8ac9844
 - 2026-09-25 14:12 · Continue · fix · 392.1 — P0: a scan verdict stamped while a flash is live restarts the flash · landed · a16d4ff3
+- 2026-09-25 20:24 · Roadmap · triage · M1 milestone triaged as DRAFT; Slice 393 (M0) approved as bootstrap; owner O1-O4 applied (one dispatcher, park, cap 12, naming rule) · triaged · c8d2ccb7
 
 ## Sunset test
 
