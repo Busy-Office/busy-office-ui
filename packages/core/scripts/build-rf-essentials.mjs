@@ -90,7 +90,14 @@ await writeFile(to.replace(/\.css$/, '.min.css'), min.css);
    Byte-exact on OUR minifier output is safe here (unlike gzip figures,
    which vary across zlib builds — the stamp-readme lesson); the budget is
    a ceiling, not an equality, so no tolerance dance is needed. */
-const RF_BUDGET_KB = 40;
+/* 40 -> 41 (roadmap 388.1, 2026-09-25): 65 characters over, from the
+   forced-colours pressed state for .bo-btn[aria-pressed] — a toggle that had
+   no visible state under forced colours. No trim was honest: the transition
+   reset stops a mid-blend and the outline keeps the ring in the system
+   palette. It is one rule set, not a component, so the membership debate this
+   budget exists to force does not arise; 389.16 (every RF class has a rule)
+   is the next claim on this room and must argue its own. */
+const RF_BUDGET_KB = 41;
 const minKb = min.css.length / 1024;
 if (minKb > RF_BUDGET_KB) {
   console.error(

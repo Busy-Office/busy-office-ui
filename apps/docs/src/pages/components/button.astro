@@ -21,11 +21,34 @@ const iconText = `<button class="bo-btn"><span class="bo-icon bo-icon--check-cir
 <button class="bo-btn bo-btn--secondary"><span class="bo-icon bo-icon--truck" aria-hidden="true"></span>Ship</button>
 <button class="bo-btn bo-btn--icon" aria-label="Settings"><span class="bo-icon bo-icon--grid" aria-hidden="true"></span></button>
 <button class="bo-btn">Text only</button>`;
+const separate = `<div class="bo-cluster">
+  <button class="bo-btn" type="button">Approve</button>
+  <button class="bo-btn bo-btn--secondary" type="button">Hold</button>
+  <button class="bo-btn bo-btn--danger-ghost" type="button">Reject</button>
+</div>`;
+const segmentedChoice = `<div class="bo-segmented" role="group" aria-label="Approval scope">
+  <input class="bo-segmented__input bo-visually-hidden" type="radio" name="btn-guide-scope" id="btn-guide-mine" checked>
+  <label class="bo-segmented__option" for="btn-guide-mine">My approvals</label>
+  <input class="bo-segmented__input bo-visually-hidden" type="radio" name="btn-guide-scope" id="btn-guide-team">
+  <label class="bo-segmented__option" for="btn-guide-team">Team approvals</label>
+</div>`;
+const toggles = `<div class="bo-btn-group" role="group" aria-label="Text style">
+  <button class="bo-btn bo-btn--secondary" type="button" aria-pressed="true"><strong>B</strong><span class="bo-visually-hidden"> Bold</span></button>
+  <button class="bo-btn bo-btn--secondary" type="button" aria-pressed="false"><em>I</em><span class="bo-visually-hidden"> Italic</span></button>
+</div>`;
+const oneShape = `<div class="bo-cluster" id="g-shape">
+  <span class="bo-badge bo-badge--success">Approved</span>
+  <button class="bo-btn bo-btn--sm bo-btn--secondary" type="button">Release</button>
+</div>`;
 ---
 <Gallery title="Button" description="The action primitive for busy-office-ui: emphasis variants, a small size for dense toolbars, and disabled and loading states.">
   <p class="demo-note">
     The action primitive: variants for emphasis, a small size for dense
-    toolbars, and disabled/loading states.
+    toolbars, and disabled/loading states. <strong>Not for</strong> picking
+    one of several views — that is a <a href={base + '/components/segmented'}>segmented
+    control</a> — or for a pill the reader clicks to filter, which is a
+    <a href={base + '/components/filters'}>chip</a>. Which of separate
+    buttons, a group, a segmented control or a bar to use is below.
   </p>
   <section class="demo">
     <h2>Variants</h2>
@@ -116,7 +139,9 @@ const iconText = `<button class="bo-btn"><span class="bo-icon bo-icon--check-cir
     its own. Each button keeps its own border, focus ring and disabled
     state — only the shared edge between two buttons collapses to one
     line, so <code>:focus-visible</code> still outlines a single button,
-    never the whole group.</p>
+    never the whole group. <strong>Not for</strong> a decision's answers or
+    a form's Post · Cancel either: joined, they read as one tool and hide
+    the difference in weight.</p>
   </section>
 
   <section class="demo">
@@ -141,7 +166,85 @@ const iconText = `<button class="bo-btn"><span class="bo-icon bo-icon--check-cir
     the F5/F6 numbers green-screen conversions carry forward: a number the
     user must translate is a label that failed. Dock it with one consumer
     line (<code>position: sticky; inset-block-end: 0</code>) — where it
-    docks belongs to the screen, not the component.</p>
+    docks belongs to the screen, not the component. When the screen's main
+    action is a press — Approve on a phone, Submit count on a scanner — it
+    takes the last slot as the bar's one solid button. Keep a handheld's bar
+    to three slots, so every label keeps a slot wide enough to read at a
+    glance.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Which one: separate buttons, a group, a segmented control or a bar</h2>
+    <p><strong>Separate buttons</strong> are the default, for actions that
+    differ in weight or consequence: one solid primary, its secondaries, and
+    a <code>--danger-ghost</code> beside them. A decision's answers stay
+    separate, so Reject is never one seam from Approve. <strong>Not
+    for</strong> two to four same-weight tools on one object; join those.</p>
+    <p><strong>A group</strong> (<code>.bo-btn-group</code>) joins two to four
+    same-weight actions on one object, each firing on its own: Copy link ·
+    Duplicate · More ▾. A group never wraps, so on a phone keep it to what
+    fits and put the rest behind More ▾. The same join carries toggles that
+    can be on together, like Bold and Italic: buttons with
+    <code>aria-pressed</code>. <strong>Not for</strong> picking one of
+    several views.</p>
+    <p><strong>A segmented control</strong> (<code>.bo-segmented</code>)
+    keeps exactly one of two to five views on: My approvals · Team
+    approvals. It is built on radios, so the arrow keys move the choice.
+    <strong>Not for</strong> commands — a segment that saves, posts or
+    deletes is a button. Past five options, use a select.</p>
+    <p><strong>A bar</strong> (<code>.bo-btn-group--bar</code>) is a
+    handheld's full-width row of equal slots under a single-task screen:
+    Back · Skip item · Report short. On a phone or scanner a decision's
+    answers go here too. <strong>Not for</strong> desktop toolbars or form
+    footers, where equal widths spend space a pointer does not need.</p>
+    <p id="btn-guide-edges"><strong>Edges and seams.</strong> A secondary
+    member's border measures 1.41:1 against the page in light and 1.90:1 in
+    dark, and the seam between two secondaries 1.47:1 and 1.70:1 against the
+    member's fill — below the 3:1 that WCAG 1.4.11 asks of a boundary that
+    identifies a control. A group and a bar do not ask the line to do that
+    job: every member carries its own label (17.74:1 and 16.15:1 on a
+    secondary), and a bar's equal slots centre each label on its own target,
+    which is where a thumb aims. Where the boundary carries meaning, the fill
+    carries it — the solid primary.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Separate buttons — a decision's answers</h2>
+    <Demo code={separate} />
+    <p class="bo-u-text-muted">Three answers to one question, in three
+    weights, with space between them. Joined into a group they would read as
+    one tool, and Reject would sit one seam from Approve.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Toggle buttons — several on at once</h2>
+    <Demo code={toggles} />
+    <p class="bo-u-text-muted"><code>aria-pressed</code> carries the state
+    to assistive tech, and the pressed button reads as pressed on screen —
+    including under forced colours, where it takes the system's own
+    Highlight pair. Use a toggle when options combine (Bold and Italic can
+    both be on); use a segmented control when exactly one is on.</p>
+  </section>
+
+  <section class="demo">
+    <h2>Segmented control — one view of several</h2>
+    <Demo code={segmentedChoice} />
+    <p class="bo-u-text-muted">One of these is always on, and picking the
+    other changes what the screen shows. Radios underneath: Tab reaches the
+    group once, and the arrow keys move the choice. <strong>Not for</strong>
+    actions — see <a href={base + '/components/segmented'}>segmented
+    control</a>.</p>
+  </section>
+
+  <section class="demo">
+    <h2>One shape — a pill is a status, not an action</h2>
+    <Demo code={oneShape} />
+    <p class="bo-u-text-muted">There is no capsule button. Here a pill is a
+    status or a token — this badge, a filter chip, a tag — and the rounded
+    rectangle is what says "this does something". At this size the two share
+    height, text size and weight, so the corners are what tells them apart.
+    <strong>Not for</strong> a pill the reader clicks to filter a list: that
+    is a <a href={base + '/components/filters'}>chip</a>.</p>
   </section>
   <ClassRef component="button" />
   <ApiTable component="button"
@@ -151,5 +254,5 @@ const iconText = `<button class="bo-btn"><span class="bo-icon bo-icon--check-cir
             '<code>.bo-btn-group</code> joins a row of buttons into one toolbar — independent actions, not a single-choice picker (that is <code>.bo-segmented</code>).',
             'Labels do NOT wrap by default, and that is deliberate: a button is a target, and a target whose height depends on its label makes rows jump. A label wraps only where the button is forced into a slot it cannot escape — <code>.bo-btn-group--bar</code> (equal shares) and <code>.bo-form-actions</code> (a sticky bar with no line to fall onto). Everywhere else the container decides the layout, so give a long label a container that fits it.']} />
   <DsaScore component="button" />
-  <Related links={[["/concepts/tokens", "Design tokens"], ["/base/colors", "Color scales"]]} />
+  <Related links={[["/components/segmented", "Segmented control"], ["/components/filters", "Filters and chips"], ["/components/badge", "Badge"], ["/concepts/tokens", "Design tokens"], ["/base/colors", "Color scales"]]} />
 </Gallery>

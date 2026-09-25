@@ -122,6 +122,13 @@ pin.
   for the stamp's whole life. Visual change only — the attribute contract
   (`data-scan-result="ok|error"`) is unchanged. Roadmap 389.4.
 
+- **A pressed toggle button had no visible state under forced colours.**
+  `.bo-btn[aria-pressed="true"]` and an unpressed button computed identically,
+  so Bold on and Bold off looked the same in Windows High Contrast. A pressed
+  toggle now takes the system Highlight pair, with no transition through a
+  mid-blend and its focus ring in Highlight. Normal colours are unchanged.
+  Roadmap 388.1.
+
 - **The generated accessibility conformance report (`dist/acr.json`,
   `/reference/acr`) overclaimed in four rows.** An audit of all 21 criteria
   against the gate each one names found four overclaims and one unbacked

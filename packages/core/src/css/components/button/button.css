@@ -146,6 +146,24 @@
     .bo-btn {
       border-color: ButtonText;
     }
+
+    /* A pressed toggle had NO visible state here: pressed and unpressed
+       computed identically, so Bold on and Bold off were the same button
+       (roadmap 388.1's panel). Highlight is the system's own "selected"
+       pair, as the segmented control uses. `transition: none` so the state
+       never passes through a mid-blend, and the focus ring stays Highlight
+       like every other control's. */
+    .bo-btn[aria-pressed] {
+      transition: none;
+    }
+
+    .bo-btn[aria-pressed="true"] {
+      forced-color-adjust: none;
+      background: Highlight;
+      color: HighlightText;
+      border-color: Highlight;
+      outline-color: Highlight;
+    }
   }
 
   /* Group a row of buttons into one visually joined control — a toolbar

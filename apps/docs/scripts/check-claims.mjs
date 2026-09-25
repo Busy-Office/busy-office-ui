@@ -3109,6 +3109,82 @@ if (pointerIsFine) {
   );
 }
 
+/* 388.1 — the usage guideline on /components/button makes four runtime
+   claims. The capsule itself was refused (ROADMAP 388.1); these hold the
+   guideline's words to the page. */
+await visit('/components/button/');
+const guide = await page.evaluate(() => {
+  const groups = [...document.querySelectorAll('.bo-btn-group:not(.bo-btn-group--bar)')];
+  const shape = document.getElementById('g-shape');
+  const badge = shape.querySelector('.bo-badge');
+  const btn = shape.querySelector('.bo-btn');
+  const out = { wraps: groups.map((g) => getComputedStyle(g).flexWrap), densities: {} };
+  for (const d of ['compact', 'comfortable', 'spacious']) {
+    document.documentElement.setAttribute('data-density', d);
+    const m = (el) => { const cs = getComputedStyle(el); return [el.getBoundingClientRect().height, cs.fontSize, cs.fontWeight]; };
+    out.densities[d] = { badge: m(badge), btn: m(btn) };
+  }
+  document.documentElement.removeAttribute('data-density');
+  return out;
+});
+check('button guideline: "a group never wraps" — every non-bar .bo-btn-group on the page computes flex-wrap: nowrap (388.1)',
+  guide.wraps.length >= 2 && guide.wraps.every((w) => w === 'nowrap'), JSON.stringify(guide.wraps));
+check('button guideline: "at this size the two share height, text size and weight" — the --sm secondary button and the badge beside it match on all three at every density (388.1)',
+  Object.values(guide.densities).every(({ badge, btn }) => badge.every((v, i) => v === btn[i])), JSON.stringify(guide.densities));
+
+/* 389.25 — the guideline STATES edge, seam and label contrast for a bar's
+   secondary member. Hand-stated figures in prose, so the claim asserts the
+   exact values: a token change must fail here rather than leave the prose
+   silently wrong. Computed colours, after the theme's transitions finish. */
+const EDGES = { light: { edge: 1.41, seam: 1.47, label: 17.74 }, dark: { edge: 1.9, seam: 1.7, label: 16.15 } };
+const edgesSeen = {};
+for (const theme of ['light', 'dark']) {
+  await visit('/components/button/');
+  edgesSeen[theme] = await page.evaluate(async (t) => {
+    document.documentElement.setAttribute('data-theme', t);
+    await Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {})));
+    const rgb = (c) => c.match(/[\d.]+/g).slice(0, 3).map(Number);
+    const lum = ([r, g, b]) => { const f = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b); };
+    const ratio = (a, c) => { const x = lum(rgb(a)), y = lum(rgb(c)); return +((Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05)).toFixed(2); };
+    const bgOf = (el) => { while (el) { const c = getComputedStyle(el).backgroundColor; if (!/rgba\(0, 0, 0, 0\)|transparent/.test(c)) return c; el = el.parentElement; } return null; };
+    const bar = document.querySelector('.bo-btn-group--bar');
+    const cs = getComputedStyle(bar.querySelector('.bo-btn--secondary'));
+    return { edge: ratio(cs.borderTopColor, bgOf(bar.parentElement)), seam: ratio(cs.borderTopColor, cs.backgroundColor), label: ratio(cs.color, cs.backgroundColor) };
+  }, theme);
+}
+check('button guideline: the stated edge, seam and label contrast of a bar\'s secondary member (1.41/1.47/17.74 light, 1.90/1.70/16.15 dark) are what the page computes (389.25)',
+  ['light', 'dark'].every((t) => ['edge', 'seam', 'label'].every((k) => edgesSeen[t][k] === EDGES[t][k])),
+  JSON.stringify(edgesSeen));
+
+/* "Tab reaches the group once, and the arrow keys move the choice." Real keys. */
+await visit('/components/button/');
+await page.evaluate(() => {
+  const before = document.createElement('button');
+  before.id = 'probe-before-seg'; before.textContent = 'probe';
+  document.getElementById('btn-guide-mine').closest('.bo-segmented').before(before);
+  before.focus();
+});
+await page.keyboard.press('Tab');
+const segA = await page.evaluate(() => document.activeElement?.id);
+await page.keyboard.press('ArrowRight');
+const segB = await page.evaluate(() => ({ focus: document.activeElement?.id, checked: document.querySelector('input[name="btn-guide-scope"]:checked')?.id }));
+await page.keyboard.press('Tab');
+const segC = await page.evaluate(() => document.activeElement?.closest('.bo-segmented') === null);
+check('button guideline: in the segmented demo, Tab lands on the checked option once, ArrowRight moves both the choice and focus, and the next Tab leaves the group (388.1)',
+  segA === 'btn-guide-mine' && segB.focus === 'btn-guide-team' && segB.checked === 'btn-guide-team' && segC,
+  JSON.stringify({ segA, segB, segC }));
+
+/* The toggle demo's promise: a pressed button reads as pressed under forced
+   colours. Before 388.1 pressed and unpressed computed identically there. */
+await visit('/components/button/', { features: [{ name: 'forced-colors', value: 'active' }] });
+const toggleFc = await page.evaluate(() => {
+  const [on, off] = document.querySelectorAll('[aria-label="Text style"] .bo-btn');
+  const c = (el) => { const cs = getComputedStyle(el); return { bg: cs.backgroundColor, fg: cs.color }; };
+  return { forced: matchMedia('(forced-colors: active)').matches, on: c(on), off: c(off) };
+});
+check('button: under forced colours a pressed toggle (aria-pressed="true") computes a different background and text colour from an unpressed one (388.1)',
+  toggleFc.forced && toggleFc.on.bg !== toggleFc.off.bg && toggleFc.on.fg !== toggleFc.off.fg, JSON.stringify(toggleFc));
+
 /* 200.3 — tab and segmented selection easing. Three cases, each locking a
    thing that was measured to be different from what reading the CSS suggests.
 
@@ -4779,8 +4855,10 @@ check(
    the page through a canvas (no image library). Accepted must show one band;
    rejected must show band, gap, band — the geometry, not the hue. */
 async function flashRow(theme, reduced) {
-  await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: reduced ? 'reduce' : 'no-preference' }]);
-  await visit("/patterns/rf/rf-pick-rf/", { width: RF_WIDTH, height: 640 });
+  // Through visit()'s own features, never a separate emulateMediaFeatures:
+  // visit() sets media in one CDP call that would wipe an earlier one.
+  await visit("/patterns/rf/rf-pick-rf/", { width: RF_WIDTH, height: 640,
+    features: [{ name: 'prefers-reduced-motion', value: reduced ? 'reduce' : 'no-preference' }] });
   // Let the theme switch's colour transitions FINISH before stamping, and
   // freeze only the flash: pausing every animation froze the page at its
   // light colours mid-transition, so a "dark" reading was not dark.
@@ -4820,7 +4898,6 @@ const flashRows = {};
 for (const theme of ['light', 'dark']) for (const reduced of [false, true]) {
   flashRows[`${theme}/${reduced ? 'reduced' : 'animated'}`] = await flashRow(theme, reduced);
 }
-await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'no-preference' }]);
 const SEEN = 1.1; // a band this far from the wash is visible; 1.00 is "identical"
 check('scan verdict in RENDERED pixels: accepted shows one frame band and rejected shows band-gap-band against the wash, in light and dark, animated and reduced-motion (389.4)',
   Object.values(flashRows).every(({ ok, error }) =>

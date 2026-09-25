@@ -23,7 +23,6 @@
  * @type {Map<string, string>} page slug → why it is exempt
  */
 export const EXEMPT = new Map([
-  ['button', 'the action primitive every other component defers to; there is no "use X instead of a button"'],
   ['form', 'the entry-context anchor the field matrix points at — the thing others are the wrong choice VERSUS'],
   ['prose', 'renders whatever stored rich text a server sends; the choice is upstream of this class'],
 ]);

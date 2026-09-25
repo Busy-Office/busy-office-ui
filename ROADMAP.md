@@ -866,7 +866,7 @@ removal or rewording; one shipped framework defect (389.4).
          Alternatively, the three-sided ring is judged against WCAG
          2.4.7 and 2.4.11 as acceptable, with the reasoning recorded.
 
-25. [ ] **389.25 — Input to 388.1: state the edge contrast of a joined bar in the glove tier.**
+25. [x] **389.25 — Input to 388.1: state the edge contrast of a joined bar in the glove tier.**
        On the same screen, the bar buttons' edges measure 1.41:1 in
        light and 1.90:1 in dark, while the steppers and fields measure
        4.63:1 and 7.44:1. Under the glare model (g=0.25) the bar edges
@@ -879,6 +879,12 @@ removal or rewording; one shipped framework defect (389.4).
          contrast, or the guideline records why the labels alone
          identify each target. A new modifier is not an acceptable
          outcome.
+       - **DONE 2026-09-25 with 388.1.** The guideline states edge 1.41:1 /
+         1.90:1, seam 1.47:1 / 1.70:1 and label 17.74:1 / 16.15:1 (light /
+         dark), below 3:1 for the edges, and records why each member's label
+         and the bar's equal slots identify the target; the solid primary
+         carries the boundary where it matters. A `check:claims` case
+         recomputes the six ratios and asserts the stated values.
 
 ## Slice 388 — owner input: a capsule button and the button group with a usage guideline; grill the RF / rugged-device patterns as a journey (2026-09-25)
 
@@ -887,7 +893,7 @@ Owner, verbatim: *"/components/button — capsule style button / group button
 screen. Task screen can be better."* Two items; the grill is dispatched by rule 3
 ("or user asked"), the button by the owner's request.
 
-1. [ ] **388.1 — a capsule (fully rounded) button shape that also works on a
+1. [x] **388.1 — a capsule (fully rounded) button shape that also works on a
        button group, and a usage guideline on `/components/button`.** Slice 111
        shipped `.bo-btn-group` / `--bar` but never decided the capsule shape.
        - **Accept — the property, and refusing the shape is a satisfying
@@ -904,6 +910,49 @@ screen. Task screen can be better."* Two items; the grill is dispatched by rule 
          and (if it ships) when a capsule is right and when it is not, each
          with its "Not for" clause, demos through `Demo`, and a `check:claims`
          case for any runtime claim the guideline makes.
+       - **DONE 2026-09-25 — the capsule is REFUSED; the guideline landed.**
+         A design panel (three designs — a shape setting, a
+         `.bo-btn--capsule` modifier, a skeptic — each prototyped on the live
+         page; two judges; a synthesis that re-measured) chose the refusal:
+         28 and 28 against the setting's 21/23 and the modifier's 17/18.
+         Measured grounds: every fully rounded shape outside the tokens (8 of
+         8) is a status, token or marker, never an action, and under forced
+         colours a `--sm` secondary capsule and a `.bo-badge` compute the same
+         in every property but the radius; a capsule is invisible at rest on
+         the ghost variants (0 px changed); it cuts an icon button's
+         hit-tested share of its box from ~0.99 to ~0.83; and the best form,
+         the setting token, froze `--bo-radius-md` on `:root` as drafted.
+         **Reopen condition:** an action that floats OVER content (the
+         modifier design's trigger) — reopen from the setting form with its
+         `:root` default fixed and a 2px forced-colours edge on lone capsules.
+         Landed on `/components/button`: the opener's "Not for" (segmented,
+         chip), so `button` leaves the wrong-choice EXEMPT list; "Which one"
+         (separate / group / segmented / bar, each with its Not-for); demos for
+         separate buttons, toggles, the segmented choice and "one shape";
+         captions on the group and bar; the edge/seam figures 389.25 asked for.
+         Also landed, found by the panel: **`aria-pressed` had no visible state
+         under forced colours** (pressed and unpressed computed identically) —
+         now the system Highlight pair, no transition, ring in Highlight. The
+         RF profile budget went 40 -> 41 kB for it (65 characters over; reason
+         in `build-rf-essentials.mjs`). `check:claims` +6, each seen to fail
+         on a broken build (314/314 green). Jev (Rubric 2): 0.97 / 0.91 / 0.91.
+3. [ ] **388.3 — the segmented control's checked option draws an author-colour
+       focus ring under forced colours.** Found by 388.1's panel: rgb(13,148,136)
+       in both themes, where every other control's ring computes Highlight,
+       because the checked option sets `forced-color-adjust: none`.
+       - **Accept — the property.** Under forced colours a focused checked
+         option's ring computes a system colour, asserted by a `check:claims`
+         case that fails on today's CSS; the tabs' forced rule is measured for
+         the same defect and fixed or cleared.
+4. [ ] **388.4 — two docs follow-ups from 388.1's panel, not re-measured.**
+       (a) `/concepts/cascade`'s example `.bo-btn { border-radius: 0; }` works
+       only because 0 is a group's inner radius; (b) `check:target-size` reads
+       bounding boxes, so a fully rounded target (`.bo-chip__remove`, 24px) is
+       judged by a box it does not fill.
+       - **Accept — the property.** (a) the cascade example demonstrates an
+         override whose result does not depend on a coincidence of values, or
+         the dependence is stated; (b) the target-size gate measures hit-tested
+         area for fully rounded targets, or records why the box is enough.
 2. [x] **388.2 — grill the RF / rugged-device family as a JOURNEY
        (`/design-grill` flow mode).** Owner hypotheses to test, not to assume:
        *an app screen may be missing* and *the task screens can be better*.
