@@ -63,6 +63,7 @@ REFUSES — exits non-zero and prints no verdict — when:
     python3 scripts/loops/milestone.py              # fields, problems, and the verdict if ACTIVE
     python3 scripts/loops/milestone.py --simulate FILE
     python3 scripts/loops/milestone.py --compare    # rule M vs simulate_rule_m.py over the live M1 slices
+    python3 scripts/loops/milestone.py --check-commit <sha>   # the planner's output contract (393.7)
     python3 scripts/loops/milestone.py --self-test
 
 @heuristic — the verdict rests on recognising field values and markers in
@@ -244,15 +245,26 @@ def budget_of(fields):
 def row_tags(item_text):
     """The tags of a loop-log row, from the text after its mode field (what
     dispatch_status.rows() keeps): the segment just before the outcome, and only
-    when it is made of `milestone=Mn` / `track=defect` tokens alone — the same
-    reading as _common.parse_log_line (393.5). Prose that MENTIONS a token, or a
-    tag-shaped segment anywhere else in the item, is not a tag."""
-    tags = {"milestone": None, "defect": False}
+    when it is made of known `key=value` tokens alone — the same reading as
+    _common.parse_log_line (393.5). Prose that MENTIONS a token, or a tag-shaped
+    segment anywhere else in the item, is not a tag. Keys are the mirror's
+    column names (milestone, track, route, tier, model, agent, skill, first_try,
+    trigger), plus `defect` as a bool."""
     segs = [s.strip() for s in item_text.split(" · ")]
-    if len(segs) >= 4 and TAG_SEGMENT.match(segs[-3]):
-        t = tags_of(segs[-3])
-        tags["milestone"], tags["defect"] = t["milestone"], t["track"] == "defect"
+    tags = tags_of(segs[-3]) if len(segs) >= 4 and TAG_SEGMENT.match(segs[-3]) else tags_of("")
+    tags["defect"] = tags["track"] == "defect"
     return tags
+
+
+def row_subject(item_text):
+    """The item id a row leads with (`393.7 — …`), or ''."""
+    m = re.match(r"\s*(\d+\.\d+[a-z]?)\b", item_text)
+    return m.group(1) if m else ""
+
+
+def row_outcome(item_text):
+    segs = [s.strip() for s in item_text.split(" · ")]
+    return segs[-2] if len(segs) >= 2 else ""
 
 
 def m1_rows_since_defect(rows, mid):
@@ -265,8 +277,8 @@ def m1_rows_since_defect(rows, mid):
         t = row_tags(r["item"])
         if t["defect"]:
             break
-        if t["milestone"] == mid:
-            k += 1
+        if t["milestone"] == mid and t["route"] != "planner":
+            k += 1   # a planner run is not a milestone dispatch for the interleave
     return k
 
 
@@ -397,8 +409,136 @@ def _active_date(fields):
     return m.group(1) if m else ""
 
 
+# --- the item lint (393.7): tier 0, code only ---------------------------------
+# An instrument is how the Accept will be checked: a backticked command, file,
+# selector or gate (not a quoted marker line), or a measuring verb as a whole
+# word. Generic stems (`run`, `check`, `test`, `count…`, `diff…`) matched 73-98%
+# of random windows of prose, so they are not instruments (393.7's verification).
+# Measured on history before shipping, and weak there — see 393.7's DONE note —
+# so it gates only milestone picks and planner output.
+INSTRUMENT = re.compile(
+    r"`(?!(?:Milestone|Route|After|Parked|Track|Status):)[^`\n]+`"
+    r"|\b(?:measured?|measures|measuring|counted|grep|replay(?:ed|s)?|red-prove[sd]?|red-proof|"
+    r"screenshots?|asserts?|asserted|numstat|self-test|axe|npm run|npm test|claims? case|quote[sd]?)\b"
+    r"|\bcheck:[a-z][a-z-]+")
+# The Accept is a LABEL at the start of a line or of a sentence — `**Accept —`,
+# `- **Accept:**`, `*Accept*:`, `Accept:` — never the word inside a title or a
+# quotation ("Accept, refuse or rethink", "… no Accept.").
+ACCEPT_LABEL = re.compile(r"(?m)(?:^[ \t]*(?:[-*][ \t]+)?|[.;][ \t]+)\*{0,2}Accept\b\*{0,2}[ \t]*(?:—|:)")
+MARKER_LINE = re.compile(r"^[ \t]*(?:After|Parked|Milestone|Route|Track):", re.I)
+
+
+def accept_block(body, start):
+    """The Accept block from its label to the end of its own bullet or sub-list:
+    the first later line at or left of the label line's indent that starts a
+    bullet or a marker ends it."""
+    lines = body[start:].split("\n")
+    line_start = body.rfind("\n", 0, start) + 1
+    indent = len(body[line_start:start]) - len(body[line_start:start].lstrip())
+    out = [lines[0]]
+    for line in lines[1:]:
+        if line.strip():
+            ind = len(line) - len(line.lstrip())
+            if ind <= indent and (line.lstrip().startswith(("- ", "* ")) or MARKER_LINE.match(line)):
+                break
+        out.append(line)
+    return "\n".join(out)
+
+
+def common_accept(text, slice_id, item_id=""):
+    """A slice preamble's `common Accept` paragraph, which module items inherit
+    ("the slice's common Accept holds") — empty for an id the preamble says it
+    does not apply to."""
+    sec = re.search(rf"^## Slice {re.escape(str(slice_id))}\b.*?(?=^\d+\.\s*\[|^## )", text, re.M | re.S)
+    ca = re.search(r"common Accept.*", sec.group(0), re.S) if sec else None
+    if not ca:
+        return ""
+    excl = re.search(r"does not apply to (.*?)\.(?:\s|$)", ca.group(0), re.S)   # ids carry dots
+    if item_id and excl and re.search(rf"(?<![\d.]){re.escape(item_id)}(?![\d])", excl.group(1)):
+        return ""
+    return ca.group(0)
+
+
+def item_lint(item, text="", routes=None, require_route=False):
+    """Why an item is not executable as written, or []: no Accept label; an
+    Accept block naming no instrument (an inherited common Accept counts); and,
+    when a route is required, a missing or unknown `Route:`."""
+    body = item["body"]
+    m = ACCEPT_LABEL.search(body)
+    reasons = []
+    if not m:
+        reasons.append("no Accept")
+    else:
+        acc = accept_block(body, m.start())
+        if re.search(r"common Accept holds", acc):
+            acc += " " + common_accept(text, item["slice"], item.get("id", ""))
+        if not INSTRUMENT.search(acc):
+            reasons.append("its Accept names no instrument")
+    if require_route:
+        if not item["route"]:
+            reasons.append("no Route:")
+        elif routes is not None and item["route"] not in routes:
+            reasons.append(f"Route: {item['route']} is not in routes.json")
+    return reasons
+
+
+def check_planner_commit(sha, routes="load", cap=None, milestone_only=False):
+    """The planner's output contract (393.7, the prompt's §7), on the ROADMAP.md
+    a commit writes: every item it ADDS or CHANGES must carry an Accept naming
+    an instrument and a `Route:` in routes.json; every `After:` must resolve; an
+    added item must be numbered and its id not already open; and a direction
+    review adds at most `cap` items. `milestone_only` limits it to items tagged
+    with a milestone — the check a non-planner Roadmap row gets while a
+    milestone is ACTIVE. Returns the problems."""
+    import subprocess
+
+    def show(rev, path):
+        out = subprocess.run(["git", "-C", ROOT, "show", f"{rev}:{path}"], capture_output=True, text=True)
+        return out.stdout if out.returncode == 0 else None
+    new, old = show(sha, "ROADMAP.md"), show(f"{sha}^", "ROADMAP.md")
+    if new is None or old is None:
+        return [f"cannot read ROADMAP.md at {sha} and its parent"]
+    try:
+        items = gs.parse_roadmap(new, show(sha, "ROADMAP-archive.md") or "")
+    except SystemExit as e:
+        return [f"ROADMAP.md at {sha} does not parse: {e}"]
+    if routes == "load":
+        routes = load_routes()
+    return added_item_problems(items, new, old, routes, cap=cap, milestone_only=milestone_only)
+
+
+def added_item_problems(items, new_text, old_text, routes, cap=None, milestone_only=False):
+    """The contract over what `new_text` adds to or changes in `old_text`."""
+    try:
+        old_items = {it["id"]: it["body"] for it in gs.parse_roadmap(old_text) if it["id"]}
+    except SystemExit:
+        old_items = {}
+    before = gs.all_item_ids(old_text)
+    problems, added = [], 0
+    ids = [it["id"] for it in items if it["id"]]
+    for dup in sorted({i for i in ids if ids.count(i) > 1}):
+        problems.append(f"{dup}: two open items share this id")
+    old_named = {it["title"] for it in gs.parse_roadmap(old_text) if not it["id"]} if old_items else set()
+    for it in items:
+        if milestone_only and not it["milestone"]:
+            continue
+        if not it["id"]:
+            if it["title"] not in old_named:
+                problems.append(f"{it['title'][:40]}: an added item needs a number")
+            continue
+        is_new = it["id"] not in before
+        changed = it["id"] in old_items and old_items[it["id"]] != it["body"]
+        if not (is_new or changed):
+            continue
+        added += is_new
+        problems += [f"{it['id']}: {r}" for r in item_lint(it, new_text, routes, require_route=True)]
+    if cap is not None and added > cap:
+        problems.append(f"the review adds {added} items; `direction-items` allows {cap}")
+    return problems
+
+
 def verdict(text, archive_text="", rows=(), cloud=False, routes="load", hold_count=None,
-            shell_ids=None):
+            shell_ids=None, now=None):
     """The dispatch verdict for the ACTIVE milestone, as a dict, or None when no
     milestone is ACTIVE. Raises Refuse on any input it will not decide on."""
     ms, structural = parse_milestones(text)
@@ -459,6 +599,16 @@ def verdict(text, archive_text="", rows=(), cloud=False, routes="load", hold_cou
 
     byid = {it["id"]: it for it in items if it["id"]}
     exit_id, exit_phase = EXIT_ITEM.get(mid, (None, None))
+    # The item lint (393.7), cached, and the items whose one sharpen bounce is
+    # spent: a sharpen row's item text leads with the id it sharpened.
+    lint_cache = {}
+
+    def lint_of(it):
+        if it["id"] not in lint_cache:
+            lint_cache[it["id"]] = item_lint(it, text)
+        return lint_cache[it["id"]]
+    bounced = {row_subject(r["item"]) for r in rows
+               if r["loop"] != "Meta" and row_tags(r["item"])["trigger"] == "sharpen"}
     other_phase = [it["id"] for it in mine if it["phase"] == exit_phase and it["id"] != exit_id]
 
     def hold_of(it):
@@ -469,6 +619,8 @@ def verdict(text, archive_text="", rows=(), cloud=False, routes="load", hold_cou
             return "browser"
         if it["id"] == exit_id and other_phase:
             return "dependency"
+        if it["milestone"] == mid and it["id"] in bounced and lint_of(it):
+            return "owner"   # failed the lint after its one sharpen (§7): the owner decides
         return ""
 
     def waits_on(it):
@@ -490,7 +642,8 @@ def verdict(text, archive_text="", rows=(), cloud=False, routes="load", hold_cou
     by_age = lambda lst: sorted(lst, key=lambda it: gs._id_key(it["id"]))  # noqa: E731
     free = by_age([it for it in mine if not hold_of(it)])
     pick = free[0] if free else None
-    held = {k: [it["id"] for it in by_age(mine) if hold_of(it) == k]
+    held = {k: [it["id"] + (" (lint, after its one sharpen)" if k == "owner" and not it["owner"] else "")
+                for it in by_age(mine) if hold_of(it) == k]
             for k in ("owner", "dependency", "parked", "browser")}
     outside = by_age([it for it in items if it["id"] and it["milestone"] != mid and not hold_of(it)])
 
@@ -506,7 +659,7 @@ def verdict(text, archive_text="", rows=(), cloud=False, routes="load", hold_cou
         for it in mine:
             terminal |= ends(it)
         term = by_age([byid[t] for t in terminal if t in byid])
-        owner_ends = [t for t in term if t["owner"]]
+        owner_ends = [t for t in term if hold_of(t) == "owner"]
         free_ends = [t for t in term if not hold_of(t)]
         if free_ends:
             dispatch, reason = free_ends[0], (f"{mid} waits on it: every {mid} item is held, and this "
@@ -518,7 +671,7 @@ def verdict(text, archive_text="", rows=(), cloud=False, routes="load", hold_cou
             defects = [it for it in outside if it["track"] == "defect"]
             rule4 = defects[0] if defects else None
         else:
-            stalled = [f"{t['id']} ({hold_of(t) or 'held'})" for t in term if not t["owner"]]
+            stalled = [f"{t['id']} ({hold_of(t) or 'held'})" for t in term if hold_of(t) != "owner"]
             rule4 = outside[0] if outside else None
             direction = (f"stalled on {', '.join(stalled)} — rule 4 runs" if rule4 else
                          f"DIRECTION GAP D1 — nothing is dispatchable: {mid} is stalled on "
@@ -554,6 +707,96 @@ def verdict(text, archive_text="", rows=(), cloud=False, routes="load", hold_cou
     if over:
         dispatch, reason, rule4 = None, f"STOP (budget): {used} of {bud['wakes']} {mid} wakes used", None
 
+    # --- rule D (393.7): the triggers, in precedence order, then the limits ---
+    # The 24 h window compares naive local stamps, which is sound while one
+    # dispatcher writes the log (`Dispatcher: local`, owner decision O1); a
+    # second clock would need the writer offset LOOPS.md Step 0c describes.
+    rule_d, notes = None, []
+    gate_open = bool(gate_id and ids.get(gate_id) != "closed")
+    diverted = bool(dispatch and pick and dispatch["id"] != pick["id"] and dispatch.get("track") == "defect")
+    chain_end = bool(dispatch and pick is None)
+    if not over and not (gate_open and rule4):
+        now_ = now or datetime.datetime.now()
+        tagged = [(r, row_tags(r["item"])) for r in rows if r["loop"] != "Meta"]
+
+        def planning(r, t):
+            return t["route"] == "planner" or (r["loop"] == "Roadmap" and r.get("mode") in ("plan", "direction"))
+        firing = []
+        if pick and dispatch is pick and lint_of(pick):
+            # Never dispatched while it fails; one bounce, then it is held for the owner (hold_of).
+            firing.append(("sharpen", f"{pick['id']} fails the item lint: {'; '.join(lint_of(pick))}", pick))
+        if direction.startswith("DIRECTION GAP D2"):
+            firing.append(("D2", direction.split(" — ", 1)[-1], None))
+        if direction.startswith("DIRECTION GAP D1"):
+            firing.append(("D1", direction.split(" — ", 1)[-1], None))
+        owner_blocked = direction.startswith("blocked by the owner")
+        mine_rows = [(r, t) for r, t in tagged if t["milestone"] == mid]
+        if not (owner_blocked or chain_end or diverted):
+            # §7: "if M1's open items are all owner- or dependency-blocked, the
+            # planner does not run"; a chain end or a defect interleave is progress.
+            execs = [r for r, t in mine_rows if not planning(r, t)][-3:]
+            if len(execs) == 3 and sum(row_outcome(r["item"]) in ("triaged", "logged") for r in execs) >= 2:
+                firing.append(("D3", f"2 or more of the last 3 {mid} executor rows ended triaged or logged", None))
+            else:
+                picks = [(r, t) for r, t in mine_rows][-3:]
+                if len(picks) == 3 and sum(t["trigger"] == "sharpen" for _, t in picks) >= 2:
+                    firing.append(("D3", f"2 or more of the last 3 {mid} picks failed the item lint", None))
+            dm = re.match(r"^N=(\d+) X=(\d+)$", m["fields"].get("Direction-drift", "off"))
+            if dm:
+                landed = [r for r, t in mine_rows if not planning(r, t) and row_outcome(r["item"]) == "landed"]
+                share, why = framework_share(landed, int(dm.group(1)))
+                if share is None:
+                    notes.append(f"D4 could not be computed: {why}")
+                elif share * 100 < int(dm.group(2)):
+                    firing.append(("D4", f"framework-path share {share:.0%} of the last {dm.group(1)} landings "
+                                         f"is below {dm.group(2)}%", None))
+
+        def last_of(trigger):
+            return next((r for r, t in reversed(tagged) if t["trigger"] == trigger), None)
+        for trig, why, subject in firing:
+            if trig != "sharpen":
+                last = last_of(trig)
+                if trig == "D1" and last is not None and row_outcome(last["item"]) == "logged":
+                    later = [r for r, t in tagged if r["at"] > last["at"] and t["milestone"] == mid and not planning(r, t)]
+                    if not later:
+                        notes.append(f"the last D1 review ({last['at']}) filed nothing, so this one falls through "
+                                     "to rules 5-8")
+                        continue
+                if last is not None and now_ - datetime.datetime.strptime(last["at"], "%Y-%m-%d %H:%M") < datetime.timedelta(hours=24):
+                    notes.append(f"{trig} was reviewed at {last['at']}: once per 24 h")
+                    continue
+            rule_d = {"trigger": trig, "why": why, "item": subject}
+            break
+        # A wake is plan-only when every row it wrote is a planner row; the stop
+        # needs two such wakes in a row (a Roadmap triage row is not a planner run).
+        wakes = []
+        for r, t in tagged:
+            key = (r["at"], r["item"].rsplit(" · ", 1)[-1])
+            if wakes and wakes[-1][0] == key:
+                wakes[-1][1] = wakes[-1][1] and t["route"] == "planner"
+            else:
+                wakes.append([key, t["route"] == "planner"])
+        if "2-wakes-plan-only" in stops and len(wakes) >= 2 and wakes[-1][1] and wakes[-2][1]:
+            rule_d = None
+            dispatch, reason = None, "STOP (2-wakes-plan-only): the last two wakes only planned — halt with a PushNotification"
+            over = True
+            notes.append("rule D does not run at the plan-only stop")
+        elif rule_d:
+            if rule_d["trigger"] == "sharpen":
+                direction = (f"DIRECTION GAP sharpen — {rule_d['why']}; the planner sharpens it this wake, "
+                             "it is not dispatched")
+            else:
+                direction = f"DIRECTION GAP {rule_d['trigger']} — {rule_d['why']}"
+            if dispatch is not None:
+                reason = f"held: rule D ({rule_d['trigger']}) takes this wake"
+                dispatch = None
+    # Printed contract: `DIRECTION GAP` means "run the planner now", so a gap
+    # rule D does not act on this wake is never printed as one (393.7's verification).
+    if rule_d is None and direction.startswith("DIRECTION GAP"):
+        direction = "held — " + direction[len("DIRECTION GAP "):]
+    if notes:
+        direction += " · " + " · ".join(notes)
+
     if dispatch:
         if not dispatch["route"]:
             route = "no Route: — rule 4's playbook, Continue build"
@@ -570,6 +813,9 @@ def verdict(text, archive_text="", rows=(), cloud=False, routes="load", hold_cou
         rule_m = f"{dispatch['id']} — {dispatch['title']} [{route}] ({reason})"
     elif over:
         rule_m = f"none — {reason}"
+    elif rule_d:
+        rule_m = (f"none — rule D ({rule_d['trigger']}) runs the planner route this wake"
+                  + (f" on {rule_d['item']['id']}" if rule_d["item"] else ""))
     else:
         rule_m = "none — see direction" + (f"; rule 4 then: {rule4['id']}" if rule4 else "")
     wake_item = dispatch["id"] if dispatch and not (gate_id and ids.get(gate_id) != "closed") else (
@@ -594,7 +840,31 @@ def verdict(text, archive_text="", rows=(), cloud=False, routes="load", hold_cou
                       + " parsed = raw · After targets resolve · modules " + modules),
     })
     return {"milestone": mid, "dispatch": dispatch, "pick": pick, "rule4": rule4,
-            "lines": lines, "direction": direction}
+            "lines": lines, "direction": direction, "rule_d": rule_d}
+
+
+def framework_share(landed_rows, n):
+    """(share, why): lines under packages/core/src over all lines changed across
+    the commits of the last `n` landed executor rows. (None, why) when it cannot
+    be computed — fewer than `n` landings, or a sha that does not resolve — and
+    the caller says so rather than going quiet (393.7's verification)."""
+    import subprocess
+    shas = [r["item"].rsplit(" · ", 1)[-1].strip() for r in landed_rows][-n:]
+    if len(shas) < n:
+        return None, f"only {len(shas)} landed row(s), fewer than N={n}"
+    total = fw = 0
+    for sha in shas:
+        out = subprocess.run(["git", "-C", ROOT, "show", "--numstat", "--format=", f"{sha}^{{commit}}"],
+                             capture_output=True, text=True)
+        if out.returncode != 0:
+            return None, f"commit {sha} does not resolve"
+        for line in out.stdout.splitlines():
+            parts = line.split("\t")
+            if len(parts) == 3 and parts[0].isdigit():
+                n_ = int(parts[0]) + int(parts[1])
+                total += n_
+                fw += n_ if parts[2].startswith("packages/core/src/") else 0
+    return (fw / total, "") if total else (None, "the landings changed no lines")
 
 
 def _count_holds():
@@ -650,6 +920,12 @@ def simulate(text, routes, keep_open=("394.16",)):
         if closed_now:
             continue
         v = verdict(text, routes=routes, hold_count=0, shell_ids={"home"})
+        if v and v.get("rule_d") and v["rule_d"]["trigger"] == "sharpen":
+            # The planner sharpens the pick (393.7); model it as fixed, marked <id>.
+            iid = v["rule_d"]["item"]["id"]
+            order.append(f"<{iid}>")
+            text = _sharpen(text, iid)
+            continue
         if not v or not v["dispatch"]:
             break
         order.append(v["dispatch"]["id"])
@@ -663,6 +939,17 @@ def _filled(key):
         "Devices: ": "desktop · phone", "Tiers: ": "top=opus · balanced=none · fast=none",
         "Budget: ": "m0-wakes 12 · wakes 999 · agents/wake 8 · workflow-wall 90m · experimental 2 · resume-lines 120 · direction-items 5",
     }.get(key, "x")
+
+
+def _sharpen(text, iid):
+    """Append an Accept that names an instrument to item `iid`'s body."""
+    heads = {m.start(): m for m in gs.ITEM.finditer(text)}
+    for st, en in gs.item_spans(text):
+        m = heads.get(st)
+        if m and f"{m.group(1)}{m.group(2) or ''}" == iid:
+            body = text[st:en].rstrip("\n")
+            return text[:st] + body + "\n       - **Accept:** `sharpened-by-the-planner` passes.\n\n" + text[en:].lstrip("\n")
+    raise Refuse(f"simulate: could not sharpen {iid}")
 
 
 def _close(text, iid):
@@ -701,7 +988,9 @@ def compare_with_reference(pasted, sim_path=SIM):
         ours = simulate(pasted, ROUTES_FX)
     except SystemExit as e:
         raise Refuse(f"rule M's simulation refused: {e}")
-    return ours, theirs
+    # The reference simulator does not model the item lint (393.7): compare the
+    # dispatch order with rule M's sharpen bounces, marked <id>, set aside.
+    return [x for x in ours if not x.startswith("<")], theirs
 
 
 # --- fixtures ----------------------------------------------------------------
@@ -732,10 +1021,12 @@ Stop: HALT | foreign-commit | budget
 BODY = """1. [ ] **9.1 — first.**
        Milestone: M1 · Phase: 1
        Route: build
+       - **Accept:** `check-x` passes.
        After: 9.2
 2. [ ] **9.2 — second.**
        Milestone: M1 · Phase: 1
        Route: design
+       - **Accept:** `check-x` passes.
 3. [ ] **9.3 — owner.**
        Milestone: M1 · Phase: 1
        Route: owner
@@ -990,6 +1281,163 @@ def _fixtures():
                                   "4. [ ] **9.4 — a defect.**\n       Track: defect\n       Route: bogus\n")),
             "names route 'bogus'", routes=table, rows=_rows("milestone=M1", "milestone=M1"))
 
+    # rule D (393.7): the item lint, the triggers, and the limits. Every run goes
+    # through rd(), which also asserts the printed contract: a direction line
+    # says `DIRECTION GAP` only when rule D acts on it this wake.
+    NOW = datetime.datetime(2026, 9, 30, 12, 0)
+
+    def rrow(tags, outcome="landed", at="2026-09-30 10:00", loop="Continue", sha=None, subject="x"):
+        sha = sha or f"d{abs(hash((tags, outcome, at, subject))) % 10**6}"
+        mode = "plan" if loop == "Roadmap" else "build"
+        return {"loop": loop, "at": at, "mode": mode,
+                "item": f"{subject} · {tags} · {outcome} · {sha}" if tags else f"{subject} · {outcome} · {sha}"}
+
+    def rd(text, rows=(), **kw):
+        v = run(text, rows=list(rows), now=NOW, **kw)
+        if v.get("rule_d") is None and v["direction"].startswith("DIRECTION GAP"):
+            bad.append(f"printed DIRECTION GAP with no rule D run: {v['direction'][:80]}")
+        return v
+
+    def planner(trigger, at, subject="x", outcome="triaged"):
+        return rrow(f"milestone=M1 route=planner trigger={trigger}", outcome, at, loop="Roadmap", subject=subject)
+    P = "preempt"
+    noacc = _fx(prec=P).replace("Route: design\n       - **Accept:** `check-x` passes.\n", "Route: design\n")
+    v = rd(noacc)
+    expect("a pick with no Accept is sharpened, not dispatched",
+           v["dispatch"] is None and v["rule_d"] and v["rule_d"]["trigger"] == "sharpen"
+           and "9.2 fails the item lint: no Accept" in v["direction"])
+    v = rd(noacc.replace("2. [ ] **9.2 — second.**", "2. [ ] **9.2 — Accept, refuse or rethink the grid.**"))
+    expect("the word Accept in a title is not an Accept label", v["rule_d"] and "no Accept" in v["direction"])
+    v = rd(_fx(prec=P).replace("Route: design\n       - **Accept:** `check-x` passes.\n",
+                               "Route: design\n       - **Accept:** the layout looks different to the owner.\n"))
+    expect("ordinary words (different, count…) are not an instrument",
+           v["rule_d"] and "its Accept names no instrument" in v["direction"])
+    inherit = (_fx(prec=P).replace("## Slice 9 — fixture\n\n",
+               "## Slice 9 — fixture\n\n**The common Accept for the module items.** It does not apply to 9.7. "
+               "Each is red-proved.\n\n")
+               .replace("Route: design\n       - **Accept:** `check-x` passes.\n",
+                        "Route: design\n       - **Accept:** the slice's common Accept holds.\n"))
+    v = rd(inherit)
+    expect("an inherited common Accept that names an instrument passes the lint", did(v) == "9.2")
+    v = rd(inherit.replace("It does not apply to 9.7.", "It does not apply to 9.2."))
+    expect("an item the common Accept excludes does not inherit it", v["rule_d"] and v["rule_d"]["trigger"] == "sharpen")
+    v = rd(noacc, [planner("sharpen", "2026-09-30 11:00", subject="9.77 — another item")])
+    expect("sharpen has no 24 h limit: another item's recent bounce does not let this pick through",
+           v["dispatch"] is None and v["rule_d"] and v["rule_d"]["trigger"] == "sharpen")
+    bounced = noacc + "6. [ ] **9.6 — a later free item.**\n       Milestone: M1 · Phase: 1\n       Route: build\n       - **Accept:** `check-y` passes.\n"
+    v = rd(bounced, [planner("sharpen", "2026-09-28 11:00", subject="9.2 — second")])
+    expect("after its one bounce a still-failing item is held for the owner, and the next pick is dispatched",
+           did(v) == "9.6" and "9.2 (lint, after its one sharpen)" in v["lines"]["blocked"])
+    v = rd(noacc, [planner("sharpen", "2026-09-28 11:00", subject="9.2 — second")])
+    expect("a failing item after its bounce is never dispatched, even when nothing else is free",
+           v["dispatch"] is None or did(v) != "9.2")
+    three = [rrow("milestone=M1", "logged", "2026-09-30 08:00"), rrow("milestone=M1", "landed", "2026-09-30 09:00"),
+             rrow("milestone=M1", "triaged", "2026-09-30 10:00")]
+    v = rd(_fx(prec=P), three)
+    expect("D3: 2 of the last 3 executor rows triaged or logged takes the wake",
+           v["dispatch"] is None and v["rule_d"]["trigger"] == "D3" and "rule D (D3)" in v["lines"]["rule M"])
+    v = rd(_fx(prec=P), [rrow("milestone=M1", "logged", "2026-09-30 08:00"), rrow("milestone=M1", "landed", "2026-09-30 09:00"),
+                         rrow("milestone=M1", "landed", "2026-09-30 10:00")])
+    expect("D3 does not fire on 1 of 3", did(v) == "9.2" and v["rule_d"] is None)
+    v = rd(_fx(prec=P), [rrow("milestone=M1", "logged", "2026-09-30 08:00"),
+                         planner("D1", "2026-09-30 09:00", outcome="logged"), rrow("milestone=M1", "landed", "2026-09-30 10:00"),
+                         rrow("milestone=M1", "landed", "2026-09-30 10:30")])
+    expect("a planner row is not an executor row for D3", v["rule_d"] is None and did(v) == "9.2")
+    sharp = [planner("sharpen", "2026-09-29 08:00", subject="9.8 — a"), rrow("milestone=M1", "landed", "2026-09-29 09:00"),
+             planner("sharpen", "2026-09-29 10:00", subject="9.9 — b")]
+    v = rd(_fx(prec=P), sharp)
+    expect("D3: 2 of the last 3 picks failed the lint", v["rule_d"] and v["rule_d"]["trigger"] == "D3"
+           and "failed the item lint" in v["direction"])
+    v = rd(_fx(prec=P), three + [planner("D3", "2026-09-30 11:00")])
+    expect("once per 24 h: a D3 reviewed 1 h ago does not fire, and rule M dispatches",
+           did(v) == "9.2" and "D3 was reviewed at 2026-09-30 11:00: once per 24 h" in v["direction"])
+    v = rd(_fx(prec=P), [planner("D3", "2026-09-29 10:00")] + three)
+    expect("after 24 h the trigger fires again", v["rule_d"] and v["rule_d"]["trigger"] == "D3")
+    allowner = _fx(prec=P, body=BODY.replace("Route: build", "Route: owner").replace("Route: design", "Route: owner"))
+    v = rd(allowner, three)
+    expect("D3 does not run when every M1 item waits on the owner (§7)",
+           v["rule_d"] is None and v["direction"].startswith("blocked by the owner"))
+    v = rd(_fx(prec="after 9.5"), three)
+    expect("rule D does not run while Precedence: after keeps rule 4 first", v["rule_d"] is None)
+    v = rd(_fx(), [rrow("milestone=M1", "logged", "2026-09-30 08:00"), rrow("milestone=M1", "triaged", "2026-09-30 09:00"),
+                   rrow("milestone=M1", "landed", "2026-09-30 10:00")])
+    expect("a due defect interleave is not displaced by D3", did(v) == "9.4" and v["rule_d"] is None)
+    real_share = globals()["framework_share"]
+    try:
+        globals()["framework_share"] = lambda rows, n: (0.05, "")
+        v = rd(_fx(prec=P).replace("Direction-drift: off", "Direction-drift: N=3 X=20"))
+        expect("D4 fires below X when Direction-drift is set",
+               v["rule_d"] and v["rule_d"]["trigger"] == "D4" and "5% of the last 3" in v["direction"])
+        v = rd(_fx(prec=P))
+        expect("D4 never fires while Direction-drift is off", v["rule_d"] is None)
+        globals()["framework_share"] = lambda rows, n: (0.5, "")
+        v = rd(_fx(prec=P).replace("Direction-drift: off", "Direction-drift: N=3 X=20"))
+        expect("D4 does not fire at or above X", v["rule_d"] is None and did(v) == "9.2")
+        globals()["framework_share"] = lambda rows, n: (None, "commit deadbee does not resolve")
+        v = rd(_fx(prec=P).replace("Direction-drift: off", "Direction-drift: N=3 X=20"))
+        expect("D4 that cannot be computed says so", "D4 could not be computed: commit deadbee" in v["direction"])
+    finally:
+        globals()["framework_share"] = real_share
+    stall = _fx(prec=P, body=BODY.replace("       Route: build\n       - **Accept:** `check-x` passes.\n       After: 9.2\n",
+                                          "       Route: build\n       - **Accept:** `check-x` passes.\n       Parked: M1 — r — revisit: x\n")
+                .replace("2. [ ] **9.2 — second.**\n       Milestone: M1 · Phase: 1\n       Route: design\n       - **Accept:** `check-x` passes.\n", "")
+                .replace("4. [ ] **9.4 — a defect.**\n       Track: defect\n", "")
+                .replace("5. [ ] **9.5 — outside, free.**\n", ""))
+    v = rd(stall)
+    expect("D1 fires when nothing at all is dispatchable", v["rule_d"] and v["rule_d"]["trigger"] == "D1")
+    v = rd(stall, [planner("D3", "2026-09-30 11:00")])
+    expect("the 24 h limit is per trigger: a recent D3 does not hold D1", v["rule_d"] and v["rule_d"]["trigger"] == "D1")
+    v = rd(stall, [planner("D1", "2026-09-28 10:00", outcome="logged")])
+    expect("a second empty D1 review falls through to rules 5-8, and is printed as held",
+           v["rule_d"] is None and "falls through to rules 5-8" in v["direction"] and v["direction"].startswith("held"))
+    v = rd(stall, [planner("D1", "2026-09-28 10:00", outcome="triaged")])
+    expect("a D1 review that filed items does not make the next one fall through",
+           v["rule_d"] and v["rule_d"]["trigger"] == "D1")
+    v = rd(stall, [planner("D1", "2026-09-30 11:00")])
+    expect("a suppressed D1 is printed as held, not as a gap", v["rule_d"] is None and v["direction"].startswith("held — D1"))
+    stop = _fx(prec=P).replace("Stop: HALT | foreign-commit | budget", "Stop: HALT | foreign-commit | budget | 2-wakes-plan-only")
+    v = rd(stop, [planner("D3", "2026-09-29 10:00"), planner("sharpen", "2026-09-29 11:00", subject="9.8 — a")])
+    expect("two consecutive plan-only wakes halt the loop", v["dispatch"] is None and "STOP (2-wakes-plan-only)" in v["lines"]["rule M"])
+    v = rd(stop, [rrow("milestone=M1", "landed", "2026-09-29 09:00"), planner("D3", "2026-09-29 10:00")])
+    expect("one plan-only wake does not halt", did(v) == "9.2" and "STOP" not in v["lines"]["rule M"])
+    v = rd(stop, [planner("D3", "2026-09-29 08:00"), rrow("milestone=M1", "landed", "2026-09-29 09:00"),
+                  planner("D2", "2026-09-29 10:00")])
+    expect("plan, build, plan does not halt", "STOP" not in v["lines"]["rule M"])
+    v = rd(stop, [rrow("milestone=M1", "landed", "2026-09-29 09:00", loop="Roadmap"),
+                  rrow("milestone=M1", "landed", "2026-09-29 10:00", loop="Roadmap")])
+    expect("Roadmap triage rows that are not planner runs do not halt", "STOP" not in v["lines"]["rule M"])
+    v = rd(stop.replace("Stop: HALT | foreign-commit | budget | 2-wakes-plan-only", "Stop: HALT | foreign-commit | budget"),
+           [planner("D3", "2026-09-29 10:00"), planner("sharpen", "2026-09-29 11:00", subject="9.8 — a")])
+    expect("without 2-wakes-plan-only in Stop there is no halt", "STOP" not in v["lines"]["rule M"])
+    # the planner's output contract, on texts (its git wrapper is red-proved in the DONE note)
+    base = _fx(prec=P)
+    add = base + "6. [ ] **9.6 — filed by the planner.**\n       Milestone: M1 · Phase: 1\n       Route: build\n       - **Accept:** `check-y` passes.\n"
+
+    def contract(new, old=base, cap=None, mo=False):
+        try:
+            return added_item_problems(gs.parse_roadmap(new), new, old, ROUTES_FX, cap=cap, milestone_only=mo)
+        except SystemExit as e:
+            return [str(e)]
+    expect("a well-formed planner item passes the output check", contract(add) == [])
+    for name, new, why in (
+        ("no Accept", add.replace("       - **Accept:** `check-y` passes.\n", ""), "9.6: no Accept"),
+        ("an unknown Route", add.replace("       Route: build\n       - **Accept:** `check-y`", "       Route: layout\n       - **Accept:** `check-y`"),
+         "9.6: Route: layout is not in routes.json"),
+        ("no Route", add.replace("       Route: build\n       - **Accept:** `check-y`", "       - **Accept:** `check-y`"), "9.6: no Route:"),
+        ("an unresolved After:", add.replace("`check-y` passes.\n", "`check-y` passes.\n       After: 9.99\n"), "9.99"),
+        ("an edit that breaks an existing item", base.replace("Route: design\n       - **Accept:** `check-x` passes.\n", "Route: design\n"),
+         "9.2: no Accept"),
+        ("a duplicated open id", add + "7. [ ] **9.6 — a second 9.6.**\n       Route: build\n       - **Accept:** `c` passes.\n",
+         "9.6: two open items share this id"),
+        ("an unnumbered item", add + "8. [ ] **a planner item with no number.**\n", "an added item needs a number"),
+    ):
+        expect(f"a planner commit with {name} fails the output check", any(why in g for g in contract(new)))
+    two = add + "7. [ ] **9.7 — another.**\n       Milestone: M1 · Phase: 1\n       Route: build\n       - **Accept:** `check-z` passes.\n"
+    expect("a review over its direction-items cap fails", any("allows 1" in g for g in contract(two, cap=1)))
+    expect("the cap is not exceeded at the cap", contract(two, cap=2) == [])
+    outside = base + "6. [ ] **9.6 — a defect filed by triage.**\n       Track: defect\n"
+    expect("a non-planner check covers only milestone items", contract(outside, mo=True) == [])
+
     # modules reconcile once the gate item has closed
     MODULES_FROM["M1"] = "9.5"
     try:
@@ -1020,10 +1468,12 @@ def _fixtures():
 SIM_BODY = """1. [ ] **9.1 — waits on the owner's decision.**
        Milestone: M1 · Phase: 1
        Route: build
+       - **Accept:** `check-x` passes.
        After: 9.3
 2. [ ] **9.2 — free.**
        Milestone: M1 · Phase: 1
        Route: design
+       - **Accept:** `check-x` passes.
 3. [ ] **9.3 — the owner decides.**
        Milestone: M1 · Phase: 1
        Route: owner
@@ -1031,10 +1481,12 @@ SIM_BODY = """1. [ ] **9.1 — waits on the owner's decision.**
 4. [ ] **9.4 — waits on two.**
        Milestone: M1 · Phase: 2
        Route: build
+       - **Accept:** `check-x` passes.
        After: 9.1, 9.5
 5. [ ] **9.5 — free, older than it looks.**
        Milestone: M1 · Phase: 2
        Route: mechanical
+       - **Accept:** `check-x` passes.
 """
 
 
@@ -1057,6 +1509,11 @@ def main():
         path = sys.argv[sys.argv.index("--simulate") + 1]
         print("dispatch order:", " ".join(simulate(open(path, encoding="utf-8").read(), ROUTES_FX)))
         return 0
+    if "--check-commit" in sys.argv:
+        sha = sys.argv[sys.argv.index("--check-commit") + 1]
+        problems = check_planner_commit(sha)
+        print("\n".join(problems) if problems else f"{sha}: every item it adds or changes meets the planner's output contract")
+        return 1 if problems else 0
     text = gs._read(gs.ROADMAP)
     if "--compare" in sys.argv:
         try:
@@ -1065,6 +1522,8 @@ def main():
             print(f"compare: REFUSED — {e}", file=sys.stderr)
             return 1
         print("rule M:            ", " ".join(ours))
+        sharp = [x for x in simulate(paste_m1(text), ROUTES_FX) if x.startswith("<")]
+        print("sharpened first:   ", " ".join(sharp) or "none")
         print("simulate_rule_m.py:", " ".join(theirs))
         print("IDENTICAL" if ours == theirs else "DIFFER", f"({len(ours)} / {len(theirs)} entries)")
         return 0 if ours == theirs else 1

@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-25 16:04 UTC
+Generated at: 2026-09-25 17:08 UTC
 
 oldest dispatchable: 375.11 — what 375.9 measured and did not fix.
 
@@ -90,8 +90,7 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 392.2 — a pressed toggle differs from an unpressed one by colour alone in normal colours.
   - 392.3 — a `--bar` label with one word wider than its slot paints past its button.
   - 392.5 — the comparator deltas are recorded nowhere a later grill reads them.
-- **Slice 393** (6 open)
-  - 393.7 — rule D: when there is no task, or an item is unclear, the loop goes to the planner (owner answer 1: "which is bigger target").
+- **Slice 393** (5 open)
   - 393.8 — a bounded hand-off, one wake prompt, and the milestone's read set.
   - 393.9 — apply the realignment markers to the 65 open items. They stay inert until the milestone is ACTIVE.
   - 393.10 — re-score the loop; the owner activates the milestone only at "watch".
@@ -222,7 +221,7 @@ Open items with an `After:` target still open. Each releases when its last targe
 - 394.15 — after 394.14
 - 394.16 — after 394.15 (also owner-blocked)
 - 394.17 — after 394.4, 394.5, 394.6, 394.7, 394.8
-- 393.10 — after 393.7, 393.8, 393.9
+- 393.10 — after 393.8, 393.9
 - 393.12 — after 393.11
 - 249.7 — after 249.10
 

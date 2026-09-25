@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS iterations (
   agent      TEXT,                   -- `agent=` — the agent type that did the work (393.6)
   skill      TEXT,                   -- `skill=` — the skill it leaned on (393.6)
   first_try  TEXT,                   -- `first-try=` landed | reworked | reverted (393.6)
-  tier       TEXT                    -- `tier=` — the tier actually run; top when a none tier was substituted (393.6)
+  tier       TEXT,                   -- `tier=` — the tier actually run; top when a none tier was substituted (393.6)
+  trigger    TEXT                    -- `trigger=` D1 | D2 | D3 | D4 | sharpen — why rule D ran the planner (393.7)
 );
 
 CREATE TABLE IF NOT EXISTS metrics (

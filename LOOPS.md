@@ -624,17 +624,69 @@ match to its full playbook below:
    rule and rule D do not exist. The prompt's §4 is the full statement
    (`.roundtable/milestone-draft-2026-09-25/4-prompt.md`).
 
-   **D. Only while a milestone is ACTIVE: rule D, the planner.** When the
-   `direction` line reads `DIRECTION GAP <trigger>`, dispatch the `planner`
-   route: one `Roadmap · plan|direction` commit that sharpens items or files
-   an owner decision, and never builds. Today the code fires two triggers:
-   - **D1:** nothing is dispatchable at all. The milestone is stalled and
-     rule 4 has no item either, which is §7's "whole backlog" scope.
-   - **D2:** no milestone item is open while its exit item has not closed.
-     This stands in for §7's Done-test clause.
+   **D. Only while a milestone is ACTIVE: rule D, the planner** (roadmap
+   393.7). When the `direction` line reads `DIRECTION GAP <trigger>`, dispatch
+   the `planner` route. It makes one `Roadmap · plan|direction` commit that
+   sharpens items or files an owner decision, and never builds. Record it with
+   `--milestone <id> --route planner --trigger <trigger>`, and lead `--item`
+   with the id of the item it sharpened. `DIRECTION GAP` is printed only when
+   rule D acts on it this wake; a gap the limits hold back is printed as
+   `held — …`. The code fires these triggers, in this order:
+   - **sharpen:** rule M's pick fails the item lint, and the pick is not
+     dispatched. The lint looks for an Accept LABEL at the start of a line or
+     sentence (`**Accept —`, `- **Accept:**`, `Accept:`), an instrument inside
+     that Accept block, and an inherited common Accept, unless the preamble
+     excludes the item. An instrument is a backticked command, file or gate,
+     or a measuring verb such as measured, grep, replay, red-prove,
+     screenshot, assert, `check:…` or quote. **One bounce:** an item that
+     still fails after its sharpen is held for the owner and shown as
+     `(lint, after its one sharpen)`, and rule M takes the next pick. Sharpen
+     has no 24 h limit. The lint's `Route:` clause is enforced earlier, by
+     393.4's milestone-wide refusal of a missing or unknown route.
+   - **D2:** no milestone item is open, and the milestone's exit item has not
+     closed.
+   - **D1:** nothing is dispatchable at all: the milestone is stalled and rule
+     4 has no item either.
+   - **D3:** 2 or more of the last 3 milestone executor rows ended `triaged`
+     or `logged`, or 2 or more of the last 3 milestone rows are sharpen
+     bounces. An executor row is any milestone row that is not a planning row
+     (`route=planner`, or `Roadmap · plan|direction`).
+   - **D4:** only when the owner sets `Direction-drift: N=<n> X=<x>`, fired
+     when the share of lines under `packages/core/src` over the last N landed
+     executor rows is below X%. When it cannot be computed, for example
+     because a commit does not resolve, it says so.
 
-   D3 (unclear direction), D4 (drift) and the once-per-24h limit are left
-   for 393.7. The planner route's contract is 393.6's `routes.json`.
+   D3 and D4 take the wake ahead of rule M's pick (the "bigger target"
+   reading of §7), with three exceptions:
+   - the owner is the blocker (§7: then the planner does not run);
+   - rule M is dispatching a free chain end the milestone waits on;
+   - the dispatch is a defect interleave.
+
+   No rule D runs while `Precedence: after <id>` keeps rule 4 first. A planner
+   row does not count toward the interleave.
+
+   **Limits**, read from the recorded rows:
+   - each of D1-D4 fires at most once per 24 h, and the limit applies to that
+     trigger only;
+   - a D1 review that filed nothing (`logged`), with no executor row since,
+     makes the next D1 fall through to rules 5-8;
+   - two consecutive wakes in which every row was a planner run stop the loop,
+     with a PushNotification, when `2-wakes-plan-only` is in the milestone's
+     `Stop` field. The rule M line reads `STOP (2-wakes-plan-only)`. A Roadmap
+     triage row is not a planner run.
+
+   The 24 h window compares local stamps, which is sound while one dispatcher
+   writes the log (O1).
+
+   **The planner's output contract is enforced when it is recorded.**
+   `record_iteration.py --route planner` runs
+   `milestone.py --check-commit <sha>`, and so does `--no-log`. Every item the
+   commit ADDS or CHANGES must carry an Accept that names an instrument, a
+   `Route:` in routes.json, and resolvable `After:` lines. An added item must
+   be numbered, and its id must not already be open. A D1-D4 review adds at
+   most `direction-items` items. While a milestone is ACTIVE, any other
+   `Roadmap` row gets the same check on the milestone items its commit
+   touches. A failure refuses the record, and nothing is written.
 
 4. **Build item queued anywhere in the backlog** — the OLDEST still-open item
    across all slices, not the newest? → dispatch **Continue**, build mode.

@@ -49,7 +49,8 @@ def from_rev(rev):
 # before them gains them here, empty: rows written before a column existed are
 # never backfilled (393.5, and 393.6 for the route columns).
 ADDED_COLUMNS = (("milestone", "TEXT"), ("track", "TEXT"), ("route", "TEXT"), ("model", "TEXT"),
-                 ("agent", "TEXT"), ("skill", "TEXT"), ("first_try", "TEXT"), ("tier", "TEXT"))
+                 ("agent", "TEXT"), ("skill", "TEXT"), ("first_try", "TEXT"), ("tier", "TEXT"),
+                 ("trigger", "TEXT"))
 
 
 def connect(db=DB):
@@ -80,11 +81,13 @@ TAG_VALUES = {
     "skill": r"[A-Za-z0-9][A-Za-z0-9._:/-]*",
     "first-try": r"landed|reworked|reverted",
     "tier": r"top|balanced|fast",
+    "trigger": r"D1|D2|D3|D4|sharpen",
 }
 _TOKEN = "(?:" + "|".join(f"{k}=(?:{v})" for k, v in TAG_VALUES.items()) + ")"
 TAG_SEGMENT = re.compile(rf"^{_TOKEN}(?: {_TOKEN})*$")
 TAG_COLUMNS = {"milestone": "milestone", "track": "track", "route": "route", "tier": "tier",
-               "model": "model", "agent": "agent", "skill": "skill", "first-try": "first_try"}
+               "model": "model", "agent": "agent", "skill": "skill", "first-try": "first_try",
+               "trigger": "trigger"}
 
 
 def tags_of(segment):

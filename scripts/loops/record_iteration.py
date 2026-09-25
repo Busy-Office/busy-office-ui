@@ -164,6 +164,9 @@ def main():
     ap.add_argument("--skill", default=None, help="the skill the work leaned on")
     ap.add_argument("--first-try", default=None, choices=["landed", "reworked", "reverted"],
                     help="did the work land on its first attempt")
+    ap.add_argument("--trigger", default=None, choices=["D1", "D2", "D3", "D4", "sharpen"],
+                    help="why rule D ran the planner (393.7); only with --route planner. The "
+                         "once-per-24h limit and the plan-only stop are read from these rows")
     ap.add_argument("--no-log", action="store_true",
                     help="insert the DB row only; don't append to loop-log.md")
     ap.add_argument("--also-refused", action="append", default=[],
@@ -226,6 +229,9 @@ def main():
         if value is not None and not re.fullmatch(TAG_VALUES[key], value):
             raise SystemExit(f'record_iteration: {flag} "{value}" must be one token '
                              "(letters, digits and . _ : / -), because it is written into the row")
+    if args.trigger is not None and (args.route != "planner" or not args.milestone):
+        raise SystemExit("record_iteration: --trigger names why rule D ran the planner, so it needs "
+                         "--route planner and --milestone (the limits and D3 read milestone rows)")
     if args.outcome not in OUTCOMES:
         raise SystemExit(
             f'record_iteration: unknown outcome "{args.outcome}".\n'
@@ -239,6 +245,23 @@ def main():
                 f"  offending text: {text!r}"
             )
     commit = args.commit or head_sha()
+    # The planner's output contract (393.7): every item a planner commit adds or
+    # changes needs an Accept naming an instrument, a Route: in routes.json and
+    # resolvable After: lines; a direction review adds at most `direction-items`.
+    # While a milestone is ACTIVE, any other Roadmap row gets the same check on
+    # the milestone items its commit touches, so triage cannot slip one past it.
+    # Runs under --no-log too: that flag skips the log, not the contract.
+    import milestone
+    active = [(mid, mm) for mid, mm in milestone.parse_milestones(
+        open(os.path.join(ROOT, "ROADMAP.md"), encoding="utf-8").read())[0].items() if mm["status"] == "ACTIVE"]
+    if args.route == "planner" or (args.loop == "Roadmap" and active):
+        cap = None
+        if args.trigger in ("D1", "D2", "D3", "D4") and active:
+            cap = milestone.budget_of(active[0][1]["fields"]).get("direction-items")
+        problems = milestone.check_planner_commit(commit, cap=cap, milestone_only=args.route != "planner")
+        if problems:
+            raise SystemExit("record_iteration: commit " + str(commit) + " breaks the planner's output "
+                             "contract, so it was not recorded:\n  " + "\n  ".join(problems))
 
     # The tags go into the ROW, as their own segment before the outcome, because
     # dispatch_status.py reads the log, not loops.db: rules 2 and 3 under
@@ -246,7 +269,7 @@ def main():
     # A refusal row is not a dispatch, so it carries no tags.
     given = {"milestone": args.milestone, "track": args.track, "route": args.route,
              "tier": args.tier, "model": args.model, "agent": args.agent, "skill": args.skill,
-             "first-try": args.first_try}
+             "first-try": args.first_try, "trigger": args.trigger}
     tags = " ".join(f"{k}={v}" for k, v in given.items() if v)
     tag_cols = {TAG_COLUMNS[k]: v for k, v in given.items()}
     rows = [(ts, args.loop, args.mode, args.item, args.outcome, commit, tags)]

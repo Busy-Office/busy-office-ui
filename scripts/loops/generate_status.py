@@ -288,7 +288,7 @@ def parse_roadmap(text, archive_text=""):
         if parked and parked not in ms:
             problems.append(f"{label} is `Parked: {parked}`, and ROADMAP.md has no `## Milestone {parked}`")
         items.append({
-            "slice": major, "id": iid, "title": title,
+            "slice": major, "id": iid, "title": title, "body": body,
             "owner": owner, "owner_quoted": quoted,
             "browser": bool(BROWSER_MARK.search(prose)),
             "after": after, "after_open": [t for t in after if ids.get(t) == "open"],

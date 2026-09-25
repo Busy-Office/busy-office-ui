@@ -2016,7 +2016,7 @@ superseded once a named item has landed or the owner has acted.
            - a false `--no-log` docstring.
 
            All are fixed as described above.
-7. [ ] **393.7 — rule D: when there is no task, or an item is unclear, the loop
+7. [x] **393.7 — rule D: when there is no task, or an item is unclear, the loop
        goes to the planner (owner answer 1: "which is bigger target").**
        Milestone: M1 · Phase: 0
        Route: build
@@ -2039,6 +2039,135 @@ superseded once a named item has landed or the owner has acted.
            Two consecutive wakes that only plan halt the loop with a
            PushNotification; red-prove this with a fixture. A second empty D1
            review falls through to rules 5-8.
+       - **DONE 2026-09-26.** Rule D lives in `milestone.py` and prints on the
+         `direction` line. `DIRECTION GAP` is printed only when rule D acts on
+         it this wake, and `held — …` otherwise. LOOPS.md Step 2 carries its
+         rule D paragraph.
+         - **Triggers, replayed before shipping.** The replay is
+           `.roundtable/milestone-m1-2026-09-25/replay_triggers.py --rev
+           024bccc2`. It reads every file through `git show`, runs from any
+           directory, and takes about 2.5 minutes. It uses proxies, because no
+           milestone was ever ACTIVE:
+           - **D1: 5 of 45 dates, ROADMAP.md at each end of day.**
+             - 2 are all-held. 09-02 is real: that ROADMAP.md says "every
+               unchecked item … is undispatchable".
+             - 3 are "free-named-only", where the only free items are
+               unnumbered. 08-13 and 08-16 are false fires. 08-14 is right for
+               the wrong reason.
+             - 21 dates are unparseable, because prose `After:` lines predate
+               the marker. A secondary pass reads all 21 as quiet.
+             - Evaluated at every log row's own commit: 360 of 1,782 rows fire,
+               and all-held fires fall on 11 of 34 dates, 9 once per 24 h. The
+               pattern: a Continue row lands the last free item, and the next
+               wake files new work.
+           - **D2: 0 by construction.** No milestone section existed before
+             `c8d2ccb7`.
+           - **D3: 0 of 678 Continue rows.** Only 4 Continue rows ever ended
+             triaged or logged, and they were 23-81 rows apart. **This clause
+             may never fire.** An executor that meets an unclear item records
+             it under a Roadmap row or a Meta refusal, not as its own outcome.
+             If every loop but Meta counted, it would fire 99 times (8.1%).
+             Revisit when the first 20 milestone executor rows are in: if D3
+             has not fired while planner re-plans happened, count `refused`
+             too. The lint half of D3 has no history to replay.
+           - **D4: dominated by bookkeeping.** `packages/core/src` is 6.0% of
+             all changed lines. The median 10-landing share is 4.9%, and a
+             threshold of 10/20/30% would fire on 27/29/29 of 33 dates. D4
+             stays off until the owner sets it (O16), and these figures are
+             the data for choosing X.
+           - **The plan-only stop.** With the loose predicate (any
+             `Roadmap · plan` row), history has 30 adjacent plan-only pairs,
+             mostly owner-input triage. So the stop counts only wakes whose
+             every row is a planner run. On history that is 0 by construction,
+             because no row carried `route=planner`.
+         - **The item lint**, re-run rather than copied. The harvest, label
+           and lint scripts are committed under `lint_history/`. At today's
+           HEAD they label 47 items that were re-planned and 314 that were
+           built as written:
+           - "no Accept" catches **10/47 (21%)** and flags **26/314 (8%)**,
+             the real signal;
+           - "no instrument" catches 9/47 (19%) and flags 77/314 (25%), no
+             better than chance on old-style items;
+           - together: 19/47 and 103/314.
+
+           The draft's "15 of 45 / 19 of 309" came from a differently defined
+           lint and reproduces as 13/45, 18/309. Both clauses ship, because
+           this Accept names them, but the pick lint only sees
+           property-and-instrument items. It flags 2 of the 35 live non-owner
+           M1 items:
+           - 394.11 states a property with no check;
+           - 396.12 delegates to other items' Accepts.
+
+           Each will be sharpened once when picked. **Revisit the instrument
+           clause** if 2 of its first 5 sharpen bounces come back "executable
+           as written".
+         - **The item lint at the pick** has two clauses: an Accept label (at
+           the start of a line or sentence, never a word in a title or a
+           quotation), and an instrument inside that Accept block. An
+           inherited common Accept counts, unless the preamble excludes the
+           item. **One bounce:** an item that still fails after its sharpen
+           is held for the owner, `(lint, after its one sharpen)`, and rule M
+           picks the next item. A failing pick is never dispatched. The
+           `Route:` clause is enforced earlier, by 393.4's milestone-wide
+           refusal.
+         - **Planner output.** `milestone.py --check-commit <sha>` checks every
+           item a commit adds or changes: Accept with an instrument, `Route:`
+           in routes.json, resolvable `After:`, numbered, no duplicate open id,
+           at most `direction-items` for a D1-D4 review. `record_iteration.py
+           --route planner` runs it, even under `--no-log`. While a milestone
+           is ACTIVE, any `Roadmap` row gets the check on the milestone items
+           its commit touches. Red-proved in scratch git repos: an item with
+           no Accept, one with an unknown route, and a triage row adding a
+           milestone item with no Accept were all refused, with log lines
+           unchanged.
+         - **Frequency limits**, from the recorded rows (`--trigger` needs
+           `--milestone` and `--route planner`):
+           - each of D1-D4 fires at most once per 24 h, per trigger;
+           - a D1 review that filed nothing, with no executor row since,
+             makes the next D1 fall through to rules 5-8;
+           - two consecutive all-planner wakes stop the loop when
+             `2-wakes-plan-only` is in `Stop`.
+
+           Fixtures red-prove each limit, and its negatives: one plan-only
+           wake, plan-build-plan and triage rows do not stop the loop, a
+           recent D3 does not hold D1, and a D1 review that filed items does
+           not fall through.
+         - **Order.** D3 and D4 take the wake ahead of rule M's pick, except
+           when the owner is the blocker (§7), when rule M dispatches a free
+           chain end, or when the dispatch is a defect interleave. Nothing
+           runs under an open `Precedence: after`. Planner rows do not count
+           toward the interleave.
+         - **Tests.** 20 injections into the rule D code all fail the
+           self-test, on top of the earlier 46. `--compare` against
+           `simulate_rule_m.py` reads IDENTICAL, 40 / 40. The rule M
+           simulation models a sharpen as fixed-then-dispatched, and reports
+           `<394.11> <396.12>` apart. With M1 DRAFT, `dispatch_status.py` is
+           byte-identical to HEAD's (2,799 bytes).
+         - **Jev, rubric 2** (advisory): triggers 0.88, lint 0.88, planner
+           output 0.86, limits 0.93. All four are in the supporting band.
+         - **Adversarial verification** (`wf_ca045290-84c`: 2 lenses and a
+           critic, all "holds with defects"). All of these were found and
+           fixed:
+           - **three blockers:**
+             - my own regression that dropped `--outcome` validation;
+             - a failing pick that got through under the 24 h limit, with no
+               one-bounce cap;
+             - suppressed gaps still printed as `DIRECTION GAP`;
+           - D3 and D4 running against §7 while the owner blocked;
+           - rule D ignoring `Precedence: after` and the interleave;
+           - a planner contract limited to added items, and bypassable with
+             `--no-log` or without `--route`;
+           - an instrument regex that matched 73-98% of prose, and an Accept
+             label that matched titles;
+           - common-Accept exclusions that were ignored;
+           - D4 going quiet on a sha that does not resolve;
+           - a replay that failed outside the repo root;
+           - frequency fixtures that could not tell one wake from two.
+
+           While fixing them, a replacement of mine truncated `milestone.py`
+           after `framework_share`. The self-test caught it by printing
+           nothing. The tail was restored from HEAD and the 393.7 edits were
+           re-applied.
 8. [ ] **393.8 — a bounded hand-off, one wake prompt, and the milestone's read
        set.**
        Milestone: M1 · Phase: 0
