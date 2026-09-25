@@ -60,20 +60,30 @@ not all re-run, because the tree this wake ships is markdown only and
 `docs:build` is the gate that reads `ROADMAP.md`/`LOOPS.md`/`.roundtable/**`.
 **Said plainly rather than implied.**
 
-**CI went red on this wake's own push and is green again — read `391.2` before
-re-raising it.** `88ba16bb` failed `check:claims` **1 of 311** on CI, and the one
-was NOT any of this container's three: it was the SC 2.5.7 file-chooser case
-timing out at 5,000 ms. One `rerun_failed_jobs` (the only re-run `LOOPS.md`
-allows) came back **green on the identical commit**, so `main` is green and the
-case is confirmed intermittent. Filed as `391.2` with the rate left to measure —
-not skipped, not quarantined. **It also sharpens `391.1` rather than weakening
-it:** CI executed the gate at that sha and reported *no sticky-table failure at
-all*, so the three this container fails are absent from CI's output, not merely
+**CI went red on this wake's own markdown-only push, twice, and `391.2` FIXES
+it.** `88ba16bb` and then `07aef5bf` both failed `check:claims` **1 of 311**,
+and the one was NOT any of this container's three: it was the SC 2.5.7
+file-chooser case timing out at 5,000 ms, with a byte-identical payload and a
+healthy geometry block both times. The one `rerun_failed_jobs` `LOOPS.md` allows
+came back **green on the identical commit — and that green was the misleading
+reading**, refuted by the next push. Measured rate: **2 of 4** CI runs.
+
+**Fixed by raising the wait to 15,000 ms**, with the rate and the reasoning in
+the code beside the constant. The case is **not** skipped, disabled or
+quarantined and its assertion is unchanged (`opened === true` still required);
+only the patience moved. If it recurs, the next step is to make the case assert
+something that is not a race — **not** to raise the number again.
+
+**It also sharpens `391.1` rather than weakening it:** CI executed the gate at
+both shas and reported *no sticky-table failure at all*, so the three this
+container fails deterministically are absent from CI's output, not merely
 unreached.
 
 **NOT VERIFIED:** no 1440/390 light-and-dark screenshots — a cloud wake has no
-Podman. None are owed; no CSS, `.astro`, docs page or generated artefact is in
-the diff.
+Podman. None are owed. The diff is four markdown files plus one constant and its
+comment in `apps/docs/scripts/check-claims.mjs` — a **gate script, not shipped
+code**; no CSS, `.astro`, docs page, `packages/core` source or generated
+artefact, so nothing a screenshot could show has changed.
 
 **For the next wake:** the queue state below is the local session's and is
 current. `391.1` is the only thing this wake added to it.

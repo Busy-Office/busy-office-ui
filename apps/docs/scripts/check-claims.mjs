@@ -7565,7 +7565,15 @@ const pickerByPointer = await (async () => {
   let opened = false, chooserErr = null;
   try {
     const [chooser] = await Promise.all([
-      page.waitForFileChooser({ timeout: 5000 }),
+      // 15s, not 5s (roadmap 391.2). The 5s wait failed on 2 of 4 observed CI
+      // runs — 88ba16bb and 07aef5bf, both markdown-only diffs — with the
+      // geometry block healthy every time (isLabel, inputHidden,
+      // pointIsOnInput false, pointInViewport true) and only the chooser event
+      // missing. A shared runner is slower than this container, where the case
+      // has never failed. This raises PATIENCE, not permissiveness: the check
+      // below still requires `opened === true`, so a dropzone that never opens
+      // a picker still fails, it just takes longer to say so.
+      page.waitForFileChooser({ timeout: 15000 }),
       page.mouse.click(geom.point.x, geom.point.y),
     ]);
     opened = !!chooser;

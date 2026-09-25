@@ -393,11 +393,13 @@ Two things follow, and they point in opposite directions:
 - **A second, separate finding: CI's file-chooser case is flaky.** A 5,000 ms
   timeout waiting for a native `FileChooser` is a timing assertion, the diff that
   "caused" it is four markdown files, and `b0401326` passed the identical case
-  minutes earlier. **One re-run was spent, which is all `LOOPS.md` allows, and it
-  came back `completed success` on the identical commit** (run `36095606397`,
-  `rerun_failed_jobs`, green at `04:55:23Z`) — so `main` is green and the case is
-  confirmed intermittent rather than assumed to be. *"Flake" is still not a root
-  cause*, so it is filed as `391.2` rather than waved off.
+  minutes earlier. **The one re-run `LOOPS.md` allows came back green on the
+  identical commit** (run `36095606397`, `rerun_failed_jobs`, `04:55:23Z`) —
+  **and then the same case failed again on the NEXT sha, `07aef5bf`, with a
+  byte-identical payload.** So the rate over the four CI runs this wake observed
+  is **2 of 4**, which is not a rare flake, and the re-run's green was the
+  misleading reading rather than the settling one. **Fixed in this wake** — see
+  `391.2`; `main` is not left red on a "flake" verdict.
 
 **This wake did not introduce either failure**, and that is a set
 membership argument rather than a guess: the gate reads `apps/docs/dist` and
@@ -445,31 +447,56 @@ intersection during **backward** scroll.
        - **Lane**: cloud-takeable for the measurement; the CI half needs only
          the run/job API, which a cloud wake has.
 
-2. [ ] **391.2 — `check:claims`'s SC 2.5.7 file-chooser case fails
-       intermittently ON CI, and its failure mode is a bare timeout.** Observed
-       on `88ba16bb`, whose diff is four markdown files, minutes after
-       `b0401326` passed the same case:
-       `{"opened":false,"chooserErr":"Waiting for FileChooser failed: 5000ms exceeded"}`.
-       The geometry block in the same payload is healthy — `isLabel: true`,
-       `inputHidden: true`, `pointIsOnInput: false`, `pointInViewport: true` —
-       so the click landed where the case intends and only the chooser event
-       did not arrive.
-       - **Accept** — the property: one wake establishes the rate (how many of
-         the last N CI runs of this case failed, from the run/job API rather
-         than from memory) and either raises the wait with the reason, makes
-         the case assert something that is not a race, or records that the
-         rate is low enough to leave alone. **Leaving it alone with a measured
-         rate is a satisfying outcome**; what is not allowed is calling it a
-         flake without the rate, which is `LOOPS.md`'s own rule.
-       - **Do NOT skip, disable or quarantine the case** — the standing rule.
-       - **Lane**: cloud-takeable; the rate is an API read and the wait is one
-         constant in `check-claims.mjs`.
+2. [x] **391.2 — DONE: `check:claims`'s SC 2.5.7 file-chooser wait goes
+       5,000 ms → 15,000 ms, because the case fails on CI at a measured 2 of 4
+       and the wait is the only thing that is short.**
+
+       **The rate is measured, not asserted**, over every CI run of this gate
+       this wake observed:
+
+       | run | sha | this case |
+       |---|---|---|
+       | `36095…` | `b0401326` | pass |
+       | `36095606397` | `88ba16bb` | **FAIL** |
+       | `36095606397` re-run | `88ba16bb` | pass |
+       | `36096487317` | `07aef5bf` | **FAIL** |
+
+       Both failing shas carry a **markdown-only** diff, and both payloads are
+       identical: `{"opened":false,"chooserErr":"Waiting for FileChooser failed:
+       5000ms exceeded"}` with the geometry block healthy every time —
+       `isLabel: true`, `inputHidden: true`, `inputNotDisplayNone: true`,
+       `pointIsOnInput: false`, `pointInViewport: true`. So the click lands
+       where the case intends and only the native chooser event is late.
+
+       **The re-run's green is the reading that would have misled a wake**, and
+       it is recorded for that reason: spending the one permitted re-run
+       produced *"confirmed intermittent, main is green"*, which the very next
+       push refuted. **A single passing re-run is not evidence of rarity** — the
+       rate needs more than one point, exactly as rule 5's own "two consecutive
+       runs" wording says about metrics.
+
+       **What the fix is NOT.** The case is not skipped, disabled, quarantined
+       or made conditional, and its assertion is unchanged: `opened === true` is
+       still required, so a dropzone that never opens a picker still fails the
+       build. Only the patience moves, and the reason is in the code beside the
+       constant. The container has never failed this case, which is consistent
+       with a shared runner simply being slower.
+
+       **What is left open**: whether 15,000 ms is enough is a claim about a
+       machine this wake cannot profile. If it recurs, the next step is to make
+       the case assert something that is not a race rather than to raise the
+       number again — a timeout ladder is how a real defect gets hidden.
 
 **NOT VERIFIED, said plainly:** no 1440/390 light-and-dark screenshots — a
 cloud wake has no Podman. **None are owed**, read off `git diff --stat` rather
-than assumed: the diff is `ROADMAP.md`, `LOOPS.md`, `LOOPS-archive.md` and
-`.roundtable/RESUME.md`. No CSS, no `.astro`, no docs page, no shipped JS, no
-generated artefact.
+than assumed: the diff is `ROADMAP.md`, `LOOPS.md`, `LOOPS-archive.md`,
+`.roundtable/RESUME.md` and **`apps/docs/scripts/check-claims.mjs`** — one
+constant and its comment, for `391.2`. That last file is a **gate script, not
+shipped code**: no CSS, no `.astro`, no docs page, no `packages/core` source, no
+generated artefact, so nothing a screenshot could show has changed. **The
+earlier "four markdown files" phrasing in this entry describes the two commits
+that OBSERVED the CI failures** (`88ba16bb`, `07aef5bf`) and stays true of
+them; it is not a claim about this slice's final diff.
 
 ## Slice 390 — Standardize sweep, 4 of 4 lanes on an isolated clean build: lanes 1 and 2 carry no new finding, lane 3 flags `/components/button/` (the new which-one guideline) and gets a verdict, lane 4's +52 is two sentences of new instruction (2026-09-25)
 
