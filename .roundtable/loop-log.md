@@ -1813,3 +1813,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-25 23:33 · Continue · build · 393.5 — milestone rows move the counters (folds 392.4 thesis-gated rule-3 reset, 381.2 base rate 4 of 20) · landed · a4f4fd13
 - 2026-09-25 23:33 · Meta · refusal · 381.2: counting only shipping slices toward rule 3 — a counter change with five recorded starvations; narrowing the grill instead · refused · a4f4fd13
 - 2026-09-25 23:33 · Meta · refusal · 392.4: design-grill rows resetting rule 3 — they grill a screen, not the armed slices' claims · refused · a4f4fd13
+- 2026-09-26 00:04 · Continue · build · 393.6 — routes.json + route telemetry; recorder preflight and column read-back; tier none→top per §5 (owner to confirm) · milestone=M1 route=build tier=top model=claude-opus-5-5 first-try=reworked · landed · 887ac04c
+- 2026-09-26 00:04 · Meta · refusal · 393.6: refusing a none tier — §5 and O14 say it runs on top; the Accept's wording is superseded, owner asked to confirm · refused · 887ac04c

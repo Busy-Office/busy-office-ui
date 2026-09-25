@@ -142,11 +142,13 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1807 iterations logged)
-  Standardize   9 / 4 Continue rounds since 2026-09-25 12:20   OVERDUE
+dispatch status — counter-triggered rules (1809 iterations logged)
+  Standardize  10 / 4 Continue rounds since 2026-09-25 12:20   OVERDUE
   Objective     3 / 3 slices          since 2026-09-25 13:32   OVERDUE  [375, 392, 393]
   -> a counter is at or past its threshold; the dispatcher should pick it
-  Optimize      0 wake-date(s) newer   since 2026-09-25 05:14   ok   [newest pair: claims; 153 sample(s), 8 of 51 name(s) paired across days]
+  Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 153 sample(s), 8 of 51 name(s) paired across days]
+  -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
+     the unit is DISTINCT LOG DATES after 2026-09-25 (2026-09-26), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (43 of 51 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
        claims                      6d  2026-09-19 203 count -> 2026-09-25 311 count  +108
        dispatch-region-words       5d  2026-09-24 7749 words -> 2026-09-25 7775 words  +26   [2 same-day]
@@ -244,8 +246,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-25 20:44 · Continue · build · 393.2 — in-flight protocol (partial): inflight.py + Step 0 hold + cap; cap proven live at 2 min (test task stopped, 33 of 60 lines unfinished) · landed · 8fcf50c2
-- 2026-09-25 21:15 · Continue · build · 375.11 — zoom half fixed: grid message never covers its field at 400% (0/360); Firefox half open · landed · 24b4cb69
 - 2026-09-25 22:03 · Continue · build · 393.2 — one real hold measured at 2 tool calls; in-flight protocol closed · landed · 3c142f20
 - 2026-09-25 22:03 · Continue · build · 393.3 — backlog mirror: every kind of wait, own-line markers reconciled, oldest dispatchable computed (375.11) · landed · 3c142f20
 - 2026-09-25 22:03 · Meta · refusal · marking 394.13 owner-blocked for one O15-dependent Accept bullet — a marker would hold the whole item · refused · 3c142f20
@@ -254,6 +254,8 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-25 23:33 · Continue · build · 393.5 — milestone rows move the counters (folds 392.4 thesis-gated rule-3 reset, 381.2 base rate 4 of 20) · landed · a4f4fd13
 - 2026-09-25 23:33 · Meta · refusal · 381.2: counting only shipping slices toward rule 3 — a counter change with five recorded starvations; narrowing the grill instead · refused · a4f4fd13
 - 2026-09-25 23:33 · Meta · refusal · 392.4: design-grill rows resetting rule 3 — they grill a screen, not the armed slices' claims · refused · a4f4fd13
+- 2026-09-26 00:04 · Continue · build · 393.6 — routes.json + route telemetry; recorder preflight and column read-back; tier none→top per §5 (owner to confirm) · landed · 887ac04c
+- 2026-09-26 00:04 · Meta · refusal · 393.6: refusing a none tier — §5 and O14 say it runs on top; the Accept's wording is superseded, owner asked to confirm · refused · 887ac04c
 
 ## Sunset test
 
