@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-25 12:34 UTC
+Generated at: 2026-09-25 12:44 UTC
 
 ## Open items by slice
 
@@ -145,9 +145,10 @@ Generated at: 2026-09-25 12:34 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1797 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-09-25 12:20   ok
+dispatch status — counter-triggered rules (1798 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-09-25 12:20   OVERDUE
   Objective     2 / 3 slices          since 2026-09-25 13:32   ok  [392, 393]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-09-25 05:14   ok   [newest pair: claims; 153 sample(s), 8 of 51 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (43 of 51 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
        claims                      6d  2026-09-19 203 count -> 2026-09-25 311 count  +108
@@ -160,6 +161,7 @@ dispatch status — counter-triggered rules (1797 iterations logged)
        behaviors_frozen            2d  2026-08-15 16 count -> 2026-08-16 18 count  +2   [2 same-day]
      no direction is recorded with a sample, so the movement above is a reading and the regression verdict is the wake's. A name that has NEVER MOVED is either healthy or pinned by a gate — rule 5 cannot fire on it either way (`axe-violations` is 0 on every day because `test:axe` fails the build above 0).
      a direction is NOT recorded on purpose (roadmap 324.1): adding one makes rule 5 fire on `bundle-gz-kb`'s four consecutive rises, which the log's own same-timestamp `components` samples refute (0.400 -> 0.355 kB per component over that window). A rise with no denominator is growth. Where a name has a real threshold, use it — `check:size` gates the bundle at 16.7 kB gz, which is rule 5's budget clause, not its trend one.
+  Holds         0 hold-wake(s) recorded, 0 today (UTC dates)   [inflight.py hold; .roundtable/hold-wakes.jsonl]
 ```
 
 ## Owner-blocked
@@ -184,7 +186,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-25 09:00 · Continue · build · 388.1 — capsule refused by design panel; button which-one guideline; aria-pressed forced-colours fix; 389.25 closed · landed · a1b3969b
 - 2026-09-25 09:00 · Meta · refusal · capsule button shape (setting token, --capsule modifier): a pill is a status here; hit area and forced-colours collision measured · refused · a1b3969b
 - 2026-09-25 12:20 · Standardize · sweep · 390 — Standardize sweep 4 of 4 lanes; /components/button verdict; icon caption narrative cut · landed · 1d0046c3
 - 2026-09-25 04:42 · Roadmap · triage · Slice 391 — cloud wake collided TWICE (Step 0c 6 and 7: rule 4 on 336.2 against a 159-commit-stale Step 0, verdicts DISAGREED; rule 2's sweep against Slice 390, same finding same number). Both discards checked, both returned nothing. Filed 391.1: check:claims 3 of 311 red here at b0401326, deterministic over two runs on Chromium 141, while CI reports success on the same sha · triaged · 3b24cc94
@@ -194,6 +195,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-25 14:12 · Continue · fix · 392.1 — P0: a scan verdict stamped while a flash is live restarts the flash · landed · a16d4ff3
 - 2026-09-25 20:24 · Roadmap · triage · M1 milestone triaged as DRAFT; Slice 393 (M0) approved as bootstrap; owner O1-O4 applied (one dispatcher, park, cap 12, naming rule) · triaged · c8d2ccb7
 - 2026-09-25 20:34 · Continue · build · 393.1 — one dispatcher: Step 0 guard (HALT, checkout, foreign commits) · landed · b17b36e7
+- 2026-09-25 20:44 · Continue · build · 393.2 — in-flight protocol (partial): inflight.py + Step 0 hold + cap; cap proven live at 2 min (test task stopped, 33 of 60 lines unfinished) · landed · 8fcf50c2
 
 ## Sunset test
 
