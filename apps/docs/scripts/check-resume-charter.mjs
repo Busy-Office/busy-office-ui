@@ -186,6 +186,51 @@ export const pointsAtEnvironment = (src) => {
   return false;
 };
 
+/* RESUME.md's own shape (roadmap 393.8): four sections and a line cap. The
+   per-wake hand-off grew to 1,044 lines by accumulating dated hand-offs; they
+   now live in `.roundtable/resume-history.md`, and the cap is the milestone's
+   `resume-lines` Budget value, read from ROADMAP.md rather than pinned here. */
+export const ALLOWED_SECTIONS = ['In flight', 'Uncommitted', 'Next rule', 'Direction'];
+export const sectionProblems = (src) => {
+  const heads = [];
+  let fenced = false;
+  for (const line of src.split('\n')) {
+    if (FENCE.test(line)) {
+      fenced = !fenced;
+      continue;
+    }
+    if (!fenced && /^#{1,2} /.test(line)) heads.push(line);
+  }
+  const out = [];
+  const titles = heads.filter((h) => /^# /.test(h));
+  if (titles.length > 1) out.push(`${titles.length} "# " titles; only the first line may be one`);
+  const sections = heads.filter((h) => /^## /.test(h)).map((h) => h.slice(3).trim());
+  const seen = new Set();
+  for (const h of sections) {
+    const key = /^Direction\b/.test(h) ? 'Direction' : h;
+    if (seen.has(key)) out.push(`"## ${key}" appears twice`);
+    seen.add(key);
+    if (key === 'Direction') {
+      if (!/^Direction — \d{4}-\d{2}-\d{2}$/.test(h)) out.push(`"## ${h}" must be dated: "## Direction — YYYY-MM-DD"`);
+    } else if (!ALLOWED_SECTIONS.includes(h)) out.push(`"## ${h}" is not one of ${ALLOWED_SECTIONS.join(', ')}`);
+  }
+  for (const want of ALLOWED_SECTIONS) if (!seen.has(want)) out.push(`no "## ${want}" section`);
+  return out;
+};
+/* The cap is the milestone's own Budget value — the ACTIVE milestone's, or the
+   only one's — read from its first fenced block, never from any stray line. */
+export const lineCap = (roadmap) => {
+  if (!roadmap) return null;
+  const secs = [...roadmap.matchAll(/^## Milestone (M\d+)\b[^\n]*\n([\s\S]*?)(?=^## |(?![\s\S]))/gm)];
+  const fields = secs.map((m) => (m[2].match(/^```\n([\s\S]*?)^```/m) || [, ''])[1]);
+  const active = fields.filter((f) => /^Status:\s*ACTIVE\b/m.test(f));
+  const pick = active.length === 1 ? active[0] : fields.length === 1 ? fields[0] : null;
+  const m = pick && pick.match(/^Budget:.*\bresume-lines (\d+)\b/m);
+  return m ? Number(m[1]) : null;
+};
+export const lineCount = (src) => src.replace(/\n$/, '').split('\n').length;
+export const capHolds = (lines, cap) => cap !== null && lines <= cap;
+
 /* Run the detector against inputs it must tell apart. This is what the
    `@heuristic` tag owes, and it is red-proved in both directions: case 2 is the
    original bash-comment bug (a `#` line inside a fence is not a heading), and
@@ -214,6 +259,30 @@ if (process.argv.includes('--self-test')) {
       'a `>` inside a fence is not a blockquote',
       !pointsAtEnvironment('```\n> cat ENVIRONMENT.md\n```'),
     ],
+    /* 393.8: the four sections and the cap. */
+    ['the four sections, Direction dated, pass',
+      sectionProblems('# R\n\n## In flight\n\n## Uncommitted\n\n## Next rule\n\n## Direction — 2026-09-26\n').length === 0],
+    ['a fifth section is caught',
+      sectionProblems('# R\n## In flight\n## Uncommitted\n## Next rule\n## Direction — 2026-09-26\n## PLAN — work this order\n').length === 1],
+    ['an undated Direction is caught',
+      sectionProblems('# R\n## In flight\n## Uncommitted\n## Next rule\n## Direction\n').some((p) => p.includes('must be dated'))],
+    ['a missing section is caught',
+      sectionProblems('# R\n## In flight\n## Next rule\n## Direction — 2026-09-26\n').some((p) => p.includes('Uncommitted'))],
+    ['a second # title is caught',
+      sectionProblems('# R\n## In flight\n## Uncommitted\n## Next rule\n## Direction — 2026-09-26\n# Old hand-off\n').length === 1],
+    ['a duplicated section is caught',
+      sectionProblems('# R\n## In flight\n## Uncommitted\n## Next rule\n## Direction — 2026-09-26\n## Direction — 2026-09-25\n').some((p) => p.includes('twice'))],
+    ['a ### subheading inside a section is allowed',
+      sectionProblems('# R\n## In flight\n## Uncommitted\n## Next rule\n### detail\n## Direction — 2026-09-26\n').length === 0],
+    ['the cap is read from the milestone field block',
+      lineCap('## Milestone M1 — x\n\n```\nStatus: DRAFT\nBudget: m0-wakes 12 · resume-lines 120\n```\n## Next\n') === 120],
+    ['a stray Budget line outside a milestone block is ignored',
+      lineCap('Budget: resume-lines 40\n## Milestone M1 — x\n\n```\nStatus: DRAFT\nBudget: resume-lines 120\n```\n') === 120],
+    ['no milestone means no cap', lineCap('Status: DRAFT') === null],
+    ['the cap holds at the cap', capHolds(120, 120)],
+    ['the cap fails at cap + 1', !capHolds(121, 120)],
+    ['no cap fails the gate', !capHolds(10, null)],
+    ['lines are counted without the trailing newline', lineCount('a\nb\n') === 2],
   ];
   const bad = cases.filter(([, ok]) => !ok);
   for (const [what, ok] of cases) console.log(`  ${ok ? 'ok  ' : 'FAIL'}  ${what}`);
@@ -249,6 +318,7 @@ try {
   process.exit(0);
 }
 const environment = await readFile(ENVIRONMENT, 'utf8').catch(() => null);
+const roadmap = await readFile(join(REPO_ROOT, 'ROADMAP.md'), 'utf8').catch(() => null);
 
 const g = gate('resume charter', 'charter rules');
 
@@ -311,5 +381,27 @@ if (environment !== null) {
     );
   }
 }
+
+/* 393.8: the hand-off's own shape. */
+const shape = sectionProblems(resume);
+g.check(
+  'RESUME.md holds only In flight, Uncommitted, Next rule and a dated Direction',
+  shape.length === 0,
+  shape.join('\n     ') +
+    '\n     History goes to .roundtable/resume-history.md (verbatim, dated), never back here.',
+);
+const cap = lineCap(roadmap);
+const lines = lineCount(resume);
+g.check(
+  `RESUME.md is at or under the milestone's resume-lines cap (${lines} of ${cap ?? '?'})`,
+  capHolds(lines, cap),
+  cap === null
+    ? 'No `Budget: … resume-lines N` in the (active or only) milestone block of ROADMAP.md, so the\n' +
+        '     cap cannot be read. When the milestone section is archived, move the cap first —\n' +
+        '     a gate that\n' +
+        '     cannot read its limit must fail, not pass.'
+    : `RESUME.md has ${lines} lines against a cap of ${cap}. Move history to\n` +
+        '     .roundtable/resume-history.md rather than raising the cap.',
+);
 
 g.report('hold');

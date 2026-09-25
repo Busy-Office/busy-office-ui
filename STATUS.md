@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-25 17:08 UTC
+Generated at: 2026-09-25 17:43 UTC
 
 oldest dispatchable: 375.11 — what 375.9 measured and did not fix.
 
@@ -91,11 +91,11 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 392.3 — a `--bar` label with one word wider than its slot paints past its button.
   - 392.5 — the comparator deltas are recorded nowhere a later grill reads them.
 - **Slice 393** (5 open)
-  - 393.8 — a bounded hand-off, one wake prompt, and the milestone's read set.
   - 393.9 — apply the realignment markers to the 65 open items. They stay inert until the milestone is ACTIVE.
   - 393.10 — re-score the loop; the owner activates the milestone only at "watch".
   - 393.11 — a close is verified on HEAD alone (folds 377.3).
   - 393.12 — worktree isolation and fan-in, as code.
+  - 393.13 — the Step 0 read cost, measured on the first ACTIVE milestone wake (393.8's fourth clause, moved here).
 - **Slice 394** (18 open)
   - 394.1 — OWNER CALL: naming doctrine. Every published name names a shape (owner answer 2; roundtable 2026-09-25).
   - 394.2 — OWNER CALL: the app, the module list and the device classes (folds 377.6; owner answer 3).
@@ -162,6 +162,16 @@ dispatch status — counter-triggered rules (1811 iterations logged)
   Holds         1 hold-wake(s) recorded, 1 today (UTC dates)   [inflight.py hold; .roundtable/hold-wakes.jsonl]
 ```
 
+## Milestone progress
+
+Generated from the `Milestone: Mn · Phase: n` markers on every item, open or closed (roadmap 393.8). The milestone's own status is its `Status:` field.
+
+- **M1** — DRAFT
+  - Phase 0: 8 of 12 closed
+  - Phase 1: 0 of 19 closed
+  - Phase 2: 0 of 15 closed
+  - Phase 3: 0 of 2 closed
+
 ## Owner-blocked
 
 Open items carrying an owner marker (`BLOCKED ON`, `OWNER CALL`, `OWNER OR <X> CALL`, `OWNER ·`, `NEEDS-RUNTIME`, or `Route: owner`) — needs an owner decision, trigger, or hardware a wake cannot supply on its own.
@@ -221,7 +231,7 @@ Open items with an `After:` target still open. Each releases when its last targe
 - 394.15 — after 394.14
 - 394.16 — after 394.15 (also owner-blocked)
 - 394.17 — after 394.4, 394.5, 394.6, 394.7, 394.8
-- 393.10 — after 393.8, 393.9
+- 393.10 — after 393.9
 - 393.12 — after 393.11
 - 249.7 — after 249.10
 

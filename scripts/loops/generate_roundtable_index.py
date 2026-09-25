@@ -50,6 +50,9 @@ LIVING = {
     # re-copy it"). LOOPS.md Step 0 instructs every wake to read it, which is
     # this section's definition, and it inflated the snapshot count by one.
     "ENVIRONMENT.md": "the git/build traps and the toolchain that works",
+    # 393.8 moved RESUME.md's accumulated hand-offs here, verbatim; it is a
+    # living archive, not a dated finding.
+    "resume-history.md": "hand-offs moved out of RESUME.md, verbatim (393.8)",
     "PANEL.md": "the standing review panel",
     "surface-baseline.md": "the scored-surface baseline",
     "surface-review-rubric.md": "how a surface is scored",

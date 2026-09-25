@@ -590,6 +590,21 @@ Two rules, both cheap:
 here); §6's warning about it not ticking per step is about mid-flight polling,
 not about a completed run.
 
+## 6e. BEFORE TRUSTING A `:8081` SCREENSHOT, CONFIRM ONE LISTENER
+
+```
+lsof -nP -iTCP:8081 -sTCP:LISTEN
+```
+
+It must show exactly one process, the Podman container. On 2026-09-22 a
+temporary host server and the container were bound to the same port on different
+stacks (node on IPv4, gvproxy on IPv6), so `http://localhost:8081` answered from
+either depending on IPv6 preference. The CLAUDE.md stale-image check
+(`curl …/_astro/*.css | grep <new-class>`) cannot catch it: a different server is
+not a stale layer. Moved here from `RESUME.md` by 393.8, because the hand-off is
+rewritten every wake and this is durable (source: `resume-history.md`, the
+2026-09-20 hand-off).
+
 ## 7. A BARE `wc -w` UNDERCOUNTS THIS REPO BY 2.4-4.5%
 
 No locale is set in this container, and GNU `wc` in the C locale swallows an em

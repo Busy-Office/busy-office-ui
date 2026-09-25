@@ -2168,7 +2168,7 @@ superseded once a named item has landed or the owner has acted.
            after `framework_share`. The self-test caught it by printing
            nothing. The tail was restored from HEAD and the 393.7 edits were
            re-applied.
-8. [ ] **393.8 — a bounded hand-off, one wake prompt, and the milestone's read
+8. [x] **393.8 — a bounded hand-off, one wake prompt, and the milestone's read
        set.**
        Milestone: M1 · Phase: 0
        Route: build
@@ -2189,6 +2189,94 @@ superseded once a named item has landed or the owner has acted.
            trigger points at the one copy.
          - **Read cost.** Count the words read at Step 0 on one real milestone
            wake, and report the figure against round 1's reading of about 110k.
+       - **DONE 2026-09-26 on its first three clauses. The fourth, read cost,
+         moved to `393.13`,** because no milestone wake can exist before M1 is
+         ACTIVE, and keeping it here would deadlock M0 (393.10 waits on this
+         item). Jev scored that clause 0.08 against a claim of "met", which is
+         right. Its measured evidence so far is below.
+         - **RESUME.md** holds four sections: `In flight`, `Uncommitted`,
+           `Next rule`, and `Direction — <date>`. It is 70 lines against the
+           cap of 120. Its first 23 lines (the title, the ENVIRONMENT.md
+           blockquote, the charter) were kept verbatim.
+           - **Accounted line by line, both ways.** HEAD's 1,044 lines = 23
+             kept + 1,021 moved. The moved block in
+             `.roundtable/resume-history.md` is exactly those lines, in order.
+             Every old line is in one of the two, and every moved line came
+             from the old file.
+           - **Still-current facts went to durable homes**, not only to
+             history. The single-`:8081`-listener rule, with its reason, is in
+             ENVIRONMENT.md §6e. The owner's O3 bootstrap wording is quoted
+             verbatim in `Next rule`. The "empty RESUME.md" instructions (in
+             LOOPS.md and the file itself) now say "clear In flight and
+             Uncommitted", which the charter allows.
+         - **`check-resume-charter`** now also asserts:
+           - the four sections: level-2 headings only, a dated Direction, no
+             second `#` title, no duplicate section, `###` allowed inside a
+             section;
+           - the line cap, read from the (ACTIVE or only) milestone's field
+             block and never from a stray `Budget:` line, failing loudly when
+             no cap can be read.
+
+           **Red-proved on the real file**: exit 0 at 120 lines, exit 1 at
+           121 ("121 of 120"), and the file was restored byte-for-byte (`cmp`).
+           Its self-test has 23 cases, including the cap predicate at the
+           cap, at cap + 1, and with no cap.
+         - **Milestone progress** is generated into STATUS.md from the markers,
+           in ROADMAP.md and in ROADMAP-archive.md, so a swept slice does not
+           vanish. It reads M1 DRAFT: Phase 0 is 7 of 12 closed, Phases 1-3
+           none of 18, 15 and 2. The self-test covers open, closed and
+           archived items.
+         - **One wake prompt.**
+           - LOOPS.md's new section "The wake prompt — the one copy" holds the
+             owner's current `/loop` text. `git grep` finds no other copy in
+             the repo.
+           - The trigger list names the `/loop` invocation, the self-paced
+             wake, the assistant's memory note (rewritten to point here; its
+             own copy had drifted to "bind-mounted") and the disabled cloud
+             routine, which holds an older copy and is stopped by
+             `step0_guard.py`.
+           - The duplicated `gh`-intake paragraphs (LOOPS.md:353-371 at the
+             triage commit) are merged into one: "only the pinned set of
+             PR-review operations is served" went from 2 copies to 1, and so
+             did "Discussions were not checked this wake".
+         - **Read cost, measured.** Counted with `str.split()` over the
+           tool-result text of real wakes in the session transcripts
+           (critic's scripts, 393.8's verification):
+           - a cold-start wake (2026-09-23) read **12,352 words** at Step 0;
+           - the first M0 bootstrap wake on a milestone item (2026-09-25) read
+             **3,791**.
+
+           As whole-file models, the literal prompt's read set (LOOPS +
+           ROADMAP + RESUME + ENVIRONMENT) is **131,377 words at HEAD and
+           122,865 now**, and the prompt §4 milestone read set models at about
+           13.3k. **Round 1's "about 110k" has no source**: `rg -F 110k` finds
+           only this Accept and its draft. No real wake reads the 131k, and
+           the Read tool truncates LOOPS.md anyway. The honest reading is that
+           RESUME.md fell from 9,216 words to about 550, and that the wake
+           prompt's "read LOOPS.md and ROADMAP.md fresh" is what a
+           milestone-scoped wake should stop doing. That wording is the
+           owner's, and is in RESUME.md's Direction. **`393.13` re-measures it
+           on the first ACTIVE wake.**
+         - **Jev, rubric 2** (advisory): RESUME 0.94, progress 0.83, one prompt
+           0.87, read cost 0.08. The first three are in the supporting band or
+           near it. The fourth does not support a close, so that clause moved.
+         - **Adversarial verification** (`wf_84102e0c-2aa`, a skeptic and a
+           critic, "holds with defects"). What was fixed:
+           - the read-cost figures (mixed snapshots, models reported as
+             measurements);
+           - an off-by-one line count (1,044, not 1,045);
+           - archived milestone items dropped from the progress count;
+           - the listener rule stranded in history;
+           - the "empty RESUME.md" instructions that now contradict the
+             charter;
+           - a section parser that missed extra H1s and duplicate sections and
+             refused `###`;
+           - a self-test that could not see a fail-open cap check;
+           - the cap read from any `Budget:` line;
+           - the owner's GOAL paraphrased;
+           - "seven" unreleased P0s (it is eight, with 392.1);
+           - the history file missing from the index's living set;
+           - the cloud routine missing from the trigger list.
 9. [ ] **393.9 — apply the realignment markers to the 65 open items. They stay
        inert until the milestone is ACTIVE.**
        Milestone: M1 · Phase: 0
@@ -2263,6 +2351,25 @@ superseded once a named item has landed or the owner has acted.
            - the ledger;
            - the suite registries;
            - generated files.
+13. [ ] **393.13 — the Step 0 read cost, measured on the first ACTIVE milestone
+       wake (393.8's fourth clause, moved here).**
+       Milestone: M1 · Phase: 1
+       Route: build
+       - **Why it is its own item.** 393.8's Accept asks for the words read at
+         Step 0 "on one real milestone wake". No milestone wake can exist until
+         M1 is ACTIVE, M1 cannot activate before 393.10, and 393.10 waits on
+         393.8. Leaving the clause in 393.8 would deadlock M0. Jev scored the
+         clause as closed at 0.08 on 2026-09-26, correctly.
+       - **Accept — the property.** On the first wake after the owner sets
+         `Status: ACTIVE`, count the words that wake read at Step 0.
+         - Count them from its own transcript, with `str.split()` over the
+           tool-result text, and name the transcript and the command.
+         - Report the figure against the two real readings 393.8 measured
+           (12,352 at a cold start, 3,791 on a bootstrap wake) and against the
+           whole-file model (122,865). Round 1's "about 110k" has no source.
+         - Say whether the wake read LOOPS.md or ROADMAP.md whole, and whether
+           the wake prompt's "Read `LOOPS.md` and `ROADMAP.md` fresh" made it
+           do so. Finding that it did not is a satisfying outcome.
 
 ## Slice 392 — Objective grill of 388.1, 389.4/389.25 and Slice 390: 41 of 59 claims reproduce, 22 of 28 findings survive (plus 12 the skeptics found), and the headline is a P0 the fix it grilled could not see — a second scan verdict inside a live flash never shows (2026-09-25)
 

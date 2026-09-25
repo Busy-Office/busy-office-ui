@@ -361,6 +361,31 @@ def raw_open_after_targets(text):
     return n
 
 
+def milestone_progress(text, archive_text=""):
+    """{mid: (status line, {phase: (open, closed)})} counted from the markers of
+    every item, open or closed, in ROADMAP.md AND ROADMAP-archive.md — a swept
+    slice's items are closed, and dropping them would make a phase vanish or
+    shrink (393.8's verification). The spans and marker parser are the ones the
+    reconcile uses for ROADMAP.md."""
+    heads = re.finditer(r"^## Milestone (M\d+)\b", text, re.M)
+    status = {}
+    for h in heads:
+        st = re.search(r"^Status:\s*(.+?)\s*(?:#.*)?$", text[h.end():], re.M)
+        status[h.group(1)] = st.group(1) if st else "?"
+    out = {mid: (st, {}) for mid, st in status.items()}
+    for src in (text, archive_text):
+      for s, e in item_spans(src):
+        body = src[s:e]
+        mk = parse_markers(body)
+        if not mk["Milestone"]:
+            continue
+        mid, ph = mk["Milestone"][0].group(1), mk["Milestone"][0].group(2)
+        is_open = bool(ANY_OPEN.match(body)) and src is text
+        o, c = out.setdefault(mid, ("?", {}))[1].get(ph, (0, 0))
+        out[mid][1][ph] = (o + is_open, c + (not is_open))
+    return out
+
+
 def blocked_kind(it):
     """Why an open item cannot be dispatched, or '' when it can. Browser-blocked
     is listed but not a hold: the one dispatcher (O1) is a local wake."""
@@ -635,6 +660,25 @@ def render(now_str):
     out.append("```")
     out.append(counters)
     out.append("```")
+    out.append("")
+
+    out.append("## Milestone progress")
+    out.append("")
+    out.append(
+        "Generated from the `Milestone: Mn · Phase: n` markers on every item, open or "
+        "closed (roadmap 393.8). The milestone's own status is its `Status:` field."
+    )
+    out.append("")
+    prog = milestone_progress(_read(ROADMAP), _read(ARCHIVE))
+    if prog:
+        for mid, (status, phases) in prog.items():
+            out.append(f"- **{mid}** — {status}")
+            for ph in sorted(phases):
+                o, c = phases[ph]
+                bar = "done" if o == 0 else f"{c} of {o + c} closed"
+                out.append(f"  - Phase {ph}: {bar}")
+    else:
+        out.append("(no milestone)")
     out.append("")
 
     out.append("## Owner-blocked")
@@ -939,6 +983,16 @@ def self_test():
             FIXTURE.replace("After: 2.2", "After: 1.1"), "2.1 is `After: 1.1`")
     a_items, a_rows = mirror(FIXTURE.replace("After: 2.2", "After: 1.1"), arch, label="FIXTURE with an archived target")
     expect("an archived After: target resolves as closed and releases", a_rows["2.1"][2] == "")
+
+    # 393.8: milestone progress is counted from the markers, open and closed.
+    prog = milestone_progress(FIXTURE)
+    expect("milestone progress counts a closed marker item", prog.get("M1") == ("ACTIVE", {"0": (0, 1)}))
+    prog = milestone_progress(FIXTURE.replace("10. [x] **2.10", "10. [ ] **2.10"))
+    expect("and an open one", prog.get("M1") == ("ACTIVE", {"0": (1, 0)}))
+    arch = "## Slice 1 — archived\n\n1. [x] **1.1 — archived.**\n       Milestone: M1 · Phase: 3\n"
+    prog = milestone_progress(FIXTURE, arch)
+    expect("an archived item's marker still counts, as closed",
+           prog.get("M1") == ("ACTIVE", {"0": (0, 1), "3": (0, 1)}))
 
     # An older mirror's table is dropped and rebuilt, not half-written.
     with tempfile.TemporaryDirectory() as d:

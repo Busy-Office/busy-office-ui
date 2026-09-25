@@ -30,6 +30,37 @@ demand: `/loop <type> …`.
 
 ---
 
+## The wake prompt — the one copy
+
+This is the prompt that runs one wake, verbatim. It is the one copy in the
+repo (roadmap 393.8). Every trigger sends this text or points here:
+- the owner's `/loop` invocation;
+- the self-paced wake that re-sends it (the loop skill requires the text
+  verbatim);
+- the assistant's memory note, which records why it exists;
+- the disabled cloud routine (`trig_019aw8t…`), whose own older copy lacks the
+  `:8081` wording and adds a cloud paragraph. It is off, and `step0_guard.py`
+  stops any cloud session it would start (O1).
+
+**If a trigger's copy differs from this one, this one is current.** The copy
+in the memory note had already drifted ("bind-mounted Podman container")
+when this section was written.
+
+> Run one wake of the busy-office-ui loop system. Read `LOOPS.md` and
+> `ROADMAP.md` fresh — don't assume prior-turn state; `.roundtable/RESUME.md`
+> is the only handover. Act as the Roadmap dispatcher exactly as `LOOPS.md`
+> specifies: triage any new input into `ROADMAP.md` with Accept criteria and
+> commit it, then evaluate the dispatcher rules **in the order that file
+> states them** and run the dispatched loop's full playbook, multi-round until
+> its exit condition is genuinely met. Verify live (Podman container on :8081,
+> rebuilt with `-p 8081:80`, 1440px and 390px, light and dark; run the CI-only
+> sweeps `test:axe` and `check:layout` before pushing), pass verifier, commit,
+> and record every iteration with `scripts/loops/record_iteration.py`. If the
+> dispatcher reaches its halt rule, report the blocking set once and stop.
+
+It restates no dispatch order, slice number or rubric detail, on purpose.
+Restatements are how the previous prompt drifted for weeks (roadmap 102.4).
+
 ## Dispatcher — what the Roadmap loop does every wake
 
 Two steps, in order. **Both run every wake** — this replaces the old model of a
@@ -128,7 +159,7 @@ exit, so an ABSENT list with no CLOSED id beside it is never seen.
 
 A dirty tree is a finding, not a starting point — the previous wake was
 interrupted. Finish and land that slice before dispatching anything new, and
-empty `RESUME.md` when it lands.
+clear `RESUME.md`'s In flight and Uncommitted sections when it lands (393.8: the file keeps its four sections).
 
 `RESUME.md`'s `## Direction` block is answered at hand-off, not read and left
 (168.1). It is the only place the loop can say the owner's chosen direction is
@@ -400,25 +431,19 @@ means **served and empty**. Verified identical in both environments
 2026-09-24 (335.1): a throwaway discussion appeared as `200 len 1` and was
 gone again once deleted.
 
-**The `gh` forms this file used to mandate DO NOT RUN in a cloud wake**
-(roadmap 302.1, and the wake that found it recorded *"Discussions were not
-checked this wake"*). There is no `gh` binary in that container, and its
-GraphQL endpoint is refused outright — *"only the pinned set of PR-review
-operations is served"*. The commands were written and verified on a local Mac
-and never in the environment that runs most wakes, which is exactly the
-"a gate that only runs in CI is not known to work" rule pointing the other
-way. `gh issue list` and `mcp__github__list_issues` both remain fine where
-they exist; the REST form above is what a wake can always fall back to.
-
-**Those are two `gh` invocations, and `gh` is not the requirement — a READING
-from each intake is** (roadmap 302.1, 2026-09-06). Neither command runs in a
-cloud wake: there is no `gh` binary, and the GraphQL endpoint the Discussions
-one needs is refused for that session with *"only the pinned set of PR-review
-operations is served"*. The issues half has an obvious substitute and was being
-read anyway; **the Discussions half had none, and the wake that first met this
-rule recorded "Discussions were not checked this wake"** — a mandated intake
-that no wake could execute, which is this file's own gate rule pointing at
-itself: *a gate that cannot run must fail loudly, never skip quietly*.
+**The `gh` forms this file used to mandate do not run in a cloud wake, and
+`gh` was never the requirement — a READING from each intake is** (roadmap
+302.1, 2026-09-06). There is no `gh` binary in that container, and the GraphQL
+endpoint the Discussions query needs is refused outright — *"only the pinned
+set of PR-review operations is served"*. The commands were written and verified
+on a local Mac, never where most wakes ran, which is "a gate that only runs in
+CI is not known to work" pointing the other way. The issues half had a
+substitute and was read anyway; **the Discussions half had none, and the wake
+that met it recorded "Discussions were not checked this wake"** — a mandated
+intake no wake could execute: *a gate that cannot run must fail loudly, never
+skip quietly*. `gh issue list` and `mcp__github__list_issues` remain fine where
+they exist; the REST form above is what a wake can always fall back to. (Two
+paragraphs said this twice until 393.8 merged them.)
 
 So the rule is: **each intake produces a count this wake, or the wake says
 which one it could not read and why.** Never report the triage step clear on an
@@ -834,7 +859,7 @@ match to its full playbook below:
    **One standing exception, named so it is not mistaken for the mechanism:**
    the owner's M0 bootstrap (decision O3 in ROADMAP.md's `## Milestone M1`)
    dispatches 393.5-393.10 in `After:` order until 393.10 closes. It runs
-   through its RESUME GOAL, capped at `m0-wakes`, because M1 is not ACTIVE
+   through RESUME.md's `Next rule` section, capped at `m0-wakes`, because M1 is not ACTIVE
    yet and rule M cannot run. No new GOAL may be written as a dispatch
    override.
 5. **A tracked metric regressed on TWO CONSECUTIVE runs** (bundle size, gate
