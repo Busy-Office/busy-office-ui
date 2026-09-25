@@ -1044,6 +1044,9 @@ python3 scripts/loops/record_iteration.py \
   #   --also-refused "<what was refused, one line>"   (repeatable; 51.1/62.1)
   # milestone work: --milestone M1; defect-track work: --track defect (393.5);
   # an interleaved defect dispatch during a milestone carries both
+  # who did it (393.6): --route <routes.json id> [--tier <tier actually run>]
+  #   --model <model actually used> --agent <agent type> --skill <skill>
+  #   --first-try landed|reworked|reverted
   # an owner-asked design-grill: --loop Objective --mode design-grill (never resets rule 3)
 ```
 Both lists are closed sets that `record_iteration.py` enforces. `Meta` is the
@@ -1052,7 +1055,20 @@ fails when this block, CLAUDE.md's copy or the code disagree.
 
 **The tags go into the ROW** as their own segment before the outcome:
 `… · <item> · milestone=M1 track=defect · landed · <sha>`. They are written
-there, and into `loops.db`, because `dispatch_status.py` reads the log. Under
+there, and into `loops.db`, because `dispatch_status.py` reads the log. The
+same segment carries who did the work, as `route=… model=… agent=… skill=…
+first-try=…` (393.6). The route is a key of `scripts/loops/routes.json`, which is
+hand-written from the milestone prompt's §5 and never generated. Jev never
+reads or writes a route. `--route` must match the route's own loop and mode,
+and `--route owner` and `--route collect` are refused because neither records
+a row of its own. `--tier` records the tier actually run: `top` when §5
+substituted it for a tier the owner set to `none`.
+
+**Before writing, the recorder checks the log.** Every `- ` bullet must parse,
+or it refuses. If the mirror's row count differs from the log's, it rebuilds
+the mirror first. **After writing, it reads the new rows back from `loops.db`
+column by column.** A mismatch at that point is reported and never fatal: the
+row WAS recorded, and re-running it would record it twice. Under
 `Rules-2-3: scoped`, rules 2 and 3 count only rows tagged with the ACTIVE
 milestone, and rule M's interleave counts the same tags. Rows written before
 393.5 carry no tags and are never backfilled.

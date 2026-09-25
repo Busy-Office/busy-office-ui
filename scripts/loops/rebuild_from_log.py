@@ -33,7 +33,7 @@ believes it did:
 import json
 import os
 
-from _common import LOG, METRICS, SEP, connect, parse_log_line
+from _common import LOG, METRICS, SEP, TAG_COLUMNS, connect, parse_log_line
 from record_iteration import OUTCOMES
 
 # The vocabulary was enforced by roadmap 41.2. Measured, not guessed: 8 rows
@@ -57,6 +57,9 @@ def self_test():
     tagged = parse_log_line("- 2026-09-25 23:00 · Continue · build · an item · milestone=M1 track=defect · landed · abc1234")
     mention = parse_log_line("- 2026-09-25 23:00 · Continue · build · writes milestone=M1 into the row · landed · abc1234")
     solo = parse_log_line("- 2026-09-25 23:00 · Continue · build · a · b · milestone=M1 · landed · abc1234")
+    full = parse_log_line("- 2026-09-26 01:00 · Continue · layout · an item · milestone=M1 route=design "
+                          "model=claude-opus-5-5 agent=general-purpose skill=design-grill first-try=reworked · landed · abc1234")
+    unknown = parse_log_line("- 2026-09-26 01:00 · Continue · build · an item · colour=blue · landed · abc1234")
     cases = [
         ("plain line parses", (plain["item"], plain["outcome"], plain["commit_sha"]),
          ("an item", "landed", "abc1234")),
@@ -74,6 +77,12 @@ def self_test():
          (mention["item"], mention["milestone"], mention["track"]),
          ("writes milestone=M1 into the row", None, None)),
         ("a lone milestone tag", (solo["milestone"], solo["track"], solo["item"]), ("M1", None, "a · b")),
+        # 393.6: who did the work rides in the same segment.
+        ("route, model, agent, skill and first-try are read",
+         tuple(full[k] for k in ("route", "model", "agent", "skill", "first_try", "milestone", "item")),
+         ("design", "claude-opus-5-5", "general-purpose", "design-grill", "reworked", "M1", "an item")),
+        ("an unknown key makes the segment prose, not tags",
+         (unknown["route"], unknown["item"]), (None, "an item · colour=blue")),
     ]
     for label, got, want in cases:
         if got != want:
@@ -130,10 +139,10 @@ def main():
 
     for row in parsed:
         conn.execute(
-            "INSERT INTO iterations (ts, loop, mode, item, outcome, commit_sha, milestone, track) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-            (row["ts"], row["loop"], row["mode"], row["item"],
-             row["outcome"], row["commit_sha"], row["milestone"], row["track"]),
+            f"INSERT INTO iterations (ts, loop, mode, item, outcome, commit_sha, {', '.join(TAG_COLUMNS.values())}) "
+            f"VALUES (?, ?, ?, ?, ?, ?, {', '.join('?' * len(TAG_COLUMNS))})",
+            (row["ts"], row["loop"], row["mode"], row["item"], row["outcome"], row["commit_sha"],
+             *[row[c] for c in TAG_COLUMNS.values()]),
         )
     iters = len(parsed)
 

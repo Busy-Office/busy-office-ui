@@ -36,6 +36,15 @@ of `milestone=Mn` / `track=defect` tokens (393.5 writes it); prose that merely
 mentions a token is not a tag. `Precedence: after <id>` puts rule M below rule
 4 until `<id>` closes; the pick is still printed as the fallback.
 
+Routes (393.6): an item's `Route:` names a key of `scripts/loops/routes.json`,
+hand-written from the prompt's §5 table. The table itself is checked (see
+route_problems). The rule M line prints the route's loop and modes, the tier
+and model it runs on, and its effort. **A tier the owner set to `none` runs on
+`top`, and the line says so.** That is §5 and owner decision O14, and it
+supersedes 393.6's Accept, which says such a tier is refused. What IS refused
+is a tier outside the fixed set top, balanced, fast or `Planner`: a
+vocabulary check on the table, not a check against the `Tiers` values.
+
 REFUSES — exits non-zero and prints no verdict — when:
 - a `Milestone` heading is malformed or duplicated, or an item is tagged with a
   milestone that has no section (these could hide an ACTIVE milestone, so they
@@ -47,7 +56,7 @@ REFUSES — exits non-zero and prints no verdict — when:
 - the markers do not reconcile or an `After:` target does not resolve
   (generate_status.parse_roadmap);
 - an item in the ACTIVE milestone is un-numbered, has no `Route:`, or has one
-  not in `routes.json`;
+  not in `routes.json`; or routes.json itself is malformed;
 - the `Modules` field disagrees with `examples/erp-suite/_shell.mjs` MODULES
   once 394.9 has closed.
 
@@ -276,11 +285,96 @@ def wakes_used(rows, mid, since):
 
 
 def load_routes(path=ROUTES):
+    """routes.json's `routes` table, or None when the file does not exist. Any
+    JSON, shape or duplicate-key problem is a Refuse, never a traceback: a
+    traceback loses the whole dispatch report (393.6's verification)."""
     if not os.path.exists(path):
         return None
-    with open(path, encoding="utf-8") as f:
-        data = json.load(f)
-    return set(data.get("routes", data))
+
+    def no_dupes(pairs):
+        keys = [k for k, _ in pairs]
+        dup = sorted({k for k in keys if keys.count(k) > 1})
+        if dup:
+            raise Refuse(f"routes.json names {', '.join(dup)} twice")
+        return dict(pairs)
+    try:
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f, object_pairs_hook=no_dupes)
+        table = data["routes"]
+    except (ValueError, KeyError, TypeError) as e:
+        raise Refuse(f"routes.json is not a readable route table: {e!r}")
+    if not isinstance(table, dict):
+        raise Refuse("routes.json's `routes` is not a table")
+    return table
+
+
+TIERS = ("top", "balanced", "fast")
+ROUTE_FIELDS = ("loop", "mode", "tier", "effort", "skills", "critic", "returns", "never", "handup")
+
+
+def route_problems(table):
+    """Malformed entries in a routes table (393.6). Every route id has the shape
+    the `Route:` marker and the `route=` tag need. Every dispatched route names:
+    a recorded loop (or none, for read-only gathering that records no row), its
+    modes, a tier among top, balanced, fast or `Planner` (the field), a
+    non-empty effort and critic, a list of skills, and a hand-up whose chain
+    ends at the planner or the owner."""
+    import record_iteration
+    from _common import TAG_VALUES
+    out = []
+    for rid, r in table.items():
+        if not re.fullmatch(TAG_VALUES["route"], rid):
+            out.append(f"route id {rid!r} is not `[a-z][a-z0-9-]*`")
+        if not isinstance(r, dict):
+            out.append(f"route {rid} is not a table")
+            continue
+        missing = [f for f in ROUTE_FIELDS if f not in r]
+        if missing:
+            out.append(f"route {rid} lacks {', '.join(missing)}")
+            continue
+        if rid == "owner":
+            continue
+        if not isinstance(r["mode"], list) or not all(isinstance(m, str) and re.fullmatch(r"[\w-]+", m) for m in r["mode"]):
+            out.append(f"route {rid}'s mode must be a list of `[\\w-]+` words")
+        elif r["loop"] is None and r["mode"]:
+            out.append(f"route {rid} names modes but no loop")
+        elif r["loop"] is not None and (r["loop"] not in record_iteration.LOOPS or not r["mode"]):
+            out.append(f"route {rid}'s loop {r['loop']!r} is not a recorded loop with at least one mode")
+        if r["tier"] not in TIERS + ("Planner",):
+            out.append(f"route {rid}'s tier {r['tier']!r} is not top, balanced, fast or Planner")
+        for f in ("effort", "critic"):
+            if not isinstance(r[f], str) or not r[f].strip():
+                out.append(f"route {rid}'s {f} is empty")
+        if not isinstance(r["skills"], list) or not r["skills"]:
+            out.append(f"route {rid} names no skills")
+        seen, cur = [rid], r["handup"]
+        while cur not in ("planner", "owner"):
+            if cur not in table or cur in seen:
+                out.append(f"route {rid}'s hand-up chain {' → '.join(seen + [str(cur)])} does not reach the planner or the owner")
+                break
+            seen.append(cur)
+            cur = table[cur].get("handup")
+    return out
+
+
+def tiers_of(fields):
+    return dict(p.split("=", 1) for p in _parts(fields.get("Tiers", "")) if "=" in p)
+
+
+def route_model(table, rid, fields):
+    """(tier, model, note) a route runs on under this milestone's `Tiers`. A
+    tier the owner set to `none` runs on `top` — the prompt's §5 and owner
+    decision O14, which supersede the Accept's "refuses" for that case. The
+    table check has already confined the tier to top/balanced/fast/Planner, and
+    `Tiers` must name all three, so the lookup below cannot miss."""
+    tier = table[rid]["tier"]
+    if tier == "Planner":
+        tier = fields["Planner"]
+    tiers = tiers_of(fields)
+    assert tier in tiers, (rid, tier)
+    if tiers[tier] == "none":
+        return "top", tiers["top"], f" (tier {tier} is none → top)"
+    return tier, tiers[tier], ""
 
 
 def shell_module_ids(path=SHELL):
@@ -335,6 +429,10 @@ def verdict(text, archive_text="", rows=(), cloud=False, routes="load", hold_cou
         raise Refuse(f"un-numbered {mid} item(s) have no age to rank by: {'; '.join(unnumbered)}")
     if routes is None:
         raise Refuse(f"{mid} is ACTIVE and scripts/loops/routes.json does not exist (393.6 writes it)")
+    if isinstance(routes, dict):
+        bad = route_problems(routes)
+        if bad:
+            raise Refuse("routes.json: " + "; ".join(bad))
     no_route = [it["id"] for it in mine if not it["route"]]
     bad_route = [f"{it['id']} ({it['route']})" for it in mine if it["route"] and it["route"] not in routes]
     if no_route or bad_route:
@@ -457,8 +555,18 @@ def verdict(text, archive_text="", rows=(), cloud=False, routes="load", hold_cou
         dispatch, reason, rule4 = None, f"STOP (budget): {used} of {bud['wakes']} {mid} wakes used", None
 
     if dispatch:
-        route = (f"route {dispatch['route']}" if dispatch["route"]
-                 else "no Route: — rule 4's playbook, Continue build")
+        if not dispatch["route"]:
+            route = "no Route: — rule 4's playbook, Continue build"
+        elif isinstance(routes, dict) and dispatch["route"] not in routes:
+            raise Refuse(f"the dispatched item {dispatch['id']} names route {dispatch['route']!r}, "
+                         "which is not in routes.json")
+        elif isinstance(routes, dict) and dispatch["route"] != "owner":
+            tier, model, note = route_model(routes, dispatch["route"], m["fields"])
+            r = routes[dispatch["route"]]
+            how = f"{r['loop']} {'|'.join(r['mode'])}" if r["loop"] else "read-only gathering"
+            route = f"route {dispatch['route']} · {how} · {tier} → {model}{note} · effort {r['effort']}"
+        else:
+            route = f"route {dispatch['route']}"
         rule_m = f"{dispatch['id']} — {dispatch['title']} [{route}] ({reason})"
     elif over:
         rule_m = f"none — {reason}"
@@ -643,6 +751,20 @@ def _fx(status="ACTIVE 2026-09-25", prec="interleave 1/3 track=defect", wakes=40
 
 ROUTES_FX = {"build", "design", "mechanical", "collect", "research", "planner", "owner"}
 
+# A fixed route table for the fixtures: the shape of routes.json, with values
+# the fixtures pin. Independent of the reviewed file on purpose.
+_R = dict(effort="high", skills=["x"], critic="J2", returns="r", never="n", handup_when=None)
+ROUTES_TABLE_FX = {
+    "build": dict(_R, loop="Continue", mode=["build"], tier="top", handup="planner"),
+    "design": dict(_R, loop="Continue", mode=["layout"], tier="top", effort="xhigh", handup="planner"),
+    "mechanical": dict(_R, loop="Continue", mode=["build"], tier="balanced", effort="medium", handup="build"),
+    "collect": dict(_R, loop=None, mode=[], tier="fast", effort="low", handup="build"),
+    "research": dict(_R, loop="Continue", mode=["brief"], tier="top", handup="planner"),
+    "planner": dict(_R, loop="Roadmap", mode=["plan", "direction"], tier="Planner", effort="xhigh", handup="owner"),
+    "owner": dict(loop=None, mode=[], tier=None, effort=None, skills=[], critic=None, returns=None,
+                  never="is dispatched", handup=None, handup_when=None),
+}
+
 
 def _row(tags, at="2026-09-25 10:00", sha=None, loop="Continue"):
     sha = sha or f"s{abs(hash((tags, at))) % 10**6}"
@@ -822,6 +944,51 @@ def _fixtures():
     expect("skipped names the oldest dispatchable item outside M1", v["lines"]["skipped"].startswith("9.4"))
     v = run(_fx(), rows=_rows("milestone=M1", "milestone=M1"))
     expect("skipped never names the item this wake dispatches", did(v) == "9.4" and v["lines"]["skipped"].startswith("9.5"))
+
+    # routes.json (393.6). The LIVE table is checked only for its shape: a
+    # legitimate edit to the reviewed table must not stop every ACTIVE dispatch
+    # (393.6's verification). Behaviour runs on a FIXED table defined here.
+    live = load_routes()
+    if live is None:
+        bad.append("scripts/loops/routes.json is missing")
+    else:
+        expect("the committed routes.json is well formed", route_problems(live) == [])
+    table = json.loads(json.dumps(ROUTES_TABLE_FX))
+    expect("the fixture table is well formed", route_problems(table) == [])
+    v = run(_fx(), routes=table)
+    expect("rule M's line names the route's loop, modes, tier, model and effort",
+           "route design · Continue layout · top → opus · effort xhigh" in v["lines"]["rule M"])
+    v = run(_fx().replace("Route: design", "Route: mechanical"), routes=table)
+    expect("a tier the owner set to none runs on top, and the line says so",
+           "top → opus (tier balanced is none → top)" in v["lines"]["rule M"])
+    for planner, tiers, want in (
+        ("top", "top=opus · balanced=none · fast=none", "top → opus · effort xhigh"),
+        ("balanced", "top=opus · balanced=none · fast=none", "top → opus (tier balanced is none → top)"),
+        ("fast", "top=opus · balanced=none · fast=haiku", "fast → haiku · effort xhigh"),
+    ):
+        fx = (_fx().replace("Route: design", "Route: planner").replace("Planner: top", f"Planner: {planner}")
+              .replace("Tiers: top=opus · balanced=none · fast=none", f"Tiers: {tiers}"))
+        v = run(fx, routes=table)
+        expect(f"the planner route runs on the Planner field's tier ({planner})",
+               f"route planner · Roadmap plan|direction · {want}" in v["lines"]["rule M"])
+    for name, mutate, why in (
+        ("a tier outside the fixed set", lambda t: t["design"].update(tier="ultra"), "tier 'ultra' is not top"),
+        ("a loop that is not recorded", lambda t: t["design"].update(loop="Layout"), "is not a recorded loop"),
+        ("a hand-up to no route", lambda t: t["build"].update(handup="nobody"), "does not reach the planner"),
+        ("a hand-up cycle", lambda t: (t["build"].update(handup="mechanical"), t["mechanical"].update(handup="build")),
+         "does not reach the planner"),
+        ("a missing field", lambda t: t["design"].pop("critic"), "route design lacks critic"),
+        ("an empty effort", lambda t: t["design"].update(effort=""), "route design's effort is empty"),
+        ("a mode given as a string", lambda t: t["design"].update(mode="layout"), "mode must be a list"),
+        ("a route id with an underscore", lambda t: t.update(fast_path=dict(t["build"])), "'fast_path' is not"),
+    ):
+        broken = json.loads(json.dumps(ROUTES_TABLE_FX))
+        mutate(broken)
+        refuses(f"a routes table with {name} refuses", _fx(), why, routes=broken)
+    refuses("a dispatched item outside M1 whose route is not in the table refuses",
+            _fx(body=BODY.replace("4. [ ] **9.4 — a defect.**\n       Track: defect\n",
+                                  "4. [ ] **9.4 — a defect.**\n       Track: defect\n       Route: bogus\n")),
+            "names route 'bogus'", routes=table, rows=_rows("milestone=M1", "milestone=M1"))
 
     # modules reconcile once the gate item has closed
     MODULES_FROM["M1"] = "9.5"

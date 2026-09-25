@@ -8,7 +8,10 @@ Usage:
       --outcome landed [--commit <sha>] [--no-log]
 
 --commit defaults to the current git HEAD short sha. --no-log inserts the DB
-row without touching the markdown (used by rebuild).
+row without touching the markdown. Such a row does not survive: the mirror is
+derived from the log, and the STATUS.md regeneration this script runs rebuilds
+the mirror whenever the counts differ (393.6's verification measured it). It
+is kept for a throwaway query, not as a way to record anything.
 
 OUTCOME VOCABULARY (roadmap 41.2). "shipped" is rejected because it was doing
 two jobs and hiding the difference: every iteration in Slices 31-40 was recorded
@@ -43,12 +46,14 @@ more than once for more than one refusal in the same item.
 """
 import argparse
 import datetime
+import json
 import os
 import re
 import subprocess
 import sys
 
-from _common import LOG, ROOT, SEP, connect, parse_log_line
+from _common import LOG, ROOT, SEP, TAG_COLUMNS, TAG_VALUES, connect, parse_log_line
+from dispatch_status import ROW
 
 OUTCOMES = {"landed", "released", "logged", "triaged", "refused", "reverted"}
 
@@ -64,6 +69,66 @@ OUTCOMES = {"landed", "released", "logged", "triaged", "refused", "reverted"}
 #   python3 -c "import re,collections;print(collections.Counter(m.group(1) for l in open('.roundtable/loop-log.md') for m in [re.match(r'^- \S+ \S+ · ([\w-]+) · ',l)] if m))"
 LOOPS = {"Continue", "Standardize", "Polish", "Research", "Optimize", "Explore",
          "Objective", "Gauntlet", "Roadmap", "Meta"}
+
+
+def log_counts():
+    """(raw bullets, parsed rows) of the log — the raw count is `- ` lines, the
+    same test rebuild_from_log.py and dispatch_status.py use."""
+    with open(LOG, encoding="utf-8") as f:
+        lines = f.readlines()
+    return (sum(1 for l in lines if l.startswith("- ")),
+            sum(1 for l in lines if parse_log_line(l)))
+
+
+def preflight_mirror():
+    """BEFORE anything is written (roadmap 393.6): the log's raw bullets must
+    all parse, and the mirror must hold as many rows as the log. A bullet the
+    parser cannot read is a defect this refuses to write past; a stale mirror
+    is rebuilt from the log first, because it is derived by definition."""
+    raw, parsed = log_counts()
+    if raw != parsed:
+        raise SystemExit(
+            f"record_iteration: loop-log.md has {raw} bullet line(s) but {parsed} parse as rows. "
+            "Fix the malformed bullet (or parse_log_line) first; nothing was recorded."
+        )
+    conn = connect()
+    have = conn.execute("SELECT count(*) FROM iterations").fetchone()[0]
+    conn.close()
+    if have != parsed:
+        print(f"  (mirror: loops.db holds {have} row(s), loop-log.md holds {parsed} — rebuilding it "
+              "from the log before recording)", file=sys.stderr)
+        import rebuild_from_log
+        rebuild_from_log.main()
+
+
+def verify_written(n_rows, lines):
+    """AFTER writing: the rows just inserted read back from loops.db equal what
+    the log lines parse to, column by column — a count cannot see a column
+    mapping error. A mismatch here is reported, never fatal: the row WAS
+    recorded, and re-running would record it twice."""
+    conn = connect()
+    cols = ["ts", "loop", "mode", "item", "outcome", "commit_sha", *TAG_COLUMNS.values()]
+    got = conn.execute(f"SELECT {', '.join(cols)} FROM iterations ORDER BY id DESC LIMIT ?", (n_rows,)).fetchall()
+    have = conn.execute("SELECT count(*) FROM iterations").fetchone()[0]
+    conn.close()
+    for line, row in zip(lines, reversed(got)):
+        back = parse_log_line(line)
+        want = tuple(back[c] if c != "mode" else (back[c] if back[c] != "-" else None) for c in cols)
+        norm = tuple(v if not (c == "mode" and v == "-") else None for c, v in zip(cols, row))
+        if norm != want:
+            print("  !! loops.db's new row does not match its log line — the row WAS recorded; do not re-run.\n"
+                  f"     log:    {want}\n     mirror: {norm}", file=sys.stderr)
+    raw, parsed = log_counts()
+    if have != parsed:
+        print(f"  !! loops.db holds {have} row(s), the log {parsed} — the row WAS recorded; "
+              "run rebuild_from_log.py", file=sys.stderr)
+
+
+def route_table():
+    """routes.json's table; the file is hand-written and reviewed."""
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "routes.json")
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)["routes"]
 
 
 def head_sha():
@@ -87,6 +152,18 @@ def main():
                          "the loop-log row, where dispatch_status.py counts it")
     ap.add_argument("--track", default=None, choices=["defect"],
                     help="tag the row as defect-track work (the interleave counts it)")
+    # Who did it (roadmap 393.6): the route from scripts/loops/routes.json, the
+    # model actually used (a route whose tier the owner set to none runs on
+    # top, and this records the substitution), the agent type, the skill it
+    # leaned on, and whether it landed on the first try.
+    ap.add_argument("--route", default=None, help="a key of scripts/loops/routes.json")
+    ap.add_argument("--tier", default=None, choices=["top", "balanced", "fast"],
+                    help="the tier actually run: top when the route's tier was none (§5 substitution)")
+    ap.add_argument("--model", default=None, help="the model actually used, e.g. claude-opus-5-5")
+    ap.add_argument("--agent", default=None, help="the agent type that did the work")
+    ap.add_argument("--skill", default=None, help="the skill the work leaned on")
+    ap.add_argument("--first-try", default=None, choices=["landed", "reworked", "reverted"],
+                    help="did the work land on its first attempt")
     ap.add_argument("--no-log", action="store_true",
                     help="insert the DB row only; don't append to loop-log.md")
     ap.add_argument("--also-refused", action="append", default=[],
@@ -128,6 +205,27 @@ def main():
                     f'record_iteration: --milestone {args.milestone} names no `## Milestone '
                     f'{args.milestone}` section in ROADMAP.md, so no counter would ever read the tag.'
                 )
+    if args.mode is not None and not re.fullmatch(r"[\w-]+", args.mode):
+        # dispatch_status.py's ROW reads the mode as `[\w-]+`; a row it cannot
+        # read stops every later dispatch (393.6's verification: `plan/direction`).
+        raise SystemExit(f'record_iteration: --mode "{args.mode}" must be one word (letters, digits, _ or -)')
+    if args.route is not None:
+        table = route_table()
+        if args.route not in table:
+            raise SystemExit(f'record_iteration: --route "{args.route}" is not in scripts/loops/routes.json '
+                             f'({", ".join(sorted(table))})')
+        r = table[args.route]
+        if r["loop"] is None:
+            raise SystemExit(f'record_iteration: --route {args.route} records no row of its own '
+                             '(routes.json gives it no loop); record the item it served instead')
+        if args.loop != r["loop"] or (args.mode or "-") not in r["mode"]:
+            raise SystemExit(f'record_iteration: --route {args.route} runs as --loop {r["loop"]} '
+                             f'--mode {"|".join(r["mode"])}, not --loop {args.loop} --mode {args.mode}')
+    for flag, key in (("--model", "model"), ("--agent", "agent"), ("--skill", "skill")):
+        value = getattr(args, key)
+        if value is not None and not re.fullmatch(TAG_VALUES[key], value):
+            raise SystemExit(f'record_iteration: {flag} "{value}" must be one token '
+                             "(letters, digits and . _ : / -), because it is written into the row")
     if args.outcome not in OUTCOMES:
         raise SystemExit(
             f'record_iteration: unknown outcome "{args.outcome}".\n'
@@ -146,8 +244,11 @@ def main():
     # dispatch_status.py reads the log, not loops.db: rules 2 and 3 under
     # `Rules-2-3: scoped`, and rule M's interleave, count from the row (393.5).
     # A refusal row is not a dispatch, so it carries no tags.
-    tags = " ".join(t for t in (f"milestone={args.milestone}" if args.milestone else "",
-                                 f"track={args.track}" if args.track else "") if t)
+    given = {"milestone": args.milestone, "track": args.track, "route": args.route,
+             "tier": args.tier, "model": args.model, "agent": args.agent, "skill": args.skill,
+             "first-try": args.first_try}
+    tags = " ".join(f"{k}={v}" for k, v in given.items() if v)
+    tag_cols = {TAG_COLUMNS[k]: v for k, v in given.items()}
     rows = [(ts, args.loop, args.mode, args.item, args.outcome, commit, tags)]
     for text in args.also_refused:
         rows.append((ts, "Meta", "refusal", text, "refused", commit, ""))
@@ -157,6 +258,8 @@ def main():
     # ending in " ·", or whose last segment is tag-shaped) would leave the log
     # and the mirror disagreeing with no warning — and the counters follow the
     # log (393.5's verification). Refuse instead.
+    if not args.no_log:
+        preflight_mirror()
     lines = []
     for r_ts, r_loop, r_mode, r_item, r_outcome, r_commit, r_tags in rows:
         line = SEP.join(["- " + r_ts, r_loop, r_mode or "-", r_item]
@@ -164,9 +267,10 @@ def main():
         back = parse_log_line(line)
         want = {"ts": r_ts, "loop": r_loop, "mode": r_mode or "-", "item": r_item, "outcome": r_outcome,
                 "commit_sha": r_commit or None,
-                "milestone": args.milestone if r_tags else None,
-                "track": args.track if r_tags else None}
+                **{c: (v if r_tags else None) for c, v in tag_cols.items()}}
         got = {k: back.get(k) if back else None for k in want}
+        if not ROW.match(line):
+            got["ROW"] = "unmatched"; want["ROW"] = "matched by dispatch_status.ROW"
         if got != want:
             diff = ", ".join(f"{k}: wrote {want[k]!r}, reads back {got[k]!r}" for k in want if got[k] != want[k])
             raise SystemExit(
@@ -181,15 +285,18 @@ def main():
                 f.write(line + "\n")
 
     conn = connect()
+    cols = list(TAG_COLUMNS.values())
     for r_ts, r_loop, r_mode, r_item, r_outcome, r_commit, r_tags in rows:
         conn.execute(
-            "INSERT INTO iterations (ts, loop, mode, item, outcome, commit_sha, milestone, track) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            f"INSERT INTO iterations (ts, loop, mode, item, outcome, commit_sha, {', '.join(cols)}) "
+            f"VALUES (?, ?, ?, ?, ?, ?, {', '.join('?' * len(cols))})",
             (r_ts, r_loop, r_mode, r_item, r_outcome, r_commit,
-             args.milestone if r_tags else None, args.track if r_tags else None),
+             *[(tag_cols[c] if r_tags else None) for c in cols]),
         )
     conn.commit()
     conn.close()
+    if not args.no_log:
+        verify_written(len(rows), lines)
     print(f"recorded: {ts} · {args.loop} · {args.mode} · {args.item} · {args.outcome}")
     for text in args.also_refused:
         print(f"  + refused: {text}")

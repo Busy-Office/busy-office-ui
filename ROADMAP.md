@@ -1899,7 +1899,7 @@ superseded once a named item has landed or the owner has acted.
            - LOOPS.md sentences that still stated the old rule 3 are
              corrected, and LOOPS.md now says that amending a refused report
              restores the reset.
-6. [ ] **393.6 — routes: the roadmap names which model does each item (owner
+6. [x] **393.6 — routes: the roadmap names which model does each item (owner
        answer 1), and telemetry records who did it.**
        Milestone: M1 · Phase: 0
        Route: build
@@ -1930,6 +1930,92 @@ superseded once a named item has landed or the owner has acted.
            loops.db, rebuild, and show the new columns equal the pre-delete
            rows.
          - **Jev stays out.** No Jev code reads or writes a Route.
+       - **DONE 2026-09-26.**
+         - **The route table.** `scripts/loops/routes.json` is hand-written
+           from the prompt's §5 table, never generated, and reviewed in this
+           diff. It has seven routes: build, design, mechanical, collect,
+           research, planner and owner. Each gives loop and mode, tier,
+           effort, skills, critic, what it returns, what it never does, and
+           its hand-up.
+           - Hand-up conditions are copied only where §5 gives one (build).
+           - Design's note cites §8 stage 6: an unresolved critic verdict is
+             a Slice 397 item, not a hand-up.
+           - `collect` has no loop. §5 calls it read-only gathering, and it
+             records no row of its own.
+         - **Refusals.** `milestone.py` refuses:
+           - an item whose route is not in the table, including a dispatched
+             item outside M1;
+           - a malformed table, as a Refuse and never a traceback: bad JSON, a
+             duplicate key, a bad id shape, a missing or empty field, a mode
+             that is not a list of words, a loop that is not recorded, a
+             hand-up chain that never reaches the planner or the owner, or a
+             tier outside top, balanced, fast or Planner.
+
+           **The tier clause is superseded, and this note says so rather than
+           reading around it.** This Accept says a tier the `Tiers` field does
+           not permit is refused. §5 says such a route "runs on top, and the
+           telemetry records the substitution", and owner decision O14 frames
+           a `none` tier the same way. So a `none` tier runs on `top`. The rule
+           M line prints `(tier balanced is none → top)`, and `--tier` records
+           the tier actually run. The only tier refusal is the vocabulary
+           check above. `Tiers` must name all three tiers, so no `Tiers` value
+           can make a route unrunnable. Its fixtures run on a table fixed
+           inside `milestone.py`, and three of them cover the planner route's
+           indirection through the `Planner` field. The live `routes.json` is
+           checked for shape only, so a legitimate edit to it cannot stop
+           dispatch.
+         - **Telemetry.** `record_iteration.py` gains `--route`, `--tier`,
+           `--model`, `--agent`, `--skill` and `--first-try`. They are written
+           into the row's tag segment
+           (`… · route=design tier=top model=… first-try=reworked · landed · …`),
+           which `dispatch_status.py`'s `ROW` still matches, and into eight
+           `loops.db` columns.
+           - It refuses a route not in the table, `--route owner` or
+             `collect`, a `--loop`/`--mode` that is not the route's own, and a
+             mode `ROW` cannot read (`plan/direction`).
+           - It writes the log first and the mirror second.
+           - **Before writing,** it refuses when a `- ` bullet does not parse.
+             Red-proved: 1,809 bullets against 1,808 parsed, nothing written.
+             When the mirror's count differs from the log's, it rebuilds the
+             mirror first. **Red-proved by dropping one row:** 1,807 against
+             1,808, rebuilt, then recorded to 1,809 = 1,809.
+           - **After writing,** it reads the new rows back from `loops.db`
+             column by column. Red-proved with an INSERT that drops `model`:
+             it printed both tuples and "the row WAS recorded; do not re-run".
+         - **Rebuildable from the log.** In a scratch root, the recorder wrote
+           design, mechanical-on-top and planner rows plus a refusal row.
+           `loops.db` was deleted and rebuilt, and **the recorder-written rows
+           equal the rebuilt rows**: 1,811 rows by 14 columns, compared with
+           `cmp`. A control rebuild that drops `route` differs.
+           - The first run of this red-proof was circular, because the
+             reconcile had already rebuilt the mirror before the "before"
+             snapshot. It was redone.
+           - Every row written before this change parses with the new fields
+             empty: 0 of 1,807. None is backfilled.
+         - **No change when inactive.** `dispatch_status.py` is byte-identical
+           to HEAD's (2,398 bytes, compared in a git worktree).
+         - **Jev stays out.** `grep -ril jev scripts/loops/` finds 0 files.
+         - **Jev, rubric 2** (advisory): table 0.89, refusals 0.75, telemetry
+           0.95, rebuild 0.94, Jev-out 0.96. The refusals bullet is in the
+           unverified band, and the reason is the stated supersession above.
+           **Owner, confirm or reverse:** should a `none` tier run on `top`
+           (§5, O14), or refuse (this Accept)? It is a one-line change either
+           way.
+         - **Adversarial verification** (`wf_954581c2-c94`: 2 lenses and a
+           critic, all "holds with defects"). It found:
+           - the dead `Tiers` refusal and the unstated override;
+           - no planner-tier fixture;
+           - invented hand-up conditions and an invented `collect` loop;
+           - a shallow table check, and a traceback on malformed JSON;
+           - a KeyError on a dispatched non-M1 route;
+           - a reconcile that counted parsed rows rather than raw bullets, ran
+             after writing, and was blind to columns;
+           - a recorder that accepted `--mode plan/direction`, which `ROW`
+             cannot read and which would halt every later dispatch;
+           - self-test fixtures tied to the live table;
+           - a false `--no-log` docstring.
+
+           All are fixed as described above.
 7. [ ] **393.7 — rule D: when there is no task, or an item is unclear, the loop
        goes to the planner (owner answer 1: "which is bigger target").**
        Milestone: M1 · Phase: 0

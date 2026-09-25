@@ -48,7 +48,8 @@ def from_rev(rev):
 # Columns added to `iterations` after the table first shipped. A mirror built
 # before them gains them here, empty: rows written before a column existed are
 # never backfilled (393.5, and 393.6 for the route columns).
-ADDED_COLUMNS = (("milestone", "TEXT"), ("track", "TEXT"))
+ADDED_COLUMNS = (("milestone", "TEXT"), ("track", "TEXT"), ("route", "TEXT"), ("model", "TEXT"),
+                 ("agent", "TEXT"), ("skill", "TEXT"), ("first_try", "TEXT"), ("tier", "TEXT"))
 
 
 def connect(db=DB):
@@ -63,18 +64,35 @@ def connect(db=DB):
     return conn
 
 
-# The row's tag segment (roadmap 393.5): its own ` · `-separated segment, just
-# before the outcome, made ONLY of `milestone=Mn` / `track=defect` tokens. A
-# segment is a tag only in that position and only in that shape, so an item
-# whose prose MENTIONS a token is not tagged (393.4's verification).
-TAG_SEGMENT = re.compile(r"^(?:milestone=M\d+|track=defect)(?: (?:milestone=M\d+|track=defect))*$")
+# The row's tag segment (roadmap 393.5, widened by 393.6): its own
+# ` · `-separated segment, just before the outcome, made ONLY of `key=value`
+# tokens from the closed set below. A segment is a tag only in that position and
+# only in that shape, so an item whose prose MENTIONS a token is not tagged
+# (393.4's verification). 393.6 added who did the work: the route it ran, the
+# model and agent that ran it, the skill it leaned on, and whether it landed on
+# the first try.
+TAG_VALUES = {
+    "milestone": r"M[1-9]\d*",
+    "track": r"defect",
+    "route": r"[a-z][a-z0-9-]*",
+    "model": r"[A-Za-z0-9][A-Za-z0-9._:/-]*",
+    "agent": r"[A-Za-z0-9][A-Za-z0-9._:/-]*",
+    "skill": r"[A-Za-z0-9][A-Za-z0-9._:/-]*",
+    "first-try": r"landed|reworked|reverted",
+    "tier": r"top|balanced|fast",
+}
+_TOKEN = "(?:" + "|".join(f"{k}=(?:{v})" for k, v in TAG_VALUES.items()) + ")"
+TAG_SEGMENT = re.compile(rf"^{_TOKEN}(?: {_TOKEN})*$")
+TAG_COLUMNS = {"milestone": "milestone", "track": "track", "route": "route", "tier": "tier",
+               "model": "model", "agent": "agent", "skill": "skill", "first-try": "first_try"}
 
 
 def tags_of(segment):
-    tags = {"milestone": None, "track": None}
+    """{column: value} for a tag segment; every column present, None when absent."""
+    tags = {col: None for col in TAG_COLUMNS.values()}
     for tok in segment.split():
         k, v = tok.split("=", 1)
-        tags[k] = v
+        tags[TAG_COLUMNS[k]] = v
     return tags
 
 
@@ -106,7 +124,7 @@ def parse_log_line(line):
         return None
     ts, loop = parts[0], parts[1]
     rest = parts[2:]
-    tags = {"milestone": None, "track": None}
+    tags = {col: None for col in TAG_COLUMNS.values()}
     if len(rest) >= 5 and TAG_SEGMENT.match(rest[-3]):   # mode · item(+) · tags · outcome · commit
         tags = tags_of(rest[-3])
         rest = rest[:-3] + rest[-2:]
@@ -121,5 +139,4 @@ def parse_log_line(line):
         mode, item, outcome, commit = None, rest[0], None, None
     commit = None if commit in (None, "-", "") else commit
     return {"ts": ts, "loop": loop, "mode": mode, "item": item,
-            "outcome": outcome, "commit_sha": commit,
-            "milestone": tags["milestone"], "track": tags["track"]}
+            "outcome": outcome, "commit_sha": commit, **tags}

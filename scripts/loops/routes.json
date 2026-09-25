@@ -1,0 +1,126 @@
+{
+  "_about": "The route table (roadmap 393.6, owner answer 1: the roadmap names which model does each item). Written by hand and reviewed in a diff; never generated. Its first content is the table in .roundtable/milestone-draft-2026-09-25/4-prompt.md §5. An item names its route with a `Route: <id>` line; milestone.py refuses an item whose route is not a key here and a malformed entry (a tier outside top, balanced, fast or Planner among them). A tier the owner set to `none` runs on `top` (§5, and owner decision O14), and `--tier`/`--model` record the tier and model actually used. Hand-up conditions are copied only where §5 gives one (build). Jev never reads or writes a route.",
+  "routes": {
+    "build": {
+      "loop": "Continue",
+      "mode": [
+        "build"
+      ],
+      "tier": "top",
+      "effort": "high",
+      "skills": [
+        "the item's named files",
+        "the CLAUDE.md component recipe",
+        "npm run new:component"
+      ],
+      "critic": "J2 (Jev rubric 2 completion review)",
+      "returns": "the landed change, gates green",
+      "never": "writes outside the item's paths",
+      "handup": "planner",
+      "handup_when": "the Accept is wrong or the premise is false"
+    },
+    "design": {
+      "loop": "Continue",
+      "mode": [
+        "layout"
+      ],
+      "tier": "top",
+      "effort": "xhigh",
+      "skills": [
+        "frontend-design (guidance only)",
+        "modern-web-guidance (guidance only)",
+        "api.json classes",
+        "the nearest worked screen's markup"
+      ],
+      "critic": "2 fresh critics running /design-grill, then flow mode",
+      "returns": "LAYOUT data (prompt §8 stage 4)",
+      "never": "writes CSS or inline styles; uses bo-skeleton; ships hallmark or wireframe output (critique only)",
+      "handup": "planner",
+      "handup_when": null,
+      "_note": "§5 gives this hand-up no condition. An unresolved critic verdict after round 3 is NOT a hand-up: §8 stage 6 files it as a Slice 397 item on route design, and the stage continues."
+    },
+    "mechanical": {
+      "loop": "Continue",
+      "mode": [
+        "build"
+      ],
+      "tier": "balanced",
+      "effort": "medium",
+      "skills": [
+        "the item's named files"
+      ],
+      "critic": "J2 (Jev rubric 2 completion review)",
+      "returns": "the edit, with before and after counts",
+      "never": "judges",
+      "handup": "build",
+      "handup_when": null
+    },
+    "collect": {
+      "loop": null,
+      "mode": [],
+      "tier": "fast",
+      "effort": "low",
+      "skills": [
+        "grep",
+        "the generators"
+      ],
+      "critic": "none",
+      "returns": "data with counts",
+      "never": "writes anything",
+      "handup": "build",
+      "handup_when": null,
+      "_note": "§5: 'read-only gathering'. It runs inside the item that dispatched it and records no row of its own, so it names no loop and the recorder refuses --route collect."
+    },
+    "research": {
+      "loop": "Continue",
+      "mode": [
+        "brief"
+      ],
+      "tier": "top",
+      "effort": "high",
+      "skills": [
+        "research or anthropic-skills:deep-research",
+        "NotebookLM notebook 89417194 as a lead only (O18)",
+        "the finance and sales SKILL.md files read as checklists, never run"
+      ],
+      "critic": "a fresh realism reviewer",
+      "returns": "BRIEF (prompt §8 stage 1)",
+      "never": "authors layouts; picks patterns",
+      "handup": "planner",
+      "handup_when": null
+    },
+    "planner": {
+      "loop": "Roadmap",
+      "mode": [
+        "plan",
+        "direction"
+      ],
+      "tier": "Planner",
+      "effort": "xhigh",
+      "skills": [
+        "busy-office:requeue",
+        "busy-office:sharpen-intent",
+        "grilling",
+        "domain-modeling"
+      ],
+      "critic": "the item lint plus JQ in shadow (one bounce)",
+      "returns": "one Roadmap · plan commit (prompt §7)",
+      "never": "builds; closes items; edits ## Objective or ## Milestone",
+      "handup": "owner",
+      "handup_when": null
+    },
+    "owner": {
+      "loop": null,
+      "mode": [],
+      "tier": null,
+      "effort": null,
+      "skills": [],
+      "critic": null,
+      "returns": null,
+      "never": "is dispatched",
+      "handup": null,
+      "handup_when": null,
+      "_note": "Never dispatched (§5); the recorder refuses --route owner."
+    }
+  }
+}

@@ -73,6 +73,7 @@ python3 scripts/loops/record_iteration.py --loop <Loop> --mode <mode> \
   # a refusal decided INSIDE this item, whatever the item's own outcome:
   #   --also-refused "<what was refused, one line>"   (repeatable; 51.1/62.1)
   # milestone work: --milestone M1; defect-track work: --track defect (393.5)
+  # who did it: --route <routes.json id> --model --agent --skill --first-try (393.6)
 python3 scripts/loops/record_metric.py --name <metric> --value <n> --unit <u>   # when measured
 ```
 

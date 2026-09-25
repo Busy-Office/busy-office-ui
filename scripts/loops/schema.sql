@@ -11,7 +11,13 @@ CREATE TABLE IF NOT EXISTS iterations (
   outcome    TEXT,                   -- shipped | fixed | discarded | committed | ...
   commit_sha TEXT,                   -- short sha, or NULL
   milestone  TEXT,                   -- `milestone=Mn` tag of the row, or NULL (393.5)
-  track      TEXT                    -- `track=defect` tag of the row, or NULL (393.5)
+  track      TEXT,                   -- `track=defect` tag of the row, or NULL (393.5)
+  route      TEXT,                   -- `route=` — the routes.json route the item ran (393.6)
+  model      TEXT,                   -- `model=` — the model actually used (393.6)
+  agent      TEXT,                   -- `agent=` — the agent type that did the work (393.6)
+  skill      TEXT,                   -- `skill=` — the skill it leaned on (393.6)
+  first_try  TEXT,                   -- `first-try=` landed | reworked | reverted (393.6)
+  tier       TEXT                    -- `tier=` — the tier actually run; top when a none tier was substituted (393.6)
 );
 
 CREATE TABLE IF NOT EXISTS metrics (
