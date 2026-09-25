@@ -34,25 +34,31 @@ that branch is the owner's call.
 - **Step 0:** `step0_guard.py`, then `inflight.py hold`, then
   `dispatch_status.py` (a REFUSED milestone line stops the wake; see LOOPS.md
   Step 0b).
-- **The one standing GOAL — the owner's M0 bootstrap.** O3, as the owner's
-  decision table records it: *"bootstrap 393.1-393.10 approved; rules 2 and 3
-  paused until 393.10; cap 12 wakes"*. The M1 Budget note adds that holds are
-  counted separately (`hold-wakes`). **Used: 9 of 12** (`393.1`-`393.9` landed; `392.4` and `381.2` closed
-  inside `393.5`). **Next: `393.10`** (re-score the loop; the M0 exit test), the last M0 item.
-- **After `393.10`:** M1 stays DRAFT until the re-score reads 3.0 or more and
-  the owner fills its fields. Until then rule 4 dispatches the oldest
-  dispatchable item that STATUS.md names (`375.11` at the time of writing).
+- **No standing GOAL.** The owner's M0 bootstrap (O3: *"bootstrap
+  393.1-393.10 approved; rules 2 and 3 paused until 393.10; cap 12 wakes"*)
+  ran to its end: `393.1`-`393.10` are closed. **Used: 10 of 12**, counted as
+  distinct loop-log timestamps of 393.x rows; the one hold is counted
+  separately (`hold-wakes`).
+- **Then Step 2 from rule 1.** Rules 2 and 3 resume, and both counters read
+  OVERDUE (`dispatch_status.py`), so with no open P0 the next dispatch is
+  rule 2, Standardize. Rule 4's oldest dispatchable item (`375.11` at the time
+  of writing) comes after them. M1 is DRAFT, so rules M and D do not run.
 
 ## Direction — 2026-09-26
 
-Owner decisions and actions waiting (none blocks `393.9` or `393.10`):
+Owner decisions and actions waiting:
 
+0. **M0 failed its exit test** (`393.10`: mean 2.375, Correctness 1 and
+   Maintainability 1; `.roundtable/loop-doctor-rescore-2026-09-26.md`). Either
+   extend the bootstrap to `398.1` plus a second re-score (2 wakes remain), or
+   set `Status: ACTIVE` without the test. Slice 398's preamble has both paths.
 1. **O5-O18** in `.roundtable/milestone-draft-2026-09-25/5-open-decisions.md`,
    the fields M1 needs before ACTIVE.
 2. **Three readings to confirm or reverse:**
    - `393.6`: a tier set to `none` runs on `top` (§5 and O14), not refused
      (`393.6`'s Accept);
-   - `Rules-2-3: scoped` is pre-filled while O12 is blank;
+   - four fields are loop-written while their decisions are blank: Precedence
+     (O11), Rules-2-3 (O12), Planner (O14), Direction-drift (O16); `398.3`;
    - D4 (`Direction-drift`): the measured framework share has a median of
      4.9%, so any X of 10% or more would fire almost daily (`393.7`).
 3. **Archive the cloud sessions** of the disabled routine (O1).

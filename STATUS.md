@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-25 17:56 UTC
+Generated at: 2026-09-25 18:25 UTC
 
 oldest dispatchable: 375.11 — what 375.9 measured and did not fix.
 
@@ -90,8 +90,7 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 392.2 — a pressed toggle differs from an unpressed one by colour alone in normal colours.
   - 392.3 — a `--bar` label with one word wider than its slot paints past its button.
   - 392.5 — the comparator deltas are recorded nowhere a later grill reads them.
-- **Slice 393** (4 open)
-  - 393.10 — re-score the loop; the owner activates the milestone only at "watch".
+- **Slice 393** (3 open)
   - 393.11 — a close is verified on HEAD alone (folds 377.3).
   - 393.12 — worktree isolation and fan-in, as code.
   - 393.13 — the Step 0 read cost, measured on the first ACTIVE milestone wake (393.8's fourth clause, moved here).
@@ -134,6 +133,10 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 - **Slice 397** (2 open)
   - 397.1 — the first real run: the first need Configuration or Distribution logs walks the component lifecycle as far as its fill.
   - 397.2 — EXIT: close Milestone M1.
+- **Slice 398** (3 open)
+  - 398.1 — the statements that disagree with the rule that replaced them (N2-N7 and the two Redundants).
+  - 398.2 — the in-flight check refuses what it cannot parse.
+  - 398.3 — `milestone.py` counts a field as filled only when the owner filled it.
 - **Slice —** (1 open)
   - AT runtime evidence
 
@@ -166,7 +169,7 @@ dispatch status — counter-triggered rules (1814 iterations logged)
 Generated from the `Milestone: Mn · Phase: n` markers on every item, open or closed (roadmap 393.8). The milestone's own status is its `Status:` field.
 
 - **M1** — DRAFT
-  - Phase 0: 9 of 13 closed
+  - Phase 0: 10 of 13 closed
   - Phase 1: 0 of 22 closed
   - Phase 2: 0 of 34 closed
   - Phase 3: 0 of 2 closed
@@ -259,6 +262,9 @@ Open items with an `After:` target still open. Each releases when its last targe
 
 Open items with a `Parked:` line. Held only while that milestone is ACTIVE.
 
+- 398.1 — M1, not held
+- 398.2 — M1, not held
+- 398.3 — M1, not held
 - 391.1 — M1, not held
 - 384.1 — M1, not held
 - 381.1 — M1, not held

@@ -1,0 +1,59 @@
+$ python3 scripts/loops/step0_guard.py --self-test
+step0_guard --self-test: 6 cases (pass, cloud checkout, HALT, foreign commit, allowed author, missing topology) behave
+  -> exit 0
+$ python3 scripts/loops/inflight.py --self-test
+inflight --self-test: 11 cases behave (status 0/3/4, open, refused second open, hold row, close, reopen)
+  -> exit 0
+$ python3 scripts/loops/generate_status.py --self-test
+generate_status --self-test: 42 cases behave (holds and releases per marker, owner-marker forms, code spans, the pick, the source and mirror reconciles, the refusals, the mirror rebuild)
+  -> exit 0
+$ python3 scripts/loops/milestone.py --self-test
+milestone --self-test: every fixture behaves (field forms and the structural refusals, the holds, interleave for oldest/dispatchable/N/reset/untagged rows, the owner fall-through and chain ends, stall vs D1, D2, Precedence after open/closed, the budget by wake and date, skipped, the Modules reconcile, and the reference simulator)
+  -> exit 0
+$ python3 scripts/loops/milestone.py --compare
+simulate_rule_m.py: (394.1) (394.2) (394.3) (394.18) (249.10) 393.10 393.11 377.3 393.12 393.13 394.4 394.5 394.6 394.7 394.8 394.9 249.7 394.10 394.11 392.5 394.12 377.10 394.13 394.14 394.15 394.17 395.1 376.5 389.14 395.2 396.1 396.2 396.3 396.4 396.12 (389.6) (389.7) 389.1 389.2 389.5 389.8 389.9 389.10 389.11 389.12 389.13 389.15 389.17 389.18 389.20 389.21 389.22 397.1 396.5 (396.13) 396.6 396.7 396.8 396.9 396.10 396.11 397.2
+IDENTICAL (62 / 62 entries)
+  -> exit 0
+$ python3 scripts/loops/dispatch_status.py --self-test
+dispatch_status --self-test: 14 slice-reference case(s), 6 clock-skew case(s), 5 metric-pairing case(s) and 17 thesis case(s) classified correctly
+  -> exit 0
+$ python3 scripts/loops/dispatch_status.py --thesis-replay
+2026-09-25 13:32  RESETS   Slice 392 — Objective grill of 388.1, 389.4, Slice 390 (renu
+    .roundtable/grill-objective-388-389-390-2026-09-25.md
+  -> exit 0
+$ python3 -c import sys; sys.path.insert(0,'scripts/loops'); import rebuild_from_log as r; r.self_test(); print('rebuild_from_log self-test ok')
+rebuild_from_log self-test ok
+  -> exit 0
+$ python3 .roundtable/milestone-m1-2026-09-25/blocked_audit.py
+AT runtime True   True   NEEDS-RUNTIME
+disagreements: 0
+  -> exit 0
+$ python3 .roundtable/milestone-m1-2026-09-25/grill_shipped.py --redproof
+RED-PROOF (a) grill 381 = 0 (want 0); (b) grill 392 = 174 (want > 0) -> PASS
+regression case: grill 346 = 50 (its report puts 161ede68, 342.1 closure, in scope; > 0 wanted under --join both)
+  -> exit 0
+$ python3 .roundtable/milestone-m1-2026-09-25/check_realignment.py
+open outside 393-397: 63 = table 63; folded 22, M0 1, defect 16, parked 9, owner 14 + AT runtime
+every item carries exactly its disposition's markers, and STATUS.md agrees
+  -> exit 0
+$ python3 scripts/loops/milestone.py --check-commit HEAD
+HEAD: every item it adds or changes meets the planner's output contract
+  -> exit 0
+$ node apps/docs/scripts/check-loop-vocab.mjs --self-test
+self-test: reads a second # loop: line                    true (want true) ok
+self-test passed — the detector can fail (12 cases)
+  -> exit 0
+$ node apps/docs/scripts/check-loop-vocab.mjs
+loop-vocab check passed — 2 document(s) match the 6 outcomes and the 10 loop names the recorder enforces
+  -> exit 0
+$ node apps/docs/scripts/check-resume-charter.mjs --self-test
+  ok    lines are counted without the trailing newline
+resume charter self-test passed — 23 cases classified correctly
+  -> exit 0
+$ node apps/docs/scripts/check-resume-charter.mjs
+resume charter passed — 16 charter rules hold
+  -> exit 0
+$ python3 scripts/loops/generate_status.py --check
+rebuilt loops.db — 1814 iterations, 153 metrics
+STATUS.md is current
+  -> exit 0

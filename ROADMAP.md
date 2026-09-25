@@ -557,6 +557,76 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 398 — findings of the 393.10 re-score (2.375, FAIL): stale statements M0 did not sweep, two dead references, and two checks that report less than they see (2026-09-26)
+
+**Why these are parked, and why that is the owner's to lift.** Slice 393's
+rule files loop-machinery findings raised during M0 with a `Parked: M1` line
+instead of adding them to M0. But M0's exit test is the re-score these
+findings failed, so the milestone cannot pass its own test while they stay
+open. Two paths exist, and choosing is the owner's:
+- extend O3's bootstrap to 398.1 and a second re-score (2 of the 12 M0 wakes
+  remain); or
+- set `Status: ACTIVE` without the test. Parked items are held while M1 is
+  ACTIVE, so these would then wait for the milestone's close.
+
+Until then, rule 4 reaches them oldest-first, which is far from now. Report:
+`.roundtable/loop-doctor-rescore-2026-09-26.md`.
+
+1. [ ] **398.1 — the statements that disagree with the rule that replaced
+       them (N2-N7 and the two Redundants).**
+       Parked: M1 — loop machinery (the 393.10 re-score's Invalids) — revisit: the owner's answer to 393.10's FAIL, or milestone close
+       - **Accept — the property.** Every site the report names agrees with
+         the code or with the rule that superseded it. Each re-read is quoted
+         after the edit:
+         - LOOPS.md's "collisions are ACCEPTED" heading and the hourly-cloud
+           operating rule are marked as reversed by O1, pointing at Step 0c
+           (N2 and the first Redundant).
+         - The Continue input no longer offers RESUME.md's in-progress
+           override, which 393.4 retired (N3).
+         - CLAUDE.md's router order is a pointer to LOOPS.md Step 2, not a
+           restatement (N4).
+         - ROADMAP.md's two dead paths resolve: `test -e` on each (N5).
+         - LOOPS.md Step 0 and `step0_guard.py`'s docstring say the owner's
+           archive of the cloud sessions is the prevention and exit 5 the
+           backstop, not that every cloud session stops at the guard (N6).
+         - The Objective loop's trigger names rule 3's counter (N7).
+         - The milestone's Step 0 order matches the code's (second
+           Redundant).
+       - **The sweep, because three of these came from M0 changing a rule
+         without its other statements.** For each old wording, a fixed-string
+         `git grep` over the live files (not the archive or dated history)
+         finds no statement that still presents it as current. Quote each
+         command and its count. Finding more sites than the report named is a
+         satisfying outcome.
+2. [ ] **398.2 — the in-flight check refuses what it cannot parse.**
+       Parked: M1 — loop machinery (the in-flight check) — revisit: the owner's answer to 393.10's FAIL, or milestone close
+       - **Why.** The scorer fed `inflight.py status` five malformed
+         In-flight lines (trailing space, a space in `paths`, fields
+         reordered, `cap=60m`, a bullet prefix). All five read "nothing in
+         flight", exit 0, so a wake would dispatch over a live workflow. A
+         missing RESUME.md crashes with exit 1, which Step 0 does not define.
+       - **Accept — the property.** A non-empty In-flight section that does
+         not parse is never reported as "nothing in flight". It either parses
+         or exits with a code LOOPS.md Step 0 names and treats as a stop, and
+         so does a missing RESUME.md. Each of the scorer's five lines is a
+         `--self-test` case, red-proved by reverting the fix and watching the
+         case fail.
+3. [ ] **398.3 — `milestone.py` counts a field as filled only when the owner
+       filled it.**
+       Parked: M1 — loop machinery (the milestone field report) — revisit: the owner's answer to 393.10's FAIL, or milestone close
+       - **Why.** It prints "unfilled: App, Modules, Devices, Tiers, Budget".
+         But Precedence, Rules-2-3, Planner and Direction-drift were written
+         by the loop while their owner decisions (O11, O12, O14, O16) are
+         blank in the decision table. RESUME.md flagged only O12. A mirror
+         that under-reports is the failure CLAUDE.md's storage doctrine names.
+       - **Accept — the property.** The unfilled list is reconciled against
+         the owner decision table in ROADMAP.md, not against the field block
+         alone. A field whose decision cell is blank is reported as unfilled,
+         or as "loop-proposed, awaiting O<n>". A self-test case blanks one
+         decision cell and fails without the fix. Finding that the owner has
+         since filled those cells is a satisfying outcome: the list is then
+         right as it stands.
+
 ## Slice 397 — M1 Phase 3: components go through the experimental tier, and the milestone closes (owner realignment, 2026-09-25)
 
 **What this slice holds.** At the start it holds two items: the first real run
@@ -2362,7 +2432,7 @@ superseded once a named item has landed or the owner has acted.
            sharpen 7 folded items' own Accepts once when picked: 392.5,
            377.10, 376.5, 389.5, 389.8, 389.10 and 389.22. It would also
            sharpen 394.11 and 396.12.
-10. [ ] **393.10 — re-score the loop; the owner activates the milestone only at
+10. [x] **393.10 — re-score the loop; the owner activates the milestone only at
        "watch".**
        Milestone: M1 · Phase: 0
        Route: build
@@ -2387,6 +2457,51 @@ superseded once a named item has landed or the owner has acted.
            milestone stays DRAFT.
 
          Either verdict satisfies this item.
+       - **DONE 2026-09-26 — FAIL: mean 2.375, Correctness 1 and
+         Maintainability 1. M1 stays DRAFT.** The full report is
+         `.roundtable/loop-doctor-rescore-2026-09-26.md`.
+         - **Closes on HEAD.** All 17 named commands of 393.1-393.9 pass on a
+           clean worktree of `8575c98b`, including every self-test, the thesis
+           replay, `milestone.py --compare` (IDENTICAL, 62 / 62),
+           `blocked_audit.py` (0 disagreements), the realignment check and both
+           charter gates. The output is
+           `.roundtable/milestone-m1-2026-09-25/closes-on-head-393.10.txt`.
+         - **Who scored.** A fresh-context subagent that built none of
+           393.1-393.9, following loop-doctor 0.9.4, not shown the 2026-09-25
+           per-dimension scores. It changed no repo file.
+         - **Scores** (2026-09-25 → 2026-09-26): Correctness 1 → 1, Safety
+           2 → 3, Reliability 2 → 3, Cost 2 → 3, Maintainability 3 → 1,
+           Understandability 2 → 2, Observability 2 → 3, Purpose 3 → 3. Mean
+           2.1 → 2.375. Dropping the most arguable Invalid (N6) gives 2.5, still
+           a FAIL.
+         - **The four Invalids, each by its own command.** A design-grill
+           resetting rule 3: **closed** (`--thesis-replay` refuses 388.2's
+           design-grill commit; the scorer's own synthetic rows agree). No
+           in-flight rule: **closed** (`inflight.py status` exit 3 on this
+           item's own line). Two live dispatchers: **no longer Invalid as
+           stated** (`step0_guard.py` exit 0 here, HALT exit 3 in its
+           self-test), but the playbook claims the guard stops every cloud
+           session, and a revived stale session never runs it (N6). The
+           self-contradicting hand-off: **narrower but still Invalid**. The
+           history half is fixed; RESUME's "after 393.10" rule sent the next
+           wake to rule 4 past two overdue counters (N1).
+         - **Failing dimensions.** Correctness (N5: two dead references in
+           ROADMAP.md; N6) and Maintainability (N2, N3, N4, N7: four stale
+           statements, three of which M0 changed the rule for and did not sweep).
+         - **What this commit fixes.** N1: RESUME.md's Next rule now reads
+           Step 2 from rule 1. N2-N7, the two Redundants, the in-flight check's
+           fail-open (Safety b) and the pre-filled fields counted as filled
+           (Safety d) are filed as Slice 398, under Slice 393's rule that
+           loop-machinery findings are parked, not added to M0.
+         - **Wakes used.** 10 of 12, counted as distinct loop-log timestamps of
+           393.x rows (9 before this one; 393.2 took two wakes and shared one
+           with 393.3). The one hold row is counted separately. The earlier
+           "9 of 12" counted items, and matched only by coincidence.
+         - **Jev (J2, advisory)**: re-run on HEAD 0.96, fresh scorer 0.88, the
+           four Invalids by their own commands 0.94, closes on HEAD 0.95, the
+           verdict rule applied 0.96. The fresh-scorer claim is the weakest
+           because its evidence is the launch prompt and the scorer's own
+           receipt, not an independent check.
 11. [ ] **393.11 — a close is verified on HEAD alone (folds 377.3).**
        Milestone: M1 · Phase: 0
        Route: build
