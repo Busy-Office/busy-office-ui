@@ -1,0 +1,6 @@
+# One dispatcher (owner decision O1, 2026-09-25; roadmap 393.1). Read by
+# scripts/loops/step0_guard.py at Step 0. Only a wake running in a checkout
+# named here may dispatch, commit or push; only these authors may appear
+# upstream. A cloud session is never this checkout, so it stops at Step 0.
+root: /Users/thepfmind/Projects/busy-office-ui
+author: ThePFMind <thepfmind@gmail.com>

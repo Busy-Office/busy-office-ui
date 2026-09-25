@@ -1488,7 +1488,7 @@ It closes in the absorbing item's landing commit, by its own Accept.
 No item closes on the realignment commit. Each closes on its own Accept, or as
 superseded once a named item has landed or the owner has acted.
 
-1. [ ] **393.1 — one committer: a wake halts on a HALT file or on a foreign
+1. [x] **393.1 — one committer: a wake halts on a HALT file or on a foreign
        commit.**
        Milestone: M1 · Phase: 0
        Route: build
@@ -1509,6 +1509,22 @@ superseded once a named item has landed or the owner has acted.
          - **Stray sessions.** A `RemoteTrigger list_runs` across every page
            shows no active session outside the topology. If one is found, the
            wake stops and notifies the owner.
+       - **DONE 2026-09-25 (owner asked to stop the collisions now).**
+         `scripts/loops/step0_guard.py` runs first at Step 0 and again before
+         the first commit: exit 3 on `.roundtable/HALT` (prints its first
+         line), exit 4 on a checkout that is not `.roundtable/DISPATCHER`'s root
+         — every cloud session, since its checkout is never the owner's — exit
+         5 on an upstream commit by an author outside the topology (the cloud
+         wakes commit as `Claude <noreply@anthropic.com>`, the owner's machine
+         as `ThePFMind`; author, not timestamps, so the local/cloud clock offset
+         at LOOPS.md:282-283 does not matter), exit 2 when it cannot read its
+         inputs. `--self-test` drives all six cases on scratch repositories and
+         FAILED, naming the case, when the checkout check was disabled in a
+         copy. Step 0c now records O1 reversing 162.1, citing collisions 6-8.
+         Stray sessions: the local wake's Step 0 lists the routine's runs; the
+         two sessions active today were reported to the owner to archive
+         (the API cannot archive them). Limit: a cloud session that ignores
+         LOOPS.md is not stopped by this — archiving is the owner's half.
 2. [ ] **393.2 — the in-flight protocol: one workflow at a time, a hold that reads
        nothing, and a wall-time cap.**
        Milestone: M1 · Phase: 0

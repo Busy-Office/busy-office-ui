@@ -38,6 +38,18 @@ router now, and it acts on what it finds instead of just reading it.
 
 ### Step 0 — Read the handover
 
+**FIRST, before any other read: `python3 scripts/loops/step0_guard.py`.** Exit 0:
+continue. Any other exit: **STOP the wake** — write nothing, commit nothing, push
+nothing; print the guard's message, and (a local wake) tell the owner. It stops
+on `.roundtable/HALT` (the owner's emergency stop for every wake), on a checkout
+that is not the one dispatcher named in `.roundtable/DISPATCHER` (**every cloud
+session stops here**, whoever sends it the wake prompt), and on upstream commits
+by an author outside that topology. **Run it again just before the wake's first
+commit.** A local wake also lists the sessions of the cloud routine
+(`RemoteTrigger list_runs trig_019aw8tDjiYxC3ejSFd5wYZY`, every page) and tells
+the owner about any session active in the last 24 hours. Roadmap 393.1; owner
+decision O1 (2026-09-25).
+
 `.roundtable/RESUME.md` **and `.roundtable/ENVIRONMENT.md`**, then `git status`.
 The wake prompt says *don't assume prior-turn state*, which only works if state a
 wake needs is written down rather than remembered. `RESUME.md` carries the two
@@ -141,7 +153,15 @@ Decided 2026-08-28 (roadmap 162.1). Two dispatchers reading one `ROADMAP.md`
 always pick the same item, because rule 4 is deterministic — promoting the
 routine to `/schedule` made that real without a rule changing.
 
-**The decision: accept collisions.** Two dispatchers may take the same item; the
+**REVERSED by the owner on 2026-09-25 (decision O1, roadmap 393.1): ONE
+dispatcher, the local /loop.** Collisions 6-8 (below) happened in a single day,
+with the cloud routine disabled — two of its 09-09 sessions were revived by
+wake prompts sent to them. `.roundtable/DISPATCHER` names the one checkout and
+author, and `scripts/loops/step0_guard.py` stops any other wake at Step 0 and
+halts the dispatcher itself on a foreign upstream commit. The text below is the
+2026-08-28 decision (162.1) this reverses, kept as the record.
+
+**The decision (2026-08-28, 162.1): accept collisions.** Two dispatchers may take the same item; the
 one that pushes second loses its work and re-dispatches. Nothing partitions the
 queue and nothing claims an item.
 
