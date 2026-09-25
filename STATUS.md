@@ -147,8 +147,8 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1799 iterations logged)
-  Standardize   5 / 4 Continue rounds since 2026-09-25 12:20   OVERDUE
+dispatch status — counter-triggered rules (1802 iterations logged)
+  Standardize   7 / 4 Continue rounds since 2026-09-25 12:20   OVERDUE
   Objective     3 / 3 slices          since 2026-09-25 13:32   OVERDUE  [375, 392, 393]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-09-25 05:14   ok   [newest pair: claims; 153 sample(s), 8 of 51 name(s) paired across days]
@@ -254,9 +254,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-25 12:20 · Standardize · sweep · 390 — Standardize sweep 4 of 4 lanes; /components/button verdict; icon caption narrative cut · landed · 1d0046c3
-- 2026-09-25 04:42 · Roadmap · triage · Slice 391 — cloud wake collided TWICE (Step 0c 6 and 7: rule 4 on 336.2 against a 159-commit-stale Step 0, verdicts DISAGREED; rule 2's sweep against Slice 390, same finding same number). Both discards checked, both returned nothing. Filed 391.1: check:claims 3 of 311 red here at b0401326, deterministic over two runs on Chromium 141, while CI reports success on the same sha · triaged · 3b24cc94
-- 2026-09-25 04:42 · Meta · refusal · rewriting RESUME.md wholesale — a cloud wake that lost both dispatches must not clobber the winner's handover; appended instead · refused · 3b24cc94
 - 2026-09-25 05:14 · Continue · bug · 391.2 — check:claims' SC 2.5.7 file-chooser wait 5s -> 15s. Failed on CI at 2 of 4 observed runs (88ba16bb, 07aef5bf; both markdown-only diffs, byte-identical payload, geometry block healthy). The one permitted re-run came back green and that green was refuted by the next push — a single passing re-run is not evidence of rarity. Patience raised, assertion unchanged (opened===true still required); not skipped, disabled or quarantined. CI green on 45aa4d1d · landed · 45aa4d1d
 - 2026-09-25 13:32 · Objective · grill · Slice 392 — Objective grill of 388.1, 389.4, Slice 390 (renumbered from 391, collision 8); P0 392.1 filed · landed · e8ac9844
 - 2026-09-25 14:12 · Continue · fix · 392.1 — P0: a scan verdict stamped while a flash is live restarts the flash · landed · a16d4ff3
@@ -264,6 +261,9 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-25 20:34 · Continue · build · 393.1 — one dispatcher: Step 0 guard (HALT, checkout, foreign commits) · landed · b17b36e7
 - 2026-09-25 20:44 · Continue · build · 393.2 — in-flight protocol (partial): inflight.py + Step 0 hold + cap; cap proven live at 2 min (test task stopped, 33 of 60 lines unfinished) · landed · 8fcf50c2
 - 2026-09-25 21:15 · Continue · build · 375.11 — zoom half fixed: grid message never covers its field at 400% (0/360); Firefox half open · landed · 24b4cb69
+- 2026-09-25 22:03 · Continue · build · 393.2 — one real hold measured at 2 tool calls; in-flight protocol closed · landed · 3c142f20
+- 2026-09-25 22:03 · Continue · build · 393.3 — backlog mirror: every kind of wait, own-line markers reconciled, oldest dispatchable computed (375.11) · landed · 3c142f20
+- 2026-09-25 22:03 · Meta · refusal · marking 394.13 owner-blocked for one O15-dependent Accept bullet — a marker would hold the whole item · refused · 3c142f20
 
 ## Sunset test
 
