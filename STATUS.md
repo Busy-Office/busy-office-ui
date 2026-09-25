@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-25 17:44 UTC
+Generated at: 2026-09-25 17:56 UTC
 
 oldest dispatchable: 375.11 — what 375.9 measured and did not fix.
 
@@ -90,8 +90,7 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 392.2 — a pressed toggle differs from an unpressed one by colour alone in normal colours.
   - 392.3 — a `--bar` label with one word wider than its slot paints past its button.
   - 392.5 — the comparator deltas are recorded nowhere a later grill reads them.
-- **Slice 393** (5 open)
-  - 393.9 — apply the realignment markers to the 65 open items. They stay inert until the milestone is ACTIVE.
+- **Slice 393** (4 open)
   - 393.10 — re-score the loop; the owner activates the milestone only at "watch".
   - 393.11 — a close is verified on HEAD alone (folds 377.3).
   - 393.12 — worktree isolation and fan-in, as code.
@@ -167,9 +166,9 @@ dispatch status — counter-triggered rules (1813 iterations logged)
 Generated from the `Milestone: Mn · Phase: n` markers on every item, open or closed (roadmap 393.8). The milestone's own status is its `Status:` field.
 
 - **M1** — DRAFT
-  - Phase 0: 8 of 12 closed
-  - Phase 1: 0 of 19 closed
-  - Phase 2: 0 of 15 closed
+  - Phase 0: 9 of 13 closed
+  - Phase 1: 0 of 22 closed
+  - Phase 2: 0 of 34 closed
   - Phase 3: 0 of 2 closed
 
 ## Owner-blocked
@@ -231,15 +230,44 @@ Open items with an `After:` target still open. Each releases when its last targe
 - 394.15 — after 394.14
 - 394.16 — after 394.15 (also owner-blocked)
 - 394.17 — after 394.4, 394.5, 394.6, 394.7, 394.8
-- 393.10 — after 393.9
 - 393.12 — after 393.11
-- 249.7 — after 249.10
+- 392.5 — after 394.11
+- 389.1 — after 396.12
+- 389.2 — after 396.12
+- 389.5 — after 396.12
+- 389.6 — after 396.12 (also owner-blocked)
+- 389.7 — after 396.12 (also owner-blocked)
+- 389.8 — after 396.12
+- 389.9 — after 396.12
+- 389.10 — after 396.12
+- 389.11 — after 396.12
+- 389.12 — after 396.12
+- 389.13 — after 396.12
+- 389.14 — after 395.1
+- 389.15 — after 396.12
+- 389.17 — after 396.12
+- 389.18 — after 396.12
+- 389.20 — after 396.12
+- 389.21 — after 396.12
+- 389.22 — after 396.12
+- 377.3 — after 393.11
+- 377.10 — after 394.12
+- 376.5 — after 395.1
+- 249.7 — after 249.10, 394.9
 
 ## Parked
 
 Open items with a `Parked:` line. Held only while that milestone is ACTIVE.
 
-(none)
+- 391.1 — M1, not held
+- 384.1 — M1, not held
+- 381.1 — M1, not held
+- 377.7 — M1, not held
+- 377.9 — M1, not held
+- 377.12 — M1, not held
+- 377.13 — M1, not held
+- 377.14 — M1, not held
+- 376.7 — M1, not held
 
 ## Browser-blocked
 

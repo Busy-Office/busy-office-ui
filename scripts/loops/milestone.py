@@ -913,7 +913,9 @@ def simulate(text, routes, keep_open=("394.16",)):
         items = gs.parse_roadmap(text)
         closed_now = False
         for it in items:
-            if it["route"] == "owner" and it["id"] not in keep_open and not it["after_open"]:
+            # the owner closes an owner-blocked item once it is ready — routed to the
+            # owner, or held by an owner marker in its prose (389.6's BLOCKED ON)
+            if (it["route"] == "owner" or it["owner"]) and it["id"] not in keep_open and not it["after_open"]:
                 text = _close(text, it["id"])
                 order.append(f"({it['id']})")
                 closed_now = True
@@ -961,12 +963,37 @@ def _close(text, iid):
 
 
 def paste_m1(text, mid="M1"):
-    """The pasted slices the simulators read: the `## Milestone <mid>` section and
-    every `## Slice N` section carrying a `Milestone: <mid>` line."""
+    """The pasted slices the simulators read: the `## Milestone <mid>` section,
+    then for every `## Slice N` carrying a `Milestone: <mid>` line, its heading
+    and only the items tagged with it. Since 393.9 folded items live in slices
+    that also hold untagged items (defect, parked, owner), which the reference
+    simulator cannot read (it requires a `Route:` on every item it sees)."""
     secs = re.split(r"(?m)^(?=## )", text)
-    keep = [s for s in secs if s.startswith(f"## Milestone {mid}")
-            or (s.startswith("## Slice ") and re.search(rf"^[ \t]+Milestone: {mid} ", s, re.M))]
-    return "# Roadmap (pasted)\n\n" + "".join(keep)
+    out = ["# Roadmap (pasted)\n\n"]
+    for s in secs:
+        if s.startswith(f"## Milestone {mid}"):
+            out.append(s)
+            continue
+        if not (s.startswith("## Slice ") and re.search(rf"^[ \t]+Milestone: {mid} ", s, re.M)):
+            continue
+        starts = [m.start() for m in gs.ANY_ITEM.finditer(s)]
+        out.append(s[: starts[0]] if starts else s)   # the heading and preamble (a common Accept lives there)
+        for i, st in enumerate(starts):
+            block = s[st:starts[i + 1] if i + 1 < len(starts) else len(s)]
+            if re.search(rf"^[ \t]+Milestone: {mid} ", block, re.M):
+                out.append(block.rstrip("\n") + "\n")
+        out.append("\n")
+    pasted = "".join(out)
+    # An `After:` target outside the paste (249.7 waits on the owner's 249.10) is
+    # stubbed as an owner-routed item: both simulators then model it the same
+    # way — the owner closes it once it is ready — instead of the reference
+    # treating it as closed and rule M refusing it as unresolved.
+    have = set(re.findall(r"^\d+\.\s*\[[ xX]\]\s*\*\*(?:[A-Z][A-Z0-9]*\s*·\s*)?(\d+\.\d+[a-z]?)", pasted, re.M))
+    wanted = sorted({t for line in re.findall(r"^[ \t]+After: (.+)$", pasted, re.M) for t in line.split(", ")} - have)
+    open_ids = gs.all_item_ids(text)
+    stubs = [f"1. [ ] **{t} — outside the milestone, stubbed for the simulators.**\n       Route: owner\n"
+             for t in wanted if open_ids.get(t) == "open"]
+    return pasted + ("## Slice 0 — stubs\n\n" + "".join(stubs) if stubs else "")
 
 
 def compare_with_reference(pasted, sim_path=SIM):
@@ -974,8 +1001,21 @@ def compare_with_reference(pasted, sim_path=SIM):
     raised as Refuse naming the side, never as an unnamed traceback."""
     import subprocess
     import tempfile
+    # The reference models an owner decision only as `Route: owner`; give it the
+    # prose-owner-blocked items that way too, so both model the same queue.
+    ref = pasted
+    try:
+        for it in gs.parse_roadmap(pasted):
+            if it["owner"] and it["route"] and it["route"] != "owner":
+                rx = re.compile(r"(^\d+\.\s*\[ \]\s*\*\*(?:[A-Z][A-Z0-9]*\s*·\s*)?" + re.escape(it["id"])
+                                + r"\b.*?^[ \t]+Route: )" + re.escape(it["route"]) + r"$", re.M | re.S)
+                ref, n = rx.subn(r"\g<1>owner", ref, count=1)
+                if n != 1:
+                    raise Refuse(f"compare: could not re-route {it['id']} for the reference")
+    except SystemExit as e:
+        raise Refuse(f"compare: the paste does not parse: {e}")
     with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False, encoding="utf-8") as f:
-        f.write(pasted)
+        f.write(ref)
         path = f.name
     try:
         out = subprocess.run([sys.executable, sim_path, path], capture_output=True, text=True)

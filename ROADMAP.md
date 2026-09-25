@@ -2277,7 +2277,7 @@ superseded once a named item has landed or the owner has acted.
            - "seven" unreleased P0s (it is eight, with 392.1);
            - the history file missing from the index's living set;
            - the cloud routine missing from the trigger list.
-9. [ ] **393.9 — apply the realignment markers to the 65 open items. They stay
+9. [x] **393.9 — apply the realignment markers to the 65 open items. They stay
        inert until the milestone is ACTIVE.**
        Milestone: M1 · Phase: 0
        Route: mechanical
@@ -2296,6 +2296,72 @@ superseded once a named item has landed or the owner has acted.
          - **Checked by script.** A script, not a reading, checks the
            regenerated STATUS.md against the table. Re-count first: the table is
            a snapshot.
+       - **DONE 2026-09-26.**
+         - **Re-counted first.** 63 items are open outside Slices 393-397: the
+           table's 65 less 392.4 and 381.2, which 393.5 closed. The breakdown
+           is 1 M0 (377.3), 22 folded, 16 defect, 9 parked, and 14
+           owner-blocked plus AT runtime evidence. Nothing is outside the
+           table, and nothing in the table is missing.
+         - **Marker sets.** 48 item blocks were edited, each located by its id
+           and appended after the item's own last indented line, at its title
+           column:
+           - 377.3: `Milestone: M1 · Phase: 0`, `Route: build`,
+             `After: 393.11`;
+           - the 22 folded items: the absorbing item's Phase and Route, plus
+             `After:` it (394.11, 394.12, 394.9, 395.1, 396.12);
+           - 16 × `Track: defect`;
+           - 9 × `Parked: M1 — <reason> — revisit: <the table's trigger>`,
+             each with a one-line reason from its title.
+
+           The owner-blocked items keep the markers 393.3 normalised. The diff
+           is +94 lines exactly (3 + 66 + 16 + 9) and nothing else. The first
+           pass indented the markers at 3 spaces, not the title column; it was
+           restored from HEAD and re-applied.
+         - **Nothing closes.** 103 `[ ]` and 85 `[x]` lines, before and after.
+         - **Checked by script.**
+           `.roundtable/milestone-m1-2026-09-25/check_realignment.py` re-counts
+           the open items against the table. It checks each item's parsed
+           markers, and the regenerated STATUS.md's Parked,
+           Dependency-blocked and Milestone-progress sections. It passes.
+           Red-proved twice:
+           - removing 386.1's `Track:` line printed `386.1: Track ''`;
+           - dropping 377.9 from STATUS.md's Parked list printed the missing
+             id.
+
+           Both files were restored byte-for-byte.
+         - **Order.** `simulate_rule_m.py` cannot read the whole ROADMAP.md: it
+           requires a `Route:` on every item, and defect, parked and owner items
+           have none. So both simulators ran over the M1 paste, which now takes
+           the M1-tagged items from mixed slices, keeps slice preambles, and
+           stubs outside `After:` targets as owner items.
+           `milestone.py --compare` reads **IDENTICAL, 63 / 63**, once both
+           simulators model a prose owner-block the same way. The reference
+           only knew `Route: owner`, so it had dispatched 389.6 and 389.7.
+           **No folded item comes before its absorbing item**: 377.3 is #4
+           after 393.11 #3, 376.5 is #23 after 395.1 #22, and 389.1 is #31
+           after 396.12 #30. 249.7, 389.6 and 389.7 wait on owner decisions.
+         - **Reconcile.** With M1 forced ACTIVE, `milestone.py` reads After=59
+           Parked=9 Milestone=71 Route=71 Track=16, parsed = raw, and every
+           `After:` target resolves.
+         - **What is not inert, stated plainly.** `Parked`, `Track`,
+           `Milestone` and `Route` change nothing while M1 is DRAFT. **The
+           folded items' `After:` lines do**, and that is the absorption: 20
+           items leave rule 4's free set (52 → 32), namely the 389 RF fixes,
+           376.5, 377.3, 377.10 and 392.5. They wait on the milestone items
+           that redesign their pages, because building a fix on a page 396.12
+           may delete is waste. The oldest dispatchable item is unchanged
+           (375.11). If the owner wants them worked before M1 activates,
+           removing those `After:` lines reverses it. 396.12's own Accept
+           returns the 389 items to the backlog if rugged devices are out of
+           scope.
+         - **Jev (J2, the `mechanical` route's critic)**: markers 0.90, order
+           0.81, nothing closes 0.94, reconcile 0.96, script 0.96. Order sits in
+           the unverified band, for the reason stated: the reference simulator
+           ran over the milestone paste, not the whole file.
+         - **A consequence for M1, measured.** The item lint (393.7) would
+           sharpen 7 folded items' own Accepts once when picked: 392.5,
+           377.10, 376.5, 389.5, 389.8, 389.10 and 389.22. It would also
+           sharpen 394.11 and 396.12.
 10. [ ] **393.10 — re-score the loop; the owner activates the milestone only at
        "watch".**
        Milestone: M1 · Phase: 0
@@ -2426,6 +2492,7 @@ place to 377.5, 388.1, Slice 390, CHANGELOG, `/components/scan`,
          non-colour cue, or by >= 3:1 in some channel, asserted by a
          `check:claims` case that fails on today's CSS; the RF profile's
          budget is re-argued if the fix lands there.
+       Track: defect
 3. [ ] **392.3 — a `--bar` label with one word wider than its slot paints past
        its button.** 'Kommissionierung' 15px, 'Wareneingangsbestätigung' 49px
        past at 390; heights stay 52, so the text overlays the next slot. The
@@ -2434,6 +2501,7 @@ place to 377.5, 388.1, Slice 390, CHANGELOG, `/components/scan`,
          single word wider than its slot at 1440 and 390 and asserts equal
          widths, a taller member, and no text rect past its button — red on
          today's CSS. `.bo-form-actions > .bo-btn` measured the same way.
+       Track: defect
 4. [x] **392.4 — rule 3 reset without the thesis section, twice; and a
        design-grill reset it.** Slice 386 read no adoption channel it could
        have read; 388.2 (a design-grill logged as Objective) has no thesis
@@ -2480,6 +2548,9 @@ place to 377.5, 388.1, Slice 390, CHANGELOG, `/components/scan`,
          Hypothesis with its counter-evidence; any doc that argues BO's case
          on generated AI docs or on density names the FS counterpart or drops
          the argument.
+       Milestone: M1 · Phase: 1
+       Route: build
+       After: 394.11
 
 ## Slice 391 — a cloud wake that collided TWICE, and the one thing it can see that no local wake can: `check:claims` fails **3 of 311** in this container at a commit CI reports `success` on (2026-09-25)
 
@@ -2607,6 +2678,7 @@ intersection during **backward** scroll.
          first thing to read.
        - **Lane**: cloud-takeable for the measurement; the CI half needs only
          the run/job API, which a cloud wake has.
+       Parked: M1 — a cloud-container gate question, and no cloud dispatcher runs under O1 — revisit: the dispatcher topology keeps a cloud gate runner
 
 2. [x] **391.2 — DONE: `check:claims`'s SC 2.5.7 file-chooser wait goes
        5,000 ms → 15,000 ms, because the case fails on CI at a measured 2 of 4
@@ -2723,6 +2795,9 @@ removal or rewording; one shipped framework defect (389.4).
          document, or the accepted cost is recorded. A screen that
          deliberately needs a different entry focus says why on its
          page. The profile's size does not change.
+       Milestone: M1 · Phase: 2
+       Route: design
+       After: 396.12
 
 2. [ ] **389.2 — RF task screens complete the task, or stop claiming to.**
        There are 0 forms in 6 of 6 RF documents. Primary actions: pick
@@ -2760,6 +2835,9 @@ removal or rewording; one shipped framework defect (389.4).
          Each task page states in one line how it commits and why.
          Profile headroom is measured before and after, and no CSS is
          added.
+       Milestone: M1 · Phase: 2
+       Route: design
+       After: 396.12
 
 3. [ ] **389.3 — A rejected scan's reason stays readable after the flash.**
        On 4 of 4 docs task screens, the reason for a rejected scan
@@ -2787,6 +2865,7 @@ removal or rewording; one shipped framework defect (389.4).
          added. Keeping the reason screen-reader-only is acceptable
          only with a recorded reason and a measured alternative
          visible cue.
+       Track: defect
 
 4. [x] **389.4 — P0 · scan.css: ok and error differ by more than hue on screen, or the claim is corrected.**
        Three lenses pixel-sampled the frame band: it is identical to
@@ -2870,6 +2949,9 @@ removal or rewording; one shipped framework defect (389.4).
            all match the census.
          Demoting the queue, with the bridge-screen reason on its
          page, also satisfies this.
+       Milestone: M1 · Phase: 2
+       Route: design
+       After: 396.12
 
 6. [ ] **389.6 — The journey's RF step exits to an RF home.**
        Both RF exits ('Back to my work' and 'Return to my work') go to
@@ -2898,6 +2980,9 @@ removal or rewording; one shipped framework defect (389.4).
        - BLOCKED ON the owner's 09-20 checkpoint (precondition P2). O2 parked
          it on `park/owner-checkpoint-2026-09-20`, and check-journey exists
          only there. Marker added by 393.3, 2026-09-25.
+       Milestone: M1 · Phase: 2
+       Route: design
+       After: 396.12
 
 7. [ ] **389.7 — The journey's RF confirm and failure verdict are in view at a rugged viewport.**
        At 360x640, after a capture, Confirm receipt sits at 689-741 px.
@@ -2922,6 +3007,9 @@ removal or rewording; one shipped framework defect (389.4).
        - BLOCKED ON the owner's 09-20 checkpoint (precondition P2), as
          for 389.6: check-journey exists only on the parked branch. Marker
          added by 393.3, 2026-09-25.
+       Milestone: M1 · Phase: 2
+       Route: design
+       After: 396.12
 
 8. [ ] **389.8 — Goods receipt shows the decision: which delivery, its expected lines, one completing action, in worker language.**
        goods-receipt-rf has 0 KV rows (pick 4, putaway 3, count 3), and
@@ -2948,6 +3036,9 @@ removal or rewording; one shipped framework defect (389.4).
          by counting .bo-kv in the built output. Re-scoping goods
          receipt as a scan-behaviour demo, with the reason recorded,
          is an acceptable outcome.
+       Milestone: M1 · Phase: 2
+       Route: design
+       After: 396.12
 
 9. [ ] **389.9 — On goods receipt, tapping a control never costs the next scan.**
        After a tap on +, the scanner's Enter presses + (quantity 2 to
@@ -2964,6 +3055,9 @@ removal or rewording; one shipped framework defect (389.4).
          360x640. A control that cannot meet this is removed, with
          the reason recorded. The States row matches what the screen
          does.
+       Milestone: M1 · Phase: 2
+       Route: design
+       After: 396.12
 
 10. [ ] **389.10 — Goods-receipt quantity: captured after the scan, per line, with out-of-range values refused visibly.**
        A quantity of 6 was applied to 2 different lines. A typed 0 was
@@ -2977,6 +3071,9 @@ removal or rewording; one shipped framework defect (389.4).
          allowed range records nothing and is flagged both visibly
          and programmatically. The States table's over-receipt row
          matches what the screen does. Measured live in both themes.
+        Milestone: M1 · Phase: 2
+        Route: design
+        After: 396.12
 
 11. [ ] **389.11 — Count: the menu, the screen and the state table agree.**
        The Count tile's aria-label says '0 open', yet it opens an
@@ -2997,6 +3094,9 @@ removal or rewording; one shipped framework defect (389.4).
          right bin; focus moves to quantity after it; Enter commits.
          Each surviving claim has a check:claims case seen to fail on
          today's markup.
+        Milestone: M1 · Phase: 2
+        Route: design
+        After: 396.12
 
 12. [ ] **389.12 — Pick shows which scan it expects next.**
        The label 'Scan bin, then item' and the placeholder 'Scan
@@ -3013,6 +3113,9 @@ removal or rewording; one shipped framework defect (389.4).
          visible reason, or the page stops claiming an order. The
          change is in the demo's consumer validation, with no
          framework change.
+        Milestone: M1 · Phase: 2
+        Route: design
+        After: 396.12
 
 13. [ ] **389.13 — Decide once where the RF exception bar sits.**
        The bar is position: static on 4 of 4 task screens. On goods
@@ -3033,6 +3136,9 @@ removal or rewording; one shipped framework defect (389.4).
          then all say the same thing. The --bar rule does not change.
          'Keep it in flow and drop the docking advice' or 'put the
          log last' are acceptable outcomes if measured.
+        Milestone: M1 · Phase: 2
+        Route: design
+        After: 396.12
 
 14. [ ] **389.14 — RF frame guidance on the existing pages: who owns each app-level slot.**
        app-frame's Not-for says RF runs 'with no frame at all'. As a
@@ -3056,6 +3162,9 @@ removal or rewording; one shipped framework defect (389.4).
          markup finds no new class). Any runtime claim gets a
          check:claims case. The owner declining session end as app-
          owned, with that recorded, also satisfies this.
+        Milestone: M1 · Phase: 2
+        Route: design
+        After: 395.1
 
 15. [ ] **389.15 — Decide what a wedge scan does on the menu and the queue.**
        From a fresh load, a scan does nothing and gives no feedback.
@@ -3076,6 +3185,9 @@ removal or rewording; one shipped framework defect (389.4).
          Either way, the wrong-task behaviour is documented in the
          States table. No new component is added unless the panel
          records why composition failed.
+        Milestone: M1 · Phase: 2
+        Route: design
+        After: 396.12
 
 16. [ ] **389.16 — Every class an RF document uses has a rule in the profile it loads.**
        bo-u-tabular has 0 rules in rf-essentials: on pick, font-
@@ -3097,6 +3209,7 @@ removal or rewording; one shipped framework defect (389.4).
          budget, or listed with a reason (for example, a JS hook).
          The documents' own membership claims match what the
          instrument reports.
+        Track: defect
 
 17. [ ] **389.17 — Decide whether putaway verifies the pallet as well as the bin.**
        Scanning the pallet's own label gives 'Wrong bin: HU-100234'.
@@ -3112,6 +3225,9 @@ removal or rewording; one shipped framework defect (389.4).
            the reason is stated on the page. Scanning an HU label
            then produces a message that names what was scanned,
            instead of 'Wrong bin'.
+        Milestone: M1 · Phase: 2
+        Route: design
+        After: 396.12
 
 18. [ ] **389.18 — The receiving log reads at the glove tier, and its headers say what the cells hold.**
        Log rows are 28 px with 11.7 px code text at 320, 360, 390 and
@@ -3131,6 +3247,9 @@ removal or rewording; one shipped framework defect (389.4).
          the same missing opt-out by measuring row heights, not by
          reading source. The reasoning in the 109.7 report is
          corrected.
+        Milestone: M1 · Phase: 2
+        Route: design
+        After: 396.12
 
 19. [ ] **389.19 — The task-menu count badge is sized to its content.**
        On rf-landing-rf the badge is 158 px wide in a 160 px tile (0.99
@@ -3146,6 +3265,7 @@ removal or rewording; one shipped framework defect (389.4).
          rf-essentials unless the budget is argued. Every other page
          that puts a .bo-badge directly in a .bo-widget is re-
          measured and either unchanged or fixed.
+        Track: defect
 
 20. [ ] **389.20 — The RF queue drops a column and a tab stop that carry nothing, and names itself.**
        The Status column has only 2 distinct values: 3 of 4 rows say
@@ -3166,6 +3286,9 @@ removal or rewording; one shipped framework defect (389.4).
          one with a recorded reason (for example axe's scrollable-
          region rule, or a slot for exception statuses) also
          satisfies this.
+        Milestone: M1 · Phase: 2
+        Route: design
+        After: 396.12
 
 21. [ ] **389.21 — RF docs pages: screen first, figures true, promised states buildable from the profile.**
        Where the device screen starts:
@@ -3196,6 +3319,9 @@ removal or rewording; one shipped framework defect (389.4).
          built from classes in the served profile (grep each one); if
          not, it is reworded. The rf-essentials budget gate stays
          green.
+        Milestone: M1 · Phase: 2
+        Route: design
+        After: 396.12
 
 22. [ ] **389.22 — Count and putaway on-screen wording and emphasis.**
        The count hint 'Blind count — …' takes 2 lines (36 px) at 360,
@@ -3214,6 +3340,9 @@ removal or rewording; one shipped framework defect (389.4).
          on one line at 360 and 390, or the wrap is kept with a
          recorded reason. Anatomy names match what each region
          contains.
+        Milestone: M1 · Phase: 2
+        Route: design
+        After: 396.12
 
 23. [ ] **389.23 — Pick identifiers do not break inside themselves at the 320 px floor.**
        At 320x533, MAT-4471 takes 2 line boxes; at 360 and 390 it takes
@@ -3227,6 +3356,7 @@ removal or rewording; one shipped framework defect (389.4).
          width. The fix's cost to the profile budget is measured.
          Refusing is acceptable if the documented range is changed to
          match.
+        Track: defect
 
 24. [ ] **389.24 — The data-table cell-link focus ring is clipped on the first and last rows.**
        Pixel sampling of the focus ring, in both themes:
@@ -3240,6 +3370,7 @@ removal or rewording; one shipped framework defect (389.4).
          themes, verified by pixel-sampling the rendered page.
          Alternatively, the three-sided ring is judged against WCAG
          2.4.7 and 2.4.11 as acceptable, with the reasoning recorded.
+        Track: defect
 
 25. [x] **389.25 — Input to 388.1: state the edge contrast of a joined bar in the glove tier.**
        On the same screen, the bar buttons' edges measure 1.41:1 in
@@ -3324,6 +3455,7 @@ screen. Task screen can be better."* Two items; the grill is dispatched by rule 
          option's ring computes a system colour, asserted by a `check:claims`
          case that fails on today's CSS; the tabs' forced rule is measured for
          the same defect and fixed or cleared.
+       Track: defect
 4. [ ] **388.4 — two docs follow-ups from 388.1's panel, not re-measured.**
        (a) `/concepts/cascade`'s example `.bo-btn { border-radius: 0; }` works
        only because 0 is a group's inner radius; (b) `check:target-size` reads
@@ -3333,6 +3465,7 @@ screen. Task screen can be better."* Two items; the grill is dispatched by rule 
          override whose result does not depend on a coincidence of values, or
          the dependence is stated; (b) the target-size gate measures hit-tested
          area for fully rounded targets, or records why the box is enough.
+       Track: defect
 2. [x] **388.2 — grill the RF / rugged-device family as a JOURNEY
        (`/design-grill` flow mode).** Owner hypotheses to test, not to assume:
        *an app screen may be missing* and *the task screens can be better*.
@@ -3375,6 +3508,7 @@ Found by the skeptics of the 375.11 workflow; each measured, none fixed here.
          each can be seen; OR each is accepted with the measurement and a
          reason. The skeptic's reading: moving the message's overflow out of
          the scroll container would close both and 196.1's residual at once.
+       Track: defect
 2. [ ] **387.2 — a frozen cell's message still has two covers above it.** Near
        the viewport bottom the anchored message flips ABOVE a first-row
        frozen field onto the sticky header (z 1100) and is 128-160 of 160
@@ -3386,6 +3520,7 @@ Found by the skeptics of the 375.11 workflow; each measured, none fixed here.
          accepted with a reason. The candidate named by the skeptic is the
          top layer (a popover message), which is a markup/JS change, so this
          is a builder's decision to argue, not a CSS tweak.
+       Track: defect
 
 ## Slice 386 — Objective grill of 362.1, 369.2 and Slice 385: 3 of 3 headline claims reproduce, and the defect is in the sweep's own write-up — it said the closed-history share fell to "~0" (measured 14.4%) and called lane 2 "unchanged by construction" while a lane-2 input had moved (2026-09-25)
 
@@ -3420,6 +3555,7 @@ No earlier grill covers any of them. Report:
          (base rate measured today: 0 of 139, so it cannot fail on this tree —
          red-prove it with the rule removed), OR the ten are made to share one
          source and the shape is refused with the reason recorded.
+       Track: defect
 
 ## Slice 385 — Standardize sweep, 4 of 4 lanes on an isolated clean build, plus the thirteenth archive sweep: lanes 1-3 match their base, lane 4 is +26 body words with no cut, and 21 closed slices moved verbatim (ROADMAP.md 10,140 -> 6,726 lines; [corrected by Slice 386: 6,750 after this slice's own entry, and the closed-history share is 14.4%, not ~0]) (2026-09-24)
 
@@ -3500,6 +3636,7 @@ on 377.5.
          either a high-water anchor in `report_loop_prose.py` or a charter line
          ("replay figures go to measure files; rules carry the pointer"), with
          the reason. Refusing both on the measurement is satisfying.
+       Parked: M1 — Standardize lane-4 machinery, not milestone work — revisit: the Standardize run at milestone close
 
 ## Slice 383 — Standardize sweep, **4 of 4 lanes on an isolated clean build**, the first under Slice 382's corrected §3: lane 2 is unchanged by construction, lanes 1 and 3 match their base, and lane 4 cuts 101 words of today's own measurement narrative back out of the dispatch region (2026-09-24)
 
@@ -3572,6 +3709,7 @@ tooling and 339 of records.
          precision and recall on the same windows (the 150 commits, the 18
          sites), or unwire it from `record_iteration.py` if it stays below the
          floor. Unwiring on the number is a satisfying outcome.
+       Parked: M1 — loop machinery (the correction-site check) — revisit: milestone close, unless the owner wants "unwire" now
 2. [x] **381.2 — rule 3 arms on slices that shipped nothing.** This grill's
        three subjects changed 0 lines under `packages/` or `apps/docs`, and it
        still ran four finders and four verifiers. Before anything changes, the
@@ -3690,6 +3828,9 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          --outcome landed` builds HEAD in a throwaway worktree and re-runs the
          item's named commands, or the rubric requires a HEAD-only build and
          the report quotes its sha. Replaying the 43cca240 close must FAIL it.
+       Milestone: M1 · Phase: 0
+       Route: build
+       After: 393.11
 4. [ ] **377.4 — pointer coverage, named per behaviour.** 16 of 26 behaviours
        listen for pointer input; trusted events reach 8 in `check-claims`;
        presses from a focused state had no coverage before 2026-09-24; two
@@ -3699,6 +3840,7 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          `--self-test`) fails when a behaviour with a pointer listener has no
          CDP-input case, unless it is in an EXEMPT map with a reason; the two
          mislabelled comments are gone. Measure its base rate before wiring it.
+       Track: defect
 5. [ ] **OWNER · 377.5 — release the unreleased fixes, or record why not.**
        231 commits and eight framework defect fixes (four P0) since 0.8.0
        (2026-09-06). The one consumer pins 0.8.0 and vendors only the CSS, so
@@ -3745,17 +3887,20 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          downloads (5 of 16 were 0.8.0); record jsDelivr hits to `dist/*`
          files, since every hit so far was a README, package.json or script;
          and add GitHub traffic, the only channel above zero.
+       Parked: M1 — Objective-grill machinery — revisit: the Objective grill at milestone close
 8. [ ] **377.8 — the ACR's 1.4.11 and 2.4.7 remarks derive from source.** 1.4.11
        still states the limitation 374.7 removed; both remarks are literals.
        - **Accept:** removing check-contrast's edge branch, or changing the
          forest focus-ring or border-strong value in a scratch copy, changes
          the published remark or fails the build.
+       Track: defect
 9. [ ] **377.9 — re-decide 375.6 on real CI timings.** Build steps are
        14.2-15.6% of job time (8 runs), not ~8%; `npm ci` is about a third of
        the build.
        - **Accept:** 375.6 and ci.yml's cost comment carry figures reproduced
          from `gh api …/actions/runs/<id>/jobs` over ≥3 recent runs, with the
          command beside them; the decision follows the data either way.
+       Parked: M1 — CI cost, not milestone work — revisit: the next change to CI cost
 10. [ ] **377.10 — the Jev band, re-measured with the question form Rubric 2
        prescribes, and the set recorded.** 375.8's zero-FP result rested on
        asymmetric criteria; uniform re-runs put a false case at 0.87 once.
@@ -3764,22 +3909,28 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          FP/FN at 0.85 and 0.35 reported with spread; the rubric, its heading
          and CLAUDE.md agree on n; the "never wrongly says yes" sentence is
          kept, qualified or withdrawn on that data.
+        Milestone: M1 · Phase: 1
+        Route: build
+        After: 394.12
 11. [ ] **377.11 — 375.10's "holds the option" half must be able to fail.**
        `label.includes('')` is true.
        - **Accept:** the predicate rejects an empty value or asserts equality
          with the label or the event detail; red-proved by a handler that
          clears the field on `bo:combobox-select`.
+        Track: defect
 12. [ ] **377.12 — the preview's provenance is truthful.** The container
        reports `{sha:null, dirty:true}` whatever it holds.
        - **Accept:** the container build receives the sha and the dirty
          build-input paths and `stamp-build-id` honours them, failing loudly
          rather than writing null; the served stamp names HEAD plus exactly the
          uncommitted paths it contains.
+        Parked: M1 — docs-preview provenance, not milestone work — revisit: a stale-docs-container incident
 13. [ ] **377.13 — 375.9's corpus figure is re-runnable.** The sweep script
        lives only in session scratch.
        - **Accept:** the script (or its committed equivalent) is in the repo
          where 375.9 cites it, and a later run on HEAD reproduces or corrects
          0 of 4,944.
+        Parked: M1 — measurement hygiene, not milestone work — revisit: milestone close
 14. [ ] **377.14 — the low items, one bundle.** (a) 374.1's seam loop visits 2
        of the 7 pages rendering `.bo-quantity`/`.bo-money` — derive the list
        from `dist` or narrow the Accept; (b) six "56rem" prose restatements of
@@ -3788,6 +3939,7 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
        runtime-behaviour sentences on component/pattern pages with and without
        a `check-claims` case before deciding anything about the umbrella
        pattern. Each closes on its own measurement.
+        Parked: M1 — a low-severity bundle — revisit: milestone close
 
 ## Slice 376 — Standardize sweep, **4 of 4 lanes**: one dead style and two false passages fixed, four prose verdicts recorded (enumeration 16 -> 20), one standing CSS group found DISSOLVED by a measured fix, and two shipped defects found BESIDE the lanes; the completeness critic also found two closed items resting on uncommitted work (2026-09-24)
 
@@ -3883,6 +4035,9 @@ were `[x]` on hunks that were never committed (the ACR 2.5.7 row; DESIGN.md,
        - **Accept:** either the launcher uses the shipped parts, verified live,
          or the page records why a grid launcher's header differs. Refusing is
          a satisfying outcome.
+       Milestone: M1 · Phase: 2
+       Route: design
+       After: 395.1
 6. [x] **376.6 — lane 4 verdicts.** CLAUDE.md changed accumulate class —
        HONEST, cut by 375.2 (5,880 -> 3,227 words), 2 up since. ROADMAP.md:
        167.1's premise ("growth here is managed") has been false since
@@ -3901,6 +4056,7 @@ were `[x]` on hunks that were never committed (the ACR 2.5.7 row; DESIGN.md,
        - **Accept:** the ratchet distinguishes a real cut from noise (a named
          floor, argued), a replay reports ROADMAP.md's last real cut at the
          2026-09-07 sweep, and the change is red-proved.
+       Parked: M1 — Standardize lane-4 machinery, not milestone work — revisit: the Standardize run at milestone close
 8. [x] **376.8 — archive sweep, the twelfth: 40 closed slices moved.** Taken
        inside lane 4 because 167.1's premise had been false for 17 days and
        rule 4 says to run the sweep when it walks thousands of lines. Targets
@@ -4352,6 +4508,7 @@ untracked or uncommitted, so the removal was a working-tree change.
            skeptic's variant (capped below/span-all with `min(5lh,100%)` and
            `min(3lh,100%)` floors, `overflow-wrap: anywhere`) cleared its matrix
            but is ungrilled.
+        Track: defect
 
 ## Slice 374 — the joined-control seam was spelled against the AUTHORED markup, not the RENDERED DOM: three trailing children defeat `:last-child`, the framework's own canonical quantity markup is one of them, and the defect shipped on **3 pages / 5 rendered views** while a gate that visits those exact elements measured only their focus rings (2026-09-22)
 
@@ -8175,6 +8332,9 @@ claimed.
          Slices 353 and 369 both counted it as owner-blocked. It carried no
          marker, so the first computed `oldest dispatchable` picked it.
        After: 249.10
+       Milestone: M1 · Phase: 1
+       Route: build
+       After: 394.9
 
 8. [x] **249.8 — Component tagline + category, generated from the CSS
        header.** `/* @tagline … @category … */` in each component's CSS

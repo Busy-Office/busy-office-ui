@@ -37,9 +37,8 @@ that branch is the owner's call.
 - **The one standing GOAL — the owner's M0 bootstrap.** O3, as the owner's
   decision table records it: *"bootstrap 393.1-393.10 approved; rules 2 and 3
   paused until 393.10; cap 12 wakes"*. The M1 Budget note adds that holds are
-  counted separately (`hold-wakes`). **Used: 8 of 12** (`393.1`-`393.8` landed; `392.4` and `381.2` closed
-  inside `393.5`). **Next: `393.9`** (apply the realignment markers, route
-  `mechanical`), **then** `393.10` (re-score the loop).
+  counted separately (`hold-wakes`). **Used: 9 of 12** (`393.1`-`393.9` landed; `392.4` and `381.2` closed
+  inside `393.5`). **Next: `393.10`** (re-score the loop; the M0 exit test), the last M0 item.
 - **After `393.10`:** M1 stays DRAFT until the re-score reads 3.0 or more and
   the owner fills its fields. Until then rule 4 dispatches the oldest
   dispatchable item that STATUS.md names (`375.11` at the time of writing).
