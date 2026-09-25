@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-25 04:20 UTC
+Generated at: 2026-09-25 04:42 UTC
 
 ## Open items by slice
 
@@ -79,6 +79,8 @@ Generated at: 2026-09-25 04:20 UTC
   - 389.22 — Count and putaway on-screen wording and emphasis.
   - 389.23 — Pick identifiers do not break inside themselves at the 320 px floor.
   - 389.24 — The data-table cell-link focus ring is clipped on the first and last rows.
+- **Slice 391** (1 open)
+  - 391.1 — settle why `check:claims` is red here and green on CI at the same commit, and record which environment is telling the truth.
 - **Slice —** (3 open)
   - OWNER · 377.5 — release the unreleased fixes, or record why not.
   - OWNER · 377.6 — is busy-office-erp the named first user?
@@ -87,7 +89,7 @@ Generated at: 2026-09-25 04:20 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1790 iterations logged)
+dispatch status — counter-triggered rules (1792 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-09-25 12:20   ok
   Objective     3 / 3 slices          since 2026-09-25 08:13   OVERDUE  [388, 389, 390]
   -> a counter is at or past its threshold; the dispatcher should pick it
@@ -123,8 +125,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-25 02:49 · Objective · grill · Slice 386 — Objective grill of 362.1, 369.2, Slice 385 · landed · 53ffa54f
-- 2026-09-25 03:34 · Continue · build · 372.1 — rule 5 keeps the day unit; day-close reason measured, comparable set labelled · landed · f866ad11
 - 2026-09-25 05:53 · Continue · build · 375.11 — three of five grid-message residuals fixed (frozen, loading, classic scrollbar); zoom premise corrected; Slice 387 filed · landed · 0c6f319c
 - 2026-09-25 05:53 · Meta · refusal · 400% zoom last-resort @position-try: clips unbreakable tokens and adds a Tab stop at 100% zoom · refused · 0c6f319c
 - 2026-09-25 07:11 · Roadmap · triage · 388 — owner input triaged: 388.1 capsule button + group guideline, 388.2 RF journey grill · triaged · f9c82ed5
@@ -133,6 +133,8 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-25 09:00 · Continue · build · 388.1 — capsule refused by design panel; button which-one guideline; aria-pressed forced-colours fix; 389.25 closed · landed · a1b3969b
 - 2026-09-25 09:00 · Meta · refusal · capsule button shape (setting token, --capsule modifier): a pill is a status here; hit area and forced-colours collision measured · refused · a1b3969b
 - 2026-09-25 12:20 · Standardize · sweep · 390 — Standardize sweep 4 of 4 lanes; /components/button verdict; icon caption narrative cut · landed · 1d0046c3
+- 2026-09-25 04:42 · Roadmap · triage · Slice 391 — cloud wake collided TWICE (Step 0c 6 and 7: rule 4 on 336.2 against a 159-commit-stale Step 0, verdicts DISAGREED; rule 2's sweep against Slice 390, same finding same number). Both discards checked, both returned nothing. Filed 391.1: check:claims 3 of 311 red here at b0401326, deterministic over two runs on Chromium 141, while CI reports success on the same sha · triaged · 3b24cc94
+- 2026-09-25 04:42 · Meta · refusal · rewriting RESUME.md wholesale — a cloud wake that lost both dispatches must not clobber the winner's handover; appended instead · refused · 3b24cc94
 
 ## Sunset test
 
