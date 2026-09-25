@@ -943,11 +943,12 @@ surfaced more:
    the only thing that keeps it from rotting.
 
    **The verdict set is an ENUMERATION, and it is the one list in this playbook
-   that may NOT be replaced by a command.** Twenty pages carry a verdict:
+   that may NOT be replaced by a command.** Twenty-one pages carry a verdict:
    **158.1**'s twelve, **161.1**'s three (`/base/motion/`,
    `/concepts/js-behaviors/`, `/concepts/design-language/`), **178.3**'s
    `/concepts/scale/`, and **376.3**'s four (`/patterns/kanban/`,
-   `/reference/acr/`, `/components/file-upload/`, `/components/alerts/`). Check membership against that enumeration, and **amend it
+   `/reference/acr/`, `/components/file-upload/`, `/components/alerts/`), and
+   **390**'s `/components/button/`. Check membership against that enumeration, and **amend it
    in the same commit as any round that records a new verdict** — nothing else
    keeps it true.
 

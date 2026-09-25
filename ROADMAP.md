@@ -320,6 +320,33 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 390 — Standardize sweep, 4 of 4 lanes on an isolated clean build: lanes 1 and 2 carry no new finding, lane 3 flags `/components/button/` (the new which-one guideline) and gets a verdict, lane 4's +52 is two sentences of new instruction (2026-09-25)
+
+**Dispatched by rule 2**, `Standardize 4 / 4 OVERDUE`. Worktree of HEAD
+(`c76a841e`) with its own `npm ci`; `@busy-office/ui` realpath-resolves inside
+it; core and docs builds green (0 FAIL). Base: Slice 385 (`6ec0e8da`).
+
+- **Lane 1 (of 4):** *"0 dead style attribute(s) on 0 page(s); 1392 live"*, and
+  the standing 10 dead declarations on 8 pages. Equal to the base.
+- **Lane 2 (of 4):** *"74 source file(s) · 246 rule(s) with 3+ declarations · 235
+  distinct bodies · 7 body(ies) appearing more than once"* against the base's
+  245 · 234 · 7. The +1 rule / +1 body is this window's new CSS (375.11,
+  389.4, 388.1); no group formed, grew or dissolved, so no delta finding.
+- **Lane 3 (of 4):** 119 pages, median 833, 119,993 words; the flagged union
+  is **18** (base 17). The new page is **`/components/button/`** at 1,806
+  words, 2.2x the corpus median — carrying no verdict yet. **Verdict: the
+  length is the THING, not the prose.** The page is now the chooser for the
+  action primitive (separate / group / toggle / segmented / bar, each with a
+  Not-for), which the owner asked for (388.1), and every figure in it is
+  asserted by a claim. One caption WAS prose: the icon paragraph narrated a
+  past check ("checked live … right now"); cut to its one-sentence contract.
+  §3's enumeration amended in this commit (twenty -> twenty-one).
+- **Lane 4 (of 4):** dispatch region **7,775** (Slice 385: 7,749), 2 of 16
+  sections moved: rule 3 +26 (already read at 385) and rule 5 +26 — 372.1's
+  day-close sentence, new instruction a wake needs to read the comparable
+  set correctly. No cut: removing it would remove instruction, not narrative.
+- **Archive sweep: not due.** `roadmap_scope.py`: 1,193 / 7,532 = 15.8%.
+
 ## Slice 389 — findings of the RF journey grill (388.2): the app screen exists but is not wired, and the task screens neither take the first scan nor finish a task (2026-09-25)
 
 Report: `.roundtable/design-grill-flow-rf-2026-09-25.md`. Six lenses on the live
