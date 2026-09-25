@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-25 12:24 UTC
+Generated at: 2026-09-25 12:34 UTC
 
 ## Open items by slice
 
@@ -86,8 +86,7 @@ Generated at: 2026-09-25 12:24 UTC
   - 392.3 — a `--bar` label with one word wider than its slot paints past its button.
   - 392.4 — rule 3 reset without the thesis section, twice; and a design-grill reset it.
   - 392.5 — the comparator deltas are recorded nowhere a later grill reads them.
-- **Slice 393** (12 open)
-  - 393.1 — one committer: a wake halts on a HALT file or on a foreign commit.
+- **Slice 393** (11 open)
   - 393.2 — the in-flight protocol: one workflow at a time, a hold that reads nothing, and a wall-time cap.
   - 393.3 — the backlog mirror reports every kind of wait, and prints the oldest dispatchable item.
   - 393.4 — `milestone.py` and rule M: code computes the milestone's next item.
@@ -146,9 +145,9 @@ Generated at: 2026-09-25 12:24 UTC
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1796 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-09-25 12:20   ok
-  Objective     1 / 3 slice           since 2026-09-25 13:32   ok  [392]
+dispatch status — counter-triggered rules (1797 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-09-25 12:20   ok
+  Objective     2 / 3 slices          since 2026-09-25 13:32   ok  [392, 393]
   Optimize      0 wake-date(s) newer   since 2026-09-25 05:14   ok   [newest pair: claims; 153 sample(s), 8 of 51 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (43 of 51 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
        claims                      6d  2026-09-19 203 count -> 2026-09-25 311 count  +108
@@ -185,7 +184,6 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 
 ## Last 10 iterations
 
-- 2026-09-25 08:38 · Continue · fix · 389.4 — P0: scan flash frame carries the verdict in rendered pixels; forced-colours frame stays · landed · 1b19d6e9
 - 2026-09-25 09:00 · Continue · build · 388.1 — capsule refused by design panel; button which-one guideline; aria-pressed forced-colours fix; 389.25 closed · landed · a1b3969b
 - 2026-09-25 09:00 · Meta · refusal · capsule button shape (setting token, --capsule modifier): a pill is a status here; hit area and forced-colours collision measured · refused · a1b3969b
 - 2026-09-25 12:20 · Standardize · sweep · 390 — Standardize sweep 4 of 4 lanes; /components/button verdict; icon caption narrative cut · landed · 1d0046c3
@@ -195,6 +193,7 @@ Open items whose text mentions "owner" — needs an owner decision, trigger, or 
 - 2026-09-25 13:32 · Objective · grill · Slice 392 — Objective grill of 388.1, 389.4, Slice 390 (renumbered from 391, collision 8); P0 392.1 filed · landed · e8ac9844
 - 2026-09-25 14:12 · Continue · fix · 392.1 — P0: a scan verdict stamped while a flash is live restarts the flash · landed · a16d4ff3
 - 2026-09-25 20:24 · Roadmap · triage · M1 milestone triaged as DRAFT; Slice 393 (M0) approved as bootstrap; owner O1-O4 applied (one dispatcher, park, cap 12, naming rule) · triaged · c8d2ccb7
+- 2026-09-25 20:34 · Continue · build · 393.1 — one dispatcher: Step 0 guard (HALT, checkout, foreign commits) · landed · b17b36e7
 
 ## Sunset test
 

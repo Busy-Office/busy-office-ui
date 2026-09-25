@@ -1802,3 +1802,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-25 13:32 · Objective · grill · Slice 392 — Objective grill of 388.1, 389.4, Slice 390 (renumbered from 391, collision 8); P0 392.1 filed · landed · e8ac9844
 - 2026-09-25 14:12 · Continue · fix · 392.1 — P0: a scan verdict stamped while a flash is live restarts the flash · landed · a16d4ff3
 - 2026-09-25 20:24 · Roadmap · triage · M1 milestone triaged as DRAFT; Slice 393 (M0) approved as bootstrap; owner O1-O4 applied (one dispatcher, park, cap 12, naming rule) · triaged · c8d2ccb7
+- 2026-09-25 20:34 · Continue · build · 393.1 — one dispatcher: Step 0 guard (HALT, checkout, foreign commits) · landed · b17b36e7
