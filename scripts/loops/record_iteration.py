@@ -44,12 +44,26 @@ more than once for more than one refusal in the same item.
 import argparse
 import datetime
 import os
+import re
 import subprocess
 import sys
 
-from _common import LOG, SEP, connect
+from _common import LOG, ROOT, SEP, connect, parse_log_line
 
 OUTCOMES = {"landed", "released", "logged", "triaged", "refused", "reverted"}
+
+# The loop names (roadmap 393.5). One closed set, stated once, here; the log's
+# own history is the floor it was taken from. Counted on 2026-09-25 over 1,804
+# rows: Continue 676, Meta 579, Roadmap 172, Standardize 169, Objective 112,
+# Explore 57, Polish 35, Optimize 3, Gauntlet 1 — plus Research, which
+# LOOPS.md's table names and no row has used yet. Meta is not a loop in that
+# table; it is the label every --also-refused row is written under (579 Meta
+# rows, 574 of them `Meta · refusal`),
+# so a set taken from the table alone would reject the recorder's own output.
+# Re-count before changing:
+#   python3 -c "import re,collections;print(collections.Counter(m.group(1) for l in open('.roundtable/loop-log.md') for m in [re.match(r'^- \S+ \S+ · ([\w-]+) · ',l)] if m))"
+LOOPS = {"Continue", "Standardize", "Polish", "Research", "Optimize", "Explore",
+         "Objective", "Gauntlet", "Roadmap", "Meta"}
 
 
 def head_sha():
@@ -68,6 +82,11 @@ def main():
     ap.add_argument("--item", required=True)
     ap.add_argument("--outcome", required=True)
     ap.add_argument("--commit", default=None)
+    ap.add_argument("--milestone", default=None, metavar="Mn",
+                    help="tag the row as milestone work (roadmap 393.5): written into "
+                         "the loop-log row, where dispatch_status.py counts it")
+    ap.add_argument("--track", default=None, choices=["defect"],
+                    help="tag the row as defect-track work (the interleave counts it)")
     ap.add_argument("--no-log", action="store_true",
                     help="insert the DB row only; don't append to loop-log.md")
     ap.add_argument("--also-refused", action="append", default=[],
@@ -92,6 +111,23 @@ def main():
             '  "a user can install it", and the second was never true while npm served\n'
             '  0.1.1. Use "landed" (committed, gates green) or "released" (published).'
         )
+    if args.loop not in LOOPS:
+        raise SystemExit(
+            f'record_iteration: unknown loop "{args.loop}".\n'
+            f'  Use one of: {", ".join(sorted(LOOPS))}\n'
+            "  A new loop is a LOOPS.md change first, then this set (roadmap 393.5)."
+        )
+    if args.milestone is not None:
+        if not re.fullmatch(r"M[1-9]\d*", args.milestone):
+            raise SystemExit(f'record_iteration: --milestone must look like M1, not "{args.milestone}"')
+        # A tag naming no milestone is counted by nothing: rules 2, 3 and M
+        # compare it with the ACTIVE milestone's id (393.5's verification).
+        with open(os.path.join(ROOT, "ROADMAP.md"), encoding="utf-8") as f:
+            if not re.search(rf"^## Milestone {args.milestone}\b", f.read(), re.M):
+                raise SystemExit(
+                    f'record_iteration: --milestone {args.milestone} names no `## Milestone '
+                    f'{args.milestone}` section in ROADMAP.md, so no counter would ever read the tag.'
+                )
     if args.outcome not in OUTCOMES:
         raise SystemExit(
             f'record_iteration: unknown outcome "{args.outcome}".\n'
@@ -106,23 +142,51 @@ def main():
             )
     commit = args.commit or head_sha()
 
-    rows = [(ts, args.loop, args.mode, args.item, args.outcome, commit)]
+    # The tags go into the ROW, as their own segment before the outcome, because
+    # dispatch_status.py reads the log, not loops.db: rules 2 and 3 under
+    # `Rules-2-3: scoped`, and rule M's interleave, count from the row (393.5).
+    # A refusal row is not a dispatch, so it carries no tags.
+    tags = " ".join(t for t in (f"milestone={args.milestone}" if args.milestone else "",
+                                 f"track={args.track}" if args.track else "") if t)
+    rows = [(ts, args.loop, args.mode, args.item, args.outcome, commit, tags)]
     for text in args.also_refused:
-        rows.append((ts, "Meta", "refusal", text, "refused", commit))
+        rows.append((ts, "Meta", "refusal", text, "refused", commit, ""))
+
+    # Build every line first and READ IT BACK before writing anything: a row the
+    # parser reads differently from what is about to go into loops.db (an item
+    # ending in " ·", or whose last segment is tag-shaped) would leave the log
+    # and the mirror disagreeing with no warning — and the counters follow the
+    # log (393.5's verification). Refuse instead.
+    lines = []
+    for r_ts, r_loop, r_mode, r_item, r_outcome, r_commit, r_tags in rows:
+        line = SEP.join(["- " + r_ts, r_loop, r_mode or "-", r_item]
+                        + ([r_tags] if r_tags else []) + [r_outcome, r_commit or "-"])
+        back = parse_log_line(line)
+        want = {"ts": r_ts, "loop": r_loop, "mode": r_mode or "-", "item": r_item, "outcome": r_outcome,
+                "commit_sha": r_commit or None,
+                "milestone": args.milestone if r_tags else None,
+                "track": args.track if r_tags else None}
+        got = {k: back.get(k) if back else None for k in want}
+        if got != want:
+            diff = ", ".join(f"{k}: wrote {want[k]!r}, reads back {got[k]!r}" for k in want if got[k] != want[k])
+            raise SystemExit(
+                "record_iteration: this row would not read back as written, so nothing was recorded.\n"
+                f"  {diff}\n  Reword the item (it must not end in \"{SEP.strip()}\" or with a tag-shaped segment)."
+            )
+        lines.append(line)
 
     if not args.no_log:
         with open(LOG, "a", encoding="utf-8") as f:
-            for r_ts, r_loop, r_mode, r_item, r_outcome, r_commit in rows:
-                line = SEP.join(["- " + r_ts, r_loop, r_mode or "-",
-                                 r_item, r_outcome, r_commit or "-"])
+            for line in lines:
                 f.write(line + "\n")
 
     conn = connect()
-    for r_ts, r_loop, r_mode, r_item, r_outcome, r_commit in rows:
+    for r_ts, r_loop, r_mode, r_item, r_outcome, r_commit, r_tags in rows:
         conn.execute(
-            "INSERT INTO iterations (ts, loop, mode, item, outcome, commit_sha) "
-            "VALUES (?, ?, ?, ?, ?, ?)",
-            (r_ts, r_loop, r_mode, r_item, r_outcome, r_commit),
+            "INSERT INTO iterations (ts, loop, mode, item, outcome, commit_sha, milestone, track) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            (r_ts, r_loop, r_mode, r_item, r_outcome, r_commit,
+             args.milestone if r_tags else None, args.track if r_tags else None),
         )
     conn.commit()
     conn.close()

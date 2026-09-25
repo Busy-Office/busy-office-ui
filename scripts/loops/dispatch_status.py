@@ -30,11 +30,12 @@ print a number, which is the whole reason this file exists.
 """
 import datetime
 import json
+import os
 import re
 import subprocess
 import sys
 
-from _common import LOG, METRICS
+from _common import LOG, METRICS, ROOT
 
 ROW = re.compile(r"^- (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) · ([\w-]+) · ([\w-]+) · (.*)$")
 # `[\w-]`, not `\w`, and the hyphen is not hypothetical: NINE rows carry a
@@ -270,7 +271,7 @@ def rows():
                 bullets += 1
             m = ROW.match(line.rstrip("\n"))
             if m:
-                out.append({"at": m.group(1), "loop": m.group(2), "item": m.group(4)})
+                out.append({"at": m.group(1), "loop": m.group(2), "mode": m.group(3), "item": m.group(4)})
     if bullets != len(out):
         raise SystemExit(
             f"dispatch_status: {bullets} iteration bullet(s) in {LOG} but only {len(out)} "
@@ -282,13 +283,161 @@ def rows():
 
 
 def since_last(all_rows, loop):
-    """Rows recorded after the last time `loop` ran (all of them if it never has)."""
-    last = max((i for i, r in enumerate(all_rows) if r["loop"] == loop), default=None)
+    """Rows recorded after the last time `loop` ran (all of them if it never has).
+
+    For Objective, "ran" means a row that RESETS rule 3 (roadmap 392.4): its
+    grill report carries LOOPS.md §6's thesis section. A row that does not is
+    reported, and the count runs on past it."""
+    if loop == "Objective":
+        last = None
+        for i in range(len(all_rows) - 1, -1, -1):
+            r = all_rows[i]
+            if r["loop"] != "Objective":
+                continue
+            ok, why = objective_resets(r)
+            if ok:
+                last = i
+                break
+            print(f"  (Objective row {r['at']} did not reset rule 3: {why})")
+    else:
+        last = max((i for i, r in enumerate(all_rows) if r["loop"] == loop), default=None)
     return (all_rows[last + 1:], all_rows[last]["at"]) if last is not None else (all_rows, "never")
 
 
-def report(all_rows, loop, threshold, unit):
+# ---------------------------------------------------------------------------
+# Rule 3's reset (roadmap 392.4). Slice 386 reset the counter with a thesis
+# section that read no channel it could have read, and 388.2 — a design-grill
+# logged as Objective — reset it with none, dropping the armed set [372, 375].
+# LOOPS.md §6 says an Objective grill's report carries a thesis section; this
+# is where that becomes a property of the counter rather than of the prose.
+#
+# @heuristic — it recognises the SHAPE of a section in a markdown report:
+# `## Thesis section`, four bold-labelled parts (adoption, the named first user,
+# comparators, framework code with its `git diff --numstat` command), none of
+# them skipped without naming the error that stopped the read. What a part SAYS
+# is the grill's judgement; the shape is what a counter can hold it to.
+# `--self-test` covers each refusal; `--thesis-replay` quotes the real rows.
+THESIS_FROM = "2026-09-24 10:38"   # 381's row: the grill that wrote the requirement. Rows at or before it predate it.
+THESIS_PARTS = {
+    "adoption": re.compile(r"adoption", re.I),
+    "first user": re.compile(r"first[- ]user", re.I),
+    "comparators": re.compile(r"comparator", re.I),
+    "framework code": re.compile(r"framework[- ]code", re.I),
+}
+THESIS_HEAD = re.compile(r"^## (?:\d+\.\s*)?Thesis section\b.*$", re.M | re.I)
+# A SKIP is one of these in a sentence; it is excused only by an error named in
+# the SAME sentence. Generic words that §6's own wording needs elsewhere ("what
+# the channels cannot see") are not errors (393.5's verification: they turned the
+# check off, and "not measured" refused a compliant report).
+SKIPPED = re.compile(r"\bnot (?:taken|read|re-read)\b", re.I)
+READ_ERROR = re.compile(r"could not|couldn't|failed|unavailable|denied|timed out|HTTP \d{3}|\b[45]\d\d\b|rate[- ]limit", re.I)
+REPORT = re.compile(r"^\.roundtable/grill[^/]*\.md$")
+DESIGN_REPORT = re.compile(r"^\.roundtable/design-grill[^/]*\.md$")
+
+
+def _unquoted(text):
+    """Text with code spans and quotations removed: a part that QUOTES another
+    grill's "not taken" has not skipped anything itself."""
+    text = re.sub(r"`[^`]*`", " ", text)
+    return re.sub(r"\"[^\"]*\"|“[^”]*”|'[^'\n]{3,}'", " ", text)
+
+
+def thesis_problems(text):
+    """[] when the report's thesis section has the shape §6 asks for."""
+    m = THESIS_HEAD.search(text)
+    if not m:
+        return ["no `## Thesis section`"]
+    body = text[m.end():]
+    nxt = re.search(r"^## ", body, re.M)
+    body = body[: nxt.start()] if nxt else body
+    parts = {}
+    for b in re.split(r"(?m)^- ", body)[1:]:
+        b = re.split(r"\n[ \t]*\n(?![ \t]|- )", b)[0]   # a part ends at a blank line before plain text
+        label = re.match(r"\*\*([^*]+)\*\*", b)
+        if not label:
+            continue
+        for name, rx in THESIS_PARTS.items():
+            if rx.search(label.group(1)) and name not in parts:
+                parts[name] = (label.group(1), b[label.end():])
+    problems = [f"no {name} part" for name in THESIS_PARTS if name not in parts]
+    for name, (label, rest) in parts.items():
+        words = re.findall(r"[A-Za-z0-9]+", rest)
+        if len(words) < 3:
+            problems.append(f"the {name} part has no reading beside its label")
+            continue
+        # A colon joins a skip to its reason ("not read: the API returned 503"),
+        # so it does not end a sentence here.
+        for sentence in re.split(r"(?<=[.;!?])\s+|\n\s*-\s", _unquoted(label + " " + rest)):
+            if SKIPPED.search(sentence) and not READ_ERROR.search(sentence):
+                problems.append(f"the {name} part was skipped without naming the error that stopped the read")
+                break
+    if "framework code" in parts and "git diff --numstat" not in parts["framework code"][1]:
+        problems.append("the framework code part has no `git diff --numstat` command beside its number")
+    return problems
+
+
+def _git(*args):
+    out = subprocess.run(["git", "-C", ROOT, *args], capture_output=True, text=True)
+    return out.stdout if out.returncode == 0 else None
+
+
+def objective_resets(row):
+    """(resets, why) for one Objective row. Reads from ROOT, never from the
+    working directory, and FAILS CLOSED: a row whose commit or report cannot be
+    read does not reset rule 3. Over-arming costs a narrowing; a wrong reset
+    costs the armed set (393.5's verification)."""
+    if row["at"] <= THESIS_FROM:
+        return True, "predates the thesis requirement"
+    if row.get("mode") == "design-grill":
+        return False, "a design-grill grills a screen, not the slices' claims (LOOPS.md §6)"
+    sha = row["item"].rsplit(" · ", 1)[-1].strip()
+    if not re.fullmatch(r"[0-9a-f]{7,40}", sha):
+        return False, f"the row records no commit ({sha!r}), so its report cannot be found"
+    added = _git("show", "--diff-filter=A", "--name-only", "--format=", sha)
+    if added is None:
+        return False, f"commit {sha} cannot be read here, so its report was not checked"
+    reports = [n for n in added.splitlines() if REPORT.match(n)]
+    if not reports:
+        touched = _git("show", "--name-only", "--format=", sha) or ""
+        reports = [n for n in touched.splitlines() if REPORT.match(n)]
+        if len(reports) > 1:
+            return False, (f"commit {sha} adds no grill report and touches {len(reports)}; "
+                           "which one is this grill's is not decidable")
+    if not reports:
+        design = [n for n in (added or "").splitlines() if DESIGN_REPORT.match(n)]
+        return False, (f"commit {sha} carries only a design-grill report ({design[0]})" if design
+                       else f"commit {sha} carries no grill report")
+    if len(reports) > 1:
+        return False, f"commit {sha} adds {len(reports)} grill reports; which one is this grill's is not decidable"
+    path = reports[0]
+    try:
+        text = open(os.path.join(ROOT, path), encoding="utf-8").read()   # as it stands: amending it restores the reset
+    except OSError:
+        text = _git("show", f"{sha}:{path}") or ""
+    problems = thesis_problems(text)
+    return (not problems), (f"{path}: " + "; ".join(problems)) if problems else path
+
+
+def thesis_replay():
+    """Every Objective row since the requirement, through the check (392.4's replay)."""
+    for r in rows():
+        if r["loop"] == "Objective" and r["at"] > THESIS_FROM:
+            ok, why = objective_resets(r)
+            print(f"{r['at']}  {'RESETS ' if ok else 'REFUSED'}  {r['item'][:60]}\n    {why}")
+    return 0
+
+
+def report(all_rows, loop, threshold, unit, scope=(None, "normal")):
+    mid, mode = scope
+    if mode == "suspended":
+        print(f"  {loop:<12} suspended — Rules-2-3: suspended while {mid} is ACTIVE; one sweep runs at its exit")
+        return False
     after, when = since_last(all_rows, loop)
+    if mode == "scoped":
+        # Only rows tagged `milestone=<mid>` count (roadmap 393.5); the reset is
+        # still the last row of the rule's own loop.
+        import milestone
+        after = [r for r in after if milestone.row_tags(r["item"])["milestone"] == mid]
     if loop == "Standardize":
         count = sum(1 for r in after if r["loop"] == "Continue")
         detail = ""
@@ -352,9 +501,22 @@ def report(all_rows, loop, threshold, unit):
     flag = "OVERDUE" if overdue else "ok"
     print(
         f"  {loop:<12} {count:>2} / {threshold} {unit + ('' if count == 1 else 's'):<16}"
-        f"since {when}   {flag}{detail}"
+        f"since {when}   {flag}{detail}" + (f"   (scoped: {mid} rows only)" if mode == "scoped" else "")
     )
     return overdue
+
+
+def rules_2_3_scope():
+    """(milestone, Rules-2-3 mode) while a milestone is ACTIVE; (None, 'normal')
+    otherwise, which is the pre-milestone behaviour byte for byte."""
+    import milestone
+    ms, structural = milestone.parse_milestones(milestone.gs._read(milestone.gs.ROADMAP))
+    active = [(mid, m) for mid, m in ms.items() if m["status"] == "ACTIVE"]
+    if structural or len(active) != 1:
+        return (None, "normal")   # the milestone report refuses these on its own line
+    mid, m = active[0]
+    mode = m["fields"].get("Rules-2-3", "normal")
+    return (mid, mode if mode in ("normal", "scoped", "suspended") else "normal")
 
 
 # ---------------------------------------------------------------------------
@@ -1012,17 +1174,86 @@ def self_test():
         for item, want in SELF_TEST
         for got in [slice_of(item)]
         if got != want
-    ] + skew_self_test() + pairing_self_test()
+    ] + skew_self_test() + pairing_self_test() + thesis_self_test()
     if bad:
         print("dispatch_status --self-test FAILED:", file=sys.stderr)
         print("\n".join(bad), file=sys.stderr)
         return 1
     print(
         f"dispatch_status --self-test: {len(SELF_TEST)} slice-reference case(s), "
-        f"{len(SKEW_SELF_TEST)} clock-skew case(s) and {len(PAIRING_SELF_TEST)} "
-        f"metric-pairing case(s) classified correctly"
+        f"{len(SKEW_SELF_TEST)} clock-skew case(s), {len(PAIRING_SELF_TEST)} "
+        f"metric-pairing case(s) and {len(THESIS_SELF_TEST)} thesis case(s) classified correctly"
     )
     return 0
+
+
+THESIS_OK = """# grill
+
+## Thesis section (LOOPS.md §6 Exit)
+
+- **Adoption, with windows.** npm 16 last week (2026-09-15..21).
+- **The named first user (377.6).** busy-office-erp pins 0.8.0.
+- **Comparator: SAP fundamental-styles.** 100,355 downloads last month.
+- **Framework code since the last Objective row** (`abc1234`):
+  `git diff --numstat abc1234 HEAD -- packages/core/src` -> 2 files.
+
+## Findings
+"""
+
+
+def thesis_self_test():
+    skipped = "the adoption part was skipped without naming the error that stopped the read"
+    cases = [
+        ("a complete thesis section", THESIS_OK, []),
+        ("no heading (384, 388.2)", THESIS_OK.replace("## Thesis section", "## 5. The product thesis"),
+         ["no `## Thesis section`"]),
+        ("a numbered heading in the house style", THESIS_OK.replace("## Thesis section", "## 5. Thesis Section"), []),
+        ("a part skipped with no error (386)",
+         THESIS_OK.replace("npm 16 last week (2026-09-15..21).", "not taken this grill."), [skipped]),
+        ("a skip with §6's 'cannot see' clause ELSEWHERE is still a skip",
+         THESIS_OK.replace("npm 16 last week (2026-09-15..21).",
+                           "not taken this grill. What the channels cannot see: copies of dist."), [skipped]),
+        ("a part skipped WITH the error in the same sentence is a reading",
+         THESIS_OK.replace("npm 16 last week (2026-09-15..21).", "not read: the npm API returned HTTP 503."), []),
+        ("quoting another grill's skip is not a skip",
+         THESIS_OK.replace("npm 16 last week (2026-09-15..21).",
+                           "npm 16 last week; Slice 386 wrote \"not taken this grill\"."), []),
+        ("'not measured' in a compliant reading is not a skip",
+         THESIS_OK.replace("npm 16 last week (2026-09-15..21).",
+                           "npm 16 last week (2026-09-15..21); docs readership is not measured."), []),
+        ("a label with no reading", THESIS_OK.replace("busy-office-erp pins 0.8.0.", ""),
+         ["the first user part has no reading beside its label"]),
+        ("hyphenated labels", THESIS_OK.replace("**Framework code since", "**Framework-code lines since")
+         .replace("**The named first user", "**The named first-user state"), []),
+        ("a missing part", THESIS_OK.replace("- **Comparator: SAP fundamental-styles.** 100,355 downloads last month.\n", ""),
+         ["no comparators part"]),
+        ("framework code without its command",
+         THESIS_OK.replace("`git diff --numstat abc1234 HEAD -- packages/core/src` -> 2 files.", "2 files."),
+         ["the framework code part has no `git diff --numstat` command beside its number"]),
+        ("a part in the NEXT section does not count",
+         THESIS_OK.replace("- **Comparator: SAP fundamental-styles.** 100,355 downloads last month.\n", "")
+         + "- **Comparator: SAP.** read it all today.\n", ["no comparators part"]),
+    ]
+    bad = [f"    thesis: {name} -> {got!r}, expected {want!r}"
+           for name, text, want in cases for got in [thesis_problems(text)] if got != want]
+    rows_ = [
+        ("a design-grill row", {"at": "2026-09-30 10:00", "loop": "Objective", "mode": "design-grill",
+                                "item": "x · landed · abc1234"}, False),
+        ("a row from before the requirement", {"at": THESIS_FROM, "loop": "Objective", "mode": "grill",
+                                               "item": "x · landed · -"}, True),
+        ("a row with no commit", {"at": "2026-09-30 10:00", "loop": "Objective", "mode": "grill",
+                                  "item": "x · landed · -"}, False),
+        ("a row whose commit does not exist (fails closed)",
+         {"at": "2026-09-30 10:00", "loop": "Objective", "mode": "grill", "item": "x · landed · 0000000"}, False),
+    ]
+    for name, row, want in rows_:
+        if objective_resets(row)[0] != want:
+            bad.append(f"    thesis: {name} -> reset={not want}, expected reset={want}")
+    THESIS_SELF_TEST[:] = cases + rows_
+    return bad
+
+
+THESIS_SELF_TEST = []
 
 
 def pairing_census():
@@ -1082,6 +1313,8 @@ def main():
         return self_test()
     if "--pairing-census" in sys.argv:
         return pairing_census()
+    if "--thesis-replay" in sys.argv:
+        return thesis_replay()
     all_rows = rows()
     if len(all_rows) < 2:
         print("dispatch status: loop-log.md has too few rows to say anything", file=sys.stderr)
@@ -1097,8 +1330,9 @@ def main():
         print(f"  milestone     REFUSED — {ms_refusal}")
         print("  -> a refused milestone report is a finding: report it and dispatch nothing but an open P0 (LOOPS.md Step 0b)")
     any_overdue = False
+    scope = rules_2_3_scope()
     for loop, (threshold, unit) in RULES.items():
-        any_overdue |= report(all_rows, loop, threshold, unit)
+        any_overdue |= report(all_rows, loop, threshold, unit, scope)
     if any_overdue:
         print("  -> a counter is at or past its threshold; the dispatcher should pick it" if not ms_refusal else
               "  -> a counter is at or past its threshold, but the milestone report REFUSED, so it is not dispatched")

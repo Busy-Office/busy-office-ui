@@ -54,6 +54,9 @@ def self_test():
     plain = parse_log_line("- 2026-08-27 06:31 · Continue · build · an item · landed · abc1234")
     embedded = parse_log_line("- 2026-08-27 06:31 · Continue · build · a · b · c · landed · abc1234")
     legacy = parse_log_line("- 2026-08-13 00:00 · Continue · build · an item · shipped · -")
+    tagged = parse_log_line("- 2026-09-25 23:00 · Continue · build · an item · milestone=M1 track=defect · landed · abc1234")
+    mention = parse_log_line("- 2026-09-25 23:00 · Continue · build · writes milestone=M1 into the row · landed · abc1234")
+    solo = parse_log_line("- 2026-09-25 23:00 · Continue · build · a · b · milestone=M1 · landed · abc1234")
     cases = [
         ("plain line parses", (plain["item"], plain["outcome"], plain["commit_sha"]),
          ("an item", "landed", "abc1234")),
@@ -62,6 +65,15 @@ def self_test():
          ("a · b · c", "landed", "abc1234")),
         ('"-" commit becomes None', legacy["commit_sha"], None),
         ("prose is not a row", parse_log_line("some prose"), None),
+        # 393.5: the tag segment sits just before the outcome and comes out of
+        # the item; prose that MENTIONS a token stays in the item, untagged.
+        ("a tag segment is read and leaves the item",
+         (tagged["item"], tagged["milestone"], tagged["track"], tagged["outcome"]),
+         ("an item", "M1", "defect", "landed")),
+        ("a mention in the item is not a tag",
+         (mention["item"], mention["milestone"], mention["track"]),
+         ("writes milestone=M1 into the row", None, None)),
+        ("a lone milestone tag", (solo["milestone"], solo["track"], solo["item"]), ("M1", None, "a · b")),
     ]
     for label, got, want in cases:
         if got != want:
@@ -118,10 +130,10 @@ def main():
 
     for row in parsed:
         conn.execute(
-            "INSERT INTO iterations (ts, loop, mode, item, outcome, commit_sha) "
-            "VALUES (?, ?, ?, ?, ?, ?)",
+            "INSERT INTO iterations (ts, loop, mode, item, outcome, commit_sha, milestone, track) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
             (row["ts"], row["loop"], row["mode"], row["item"],
-             row["outcome"], row["commit_sha"]),
+             row["outcome"], row["commit_sha"], row["milestone"], row["track"]),
         )
     iters = len(parsed)
 

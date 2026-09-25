@@ -1798,7 +1798,7 @@ superseded once a named item has landed or the owner has acted.
            - Nothing outside `dispatch_status` runs `--self-test`, but the
              fixtures run on every ACTIVE read, following the precedent in
              `rebuild_from_log.py`.
-5. [ ] **393.5 — milestone rows move the counters the way the rules say (folds
+5. [x] **393.5 — milestone rows move the counters the way the rules say (folds
        392.4 and 381.2).**
        Milestone: M1 · Phase: 0
        Route: build
@@ -1826,6 +1826,79 @@ superseded once a named item has landed or the owner has acted.
          - **Scoped counting.** Under `Rules-2-3: scoped`, only rows tagged M1
            count toward rules 2 and 3. Red-prove this on a fixture log, quoting
            `dispatch_status.py` after each fixture row.
+       - **DONE 2026-09-25.**
+         - **Loop names.** `record_iteration.py`'s `LOOPS` holds ten names:
+           the nine the log uses (re-counted over 1,804 rows: Continue 676,
+           Meta 579, Roadmap 172, Standardize 169, Objective 112, Explore 57,
+           Polish 35, Optimize 3, Gauntlet 1) plus Research, which LOOPS.md's
+           table names. `--loop Layout` is refused with exit 1 and appends
+           nothing (1,815 log lines before and after, in a scratch root).
+           `check:loop-vocab` compares a `# loop:` line in CLAUDE.md and in
+           LOOPS.md against the constant. It went red naming `MISSING:
+           Research` / `NOT A REAL LOOP: Layout` when one was swapped, and its
+           self-test grew loop cases, 12 cases after verification. CLAUDE.md now names all nine loops
+           and says `Meta` labels refusal rows.
+         - **Tags in the row.** `--milestone M1` and `--track defect` write a
+           segment made only of tags just before the outcome: `… · <item> ·
+           milestone=M1 track=defect · landed · <sha>`. They also go into
+           two new `loops.db` columns. `connect()` adds the columns to an
+           older mirror, and nothing is backfilled.
+           - `parse_log_line` reads the segment only in that position, so an
+             item that mentions `milestone=M1` in prose is untagged.
+             `rebuild_from_log.py`'s self-test has three new cases.
+           - `milestone.row_tags` now uses the same reading.
+           - The mirror was rebuilt: 1,804 rows, 0 tagged.
+         - **Scoped counting**, red-proved on fixture rows written by the real
+           recorder. The scratch root had M1 ACTIVE and `Rules-2-3: scoped`.
+           `dispatch_status.py` read as follows after each row:
+           - no tagged rows: Standardize 0/4 and Objective 0/3;
+           - after an untagged Continue row: still 0/4 and 0/3;
+           - after a `milestone=M1` row: 1/4 and 1/3 `[393]`;
+           - after a `milestone=M1 track=defect` row: 2/4 and 2/3 `[375, 393]`;
+           - the same log under `normal`: 11/4 and 4/3, both OVERDUE;
+           - under `suspended`: both rules print as suspended.
+
+           With no ACTIVE milestone the output is byte-identical to HEAD's
+           (2,398 bytes, compared in a git worktree).
+         - **392.4** closes by its first route, and also takes the second: see
+           392.4.
+         - **Jev, rubric 2** (advisory): loop names 0.94, tags 0.94, scoped
+           counting 0.94, 392.4 0.92, 381.2 0.90. All five are in the
+           supporting band.
+         - **381.2**'s count is quoted before the owner confirms `Rules-2-3`,
+           which reads `scoped` as a pre-filled default while O12 is open:
+           **4 of 20**. See 381.2.
+         - **Adversarial verification** (`wf_e0d8bf47-300`, 3 lenses and a
+           critic, all "holds with defects"). What was fixed:
+           - The recorder could write a row whose tags do not read back: an
+             item ending in ` ·`, or with a tag-shaped last segment. It now
+             builds each line, parses it back, and refuses on any difference
+             before writing. Three such inputs were refused, and an ordinary
+             item with a middle separator records.
+           - `--milestone` naming no `## Milestone` section (M2), or `M01`, is
+             refused.
+           - The loop-name gate read only Title-case tokens on one line. It now
+             compares every `|` token exactly, across continuation lines and
+             every `# loop:` line. `layout` and `GauntLet` turn it red, and its
+             self-test is at 12 cases.
+           - The thesis check had four problems, all fixed:
+             - it depended on the working directory;
+             - it failed OPEN when a commit could not be read;
+             - it took whichever report sorted first;
+             - its skip test matched words anywhere, so §6's own "cannot see"
+               clause switched it off and "not measured" refused a compliant
+               report.
+
+             It now runs `git -C ROOT` and fails closed. It reads the report
+             the commit ADDED and refuses when that is ambiguous. It ties a
+             skip to an error in the same sentence, ignores quotations, and
+             accepts hyphenated labels and numbered headings. Its self-test
+             has 17 thesis cases, the two-report commits were checked in a
+             scratch git repo, and the replay reads the same from `/tmp` as
+             from the repo root.
+           - LOOPS.md sentences that still stated the old rule 3 are
+             corrected, and LOOPS.md now says that amending a refused report
+             restores the reset.
 6. [ ] **393.6 — routes: the roadmap names which model does each item (owner
        answer 1), and telemetry records who did it.**
        Milestone: M1 · Phase: 0
@@ -2039,7 +2112,7 @@ place to 377.5, 388.1, Slice 390, CHANGELOG, `/components/scan`,
          single word wider than its slot at 1440 and 390 and asserts equal
          widths, a taller member, and no text rect past its button — red on
          today's CSS. `.bo-form-actions > .bo-btn` measured the same way.
-4. [ ] **392.4 — rule 3 reset without the thesis section, twice; and a
+4. [x] **392.4 — rule 3 reset without the thesis section, twice; and a
        design-grill reset it.** Slice 386 read no adoption channel it could
        have read; 388.2 (a design-grill logged as Objective) has no thesis
        section and dropped the armed set `[372, 375]`.
@@ -2049,6 +2122,34 @@ place to 377.5, 388.1, Slice 390, CHANGELOG, `/components/scan`,
          and 388.2 through the check refuses all three; OR §6 is amended to
          exempt owner-asked design-grills, and the exemption says what they
          must log instead.
+       - **DONE 2026-09-25 (by 393.5), by the first route, and the second
+         too.** `dispatch_status.py` resets rule 3 only on an Objective row
+         whose grill report has §6's thesis section in the shape the counter
+         checks:
+         - a `## Thesis section` heading;
+         - four labelled parts;
+         - none of them skipped without naming the error;
+         - `git diff --numstat` in the framework-code part.
+
+         A row that fails is printed with its reason, and the count runs on.
+         **The replay** (`dispatch_status.py --thesis-replay`), over every
+         Objective row since the requirement:
+         - **384: REFUSED**, no `## Thesis section`;
+         - **386: REFUSED**, adoption and comparators were skipped without an
+           error;
+         - **388.2: REFUSED**, no `## Thesis section`;
+         - 382: REFUSED as well;
+         - **392: RESETS**, so today's counter is unchanged.
+
+         The self-test has 17 thesis cases after verification, including a
+         skipped part WITH its error in the same sentence, which counts as a
+         reading. The second route was also taken:
+         §6 now says an owner-asked design-grill is logged
+         `--loop Objective --mode design-grill`. Such a row never resets rule
+         3, and its report is its `design-grill-*.md` file. This is what the
+         prompt's §4 anticipated ("a design-grill does not reset it"). @heuristic,
+         and it checks SHAPE: whether a reading is any good stays the grill's
+         judgement.
 5. [ ] **392.5 — the comparator deltas are recorded nowhere a later grill
        reads them.** This grill measured five against fundamental-styles
        (two Evidence for each side, two BO candidates refuted).
@@ -3149,7 +3250,7 @@ tooling and 339 of records.
          precision and recall on the same windows (the 150 commits, the 18
          sites), or unwire it from `record_iteration.py` if it stays below the
          floor. Unwiring on the number is a satisfying outcome.
-2. [ ] **381.2 — rule 3 arms on slices that shipped nothing.** This grill's
+2. [x] **381.2 — rule 3 arms on slices that shipped nothing.** This grill's
        three subjects changed 0 lines under `packages/` or `apps/docs`, and it
        still ran four finders and four verifiers. Before anything changes, the
        base rate.
@@ -3159,6 +3260,44 @@ tooling and 339 of records.
          beside the count. Then decide: narrow such a grill to reproducing the
          headlines plus the thesis section, count only shipping slices toward
          rule 3, or leave it — refusing on the number is satisfying.
+       - **DONE 2026-09-25 (by 393.5): 4 of 20, so narrow, don't recount.**
+         `python3 .roundtable/milestone-m1-2026-09-25/grill_shipped.py --rev
+         5177daad`. The flag pins the window: the script takes the last 20
+         grill rows at that revision. The script is committed with 393.5. Over the
+         last 20 Objective grill rows (388.2's design-grill and the duplicate
+         `Slice 330 amended` row were excluded), the subjects of **382, 381, 355
+         and 337** changed 0 lines under `packages/` and `apps/docs/src`.
+         - **Red-proved** (`--redproof`): 381 reads 0, as its own report says,
+           and 392 reads 174. 39 of those lines are in button.css and
+           scan.css; most of the rest are their docs pages.
+         - **What changes the count:**
+           - the commit-subject match alone gives 5 (grill 346's subject
+             landed inside a 345 commit);
+           - the path set `packages/ apps/docs` gives 3;
+           - leaving out build scripts, tests and READMEs gives 5;
+           - counting the ARMED set, the script's `armed rows / their lines`
+             column, gives 3 of 20: 382, 381 and 351. It is 4 if 337's empty
+             window is counted.
+         - **What the instrument cannot see:** behaviour (it counts lines),
+           and work that neither a commit subject nor a log row attributes to
+           the subject. It was corrected four times before the figure was
+           taken:
+           - a subject match alone missed grill 346's in-scope commit, so a
+             second join through the log rows' shas was added;
+           - three rows' recorded shas pointed at the wrong commit, and their
+             grill commits were resolved by hand in the script;
+           - lines are summed once per commit;
+           - an exclude pathspec that excluded nothing was fixed.
+         - **Decided:** such a grill is narrowed (LOOPS.md §6 step 0). It
+           reproduces the headlines and writes the thesis section, with no
+           finder or verifier fan-out.
+         - **Refused:** counting only shipping slices toward rule 3. It changes
+           a counter, and this repo has five recorded counter starvations.
+           `Rules-2-3` in M1's field block already reads `scoped`. That was
+           pre-filled by the triage commit as the draft's recommendation, while
+           O12 is still `___` in the owner table, so it is a default awaiting
+           the owner's confirmation, not a decision. `milestone.py` counts the
+           field as filled, and the owner can set `normal` or `suspended`.
 
 ## Slice 380 — Standardize sweep, **4 of 4 lanes on a clean HEAD tree**: lanes 1-3 carry no delta; lane 4 re-decides `DESIGN.md` (HONEST on what it grew on, no longer "the control") and moves 346.1's correction rule out of the dispatch region (2026-09-24)
 

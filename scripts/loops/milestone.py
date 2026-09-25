@@ -67,7 +67,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import generate_status as gs  # noqa: E402
-from _common import ROOT  # noqa: E402
+from _common import ROOT, TAG_SEGMENT, tags_of  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROUTES = os.path.join(HERE, "routes.json")
@@ -232,22 +232,17 @@ def budget_of(fields):
     return b
 
 
-TAG_SEGMENT = re.compile(r"^(?:milestone=M\d+|track=defect)(?: (?:milestone=M\d+|track=defect))*$")
-
-
 def row_tags(item_text):
-    """The tags in a loop-log row: a ` · `-separated segment made ONLY of
-    `milestone=Mn` / `track=defect` tokens (393.5 writes it). A search over the
-    free text would read a row that merely DESCRIBES the tags as tagged."""
+    """The tags of a loop-log row, from the text after its mode field (what
+    dispatch_status.rows() keeps): the segment just before the outcome, and only
+    when it is made of `milestone=Mn` / `track=defect` tokens alone — the same
+    reading as _common.parse_log_line (393.5). Prose that MENTIONS a token, or a
+    tag-shaped segment anywhere else in the item, is not a tag."""
     tags = {"milestone": None, "defect": False}
-    for seg in item_text.split(" · "):
-        seg = seg.strip()
-        if TAG_SEGMENT.match(seg):
-            for tok in seg.split():
-                if tok == "track=defect":
-                    tags["defect"] = True
-                else:
-                    tags["milestone"] = tok.split("=", 1)[1]
+    segs = [s.strip() for s in item_text.split(" · ")]
+    if len(segs) >= 4 and TAG_SEGMENT.match(segs[-3]):
+        t = tags_of(segs[-3])
+        tags["milestone"], tags["defect"] = t["milestone"], t["track"] == "defect"
     return tags
 
 

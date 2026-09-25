@@ -487,9 +487,18 @@ match to its full playbook below:
    included; closed is not required — **or user asked**? → dispatch
    **Objective**.
 
+   **"The last Objective" means the last one that reset the count** (roadmap
+   392.4). That is an Objective row whose grill report has §6's thesis
+   section in the shape the counter checks. An `Objective · design-grill` row
+   never resets it. `dispatch_status.py` prints every Objective row since the
+   reset that did not count, and why. **Under an ACTIVE milestone,**
+   `Rules-2-3: scoped` counts only rows tagged `milestone=<id>`, and
+   `suspended` prints this rule and rule 2 as suspended (393.5).
+
    **Named, not closed** (roadmap 349.1, corrected by Slice 382). The counter
    credits the slice a building row's label names, whatever the row's outcome;
-   whether a grill should need shipped work is 381.2's question. It is kept on
+   whether a grill should need shipped work was 381.2's question, decided
+   2026-09-25: such a grill is narrowed, not uncounted (§6 step 0). It is kept on
    the asymmetry §6 step 0 records: over-arming costs a paragraph of narrowing,
    under-arming starves the loop. Replayed with the counter as it shipped at
    each past grill, only 28 of 63 had three slices closed; that figure comes
@@ -516,7 +525,8 @@ match to its full playbook below:
    Excluded: `Roadmap` (a triage row plans a slice, it does not close one —
    Slice 162 is the live illustration, Roadmap-only and open), `Explore` (a
    spike graduates INTO the plan; the build that follows is a Continue row),
-   `Objective` (circular — an Objective row resets this counter), `Meta` (its
+   `Objective` (circular — an Objective row that passes the thesis check resets
+   this counter, and a `design-grill` row never does), `Meta` (its
    rows record machinery about the loop itself, which is the Roadmap reason),
    and `Optimize`, which has never named a slice at all.
 
@@ -1027,11 +1037,25 @@ the next wake (which may pick the next item, or — every 4th round — Standard
 ```
 python3 scripts/loops/record_iteration.py \
   --loop <Loop> --mode <mode> --item "<what>" --outcome <outcome>
+  # loop: Continue | Standardize | Polish | Research | Optimize | Explore | Objective | Gauntlet | Roadmap | Meta
   # outcome: landed | released | logged | triaged | refused | reverted
   # "shipped" is rejected — it hid that nothing had reached npm (41.2)
   # a refusal decided INSIDE this item, whatever the item's own outcome:
   #   --also-refused "<what was refused, one line>"   (repeatable; 51.1/62.1)
+  # milestone work: --milestone M1; defect-track work: --track defect (393.5);
+  # an interleaved defect dispatch during a milestone carries both
+  # an owner-asked design-grill: --loop Objective --mode design-grill (never resets rule 3)
 ```
+Both lists are closed sets that `record_iteration.py` enforces. `Meta` is the
+label of every `--also-refused` row, not a loop you dispatch. `check:loop-vocab`
+fails when this block, CLAUDE.md's copy or the code disagree.
+
+**The tags go into the ROW** as their own segment before the outcome:
+`… · <item> · milestone=M1 track=defect · landed · <sha>`. They are written
+there, and into `loops.db`, because `dispatch_status.py` reads the log. Under
+`Rules-2-3: scoped`, rules 2 and 3 count only rows tagged with the ACTIVE
+milestone, and rule M's interleave counts the same tags. Rows written before
+393.5 carry no tags and are never backfilled.
 This appends the human line to `.roundtable/loop-log.md` **and** inserts the row
 into the derived `.roundtable/loops.db`. Capture any measured number too, e.g.
 `python3 scripts/loops/record_metric.py --name bundle-gz-kb --value 7.0 --unit kB`.
@@ -1528,12 +1552,32 @@ never dirties main.
 
 0. **Narrow the arming set before grilling it.** Rule 3 counts distinct slice
    numbers **named by Continue/Standardize/Polish rows** since the last
-   Objective row, whatever the row's outcome — not slices closed (349.1) — so a slice with many
+   Objective row that RESET the count (392.4: its report passed the thesis
+   check; under `Rules-2-3: scoped`, only rows tagged with the ACTIVE
+   milestone count), whatever the row's outcome — not slices closed (349.1) — so a slice with many
    rounds re-arms after each grill and the set can name a slice an earlier
    grill already covered in full, or one still mid-build. Check
    `.roundtable/INDEX.md` first — it is generated, it lists every finding, and
    it reports its own **repeated subject** count — then state the honest scope
    in the write-up, naming what you dropped and why.
+
+   **A grill whose subjects shipped nothing is narrowed** (roadmap 381.2,
+   decided 2026-09-25). "Shipped nothing" means 0 lines changed under
+   `packages/` and `apps/docs/src` by the subjects' landing commits. Such a
+   grill does two things and nothing else:
+   - it reproduces each subject's headline claims;
+   - it writes the thesis section below.
+
+   It sends out no finder or verifier fan-out, because there is no shipped
+   behaviour for one to find. Measured over the last 20 Objective grills
+   before deciding: **4 of 20** (382, 381, 355, 337), and 3 to 5 of 20 under
+   the other readings the instrument lists (`--rev 5177daad` pins the window). The instrument is
+   `.roundtable/milestone-m1-2026-09-25/grill_shipped.py`, with `--redproof`
+   checking the two known cases (381 reads 0, 392 reads 174). **Counting
+   only shipping slices toward rule 3 was refused.** It changes a counter,
+   and this file records five times a counter starved silently. Over-arming
+   costs this narrowing; under-arming costs a starved loop (the asymmetry
+   above).
 
    ```
    python3 scripts/loops/dispatch_status.py            # the armed set
@@ -1579,12 +1623,50 @@ never dirties main.
    `Hypothesis`; every claim carries counter-evidence.
 3. Feed findings back into the Roadmap loop's triage as re-prioritization, not as vibes.
 **Exit:** a scored report lands in `.roundtable/`, and it carries a **thesis
-section** (roadmap 377.7, this half landed by Slice 381): the adoption reading
-with each channel's window and what the channels cannot see; the named first
-user and its state; comparators, starting from SAP fundamental-styles; and the
-framework-code lines changed since the last grill, with the command beside the
-number (`git diff --numstat <last grill's sha> HEAD -- packages/core/src`). A
-grill that cannot take the reading says which channel it could not read.
+section** (roadmap 377.7, this half landed by Slice 381). The section has four
+parts:
+- the adoption reading, with each channel's window and what the channels
+  cannot see;
+- the named first user and its state;
+- comparators, starting from SAP fundamental-styles;
+- the framework-code lines changed since the last grill, with the command
+  beside the number (`git diff --numstat <last grill's sha> HEAD --
+  packages/core/src`).
+
+A grill that cannot take a reading says which channel it could not read.
+
+**The shape rule 3 checks** (roadmap 392.4, 2026-09-25). A grill resets rule 3
+only when its report, the `.roundtable/grill-*.md` file in the row's commit,
+has:
+- a `## Thesis section` heading, which may be numbered (`## 5. Thesis
+  section`);
+- four `- **<label>**` bullets under it, whose labels name adoption, first
+  user (or first-user), comparator(s) and framework code (or framework-code),
+  each with a reading beside the label;
+- no sentence saying `not taken`, `not read` or `not re-read` unless that
+  same sentence names the error that stopped the read (`not read: the npm API
+  returned 503`). Quoting another grill's words does not count as a skip;
+- `git diff --numstat` in the framework-code part.
+
+The report is the grill report the row's commit ADDED. A commit that adds
+more than one, or none and touches several, is not decidable and does not
+reset. Neither does a commit that cannot be read: the check fails closed,
+because over-arming is the cheaper error.
+
+A row that fails does not reset the count. `dispatch_status.py` prints why,
+and `--thesis-replay` shows every row since the requirement: 382, 384, 386 and
+388.2 were refused, and 392 resets. **Adding the missing part to the refused
+report restores the reset**, because the check reads the report as it stands,
+not as it was committed. That is cheaper than grilling the subjects again.
+This checks the SHAPE. Whether a reading is any good is still the grill's
+judgement.
+
+**An owner-asked design-grill is not an Objective grill.** It grills a screen
+or a journey, not the claims of the slices rule 3 armed on. Log it as
+`--loop Objective --mode design-grill`. It never resets rule 3, and its report
+is the `.roundtable/design-grill-*.md` file its skill writes, with the findings
+triaged as usual. 388.2 was logged as a plain `grill` and dropped the armed set
+`[372, 375]`. That is what this prevents.
 
 ---
 

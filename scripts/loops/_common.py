@@ -4,6 +4,7 @@ Doctrine: the markdown/jsonl files under .roundtable/ are the source of truth;
 loops.db is a derived mirror that can be rebuilt from them at any time.
 """
 import os
+import re
 import sqlite3
 import subprocess
 
@@ -44,12 +45,37 @@ def from_rev(rev):
     return read
 
 
+# Columns added to `iterations` after the table first shipped. A mirror built
+# before them gains them here, empty: rows written before a column existed are
+# never backfilled (393.5, and 393.6 for the route columns).
+ADDED_COLUMNS = (("milestone", "TEXT"), ("track", "TEXT"))
+
+
 def connect(db=DB):
     os.makedirs(os.path.dirname(db), exist_ok=True)
     conn = sqlite3.connect(db)
     with open(SCHEMA, encoding="utf-8") as f:
         conn.executescript(f.read())
+    have = {r[1] for r in conn.execute("PRAGMA table_info(iterations)")}
+    for name, kind in ADDED_COLUMNS:
+        if name not in have:
+            conn.execute(f"ALTER TABLE iterations ADD COLUMN {name} {kind}")
     return conn
+
+
+# The row's tag segment (roadmap 393.5): its own ` · `-separated segment, just
+# before the outcome, made ONLY of `milestone=Mn` / `track=defect` tokens. A
+# segment is a tag only in that position and only in that shape, so an item
+# whose prose MENTIONS a token is not tagged (393.4's verification).
+TAG_SEGMENT = re.compile(r"^(?:milestone=M\d+|track=defect)(?: (?:milestone=M\d+|track=defect))*$")
+
+
+def tags_of(segment):
+    tags = {"milestone": None, "track": None}
+    for tok in segment.split():
+        k, v = tok.split("=", 1)
+        tags[k] = v
+    return tags
 
 
 def parse_log_line(line):
@@ -80,6 +106,10 @@ def parse_log_line(line):
         return None
     ts, loop = parts[0], parts[1]
     rest = parts[2:]
+    tags = {"milestone": None, "track": None}
+    if len(rest) >= 5 and TAG_SEGMENT.match(rest[-3]):   # mode · item(+) · tags · outcome · commit
+        tags = tags_of(rest[-3])
+        rest = rest[:-3] + rest[-2:]
     if len(rest) >= 4:                       # mode · item(+) · outcome · commit
         mode, outcome, commit = rest[0], rest[-2], rest[-1]
         item = SEP.join(rest[1:-2])
@@ -91,4 +121,5 @@ def parse_log_line(line):
         mode, item, outcome, commit = None, rest[0], None, None
     commit = None if commit in (None, "-", "") else commit
     return {"ts": ts, "loop": loop, "mode": mode, "item": item,
-            "outcome": outcome, "commit_sha": commit}
+            "outcome": outcome, "commit_sha": commit,
+            "milestone": tags["milestone"], "track": tags["track"]}

@@ -5,11 +5,13 @@
 CREATE TABLE IF NOT EXISTS iterations (
   id         INTEGER PRIMARY KEY AUTOINCREMENT,
   ts         TEXT NOT NULL,          -- "YYYY-MM-DD HH:MM"
-  loop       TEXT NOT NULL,          -- Continue | Standardize | Optimize | Explore | Roadmap | Objective | Meta
+  loop       TEXT NOT NULL,          -- record_iteration.py's LOOPS set (393.5)
   mode       TEXT,                   -- router mode this iteration ran (bug | build | tidy | explore | grill | plan | meta)
   item       TEXT,                   -- what was worked on
   outcome    TEXT,                   -- shipped | fixed | discarded | committed | ...
-  commit_sha TEXT                    -- short sha, or NULL
+  commit_sha TEXT,                   -- short sha, or NULL
+  milestone  TEXT,                   -- `milestone=Mn` tag of the row, or NULL (393.5)
+  track      TEXT                    -- `track=defect` tag of the row, or NULL (393.5)
 );
 
 CREATE TABLE IF NOT EXISTS metrics (

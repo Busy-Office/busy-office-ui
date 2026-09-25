@@ -33,6 +33,28 @@ export const outcomesFromPython = (src) => {
 };
 export const outcomesFromDocLine = (line) =>
   [...line.matchAll(/\b([a-z]+)\b/g)].map((x) => x[1]).filter((w) => w !== 'outcome').sort();
+/* The loop names (roadmap 393.5): the same shape, one more closed set. */
+export const loopsFromPython = (src) => {
+  const m = src.match(/^LOOPS = \{([^}]*)\}/m);
+  return m ? [...m[1].matchAll(/"([A-Za-z]+)"/g)].map((x) => x[1]).sort() : null;
+};
+/* Every `|`-separated token after `# loop:`, exactly as written — any case, any
+   spelling — so `layout` or `GauntLet` is a finding, not skipped (393.5's
+   verification: a Title-case-only regex let both through). Continuation lines
+   (`#   | Name`) belong to the list. */
+export const loopsFromDocLine = (text) => {
+  const lines = text.split('\n');
+  const out = [];
+  for (let i = 0; i < lines.length; i += 1) {
+    if (!lines[i].includes('# loop:')) continue;
+    const chunk = [lines[i].replace(/^.*# loop:/, '')];
+    for (let j = i + 1; j < lines.length && /^\s*#\s*\|/.test(lines[j]); j += 1) {
+      chunk.push(lines[j].replace(/^\s*#\s*/, ''));
+    }
+    out.push(...chunk.join('|').split('|').map((t) => t.trim()).filter(Boolean));
+  }
+  return out.sort();
+};
 
 if (process.argv.includes('--self-test')) {
   /* Both halves of this gate are pattern-matching over prose: pulling the
@@ -46,6 +68,13 @@ if (process.argv.includes('--self-test')) {
     ['parses a documented list', outcomesFromDocLine('# outcome: landed | released | logged'), ['landed', 'logged', 'released']],
     ['spots an invented outcome', outcomesFromDocLine('# outcome: landed | shipped').includes('shipped'), true],
     ['spots a missing one', outcomesFromDocLine('# outcome: landed').length !== 3, true],
+    ['parses the python loop set', loopsFromPython('LOOPS = {"Continue", "Meta",\n         "Roadmap"}\n'), ['Continue', 'Meta', 'Roadmap']],
+    ['null when the loop set is gone', loopsFromPython('X = 1'), null],
+    ['parses a documented loop list', loopsFromDocLine('  # loop: Continue | Meta | Roadmap'), ['Continue', 'Meta', 'Roadmap']],
+    ['spots an invented loop', loopsFromDocLine('  # loop: Continue | Layout').includes('Layout'), true],
+    ['keeps a lowercase token as written', loopsFromDocLine('  # loop: Continue | layout').includes('layout'), true],
+    ['reads a continuation line', loopsFromDocLine('  # loop: Continue |\n  #   | Layout').includes('Layout'), true],
+    ['reads a second # loop: line', loopsFromDocLine('  # loop: Continue\n  # loop: Layout (x)').includes('Layout (x)'), true],
   ]);
 }
 
@@ -74,9 +103,17 @@ if (!authoritative) {
   process.exit(1);
 }
 
+const loops = loopsFromPython(py);
+if (!loops) {
+  console.error('loop-vocab check FAILED — no LOOPS set in record_iteration.py.');
+  console.error('  The loop names are a closed set the recorder enforces (roadmap 393.5); without it there is no authority.');
+  process.exit(1);
+}
+
 const DOCS = ['CLAUDE.md', 'LOOPS.md'];
 const failures = [];
 let checked = 0;
+let loopChecked = 0;
 
 for (const doc of DOCS) {
   const src = await readFile(join(REPO_ROOT, doc), 'utf8');
@@ -86,6 +123,23 @@ for (const doc of DOCS) {
     continue;
   }
   checked += 1;
+  const loopLine = src.includes('# loop:') ? src : null;
+  if (!loopLine) {
+    failures.push(`${doc}\n     has no "# loop:" line — the loop names are documented where the command is`);
+  } else {
+    loopChecked += 1;
+    const docLoops = loopsFromDocLine(loopLine);
+    const lm = loops.filter((o) => !docLoops.includes(o));
+    const lx = docLoops.filter((o) => !loops.includes(o));
+    if (lm.length || lx.length) {
+      failures.push(
+        `${doc}\n     loops listed: ${docLoops.join(', ')}` +
+          `\n     loops code:   ${loops.join(', ')}` +
+          (lm.length ? `\n     MISSING: ${lm.join(', ')}` : '') +
+          (lx.length ? `\n     NOT A REAL LOOP: ${lx.join(', ')}` : ''),
+      );
+    }
+  }
   const listed = outcomesFromDocLine(line);
   const missing = authoritative.filter((o) => !listed.includes(o));
   const extra = listed.filter((o) => !authoritative.includes(o));
@@ -100,10 +154,14 @@ for (const doc of DOCS) {
 }
 
 assertScanned(checked, 'documented outcome lists', 'neither CLAUDE.md nor LOOPS.md documents the vocabulary');
+assertScanned(loopChecked, 'documented loop lists', 'neither CLAUDE.md nor LOOPS.md documents the loop names');
 
 if (failures.length) {
   console.error(`loop-vocab check FAILED — ${failures.length} document(s) disagree with record_iteration.py:`);
   for (const f of failures) console.error('  ' + f);
   process.exit(1);
 }
-console.log(`loop-vocab check passed — ${checked} document(s) match the ${authoritative.length} outcomes the recorder enforces`);
+console.log(
+  `loop-vocab check passed — ${checked} document(s) match the ${authoritative.length} outcomes and ` +
+    `the ${loops.length} loop names the recorder enforces`,
+);
