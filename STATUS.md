@@ -158,9 +158,10 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1850 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-09-26 18:07   ok
+dispatch status — counter-triggered rules (1851 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-09-26 18:07   OVERDUE
   Objective     1 / 3 slice           since 2026-09-26 19:15   ok  [377]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 157 sample(s), 8 of 51 name(s) paired across days]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-25 (2026-09-26), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -297,7 +298,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-26 17:05 · Continue · fix · 406.1 (P0) — snapshot cut leaves out v/ and pagefind/ and asserts it; install refuses a nested v/, counts switchers from committed pages, clears dist/v · landed · 45a0bfa7
 - 2026-09-26 17:33 · Continue · fix · 406.6 (P0) — grid controls keep their focus ring outside their own fill (1px offset; cells stay inset); 14-config real-key case with contrast vs published debt; filed 406.7 (forest-light 2.99) · landed · c8ec19c2
 - 2026-09-26 17:40 · Continue · build · 377.11 — combobox commit case asserts equality with display text and detail.text; command-bar row asserts the palette's clear-and-close commit it had hidden · landed · 00b8511f
 - 2026-09-26 17:53 · Continue · build · 377.12 — docs container build-id names HEAD and exactly its uncommitted build inputs (npm run docs:container); stamp refuses null · landed · 86d34785
@@ -307,6 +307,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 20:56 · Continue · build · 377.14 — seam loop derived (7 docs, 31 seams), shell band derived + check-floor needle (container stand-down), report:text-collapse (373.9 corrected 3/8/1, filed 377.16), runtime-claim coverage 18.5% · landed · f7cecafb
 - 2026-09-26 21:11 · Roadmap · triage · 377.17 filed — SC 2.5.7 file-picker case flaked on CI at 15s (3rd failure; rerun passed) · triaged · 01f1941c
 - 2026-09-26 22:01 · Continue · build · 377.15 (in progress) — check:claims split into two CI shards at the runtime midpoint; 162 + 197 = 359 reconciled; wall-clock reading waits on 3 green runs · landed · 20dc0918
+- 2026-09-26 22:17 · Continue · fix · 377.16 — object-page anchor strip: buttons flex-shrink 0 (labels no longer overlap, first reachable at 390); text-Range case red 14-33px then green · landed · 4e9308c9
 
 ## Sunset test
 
