@@ -4741,7 +4741,7 @@ were `[x]` on hunks that were never committed (the ACR 2.5.7 row; DESIGN.md,
        handover has been PREPENDED, and the 2026-09-09 hand-off below has
        survived 7 commits byte for byte (43% of the file); recorded, not cut,
        because pruning the handover is the next hand-off's job.
-7. [ ] **376.7 — the lane-4 ratchet counts any net shrink as a cut.**
+7. [x] **376.7 — the lane-4 ratchet counts any net shrink as a cut.**
        `report_loop_prose.py`'s `ups_since_last_cut` treats `cur < prev` as a
        cut, so a 52-word item close reads as ROADMAP.md's "last cut" while
        its real cut was 81 steps back; ENVIRONMENT.md's "cut" was 7 words.
@@ -4751,6 +4751,47 @@ were `[x]` on hunks that were never committed (the ACR 2.5.7 row; DESIGN.md,
          floor, argued), a replay reports ROADMAP.md's last real cut at the
          2026-09-07 sweep, and the change is red-proved.
        Parked: M1 — Standardize lane-4 machinery, not milestone work — revisit: the Standardize run at milestone close
+       - **DONE 2026-09-26 (rule 4, oldest dispatchable).**
+         - **The floor, named and argued.** A cut is a step that removes at
+           least **100 words and at least 1% of the file**
+           (`is_real_cut`). Chosen from the measured distribution of every
+           shrink, 196 in total, of the eight files the report reads:
+           - under 1%: item closes, reverts, stub removals and tiny tidies,
+             such as f7bc8777 (−52, 0.04%), 1005d1db (−7), c83f640a (−29) and
+             3174784a (−167, 0.23%);
+           - at or above 1% and 100 words: archive sweeps, splits and
+             deliberate folds, such as 6ec0e8da (−33,566), de765a58
+             (−2,653), 8848ed55 (−442) and daea445f (−261).
+
+           The one deliberate trim under the floor is Slice 383's 101 words
+           of LOOPS.md (0.5%). That trim does not answer 158.2's question,
+           whether anything reversed the growth. The dispatch region's own
+           detector, `last_region_cut`, is untouched and still anchors on it.
+           The block now also prints how many sub-floor shrinks it stepped
+           over.
+         - **Replay at the revision where this item was filed
+           (`f7bc8777`), old code against new:**
+           - ROADMAP.md's last cut: `f7bc8777` itself, the 52-word close
+             with 0 up, becomes **`3cb2381a`, the 2026-09-07 sweep**, 75 up.
+             This is the Accept's replay.
+           - LOOPS.md: `4e6b83c1` (−68) becomes `8848ed55` (−442).
+           - ENVIRONMENT.md: `1005d1db` (−7) becomes **never cut**.
+         - **At HEAD the premise moved.** ROADMAP.md's reported cut is now
+           the real one, 6ec0e8da's 09-24 archive sweep, so the old and new
+           code agree there. They still disagree on three files:
+           - ENVIRONMENT.md: 7 words becomes never cut, 36 up;
+           - CLAUDE.md: c83f640a's 29 words becomes de765a58's halving,
+             10 up;
+           - ROADMAP-archive.md: 54 words becomes never cut.
+         - **Red-proof.** With the floor zeroed, 6 of the 10 new self-test
+           cases fail. `--self-test` passes 33 cases with the floor in place.
+           The case word counts are `git show` counts for each named commit
+           and its predecessor. Eight of the nine were first typed from memory
+           and were wrong; that was caught and re-derived before commit.
+         - **An instrument slip, caught.** The first old-code replay read
+           "never, 0 up" on all eight files. That identical value was the
+           scratch copy's `ROOT` resolving outside the repo, not a finding.
+         - **Jev (J2, advisory):** floor 0.95, replay 0.95, red-proof 0.90.
 8. [x] **376.8 — archive sweep, the twelfth: 40 closed slices moved.** Taken
        inside lane 4 because 167.1's premise had been false for 17 days and
        rule 4 says to run the sweep when it walks thousands of lines. Targets

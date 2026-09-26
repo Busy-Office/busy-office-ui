@@ -353,9 +353,35 @@ def words_at(rev, path):
     return _WORDS_CACHE[key]
 
 
-def ups_since_last_cut(path):
-    """(n, sha, day) — steps at the tip that did not shrink `path`, and the step
-    that last did. `sha` is None when the file has never been cut.
+# A CUT, as the ratchet counts it (roadmap 376.7): a step that removes at least
+# CUT_FLOOR_WORDS words AND at least CUT_FLOOR_SHARE of the file. Any `cur < prev`
+# used to count, so a 52-word item close read as ROADMAP.md's last cut while its
+# real one was 81 steps back, ENVIRONMENT.md's only "cut" was 7 words, and
+# CLAUDE.md's was a 29-word wording revert. Measured over every shrink of the
+# eight files on 2026-09-26 (196 shrinks; per-file lists in 376.7's DONE note):
+# every shrink under 1% of its file was an item close, a revert, a stub removal
+# or a small tidy, and every one at or above 1% and 100 words was an archive
+# sweep, a split or a deliberate fold. The absolute floor keeps a 76-word edit
+# of the 4,769-word 2026-08-14 roadmap (1.6%) from counting. One deliberate trim
+# falls under it, Slice 383's 101 words of LOOPS.md (0.5%), and that is the
+# point: 0.5% of a file does not answer 158.2's question, which is whether
+# anything reversed the file's growth. The DISPATCH REGION's own cut detector,
+# `last_region_cut`, is separate and unchanged, so the per-section block still
+# anchors on trims like that one.
+CUT_FLOOR_WORDS = 100
+CUT_FLOOR_SHARE = 0.01
+
+
+def is_real_cut(prev, cur):
+    """True when going from `prev` to `cur` words is a cut the ratchet counts."""
+    return prev - cur >= max(CUT_FLOOR_WORDS, CUT_FLOOR_SHARE * prev)
+
+
+def ups_since_last_cut(path, rev="HEAD"):
+    """(n, sha, day, noise) — steps at the tip of `rev` without a real cut (see
+    `is_real_cut`), the step that last made one, and how many of the n steps
+    shrank the file by less than the floor. `sha` is None when the file has
+    never been cut.
 
     @exact — blob word counts and a `<` comparison; no recognition. It is
     the `accumulate` column asked over FULL history instead of inside `--since`,
@@ -375,17 +401,18 @@ def ups_since_last_cut(path):
     Reading it from the tip backwards is what makes it window-independent: no
     `--since` can hide or manufacture a cut here.
     """
-    out = git("log", "--format=%x00%H %ad", "--date=format:%Y-%m-%d", "--", path).stdout
+    out = git("log", "--format=%x00%H %ad", "--date=format:%Y-%m-%d", rev, "--", path).stdout
     recs = [r.strip().split()[:2] for r in out.split("\x00") if r.strip()]  # newest first
-    n = 0
+    n = noise = 0
     for (sha, day), (prev_sha, _) in zip(recs, recs[1:]):
         cur, prev = words_at(sha, path), words_at(prev_sha, path)
         if cur is None or prev is None:
             break
-        if cur < prev:
-            return n, sha, day
+        if is_real_cut(prev, cur):
+            return n, sha, day, noise
+        noise += cur < prev
         n += 1
-    return n, None, None
+    return n, None, None, noise
 
 
 def series(path, since):
@@ -509,12 +536,32 @@ def self_test():
         if is_cut(*args) is not want:
             bad.append(f"    is_cut{args} should be {want}: {what}")
 
+    # The ratchet's floor (376.7), on real shrinks from the history it reads.
+    # Word counts are git show <rev>:<path> | split, for the named commit and its
+    # predecessor on that path (re-derived 2026-09-26; typed from memory first,
+    # eight of nine were wrong).
+    floor_cases = (
+        ((148171, 148119), False, "f7bc8777: a 52-word item close on ROADMAP.md (0.04%)"),
+        ((3137, 3130), False, "1005d1db: ENVIRONMENT.md's 7-word 'cut'"),
+        ((3422, 3393), False, "c83f640a: a 29-word wording revert on CLAUDE.md"),
+        ((71714, 71547), False, "3174784a: 167 words, 0.23% of ROADMAP.md"),
+        ((4769, 4693), False, "01a6bad6: 76 words, 1.6% of a small file (under the absolute floor)"),
+        ((19404, 19303), False, "330051e0: Slice 383's 101-word trim, 0.5% of LOOPS.md"),
+        ((97065, 63499), True, "6ec0e8da: an archive sweep, 34.6%"),
+        ((5880, 3227), True, "de765a58: CLAUDE.md halved"),
+        ((23152, 22891), True, "daea445f: Slice 400's 261-word charter cut, 1.1% of LOOPS.md"),
+        ((100, 110), False, "growth is never a cut"),
+    )
+    for (prev, cur), want, what in floor_cases:
+        if is_real_cut(prev, cur) is not want:
+            bad.append(f"    is_real_cut({prev}, {cur}) should be {want}: {what}")
+
     if bad:
         print("report_loop_prose --self-test FAILED:", file=sys.stderr)
         print("\n".join(bad), file=sys.stderr)
         return 1
     print(f"report_loop_prose --self-test: "
-          f"{len(SELF_TEST) + len(SPLIT_SELF_TEST) + len(SECTION_SELF_TEST) + 3 + 4} "
+          f"{len(SELF_TEST) + len(SPLIT_SELF_TEST) + len(SECTION_SELF_TEST) + 3 + 4 + len(floor_cases)} "
           f"cases classified correctly")
     return 0
 
@@ -569,7 +616,7 @@ def main():
 
     fatal = []   # the report cannot be trusted at all
     stale = []   # one row's `now` is HEAD's, and disk has moved on
-    ratchet = []  # (path, ups, cut-sha, cut-day) — see ups_since_last_cut
+    ratchet = []  # (path, ups, cut-sha, cut-day, noise) — see ups_since_last_cut
 
     for path, read_at in FILES:
         # RECONCILE against the working tree, not just the git object store —
@@ -605,11 +652,13 @@ def main():
     # The same question over FULL history, because the column above is asked
     # inside `--since` and a window containing a file's cut answers a different
     # question than the one the sweep asks. See ups_since_last_cut.
-    print("\n  ratchet — steps at the tip that did NOT shrink each file, over "
+    print("\n  ratchet — steps at the tip since each file's last CUT (at least "
+          f"{CUT_FLOOR_WORDS} words and {CUT_FLOOR_SHARE:.0%} of the file; 376.7), over "
           "full history (window-independent):")
-    for path, ups, sha, day in ratchet:
+    for path, ups, sha, day, noise in ratchet:
         where = f"last cut {sha[:8]} ({day})" if sha else "never cut"
-        print(f"    {path:26}{ups:4} up   {where}")
+        smaller = f"   ({noise} smaller shrink(s) since, under the floor)" if noise else ""
+        print(f"    {path:26}{ups:4} up   {where}{smaller}")
 
     # LOOPS.md BY REGION — see REGION_SPLIT. The row above measures the file; a
     # wake reads the first region to DECIDE, so the two answer different

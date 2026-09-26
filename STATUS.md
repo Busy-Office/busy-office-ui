@@ -2,9 +2,9 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 04:34 UTC
+Generated at: 2026-09-26 04:43 UTC
 
-oldest dispatchable: 376.7 — the lane-4 ratchet counts any net shrink as a cut.
+oldest dispatchable: 377.4 — pointer coverage, named per behaviour.
 
 Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, open `After:` target or held `Parked:` line holds — and, while a milestone is ACTIVE, that the milestone does not tag (rule M dispatches those; `dispatch_status.py` prints its pick). No GOAL overrides it: the owner's M0 bootstrap (O3), the one exception there was, ended with 398.5. A named item without a number has no age to rank by; any that nothing holds is listed here instead of being dropped.
 
@@ -32,9 +32,8 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 374.4 — `.bo-btn--secondary` standing alone is identified almost entirely by a 1.47:1 border, the contrast gate structurally cannot see it, and the published ACR says it can.
 - **Slice 375** (1 open)
   - 375.11 — what 375.9 measured and did not fix.
-- **Slice 376** (2 open)
+- **Slice 376** (1 open)
   - 376.5 — the app-launch launcher hand-rolls a dialog header.
-  - 376.7 — the lane-4 ratchet counts any net shrink as a cut.
 - **Slice 377** (11 open)
   - 377.3 — the completion gate cannot see a revision.
   - 377.4 — pointer coverage, named per behaviour.
@@ -277,7 +276,6 @@ Open items with a `Parked:` line. Held only while that milestone is ACTIVE.
 - 377.12 — M1, not held
 - 377.13 — M1, not held
 - 377.14 — M1, not held
-- 376.7 — M1, not held
 
 ## Browser-blocked
 
