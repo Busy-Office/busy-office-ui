@@ -1883,3 +1883,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-27 06:26 · Continue · fix · 413.4 part — pasted-page case reads simApplied (rewritten, passedThrough, fallback static box); red-proved 2 of 201 · track=defect · landed · 9bee4829
 - 2026-09-27 06:57 · Continue · fix · 413.4 (b) — '2 of 7' and '4 of 7' labelled with their samplings · track=defect · landed · a09c0bde
 - 2026-09-27 07:28 · Continue · fix · 413.3 — unbreakable-token exception named in the CHANGELOG; code refused on the RF byte budget · track=defect · landed · aedf3a49
+- 2026-09-27 07:52 · Standardize · sweep · Slice 414 — 4 of 4 lanes (isolated build): lane 1 0 dead/1392; lane 2 247/236/7; lane 3 120,015 words; lane 4 dispatch region 10,374; all equal Slice 412 · landed · d9583913

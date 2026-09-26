@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 23:28 UTC
+Generated at: 2026-09-26 23:52 UTC
 
 oldest dispatchable: 387.2 — a frozen cell's message still has two covers above it.
 
@@ -163,14 +163,13 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1877 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-09-27 03:43   OVERDUE
-  Objective     1 / 3 slice           since 2026-09-27 04:02   ok  [413]
-  -> a counter is at or past its threshold; the dispatcher should pick it
-  Optimize      0 wake-date(s) newer   since 2026-09-27 05:16   ok   [newest pair: claims; 163 sample(s), 8 of 52 name(s) paired across days]
+dispatch status — counter-triggered rules (1878 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-09-27 07:52   ok
+  Objective     2 / 3 slices          since 2026-09-27 04:02   ok  [413, 414]
+  Optimize      0 wake-date(s) newer   since 2026-09-27 05:16   ok   [newest pair: claims; 164 sample(s), 8 of 52 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (44 of 52 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
        claims                      7d  2026-09-25 311 count -> 2026-09-27 364 count  +53
-       dispatch-region-words       7d  2026-09-26 10374 words -> 2026-09-27 10374 words  +0   [6 same-day]
+       dispatch-region-words       7d  2026-09-26 10374 words -> 2026-09-27 10374 words  +0   [7 same-day]
        gates                       4d  2026-09-07 55 count -> 2026-09-09 56 count  +1
        axe-violations              8d  2026-09-03 0 count -> 2026-09-06 0 count  +0   NEVER MOVED
        bundle-gz-kb                5d  2026-08-17 11.7 kB -> 2026-09-03 15.1 kB  +3.4   [2 same-day]
@@ -298,7 +297,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-27 03:34 · Continue · fix · red main on a8fae14b/17dddf66: 387.1's path (a) counterfactual claim failed on CI (the sideways wheel did not scroll in 300ms on Linux); case now waits for the wheel and falls back to scrollLeft, recording which; verified real and stubbed wheel locally · landed · 464f1e57
 - 2026-09-27 03:43 · Standardize · sweep · Slice 412 — 4 of 4 lanes (isolated build): lanes 1, 3 equal Slice 410; lane 2 +1 rule (387.1's position: relative, traced); lane 4 dispatch region 10,374; CLAUDE.md +405 on the approved Jev section · landed · c7af39f2
 - 2026-09-27 04:02 · Objective · grill · Slice 413 — grill of 384.1/386.1/387.1/412: 387.1's fix trades a horizontal lengthening for a vertical one (not within six lines); overclaims corrected, 413.1-413.5 filed · landed · 1565560b
 - 2026-09-27 04:24 · Continue · fix · 413.5 — 384.1's write-up states the basis of the ratchet floor (file vs region words) · landed · 848e8c49
@@ -308,6 +306,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-27 06:26 · Continue · fix · 413.4 part — pasted-page case reads simApplied (rewritten, passedThrough, fallback static box); red-proved 2 of 201 · landed · 9bee4829
 - 2026-09-27 06:57 · Continue · fix · 413.4 (b) — '2 of 7' and '4 of 7' labelled with their samplings · landed · a09c0bde
 - 2026-09-27 07:28 · Continue · fix · 413.3 — unbreakable-token exception named in the CHANGELOG; code refused on the RF byte budget · landed · aedf3a49
+- 2026-09-27 07:52 · Standardize · sweep · Slice 414 — 4 of 4 lanes (isolated build): lane 1 0 dead/1392; lane 2 247/236/7; lane 3 120,015 words; lane 4 dispatch region 10,374; all equal Slice 412 · landed · d9583913
 
 ## Sunset test
 
