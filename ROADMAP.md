@@ -818,6 +818,16 @@ not need.
            retry, and what follows is the owner's call.
 
          Either verdict satisfies this item.
+       - **Pre-registered on 2026-09-26, before the run.** Two fresh scorers,
+         A and B, run independently from the same prompt.
+         - **A's verdict is the verdict.**
+         - **B is a variance check only.** It is reported beside A and never
+           replaces it. The retry plan put the odds of passing at 40-60%, and
+           a single score cannot say how stable it is.
+         - Neither scorer is given an earlier score. Both are told not to open
+           the 2026-09-26 report, the recommendations file, or the DONE notes
+           of 393.10 and Slice 398 before writing their own scores.
+         - A third agent lists the cloud routine's sessions, read-only.
 
 ## Slice 397 — M1 Phase 3: components go through the experimental tier, and the milestone closes (owner realignment, 2026-09-25)
 
