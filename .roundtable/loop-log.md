@@ -1858,3 +1858,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-26 22:01 · Continue · build · 377.15 (in progress) — check:claims split into two CI shards at the runtime midpoint; 162 + 197 = 359 reconciled; wall-clock reading waits on 3 green runs · landed · 20dc0918
 - 2026-09-26 22:17 · Continue · fix · 377.16 — object-page anchor strip: buttons flex-shrink 0 (labels no longer overlap, first reachable at 390); text-Range case red 14-33px then green · track=defect · landed · 4e9308c9
 - 2026-09-26 22:29 · Standardize · sweep · Slice 409 — 4 of 4 lanes (isolated build): lanes 1, 2, 4 equal Slice 407; lane 3 120,015 (-6, 377.14 b prose, bounded by diff); dispatch region 10,374 · landed · bb80a2ea
+- 2026-09-26 22:33 · Continue · build · 377.15 — closed: split claims shard measured over 3 green runs, CI wall 3.9-4.0 min (from 5.4-5.9), reconciled 163 + 197 = 360 in CI · landed · 26b262ce
