@@ -74,6 +74,32 @@ async function* walk(dir, rel = '') {
 }
 
 /**
+ * The ERP suite's screens (every `.html` under `dist/suite`), which `distPages` skips on
+ * purpose: they are an app, not documentation (the comment above SKIP_DIRS).
+ * A sweep that measures the FRAMEWORK's behaviour across every screen it
+ * ships needs them anyway. 375.9's corpus covered 25 of them, and a
+ * docs-only rerun silently dropped from 134 pages to 107 (roadmap 377.13).
+ * Redirect stubs are skipped. Zero screens throws, like `distPages`.
+ * @param {string} dist  absolute path to the built docs
+ * @returns {Promise<Array<{ url: string, file: string, html: string }>>}
+ */
+export async function suitePages(dist) {
+  const out = [];
+  async function* screens(dir, rel) {
+    for (const e of await readdir(dir, { withFileTypes: true })) {
+      if (e.isDirectory()) yield* screens(join(dir, e.name), `${rel}/${e.name}`);
+      else if (e.name.endsWith('.html')) yield { url: `${rel}/${e.name === 'index.html' ? '' : e.name}`, file: join(dir, e.name) };
+    }
+  }
+  for await (const p of screens(join(dist, 'suite'), '/suite')) {
+    const html = await readFile(p.file, 'utf8');
+    if (!html.includes('http-equiv="refresh"')) out.push({ ...p, html });
+  }
+  if (!out.length) throw new Error(`suitePages: no suite screens under ${join(dist, 'suite')} — was copy-suite skipped?`);
+  return out.sort((a, b) => a.url.localeCompare(b.url));
+}
+
+/**
  * @param {string} dist  absolute path to the built docs
  * @param {{ skipRedirects?: boolean }} [opts]
  * @returns {Promise<Array<{ url: string, file: string, html: string }>>}

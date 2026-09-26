@@ -53,7 +53,8 @@
     "check:resume-slice-ids": "node scripts/check-resume-slice-ids.mjs",
     "check:deprecated-icons": "node scripts/check-deprecated-icons.mjs",
     "check:repo": "node scripts/check-imports.mjs && node scripts/check-loop-vocab.mjs && node scripts/check-pointer-coverage.mjs && node scripts/check-selftests.mjs && node scripts/check-parse-asserts.mjs && node scripts/check-dist-walkers.mjs && node scripts/check-src-css-walkers.mjs && node scripts/check-viewport-forks.mjs && node scripts/check-paths.mjs && node scripts/check-ci-ignores.mjs && node scripts/check-slice-refs.mjs && node scripts/check-vendor-names.mjs",
-    "check:metadata": "node scripts/check-metadata.mjs"
+    "check:metadata": "node scripts/check-metadata.mjs",
+    "report:grid-presses": "node scripts/report-grid-presses.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

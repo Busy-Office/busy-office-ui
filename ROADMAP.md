@@ -5494,12 +5494,46 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
            unseen, because there is no `.containerignore` (408.2).
          - **Not covered until CI runs:** that `docker build` with the new arg
            passes on the runner.
-13. [ ] **377.13 — 375.9's corpus figure is re-runnable.** The sweep script
+13. [x] **377.13 — 375.9's corpus figure is re-runnable.** The sweep script
        lives only in session scratch.
        - **Accept:** the script (or its committed equivalent) is in the repo
          where 375.9 cites it, and a later run on HEAD reproduces or corrects
          0 of 4,944.
         Parked: M1 — measurement hygiene, not milestone work — revisit: milestone close
+       - **DONE 2026-09-26 (rule 4). Committed, re-run, and the old figure
+         corrected rather than reproduced.**
+         - **The script:** `apps/docs/scripts/report-grid-presses.mjs`
+           (`npm run report:grid-presses -w docs`), cited from 375.9's note.
+           It was recovered from the 09-23 session scratch
+           (`375-9/attack-corpus/sweep.mjs`), with its in-page measurement kept
+           verbatim and its plumbing made repo-relative: `distPages`, the new
+           `suitePages`, `viewports.mjs`, `--shard`, `--out`. It now prints
+           both counts, all presses and focused-only.
+         - **`--counterfactual`** re-injects the pre-375.9 toggled reserve and
+           exits non-zero if no press is lost, so the sweep can fail. It did,
+           on `/patterns/editable-grid/`: 8 of 90 lost, against 0 of 105
+           without it.
+         - **What the old figure was.** From the surviving run logs and JSON:
+           - "2,834 valid targets" is the A runs' focused count per width;
+           - the baseline "92 of 358" reconciles exactly as the Bx runs'
+             focused presses (220 + 138) and losses (53 + 39);
+           - "0 of 4,944" matches no surviving group or filter. The nearest
+             is 4,727, the A runs' focused presses. The figure stood, but
+             nothing could re-derive it.
+         - **The coverage trap, found by reconciling pages before quoting.**
+           `distPages` skips `suite` by design, so a docs-only run silently
+           covered 107 pages, not the 134 that carry a data-table container.
+           `dist-pages.mjs` gains `suitePages()`, so the walker rule still
+           holds, and the sweep covers both unless `--no-suite` is passed.
+         - **HEAD (`ef6c5e9e` tree), both widths, 8 + 4 shards:** 132 pages,
+           3,170 targets per width, 2,818 of them focused. **0 of 4,910
+           presses lost** (0 of 3,548 focused-only), with 0 errors. 375.9's
+           property is reproduced; its exact number is corrected to this
+           run.
+         - `check:repo` is green (the dist walkers, viewport forks and paths
+           gates cover the new script).
+         - **Not covered:** a full-corpus counterfactual (only one page), and
+           Firefox and Safari, as for 375.11.
 14. [ ] **377.14 — the low items, one bundle.** (a) 374.1's seam loop visits 2
        of the 7 pages rendering `.bo-quantity`/`.bo-money` — derive the list
        from `dist` or narrow the Accept; (b) six "56rem" prose restatements of
@@ -6009,7 +6043,11 @@ untracked or uncommitted, so the removal was a working-tree change.
          (173.2); a long message paints at every sample point (190.1, vertical
          fit holds in both modes); dialog/offcanvas rest at `none`), each
          red-proved by injection. Corpus sweep, 135 pages, 2834 valid targets:
-         0 of 4944 presses lost (baseline control lost 92 of 358).
+         0 of 4944 presses lost (baseline control lost 92 of 358). The sweep
+         is committed as `apps/docs/scripts/report-grid-presses.mjs`
+         (`npm run report:grid-presses -w docs`, 377.13). Re-run on
+         2026-09-26 it reads **0 of 4,910** over 132 pages; the 4,944 cannot
+         be reconstructed from the surviving logs (377.13).
          Chrome 153 + WebKit 26.6: 0 hidden controls activated; every lost
          press is one on a control the visible message covers.
        - Not covered, filed as 375.11: Firefox unverified; fallback + classic
