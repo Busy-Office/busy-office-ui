@@ -559,6 +559,42 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 410 — Standardize sweep, 4 of 4 lanes on an isolated clean build: lanes 1, 2 and 3 equal Slice 409; lane 4's dispatch region grew 25 words on 381.1's history sentence, and applying the charter returns it to 10,374 (2026-09-26)
+
+**Dispatched by rule 2**, `Standardize 4 / 4 OVERDUE`, after rule 1 read 0 open
+P0 and CI green on `b4bbed9b`. The sweep ran in a worktree of HEAD
+(`b4bbed9b`) with its own `npm ci`. `@busy-office/ui` resolved inside the
+worktree. The core build, the docs build and `standardize_lanes.py` all exit
+0. Base: Slice 409 (`bb80a2ea`, built from `ab28fc86`).
+
+- **Lane 1 (of 4):** *"0 dead style attribute(s) on 0 page(s); 1392 live"*.
+  Equal to the base. Its only moved input since `ab28fc86` is
+  `apps/docs/scripts/check-claims.mjs` (377.17), a gate that renders
+  nothing.
+- **Lane 2 (of 4):** *"74 source file(s) · 246 rule(s) with 3+ declarations ·
+  235 distinct bodies · 7 body(ies) appearing more than once"*. **Unchanged by
+  construction:** `git diff --stat ab28fc86 HEAD --` over the lane's inputs is
+  empty, and the figure equals the base.
+- **Lane 3 (of 4):** 119 pages of 128 built, median 833, **120,015 words**,
+  equal to the base. The flagged union is the same 18 pages, all with
+  enumerated verdicts, so it is a clean round.
+- **Lane 4 (of 4):** the dispatch region read **10,399** at HEAD, against
+  10,374 at the base. 1 of 17 sections moved: `### Step 0`, +25 body words.
+  - **Attributed:** it is 381.1's rewrite of the advisory-checks paragraph,
+    which put the unwired check's dates and its 4-of-84 precision into the
+    region a wake reads to decide.
+  - That is the playbook's third branch: new material, not a cut regrowing.
+    The charter is applied to it: the history already lives in 381.1's DONE
+    block and `.roundtable/measure-381.1-2026-09-26.md`, so Step 0 keeps
+    only the instruction (three checks, and a fourth that is run on purpose).
+  - `loops_regions` on the working tree reads **10,374**, equal to the base.
+  - The rest of the file is unchanged by this edit at 12,653. The operating
+    rule 381.1 rewrote sits below `## Playbooks`.
+  - `ENVIRONMENT.md` is still never cut (36 up), which is the owner's
+    Direction #0.
+  - `CLAUDE.md` is 15 up since its 09-22 cut, unchanged.
+- **Exit:** a clean pass after the one consolidation.
+
 ## Slice 409 — Standardize sweep, 4 of 4 lanes on an isolated clean build: lanes 1, 2 and 4 equal Slice 407; lane 3 is 6 words lighter from 377.14's derived band sentences (2026-09-26)
 
 **Dispatched by rule 2**, `Standardize 4 / 4 OVERDUE`. The sweep ran in a

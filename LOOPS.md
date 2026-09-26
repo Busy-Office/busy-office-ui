@@ -146,11 +146,8 @@ other.**
 
 **THREE advisory checks run from the same place, so expect up to three
 stderr blocks** (roadmap 186.1, 2026-08-29; the third added by 283.2,
-2026-09-05). A fourth, `check_correction_sites.py` (346.1), ran here from
-2026-09-24 until 381.1 unwired it on its measured precision: 4 real lines in
-84, against a 10% floor stated before measuring. It is now run on purpose;
-see the operating rules. The one added by 283.2 is `polish_requeue.py
---verify-stamps`, and it lives here
+2026-09-05; a fourth was taken out by 381.1 and is run on purpose, see the
+operating rules). The third is `polish_requeue.py --verify-stamps`, and it lives here
 rather than at Polish step 0 for a reason the other two do not have: **it can
 only work after the commit.** A `--stamp` taken at the end of a round digests
 the working tree; if the round then edits that surface's source again before
