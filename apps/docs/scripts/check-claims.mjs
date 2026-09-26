@@ -1987,15 +1987,25 @@ check(
    above always worked; a mouse press or a tap did not, anywhere: mousedown
    moved focus off the input, focusout closed the list, and the click landed
    on whatever was left under the pointer. element.click() skips mousedown,
-   which is why every unit test passed — so these drive real input. */
-async function pointerPick(path, inputSel, typed, { touch = false, width = DESKTOP_WIDTH, pre = null, pick = 0 } = {}) {
+   which is why every unit test passed — so these drive real input.
+   "The field holds the option" is an EQUALITY (377.11): the field is
+   non-empty, equals the option's display text (its label part on a rich
+   row, as combobox.ts's displayText() writes it), and equals the event's
+   detail.text. It used to be `label.includes(value)`, which a handler that
+   clears the field on select passed, since every string includes ''. The
+   command bar is the proof that it mattered: it "clears and closes" by
+   design, so its row passed only on that ''. It now asserts the palette's
+   own documented commit: the event carries this option, the result line
+   names its value, the field is empty and the dialog closed. */
+async function pointerPick(path, inputSel, typed, { touch = false, width = DESKTOP_WIDTH, pre = null, pick = 0, expect = 'holds' } = {}) {
   await visit(path, { width, height: 900 });
   if (touch) await page.setViewport({ width, height: 900, hasTouch: true, isMobile: true });
   if (pre) { await page.click(pre); await new Promise((r) => setTimeout(r, 250)); }
   await page.evaluate((s) => {
     document.querySelector(s).scrollIntoView({ block: 'center' });
     window.__cbSelects = 0;
-    document.addEventListener('bo:combobox-select', () => { window.__cbSelects++; });
+    window.__cbDetail = null;
+    document.addEventListener('bo:combobox-select', (e) => { window.__cbSelects++; window.__cbDetail = e.detail; });
   }, inputSel);
   await page.focus(inputSel);
   await page.evaluate((s) => document.querySelector(s).select(), inputSel);
@@ -2010,6 +2020,7 @@ async function pointerPick(path, inputSel, typed, { touch = false, width = DESKT
     const r = o.getBoundingClientRect();
     const x = r.left + r.width / 2, y = r.top + r.height / 2;
     return { label: o.textContent.trim().replace(/\s+/g, ' '), value: input.value, x, y,
+      display: (o.querySelector('.bo-combobox__option-label') ?? o).textContent.trim(),
       hitIsOption: document.elementFromPoint(x, y)?.closest('[role="option"]') === o };
   }, inputSel, pick);
   if (before.noOption) return before;
@@ -2023,19 +2034,25 @@ async function pointerPick(path, inputSel, typed, { touch = false, width = DESKT
   }
   await new Promise((r) => setTimeout(r, 300));
   const after = await page.evaluate((s) => ({
-    value: document.querySelector(s)?.value, selects: window.__cbSelects,
+    value: document.querySelector(s)?.value, selects: window.__cbSelects, detail: window.__cbDetail,
+    result: document.getElementById('cmd-result')?.textContent.trim() ?? null,
+    dialogOpen: document.querySelector(s)?.closest('dialog')?.open ?? null,
   }), inputSel);
-  return { ...before, after, committed: after.selects > 0 && after.value !== before.value && before.label.includes(after.value) };
+  const committed = expect === 'palette'
+    ? after.selects > 0 && after.detail?.text === before.display && after.value === '' &&
+      after.result === `Would open: ${after.detail?.value}` && after.dialogOpen === false
+    : after.selects > 0 && after.value !== '' && after.value === before.display && after.detail?.text === after.value;
+  return { ...before, after, expect, committed };
 }
 for (const [label, path, sel, typed, opts] of [
   ['/components/combobox, mouse', '/components/combobox/', '#demo-cb-input', 'c', {}],
   ['/components/combobox, touch tap @390', '/components/combobox/', '#demo-cb-input', 'c', { touch: true, width: NARROW_WIDTH }],
   ['/patterns/editable-grid cell, mouse', '/patterns/editable-grid/', '#eg-table tbody tr [role="combobox"]', 'st', { pick: 1 }],
-  ['/patterns/command-bar inside its dialog, mouse', '/patterns/command-bar/', '#cmd-input', 'po', { pre: '#cmd-open' }],
+  ['/patterns/command-bar inside its dialog, mouse', '/patterns/command-bar/', '#cmd-input', 'po', { pre: '#cmd-open', expect: 'palette' }],
   ['/components/money searchable currency, mouse', '/components/money/', 'input[aria-controls="cur-list"]', 'u', {}],
 ]) {
   const r = await pointerPick(path, sel, typed, opts);
-  check(`combobox (${label}): a real press on an option commits it — bo:combobox-select fires and the field holds the option (375.10)`,
+  check(`combobox (${label}): a real press on an option commits it — bo:combobox-select fires with it and ${opts.expect === 'palette' ? 'the palette reports it, clears and closes' : 'the field holds exactly the option'} (375.10, 377.11)`,
     !r.noOption && r.hitIsOption && r.committed, JSON.stringify(r));
 }
 

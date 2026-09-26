@@ -5306,12 +5306,35 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
         Milestone: M1 · Phase: 1
         Route: build
         After: 394.12
-11. [ ] **377.11 — 375.10's "holds the option" half must be able to fail.**
+11. [x] **377.11 — 375.10's "holds the option" half must be able to fail.**
        `label.includes('')` is true.
        - **Accept:** the predicate rejects an empty value or asserts equality
          with the label or the event detail; red-proved by a handler that
          clears the field on `bo:combobox-select`.
         Track: defect
+       - **DONE 2026-09-26 (rule 4).** "The field holds the option" is now an
+         EQUALITY: the field is non-empty, equals the option's display text
+         (its label part on a rich row, computed the way combobox.ts's
+         `displayText()` writes it), and equals the event's `detail.text`.
+         - **The premise was live, not hypothetical.** The command-bar row
+           had passed only on `includes('')`: the palette "clears and closes"
+           by design, so its field is always empty after a commit. The row
+           now asserts the palette's own documented commit: the event
+           carries this option, `#cmd-result` reads "Would open: <value>",
+           the field is empty and the dialog closed. The other four rows
+           keep "holds".
+         - **Red-proven** by running the case's own sliced source, with the
+           old predicate evaluated alongside:
+           - a handler that clears the field on select fails the 4 "holds"
+             rows. The palette row passes, since clearing is its documented
+             commit;
+           - a handler that restores the text after the palette clears it
+             fails the palette row;
+           - the old predicate passed all 15 runs across the baseline and
+             both injections.
+         - `check:repo` is green (pointer coverage 16 of 16).
+         - **Not covered:** `test:axe` and `check:layout`, since no rendered
+           page changed, only the harness.
 12. [ ] **377.12 — the preview's provenance is truthful.** The container
        reports `{sha:null, dirty:true}` whatever it holds.
        - **Accept:** the container build receives the sha and the dirty
