@@ -8610,10 +8610,24 @@ async function noAnchorScrollThenPress({ revert }) {
     }, LONG_MESSAGE);
     await p.focus('#line-1-qty');
     await new Promise((r) => setTimeout(r, 150));
-    const focused = await p.evaluate(() => { const c = document.querySelector('#eg-table').closest('.bo-data-table-container'); return { sw: c.scrollWidth }; });
+    const focused = await p.evaluate(() => { const c = document.querySelector('#eg-table').closest('.bo-data-table-container'); return { sw: c.scrollWidth, cw: c.clientWidth }; });
+    /* A sideways wheel to read the message. CI (Linux, classic scrollbars, smooth
+       scrolling) did not always move the scroller within a fixed 300ms, and a
+       press with nothing scrolled has nothing to lose, so wait for the wheel and,
+       if it never lands, put the same offset on the scroller and say so. */
+    const room = focused.sw - focused.cw;
+    let method = room > 0 ? 'wheel' : 'none (no room to scroll)';
     await p.mouse.move(setup.x, setup.y);
     await p.mouse.wheel({ deltaX: 70 });
-    await new Promise((r) => setTimeout(r, 300));
+    const readSl = () => p.evaluate(() => Math.round(document.querySelector('#eg-table').closest('.bo-data-table-container').scrollLeft));
+    if (room > 0) {
+      for (let waited = 0; waited < 1000 && (await readSl()) === 0; waited += 50) await new Promise((r) => setTimeout(r, 50));
+      if ((await readSl()) === 0) {
+        method = 'script (the wheel did not scroll)';
+        await p.evaluate((n) => { document.querySelector('#eg-table').closest('.bo-data-table-container').scrollLeft = n; }, Math.min(70, room));
+      }
+    } else await new Promise((r) => setTimeout(r, 300));
+    await new Promise((r) => setTimeout(r, 150));
     const btn = await p.evaluate(() => {
       window.__clicks = [];
       document.addEventListener('click', (e) => window.__clicks.push(e.target.closest('button,input')?.getAttribute('aria-label') || e.target.tagName), true);
@@ -8628,7 +8642,7 @@ async function noAnchorScrollThenPress({ revert }) {
     await p.mouse.up();
     await new Promise((r) => setTimeout(r, 200));
     const clicks = await p.evaluate(() => window.__clicks);
-    return { fallbackBranch: setup.fallbackBranch, blurredSw: setup.sw, focusedSw: focused.sw, scrolledTo: btn.sl, slid, clicks };
+    return { fallbackBranch: setup.fallbackBranch, blurredSw: setup.sw, focusedSw: focused.sw, room, method, scrolledTo: btn.sl, slid, clicks };
   } finally { await p.close(); }
 }
 
@@ -8660,7 +8674,7 @@ for (const revert of [false, true]) {
   check(revert
     ? 'editable-grid, no anchor positioning, pre-387.1 rules put back: the message lengthens the scroller and the press after reading it is lost (the stated reason)'
     : 'editable-grid, no anchor positioning (simulated): a press on a visible control after a sideways wheel lands, and focusing the field leaves the scroller no longer (387.1)',
-  revert ? (a.fallbackBranch && a.focusedSw > a.blurredSw && !landed) : (a.fallbackBranch && a.focusedSw === a.blurredSw && landed && a.slid === 0),
+  revert ? (a.fallbackBranch && a.focusedSw > a.blurredSw && a.scrolledTo > 0 && !landed) : (a.fallbackBranch && a.focusedSw === a.blurredSw && landed && a.slid === 0),
   JSON.stringify(a));
   const b2 = await noAnchorPastedPage({ revert });
   check(revert
