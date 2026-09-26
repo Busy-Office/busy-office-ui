@@ -1882,3 +1882,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-27 05:47 · Roadmap · triage · 413.1 decided by the ladder pilot: option b, Jev 0.77 agrees with own verdict; reversible · landed · 4c60f6f4
 - 2026-09-27 06:26 · Continue · fix · 413.4 part — pasted-page case reads simApplied (rewritten, passedThrough, fallback static box); red-proved 2 of 201 · track=defect · landed · 9bee4829
 - 2026-09-27 06:57 · Continue · fix · 413.4 (b) — '2 of 7' and '4 of 7' labelled with their samplings · track=defect · landed · a09c0bde
+- 2026-09-27 07:28 · Continue · fix · 413.3 — unbreakable-token exception named in the CHANGELOG; code refused on the RF byte budget · track=defect · landed · aedf3a49

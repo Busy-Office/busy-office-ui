@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 22:57 UTC
+Generated at: 2026-09-26 23:28 UTC
 
 oldest dispatchable: 387.2 — a frozen cell's message still has two covers above it.
 
@@ -154,9 +154,8 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 411.7 — the band needle and the sidebar-nav demo frames.
   - 411.8 — 377.14 (d)'s counts cannot be re-derived.
   - 411.9 — the file-picker case passes when the click is cancelled.
-- **Slice 413** (3 open)
+- **Slice 413** (2 open)
   - 413.2 — `position: relative` gives the message the scrollport as its box.
-  - 413.3 — an unbreakable token still lengthens the scroller (fallback only).
   - 413.4 — the claims that cannot fail.
 - **Slice —** (1 open)
   - AT runtime evidence
@@ -164,9 +163,10 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1876 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-09-27 03:43   ok
+dispatch status — counter-triggered rules (1877 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-09-27 03:43   OVERDUE
   Objective     1 / 3 slice           since 2026-09-27 04:02   ok  [413]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-09-27 05:16   ok   [newest pair: claims; 163 sample(s), 8 of 52 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (44 of 52 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
        claims                      7d  2026-09-25 311 count -> 2026-09-27 364 count  +53
@@ -298,7 +298,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-27 03:21 · Roadmap · triage · Jev 0.10/0.11 migration landed, owner-approved 2026-09-27: CLAUDE.md, LOOPS §6 step 4, jev-rubrics v2, local/grill-finding judge; MCP path retired · triaged · afb2f38b
 - 2026-09-27 03:34 · Continue · fix · red main on a8fae14b/17dddf66: 387.1's path (a) counterfactual claim failed on CI (the sideways wheel did not scroll in 300ms on Linux); case now waits for the wheel and falls back to scrollLeft, recording which; verified real and stubbed wheel locally · landed · 464f1e57
 - 2026-09-27 03:43 · Standardize · sweep · Slice 412 — 4 of 4 lanes (isolated build): lanes 1, 3 equal Slice 410; lane 2 +1 rule (387.1's position: relative, traced); lane 4 dispatch region 10,374; CLAUDE.md +405 on the approved Jev section · landed · c7af39f2
 - 2026-09-27 04:02 · Objective · grill · Slice 413 — grill of 384.1/386.1/387.1/412: 387.1's fix trades a horizontal lengthening for a vertical one (not within six lines); overclaims corrected, 413.1-413.5 filed · landed · 1565560b
@@ -308,6 +307,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-27 05:47 · Roadmap · triage · 413.1 decided by the ladder pilot: option b, Jev 0.77 agrees with own verdict; reversible · landed · 4c60f6f4
 - 2026-09-27 06:26 · Continue · fix · 413.4 part — pasted-page case reads simApplied (rewritten, passedThrough, fallback static box); red-proved 2 of 201 · landed · 9bee4829
 - 2026-09-27 06:57 · Continue · fix · 413.4 (b) — '2 of 7' and '4 of 7' labelled with their samplings · landed · a09c0bde
+- 2026-09-27 07:28 · Continue · fix · 413.3 — unbreakable-token exception named in the CHANGELOG; code refused on the RF byte budget · landed · aedf3a49
 
 ## Sunset test
 
