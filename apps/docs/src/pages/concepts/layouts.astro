@@ -1,6 +1,7 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
+import { SHELL_BAND_REM, SHELL_BAND_PX } from '../../lib/shell-band';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 /* ONE array, three surfaces (roadmap 152.1). The four shells used to be
@@ -16,36 +17,21 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
    conclusion and shows the shell as code with placeholders; this follows that
    precedent for all four. It is also the form an agent can actually use:
    something to copy, not a picture to interpret. */
-/* The ONE band the stylesheet declares for the shell, PARSED from the source
-   css at build — the same idiom `/concepts/cascade` uses for the z-index
-   scale. This const used to be hand-typed `56`, with a comment saying the
-   prose "never restates it from memory" — which was true of the prose and
-   false of the const: nothing compared it to the stylesheet, so a CSS change
-   would have moved `check:claims`' band assertion and left this page quietly
-   stale. `.bo-app-shell` sets `container-name: bo-shell`; `sidebar-nav.css`
-   is the only rule that queries it, and a second band throws below rather
-   than being silently ignored. */
+/* The ONE band the stylesheet declares for the shell (SHELL_BAND_REM/PX,
+   imported above) is PARSED from the source css at build by
+   `lib/shell-band.ts`. It was parsed here from 373.3 and moved into the lib
+   in 377.14, when three other pages that had typed the number by hand began
+   printing it too — four parsers over one file is the drift class the lib
+   exists to prevent. The shell's own sizing and padding below are still read
+   here, because only this page states them. */
 const shellFiles = import.meta.glob<string>('../../../../../packages/core/src/css/primitives/sidebar-layout.css', {
-  query: '?raw', import: 'default', eager: true,
-});
-const navFiles = import.meta.glob<string>('../../../../../packages/core/src/css/components/sidebar-nav/sidebar-nav.css', {
   query: '?raw', import: 'default', eager: true,
 });
 const spaceFiles = import.meta.glob<string>('../../../../../packages/core/src/css/tokens/space.css', {
   query: '?raw', import: 'default', eager: true,
 });
 const shellCssSrc = Object.values(shellFiles)[0];
-const navCssSrc = Object.values(navFiles)[0];
 const spaceCssSrc = Object.values(spaceFiles)[0];
-
-const bands = [...navCssSrc.matchAll(/@container bo-shell \(max-width:\s*([\d.]+)rem\)/g)].map((m) => Number(m[1]));
-if (bands.length !== 1)
-  throw new Error(
-    `layouts: expected exactly ONE '@container bo-shell (max-width: …rem)' in sidebar-nav.css, found ${bands.length} ` +
-      `[${bands.join(', ')}]. The page's device matrix assumes a single band; add the new one here deliberately.`,
-  );
-const SHELL_BAND_REM = bands[0];
-const SHELL_BAND_PX = SHELL_BAND_REM * 16;
 
 /* The scroll owner's padding, and the sticky offset every bar inside `__main`
    is measured against. Declared on `__main` itself, NOT on `.bo-app-shell` —
@@ -334,7 +320,7 @@ const SHELLS = [
     room, not less</strong> — the one result here that surprises. At {SHELL_BAND_PX}px
     the rail drops from 224px to 52px, so <code>main</code> gains 171px in the same
     breath the window got narrower: measured, a role home goes from 1 widget column
-    at 897px to 2 columns at {SHELL_BAND_PX}px. If you are testing a layout, test
+    at {SHELL_BAND_PX + 1}px to 2 columns at {SHELL_BAND_PX}px. If you are testing a layout, test
     <em>both sides</em> of the band, not just the narrow end.</p>
   </section>
 

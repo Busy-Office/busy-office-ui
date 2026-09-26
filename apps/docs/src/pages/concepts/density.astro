@@ -1,6 +1,7 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
+import { SHELL_BAND_REM } from '../../lib/shell-band';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const recipe = `<html data-density="compact">          <!-- app-wide default -->
 …
@@ -51,8 +52,8 @@ const recipe = `<html data-density="compact">          <!-- app-wide default -->
           </tr>
           <tr>
             <td>Mobile app</td>
-            <td><code>data-density="compact"</code> + the app shell's own <code>bo-shell</code> container query (sidebar collapses to an icon rail ≤ 56rem) — this docs site does exactly that</td>
-            <td>Resize this page's window below 56rem, or see <a href={base + '/concepts/container-queries'}>the container-query registry</a></td>
+            <td><code>data-density="compact"</code> + the app shell's own <code>bo-shell</code> container query (sidebar collapses to an icon rail ≤ {SHELL_BAND_REM}rem)</td>
+            <td>The narrow frame on <a href={base + '/components/sidebar-nav'}>Sidebar navigation</a>, or see <a href={base + '/concepts/container-queries'}>the container-query registry</a></td>
           </tr>
           <tr>
             <td>Tablet (Bento UI)</td>

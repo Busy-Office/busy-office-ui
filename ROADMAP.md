@@ -5534,7 +5534,7 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
            gates cover the new script).
          - **Not covered:** a full-corpus counterfactual (only one page), and
            Firefox and Safari, as for 375.11.
-14. [ ] **377.14 — the low items, one bundle.** (a) 374.1's seam loop visits 2
+14. [x] **377.14 — the low items, one bundle.** (a) 374.1's seam loop visits 2
        of the 7 pages rendering `.bo-quantity`/`.bo-money` — derive the list
        from `dist` or narrow the Accept; (b) six "56rem" prose restatements of
        the shell band pass 373.3's value grep — derive or accept them;
@@ -5543,6 +5543,142 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
        a `check-claims` case before deciding anything about the umbrella
        pattern. Each closes on its own measurement.
         Parked: M1 — a low-severity bundle — revisit: milestone close
+       - **DONE 2026-09-26 (rule 4).** Four agents measured, one per part,
+         and proposed exact edits. All 28 applied with 0 mismatches, and I
+         reviewed each diff before the build.
+       - **(a) derived, not narrowed.** The seam loop took 2 hand-named pages;
+         `.bo-quantity`/`.bo-money` render on 7 documents (18 quantity and 12
+         money instances; raw HTML, the DOM and a grep agree). The loop now
+         takes its list from `distPages` plus `suitePages`: 8 page-blocks and
+         31 seams, against 20 before. Every derived page passes the defect
+         predicates in both themes. `/patterns/rf/rf-count-rf/` has a
+         single-segment quantity with no seam, so the floors are per-run
+         conditional and unconditional on the two named pages. It adds about
+         12s to the claims shard (377.15). Red-proven by planting a stepper on
+         a docs page and a suite screen, both of which enrolled.
+       - **(b) derived.** Seven rendered restatements of the shell band (the
+         grill's six, plus a hand-typed "897px" on `/concepts/layouts`) now
+         print from one reader, `apps/docs/src/lib/shell-band.ts`, which
+         parses `sidebar-nav.css` and throws unless there is exactly one
+         band. `check-floor` gains a second needle read from the same CSS,
+         replacing 373.3's "900px" grep, which matched one viewport height
+         and 0 band sites. It fails on any literal restatement outside 5
+         counted exemptions (code that must equal the band).
+         - The docs container copies neither `CLAUDE.md`, `README.md` nor
+           `LOOPS.md`, and the first container build failed on it
+           (`ENOENT … CLAUDE.md`). Those three now stand down as "NOT verified
+           here", as `check-slice-refs` does; every other root must exist.
+           Verified in a copy of the container's context and in the rebuilt
+           image.
+       - **(c) recorded.** The predicate survived in scratch and is committed
+         as `npm run report:text-collapse -w docs`, whose `--counterfactual`
+         exits 1 unless it finds the real 373.1 collapse. It reproduces 125 of
+         128 pages on HEAD, and 373.9's "0 true / 12 false positives" is
+         corrected in place to 3 true, 8 false and 1 borderline. The 3 are
+         object-page anchor labels that overlap at 390px, a live defect,
+         filed as 377.16.
+       - **(d) measured (2026-09-26, HEAD `ba972a0a`): a count, no gate.**
+         Corpus: the 81 component and pattern docs pages in `distPages`
+         (41 + 40). Excluded: the 9 pages that exist only as another
+         page's `<iframe>`, derived from the built `src`s, and the two
+         family indexes. Prose is `p`/`li`/`tr`/`blockquote`/`figcaption`
+         whose every ancestor up to `<main>` is `section.demo` (not
+         `.related`), `.docs-content`, a `.docs-list`, a docs table or a
+         non-code `<details>`. Anything inside a `bo-*` component, a
+         `demo-pair` preview, a form or a dialog is live screen and is
+         dropped. "generated" sections are dropped except
+         `ul[data-api-notes]`. A table row is one sentence, and only if it
+         holds no control and has a 5+-word cell or a `<kbd>`. That gives
+         **2,794 prose sentences**. **Candidate predicate:** an outcome
+         (a state-change verb, focus, or a key name) AND an event or
+         runtime context (an interaction verb, a key, focus, a runtime
+         noun, a trigger word). The opener's usage clauses are never
+         candidates. That gives **762 candidates** (components 363,
+         patterns 399). **Precision, hand-classified on a held-out
+         random sample: 49/80 = 61% (Wilson 95% 50-71%). Miss rate on
+         held-out non-candidates: 6/80 = 7.5% (3.5-15%).**
+         Post-stratified over all 310 labels, the pages carry **~635 ± 96
+         runtime-behaviour sentences**. "Runtime" means the browser, a
+         behaviour or the demo does something on an event or condition:
+         key, pointer, focus, open/close, commit, event, swap, resize,
+         print, forced-colors, reduced-motion. Server-contract
+         requirements, static semantics and advice are not runtime. One
+         rater. The first tuning pass (v2: 568 candidates, 59/80)
+         missed 17%, so its labels tuned the predicate and are not
+         quoted as evidence.
+       - **Coverage.** The cases are check-claims' **326 runtime checks
+         from 289 call sites** (the instrumented run printed "326
+         documented behaviours verified live"; `grep` counts 289
+         `check(`). 276 of those sites sit on component or pattern pages.
+         A case's page is its URL at `check()` time. Frames map to their
+         iframe parent. Fixtures map to the page their label names (L8454
+         file-dropzone, L7006 sidebar-nav, L1860 output-form), and L6297
+         also visits `/components/dropdown/`. **45 of 81 pages have a
+         case, and 36 have none (151 candidates).** Each candidate on the
+         45 was adjudicated by hand against that page's cases. **Of the
+         762 candidates: covered 141 (18.5%), partly 66 (8.7%: the
+         sentence asserts several behaviours and a case checks some),
+         uncovered 555 (72.8%).** Components 88/37/238 of 363, patterns
+         53/29/317 of 399. Weighted by each stratum's labelled precision
+         (covered 19/24, partly 13/14, uncovered 86/135), that is **~112
+         covered, ~61 partly and ~354 uncovered runtime sentences**. The
+         ~120 runtime sentences the predicate misses sit mostly on the
+         uncovered side; 53 non-candidates were found covered, a lower
+         bound. **Most uncovered:** data-table 36, editable-grid 25,
+         kanban 24, richtext 21, combobox 18, list-report 18,
+         master-detail 17, bulk-actions 15 (no case), validation-summary
+         15, command-bar 13.
+       - **Beside the count.** (1) `/components/richtext` (source lines
+         508-512) says the align buttons "sync `aria-pressed`". The demo
+         is a radio group, and L3820 asserts no `aria-pressed`. The page
+         contradicts itself, and no case reads the sentence. (2) L1860's
+         comment says output-form's @page-counter / `string-set` table
+         needs the PDF text read back. It asserts `pageCount >= 2`, so
+         the page's "measured … by reading the text back out" rows are
+         unexecuted. (3) A URL-only join puts L8439/L8454 (dropzone
+         fixtures) on `/components/data-table/`. The instrument itself is
+         an instance of the umbrella class.
+       - **Commands** (scratch, uncommitted): an instrumented copy of
+         `check-claims.mjs` logging `page.url()`, the last `visit()` and
+         the call-site line; `node extract.mjs` (jsdom over `distPages`);
+         a lexical shortlist, with decisions by hand. **Reconciled:** a
+         Python re-implementation of the predicate gives 762 with 0
+         disagreements. 80/81 openers are found both by jsdom and by a
+         raw-HTML regex. 43 static `visit()` literals + 2 loop-driven
+         pages = 45 = 44 runtime + the dropdown reference visit. Iframe
+         parents were derived 9/9. The extractor was red-proved with 5
+         injected sentences (prose kept; live-component and generated-API
+         text dropped; an API note kept; a static sentence kept but not
+         flagged), each counted as 1 before the run.
+       - **Not covered:** one rater for both labels; "partly" is a
+         judgement; non-candidates were adjudicated only at a lexical
+         score ≥ 0.5; a case on another page exercising the same
+         component does not count (scan on goods-receipt/rf-pick,
+         dropdown anchoring on filters); Chromium only. At 61% precision
+         the predicate is not gate-grade.
+       - **Live:** the docs build (including both floor needles),
+         `check:claims` (359 of 359, from 326; the derived seam loop adds 33),
+         `test:axe` (128 × 2, 0 violations) and `check:layout` (128) all passed;
+         `docs:container` was rebuilt, and `/concepts/layouts` and
+         `/components/sidebar-nav` were screenshotted at 1440 and 390 in
+         light and dark with 0 overflow.
+16. [ ] **377.16 — the object-page anchor strip's labels overlap at 390px.**
+       Track: defect
+       - **Why (377.14 c).** On `/patterns/object-page/` the anchor strip
+         (`.bo-pagination.op-anchors`, `overflow-x: auto`) squeezes its labels
+         at 390px. Text overlaps its neighbour by 5.6-7.7px, and 14.2px (20.5
+         at the page's comfortable density) for the pair the predicate
+         misses. "Approvals" runs 3px past the scroller, and "General
+         information" starts 15-19px before its left edge, where scrolling
+         cannot reach it. It was already true on 2026-09-23, so it is not a
+         regression. No gate sees it.
+       - **Accept — the property.** At 390px, in every row size the page
+         offers, no anchor label overlaps another, and every label is fully
+         reachable inside the strip, by scrolling if needed. A `check-claims`
+         case measures label rects against each other and the scroller, fails
+         on today's build, and passes after. The fix is argued as a shape:
+         whether the strip is a pagination composition at all, or a tabs or
+         anchor-bar pattern.
 
 15. [ ] **377.15 — the claims shard sets CI's wall clock, at nearly twice the
        next shard.** In 8 of 8 runs the `Claims + formatting` job took
@@ -7079,6 +7215,32 @@ before quoting a change.
        - So 373.1's local `file-upload rows @390` claim is recorded as the whole
          answer. This is 94.11's ceremony case in mirror image: there the
          predicate was uniformly true, here no threshold exists at all.
+       - **The predicate is recorded (377.14 c).** `npm run
+         report:text-collapse -w docs` is the two session-scratch scripts
+         behind these counts, with their in-page predicates verbatim.
+         `--counterfactual` restores the pre-373.1 file-list rules and exits 1
+         unless both the min-content and the <3ch predicates find the
+         collapsed names (3 names at 0px, rows 74 -> 388.5px). Re-run on
+         `ba972a0a` with animations settled, 5 of 5 runs identical: 125/128
+         pages, **4,971** boxes; 91 / 395; 36 / 146; 21 / 46; 1 / 1; 0 / 0;
+         min-content 15 / 30, **4 / 12 outside scroll regions**, the same 12
+         boxes. The drift from 4,956 is four pages whose built content changed
+         since (button, scan, motion, screen-kit), plus two `/base/motion/`
+         boxes the unsettled run read mid-animation (13, 14 or 15 by load).
+       - **The 12 were misjudged; the counts were not.** They are EIGHT
+         single-glyph buttons, one two-letter avatar ("MO") and the three
+         `.bo-pagination__btn`, and those three are NOT fully visible. On
+         `/patterns/object-page/` at 390px the anchor labels overlap their
+         neighbours' text by 5.6-7.7px (14.2px for the pair the predicate
+         misses; up to 20.5px at the page's own density), "Approvals" runs 3px
+         outside its scroller, and "General information" starts 15-19px
+         before the scroller's left edge, where no scroll reaches it. The
+         "49-231px INSIDE the parent" came from `pag.mjs` piped through
+         `head -50`: 231 and 184 are "General information" and "Line items",
+         which are not hits, and the fifth row, "Approvals" at +3 (past the
+         edge), was cut off. So the min-content predicate scored **3 true
+         positives of 12**, not 0. A gate at that precision is still refused;
+         the overlap is a defect of its own and is not filed here.
 
 10. [x] **373.10 — independent re-score of `file-upload · interaction`.** The
        DSA cite claimed "native drag-drop come free", which is false for the

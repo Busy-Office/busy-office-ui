@@ -2,9 +2,9 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 11:44 UTC
+Generated at: 2026-09-26 12:56 UTC
 
-oldest dispatchable: 377.14 — the low items, one bundle.
+oldest dispatchable: 377.15 — the claims shard sets CI's wall clock, at nearly twice the next shard.
 
 Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, open `After:` target or held `Parked:` line holds — and, while a milestone is ACTIVE, that the milestone does not tag (rule M dispatches those; `dispatch_status.py` prints its pick). No GOAL overrides it: the owner's M0 bootstrap (O3), the one exception there was, ended with 398.5. A named item without a number has no age to rank by; any that nothing holds is listed here instead of being dropped.
 
@@ -38,7 +38,7 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 377.3 — the completion gate cannot see a revision.
   - 377.6 — is busy-office-erp the named first user?
   - 377.10 — the Jev band, re-measured with the question form Rubric 2 prescribes, and the set recorded.
-  - 377.14 — the low items, one bundle.
+  - 377.16 — the object-page anchor strip's labels overlap at 390px.
   - 377.15 — the claims shard sets CI's wall clock, at nearly twice the next shard.
 - **Slice 381** (1 open)
   - 381.1 — the correction-site check: precision, coverage, or unwire it.
@@ -161,10 +161,10 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 dispatch status — counter-triggered rules (1847 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-09-26 18:07   ok
   Objective     1 / 3 slice           since 2026-09-26 19:15   ok  [377]
-  Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 155 sample(s), 8 of 49 name(s) paired across days]
+  Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 157 sample(s), 8 of 51 name(s) paired across days]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-25 (2026-09-26), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
-     rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (41 of 49 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
+     rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (43 of 51 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
        dispatch-region-words       6d  2026-09-25 7775 words -> 2026-09-26 10374 words  +2599   [3 same-day]
        claims                      6d  2026-09-19 203 count -> 2026-09-25 311 count  +108
        gates                       4d  2026-09-07 55 count -> 2026-09-09 56 count  +1
@@ -176,7 +176,7 @@ dispatch status — counter-triggered rules (1847 iterations logged)
      no direction is recorded with a sample, so the movement above is a reading and the regression verdict is the wake's. A name that has NEVER MOVED is either healthy or pinned by a gate — rule 5 cannot fire on it either way (`axe-violations` is 0 on every day because `test:axe` fails the build above 0).
      a direction is NOT recorded on purpose (roadmap 324.1): adding one makes rule 5 fire on `bundle-gz-kb`'s four consecutive rises, which the log's own same-timestamp `components` samples refute (0.400 -> 0.355 kB per component over that window). A rise with no denominator is growth. Where a name has a real threshold, use it — `check:size` gates the bundle at 16.7 kB gz, which is rule 5's budget clause, not its trend one.
      not rule 5's input: 24 adoption-* name(s), the Objective grill's reading of the world (377.7), never a size or speed regression.
-  Holds         5 hold-wake(s) recorded, 4 today (UTC dates)   [inflight.py hold; .roundtable/hold-wakes.jsonl]
+  Holds         6 hold-wake(s) recorded, 5 today (UTC dates)   [inflight.py hold; .roundtable/hold-wakes.jsonl]
 ```
 
 ## Milestone progress
@@ -281,7 +281,6 @@ Open items with a `Parked:` line. Held only while that milestone is ACTIVE.
 - 391.1 — M1, not held
 - 384.1 — M1, not held
 - 381.1 — M1, not held
-- 377.14 — M1, not held
 - 377.15 — M1, not held
 
 ## Browser-blocked

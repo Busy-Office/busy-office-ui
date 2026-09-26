@@ -1,8 +1,9 @@
 ---
 import Gallery from '../../layouts/Gallery.astro';
 import Related from '../../components/Related.astro';
+import { SHELL_BAND_REM } from '../../lib/shell-band';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const registry = `bo-shell        the app shell     → sidebar collapses to icon rail  (≤ 56rem)
+const registry = `bo-shell        the app shell     → sidebar collapses to icon rail  (≤ ${SHELL_BAND_REM}rem)
 bo-table        table container   → density compaction + col hiding  (≤ 30rem)
 bo-widget-grid  dashboard grid    → span-2 widgets collapse          (≤ 41rem)
 bo-widget       each widget       → components inside adapt to WIDGET width

@@ -45,6 +45,7 @@
 import { serveDist } from './serve-dist.mjs';
 import { gate } from './gate-report.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
+import { distPages, suitePages } from './dist-pages.mjs';
 import { DIST, REPO_ROOT } from './paths.mjs';
 import { WIDTHS, DESKTOP_WIDTH, NARROW_WIDTH, RF_WIDTH, ZOOM_400 } from './viewports.mjs';
 import { contrastRatio, composite } from '../../../packages/core/scripts/wcag.mjs';
@@ -4608,11 +4609,44 @@ check(
 const seams = {};
 const SEAM_SETTLE_MS = 600;
 
-for (const [label, path, sel] of [
-  ['money', '/components/money/', '.bo-money'],
-  ['quantity', '/components/quantity/', '.bo-quantity'],
-]) {
+/* WHICH PAGES — read off the build, not listed (roadmap 377.14). This loop
+   used to visit two literals, /components/money/ and /components/quantity/,
+   while 374.1's Accept spoke for every `.bo-quantity` on the built site: when
+   377.14 measured it, the build rendered the two blocks on 7 documents and the
+   loop saw 2. The list is now derived from the served HTML through distPages +
+   suitePages, so a page that starts rendering either block is swept with no
+   edit here.
+
+   A class on a REAL tag, token-exact. A tag opens with a literal `<` and a
+   copyable sample is escaped to `&lt;`, so a sample cannot enrol its page;
+   `bo-quantity__input` is a part, not the block. What the regex read is
+   reconciled against the DOM on every page it enrols (post-loop), so a
+   miscount goes red instead of quietly adding or dropping a run. What that
+   cannot see is a page the regex never enrolled, which is why the list must
+   still reach the two pages it once named by hand. */
+const WELDED_BLOCKS = ['money', 'quantity'];
+const blockCount = (html, block) =>
+  [...html.matchAll(/<[a-zA-Z][^>]*?\sclass="([^"]*)"/g)]
+    .filter(([, cls]) => cls.split(/\s+/).includes(`bo-${block}`)).length;
+const SEAM_RUNS = [];
+for (const p of [...(await distPages(DIST)), ...(await suitePages(DIST))]) {
+  for (const block of WELDED_BLOCKS) {
+    const raw = blockCount(p.html, block);
+    if (raw) SEAM_RUNS.push({ label: `${block} ${p.url}`, path: p.url, sel: `.bo-${block}`, raw });
+  }
+}
+const SEAM_NAMED = ['money /components/money/', 'quantity /components/quantity/'];
+check(
+  'joined-control seam: the page list derived from dist reaches both pages it once named by hand, and no fewer runs',
+  SEAM_NAMED.every((l) => SEAM_RUNS.some((r) => r.label === l)) && SEAM_RUNS.length >= SEAM_NAMED.length,
+  JSON.stringify(SEAM_RUNS.map((r) => r.label)),
+);
+const ringRuns = {};
+const domInstances = {};
+
+for (const { label, path, sel } of SEAM_RUNS) {
   await visit(path, { width: DESKTOP_WIDTH, height: 1400 });
+  domInstances[label] = await page.$$eval(sel, (els) => els.length);
   const rings = await page.evaluate((groupSel) => {
     const worst = [];
     let skipped = 0;
@@ -4644,9 +4678,10 @@ for (const [label, path, sel] of [
     }
     return { pairs: worst.length, skipped, maxOverlap: worst.length ? Math.max(...worst) : 0 };
   }, sel);
+  ringRuns[label] = rings;
   check(
     `${label}: a focused segment's ring stays off its neighbour — joined controls share an edge`,
-    rings.pairs > 0 && rings.maxOverlap <= 1,   // 1px tolerance: the shared border rounds
+    rings.maxOverlap <= 1,   // 1px tolerance: the shared border rounds; floor is post-loop
     JSON.stringify(rings),
   );
 
@@ -4739,15 +4774,15 @@ for (const [label, path, sel] of [
       }
       return out;
     }, sel);
-    seams[`${label}/${theme}`] = seam;
+    seams[`${label} (${theme})`] = seam;
     check(
       `${label} (${theme}): an INTERIOR corner of a welded control is square — no rounded edge butted against a flat one`,
-      seam.welded > 0 && seam.rounded.length === 0,
+      seam.rounded.length === 0,
       JSON.stringify(seam),
     );
     check(
       `${label} (${theme}): every segment of one welded control draws the same border colour`,
-      seam.groups > 0 && seam.mismatched.length === 0,
+      seam.mismatched.length === 0,
       JSON.stringify(seam),
     );
   }
@@ -4758,24 +4793,56 @@ for (const [label, path, sel] of [
   await page.evaluate(() => document.documentElement.removeAttribute('data-theme'));
 }
 
-/* The four runs must not be two themes measured twice — the failure this file
+/* THE FLOORS — per run where a seam exists, and in full on the two pages the
+   list once named. The per-page `pairs > 0` / `welded > 0` / `groups > 0` this
+   loop carried cannot stand once the list is derived: /patterns/rf/rf-count-rf/
+   renders its quantity as an input beside a `__unit` span — one segment, no
+   seam, nothing wrong — and failed all three for having nothing to weld
+   (377.14, measured). So a run that found a multi-segment group must have
+   measured a weld in both themes and a ring pair; a run that found none has
+   nothing to floor. The two hand-named pages keep the unconditional floor they
+   had, so no page is floored more weakly than before. */
+check(
+  'joined-control seam: every run that found a multi-segment group measured a weld (both themes) and a ring pair, and the two hand-named pages measured all three',
+  SEAM_RUNS.every(({ label }) => ['light', 'dark'].every((t) => {
+    const s = seams[`${label} (${t})`];
+    return s.groups === 0 || (s.welded > 0 && ringRuns[label].pairs > 0);
+  })) &&
+    SEAM_NAMED.every((l) => ringRuns[l]?.pairs > 0 && ['light', 'dark'].every((t) =>
+      seams[`${l} (${t})`]?.groups > 0 && seams[`${l} (${t})`]?.welded > 0)),
+  JSON.stringify(Object.fromEntries(SEAM_RUNS.map(({ label }) => [label, {
+    pairs: ringRuns[label].pairs,
+    groups: [seams[`${label} (light)`].groups, seams[`${label} (dark)`].groups],
+    welded: [seams[`${label} (light)`].welded, seams[`${label} (dark)`].welded],
+  }]))),
+);
+/* What the derivation READ, reconciled against what the browser BUILT on every
+   page it enrolled. A regex that counted a sample, a <template> or a duplicate
+   disagrees here instead of quietly adding a run. */
+check(
+  'joined-control seam: on every page the list enrolled, the DOM renders exactly as many instances as the HTML was read to carry',
+  SEAM_RUNS.every(({ label, raw }) => domInstances[label] === raw),
+  JSON.stringify(SEAM_RUNS.map(({ label, raw }) => [label, raw, domInstances[label]])),
+);
+/* The runs must not be two themes measured twice — the failure this file
    already had with the wrong localStorage key. */
 check(
   'joined-control seam: the light and dark readings rendered different themes',
-  ['money', 'quantity'].every((l) => seams[`${l}/light`].bodyBg !== seams[`${l}/dark`].bodyBg),
+  SEAM_RUNS.every(({ label }) => seams[`${label} (light)`].bodyBg !== seams[`${label} (dark)`].bodyBg),
   JSON.stringify(Object.fromEntries(Object.entries(seams).map(([k, s]) => [k, s.bodyBg]))),
 );
 /* The combobox resolver is EXERCISED, and resolves everything it counted. A
    `:scope > .bo-input` that stopped matching would silently drop those
    segments and leave both assertions above passing over a smaller set — the
    quiet coverage loss this whole file exists to prevent. /components/money
-   carries the two combobox demos; /components/quantity has none, and 0 === 0
+   carries the two combobox demos; no other enrolled page has one, and 0 === 0
    there says so without inventing a floor for a page that has nothing to
    floor. */
 check(
   'joined-control seam: every .bo-combobox segment resolved to its nested .bo-input, and money exercised that path',
   Object.values(seams).every((s) => s.resolved === s.wrappers) &&
-    seams['money/light'].resolved > 0 && seams['money/dark'].resolved > 0,
+    seams['money /components/money/ (light)']?.resolved > 0 &&
+    seams['money /components/money/ (dark)']?.resolved > 0,
   JSON.stringify(Object.fromEntries(Object.entries(seams)
     .map(([k, s]) => [k, { wrappers: s.wrappers, resolved: s.resolved }]))),
 );
@@ -4783,10 +4850,14 @@ check(
    outlast, and the duration is a TOKEN somebody can raise. `transitionMs > 0`
    is the other half: if the live transition ever read 0 here the colour
    readings would be trustworthy for a different reason than this block
-   claims, and that is worth noticing rather than passing through. */
+   claims, and that is worth noticing rather than passing through. A run with
+   no multi-segment group reads no segment and so no transition (rf-count-rf's
+   lone input); it is left out rather than read as a 0 that fails `> 0` for a
+   reason that is not a finding, and the floor above keeps the set non-empty. */
 check(
   'joined-control seam: the settle outlasts the live border-color transition, so a colour reading is a token and not an interpolation',
-  Object.values(seams).every((s) => s.transitionMs > 0 && SEAM_SETTLE_MS >= 4 * s.transitionMs),
+  Object.values(seams).filter((s) => s.groups > 0)
+    .every((s) => s.transitionMs > 0 && SEAM_SETTLE_MS >= 4 * s.transitionMs),
   JSON.stringify(Object.fromEntries(Object.entries(seams).map(([k, s]) => [k, s.transitionMs]))),
 );
 
