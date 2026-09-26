@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 01:18 UTC
+Generated at: 2026-09-26 01:28 UTC
 
 oldest dispatchable: 375.11 — what 375.9 measured and did not fix.
 
@@ -133,11 +133,12 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 - **Slice 397** (2 open)
   - 397.1 — the first real run: the first need Configuration or Distribution logs walks the component lifecycle as far as its fill.
   - 397.2 — EXIT: close Milestone M1.
-- **Slice 398** (4 open)
+- **Slice 398** (5 open)
   - 398.1 — the statements that disagree with the rule that replaced them (N2-N7 and the two Redundants).
   - 398.2 — the in-flight check refuses what it cannot parse.
   - 398.3 — `milestone.py` counts a field as filled only when the owner filled it.
   - 398.4 — a `Modules` value that is not ` · `-separated is refused, not read as one module.
+  - 398.5 — the second re-score: M0's exit test, run once more.
 - **Slice —** (1 open)
   - AT runtime evidence
 
@@ -170,7 +171,7 @@ dispatch status — counter-triggered rules (1816 iterations logged)
 Generated from the `Milestone: Mn · Phase: n` markers on every item, open or closed (roadmap 393.8). The milestone's own status is its `Status:` field.
 
 - **M1** — DRAFT
-  - Phase 0: 10 of 13 closed
+  - Phase 0: 10 of 16 closed
   - Phase 1: 0 of 22 closed
   - Phase 2: 0 of 34 closed
   - Phase 3: 0 of 2 closed
@@ -207,6 +208,8 @@ Open items carrying an owner marker (`BLOCKED ON`, `OWNER CALL`, `OWNER OR <X> C
 
 Open items with an `After:` target still open. Each releases when its last target closes. An item that is also owner-blocked says so: its dependency outlasts the owner's answer.
 
+- 398.2 — after 398.1
+- 398.5 — after 398.1, 398.2
 - 397.1 — after 394.4, 394.5, 394.6, 394.7, 394.8, 394.17, 396.3, 396.4
 - 397.2 — after 393.11, 393.12, 394.1, 394.2, 394.3, 394.4, 394.5, 394.6, 394.7, 394.8, 394.9, 394.10, 394.11, 394.12, 394.13, 394.14, 394.15, 394.17, 394.18, 395.1, 395.2, 396.1, 396.2, 396.3, 396.4, 396.5, 396.6, 396.7, 396.8, 396.9, 396.10, 396.11, 396.12, 396.13, 397.1
 - 396.1 — after 394.1, 394.2, 394.9
@@ -263,8 +266,6 @@ Open items with an `After:` target still open. Each releases when its last targe
 
 Open items with a `Parked:` line. Held only while that milestone is ACTIVE.
 
-- 398.1 — M1, not held
-- 398.2 — M1, not held
 - 398.3 — M1, not held
 - 398.4 — M1, not held
 - 391.1 — M1, not held

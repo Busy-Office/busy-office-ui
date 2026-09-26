@@ -135,7 +135,7 @@ against is a Breaking-entry decision, not a tidy-up.
 
 ## Milestone M1 — Layouts and components for a long-use ERP app
 
-> **DRAFT, round 2 (2026-09-25). Not active.** O1-O4 decided by the owner 2026-09-25 (below); M0 (Slice 393) is approved to run as a one-time bootstrap capped at 12 wakes.
+> **DRAFT, round 2 (2026-09-25). Not active.** O1-O4 decided by the owner 2026-09-25 (below); M0 (Slice 393) is approved to run as a one-time bootstrap capped at 12 wakes; after 393.10's FAIL the owner extended it on 2026-09-26 to one retry (398.1, 398.2, then the re-score 398.5), capped at 13.
 > - **Who edits it.** The owner edits this section. The loop reads it and never
 >   edits it. `scripts/loops/milestone.py` (built by 393.4) parses the fields in
 >   the first fenced block under this heading. It refuses to print a verdict if
@@ -160,7 +160,7 @@ Dispatcher: local                                 # (O1) local | local+auditor |
 Tiers: top=OWNER · balanced=OWNER|none · fast=OWNER|none
 Planner: top                                      # (O14) the tier the planner route uses
 Direction-drift: off                              # (O16) off | N=<landings> X=<percent>
-Budget: m0-wakes 12 · wakes OWNER · agents/wake OWNER · workflow-wall OWNERm · experimental 2 · resume-lines 120 · direction-items 5
+Budget: m0-wakes 13 · wakes OWNER · agents/wake OWNER · workflow-wall OWNERm · experimental 2 · resume-lines 120 · direction-items 5
 Stop: HALT | foreign-commit | budget | 2-wakes-no-progress-on-one-item | 2-wakes-plan-only | one-way-door
 ```
 
@@ -368,7 +368,7 @@ and the A/B test (396.5) will show it.
 
 | O1 | O2 | O3 | O4 | O5 | O6 | O7 | O8 | O9 | O10 | O11 | O12 | O13 | O14 | O15 | O16 | O17 | O18 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| local /loop only; cloud sessions archived by the owner | parked on branch `park/owner-checkpoint-2026-09-20` (`a9a2d9bb`) | bootstrap 393.1-393.10 approved; rules 2 and 3 paused until 393.10; cap 12 wakes | CLAUDE.md naming rule widened (shape names everywhere; tier word left to O7) | ___ | ___ | ___ | ___ | ___ | ___ | ___ | ___ | ___ | ___ | ___ | ___ | ___ | ___ |
+| local /loop only; cloud sessions archived by the owner | parked on branch `park/owner-checkpoint-2026-09-20` (`a9a2d9bb`) | bootstrap 393.1-393.10 approved; rules 2 and 3 paused until 393.10; cap 12 wakes. **Extended 2026-09-26** after 393.10's FAIL: one retry, 398.1 → 398.2 → re-score 398.5; rules 2 and 3 paused until 398.5; cap 13 | CLAUDE.md naming rule widened (shape names everywhere; tier word left to O7) | ___ | ___ | ___ | ___ | ___ | ___ | ___ | ___ | ___ | ___ | ___ | ___ | ___ | ___ |
 
 ## CI strategy — measured, and why branches are not the lever (2026-08-24)
 
@@ -572,9 +572,18 @@ open. Two paths exist, and choosing is the owner's:
 Until then, rule 4 reaches them oldest-first, which is far from now. Report:
 `.roundtable/loop-doctor-rescore-2026-09-26.md`.
 
+**The owner chose the first path on 2026-09-26** ("M0 retry": 398.1 → 398.2 →
+one fresh re-score, with the bootstrap cap raised from 12 to 13 and rules 2 and 3
+still paused). So 398.1 and 398.2 lose their `Parked:` line and join M0 as
+Phase 0, and 398.5 is the re-score. It is one retry, not a standing
+extension. 398.3 and 398.4 stay parked: 398.3 closes as satisfied when the
+owner fills the O11, O12, O14 and O16 cells, and 398.4 is code the retry does
+not need.
+
 1. [ ] **398.1 — the statements that disagree with the rule that replaced
        them (N2-N7 and the two Redundants).**
-       Parked: M1 — loop machinery (the 393.10 re-score's Invalids) — revisit: the owner's answer to 393.10's FAIL, or milestone close
+       Milestone: M1 · Phase: 0
+       Route: build
        - **Accept — the property.** Every site the report names agrees with
          the code or with the rule that superseded it. Each re-read is quoted
          after the edit:
@@ -605,7 +614,9 @@ Until then, rule 4 reaches them oldest-first, which is far from now. Report:
          command and its count. Finding more sites than the report named is a
          satisfying outcome.
 2. [ ] **398.2 — the in-flight check refuses what it cannot parse.**
-       Parked: M1 — loop machinery (the in-flight check) — revisit: the owner's answer to 393.10's FAIL, or milestone close
+       Milestone: M1 · Phase: 0
+       Route: build
+       After: 398.1
        - **Why.** The scorer fed `inflight.py status` five malformed
          In-flight lines (trailing space, a space in `paths`, fields
          reordered, `cap=60m`, a bullet prefix). All five read "nothing in
@@ -648,6 +659,29 @@ Until then, rule 4 reaches them oldest-first, which is far from now. Report:
          comma form and fails without the fix. The Milestone block's comment
          is the owner's to change; the report says whether it still invites
          the comma form.
+5. [ ] **398.5 — the second re-score: M0's exit test, run once more.**
+       Milestone: M1 · Phase: 0
+       Route: build
+       After: 398.1, 398.2
+       - **Accept — the property.** The same test as 393.10, run on HEAD after
+         398.1 and 398.2 have closed.
+         - **Who scores.** A fresh-context subagent that built none of
+           393.1-398.2 re-runs `busy-office:loop-doctor` 0.9.4. It is not
+           shown either earlier score.
+         - **What is re-checked.** Every Invalid the 2026-09-26 report named
+           (N1-N7) is re-checked by its own command, and the output is quoted.
+         - **Closes on HEAD.** Before the re-score, the named commands of
+           398.1 and 398.2 are re-run on a clean HEAD worktree.
+         - **The owner's archive of the cloud sessions** (O1) is re-listed
+           read-only with RemoteTrigger. The count still active is quoted, and
+           the re-score is not held for it.
+         - **Pass.** A mean of 3.0 or more with no dimension at 1 sends a
+           PushNotification asking the owner to set `Status: ACTIVE`.
+         - **Fail.** The report names the failing dimensions and M1 stays
+           DRAFT. The loop does not extend M0 again: this was the owner's one
+           retry, and what follows is the owner's call.
+
+         Either verdict satisfies this item.
 
 ## Slice 397 — M1 Phase 3: components go through the experimental tier, and the milestone closes (owner realignment, 2026-09-25)
 

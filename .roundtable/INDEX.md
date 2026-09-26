@@ -16,7 +16,7 @@ Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_
 - [`surface-baseline.md`](surface-baseline.md) — the scored-surface baseline
 - [`surface-review-rubric.md`](surface-review-rubric.md) — how a surface is scored
 
-## Findings — 219 snapshots, newest first
+## Findings — 222 snapshots, newest first
 
 A **·** marks a file nothing outside `.roundtable/` links to. That is not a defect: a grill can settle a question without anything needing to cite it afterwards. It is here so the uncited set stays visible instead of growing unnoticed.
 
@@ -44,6 +44,9 @@ A **·** marks a file nothing outside `.roundtable/` links to. That is not a def
 | 2026-09-24 | [349.1 — rule 3 under both readings: the replay (2026-09-24)](measure-349.1-2026-09-24.md) | ✓ |
 | 2026-09-24 | [350.1 — should rule 2 test for lane input? The measurement (2026-09-24)](measure-350.1-2026-09-24.md) | ✓ |
 | 2026-09-23 | [Should the launcher's text filter be extracted? — no, and here is the measurement](launcher-filter-extraction-2026-09-23.md) | ✓ |
+| 2026-09-21 | [Grill — putting Kev (kev-0.5b) into the loop: dispatcher, gate, first-level decision](grill-kev-in-the-loop-2026-09-21.md) | ✓ |
+| 2026-09-20 | [Direction review — comprehensive ERP UI framework](grill-erp-framework-direction-2026-09-20.md) | · |
+| 2026-09-20 | [Grill — examples as experiments across desktop, mobile and RF](grill-examples-device-coverage-2026-09-20.md) | · |
 | 2026-09-09 | [Objective grill — Slices 360, 361, 362, 363 (2026-09-09, cloud wake)](grill-objective-360-361-362-363-2026-09-09.md) | ✓ |
 | 2026-09-09 | [Objective grill — Slices 365, 366, 367 (2026-09-09, cloud wake)](grill-objective-365-366-367-2026-09-09.md) | ✓ |
 | 2026-09-09 | [Objective grill — Slices 369, 370, 371 (2026-09-09, cloud wake)](grill-objective-369-370-371-2026-09-09.md) | ✓ |
@@ -253,4 +256,4 @@ The signature of a directory that has outgrown retrieval is the same subject inv
 
 Two files on one subject is usually a deliberate follow-up (a grill and its sign-off). Three is worth a look.
 
-— 228 files, 171 cited from outside, 58 uncited snapshots, 4 repeated subject(s).
+— 231 files, 172 cited from outside, 60 uncited snapshots, 4 repeated subject(s).

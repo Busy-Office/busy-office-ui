@@ -5,6 +5,60 @@ One entry per gap, written **when it was hit**, with the screen that hit it.
 Promoted into `ROADMAP.md` slices in batches — this file is the raw log, the
 roadmap is the decision.
 
+## September 20 procurement experiment checkpoint
+
+The owner's accepted plan in `grill-examples-device-coverage-2026-09-20.md`
+is implemented locally in `examples/erp-suite/journey/`. The original pilot
+status below is historical. The current suite build enumerates its screens;
+do not treat the old pilot count as current coverage.
+
+| Question | Observed result | Disposition |
+| --- | --- | --- |
+| Do three work contexts need three component families? | Desktop shell/kv/table, mobile approval form and focused RF form compose with shipped classes; no local CSS | Keep shared components; no new core API admitted |
+| Can navigation show honest personal counts? | Fixture predicates also drive destination queues; approval moves 1→0 and receiving 0→1, then 1→0 on completion; unknown/loading preserve links | Example-owned counts and labels, not a framework task service |
+| Does the dock beat a switcher? | Same link destinations and count semantics; dock exposes links without opening the switcher | Navigation composition demonstrated; human task-time benefit unmeasured, 373.6 remains open |
+| Can mobile resume a decision? | Note and desktop search survive navigation in the same tab; conflict preserves the note and exposes a changed delivery instruction | Application state with existing form/alert components; real mobile interruption remains pending |
+| Can RF recover without new scanner machinery? | Invalid code, quantity bounds, partial receipt, loss-before-send retry and previous-response replay pass browser actions with the shipped scan behavior | Keep hardware, authorization and receipt idempotency app/service-owned |
+
+**Evidence:** `check-journey.mjs` drives real keys/clicks and asserts the outcomes;
+`audit.mjs` separately checks suite-wide accessibility and child clipping.
+`journey/README.md` maps task → pattern → component → source → executable evidence.
+The new code is not claimed to be present in the earlier derived graph snapshot.
+Screenshots and environment evidence are listed in the experiment review's
+implementation checkpoint. No physical RF/device result or production backend
+result is implied.
+
+## GAP-22 — 2026-09-20 — native validation feedback can move a submit target during its first click
+
+**Hit on:** the receiving experiment's quantity field, at 390×844 in local
+headless Chrome, using `bo-form-field__message` and a native number input with
+`min=1 max=12 step=1 required`. The form used `novalidate` because the example
+owns its error response. That does not disable CSS `:user-invalid`.
+
+**Reproduction:** approve the sample order, accept FLT-204, enter 13, and click
+Confirm receipt once. Blur makes `:user-invalid` true and reveals a 36px error
+message. The button moves from top 688.5 to 728.5 (40px including the gap)
+between pointerdown and pointerup. Submit count remains zero; clicking the
+new position submits once. Read both rectangles and the submit-event count,
+not merely the error text. Reinstating those attributes on the corrected input
+reproduced the same result. The first browser-check failure was a real interaction
+failure, not a test expecting a forecast value.
+
+**Local resolution:** the example uses `inputmode=numeric` with an ordinary text
+input, `aria-required`, and application validation at submit. It rejects empty,
+fractional, nonnumeric and excessive values, sets `aria-invalid`, announces the
+reason and focuses the field. Approval's required note uses the same explicit
+validation timing. The first pointer activation now produces the error.
+
+**Framework disposition:** investigate native-validation guidance/layout timing;
+the underlying native-constraint composition is not globally repaired by this
+example change. No new primitive or blanket suppression of native validation is
+admitted. The durable check covers the chosen application composition; a core
+fix would need a reproduction against the existing validation patterns and
+checks for normal, invalid, keyboard and pointer use.
+
+---
+
 **The rule that produces this file**: the example may not add a single line of
 its own CSS (`check-erp-suite.mjs` enforces it). When a screen needs something
 the framework has not got, the screen compromises visibly and the need lands

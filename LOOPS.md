@@ -860,8 +860,10 @@ match to its full playbook below:
    the owner's M0 bootstrap (decision O3 in ROADMAP.md's `## Milestone M1`)
    dispatches 393.5-393.10 in `After:` order until 393.10 closes. It runs
    through RESUME.md's `Next rule` section, capped at `m0-wakes`, because M1 is not ACTIVE
-   yet and rule M cannot run. No new GOAL may be written as a dispatch
-   override.
+   yet and rule M cannot run. After 393.10's FAIL, the owner extended it once on
+   2026-09-26 (O3's cell): 398.1 → 398.2 → the re-score 398.5, cap 13, with rules
+   2 and 3 still paused until 398.5 closes. No new GOAL may be written as a
+   dispatch override, and the loop does not extend M0 on its own.
 5. **A tracked metric regressed on TWO CONSECUTIVE runs** (bundle size, gate
    coverage, a number from `record_metric.py` trending the wrong way), **or a
    size budget breached outright**? → dispatch **Optimize**.

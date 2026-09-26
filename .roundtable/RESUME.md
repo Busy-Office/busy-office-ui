@@ -34,15 +34,15 @@ that branch is the owner's call.
 - **Step 0:** `step0_guard.py`, then `inflight.py hold`, then
   `dispatch_status.py` (a REFUSED milestone line stops the wake; see LOOPS.md
   Step 0b).
-- **No standing GOAL.** The owner's M0 bootstrap (O3: *"bootstrap
-  393.1-393.10 approved; rules 2 and 3 paused until 393.10; cap 12 wakes"*)
-  ran to its end: `393.1`-`393.10` are closed. **Used: 10 of 12**, counted as
-  distinct loop-log timestamps of 393.x rows; the one hold is counted
-  separately (`hold-wakes`).
-- **Then Step 2 from rule 1.** Rules 2 and 3 resume, and both counters read
-  OVERDUE (`dispatch_status.py`), so with no open P0 the next dispatch is
-  rule 2, Standardize. Rule 4's oldest dispatchable item (`375.11` at the time
-  of writing) comes after them. M1 is DRAFT, so rules M and D do not run.
+- **The one standing GOAL — the owner's M0 retry** (O3's cell, extended
+  2026-09-26 after `393.10`'s FAIL): *"one retry, 398.1 → 398.2 → re-score
+  398.5; rules 2 and 3 paused until 398.5; cap 13"*. **Used: 10 of 13**,
+  counted as distinct loop-log timestamps of M0 dispatch rows; holds are
+  counted separately (`hold-wakes`). **Next: `398.1`**, then `398.2`, then
+  `398.5`. A P0 still preempts. Rules 2 and 3 print OVERDUE and stay paused.
+- **After `398.5`:** on PASS, the owner sets `Status: ACTIVE`. On FAIL, M1
+  stays DRAFT, and the loop does not extend M0 again. Either way the GOAL
+  ends: Step 2 from rule 1, with rules 2 and 3 resuming.
 
 ## Direction — 2026-09-26
 
@@ -50,10 +50,10 @@ Owner decisions and actions waiting. **A recommendation for every item below,
 with its re-measured evidence and a validated field block to paste, is in
 `.roundtable/owner-recs-2026-09-26.md`** (start at "Start here").
 
-0. **M0 failed its exit test** (`393.10`: mean 2.375, Correctness 1 and
-   Maintainability 1; `.roundtable/loop-doctor-rescore-2026-09-26.md`). Either
-   extend the bootstrap to `398.1` plus a second re-score (2 wakes remain), or
-   set `Status: ACTIVE` without the test. Slice 398's preamble has both paths.
+0. **Archive the cloud sessions before `398.5`** (O1): 302 of 307 sessions of
+   the disabled routine are still active. The loop can list them but has no
+   archive action. `398.5` re-lists them and quotes the count, and is not held
+   for it. (M0's FAIL was answered on 2026-09-26: one retry, above.)
 1. **O5-O18** in `.roundtable/milestone-draft-2026-09-25/5-open-decisions.md`,
    the fields M1 needs before ACTIVE.
 2. **Three readings to confirm or reverse:**
@@ -63,7 +63,9 @@ with its re-measured evidence and a validated field block to paste, is in
      (O11), Rules-2-3 (O12), Planner (O14), Direction-drift (O16); `398.3`;
    - D4 (`Direction-drift`): the measured framework share has a median of
      4.9%, so any X of 10% or more would fire almost daily (`393.7`).
-3. **Archive the cloud sessions** of the disabled routine (O1).
+3. **Push `park/owner-checkpoint-2026-09-20`** to origin as a backup (it has no
+   upstream). Its four `.roundtable` records were copied to main on 2026-09-26;
+   the journey code stays parked until O5 decides RF.
 4. **`377.5`** — release: eight P0 fixes are unreleased (377.5's seven, plus
    `392.1`).
    **`377.6`** — is busy-office-erp the first user?
