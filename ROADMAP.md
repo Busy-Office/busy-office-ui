@@ -4972,6 +4972,42 @@ tooling and 339 of records.
          sites), or unwire it from `record_iteration.py` if it stays below the
          floor. Unwiring on the number is a satisfying outcome.
        Parked: M1 — loop machinery (the correction-site check) — revisit: milestone close, unless the owner wants "unwire" now
+       - **The floor, stated 2026-09-26 before any precision was measured.**
+         The volume premise was re-run first and reproduces exactly. The
+         command is
+         `window.py <script> f8856986^ 150`, which runs the check at
+         `f8856986` over the 150 `ROADMAP.md` commits before it
+         (`fc79ea85..2fad3cc7`). It gives **36 reports and 234 printed site
+         lines**.
+         - **Unit:** a printed `L<n>:` site line, over that same window.
+         - **Real:** the line restates the superseded value of the claim the
+           commit corrected, and was left standing. This is the standard of
+           `.roundtable/measure-346.1-2026-09-24.md` §3. A quotation, a
+           historical figure true at its own slice, or a different claim is
+           not real.
+         - **Floor:** precision **≥ 10%** (at most 9 false lines read per
+           real one), **and** recall not below today's.
+           - Recall is measured two ways. First, the known sites whose
+             commits fall in the window: 7 sites in 5 commits (`11503760`,
+             `26d464fe`, `5ce62916`, `623c98d9`, `ccb7d3ce`). A re-tune must
+             still list each one today's check lists. Second, the diff-alone
+             replay on the 17-site set must stay at 10 or more.
+           - Precision bought by losing sites does not count.
+         - **Why 10%:** today's check prints about 1.6 lines per `ROADMAP.md`
+           commit, into every recording's stderr.
+           - At the grill's estimate of about 2%, it cries wolf about 58
+             times per real site. That is the "trained away" regime this
+             file warns about.
+           - Higher is not asked for. Each line is dismissed in seconds.
+             The list says outright that most lines are quotations. The
+             copies it exists to find are ones no other instrument looks
+             for.
+         - **Decision rule:**
+           - At or above the floor: keep it wired, with the re-tune.
+           - Below it: unwire it from `record_iteration.py`, and keep the
+             script as the deliberate `--worktree --old` tool that LOOPS.md's
+             operating rule describes. The floor judges only the automatic
+             run; `--old` is a separate, deliberate mode (16 of 17).
 2. [x] **381.2 — rule 3 arms on slices that shipped nothing.** This grill's
        three subjects changed 0 lines under `packages/` or `apps/docs`, and it
        still ran four finders and four verifiers. Before anything changes, the
