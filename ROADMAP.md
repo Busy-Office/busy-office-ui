@@ -559,6 +559,49 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 405 — Standardize sweep, 4 of 4 lanes on an isolated clean build: lanes 1, 2 and 4 equal Slice 402, and lane 3's +50 words are all 377.8's generated ACR remarks, measured by reverting it (2026-09-26)
+
+**Dispatched by rule 2**, `Standardize 4 / 4 OVERDUE`. The sweep ran in a
+worktree of HEAD (`c31fd4f5`) with its own `npm ci`. `@busy-office/ui`
+realpath-resolves inside it, and the core build, the docs build and
+`standardize_lanes.py` all exit 0. Base: Slice 402 (`da1b2cb8`).
+
+- **Lane 1 (of 4):** *"0 dead style attribute(s) on 0 page(s); 1392 live"*.
+  Equal to the base. Its inputs moved (404.1's harness scripts and 377.8's
+  ACR scripts), and neither adds an inline style.
+- **Lane 2 (of 4):** *"74 source file(s) · 246 rule(s) with 3+ declarations ·
+  235 distinct bodies · 7 body(ies) appearing more than once"*. **Unchanged by
+  construction:** `git diff --stat da1b2cb8 HEAD --` over the lane's inputs is
+  empty, and the figure equals the base.
+- **Lane 3 (of 4):** 119 pages of 128 built, median 833, **120,021 words**
+  (base 119,971). The flagged union is 18, and all 18 carry an enumerated
+  verdict. The set is Slice 400's exactly:
+  - nine of 158.1's twelve;
+  - 161.1's three;
+  - 178.3's `/concepts/scale/`;
+  - 376.3's four;
+  - 390's `/components/button/`.
+
+  **The +50 words are measured, not read off the diff.** In the worktree, the
+  two 377.8 scripts (`extract-acr.mjs`, `check-contrast.mjs`) were reverted to
+  the base and core and docs rebuilt. The report then read **119,971**, the
+  base figure, with `/reference/acr/` at 1,949 words (1,742 generated)
+  against 1,999 (1,792) at HEAD. So every added word is the ACR's derived
+  1.4.11 and 2.4.7 remarks. 404.1's `dist/v` snapshots are outside the
+  report, which still counts 128 built pages. A clean round; the enumeration
+  is unchanged.
+- **Lane 4 (of 4):** the dispatch region is **10,374**, as at the base; 0 of
+  17 sections moved since the last cut (`daea445f`). The ratchet reads as it
+  did in Slice 402, and nothing is new:
+  - `ENVIRONMENT.md` is still never cut, 36 steps up. It has not changed since
+    402, and the answer is still the owner's (RESUME Direction #0);
+  - `RESUME.md` is 10 up since its last cut, `ROADMAP.md` 46 up, and
+    `LOOPS.md` 1 up.
+- **Archive sweep: not due.** `roadmap_scope.py` reads the closed-history share
+  as 1,332 / 11,308 = 11.8%.
+- **Exit:** a clean pass. Nothing inside Standardize's remit is left to
+  consolidate.
+
 ## Slice 404 — the docs version switcher 404'd everywhere but Pages (owner report, 2026-09-26)
 
 Owner input, verbatim: "FYI; Navigate the version on doc site doesn't working.
