@@ -559,6 +559,40 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 407 — Standardize sweep, 4 of 4 lanes on an isolated clean build: every lane equals Slice 405; lane 2's one moved input cannot enter its census (2026-09-26)
+
+**Dispatched by rule 2**, `Standardize 4 / 4 OVERDUE`. The sweep ran in a
+worktree of HEAD (`3a50f171`) with its own `npm ci`. The core build, the docs
+build and `standardize_lanes.py` all exit 0. Base: Slice 405 (`e6c341a2`).
+
+- **Lane 1 (of 4):** *"0 dead style attribute(s) on 0 page(s); 1392 live"*.
+  Equal to the base. Its inputs moved (406.6's CSS and case, 406.1's
+  scripts, 377.11 and 377.12), and none adds an inline style.
+- **Lane 2 (of 4):** *"74 source file(s) · 246 rule(s) with 3+ declarations ·
+  235 distinct bodies · 7 body(ies) appearing more than once"*. Equal to the
+  base, but **not** unchanged by construction: the lane's input moved.
+  `git diff e6c341a2 HEAD` over its inputs is one file,
+  `data-table.css`, from 406.6. It re-selects one rule and adds one, and
+  each has a single declaration (`outline-offset`), so neither can enter a
+  census of rules with 3 or more. The equal figure follows from the lane's
+  own threshold.
+- **Lane 3 (of 4):** 119 pages of 128 built, median 833, **120,021 words**:
+  the same as Slice 405 to the word. The flagged union is the same 18 pages,
+  all with enumerated verdicts. No inputs that moved render words; the
+  CHANGELOG is not a docs page.
+- **Lane 4 (of 4):** the dispatch region is **10,374**; 0 of 17 sections
+  moved since `daea445f`. The window's `LOOPS.md` edits (Jev in agents,
+  `docs:container`) sit below the anchor.
+  - `CLAUDE.md` is 14 steps up since its last cut (`de765a58`, 09-22), and
+    now 3,855 words. It has a cut behind it, so this is not lane 4's finding
+    condition.
+  - `ENVIRONMENT.md` is still never cut at 36 up, unchanged since 402; the
+    owner's call (RESUME Direction #0).
+- **Archive sweep: not due.** `roadmap_scope.py` at HEAD, before this write-up,
+  reads the closed-history share as 1,374 / 11,671 = 11.8%.
+- **Exit:** a clean pass. Nothing inside Standardize's remit is left to
+  consolidate.
+
 ## Slice 406 — Objective grill of 377.8 and 404.1 (full), with 377.9 and Slice 405 narrowed: 42 of 57 claims reproduce in full, 20 findings (18 confirmed, 2 narrowed, 0 refuted), two P0s — 404.1 left a release trap, and a focused checked checkbox in a data grid has no visible ring (2026-09-26)
 
 Report: `.roundtable/grill-objective-377-404-405-2026-09-26.md`. Six of the
