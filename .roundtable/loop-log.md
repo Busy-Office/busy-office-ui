@@ -1855,3 +1855,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-26 19:44 · Continue · build · 377.13 — 375.9's grid-press corpus sweep committed (report:grid-presses, suitePages, --counterfactual); HEAD 0 of 4,910 over 132 pages; old 4,944 not reconstructable, corrected · landed · 908cf7c9
 - 2026-09-26 20:56 · Continue · build · 377.14 — seam loop derived (7 docs, 31 seams), shell band derived + check-floor needle (container stand-down), report:text-collapse (373.9 corrected 3/8/1, filed 377.16), runtime-claim coverage 18.5% · landed · f7cecafb
 - 2026-09-26 21:11 · Roadmap · triage · 377.17 filed — SC 2.5.7 file-picker case flaked on CI at 15s (3rd failure; rerun passed) · triaged · 01f1941c
+- 2026-09-26 22:01 · Continue · build · 377.15 (in progress) — check:claims split into two CI shards at the runtime midpoint; 162 + 197 = 359 reconciled; wall-clock reading waits on 3 green runs · landed · 20dc0918
