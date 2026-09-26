@@ -5680,6 +5680,26 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          whether the strip is a pagination composition at all, or a tabs or
          anchor-bar pattern.
 
+17. [ ] **377.17 — the SC 2.5.7 file-picker case flakes on CI, even at 15s.**
+       Track: defect
+       - **Why.** `check-claims`' "a single real mouse click on the dropzone's
+         visible hint opens the file picker" waits on puppeteer's
+         `waitForFileChooser`. 391.2 raised that wait from 5s to 15s after 2
+         failures in 4 observed runs (`88ba16bb`, `07aef5bf`). It failed again
+         at 15s on `89c4a85e`, run 36243511500, attempt 1, with healthy
+         geometry (`isLabel`, input clipped not hidden, point off the input,
+         in the viewport) and only the chooser event missing. Attempt 2
+         passed. Three failures, never locally: this is a timing dependence,
+         and more patience did not remove it.
+       - **Accept — the property.** The case asserts that a real click on the
+         hint activates the file input, by an observation that does not
+         depend on the chooser event arriving in time: the input's own
+         trusted `click` via the label, or CDP's file-chooser interception
+         set before the click. It still fails when the hint is not a label or
+         the input is `display: none`, red-proven on both. It passes N
+         consecutive CI runs, with N and the command stated. Or the case is
+         kept and the flake is quantified and accepted, with the reason.
+
 15. [ ] **377.15 — the claims shard sets CI's wall clock, at nearly twice the
        next shard.** In 8 of 8 runs the `Claims + formatting` job took
        325-354s, against 174-191s for the next slowest. Every push waits on
