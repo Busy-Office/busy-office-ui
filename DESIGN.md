@@ -73,8 +73,8 @@ only their own layer and depend on tokens/reset being imported first. The all-in
 `index.css` remains the simplest path and is cheaper once you use most components.
 
 **Browser floor: <!-- stat:floor -->Chrome/Edge 119 · Firefox 129 · Safari 17.5<!-- /stat -->** (declared in
-browserslist; FF 128 is required by `content` alt-text syntax and comfortably covers
-the `popover` attribute). `:has()`-driven reveals are fail-closed below the floor;
+`browserslist`, which `derive-floor.mjs` now holds equal to this derived value; `floor.json`'s
+`drivenBy` names the feature that sets each browser's number, rather than this prose). `:has()`-driven reveals are fail-closed below the floor;
 server-set `aria-invalid` error messages have a non-`:has()` fallback rule.
 
 ## Token system (4 tiers)

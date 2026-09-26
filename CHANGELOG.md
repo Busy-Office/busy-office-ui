@@ -57,6 +57,26 @@ pin.
   could not relicense them. Their MIT grant is reproduced verbatim in `NOTICE`,
   which is exactly what Apache-2.0's NOTICE mechanism is for.
 
+- **`browserslist` now states the floor the CSS actually needs: Firefox 129
+  and Safari 17.5 (was 128 and 17.4).** Chrome and Edge stay at 119. The
+  published list had been hand-typed since the first release. The floor derived
+  from the shipped CSS (`dist/floor.json`, shown on every docs page) was already
+  one version higher on both browsers, because `@starting-style` sets it.
+  - **What this changes for you: the claim, not the CSS.** The built CSS and
+    JS are byte-identical: autoprefixer and cssnano build against this list,
+    and 0 of 148 `dist` files changed. Firefox 128 and Safari 17.4 behave
+    exactly as they did in 0.8.0:
+    - the dialog, offcanvas, dropdown and bulk-action bar open without their
+      entrance transition;
+    - a dropdown can show for one frame before it is positioned (`dropdown.ts`
+      relies on `@starting-style` hiding it for that frame).
+
+    Everything else renders.
+  - **If your own tooling reads our `browserslist`,** its range narrows by one
+    version on those two browsers.
+  - `derive-floor.mjs` now fails the build if the two ever disagree again
+    (roadmap 399.3).
+
 ### Fixed
 
 - **Right-clicking a `[data-context-menu]` element now opens its menu.** On

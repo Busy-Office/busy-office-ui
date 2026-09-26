@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 02:37 UTC
+Generated at: 2026-09-26 02:59 UTC
 
 oldest dispatchable: 376.7 — the lane-4 ratchet counts any net shrink as a cut.
 
@@ -136,10 +136,9 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 - **Slice 398** (2 open)
   - 398.3 — `milestone.py` counts a field as filled only when the owner filled it.
   - 398.4 — a `Modules` value that is not ` · `-separated is refused, not read as one module.
-- **Slice 399** (5 open)
+- **Slice 399** (4 open)
   - 399.1 — the stale statements the 398.5 scorers found, and the sweep for their siblings.
   - 399.2 — the in-flight check reads a drifted heading as "nothing in flight".
-  - 399.3 — the published browser floor agrees with the one the CSS needs.
   - 399.4 — the loop-written owner fields and the activation rule (both scorers' Safety finding).
   - 399.5 — a `.roundtable`-only commit broke CI for five pushes, and no local step saw it.
 - **Slice —** (1 open)

@@ -604,7 +604,7 @@ retry. Report: `.roundtable/loop-doctor-rescore-398.5-2026-09-26.md`.
            exits 5.
 
          Red-proved by reverting and watching the cases fail.
-3. [ ] **399.3 — the published browser floor agrees with the one the CSS
+3. [x] **399.3 — the published browser floor agrees with the one the CSS
        needs.**
        Track: defect
        - **Why.** `package.json`'s `browserslist` ships to npm. It has been
@@ -622,6 +622,41 @@ retry. Report: `.roundtable/loop-doctor-rescore-398.5-2026-09-26.md`.
 
          Relevant to O6: decide before 0.9.0 ships, or ship with the
          entry saying it is known.
+       - **DONE 2026-09-26 (owner: "Prep 0.9.0 release").** `browserslist`
+         now equals the derived floor: Firefox 129 and Safari 17.5, with
+         Chrome and Edge unchanged at 119. `@starting-style` sets both
+         (`floor.json` `drivenBy`), and its tier is `degrades`. Every use is an
+         entry transition's starting values:
+         - dialog and its backdrop;
+         - offcanvas;
+         - dropdown;
+         - the data-table bulk bar.
+
+         `dropdown.ts` also relies on it to hide the menu for the one frame
+         before it is positioned.
+         - **The shipped artefact did not change.** A rebuild with the old list
+           was byte-identical to the build before it, 148 of 148 `dist` files,
+           so the build is deterministic. The build with the new list was
+           byte-identical too. **Red-proof of that diff:** lowering the list
+           to Firefox 60 and Safari 11 changed 67 CSS files (`index.css` gained
+           141 `-webkit-` prefixes). So the diff could see a change, and the
+           raise genuinely moves none.
+         - **The check.** `derive-floor.mjs` now fails the build when
+           `browserslist` differs from the derived floor, naming the browser.
+           It cannot generate the list, because the build reads it before the
+           script runs. `build:floor` exits 0; with Firefox set back to 128 it
+           prints `derive-floor FAILED — package.json browserslist … differs
+           on: firefox` and exits 1.
+         - **The rest.** DESIGN.md's "FF 128 is required by `content`
+           alt-text syntax" now points at `floor.json`'s `drivenBy`.
+           `check:readme-facts` and `check-floor` pass. The other hits for the
+           old values are frozen 0.1.1 snapshots, history comments in the two
+           floor scripts, an issue-template example, and a feature comment.
+         - **CHANGELOG** (Unreleased → Changed): the claim changes, the CSS
+           does not. The entry says what Firefox 128 and Safari 17.4 do,
+           exactly as in 0.8.0: no entrance transition, and a one-frame
+           unpositioned dropdown. It also covers tooling that reads our
+           list.
 4. [ ] **399.4 — the loop-written owner fields and the activation rule
        (both scorers' Safety finding).**
        - **Why.** Both scorers count, as an Invalid, that the loop wrote

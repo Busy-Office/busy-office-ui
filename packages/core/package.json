@@ -95,8 +95,8 @@
   "browserslist": [
     "chrome >= 119",
     "edge >= 119",
-    "firefox >= 128",
-    "safari >= 17.4"
+    "firefox >= 129",
+    "safari >= 17.5"
   ],
   "devDependencies": {
     "@mdn/browser-compat-data": "^8.0.11",

@@ -332,6 +332,30 @@ for (const [name, c] of Object.entries(perComponent)) {
   }
 }
 
+/* The ninth copy (roadmap 399.3). package.json's `browserslist` is the floor
+   as npm publishes it, and it is also what autoprefixer and cssnano build
+   against. It stayed hand-typed after the other eight copies became derived,
+   and it shipped one version below this floor on Firefox and Safari from the
+   first commit through 0.8.0. It cannot be generated (the build reads it
+   before this script runs), so it is held EQUAL here instead: a published
+   floor the framework does not meet is the failure this file exists to
+   prevent. Raising it to the derived values changed 0 bytes of dist (measured
+   2026-09-26; 67 CSS files change when it is lowered to Firefox 60/Safari 11,
+   so that diff could see a change). */
+const pkg = JSON.parse(await readFile(join(HERE, '..', 'package.json'), 'utf8'));
+const declared = Object.fromEntries(
+  (pkg.browserslist ?? []).map((q) => q.match(/^\s*(\w+)\s*>=\s*([\d.]+)\s*$/)).filter(Boolean).map((m) => [m[1], m[2]]),
+);
+const drift = BROWSERS.filter((b) => declared[b] !== String(floor[b]));
+if (drift.length || (pkg.browserslist ?? []).length !== BROWSERS.length) {
+  console.error(
+    `derive-floor FAILED — package.json browserslist ${JSON.stringify(pkg.browserslist)} does not equal the derived floor ` +
+      `(${BROWSERS.map((b) => `${b} >= ${floor[b]}`).join(', ')}); differs on: ${drift.join(', ') || 'entry count'}. ` +
+      'Set browserslist to the derived values (it is published to npm and is what autoprefixer builds against).',
+  );
+  process.exit(1);
+}
+
 const out = {
   generated: 'by scripts/derive-floor.mjs from dist/css — do not edit',
   source: `@mdn/browser-compat-data@${JSON.parse(await readFile(join(HERE, '..', '..', '..', 'node_modules/@mdn/browser-compat-data/package.json'), 'utf8')).version}`,
