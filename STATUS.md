@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 10:06 UTC
+Generated at: 2026-09-26 10:07 UTC
 
 oldest dispatchable: 377.13 — 375.9's corpus figure is re-runnable.
 
@@ -155,15 +155,15 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1844 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-09-26 15:34   OVERDUE
-  Objective     2 / 3 slices          since 2026-09-26 16:54   ok  [377, 406]
+dispatch status — counter-triggered rules (1845 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-09-26 18:07   ok
+  Objective     3 / 3 slices          since 2026-09-26 16:54   OVERDUE  [377, 406, 407]
   -> a counter is at or past its threshold; the dispatcher should pick it
-  Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 154 sample(s), 8 of 49 name(s) paired across days]
+  Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 155 sample(s), 8 of 49 name(s) paired across days]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-25 (2026-09-26), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (41 of 49 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
-       dispatch-region-words       6d  2026-09-25 7775 words -> 2026-09-26 10374 words  +2599   [2 same-day]
+       dispatch-region-words       6d  2026-09-25 7775 words -> 2026-09-26 10374 words  +2599   [3 same-day]
        claims                      6d  2026-09-19 203 count -> 2026-09-25 311 count  +108
        gates                       4d  2026-09-07 55 count -> 2026-09-09 56 count  +1
        axe-violations              8d  2026-09-03 0 count -> 2026-09-06 0 count  +0   NEVER MOVED
@@ -297,7 +297,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-26 15:16 · Meta · refusal · 375.6 build-once-and-share-dist, re-refused on runner data: wall clock >= 5.7-6.1 min vs 5.4-5.9 today · refused · f0704759
 - 2026-09-26 15:19 · Continue · fix · 377.9 follow-up — duplicate 377.10 renumbered to 377.15; generate_status refuses a duplicate open id by name · landed · d9163e67
 - 2026-09-26 15:34 · Standardize · sweep · Slice 405 — 4 of 4 lanes (isolated build): lanes 1, 2, 4 equal Slice 402; lane 3 +50 words attributed to 377.8's ACR remarks by reverting it; dispatch region 10,374 · landed · e6c341a2
 - 2026-09-26 15:43 · Roadmap · triage · 377.10 amended: owner's no-cap Jev input; model-string premise added to Accept · triaged · 954f769a
@@ -307,6 +306,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 17:33 · Continue · fix · 406.6 (P0) — grid controls keep their focus ring outside their own fill (1px offset; cells stay inset); 14-config real-key case with contrast vs published debt; filed 406.7 (forest-light 2.99) · landed · c8ec19c2
 - 2026-09-26 17:40 · Continue · build · 377.11 — combobox commit case asserts equality with display text and detail.text; command-bar row asserts the palette's clear-and-close commit it had hidden · landed · 00b8511f
 - 2026-09-26 17:53 · Continue · build · 377.12 — docs container build-id names HEAD and exactly its uncommitted build inputs (npm run docs:container); stamp refuses null · landed · 86d34785
+- 2026-09-26 18:07 · Standardize · sweep · Slice 407 — 4 of 4 lanes (isolated build): all equal Slice 405; lane 2's moved input (406.6) is single-declaration rules, below its census; dispatch region 10,374 · landed · 1a64e98b
 
 ## Sunset test
 
