@@ -559,6 +559,59 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 413 — Objective grill of 384.1, 386.1, 387.1 and Slice 412: 387.1's headline holds for the axis it measured and fails on the other — the message is not "within the six lines" (2026-09-27)
+
+Report: `.roundtable/grill-objective-384-386-387-412-2026-09-27.md`. Dispatched by
+rule 3. 387.1: 11 claims, 9 hold, 2 fail; 7 findings (5 confirmed, 2 narrowed).
+384.1's write-up narrowed (basis of the floor). 386.1 and 412 reproduce.
+
+1. [ ] **413.1 — bound the fallback message's height, or say what it can do.**
+       Last column, 390px, 117 characters: message 83x262px (15 lines), container
+       `scrollHeight` 244 to 360 on focus; a press after a vertical wheel lands on
+       TBODY. Cause (413.2): the message's box is bounded by the scrollport, not the
+       scroll area, so a field beyond the first scrollport width gets a min-content
+       message. The pre-fix rules had 7-8 lines and no height change.
+       - **Accept — the property.** With `no-anchor.mjs`, at 390 and 320, first and
+         last column, ltr and rtl, messages of 21, 117 and 303 characters: focus adds
+         0 to the scroller's `scrollHeight` and `scrollWidth`, and a press after a
+         wheel in either axis lands on the field. OR the item is refused with the
+         measurement that shows the cost outweighs the fix.
+       Track: defect
+2. [ ] **413.2 — `position: relative` gives the message the scrollport as its box.**
+       Static position sits ~1100px in a 1200px table while the containing block is
+       356px; `fit-content` gets negative room and falls to min-content (21
+       characters: 65x82 vs 152x28 before). Accept: the width the message gets is
+       stated with its cause, and 413.1's matrix covers it.
+       Track: defect
+3. [ ] **413.3 — an unbreakable token still lengthens the scroller (fallback only).**
+       `overflow-wrap: anywhere` exists only in the anchored branch. scrollWidth
+       1200 to 1729, identical to before 387.1, so not a regression, but the item's
+       claim "cannot change what can scroll" is false for it. Also folds 387.3's
+       "very long unbreakable word" candidate. Accept: wraps or the claim is narrowed.
+       Track: defect
+4. [ ] **413.4 — the claims that cannot fail.** (a) `noAnchorPastedPage`'s sticky-bar
+       half passes with the pre-fix rules under overlay scrollbars (postTop equal
+       either way), and neither new case reads `passedThrough`, so a failed refetch
+       passes vacuously; (b) "2 of 7 top-band" vs "4 of 7 along Post" are different
+       samplings, unlabelled; (c) the size budget for `css/components/*.min.css`
+       was raised a third time for one file. Accept: each case fails when its
+       injection is applied (grep the served CSS or DOM first), and each figure names
+       its band and count.
+       Track: defect
+5. [ ] **413.5 — 384.1's write-up states the basis of the ratchet floor.**
+       The ratchet's `is_real_cut` is on FILE words (194 for LOOPS.md), so
+       330051e0's -101 does not pass it; on region words (floor 100) it does. The
+       refusal stands only on the region basis. Accept: the measure file and the
+       DONE line name the basis.
+       Track: defect
+
+**Thesis (2026-09-27 03:44).** npm `ui` 980 downloads in the month, 125 outside
+publish days; `create-ui` 652; jsDelivr 30, 0 to `dist/`; GitHub 0 stars/forks/
+issues, 20 views, 367 clones. Comparators unchanged (fundamental-styles 0.41.9,
+ui5 2.27.2, PatternFly 6.6.1, Carbon 1.116.0). busy-office-erp: 18 commits since
+09-10, ADR-0016 still Proposed. Framework code since Slice 411: 105 lines, all in
+`data-table.css`, all in the fallback of a path the RF pages do not exercise (F4).
+
 ## Slice 412 — Standardize sweep, 4 of 4 lanes on an isolated clean build: lanes 1 and 3 equal Slice 410; lane 2 is +1 rule, from 387.1's `position: relative` taking one rule to three declarations; lane 4's dispatch region is unchanged at 10,374 and CLAUDE.md grew 405 words on the approved Jev section (2026-09-27)
 
 **Dispatched by rule 2**, `Standardize 5 / 4 OVERDUE`, after rule 1 read 0 open P0

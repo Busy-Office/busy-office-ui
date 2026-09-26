@@ -49,8 +49,9 @@ pin.
     focused scroller stays as long as the blurred one, and the sticky bar
     does not move (7 of 7).
   - Browsers with anchor positioning are unchanged.
-  - A message from a field near the inline end can be narrower and taller,
-    within the six lines already reserved under the grid.
+  - A message from a field near the inline end can be narrower and taller.
+    It is not bounded by the six lines reserved under the grid: a long
+    message can lengthen the scroller vertically on focus (roadmap 413.1).
   - Nothing to migrate, unless you restyled `.bo-form-field` inside a
     `.bo-data-table`. In these browsers it is now `display: block` and
     `position: static`, which is what puts the message where it would sit in

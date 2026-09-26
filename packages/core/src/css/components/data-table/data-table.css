@@ -660,7 +660,9 @@
      435), the message is painted in full inside the container (was 94px past
      its edge, 112 of 128 sample points visible), and the sticky bar stays put.
      The cost: a message from a field near the inline end is narrower and so
-     taller, capped by the six lines the reserve rule in this block already holds. Not run
+     taller, and NOT bounded by the six lines the reserve rule in this block holds:
+     the grill of Slice 413 measured 15 lines (262px) for 117 characters in the last
+     column at 390px, growing the scroller's height on focus (roadmap 413.1). Not run
      in Firefox or Safari; how they place a static box in a block is per spec,
      not observed here. */
   @media screen {
