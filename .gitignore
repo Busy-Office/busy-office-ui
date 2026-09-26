@@ -45,3 +45,7 @@ __pycache__/
 # calling the API reads ~/Projects/jev-mcp/.env at runtime (jev-rubrics.md).
 .env
 .env.*
+# Claude Code's per-project local settings. It carries JEV_AI_API_KEY in its
+# env block so sandboxed agents can call Jev (owner, 2026-09-26). The owner's
+# global git ignore covers it on this machine; this line covers every clone.
+.claude/settings.local.json

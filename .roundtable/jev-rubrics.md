@@ -29,10 +29,20 @@ threshold is only meaningful for the wording it was measured on.
     subagents and workflow agents call it through ToolSearch. A subagent test
     confirmed this on 2026-09-26. The owner has approved no daily cap.
   - **A script that calls the API directly** (for example 377.10's
-    re-measurement) reads `~/Projects/jev-mcp/.env` at runtime, which the
-    Bash sandbox can read. It sends the key only as a request header to
-    `https://jev-ai.pro/api`. It never prints or logs the key, and never puts
-    it in a URL, an agent prompt, workflow `args` or a file under the repo.
+    re-measurement) reads `JEV_AI_API_KEY` from its environment. It sends the
+    key only as a request header to `https://jev-ai.pro/api`. It never prints
+    or logs the key, and never puts it in a URL, an agent prompt, workflow
+    `args` or a tracked file.
+  - **Where the sandbox gets it (owner: "Just replicate the key for now",
+    2026-09-26).** `~/.zshrc` exports it on line 93, but the Bash tool never
+    reached that line: an earlier line ends in `|| return` after a keychain
+    lookup, so both sandboxed and unsandboxed shells read NOT set. The key
+    is now in `.claude/settings.local.json`'s `env` block. Claude Code
+    applies it to this project's sessions only, and it took effect without a
+    restart. A sandboxed direct call returned 200. The file is ignored by the
+    owner's global git ignore and now by this repo's `.gitignore` too.
+    Rotating the key means updating it there as well as in
+    `~/Projects/jev-mcp/.env`, `~/.zshrc` and the root `.env.local`.
   - **A local `.env.local` copy exists in the repo root.** It dates from
     2026-09-25, and nothing reads it. `.gitignore` now covers `.env` and
     `.env.*` for every clone, not only this one's `.git/info/exclude`.

@@ -108,8 +108,10 @@ either. Thresholds (≥0.85 supports, ≤0.35 does not, between = unverified) ar
 
 **Agents consult it too, at the same two points** (owner, 2026-09-26). A
 subagent or workflow agent reaches Jev through the session's MCP server
-(ToolSearch, then `mcp__jev__jev_evaluate`); no key is copied anywhere
-(`jev-rubrics.md`). Credit is not the limit; the two points are. An agent that
+(ToolSearch, then `mcp__jev__jev_evaluate`). A sandboxed script calling the API
+directly reads `JEV_AI_API_KEY` from its environment, which the git-ignored
+`.claude/settings.local.json` supplies (owner's request; `jev-rubrics.md` has
+the handling rules). Credit is not the limit; the two points are. An agent that
 consults it:
 - **forms its own verdict first**, then asks, and reports both. A disagreement
   is surfaced as a finding, never settled by Jev;
