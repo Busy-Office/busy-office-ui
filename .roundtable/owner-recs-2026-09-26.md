@@ -725,7 +725,7 @@ Cost to reverse: Before a release, a graduation is undone by restoring one heade
 
 #### O8f
 
-**Recommendation:** No. An experimental part must meet the framework floor, today Chrome/Edge 119 · Firefox 129 · Safari 17.5, for its core and degrades features. Newer features are allowed only as a `polish`-tier enhancement, the same rule stable parts follow. If O5 puts rugged RF in scope, a part used on an RF screen must also meet rf-essentials' Chrome/WebView 108 floor.
+**Recommendation:** No. An experimental part must meet the framework floor, today the label in `packages/core/dist/floor.json` (print it: `node -p "require('./packages/core/dist/floor.json').label"`), for its core and degrades features. Newer features are allowed only as a `polish`-tier enhancement, the same rule stable parts follow. If O5 puts rugged RF in scope, a part used on an RF screen must also meet rf-essentials' Chrome/WebView 108 floor.
 
 Agrees with the draft's own recommendation: no-doc-recommendation · confidence: high · blocks: 394.4 (its 'floor does not change' property), G4 at N.3, 394.17
 
@@ -739,9 +739,9 @@ Cost to reverse: Relaxing later is a code change to derive-floor plus a floor.js
 
 | premise | command | result | holds |
 |---|---|---|---|
-| The project states a browser floor | `sed -n 75p DESIGN.md; python3 -c "import json;print(json.load(open('packages/core/dist/floor.json'))['label'])"; sed -n '95,100p' packages/core/package.json` | Derived floor: 'Chrome/Edge 119 · Firefox 129 · Safari 17.5'. browserslist is lower: chrome/edge>=119, firefox>=128, safari>=17.4. | yes |
+| The project states a browser floor | `sed -n 75p DESIGN.md; python3 -c "import json;print(json.load(open('packages/core/dist/floor.json'))['label'])"; sed -n '95,100p' packages/core/package.json` | The derived floor is `floor.json`'s `label`. browserslist agrees on Chrome/Edge, but is one version LOWER on Firefox and on Safari (compare the two commands' output). | yes |
 | derive-floor reads the per-component files and fails any above the floor | `grep -n -E "index.css'\)\|const componentDir\|above the framework floor\|process.exit\(1\)" packages/core/scripts/derive-floor.mjs` | 90 reads index.css (the framework floor); 298 reads dist/css/components; 328-330 exits 1 with 'above the framework floor' | yes |
-| (my check) current components all sit at or below the floor | `python3 Counter over floor.json perComponent labels` | 40 components; the highest is 'Chrome/Edge 119 · Firefox 128 · Safari 17.4', so none exceeds the floor | yes |
+| (my check) current components all sit at or below the floor | `python3 Counter over floor.json perComponent labels` | 40 components; the highest per-component label is at or below `floor.json`'s `label` on every browser, so none exceeds the floor | yes |
 | 394.4: the framework floor is derived from dist/css/components/*.css | `sed -n 90p packages/core/scripts/derive-floor.mjs` | The framework floor comes from index.css; components/*.css feed only the per-component check | no |
 
 #### O10
@@ -780,7 +780,7 @@ Cost to reverse: Cheap while it is warnings-only and unpublished: delete the fie
 - **O10 timing.** Decide O10 before 396.2, not only before 396.5. 396.2 pre-registers score.mjs as an A/B metric, and (a) changes what score.mjs reads. Either add `After: 112.4` to 396.2 or pin the score.mjs commit in the protocol.
 - **O10 order.** Under rule M's by_age sort (milestone.py:642), an M1-tagged 112.4 dispatches straight after 394.10, ahead of the frame, which is already dispatch #26. If you want the frame first, add `After: 395.1` to 112.4.
 - **O10 and O9.** If the contract ever ships inside an exported patterns.json, O9's approval should name that field.
-- **Small defect for the defect track.** browserslist (firefox>=128, safari>=17.4) and DESIGN.md:75-77's 'FF 128 is required' prose lag the derived floor stat (Firefox 129, Safari 17.5).
+- **Small defect for the defect track.** browserslist and DESIGN.md:75-77's Firefox prose lag the derived floor stat by one version on Firefox and on Safari (compare `floor.json`'s `label` with package.json's `browserslist`).
 - **Jev not called.** O13, which decides what may be sent to jev-ai.pro, is undecided. The round-2 call on this same O7/O8 choice returned 1.00 on a leading payload, which the report itself said was not evidence.
 - **Scratch file.** /private/tmp/claude-501/-Users-thepfmind-Projects-busy-office-ui/1dbfe40a-17f6-4a1d-a447-12cd87bce187/scratchpad/owner-recs/dirs-norename.txt holds the first-add date of every component directory.
 
@@ -1291,7 +1291,7 @@ Why:
 - Reproduced today: Playwright's Firefox 155 (firefox-1543, the one installed) exits with 'Could not find profile folder', exitCode=1, both headless and headed, and also with TMPDIR moved into the scratchpad.
 - The repo has no Playwright package (require of playwright, playwright-core and @playwright/test all fail); the failing binary is a patched Nightly from an npx cache. puppeteer-core ^25.7.0 is already an apps/docs devDependency and drives stock Firefox.
 - The newest npx Playwright (1.64.0-alpha, firefox-1549) is not installed, so a newer patched build is untested. A stock install is the cheaper test.
-- Firefox is inside the published floor (README: Firefox 129; browserslist firefox >= 128), so this half cannot be closed as out of scope.
+- Firefox is inside the published floor (both README's generated floor stat and browserslist include Firefox), so this half cannot be closed as out of scope.
 
 Cost to reverse: Trivial: uninstall Firefox.
 
@@ -1547,7 +1547,7 @@ Issue #2: 394.9's job index should list 'board, kanban' as also-called words for
 Stale text, not investigated further:
 - CLAUDE.md's '→ 1,094' against 10,263 lines today.
 - The Sequence section near ROADMAP.md:462 still lists 'OWNER CALL — direction … 0.3.0' while tags reach v0.8.0.
-- packages/core/README.md says the floor is 'Firefox 129 · Safari 17.5', while package.json browserslist says firefox >= 128 and safari >= 17.4.
+- packages/core/README.md's generated floor stat and package.json's `browserslist` disagree: browserslist is one version lower on Firefox and on Safari.
 
 Side effects: RemoteTrigger was used only for list and list_runs (31 pages). npx cached playwright 1.63.0 under ~/.npm/_npx. The Firefox repro scripts are in /private/tmp/claude-501/-Users-thepfmind-Projects-busy-office-ui/1dbfe40a-17f6-4a1d-a447-12cd87bce187/scratchpad/owner-recs/ (ff.cjs, ff2.cjs). The repo working tree is untouched (git status clean).
 
