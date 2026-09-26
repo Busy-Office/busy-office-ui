@@ -8649,7 +8649,7 @@ async function noAnchorScrollThenPress({ revert }) {
 async function noAnchorPastedPage({ revert }) {
   const p = await browser.newPage();
   try {
-    await simulateNoAnchor(p, { extraCss: revert ? NO_ANCHOR_FIX_REVERTED : '' });
+    const sim = await simulateNoAnchor(p, { extraCss: revert ? NO_ANCHOR_FIX_REVERTED : '' });
     await p.setViewport({ width: NARROW_WIDTH, height: 700 });
     await p.goto(url('/patterns/editable-grid/'), { waitUntil: 'networkidle0' });
     const sample = await p.evaluate(() => [...document.querySelectorAll('pre')].map((x) => x.textContent)
@@ -8660,11 +8660,16 @@ async function noAnchorPastedPage({ revert }) {
       <div class="bo-form-actions"><button class="bo-btn" id="post" type="button">Post</button></div></body></html>`, { waitUntil: 'load' });
     await p.evaluate((m) => { document.getElementById('line-1-qty-err').textContent = m; }, LONG_MESSAGE);
     const read = () => p.evaluate(() => ({ pageOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth, postTop: Math.round(document.getElementById('post').getBoundingClientRect().top * 10) / 10 }));
+    // The fallback branch applied: sheets were rewritten, none passed through, and the
+    // field is the static box only that branch gives it (413.4: this case used to pass
+    // vacuously when the simulation did not apply).
+    const fallbackBranch = await p.evaluate(() => getComputedStyle(document.querySelector('.bo-data-table .bo-form-field')).position === 'static');
+    const simApplied = sim.rewritten > 0 && sim.passedThrough === 0 && (revert || fallbackBranch);
     const blurred = await read();
     await p.focus('[aria-describedby="line-1-qty-err"]');
     await new Promise((r) => setTimeout(r, 200));
     const focused = await read();
-    return { sampleFound: !!sample, blurred, focused };
+    return { sampleFound: !!sample, simApplied, sim, fallbackBranch, blurred, focused };
   } finally { await p.close(); }
 }
 
@@ -8680,8 +8685,8 @@ for (const revert of [false, true]) {
   check(revert
     ? 'pasted canonical markup, no anchor positioning, pre-387.1 rules put back: the message overflows the page sideways (the stated reason)'
     : 'pasted canonical markup, no anchor positioning (simulated): a long message does not overflow the page or move a sticky action bar (387.1)',
-  revert ? (b2.sampleFound && b2.focused.pageOverflow > b2.blurred.pageOverflow)
-    : (b2.sampleFound && b2.focused.pageOverflow <= b2.blurred.pageOverflow && b2.focused.postTop === b2.blurred.postTop),
+  revert ? (b2.sampleFound && b2.simApplied && b2.focused.pageOverflow > b2.blurred.pageOverflow)
+    : (b2.sampleFound && b2.simApplied && b2.focused.pageOverflow <= b2.blurred.pageOverflow && b2.focused.postTop === b2.blurred.postTop),
   JSON.stringify(b2));
 }
 

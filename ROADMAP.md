@@ -615,6 +615,12 @@ rule 3. 387.1: 11 claims, 9 hold, 2 fail; 7 findings (5 confirmed, 2 narrowed).
        was raised a third time for one file. Accept: each case fails when its
        injection is applied (grep the served CSS or DOM first), and each figure names
        its band and count.
+       - **Part (a)'s `passedThrough` half landed 2026-09-27:** `noAnchorPastedPage`
+         now returns `simApplied` (sheets rewritten > 0, none passed through, and
+         the field is the static box only the fallback gives it). Red-proved:
+         requiring 999 rewrites failed both pasted-page cases (2 of 201). Still
+         open: the sticky-bar half under classic scrollbars, (b) the two press
+         figures' labels, (c) the size-budget trend.
        Track: defect
 5. [x] **413.5 — 384.1's write-up states the basis of the ratchet floor.**
        The ratchet's `is_real_cut` is on FILE words (194 for LOOPS.md), so
