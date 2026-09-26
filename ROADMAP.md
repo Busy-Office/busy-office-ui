@@ -5033,6 +5033,20 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          FP/FN at 0.85 and 0.35 reported with spread; the rubric, its heading
          and CLAUDE.md agree on n; the "never wrongly says yes" sentence is
          kept, qualified or withdrawn on that data.
+       - **Owner input, 2026-09-26, triaged here.** "I have enough Jev-pro ai
+         credit..so no cap per day". Credit does not limit the sample, so
+         ≥3 repeats is a floor, not a budget. The owner also asked whether
+         agents can consult Jev, and a subagent test showed they can: it
+         loaded the tool through ToolSearch and one call succeeded.
+       - **New premise, from two health checks that day.** The response's
+         `model` field was `typesafe/jev-1.13-20260917` on one call and
+         `typesafe-ai/jev` on the next two. Obviously true statements scored
+         **0.84** and **0.88**, one under the 0.85 line and one over it.
+         Neither establishes a model change or a drift. **Added to Accept:**
+         every reading records the response's `model` string. The report
+         states whether the string varied within the run and, if it did,
+         the FP/FN for each string separately. Finding one string throughout
+         satisfies it.
         Milestone: M1 · Phase: 1
         Route: build
         After: 394.12
