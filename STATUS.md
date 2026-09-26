@@ -2,9 +2,9 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 17:10 UTC
+Generated at: 2026-09-26 17:20 UTC
 
-oldest dispatchable: 384.1 — lane 4's anchor and the rule-text generator.
+oldest dispatchable: 386.1 — nothing keeps the print reset true on a NEW standalone page.
 
 Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, open `After:` target or held `Parked:` line holds — and, while a milestone is ACTIVE, that the milestone does not tag (rule M dispatches those; `dispatch_status.py` prints its pick). No GOAL overrides it: the owner's M0 bootstrap (O3), the one exception there was, ended with 398.5. A named item without a number has no age to rank by; any that nothing holds is listed here instead of being dropped.
 
@@ -38,8 +38,6 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 377.3 — the completion gate cannot see a revision.
   - 377.6 — is busy-office-erp the named first user?
   - 377.10 — the Jev band, re-measured with the question form Rubric 2 prescribes, and the set recorded.
-- **Slice 384** (1 open)
-  - 384.1 — lane 4's anchor and the rule-text generator.
 - **Slice 386** (1 open)
   - 386.1 — nothing keeps the print reset true on a NEW standalone page.
 - **Slice 387** (2 open)
@@ -287,7 +285,6 @@ Open items with a `Parked:` line. Held only while that milestone is ACTIVE.
 - 398.3 — M1, not held
 - 398.4 — M1, not held
 - 391.1 — M1, not held
-- 384.1 — M1, not held
 
 ## Browser-blocked
 

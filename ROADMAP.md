@@ -5056,7 +5056,7 @@ forks; framework code since Slice 382 **0 lines** (`git diff --numstat
 0ed584cd HEAD -- packages/core/src`), 11 lines of docs. Six P0 fixes still wait
 on 377.5.
 
-1. [ ] **384.1 — lane 4's anchor and the rule-text generator.** A partial trim
+1. [x] **384.1 — lane 4's anchor and the rule-text generator.** A partial trim
        resets both lane-4 anchors, so 239 of the 340 words that grew since the
        previous full cut are now invisible to the next sweep's per-section
        attribution and ratchet. The growth itself has a GENERATOR: closures and
@@ -5068,6 +5068,27 @@ on 377.5.
          ("replay figures go to measure files; rules carry the pointer"), with
          the reason. Refusing both on the measurement is satisfying.
        Parked: M1 — Standardize lane-4 machinery, not milestone work — revisit: the Standardize run at milestone close
+       - **DONE 2026-09-27 — both refused, on the number.**
+         - **Measured:** the dispatch region grew 7,484 → 10,374 words since
+           `4e6b83c1`, with 3,130 new words in 44 changed paragraphs. Two
+           blind labellers put the measurement narrative at 360–495 of them
+           (11.5%–15.8%), so about 85% of the growth is instruction: rule M,
+           rule D, the planner contract, the markers and the in-flight exits.
+           Commands, labels and the full table:
+           `.roundtable/measure-384.1-2026-09-27.md`.
+         - **Premise:** re-derived (340 − 101 = 239 at filing). Only the
+           region anchor lacks the ratchet's 376.7 floor.
+         - **Charter line refused:** it would target at most 16% of the
+           growth, and lane 4's third branch already applies the charter per
+           incident (Slice 410 did).
+         - **High-water anchor refused:** instruction growth never returns
+           the region to an old level, so every cut since `3006da0a` would
+           read as partial, and every new rule would fold into "did the cut
+           hold".
+         - **Ratchet floor on the region anchor refused:** `330051e0`, the
+           case the item names (−101 words), passes it.
+         - The 39%-in-18-days reading is the owner's read-set question
+           (RESUME Direction #7, `393.13`), not a new item.
 
 ## Slice 383 — Standardize sweep, **4 of 4 lanes on an isolated clean build**, the first under Slice 382's corrected §3: lane 2 is unchanged by construction, lanes 1 and 3 match their base, and lane 4 cuts 101 words of today's own measurement narrative back out of the dispatch region (2026-09-24)
 

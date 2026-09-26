@@ -1,0 +1,266 @@
+[
+{
+"id": 1,
+"section": "## The nine loops",
+"words": 279,
+"new_words": 18
+},
+{
+"id": 2,
+"section": "## The wake prompt \u2014 the one copy",
+"words": 8,
+"new_words": 8
+},
+{
+"id": 3,
+"section": "## The wake prompt \u2014 the one copy",
+"words": 88,
+"new_words": 88
+},
+{
+"id": 4,
+"section": "## The wake prompt \u2014 the one copy",
+"words": 29,
+"new_words": 29
+},
+{
+"id": 5,
+"section": "## The wake prompt \u2014 the one copy",
+"words": 130,
+"new_words": 130
+},
+{
+"id": 6,
+"section": "## The wake prompt \u2014 the one copy",
+"words": 23,
+"new_words": 23
+},
+{
+"id": 7,
+"section": "### Step 0 \u2014 Read the handover",
+"words": 157,
+"new_words": 157
+},
+{
+"id": 8,
+"section": "### Step 0 \u2014 Read the handover",
+"words": 200,
+"new_words": 200
+},
+{
+"id": 9,
+"section": "### Step 0 \u2014 Read the handover",
+"words": 66,
+"new_words": 66
+},
+{
+"id": 10,
+"section": "### Step 0 \u2014 Read the handover",
+"words": 171,
+"new_words": 17
+},
+{
+"id": 11,
+"section": "### Step 0 \u2014 Read the handover",
+"words": 150,
+"new_words": 58
+},
+{
+"id": 12,
+"section": "### Step 0 \u2014 Read the handover",
+"words": 43,
+"new_words": 15
+},
+{
+"id": 13,
+"section": "### Step 0b \u2014 Read the counters",
+"words": 165,
+"new_words": 165
+},
+{
+"id": 14,
+"section": "### Step 0c \u2014 One dispatcher (O1, 2026-09-25); the earlier \"accept collisions\" decision is kept below as the record",
+"words": 19,
+"new_words": 19
+},
+{
+"id": 15,
+"section": "### Step 0c \u2014 One dispatcher (O1, 2026-09-25); the earlier \"accept collisions\" decision is kept below as the record",
+"words": 138,
+"new_words": 138
+},
+{
+"id": 16,
+"section": "### Step 0c \u2014 One dispatcher (O1, 2026-09-25); the earlier \"accept collisions\" decision is kept below as the record",
+"words": 32,
+"new_words": 3
+},
+{
+"id": 17,
+"section": "### Step 0c \u2014 One dispatcher (O1, 2026-09-25); the earlier \"accept collisions\" decision is kept below as the record",
+"words": 350,
+"new_words": 80
+},
+{
+"id": 18,
+"section": "### Step 0c \u2014 One dispatcher (O1, 2026-09-25); the earlier \"accept collisions\" decision is kept below as the record",
+"words": 64,
+"new_words": 64
+},
+{
+"id": 19,
+"section": "### Step 1 \u2014 Triage new input",
+"words": 29,
+"new_words": 9
+},
+{
+"id": 20,
+"section": "### Step 1 \u2014 Triage new input",
+"words": 7,
+"new_words": 3
+},
+{
+"id": 21,
+"section": "### Step 1 \u2014 Triage new input",
+"words": 34,
+"new_words": 6
+},
+{
+"id": 22,
+"section": "### Step 1 \u2014 Triage new input",
+"words": 59,
+"new_words": 59
+},
+{
+"id": 23,
+"section": "### Step 1 \u2014 Triage new input",
+"words": 83,
+"new_words": 22
+},
+{
+"id": 24,
+"section": "### Step 1 \u2014 Triage new input",
+"words": 172,
+"new_words": 83
+},
+{
+"id": 25,
+"section": "### Step 1 \u2014 Triage new input",
+"words": 65,
+"new_words": 4
+},
+{
+"id": 26,
+"section": "### Step 2 \u2014 Decide what runs next",
+"words": 135,
+"new_words": 23
+},
+{
+"id": 27,
+"section": "### Step 2 \u2014 Decide what runs next",
+"words": 75,
+"new_words": 75
+},
+{
+"id": 28,
+"section": "### Step 2 \u2014 Decide what runs next",
+"words": 106,
+"new_words": 106
+},
+{
+"id": 29,
+"section": "### Step 2 \u2014 Decide what runs next",
+"words": 102,
+"new_words": 18
+},
+{
+"id": 30,
+"section": "### Step 2 \u2014 Decide what runs next",
+"words": 299,
+"new_words": 299
+},
+{
+"id": 31,
+"section": "### Step 2 \u2014 Decide what runs next",
+"words": 28,
+"new_words": 28
+},
+{
+"id": 32,
+"section": "### Step 2 \u2014 Decide what runs next",
+"words": 349,
+"new_words": 349
+},
+{
+"id": 33,
+"section": "### Step 2 \u2014 Decide what runs next",
+"words": 53,
+"new_words": 53
+},
+{
+"id": 34,
+"section": "### Step 2 \u2014 Decide what runs next",
+"words": 21,
+"new_words": 21
+},
+{
+"id": 35,
+"section": "### Step 2 \u2014 Decide what runs next",
+"words": 89,
+"new_words": 89
+},
+{
+"id": 36,
+"section": "### Step 2 \u2014 Decide what runs next",
+"words": 17,
+"new_words": 17
+},
+{
+"id": 37,
+"section": "### Step 2 \u2014 Decide what runs next",
+"words": 95,
+"new_words": 95
+},
+{
+"id": 38,
+"section": "### Step 2 \u2014 Decide what runs next",
+"words": 155,
+"new_words": 155
+},
+{
+"id": 39,
+"section": "### Step 2 \u2014 Decide what runs next",
+"words": 90,
+"new_words": 90
+},
+{
+"id": 40,
+"section": "### Step 2 \u2014 Decide what runs next",
+"words": 52,
+"new_words": 52
+},
+{
+"id": 41,
+"section": "### Step 2 \u2014 Decide what runs next",
+"words": 142,
+"new_words": 2
+},
+{
+"id": 42,
+"section": "### Step 2 \u2014 Decide what runs next",
+"words": 81,
+"new_words": 81
+},
+{
+"id": 43,
+"section": "### Step 2 \u2014 Decide what runs next",
+"words": 85,
+"new_words": 85
+},
+{
+"id": 44,
+"section": "### Step 2 \u2014 Decide what runs next",
+"words": 163,
+"new_words": 28
+}
+]

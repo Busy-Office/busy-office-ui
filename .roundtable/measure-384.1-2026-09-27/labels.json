@@ -1,0 +1,534 @@
+{
+"A": {
+"1": {
+"id": 1,
+"narrative_words": 0,
+"instruction_words": 279,
+"note": "Loop table defines jobs and dispatch cadence"
+},
+"2": {
+"id": 2,
+"narrative_words": 0,
+"instruction_words": 8,
+"note": "Section heading"
+},
+"3": {
+"id": 3,
+"narrative_words": 19,
+"instruction_words": 69,
+"note": "Trigger list; stale cloud-copy detail is narrative"
+},
+"4": {
+"id": 4,
+"narrative_words": 17,
+"instruction_words": 12,
+"note": "Rule current copy wins; drift anecdote narrative"
+},
+"5": {
+"id": 5,
+"narrative_words": 0,
+"instruction_words": 130,
+"note": "Verbatim wake prompt, all instruction"
+},
+"6": {
+"id": 6,
+"narrative_words": 11,
+"instruction_words": 12,
+"note": "No-restatement rule; drift history narrative"
+},
+"7": {
+"id": 7,
+"narrative_words": 6,
+"instruction_words": 151,
+"note": "Guard steps instruction; trailing decision citation narrative"
+},
+"8": {
+"id": 8,
+"narrative_words": 0,
+"instruction_words": 200,
+"note": "inflight.py exit codes and actions"
+},
+"9": {
+"id": 9,
+"narrative_words": 16,
+"instruction_words": 50,
+"note": "Pre-398.2 malformed-line replay is narrative"
+},
+"10": {
+"id": 10,
+"narrative_words": 86,
+"instruction_words": 85,
+"note": "Stamp failure mechanism and 09-05 deaths narrative"
+},
+"11": {
+"id": 11,
+"narrative_words": 0,
+"instruction_words": 150,
+"note": "Check semantics; 216/244 figure inside instruction sentence"
+},
+"12": {
+"id": 12,
+"narrative_words": 0,
+"instruction_words": 43,
+"note": "Dirty tree handling rule"
+},
+"13": {
+"id": 13,
+"narrative_words": 0,
+"instruction_words": 165,
+"note": "Refused milestone report stops dispatch"
+},
+"14": {
+"id": 14,
+"narrative_words": 0,
+"instruction_words": 19,
+"note": "Section heading"
+},
+"15": {
+"id": 15,
+"narrative_words": 41,
+"instruction_words": 97,
+"note": "Collision history and record pointer narrative"
+},
+"16": {
+"id": 16,
+"narrative_words": 32,
+"instruction_words": 0,
+"note": "Superseded accept-collisions decision, record only"
+},
+"17": {
+"id": 17,
+"narrative_words": 350,
+"instruction_words": 0,
+"note": "Eight dated collision incidents, pure history"
+},
+"18": {
+"id": 18,
+"narrative_words": 0,
+"instruction_words": 64,
+"note": "Read fetch range; prefer undupable work"
+},
+"19": {
+"id": 19,
+"narrative_words": 0,
+"instruction_words": 29,
+"note": "Use REST form"
+},
+"20": {
+"id": 20,
+"narrative_words": 0,
+"instruction_words": 7,
+"note": "Command setup"
+},
+"21": {
+"id": 21,
+"narrative_words": 0,
+"instruction_words": 34,
+"note": "Intake commands"
+},
+"22": {
+"id": 22,
+"narrative_words": 0,
+"instruction_words": 59,
+"note": "Read status before length; 401 signature"
+},
+"23": {
+"id": 23,
+"narrative_words": 37,
+"instruction_words": 46,
+"note": "Dated verification proofs narrative"
+},
+"24": {
+"id": 24,
+"narrative_words": 118,
+"instruction_words": 54,
+"note": "gh cloud failure history narrative"
+},
+"25": {
+"id": 25,
+"narrative_words": 0,
+"instruction_words": 65,
+"note": "Each intake produces a count rule"
+},
+"26": {
+"id": 26,
+"narrative_words": 98,
+"instruction_words": 37,
+"note": "Ordering rationale history; rule 3 instruction"
+},
+"27": {
+"id": 27,
+"narrative_words": 0,
+"instruction_words": 75,
+"note": "Definition of last Objective reset"
+},
+"28": {
+"id": 28,
+"narrative_words": 61,
+"instruction_words": 45,
+"note": "Asymmetry rationale and replay figures narrative"
+},
+"29": {
+"id": 29,
+"narrative_words": 0,
+"instruction_words": 102,
+"note": "Which loops count toward rule 3"
+},
+"30": {
+"id": 30,
+"narrative_words": 0,
+"instruction_words": 299,
+"note": "Rule M mechanics"
+},
+"31": {
+"id": 31,
+"narrative_words": 0,
+"instruction_words": 28,
+"note": "No-milestone condition and pointer"
+},
+"32": {
+"id": 32,
+"narrative_words": 0,
+"instruction_words": 349,
+"note": "Rule D triggers and lint"
+},
+"33": {
+"id": 33,
+"narrative_words": 0,
+"instruction_words": 53,
+"note": "D3/D4 precedence exceptions"
+},
+"34": {
+"id": 34,
+"narrative_words": 0,
+"instruction_words": 21,
+"note": "Rule D precedence constraints"
+},
+"35": {
+"id": 35,
+"narrative_words": 0,
+"instruction_words": 89,
+"note": "Planner firing limits"
+},
+"36": {
+"id": 36,
+"narrative_words": 0,
+"instruction_words": 17,
+"note": "24h window soundness condition"
+},
+"37": {
+"id": 37,
+"narrative_words": 0,
+"instruction_words": 95,
+"note": "Planner output contract enforcement"
+},
+"38": {
+"id": 38,
+"narrative_words": 0,
+"instruction_words": 155,
+"note": "Blocking marker definitions"
+},
+"39": {
+"id": 39,
+"narrative_words": 0,
+"instruction_words": 90,
+"note": "Marker parsing and refusal conditions"
+},
+"40": {
+"id": 40,
+"narrative_words": 31,
+"instruction_words": 21,
+"note": "249.7 incident narrative; marker rule instruction"
+},
+"41": {
+"id": 41,
+"narrative_words": 134,
+"instruction_words": 8,
+"note": "LIFO history and struck rule narrative"
+},
+"42": {
+"id": 42,
+"narrative_words": 0,
+"instruction_words": 81,
+"note": "Retired overrides; current in-flight behavior"
+},
+"43": {
+"id": 43,
+"narrative_words": 35,
+"instruction_words": 50,
+"note": "M0 bootstrap history narrative; GOAL ban instruction"
+},
+"44": {
+"id": 44,
+"narrative_words": 36,
+"instruction_words": 127,
+"note": "Sample-count correction figures narrative"
+}
+},
+"B": {
+"44": {
+"id": 44,
+"narrative_words": 51,
+"instruction_words": 112,
+"note": "ci-wall-time sample counts and axe-violations example are measurement"
+},
+"43": {
+"id": 43,
+"narrative_words": 35,
+"instruction_words": 50,
+"note": "M0 bootstrap history narrative; no-GOAL rule and rule 5 instruction"
+},
+"42": {
+"id": 42,
+"narrative_words": 0,
+"instruction_words": 81,
+"note": "Retired overrides and replacements; all instruction"
+},
+"41": {
+"id": 41,
+"narrative_words": 134,
+"instruction_words": 8,
+"note": "LIFO incident history and struck-out override are narrative"
+},
+"40": {
+"id": 40,
+"narrative_words": 31,
+"instruction_words": 21,
+"note": "249.7 and unmarked-item incident is narrative"
+},
+"39": {
+"id": 39,
+"narrative_words": 0,
+"instruction_words": 90,
+"note": "Marker parsing and refusal conditions; all instruction"
+},
+"38": {
+"id": 38,
+"narrative_words": 0,
+"instruction_words": 155,
+"note": "Marker definitions; all instruction"
+},
+"37": {
+"id": 37,
+"narrative_words": 0,
+"instruction_words": 95,
+"note": "Planner output contract; all instruction"
+},
+"36": {
+"id": 36,
+"narrative_words": 0,
+"instruction_words": 17,
+"note": "Condition on 24h window; instruction"
+},
+"35": {
+"id": 35,
+"narrative_words": 0,
+"instruction_words": 89,
+"note": "Rule D limits; all instruction"
+},
+"34": {
+"id": 34,
+"narrative_words": 0,
+"instruction_words": 21,
+"note": "Rule D precedence conditions; instruction"
+},
+"33": {
+"id": 33,
+"narrative_words": 0,
+"instruction_words": 53,
+"note": "D3/D4 precedence and exceptions; instruction"
+},
+"32": {
+"id": 32,
+"narrative_words": 0,
+"instruction_words": 349,
+"note": "Rule D triggers and lint definitions; all instruction"
+},
+"31": {
+"id": 31,
+"narrative_words": 0,
+"instruction_words": 28,
+"note": "No-milestone condition plus pointer; instruction"
+},
+"30": {
+"id": 30,
+"narrative_words": 0,
+"instruction_words": 299,
+"note": "Rule M mechanics; all instruction"
+},
+"29": {
+"id": 29,
+"narrative_words": 0,
+"instruction_words": 102,
+"note": "Which loops count toward rule 3; definition"
+},
+"28": {
+"id": 28,
+"narrative_words": 41,
+"instruction_words": 65,
+"note": "Replay figures 28/63 and 42/72 are measurement narrative"
+},
+"27": {
+"id": 27,
+"narrative_words": 0,
+"instruction_words": 75,
+"note": "Defines last Objective reset; instruction"
+},
+"26": {
+"id": 26,
+"narrative_words": 98,
+"instruction_words": 37,
+"note": "Ordering rationale history narrative; rule 3 statement instruction"
+},
+"25": {
+"id": 25,
+"narrative_words": 0,
+"instruction_words": 65,
+"note": "Intake count rule plus ENVIRONMENT.md pointer"
+},
+"24": {
+"id": 24,
+"narrative_words": 118,
+"instruction_words": 54,
+"note": "gh cloud failure history narrative; REST fallback instruction"
+},
+"23": {
+"id": 23,
+"narrative_words": 37,
+"instruction_words": 46,
+"note": "Control explanation instruction; dated verification results narrative"
+},
+"22": {
+"id": 22,
+"narrative_words": 0,
+"instruction_words": 59,
+"note": "Status-before-length rule with token failure condition"
+},
+"21": {
+"id": 21,
+"narrative_words": 0,
+"instruction_words": 34,
+"note": "Commands to run"
+},
+"20": {
+"id": 20,
+"narrative_words": 0,
+"instruction_words": 7,
+"note": "Command setup"
+},
+"19": {
+"id": 19,
+"narrative_words": 0,
+"instruction_words": 29,
+"note": "Use REST form; instruction"
+},
+"18": {
+"id": 18,
+"narrative_words": 0,
+"instruction_words": 64,
+"note": "Read fetch range; expect losing next dispatch"
+},
+"17": {
+"id": 17,
+"narrative_words": 326,
+"instruction_words": 24,
+"note": "Collision incident list; keep-checking-loser sentence instruction"
+},
+"16": {
+"id": 16,
+"narrative_words": 32,
+"instruction_words": 0,
+"note": "Reversed accept-collisions decision kept as record"
+},
+"15": {
+"id": 15,
+"narrative_words": 27,
+"instruction_words": 111,
+"note": "Collisions 6-8 same-day history narrative; rest instruction"
+},
+"14": {
+"id": 14,
+"narrative_words": 0,
+"instruction_words": 19,
+"note": "Section heading"
+},
+"13": {
+"id": 13,
+"narrative_words": 0,
+"instruction_words": 165,
+"note": "Refused milestone report stop rule; all instruction"
+},
+"12": {
+"id": 12,
+"narrative_words": 0,
+"instruction_words": 43,
+"note": "Dirty tree handling; instruction"
+},
+"11": {
+"id": 11,
+"narrative_words": 0,
+"instruction_words": 150,
+"note": "Advisory check semantics; figures embedded in rule sentence"
+},
+"10": {
+"id": 10,
+"narrative_words": 46,
+"instruction_words": 125,
+"note": "data-table/pagination incident and rationale narrative"
+},
+"9": {
+"id": 9,
+"narrative_words": 16,
+"instruction_words": 50,
+"note": "Pre-398.2 malformed-line replay is narrative"
+},
+"8": {
+"id": 8,
+"narrative_words": 0,
+"instruction_words": 200,
+"note": "inflight.py exit codes; all instruction"
+},
+"7": {
+"id": 7,
+"narrative_words": 6,
+"instruction_words": 151,
+"note": "Guard instructions; trailing decision citation narrative"
+},
+"6": {
+"id": 6,
+"narrative_words": 11,
+"instruction_words": 12,
+"note": "Drift history sentence is narrative"
+},
+"5": {
+"id": 5,
+"narrative_words": 0,
+"instruction_words": 130,
+"note": "The wake prompt itself; all instruction"
+},
+"4": {
+"id": 4,
+"narrative_words": 17,
+"instruction_words": 12,
+"note": "Memory note drift observation narrative"
+},
+"3": {
+"id": 3,
+"narrative_words": 0,
+"instruction_words": 88,
+"note": "Lists triggers using the one copy"
+},
+"2": {
+"id": 2,
+"narrative_words": 0,
+"instruction_words": 8,
+"note": "Section heading"
+},
+"1": {
+"id": 1,
+"narrative_words": 0,
+"instruction_words": 279,
+"note": "Loop table: jobs, cadence, dispatch conditions"
+}
+}
+}
