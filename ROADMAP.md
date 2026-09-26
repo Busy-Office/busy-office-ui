@@ -576,6 +576,15 @@ rule 3. 387.1: 11 claims, 9 hold, 2 fail; 7 findings (5 confirmed, 2 narrowed).
          0 to the scroller's `scrollHeight` and `scrollWidth`, and a press after a
          wheel in either axis lands on the field. OR the item is refused with the
          measurement that shows the cost outweighs the fix.
+       - **Triage 2026-09-27 (no code).** A one-line cap cannot close it: capping the
+         message's width inside a scroller whose static position is past the
+         scrollport re-creates the sideways lengthening 387.1 removed, and capping
+         its height clips the message (a state signal, two-channel rule). The real
+         choices are (a) anchor the message to the field's cell, (b) accept the
+         vertical growth and narrow the claim, or (c) retire the fallback for
+         browsers below the `position-area` floor. Weigh (c) first: one of 156
+         built pages has the markup and none of the RF pages runs it (Slice 413 F4).
+         Needs a builder's decision, so it goes to the ladder, not a code wake.
        Track: defect
 2. [ ] **413.2 — `position: relative` gives the message the scrollport as its box.**
        Static position sits ~1100px in a 1200px table while the containing block is
