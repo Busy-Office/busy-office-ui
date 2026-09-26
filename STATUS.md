@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 03:15 UTC
+Generated at: 2026-09-26 03:25 UTC
 
 oldest dispatchable: 376.7 — the lane-4 ratchet counts any net shrink as a cut.
 
@@ -35,10 +35,9 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 - **Slice 376** (2 open)
   - 376.5 — the app-launch launcher hand-rolls a dialog header.
   - 376.7 — the lane-4 ratchet counts any net shrink as a cut.
-- **Slice 377** (12 open)
+- **Slice 377** (11 open)
   - 377.3 — the completion gate cannot see a revision.
   - 377.4 — pointer coverage, named per behaviour.
-  - 377.5 — release the unreleased fixes, or record why not.
   - 377.6 — is busy-office-erp the named first user?
   - 377.7 — an adoption reading at every Objective grill, and §6's exit requires the thesis section.
   - 377.8 — the ACR's 1.4.11 and 2.4.7 remarks derive from source.
@@ -94,10 +93,9 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 393.11 — a close is verified on HEAD alone (folds 377.3).
   - 393.12 — worktree isolation and fan-in, as code.
   - 393.13 — the Step 0 read cost, measured on the first ACTIVE milestone wake (393.8's fourth clause, moved here).
-- **Slice 394** (18 open)
+- **Slice 394** (17 open)
   - 394.1 — OWNER CALL: naming doctrine. Every published name names a shape (owner answer 2; roundtable 2026-09-25).
   - 394.2 — OWNER CALL: the app, the module list and the device classes (folds 377.6; owner answer 3).
-  - 394.3 — OWNER CALL: a release boundary before any experimental part merges (377.5).
   - 394.4 — the experimental tier: `@status experimental` and `@decide` in the registration header, and where the build puts the part.
   - 394.5 — `bo-check-markup` (the shipped bin) sees experimental parts and placeholders.
   - 394.6 — docs, llms.txt and the sidebar show the status in words, in both directions.
@@ -174,7 +172,7 @@ Generated from the `Milestone: Mn · Phase: n` markers on every item, open or cl
 
 - **M1** — DRAFT
   - Phase 0: 13 of 16 closed
-  - Phase 1: 0 of 22 closed
+  - Phase 1: 1 of 22 closed
   - Phase 2: 0 of 34 closed
   - Phase 3: 0 of 2 closed
 
@@ -185,12 +183,10 @@ Open items carrying an owner marker (`BLOCKED ON`, `OWNER CALL`, `OWNER OR <X> C
 - 396.13 — OWNER CALL: the form the remaining modules take (full module sets, or job rows plus screens only where a new shape is needed), decided on 396.5's result.
 - 394.1 — OWNER CALL: naming doctrine. Every published name names a shape (owner answer 2; roundtable 2026-09-25).
 - 394.2 — OWNER CALL: the app, the module list and the device classes (folds 377.6; owner answer 3).
-- 394.3 — OWNER CALL: a release boundary before any experimental part merges (377.5).
 - 394.16 — OWNER CALL: promote the queue screen, keep it in shadow, or retire it.
 - 394.18 — OWNER CALL: declare the queue screen as Jev's third point (O13), say what may leave the machine, and choose its mode before promotion.
 - 389.6 — The journey's RF step exits to an RF home.
 - 389.7 — The journey's RF confirm and failure verdict are in view at a rugged viewport.
-- 377.5 — release the unreleased fixes, or record why not.
 - 377.6 — is busy-office-erp the named first user?
 - 375.11 — what 375.9 measured and did not fix.
 - 374.4 — `.bo-btn--secondary` standing alone is identified almost entirely by a 1.47:1 border, the contrast gate structurally cannot see it, and the published ACR says it can.
@@ -212,7 +208,7 @@ Open items carrying an owner marker (`BLOCKED ON`, `OWNER CALL`, `OWNER OR <X> C
 Open items with an `After:` target still open. Each releases when its last target closes. An item that is also owner-blocked says so: its dependency outlasts the owner's answer.
 
 - 397.1 — after 394.4, 394.5, 394.6, 394.7, 394.8, 394.17, 396.3, 396.4
-- 397.2 — after 393.11, 393.12, 394.1, 394.2, 394.3, 394.4, 394.5, 394.6, 394.7, 394.8, 394.9, 394.10, 394.11, 394.12, 394.13, 394.14, 394.15, 394.17, 394.18, 395.1, 395.2, 396.1, 396.2, 396.3, 396.4, 396.5, 396.6, 396.7, 396.8, 396.9, 396.10, 396.11, 396.12, 396.13, 397.1
+- 397.2 — after 393.11, 393.12, 394.1, 394.2, 394.4, 394.5, 394.6, 394.7, 394.8, 394.9, 394.10, 394.11, 394.12, 394.13, 394.14, 394.15, 394.17, 394.18, 395.1, 395.2, 396.1, 396.2, 396.3, 396.4, 396.5, 396.6, 396.7, 396.8, 396.9, 396.10, 396.11, 396.12, 396.13, 397.1
 - 396.1 — after 394.1, 394.2, 394.9
 - 396.2 — after 394.10
 - 396.3 — after 395.1, 396.1, 396.2, 394.8, 394.9, 393.12

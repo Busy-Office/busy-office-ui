@@ -1506,7 +1506,7 @@ this: it orders rule M against rule 4, not within M1.
            replacing commit."
 
          377.6 closes by this item.
-3. [ ] **394.3 — OWNER CALL: a release boundary before any experimental part
+3. [x] **394.3 — OWNER CALL: a release boundary before any experimental part
        merges (377.5).**
        Milestone: M1 · Phase: 1
        Route: owner
@@ -1518,6 +1518,11 @@ this: it orders rule M against rule 4, not within M1.
 
          No release carries experimental surface without its label. 377.5
          closes by this item.
+       - **DONE 2026-09-26: released.** 0.9.0 is on npm (377.5's DONE note),
+         before any `@status experimental` line: `git grep -c '@status
+         experimental' -- packages/core/src` reads 0. Every stable fix that
+         was unreleased is now published, and the next release is the first
+         that may carry labelled experimental parts.
 4. [ ] **394.4 — the experimental tier: `@status experimental` and `@decide` in
        the registration header, and where the build puts the part.**
        Milestone: M1 · Phase: 1
@@ -4397,7 +4402,7 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          CDP-input case, unless it is in an EXEMPT map with a reason; the two
          mislabelled comments are gone. Measure its base rate before wiring it.
        Track: defect
-5. [ ] **OWNER · 377.5 — release the unreleased fixes, or record why not.**
+5. [x] **OWNER · 377.5 — release the unreleased fixes, or record why not.**
        231 commits and eight framework defect fixes (four P0) since 0.8.0
        (2026-09-06). The one consumer pins 0.8.0 and vendors only the CSS, so
        375.9, 376.2, 376.4 and 374.5's 6x smaller default export are fixes it
@@ -4442,6 +4447,26 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          - **Left, the loop's, after publish:** `derive-introduced --refresh`
            (introduced.json's registryVersions stop at 0.8.0), then close
            this item and 394.3.
+         - **DONE 2026-09-26 — RELEASED.** The owner asked "Can you publish
+           the 0.9.0?". GitHub Release `v0.9.0` was created at `116f6e86`,
+           where CI and Pages were green. Its `publish.yml` run (36214499666)
+           rebuilt, re-tested and published both packages with signed
+           provenance.
+           - **Verified on the registry and in the published tarballs:**
+             - `latest` is 0.9.0 and 0.2.0, with attestations;
+             - the tarball's `browserslist` is the derived floor;
+             - `bo-check-markup` on a missing path prints its clean "no HTML
+               files found" error and exits 1. The published 0.8.0 threw
+               ENOENT (issue #1, 300.1);
+             - `LICENSE` and `NOTICE` ship;
+             - create-ui pins `^0.9.0`.
+           - **npm's publish-time "bin[bo-check-markup] … was invalid and
+             removed" warning is cosmetic.** It also appears in 0.8.0's publish
+             log and in a local `npm publish --dry-run` on npm 11.19.1 and
+             11.20.0. Both registry manifests and the 0.9.0 tarball still carry
+             the bin.
+           - `derive-introduced --refresh` added 0.9.0; 40 component
+             stylesheets, and none is new in 0.9.0.
 6. [ ] **OWNER · 377.6 — is busy-office-erp the named first user?** Its ADR-0016
        names this package the reference implementation of its runtime-UI
        contract; nothing in this repo's steering documents names it. If yes:
