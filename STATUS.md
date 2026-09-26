@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-25 18:25 UTC
+Generated at: 2026-09-26 01:18 UTC
 
 oldest dispatchable: 375.11 — what 375.9 measured and did not fix.
 
@@ -133,10 +133,11 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 - **Slice 397** (2 open)
   - 397.1 — the first real run: the first need Configuration or Distribution logs walks the component lifecycle as far as its fill.
   - 397.2 — EXIT: close Milestone M1.
-- **Slice 398** (3 open)
+- **Slice 398** (4 open)
   - 398.1 — the statements that disagree with the rule that replaced them (N2-N7 and the two Redundants).
   - 398.2 — the in-flight check refuses what it cannot parse.
   - 398.3 — `milestone.py` counts a field as filled only when the owner filled it.
+  - 398.4 — a `Modules` value that is not ` · `-separated is refused, not read as one module.
 - **Slice —** (1 open)
   - AT runtime evidence
 
@@ -161,7 +162,7 @@ dispatch status — counter-triggered rules (1815 iterations logged)
        behaviors_frozen            2d  2026-08-15 16 count -> 2026-08-16 18 count  +2   [2 same-day]
      no direction is recorded with a sample, so the movement above is a reading and the regression verdict is the wake's. A name that has NEVER MOVED is either healthy or pinned by a gate — rule 5 cannot fire on it either way (`axe-violations` is 0 on every day because `test:axe` fails the build above 0).
      a direction is NOT recorded on purpose (roadmap 324.1): adding one makes rule 5 fire on `bundle-gz-kb`'s four consecutive rises, which the log's own same-timestamp `components` samples refute (0.400 -> 0.355 kB per component over that window). A rise with no denominator is growth. Where a name has a real threshold, use it — `check:size` gates the bundle at 16.7 kB gz, which is rule 5's budget clause, not its trend one.
-  Holds         1 hold-wake(s) recorded, 1 today (UTC dates)   [inflight.py hold; .roundtable/hold-wakes.jsonl]
+  Holds         1 hold-wake(s) recorded, 0 today (UTC dates)   [inflight.py hold; .roundtable/hold-wakes.jsonl]
 ```
 
 ## Milestone progress
@@ -265,6 +266,7 @@ Open items with a `Parked:` line. Held only while that milestone is ACTIVE.
 - 398.1 — M1, not held
 - 398.2 — M1, not held
 - 398.3 — M1, not held
+- 398.4 — M1, not held
 - 391.1 — M1, not held
 - 384.1 — M1, not held
 - 381.1 — M1, not held

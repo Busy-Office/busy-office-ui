@@ -46,7 +46,9 @@ that branch is the owner's call.
 
 ## Direction — 2026-09-26
 
-Owner decisions and actions waiting:
+Owner decisions and actions waiting. **A recommendation for every item below,
+with its re-measured evidence and a validated field block to paste, is in
+`.roundtable/owner-recs-2026-09-26.md`** (start at "Start here").
 
 0. **M0 failed its exit test** (`393.10`: mean 2.375, Correctness 1 and
    Maintainability 1; `.roundtable/loop-doctor-rescore-2026-09-26.md`). Either

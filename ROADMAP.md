@@ -585,7 +585,13 @@ Until then, rule 4 reaches them oldest-first, which is far from now. Report:
            override, which 393.4 retired (N3).
          - CLAUDE.md's router order is a pointer to LOOPS.md Step 2, not a
            restatement (N4).
-         - ROADMAP.md's two dead paths resolve: `test -e` on each (N5).
+         - ROADMAP.md's two dead paths resolve: `test -e` on each (N5). So does
+           a third the re-score's path-prefix scan missed, a bare filename:
+           `grill-kev-in-the-loop-2026-09-21.md` (cited in 394.14's Accept)
+           exists only on `park/owner-checkpoint-2026-09-20`, and bringing it
+           to main is the owner's O2 call. Found by the owner-recommendations
+           critic on 2026-09-26 (`.roundtable/owner-recs-2026-09-26.md`), so
+           the sweep below re-scans bare filenames too.
          - LOOPS.md Step 0 and `step0_guard.py`'s docstring say the owner's
            archive of the cloud sessions is the prevention and exit 5 the
            backstop, not that every cloud session stops at the guard (N6).
@@ -626,6 +632,22 @@ Until then, rule 4 reaches them oldest-first, which is far from now. Report:
          decision cell and fails without the fix. Finding that the owner has
          since filled those cells is a satisfying outcome: the list is then
          right as it stands.
+4. [ ] **398.4 — a `Modules` value that is not ` · `-separated is refused, not
+       read as one module.**
+       Parked: M1 — loop machinery (the milestone field check) — revisit: the owner's answer to 393.10's FAIL, or milestone close
+       - **Why.** `_check_value('Modules', 'o2c=sales:Sales, fin=finance:Finance')`
+         returns no problem, and the value parses as one entry, because only
+         ` · ` splits entries. The field's own comment in the Milestone block
+         reads `<dir-id>=<facet word>:<Label>, …`, so the comma form is the one
+         the owner is invited to write. The module count is then wrong, and
+         nothing says so until 394.9's reconcile against `_shell.mjs`.
+         Found by the owner-recommendations critic on 2026-09-26, and
+         re-run by hand the same day.
+       - **Accept — the property.** A `Modules` entry containing `, ` or a
+         second `=` is refused, naming the entry. A self-test case feeds the
+         comma form and fails without the fix. The Milestone block's comment
+         is the owner's to change; the report says whether it still invites
+         the comma form.
 
 ## Slice 397 — M1 Phase 3: components go through the experimental tier, and the milestone closes (owner realignment, 2026-09-25)
 
