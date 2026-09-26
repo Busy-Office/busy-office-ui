@@ -559,6 +559,40 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 412 — Standardize sweep, 4 of 4 lanes on an isolated clean build: lanes 1 and 3 equal Slice 410; lane 2 is +1 rule, from 387.1's `position: relative` taking one rule to three declarations; lane 4's dispatch region is unchanged at 10,374 and CLAUDE.md grew 405 words on the approved Jev section (2026-09-27)
+
+**Dispatched by rule 2**, `Standardize 5 / 4 OVERDUE`, after rule 1 read 0 open P0
+and CI green on `df443ce3` (all 7 jobs). The sweep ran in a worktree of HEAD
+(`df443ce3`) with its own `npm ci`; `@busy-office/ui` resolved inside the
+worktree, and the core build, the docs build and `standardize_lanes.py` all exit 0.
+Base: Slice 410 (`ec482111`).
+
+- **Lane 1 (of 4):** *"0 dead style attribute(s) on 0 page(s); 1392 live"*. Equal to
+  the base. Its inputs moved (`check-layout.mjs`, `check-claims.mjs`,
+  `no-anchor.mjs`, `report-grid-presses.mjs`, `check-size.mjs`, `data-table.css`):
+  none renders an inline style.
+- **Lane 2 (of 4):** *"74 source file(s) · 247 rule(s) with 3+ declarations · 236
+  distinct bodies · 7 body(ies) appearing more than once"*, against 246 / 235 / 7.
+  **Not "unchanged by construction": its input moved** (`git diff --stat ec482111
+  HEAD -- packages/core/src/css` is `data-table.css`, +75 −30), so it was run and
+  compared. The delta is one rule: 387.1 added `position: relative` to the
+  no-anchor reserve rule, which had 2 declarations at Slice 410 (`padding-block-end`,
+  `overflow-x`) and has 3 now, so it crosses the lane's threshold. Measured by
+  reading that rule at both revisions. The 7 repeated groups are unchanged, and the
+  new rule's body is unique, so it is a new distinct body, not a repeat.
+- **Lane 3 (of 4):** 119 pages of 128 built, median 833, **120,015 words**, equal
+  to the base. The flagged union is the same 18 pages, all with enumerated
+  verdicts, so it is a clean round.
+- **Lane 4 (of 4):** the dispatch region is **10,374**, equal to Slice 410, 0 of 17
+  sections moved. `CLAUDE.md` is 4,274 words against 3,869 (+405, 16 steps up since
+  its 09-22 cut): the Jev section the owner approved on 2026-09-27 (exit codes, the
+  agent subcommand list, evidence handling, the calibration exception). It is
+  instruction, not narration, and it is loaded every wake, so it is recorded as
+  growth with no cut and no trim. `LOOPS.md` is 23,037 against 23,027 (+10 words
+  net, in the playbooks below the dispatch region: the §6 step 4 line for the new
+  judge); `ENVIRONMENT.md` is still never cut, the owner's Direction #0.
+- **Exit:** a clean pass. Nothing to consolidate.
+
 ## Slice 411 — Objective grill of 377.14 and 377.16 (full), with 377.13, 377.15, 377.17, 381.1 and Slices 409/410 narrowed: 63 claims, 52 hold; 15 findings (12 confirmed, 3 narrowed, 0 refuted, no P0). 377.16's fix regressed the anchor marker it did not measure (2026-09-27)
 
 Report: `.roundtable/grill-objective-377-381-409-410-2026-09-27.md`
