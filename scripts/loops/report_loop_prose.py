@@ -358,7 +358,10 @@ def words_at(rev, path):
 # used to count, so a 52-word item close read as ROADMAP.md's last cut while its
 # real one was 81 steps back, ENVIRONMENT.md's only "cut" was 7 words, and
 # CLAUDE.md's was a 29-word wording revert. Measured over every shrink of the
-# eight files on 2026-09-26 (196 shrinks; per-file lists in 376.7's DONE note):
+# eight files on 2026-09-26 (188 shrinks: RESUME 138, ROADMAP 37, LOOPS 8, CLAUDE 3,
+# ENVIRONMENT 1, ROADMAP-archive 1, LOOPS-archive 0, DESIGN 0. First quoted as
+# 196, which was a line count of an output that also held 8 per-file headers;
+# corrected by Slice 403's grill):
 # every shrink under 1% of its file was an item close, a revert, a stub removal
 # or a small tidy, and every one at or above 1% and 100 words was an archive
 # sweep, a split or a deliberate fold. The absolute floor keeps a 76-word edit

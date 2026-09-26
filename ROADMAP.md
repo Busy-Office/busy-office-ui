@@ -559,6 +559,69 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 403 — Objective grill of 377.4 (full), with 376.7, 377.7 and Slice 402 narrowed: 33 of 39 claims reproduce in full, 13 findings (6 confirmed, 7 narrowed, 0 refuted, no P0); the pointer gate fails open on a comment, and two of the dispatcher's own figures were wrong (2026-09-26)
+
+Report: `.roundtable/grill-objective-376-377-402-2026-09-26.md`. Its thesis section quotes 377.7's
+`record_metric.py --adoption` for the first time. Framework code since
+Slice 401 is 1 file, +1 −1, the README stamp: no framework code changed.
+
+The dispatcher's own claims are corrected in place:
+- 376.7's "196 shrinks" is 188, a line count quoted as a shrink count;
+- 376.7's replay revision was the named close, not the filing revision;
+- 377.4's "touchscreen counts" was false;
+- 377.4's "every case was `el.click()`" was false for table-toolbar.
+
+1. [ ] **403.1 — the pointer-coverage gate cannot be satisfied by a comment,
+       and it reads what it could not classify.**
+       Track: defect
+       - **Why (gate-F1, F2, F3, F4 and F6).** `TRUSTED` matches:
+         - `page.click` inside a comment or a string;
+         - a line inside a multi-line `page.evaluate` whose `evaluate(` sits
+           on an earlier line.
+
+         So an annotated synthetic-only case passes: the gate fails open on
+         the regression it exists to catch. The 150-line block also crosses
+         case and `visit()` boundaries. Touchscreen and puppeteer handle and
+         frame clicks are unrecognised, which fails closed. Listener
+         detection never reconciles raw `addEventListener` counts, and does
+         not scan `utils/` or other extensions. A pointer path that arrives
+         as `change` (278.4's data-grid) is out of scope, so its case could
+         regress silently.
+       - **Accept — the property.** Each of these is a `--self-test` case
+         that fails before the fix:
+         - a trusted-call match inside a comment, a string, or a multi-line
+           `evaluate` body does not count;
+         - a block ends at the next case boundary, not only at the next
+           annotation;
+         - `page.touchscreen.*` and puppeteer handle and frame clicks count.
+
+         The gate reconciles every raw listener registration in the
+         behaviours it scans against the ones it classified, and names any it
+         could not classify. Whether `change`-delivered pointer paths come
+         into scope is argued and decided. An honest "out of scope, and here
+         is where it is covered instead" satisfies that part.
+2. [ ] **403.2 — the seven trusted cases assert what their names claim
+       (cases-F1, F2, F5, F6 and the two nits).**
+       Track: defect
+       - **Why.**
+         - validation-summary's case cannot tell the handler from Chrome's
+           native fragment navigation.
+         - row-edit's case never asserts where focus lands after a real
+           press, so a hide-before-refocus regression passes it and vitest.
+         - The recorder cannot tell a pointer press from keyboard activation.
+         - The recorder also counts a behaviour's own synthetic clicks.
+         - collapsible-card reads `data-state` but never asserts it.
+         - tag-input never checks which chip went.
+       - **Accept — the property.** Each case fails when its behaviour's
+         pointer handler is removed or reordered, not merely when the click
+         becomes synthetic. It is shown by a mutant per case, in a scratch
+         copy of the built JS, that fails only that case:
+         - validation-summary: a path native navigation cannot satisfy;
+         - row-edit: focus asserted after Cancel and after Save;
+         - the recorder: it records `pointerType` or a preceding `pointerdown`,
+           so a keyboard activation fails, and it ignores clicks a behaviour
+           dispatches itself.
+
 ## Slice 402 — Standardize sweep, 4 of 4 lanes on an isolated clean build: every lane equals Slice 400, and the ratchet's new floor (376.7) shows ENVIRONMENT.md has never been cut in 36 steps (2026-09-26)
 
 **Dispatched by rule 2**, `Standardize 4 / 4 OVERDUE`. The sweep ran in a
@@ -4541,6 +4604,11 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
            carries `// @pointer: <behaviour>` over a block that contains a
            TRUSTED call: `page.click`, `page.mouse.*`, `page.touchscreen.*`
            (puppeteer's CDP input) or a CDP `Input.dispatch*Event`.
+           [**Corrected by Slice 403:** the regex has no touchscreen
+           alternative. It also misses puppeteer handle and frame clicks,
+           though those misses fail closed. And it matches comments, strings
+           and multi-line `evaluate` bodies, which fails open. Both are filed
+           as 403.1.]
            - An annotation over only synthetic clicks (`el.click()` in
              `evaluate`) fails as a mislabel.
            - So does one naming a behaviour with no pointer listener.
@@ -4553,7 +4621,9 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          - **Base rate measured before wiring: 7 of 16 would fail.** These were
            collapsible-card, load-more, row-edit, table-toolbar, tag-input,
            validation-summary and wizard. Every one of their cases was an
-           in-page `el.click()`. None was exempted: all seven were feasible,
+           in-page `el.click()`. [**Corrected by Slice 403:** not for
+           table-toolbar. Trusted clicks already reached its `change` listener,
+           and only its export click branch had no case at all.] None was exempted: all seven were feasible,
            and several were probed live. So `check-claims` gains **seven
            trusted cases**, scoped in one block. Each asserts `isTrusted` on
            every click it sends, plus the behaviour's effect:
@@ -4918,7 +4988,9 @@ were `[x]` on hunks that were never committed (the ACR 2.5.7 row; DESIGN.md,
          - **The floor, named and argued.** A cut is a step that removes at
            least **100 words and at least 1% of the file**
            (`is_real_cut`). Chosen from the measured distribution of every
-           shrink, 196 in total, of the eight files the report reads:
+           shrink, 196 in total [**Corrected by Slice 403:** 188. The 196
+           was `wc -l` over output that also held 8 per-file header lines],
+           of the eight files the report reads:
            - under 1%: item closes, reverts, stub removals and tiny tidies,
              such as f7bc8777 (−52, 0.04%), 1005d1db (−7), c83f640a (−29) and
              3174784a (−167, 0.23%);
@@ -4933,7 +5005,10 @@ were `[x]` on hunks that were never committed (the ACR 2.5.7 row; DESIGN.md,
            The block now also prints how many sub-floor shrinks it stepped
            over.
          - **Replay at the revision where this item was filed
-           (`f7bc8777`), old code against new:**
+           (`f7bc8777`), old code against new:** [**Corrected by Slice 403:**
+           `f7bc8777` is the close the old code named as the last cut. 376.7
+           was filed in `85e8c6f5`. The replay there gives the same answer:
+           old `f7bc8777`, 8 up; new `3cb2381a`, 83 up.]
            - ROADMAP.md's last cut: `f7bc8777` itself, the 52-word close
              with 0 up, becomes **`3cb2381a`, the 2026-09-07 sweep**, 75 up.
              This is the Accept's replay.

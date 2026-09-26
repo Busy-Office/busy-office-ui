@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 05:26 UTC
+Generated at: 2026-09-26 06:16 UTC
 
 oldest dispatchable: 377.8 — the ACR's 1.4.11 and 2.4.7 remarks derive from source.
 
@@ -141,6 +141,9 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 401.2 — the 0.9.0 CHANGELOG says what 0.9.0 actually does (G401-1, G401-3, g375-F1, g392-F3).
   - 401.3 — 392.1's restart survives a consumer's tree-shaking, or the limit is recorded (g392-F1, g392-F2).
   - 401.4 — how a repeat verdict is acknowledged without motion (g392-F3).
+- **Slice 403** (2 open)
+  - 403.1 — the pointer-coverage gate cannot be satisfied by a comment, and it reads what it could not classify.
+  - 403.2 — the seven trusted cases assert what their names claim (cases-F1, F2, F5, F6 and the two nits).
 - **Slice —** (1 open)
   - AT runtime evidence
 
@@ -166,7 +169,7 @@ dispatch status — counter-triggered rules (1830 iterations logged)
      no direction is recorded with a sample, so the movement above is a reading and the regression verdict is the wake's. A name that has NEVER MOVED is either healthy or pinned by a gate — rule 5 cannot fire on it either way (`axe-violations` is 0 on every day because `test:axe` fails the build above 0).
      a direction is NOT recorded on purpose (roadmap 324.1): adding one makes rule 5 fire on `bundle-gz-kb`'s four consecutive rises, which the log's own same-timestamp `components` samples refute (0.400 -> 0.355 kB per component over that window). A rise with no denominator is growth. Where a name has a real threshold, use it — `check:size` gates the bundle at 16.7 kB gz, which is rule 5's budget clause, not its trend one.
      not rule 5's input: 24 adoption-* name(s), the Objective grill's reading of the world (377.7), never a size or speed regression.
-  Holds         3 hold-wake(s) recorded, 2 today (UTC dates)   [inflight.py hold; .roundtable/hold-wakes.jsonl]
+  Holds         4 hold-wake(s) recorded, 3 today (UTC dates)   [inflight.py hold; .roundtable/hold-wakes.jsonl]
 ```
 
 ## Milestone progress
