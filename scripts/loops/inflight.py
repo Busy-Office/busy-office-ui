@@ -10,11 +10,20 @@ invisible to the hand-off. This keeps ONE structured line under RESUME.md's
 
   open    --wf ID --item ID --cap MIN --session ID --out PATH --paths GLOBS [--started ISO]
           writes the line; exit 1 if one already exists (one workflow at a time).
-  status  exit 0: no line · 3: a line under its cap · 4: a line past its cap.
+  status  exit 0: no line · 3: a line under its cap · 4: a line past its cap ·
+          5: the section holds something that does not parse, or RESUME.md
+          cannot be read (398.2). Exit 5 is a STOP, never "nothing in flight".
   hold    status, and when the line is under its cap also append one row to
           .roundtable/hold-wakes.jsonl; same exits as status. This is the whole
           of a hold wake: guard, hold, schedule the next wake, stop.
   close   removes the line; exit 1 if there was none.
+
+Why exit 5 exists (roadmap 398.2): the 2026-09-26 re-score fed `status` five
+malformed lines (a trailing space, a space in `paths`, fields reordered,
+`cap=60m`, a bullet prefix). All five read "nothing in flight", exit 0, so a
+wake would have dispatched over a live workflow. A missing RESUME.md crashed
+with exit 1, which Step 0 does not define. Every non-blank line in the section
+must now parse, trailing whitespace aside; anything else is refused by name.
 
 What a wake does with exit 4 (the cap): stop the workflow (TaskStop), keep its
 partial output at `out`, record `--outcome logged` naming what did not finish,
@@ -30,10 +39,17 @@ import re
 import sys
 import tempfile
 
+# The repo root comes from this file's own path, not the caller's cwd (398.2).
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 RESUME = '.roundtable/RESUME.md'
 HOLDS = '.roundtable/hold-wakes.jsonl'
 HEADING = '## In flight'
-LINE_RE = re.compile(r'^wf=\S+ item=\S+ started=(\S+) cap=(\d+) session=\S+ out=\S+ paths=\S+$', re.M)
+LINE_RE = re.compile(r'wf=\S+ item=\S+ started=(\S+) cap=(\d+) session=\S+ out=\S+ paths=\S+')
+UNPARSED = 5
+
+
+class Unparsed(Exception):
+    """The in-flight state cannot be read: exit 5, a STOP (398.2)."""
 
 
 def now_utc():
@@ -51,16 +67,39 @@ def section_bounds(text):
 
 
 def current(text):
+    """The in-flight line's match; None when the section is absent or blank.
+
+    Raises Unparsed when the section holds anything else: a line that is not
+    exactly the protocol's form (trailing whitespace aside), more than one line,
+    or a `started` that is not a timezone-aware ISO time."""
     b = section_bounds(text)
     if not b:
         return None
-    m = LINE_RE.search(text[b[0]:b[1]])
+    lines = [l.rstrip() for l in text[b[0]:b[1]].split('\n') if l.strip()]
+    if not lines:
+        return None
+    if len(lines) > 1:
+        raise Unparsed(f'{len(lines)} lines under {HEADING}; the protocol allows one: ' + ' | '.join(lines))
+    m = LINE_RE.fullmatch(lines[0])
+    if not m:
+        raise Unparsed(f'the line under {HEADING} does not parse (expected: '
+                       'wf=… item=… started=… cap=<minutes> session=… out=… paths=…, '
+                       'single spaces, no bullet): ' + lines[0])
+    try:
+        started = dt.datetime.fromisoformat(m.group(1).replace('Z', '+00:00'))
+    except ValueError:
+        raise Unparsed(f'started={m.group(1)} is not an ISO time: ' + lines[0])
+    if started.tzinfo is None:
+        raise Unparsed(f'started={m.group(1)} has no timezone (write it in UTC with a Z): ' + lines[0])
     return m
 
 
 def read(root):
-    with open(os.path.join(root, RESUME), encoding='utf-8') as f:
-        return f.read()
+    try:
+        with open(os.path.join(root, RESUME), encoding='utf-8') as f:
+            return f.read()
+    except OSError as e:
+        raise Unparsed(f'cannot read {os.path.join(root, RESUME)} ({e.strerror})')
 
 
 def write(root, text):
@@ -109,8 +148,8 @@ def cmd_close(root):
     if not m:
         return 1, 'inflight: nothing to close'
     b = section_bounds(text)
-    body = text[b[0]:b[1]].replace(m.group(0) + '\n', '', 1)
-    write(root, text[:b[0]] + body + text[b[1]:])
+    kept = [l for l in text[b[0]:b[1]].split('\n') if l.rstrip() != m.group(0)]
+    write(root, text[:b[0]] + '\n'.join(kept) + text[b[1]:])
     return 0, 'inflight: closed ' + m.group(0)
 
 
@@ -135,11 +174,12 @@ def parse(argv):
 
 
 def self_test():
-    bad = []
+    bad, checked = [], [1]  # the ROOT check below counts as one
     with tempfile.TemporaryDirectory() as root:
         os.makedirs(os.path.join(root, '.roundtable'))
         write(root, '# Resume\n\nintro\n\n## GOAL\n\ngoal text\n')
         def expect(name, got, want):
+            checked[0] += 1
             if got[0] != want:
                 bad.append(f'{name}: expected {want}, got {got}')
         expect('status with no line', status(root), 0)
@@ -158,25 +198,65 @@ def self_test():
         expect('close', cmd_close(root), 0)
         expect('status after close', status(root), 0)
         expect('reopen after close', cmd_open(root, {**args, 'wf': 'wf_y'}), 0)
+
+        # 398.2 — the re-score's five malformed lines, then every other state
+        # that cannot be read. None of them may read as "nothing in flight".
+        z = now_utc().isoformat().replace('+00:00', 'Z')
+        good = f'wf=wf_z item=398.2 started={z} cap=60 session=s1 out=/tmp/o paths=a/*'
+        cases = [
+            ('a trailing space parses', good + '  ', 3),
+            ('a space in paths', good.replace('paths=a/*', 'paths=a/* b/*'), UNPARSED),
+            ('fields reordered', good.replace('wf=wf_z item=398.2', 'item=398.2 wf=wf_z'), UNPARSED),
+            ('cap=60m', good.replace('cap=60 ', 'cap=60m '), UNPARSED),
+            ('a bullet prefix', '- ' + good, UNPARSED),
+            ('two lines', good + '\n' + good.replace('wf_z', 'wf_w'), UNPARSED),
+            ('started with no timezone', good.replace(z, z[:-1]), UNPARSED),
+            ('started not a time', good.replace(z, 'yesterday'), UNPARSED),
+        ]
+        for name, body, want in cases:
+            write(root, f'# Resume\n\n## In flight\n{body}\n\n## Uncommitted\n')
+            expect(name, run(root, 'status'), want)
+        rows = sum(1 for _ in open(os.path.join(root, HOLDS)))
+        expect('hold on an unparsed line', run(root, 'hold'), UNPARSED)
+        if sum(1 for _ in open(os.path.join(root, HOLDS))) != rows:
+            bad.append('hold appended a row for a line it could not parse')
+        expect('open over an unparsed line', run(root, 'open', ['--wf', 'wf_q', '--item', 'x', '--cap', '5',
+                                                              '--session', 's', '--out', 'o', '--paths', 'p']), UNPARSED)
+        expect('close over an unparsed line', run(root, 'close'), UNPARSED)
+        write(root, f'# Resume\n\n## In flight\n{good}  \n\n## Uncommitted\n')
+        expect('close removes a line with trailing whitespace', run(root, 'close'), 0)
+        expect('status after that close', run(root, 'status'), 0)
+        os.remove(os.path.join(root, RESUME))
+        expect('a missing RESUME.md', run(root, 'status'), UNPARSED)
+    if not os.path.exists(os.path.join(ROOT, 'scripts', 'loops', 'inflight.py')):
+        bad.append(f'ROOT does not resolve to the repo: {ROOT}')
     if bad:
         print('inflight --self-test FAILED:\n  ' + '\n  '.join(bad), file=sys.stderr)
         return 1
-    print('inflight --self-test: 11 cases behave (status 0/3/4, open, refused second open, hold row, close, reopen)')
+    print(f'inflight --self-test: {checked[0]} cases behave (status 0/3/4/5, open, refused second open, '
+          'hold row, close, reopen; 398.2: the five malformed lines, two lines, bad started, '
+          'hold/open/close over an unparsed line, a missing RESUME.md, the root)')
     return 0
+
+
+def run(root, cmd, argv=()):
+    """One command; an unreadable in-flight state is exit 5 for every command."""
+    try:
+        if cmd == 'open':
+            return cmd_open(root, parse(list(argv)))
+        if cmd == 'close':
+            return cmd_close(root)
+        if cmd == 'hold':
+            return cmd_hold(root)
+        return status(root)
+    except Unparsed as e:
+        return UNPARSED, f'inflight: STOP — {e}. Fix it by hand; dispatch nothing until it parses.'
 
 
 if __name__ == '__main__':
     if '--self-test' in sys.argv:
         sys.exit(self_test())
-    root = os.getcwd()
     cmd = sys.argv[1] if len(sys.argv) > 1 else 'status'
-    if cmd == 'open':
-        code, msg = cmd_open(root, parse(sys.argv[2:]))
-    elif cmd == 'close':
-        code, msg = cmd_close(root)
-    elif cmd == 'hold':
-        code, msg = cmd_hold(root)
-    else:
-        code, msg = status(root)
+    code, msg = run(ROOT, cmd, sys.argv[2:])
     print(msg)
     sys.exit(code)

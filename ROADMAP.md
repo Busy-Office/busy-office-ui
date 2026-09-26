@@ -712,7 +712,7 @@ not need.
            An earlier call read 0.23 on evidence that summarised the remaining
            hits. That prompted the in-context re-read that found three of the
            four extra sites. 398.5's fresh scorer is the independent check.
-2. [ ] **398.2 — the in-flight check refuses what it cannot parse.**
+2. [x] **398.2 — the in-flight check refuses what it cannot parse.**
        Milestone: M1 · Phase: 0
        Route: build
        After: 398.1
@@ -727,6 +727,43 @@ not need.
          so does a missing RESUME.md. Each of the scorer's five lines is a
          `--self-test` case, red-proved by reverting the fix and watching the
          case fail.
+       - **DONE 2026-09-26.** Every non-blank line under `## In flight` must
+         now parse, trailing whitespace aside. Anything else is **exit 5, a
+         STOP**, which LOOPS.md Step 0 names beside 0, 3 and 4. The cases:
+         a malformed line, two lines, a `started` that is not a UTC time, or
+         an unreadable RESUME.md. `hold` writes no row on it, and `open` and
+         `close` refuse with 5 too.
+
+         The repo root now comes from the script's own path, not the cwd. Run
+         from `/tmp`, the old script crashed with `FileNotFoundError`, exit 1,
+         and the new one reads the repo.
+         - **Self-test: 25 cases behave** (it was 11). Those include:
+           - the scorer's five lines: a trailing space parses to exit 3, and
+             a space in `paths`, reordered fields, `cap=60m` and a bullet
+             prefix each exit 5;
+           - two lines;
+           - a `started` with no timezone, and one that is not a time;
+           - hold, open and close over an unparsed line;
+           - close removing a line with trailing whitespace;
+           - a missing RESUME.md;
+           - the root check.
+         - **Red-proof.** The old `current()` and `read()` were loaded from
+           HEAD, and the injection was asserted to be the old parser: it uses
+           `LINE_RE.search` and has no `fullmatch`. 13 of the 14 new command
+           cases then fail; the 14th, status after the trailing-space close,
+           reads 0 either way:
+           - all five of the scorer's lines read "nothing in flight", exit 0,
+             which reproduces the finding;
+           - two lines read as a hold on the first line;
+           - the bad `started` cases and the missing file crash;
+           - `close` removed an unparsed line, and could not remove a line
+             with trailing whitespace.
+         - **End to end.** The CLI, run from `/tmp` on a scratch tree whose
+           line carries a bullet, prints `STOP — the line under ## In flight
+           does not parse …`, exits 5, and writes no hold row. On this repo it
+           reads "nothing in flight", exit 0.
+         - **Jev (J2, advisory)**: stop-not-nothing 0.95, five lines
+           red-proved 0.90.
 3. [ ] **398.3 — `milestone.py` counts a field as filled only when the owner
        filled it.**
        Parked: M1 — loop machinery (the milestone field report) — revisit: the owner's answer to 393.10's FAIL, or milestone close

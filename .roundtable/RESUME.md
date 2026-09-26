@@ -36,10 +36,10 @@ that branch is the owner's call.
   Step 0b).
 - **The one standing GOAL — the owner's M0 retry** (O3's cell, extended
   2026-09-26 after `393.10`'s FAIL): *"one retry, 398.1 → 398.2 → re-score
-  398.5; rules 2 and 3 paused until 398.5; cap 13"*. **Used: 11 of 13**,
+  398.5; rules 2 and 3 paused until 398.5; cap 13"*. **Used: 12 of 13**,
   counted as distinct loop-log timestamps of M0 dispatch rows; holds are
-  counted separately (`hold-wakes`). `398.1` landed. **Next: `398.2`**, then
-  `398.5`. A P0 still preempts. Rules 2 and 3 print OVERDUE and stay paused.
+  counted separately (`hold-wakes`). `398.1` and `398.2` landed. **Next:
+  `398.5`**, the re-score, the last M0 wake. A P0 still preempts. Rules 2 and 3 print OVERDUE and stay paused.
 - **After `398.5`:** on PASS, the owner sets `Status: ACTIVE`. On FAIL, M1
   stays DRAFT, and the loop does not extend M0 again. Either way the GOAL
   ends: Step 2 from rule 1, with rules 2 and 3 resuming.

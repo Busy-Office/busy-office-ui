@@ -95,6 +95,18 @@ workflow at a time; its line sits under RESUME.md `## In flight`.
 - **Exit 4 — past its cap:** stop the workflow (TaskStop its task id), keep its
   partial output at the line's `out`, record `--outcome logged` naming what did
   not finish, then `inflight.py close`, and continue.
+- **Exit 5 — the in-flight state cannot be read: STOP the wake**, exactly as a
+  guard stop does (write nothing, dispatch nothing), print the message, and
+  tell the owner. The cases:
+  - the section holds a line that is not the protocol's form (trailing
+    whitespace aside);
+  - it holds more than one line;
+  - `started` is not a UTC time;
+  - RESUME.md cannot be read.
+
+  It is never "nothing in flight". Before 398.2, all five malformed lines the
+  2026-09-26 re-score tried read as exactly that, exit 0. The fix is a hand
+  edit of the line; `open` and `close` refuse with exit 5 too.
 - **Launching a workflow** is `inflight.py open --wf … --item … --cap … --session
   … --out … --paths …` first; landing its result ends with `inflight.py close`.
 
