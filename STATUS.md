@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 16:49 UTC
+Generated at: 2026-09-26 16:50 UTC
 
 oldest dispatchable: 384.1 — lane 4's anchor and the rule-text generator.
 
@@ -164,13 +164,12 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1858 iterations logged)
+dispatch status — counter-triggered rules (1859 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-09-26 23:48   ok
-  Objective     4 / 3 slices          since 2026-09-26 19:15   OVERDUE  [377, 381, 409, 410]
-  -> a counter is at or past its threshold; the dispatcher should pick it
-  Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 160 sample(s), 8 of 52 name(s) paired across days]
-  -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
-     the unit is DISTINCT LOG DATES after 2026-09-25 (2026-09-26), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
+  Objective     0 / 3 slices          since 2026-09-27 00:50   ok
+  Optimize      2 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 160 sample(s), 8 of 52 name(s) paired across days]
+  -> rule 5's newest comparable pair predates 2 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
+     the unit is DISTINCT LOG DATES after 2026-09-25 (2026-09-26, 2026-09-27), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (44 of 52 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
        dispatch-region-words       6d  2026-09-25 7775 words -> 2026-09-26 10374 words  +2599   [5 same-day]
        claims                      6d  2026-09-19 203 count -> 2026-09-25 311 count  +108
@@ -302,7 +301,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-26 21:11 · Roadmap · triage · 377.17 filed — SC 2.5.7 file-picker case flaked on CI at 15s (3rd failure; rerun passed) · triaged · 01f1941c
 - 2026-09-26 22:01 · Continue · build · 377.15 (in progress) — check:claims split into two CI shards at the runtime midpoint; 162 + 197 = 359 reconciled; wall-clock reading waits on 3 green runs · landed · 20dc0918
 - 2026-09-26 22:17 · Continue · fix · 377.16 — object-page anchor strip: buttons flex-shrink 0 (labels no longer overlap, first reachable at 390); text-Range case red 14-33px then green · landed · 4e9308c9
 - 2026-09-26 22:29 · Standardize · sweep · Slice 409 — 4 of 4 lanes (isolated build): lanes 1, 2, 4 equal Slice 407; lane 3 120,015 (-6, 377.14 b prose, bounded by diff); dispatch region 10,374 · landed · bb80a2ea
@@ -312,6 +310,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 23:35 · Continue · build · 381.1 — correction-site check unwired on the number: re-tuned 234 -> 84 printed lines, blind judge 4 real (4.8%) under the 10% floor stated first; recall held; self-test 20/20 mutations · landed · 68b2f088
 - 2026-09-26 23:35 · Meta · refusal · 381.1: section suppression (drops 2 of 4 real) and archive search (+132 lines) as re-tunes · refused · 68b2f088
 - 2026-09-26 23:48 · Standardize · sweep · Slice 410 — 4 of 4 lanes (isolated build): lanes 1-3 equal Slice 409; lane 4 +25 in Step 0 from 381.1's history sentence, trimmed to the instruction; dispatch region 10,374 · landed · ec482111
+- 2026-09-27 00:50 · Objective · grill · Slice 411 — Objective grill of 377.14/377.16 (full), 377.13/15/17, 381.1, 409, 410 (narrowed): 63 claims, 52 hold; 15 findings (12 confirmed, 3 narrowed), no P0; 377.16 fix regressed the anchor marker (411.1) · landed · 94450fd5
 
 ## Sunset test
 
