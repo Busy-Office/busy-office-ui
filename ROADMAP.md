@@ -5692,7 +5692,7 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          `docs:container` was rebuilt, and `/concepts/layouts` and
          `/components/sidebar-nav` were screenshotted at 1440 and 390 in
          light and dark with 0 overflow.
-15. [ ] **377.15 — the claims shard sets CI's wall clock, at nearly twice the
+15. [x] **377.15 — the claims shard sets CI's wall clock, at nearly twice the
        next shard.** In 8 of 8 runs the `Claims + formatting` job took
        325-354s, against 174-191s for the next slowest. Every push waits on
        it, and every wake reads CI after pushing. Balanced, the slowest shard
@@ -5731,8 +5731,21 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
            is contention between two browsers, not the split.
          - `ci_timings.py` reconciles 13 build steps from now on and refuses
            windows that mix in the 11-step runs. That refusal is correct.
-         - **Still owed:** `python3 scripts/loops/ci_timings.py 3` over 3
-           green runs of the new layout, against the 5.4-5.9 min baseline.
+         - **DONE 2026-09-26: measured over 3 green runs of the new layout**
+           with `python3 scripts/loops/ci_timings.py 3` (runs 36247104833,
+           36248030150, 36248660290):
+           - **Wall clock 3.9-4.0 min**, against the 5.4-5.9 min baseline and
+             6.4 min on the last unsplit run. The two claims shards took
+             228-238s, now level with the other shards (150-185s).
+           - **Machine time rose** from 18.0-19.4 to 19.8-20.8 min, the extra
+             shard's setup and builds. It is free on a public repo, which is
+             the same ground 375.6 stands on.
+           - **Reconciled in CI too:** part a is 160 verified plus 3 not
+             verifiable in that environment, 163 in all, including 377.16's new
+             case; part b is 197. 163 + 197 = 360, the local single-process
+             count.
+           - `ci_timings.py`'s reconciliation refused the mixed window (an
+             11-step run against the 13 now declared), as designed.
 
 16. [x] **377.16 — the object-page anchor strip's labels overlap at 390px.**
        Track: defect

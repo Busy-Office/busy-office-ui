@@ -240,3 +240,4 @@
 {"ts": "2026-09-26 19:44", "name": "grid-presses-lost", "value": 0.0, "unit": "presses"}
 {"ts": "2026-09-26 19:44", "name": "grid-presses-total", "value": 4910.0, "unit": "presses"}
 {"ts": "2026-09-26 22:29", "name": "dispatch-region-words", "value": 10374.0, "unit": "words", "commit": "bb80a2ea"}
+{"ts": "2026-09-26 22:33", "name": "ci-wall-median-3runs", "value": 4.0, "unit": "min", "commit": "6bbde2f6"}
