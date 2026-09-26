@@ -4481,7 +4481,7 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
        Milestone: M1 · Phase: 0
        Route: build
        After: 393.11
-4. [ ] **377.4 — pointer coverage, named per behaviour.** 16 of 26 behaviours
+4. [x] **377.4 — pointer coverage, named per behaviour.** 16 of 26 behaviours
        listen for pointer input; trusted events reach 8 in `check-claims`;
        presses from a focused state had no coverage before 2026-09-24; two
        comments call an in-page `el.click()` "real". Base rate of a synthetic-
@@ -4491,6 +4491,83 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          CDP-input case, unless it is in an EXEMPT map with a reason; the two
          mislabelled comments are gone. Measure its base rate before wiring it.
        Track: defect
+       - **DONE 2026-09-26 (rule 4).** `check:pointer-coverage` is a meta-gate
+         in `check:repo`: `@heuristic`, with a 14-case `--self-test`. It is now
+         classified by `check:selftests` (58 gates, 25 heuristic, 232 cases).
+         - **Premise re-measured by the gate itself:** 16 of the 26 behaviours
+           listen for pointer input. That count includes `file-dropzone`'s
+           drag/drop and `context-menu`'s pointerdown, pointerup and
+           contextmenu. Before this item, trusted input reached **9**, not 8,
+           because 377.1 had added context-menu.
+         - **How it decides.** A behaviour is covered when `check-claims.mjs`
+           carries `// @pointer: <behaviour>` over a block that contains a
+           TRUSTED call: `page.click`, `page.mouse.*`, `page.touchscreen.*`
+           (puppeteer's CDP input) or a CDP `Input.dispatch*Event`.
+           - An annotation over only synthetic clicks (`el.click()` in
+             `evaluate`) fails as a mislabel.
+           - So does one naming a behaviour with no pointer listener.
+           - So does an EXEMPT entry for a behaviour that is covered or has
+             no listener.
+
+           Which handler a trusted event actually reaches is the annotator's
+           judgement. It was mapped per behaviour, by selector, by a
+           five-agent read-only workflow, with evidence per case.
+         - **Base rate measured before wiring: 7 of 16 would fail.** These were
+           collapsible-card, load-more, row-edit, table-toolbar, tag-input,
+           validation-summary and wizard. Every one of their cases was an
+           in-page `el.click()`. None was exempted: all seven were feasible,
+           and several were probed live. So `check-claims` gains **seven
+           trusted cases**, scoped in one block. Each asserts `isTrusted` on
+           every click it sends, plus the behaviour's effect:
+           - collapsible-card: aria-expanded flips;
+           - load-more: one `bo:table-load-more`, and the rows grow;
+           - row-edit: Cancel restores the value, and Save fires one
+             `bo:row-save` for LINE-1;
+           - table-toolbar: one `bo:table-export` with `csv`;
+           - tag-input: the FOCUSED-removal branch, where the chip goes and
+             focus stays in its group;
+           - validation-summary: a closed section opens, and the field takes
+             focus;
+           - wizard: Next moves a step, and Back returns.
+
+           Result: **16 of 16 covered, 0 exempt.** `check:claims` passes 324
+           behaviours.
+         - **Red-proofs.**
+           - `check-claims`, on a scratch copy with wizard's Next made
+             synthetic and load-more's press removed, fails **exactly those
+             2 of 324**.
+           - The gate fails on each of three injections: a dropped
+             annotation ("wizard … no check-claims case"), a synthetic click
+             under an annotation ("@pointer: alert has no trusted input
+             call"), and a stale EXEMPT ("tabs: EXEMPT, but … covers it").
+           - Both files were restored byte-identical (`cmp`).
+         - **The mislabelled comments, now corrected:**
+           - :1836, "after a REAL click", is now "an EXECUTED click … a
+             synthetic `entry.click()`".
+           - :7859, "with a real click", now says the click is synthetic ON
+             PURPOSE. A real press focuses the button, which is the other
+             branch, and the new trusted case covers that branch.
+           - A third, found by the same search: :4824's "Real keydown" was a
+             synthetic `dispatchEvent`.
+           - **Measured after the edit:** every one of the 26 comments in
+             `check-claims.mjs` that calls a click, press or key "real" was
+             paired with the code after it:
+             - 19 are followed by a trusted call within 25 code lines.
+             - Of the other 7, 5 are artefacts of that window: the file's
+               header, check labels written after their code, and a
+               same-line `page.click`.
+             - 2 are trusted just beyond it: `walkToTerminal`'s
+               `page.keyboard` at :5747, and the launcher's `page.click` at
+               :7702.
+
+             **0 describe a synthetic call**, except the corrected :8048
+             comment, which says it is synthetic on purpose.
+         - **Jev (J2, advisory):** gate 0.96, base rate 0.96, comments 0.93.
+           The comments claim read 0.75 on the edit descriptions alone, and
+           0.93 once the paired measurement above was in the evidence.
+         - **Stamped counts:** both READMEs are re-stamped (58 gates, 25
+           heuristic), and CLAUDE.md's hand-written "57 today, 24" is
+           updated.
 5. [x] **OWNER · 377.5 — release the unreleased fixes, or record why not.**
        231 commits and eight framework defect fixes (four P0) since 0.8.0
        (2026-09-06). The one consumer pins 0.8.0 and vendors only the CSS, so

@@ -2,9 +2,9 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 04:43 UTC
+Generated at: 2026-09-26 05:08 UTC
 
-oldest dispatchable: 377.4 — pointer coverage, named per behaviour.
+oldest dispatchable: 377.7 — an adoption reading at every Objective grill, and §6's exit requires the thesis section.
 
 Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, open `After:` target or held `Parked:` line holds — and, while a milestone is ACTIVE, that the milestone does not tag (rule M dispatches those; `dispatch_status.py` prints its pick). No GOAL overrides it: the owner's M0 bootstrap (O3), the one exception there was, ended with 398.5. A named item without a number has no age to rank by; any that nothing holds is listed here instead of being dropped.
 
@@ -34,9 +34,8 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 375.11 — what 375.9 measured and did not fix.
 - **Slice 376** (1 open)
   - 376.5 — the app-launch launcher hand-rolls a dialog header.
-- **Slice 377** (11 open)
+- **Slice 377** (10 open)
   - 377.3 — the completion gate cannot see a revision.
-  - 377.4 — pointer coverage, named per behaviour.
   - 377.6 — is busy-office-erp the named first user?
   - 377.7 — an adoption reading at every Objective grill, and §6's exit requires the thesis section.
   - 377.8 — the ACR's 1.4.11 and 2.4.7 remarks derive from source.

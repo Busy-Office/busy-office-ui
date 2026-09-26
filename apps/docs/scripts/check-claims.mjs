@@ -834,6 +834,7 @@ check(
   `gaps after each scroll: ${JSON.stringify(anchored)}`,
 );
 
+// @pointer: tabs
 /* /components/tabs claims an over-long strip "scrolls sideways… never wraps and
    never clips, so no tab is unreachable", and that arrow keys bring an
    off-screen tab into view. Both are runtime behaviour (roadmap 30.1). The
@@ -1071,6 +1072,7 @@ check(
   JSON.stringify(wide),
 );
 
+// @pointer: tabs
 /* Every tab shows ITS panel — not just the first one (owner report, 2026-08-18).
    The 9-tab demo shipped with all tabs pointing at one panel: it worked on load
    and broke on the first click, because initTabs() loops the tabs setting
@@ -1252,6 +1254,7 @@ check(
   JSON.stringify(iconSrc),
 );
 
+// @pointer: dropdown
 /* /patterns/filter-panel promises four runtime behaviours, and the whole
    argument for it being a PATTERN rather than a component is that the platform
    and the shipped dropdown already provide them (roadmap 40.4):
@@ -1400,6 +1403,7 @@ for (const theme of ['light', 'dark']) {
    at all. The rest are queued; these are the three whose failure would be
    silent. */
 
+// @pointer: tree-table
 // tree-table: the toggle collapses its subtree and says so.
 await visit('/components/tree-table/', { width: DESKTOP_WIDTH });
 const treeBefore = await page.evaluate(() => {
@@ -1427,6 +1431,7 @@ check(
   JSON.stringify({ treeBefore, treeAfter }),
 );
 
+// @pointer: quantity
 /* quantity: the stepper actually steps, and respects its own min.
 
    Every selector below is scoped to ONE widget via :has([data-quantity-step]),
@@ -1464,6 +1469,7 @@ check(
   JSON.stringify({ ...qty, afterUp, afterDown }),
 );
 
+// @pointer: alert
 // alert: dismiss removes the alert it belongs to, and only that one.
 await visit('/components/alerts/', { width: DESKTOP_WIDTH });
 const alertBefore = await page.evaluate(() => document.querySelectorAll('.bo-alert').length);
@@ -1475,6 +1481,175 @@ check(
   alertBefore > 0 && alertAfter === alertBefore - 1,
   JSON.stringify({ alertBefore, alertAfter }),
 );
+
+/* 377.4 — TRUSTED pointer input for the seven behaviours whose only cases were
+   an in-page el.click(). A synthetic click skips pointerdown, mousedown, the
+   focus move and the trusted flag, which is how 375.10 and 377.1 passed while
+   broken under a real mouse. Each case records isTrusted on every click that
+   reaches the page, so a regression back to el.click() fails here as well as a
+   regression in the behaviour. check-pointer-coverage.mjs holds the annotations
+   to a trusted call. Scoped in a block so its names cannot collide. */
+{
+const recordClicks = () => page.evaluate(() => {
+  window.__tc = [];
+  document.addEventListener('click', (e) => window.__tc.push(e.isTrusted), true);
+});
+const pause = (ms = 150) => new Promise((r) => setTimeout(r, ms));
+const allTrusted = (c) => Array.isArray(c) && c.length > 0 && c.every(Boolean);
+
+// @pointer: collapsible-card
+await visit('/components/dashboard/', { width: DESKTOP_WIDTH });
+await recordClicks();
+const ccSel = '[data-collapse-trigger][aria-controls="collapse-demo-body"]';
+const ccBefore = await page.$eval(ccSel, (t) => t.getAttribute('aria-expanded'));
+await page.click(ccSel);
+await pause();
+const cc = await page.$eval(ccSel, (t) => ({
+  expanded: t.getAttribute('aria-expanded'),
+  state: document.getElementById(t.getAttribute('aria-controls'))?.dataset.state ?? null,
+  clicks: window.__tc,
+}));
+check(
+  'collapsible-card: a real press on the trigger flips aria-expanded (377.4)',
+  allTrusted(cc.clicks) && cc.expanded !== ccBefore,
+  JSON.stringify({ ccBefore, ...cc }),
+);
+
+// @pointer: load-more
+await visit('/components/pagination/', { width: DESKTOP_WIDTH });
+await recordClicks();
+const lmBefore = await page.evaluate(() => {
+  window.__lm = 0;
+  document.addEventListener('bo:table-load-more', () => { window.__lm += 1; });
+  return document.querySelectorAll('#lm-rows tr').length;
+});
+await page.click('[data-table-load-more]');
+await pause();
+const lm = await page.evaluate(() => ({
+  fired: window.__lm, rows: document.querySelectorAll('#lm-rows tr').length, clicks: window.__tc,
+}));
+check(
+  'load-more: a real press fires bo:table-load-more once and the rows grow (377.4)',
+  allTrusted(lm.clicks) && lm.fired === 1 && lm.rows > lmBefore,
+  JSON.stringify({ lmBefore, ...lm }),
+);
+
+// @pointer: row-edit
+await visit('/patterns/editable-grid/', { width: DESKTOP_WIDTH });
+await recordClicks();
+const reRow = '#eg-table tbody tr[data-row-id="LINE-1"]';
+const reField = `${reRow} input[type=number]`;
+await page.evaluate(() => {
+  window.__rs = [];
+  document.addEventListener('bo:row-save', (e) => window.__rs.push(e.detail?.rowId ?? null));
+});
+const reStart = await page.$eval(reField, (i) => i.value);
+await page.focus(reField);
+await page.keyboard.type('77');
+const reDirty = await page.$eval(reField, (i) => i.value);
+await page.click(`${reRow} [data-row-edit-cancel]`);
+await pause();
+const reCancel = await page.$eval(reRow, (r) => ({
+  value: r.querySelector('input[type=number]').value,
+  cancelHidden: r.querySelector('[data-row-edit-cancel]').hidden,
+}));
+await page.focus(reField);
+await page.keyboard.type('1');
+await page.click(`${reRow} [data-row-edit-save]`);
+await pause();
+const reSave = await page.evaluate(() => ({ saves: window.__rs, clicks: window.__tc }));
+check(
+  'row-edit: a real press on Cancel restores the row, and on Save fires one bo:row-save (377.4)',
+  allTrusted(reSave.clicks) && reSave.clicks.length >= 2 && reDirty !== reStart
+    && reCancel.value === reStart && reCancel.cancelHidden === true
+    && reSave.saves.length === 1 && reSave.saves[0] === 'LINE-1',
+  JSON.stringify({ reStart, reDirty, reCancel, reSave }),
+);
+
+// @pointer: table-toolbar
+await visit('/components/table-toolbar/', { width: DESKTOP_WIDTH });
+await recordClicks();
+await page.evaluate(() => {
+  window.__te = [];
+  document.addEventListener('bo:table-export', (e) => window.__te.push(e.detail?.format ?? null));
+});
+await page.click('[data-table-export]');
+await pause();
+const te = await page.evaluate(() => ({ exports: window.__te, clicks: window.__tc }));
+check(
+  'table-toolbar: a real press on Export fires one bo:table-export (377.4)',
+  allTrusted(te.clicks) && te.exports.length === 1 && te.exports[0] === 'csv',
+  JSON.stringify(te),
+);
+
+/* tag-input's FOCUSED-removal branch: a real press focuses the remove button
+   on mousedown, so removeTag() must hand focus back to the group's field rather
+   than drop it to <body>. The synthetic case further down tests the unfocused
+   branch, and says so. */
+// @pointer: tag-input
+await visit('/components/tag-input/', { width: DESKTOP_WIDTH });
+await recordClicks();
+const tiBefore = await page.evaluate(() => {
+  window.__tr = [];
+  document.addEventListener('bo:tag-remove', (e) => window.__tr.push(e.detail?.value ?? null));
+  return document.querySelectorAll('#ti-basic .bo-tag-input__tag').length;
+});
+await page.click('#ti-basic .bo-tag-input__remove');
+await pause();
+const ti = await page.evaluate(() => ({
+  tags: document.querySelectorAll('#ti-basic .bo-tag-input__tag').length,
+  removed: window.__tr,
+  clicks: window.__tc,
+  focusInGroup: !!document.activeElement?.closest('#ti-basic'),
+  focused: document.activeElement?.tagName ?? null,
+}));
+check(
+  'tag-input: a real press on a chip\'s remove button removes that chip and keeps focus in its group (377.4)',
+  allTrusted(ti.clicks) && ti.tags === tiBefore - 1 && ti.removed.length === 1 && ti.focusInGroup,
+  JSON.stringify({ tiBefore, ...ti }),
+);
+
+// @pointer: validation-summary
+await visit('/patterns/validation-summary/', { width: DESKTOP_WIDTH });
+await recordClicks();
+await page.click('form[data-validation-summary] button[type="submit"]');
+await pause(250);
+const vsLinks = await page.evaluate(() =>
+  [...document.querySelectorAll('[data-validation-summary-box] a')].map((a) => a.getAttribute('href')));
+const vsClosed = await page.evaluate(() => {
+  const d = document.querySelector('#vs-dock')?.closest('details');
+  return !!d && !d.open;
+});
+await page.click('[data-validation-summary-box] a[href="#vs-dock"]');
+await pause(250);
+const vs = await page.evaluate(() => ({
+  focus: document.activeElement?.id ?? null,
+  open: !!document.querySelector('#vs-dock')?.closest('details')?.open,
+  clicks: window.__tc,
+}));
+check(
+  'validation-summary: a real press on a summary link opens its closed section and focuses the field (377.4)',
+  allTrusted(vs.clicks) && vs.clicks.length >= 2 && vsLinks.includes('#vs-dock') && vsClosed && vs.open && vs.focus === 'vs-dock',
+  JSON.stringify({ vsLinks, vsClosed, ...vs }),
+);
+
+// @pointer: wizard
+await visit('/patterns/wizard/', { width: DESKTOP_WIDTH });
+await recordClicks();
+const wz = [await page.$eval('[data-wizard]', (w) => w.dataset.wizardCurrent)];
+await page.click('[data-wizard] [data-wizard-next]');
+await pause();
+wz.push(await page.$eval('[data-wizard]', (w) => w.dataset.wizardCurrent));
+await page.click('[data-wizard] [data-wizard-back]');
+await pause();
+wz.push(await page.$eval('[data-wizard]', (w) => w.dataset.wizardCurrent));
+const wzClicks = await page.evaluate(() => window.__tc);
+check(
+  'wizard: a real press on Next advances a step and on Back returns (377.4)',
+  allTrusted(wzClicks) && wzClicks.length === 2 && Number(wz[1]) === Number(wz[0]) + 1 && wz[2] === wz[0],
+  JSON.stringify({ steps: wz, clicks: wzClicks }),
+);
+}
 
 /* Two screens that promised behaviour they never showed (roadmap 45.2).
    `invoice-list` discussed paging in four places and rendered none;
@@ -1576,6 +1751,7 @@ check(
   JSON.stringify(reportPrint),
 );
 
+// @pointer: dialog
 // The detail arrives as a real drawer, and Escape returns focus to its trigger.
 await visit('/patterns/master-detail/', { width: NARROW_WIDTH });
 await page.click('[data-dialog-trigger="md-drawer"]');
@@ -1684,6 +1860,7 @@ check(
   JSON.stringify(cbPick),
 );
 
+// @pointer: combobox
 /* 375.10 — a real POINTER press on an option commits it. The keyboard path
    above always worked; a mouse press or a tap did not, anywhere: mousedown
    moved focus off the input, focusout closed the list, and the click landed
@@ -1833,8 +2010,10 @@ check(
    demos a required field inside a closed <details>, so the claim is checkable
    against the real page rather than against injected markup.
 
-   Asserted on the DOM after a REAL click, never on the source: the failing
-   version listed the entry correctly and looked completely fine. */
+   Asserted on the DOM after an EXECUTED click, never on the source: the failing
+   version listed the entry correctly and looked completely fine. The click is
+   a synthetic entry.click(); the trusted press on a summary link is 377.4's
+   case after the alert check. */
 const vsReveal = await page.evaluate(async () => {
   const details = document.querySelector('form[data-validation-summary] details');
   const box = document.querySelector('[data-validation-summary-box]');
@@ -2338,6 +2517,7 @@ check(
   JSON.stringify(drop),
 );
 
+// @pointer: file-dropzone
 /* file-dropzone PARITY (roadmap 373.1). The page promises a forwarded drop
    behaves "exactly as if the user had picked the files via the dialog", and
    three separate divergences shipped under that sentence: a DISABLED input
@@ -2489,6 +2669,7 @@ check(
   JSON.stringify({ zone: dzParity.multiple.zone.events, native: dzParity.multiple.native.events }),
 );
 
+// @pointer: file-dropzone
 /* The highlight is a PROMISE that the drop will be accepted, so it must be
    read mid-drag and must not appear over a drop the zone is about to refuse.
    Read after the drop it would always be cleared, which is the measurement
@@ -2942,6 +3123,7 @@ check(
   JSON.stringify(mdClose),
 );
 
+// @pointer: dialog
 /* 200.1 — dialog exit motion (offcanvas's 143.4 recipe applied verbatim).
    The whole point of using a pure-CSS `allow-discrete` transition instead of
    delaying JS `close()` on `animationend` is that dismissal never depends on
@@ -2989,6 +3171,7 @@ check(
   JSON.stringify(dlgReduced),
 );
 
+// @pointer: dialog
 /* 375.9 — an open dialog or offcanvas must not be a containing block for
    fixed descendants, or a grid cell's anchored error message is trapped and
    clipped inside the panel. Any transform does that, the identity included,
@@ -3397,6 +3580,7 @@ check(
   JSON.stringify(inboxArrow),
 );
 
+// @pointer: dropdown
 /* /patterns/kanban: the Move menu opens via native popovertarget and
    auto-closes on item selection via initDropdowns()'s delegated click
    listener (roadmap 109.17 — zero prior coverage). Verified against
@@ -4058,6 +4242,7 @@ check('quantity: a grouped, named field keeps the qty | unit joint — same radi
     joint.grouped.selRadius === joint.control.selRadius && joint.grouped.gap === joint.control.gap,
   JSON.stringify(joint));
 
+// @pointer: context-menu
 /* 377.1 — "right-click a header … and the menu opens at the cursor". A real
    right press opens the menu on `contextmenu`, which Chromium on macOS/Linux
    fires while the button is still DOWN; the popover's light dismiss then paired
@@ -4821,8 +5006,9 @@ check(
 
 // Scan-result flash (126.2): "press Enter: the viewport flashes green …
 // scan a REJECT* code and it flashes red with the reason announced".
-// Real keydown on the real input — a synthetic document-level event
-// matches no delegated handler (this file's own standing lesson).
+// A keydown dispatched ON the input (synthetic, isTrusted false), because a
+// document-level event matches no delegated handler (this file's own standing
+// lesson).
 await visit('/patterns/goods-receipt/');
 /* The flash paints on the SCREEN's viewport, which is now the device's —
    `position: fixed` resolves against the mirror document, not the docs page.
@@ -5895,6 +6081,7 @@ check(
 
 await visit('/components/table-toolbar/', { width: DESKTOP_WIDTH });
 
+// @pointer: dropdown
 /* 278.5 — the caption calls Columns "the same multi-select dropdown pattern as
    elsewhere", and until this case the page shipped that pattern's markup
    without the behavior that makes it one: it called initDataTables /
@@ -6507,6 +6694,7 @@ check(
 );
 await page.evaluate(() => document.getElementById('dz-states')?.remove());
 
+// @pointer: dialog
 /* Drawer sidebar-nav labels never collapse to the rail's icon-only state,
    however narrow the surrounding .bo-app-shell reads (roadmap 373.3). A
    <dialog> escapes the shell's PAINT layer once open, not its DOM subtree —
@@ -7856,7 +8044,9 @@ const tagUnfocused = await page.evaluate(() => {
   const field = document.querySelector('#ti-recipients .bo-tag-input__field');
   field.focus();
   const before = document.activeElement === field;
-  // remove a chip in the OTHER group, with a real click on its button
+  // remove a chip in the OTHER group with a SYNTHETIC click, deliberately: a
+  // real press focuses the button first, which is the focused-removal branch
+  // (377.4's trusted tag-input case); this case tests the unfocused one
   g.querySelector('.bo-tag-input__remove').click();
   return { focusStartedInOtherGroupsField: before,
     stillInThatField: document.activeElement === field,
