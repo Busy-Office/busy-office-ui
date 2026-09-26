@@ -129,7 +129,8 @@ independence exists to exclude.
 ## Quality bar (every change meets it)
 
 - Verify **live** before committing — the docs run in a Podman container on `:8081`
-  (`podman build -f apps/docs/Containerfile -t bo-docs . && podman run …`); screenshot
+  (`npm run docs:container`, which builds and serves it and stamps
+  `/build-id.json` with the commit and any uncommitted build inputs); screenshot
   at 1440px **and** 390px, in **both** light and dark themes. Podman can serve a
   **stale image from cache** — confirm the served CSS actually contains your change
   (`curl …/_astro/*.css | grep <new-class>`) and rebuild with `--no-cache` if not,

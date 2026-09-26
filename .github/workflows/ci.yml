@@ -133,7 +133,7 @@ jobs:
       # `podman run` cheerfully serves it — a stale screenshot that looks green.
       # Builds the image only; publishing it is a separate question.
       - name: Docs container builds
-        run: docker build -f apps/docs/Containerfile -t bo-docs .
+        run: docker build -f apps/docs/Containerfile -t bo-docs --build-arg BUILD_SHA=${{ github.sha }} .
 
   # ---------------------------------------------------------------------------
   # The browser gates, sharded. They were 11 serial steps totalling ~12 minutes

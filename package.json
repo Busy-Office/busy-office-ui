@@ -13,6 +13,7 @@
     "suite:check": "node examples/erp-suite/check-erp-suite.mjs && node packages/core/scripts/check-markup.mjs examples/erp-suite/dist",
     "suite:audit": "node examples/erp-suite/audit.mjs",
     "suite": "npm run suite:build && npm run suite:check && npm run suite:audit",
-    "build:create": "npm run build -w @busy-office/create-ui"
+    "build:create": "npm run build -w @busy-office/create-ui",
+    "docs:container": "node apps/docs/scripts/container.mjs"
   }
 }

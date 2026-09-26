@@ -1,6 +1,9 @@
 # Build the docs site and serve it statically. Build context = repo root.
-#   podman build -f apps/docs/Containerfile -t bo-docs .
-#   podman run --rm -p 8081:80 bo-docs   ->  http://localhost:8081/
+#   npm run docs:container   ->  http://localhost:8081/  (builds and serves)
+# It passes the commit and the uncommitted build-input paths as build args,
+# so /build-id.json names what this image holds (roadmap 377.12). A bare
+# `podman build` without them fails in stamp-build-id.mjs rather than
+# stamping null.
 FROM node:22-alpine AS build
 WORKDIR /repo
 COPY package.json package-lock.json tsconfig.base.json ./
@@ -35,6 +38,9 @@ RUN npm ci --ignore-scripts
 # three times before, so check this line when a gate starts failing only here.
 RUN npm run build -w @busy-office/ui
 # No base path: served at the container root, so links resolve at "/".
+# The image has no .git: the stamp's commit comes in from the host.
+ARG BUILD_SHA
+ARG BUILD_DIRTY_PATHS=""
 RUN npm run build -w docs
 
 FROM docker.io/library/nginx:alpine

@@ -5335,13 +5335,39 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          - `check:repo` is green (pointer coverage 16 of 16).
          - **Not covered:** `test:axe` and `check:layout`, since no rendered
            page changed, only the harness.
-12. [ ] **377.12 — the preview's provenance is truthful.** The container
+12. [x] **377.12 — the preview's provenance is truthful.** The container
        reports `{sha:null, dirty:true}` whatever it holds.
        - **Accept:** the container build receives the sha and the dirty
          build-input paths and `stamp-build-id` honours them, failing loudly
          rather than writing null; the served stamp names HEAD plus exactly the
          uncommitted paths it contains.
         Parked: M1 — docs-preview provenance, not milestone work — revisit: a stale-docs-container incident
+       - **DONE 2026-09-26 (rule 4).** Premise re-checked first: :8081
+         served `{"sha": null, "dirty": true}`. The image has no `.git`, so
+         `rev-parse` returned null and `status` read as dirty.
+         - **`stamp-build-id.mjs`** takes its commit from `GITHUB_SHA` (CI), then
+           from `BUILD_SHA` plus `BUILD_DIRTY_PATHS` (the container), then from
+           `git` (a checkout). It now **fails** whenever it cannot name a
+           40-hex commit, instead of writing null. The stamp gains
+           `dirtyPaths`.
+         - **`npm run docs:container`** (new, `apps/docs/scripts/container.mjs`)
+           builds and serves :8081. It passes `BUILD_SHA` and the uncommitted
+           paths among the image's own build inputs. The inputs are read from
+           the Containerfile's COPY lines, not restated. `--self-test` covers
+           the parser.
+         - **The Containerfile** declares both ARGs. **CI** passes
+           `--build-arg BUILD_SHA=${{ github.sha }}`. **CLAUDE.md** and
+           **LOOPS.md** name the new command, since a bare build now fails by
+           design.
+         - **Measured:** the served stamp named HEAD `816b4155` and exactly 4
+           paths. An independent `git status` of the COPY sources lists the
+           same 4. The 3 uncommitted non-inputs (`ci.yml`, `CLAUDE.md`,
+           `LOOPS.md`) are correctly absent.
+         - **Red-proven:** an empty `BUILD_SHA` exits 1, a non-hex one exits 1,
+           and a bare `podman build` fails at `RUN npm run build -w docs` with
+           the refusal message.
+         - **Not covered until CI runs:** that `docker build` with the new arg
+           passes on the runner.
 13. [ ] **377.13 — 375.9's corpus figure is re-runnable.** The sweep script
        lives only in session scratch.
        - **Accept:** the script (or its committed equivalent) is in the repo
