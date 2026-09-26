@@ -1824,3 +1824,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-26 09:18 · Roadmap · triage · owner recommendations for O5-O18 and 22 other waiting items (.roundtable/owner-recs-2026-09-26.md); 398.1 third dead reference, 398.4 filed · triaged · 7438e033
 - 2026-09-26 09:28 · Roadmap · triage · owner extends M0 once: 398.1 → 398.2 → re-score 398.5, cap 13; four parked .roundtable records copied to main · triaged · 0ab92652
 - 2026-09-26 10:00 · Continue · build · 398.1 — stale statements fixed (N2-N7, both Redundants, 4 more found by re-reading); dead-ref re-scan 31 unresolved, none live · milestone=M1 route=build tier=top model=claude-opus-5-5 · landed · 08ca48f0
+- 2026-09-26 10:08 · Continue · build · 398.2 — in-flight check: unparseable state is exit 5 (STOP), self-test 11→25, red-proved (13 of 14 new cases fail on the old parser) · milestone=M1 route=build tier=top model=claude-opus-5-5 · landed · 428ca7f1
