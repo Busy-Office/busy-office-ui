@@ -37,9 +37,9 @@ that branch is the owner's call.
 - **No standing GOAL.** The owner's M0 retry ended with `398.5`, which
   FAILED at 2.375. That used 13 of 13 wakes. M1 stays DRAFT, and the loop does
   not extend M0 on its own.
-- **Step 2 from rule 1.** Read the counters rather than this line: at the
-  last wake Standardize read 2 of 4 and Objective 2 of 3, so neither fired,
-  and rule 4 ran `377.9`. `STATUS.md` prints rule 4's next pick; read every
+- **Step 2 from rule 1.** Read the counters rather than this line: the
+  last wake ran Standardize (Slice 405, clean) at 4 of 4, and before it rule 4
+  ran `377.9`. `STATUS.md` prints rule 4's next pick; read every
   free item older than it before quoting it. M1 is DRAFT, so rules M and D do
   not run.
 - **Before choosing, read CI for main's HEAD** (`gh run list --branch main

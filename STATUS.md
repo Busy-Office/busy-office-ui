@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 07:19 UTC
+Generated at: 2026-09-26 07:34 UTC
 
 oldest dispatchable: 377.11 — 375.10's "holds the option" half must be able to fail.
 
@@ -151,15 +151,15 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1836 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-09-26 13:26   OVERDUE
-  Objective     2 / 3 slices          since 2026-09-26 14:16   ok  [377, 404]
+dispatch status — counter-triggered rules (1837 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-09-26 15:34   ok
+  Objective     3 / 3 slices          since 2026-09-26 14:16   OVERDUE  [377, 404, 405]
   -> a counter is at or past its threshold; the dispatcher should pick it
-  Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 153 sample(s), 8 of 49 name(s) paired across days]
+  Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 154 sample(s), 8 of 49 name(s) paired across days]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-25 (2026-09-26), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (41 of 49 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
-       dispatch-region-words       6d  2026-09-25 7775 words -> 2026-09-26 10374 words  +2599   [1 same-day]
+       dispatch-region-words       6d  2026-09-25 7775 words -> 2026-09-26 10374 words  +2599   [2 same-day]
        claims                      6d  2026-09-19 203 count -> 2026-09-25 311 count  +108
        gates                       4d  2026-09-07 55 count -> 2026-09-09 56 count  +1
        axe-violations              8d  2026-09-03 0 count -> 2026-09-06 0 count  +0   NEVER MOVED
@@ -294,7 +294,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-26 12:43 · Continue · build · 376.7 — lane-4 ratchet: a cut is >=100 words and >=1% (argued from 196 shrinks); replay at filing rev -> 09-07 sweep; red-proved · landed · 3569a013
 - 2026-09-26 13:08 · Continue · build · 377.4 — check:pointer-coverage meta-gate; 7 trusted check-claims cases added (16/16 covered, 0 exempt); mislabelled comments fixed · landed · 1f34a912
 - 2026-09-26 13:18 · Continue · build · 377.7 — adoption reading instrument (record_metric --adoption): windows, current-version, dist hits, GitHub traffic; unread = nothing; out of rule 5 · landed · dfc9bf54
 - 2026-09-26 13:26 · Standardize · sweep · Slice 402 — 4 of 4 lanes (isolated build): all equal Slice 400; ratchet floor surfaces ENVIRONMENT.md never cut (36 up) -> owner Direction #0 · landed · da1b2cb8
@@ -304,6 +303,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 15:16 · Continue · build · 377.9 — 375.6 re-decided on runner timings (ci_timings.py, 8 runs): still refused, wall clock cannot fall; filed 377.10 · landed · f0704759
 - 2026-09-26 15:16 · Meta · refusal · 375.6 build-once-and-share-dist, re-refused on runner data: wall clock >= 5.7-6.1 min vs 5.4-5.9 today · refused · f0704759
 - 2026-09-26 15:19 · Continue · fix · 377.9 follow-up — duplicate 377.10 renumbered to 377.15; generate_status refuses a duplicate open id by name · landed · d9163e67
+- 2026-09-26 15:34 · Standardize · sweep · Slice 405 — 4 of 4 lanes (isolated build): lanes 1, 2, 4 equal Slice 402; lane 3 +50 words attributed to 377.8's ACR remarks by reverting it; dispatch region 10,374 · landed · e6c341a2
 
 ## Sunset test
 

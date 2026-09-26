@@ -1842,3 +1842,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-26 15:16 · Continue · build · 377.9 — 375.6 re-decided on runner timings (ci_timings.py, 8 runs): still refused, wall clock cannot fall; filed 377.10 · landed · f0704759
 - 2026-09-26 15:16 · Meta · refusal · 375.6 build-once-and-share-dist, re-refused on runner data: wall clock >= 5.7-6.1 min vs 5.4-5.9 today · refused · f0704759
 - 2026-09-26 15:19 · Continue · fix · 377.9 follow-up — duplicate 377.10 renumbered to 377.15; generate_status refuses a duplicate open id by name · landed · d9163e67
+- 2026-09-26 15:34 · Standardize · sweep · Slice 405 — 4 of 4 lanes (isolated build): lanes 1, 2, 4 equal Slice 402; lane 3 +50 words attributed to 377.8's ACR remarks by reverting it; dispatch region 10,374 · landed · e6c341a2
