@@ -4343,6 +4343,30 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
        unreleased fix its workflow touched is 300.1 (issue #1). Any case for
        releasing rests on users no channel can see. The release stays the
        owner's call.]
+       - **Owner decision 2026-09-26: release ("Prep 0.9.0 release"), which
+         answers O6.** The loop prepped it; publishing stays the owner's.
+         - **The prep commit** has the same shape as 0.8.0's `2a4bb245`:
+           - CHANGELOG `## Unreleased` becomes `## 0.9.0 (2026-09-26)`, with a
+             new empty Unreleased above it;
+           - `@busy-office/ui` 0.9.0;
+           - `@busy-office/create-ui` 0.2.0, a minor for the Apache-2.0
+             relicence;
+           - `framework.json` `^0.9.0`;
+           - the two workspace versions in the lockfile.
+
+           Release 399.3's floor correction lands first.
+         - **Checks on the prep tree:**
+           - `check-publishable` passes: 0.9.0 and 0.2.0 are not on the
+             registry, whose newest versions are 0.8.0 and 0.1.3;
+           - `npm ls --workspaces` shows both new versions.
+
+           The build results are in the prep commit's body.
+         - **Left, the owner's:** once CI is green on the prep sha, publish
+           GitHub Release `v0.9.0`; `publish.yml` builds and publishes both
+           packages.
+         - **Left, the loop's, after publish:** `derive-introduced --refresh`
+           (introduced.json's registryVersions stop at 0.8.0), then close
+           this item and 394.3.
 6. [ ] **OWNER · 377.6 — is busy-office-erp the named first user?** Its ADR-0016
        names this package the reference implementation of its runtime-UI
        contract; nothing in this repo's steering documents names it. If yes:

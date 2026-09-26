@@ -9,6 +9,11 @@ pin.
 
 ## Unreleased
 
+_Nothing yet._
+
+
+## 0.9.0 (2026-09-26)
+
 ### Changed
 
 - **`.bo-motion-spin` now sets `display: inline-block`.** `transform` does not
