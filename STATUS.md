@@ -150,10 +150,9 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1830 iterations logged)
+dispatch status — counter-triggered rules (1831 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-09-26 13:26   ok
-  Objective     3 / 3 slices          since 2026-09-26 12:34   OVERDUE  [376, 377, 402]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-09-26 14:16   ok
   Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 151 sample(s), 8 of 47 name(s) paired across days]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-25 (2026-09-26), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -293,7 +292,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-26 10:37 · Continue · fix · CI red since bbdc4269: five floor labels in the owner-recs record tripped check-floor; fixed 57e67a42 (399.5 filed) · landed · 35c25abf
 - 2026-09-26 11:02 · Continue · build · 399.3 — browserslist raised to the derived floor (Firefox/Safari +1), held equal by derive-floor; dist byte-identical (red-proved) · landed · 64ba08eb
 - 2026-09-26 11:02 · Continue · release-prep · 0.9.0 release prep (e43330f2): @busy-office/ui 0.9.0, create-ui 0.2.0; publish is the owner's · landed · 64ba08eb
 - 2026-09-26 11:15 · Standardize · sweep · Slice 400 — 4 of 4 lanes (isolated build): lanes 1-3 equal to base; lane 4 Step 0c charter applied, expired M0 exception retired; dispatch region 10,625 -> 10,374 · landed · daea445f
@@ -303,6 +301,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 13:08 · Continue · build · 377.4 — check:pointer-coverage meta-gate; 7 trusted check-claims cases added (16/16 covered, 0 exempt); mislabelled comments fixed · landed · 1f34a912
 - 2026-09-26 13:18 · Continue · build · 377.7 — adoption reading instrument (record_metric --adoption): windows, current-version, dist hits, GitHub traffic; unread = nothing; out of rule 5 · landed · dfc9bf54
 - 2026-09-26 13:26 · Standardize · sweep · Slice 402 — 4 of 4 lanes (isolated build): all equal Slice 400; ratchet floor surfaces ENVIRONMENT.md never cut (36 up) -> owner Direction #0 · landed · da1b2cb8
+- 2026-09-26 14:16 · Objective · grill · Slice 403 — Objective grill of 377.4 (full), 376.7/377.7/402 (narrowed): 33/39 claims full, 13 findings (6 confirmed); own 196->188 and touchscreen claims corrected · landed · 8fa43c1d
 
 ## Sunset test
 
