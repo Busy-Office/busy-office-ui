@@ -34,23 +34,30 @@ that branch is the owner's call.
 
 - **Step 0:** `step0_guard.py`, then `inflight.py hold`, then
   `dispatch_status.py` (a REFUSED milestone line stops the wake; see LOOPS.md
-  Step 0b).
-- **No standing GOAL.** The owner's M0 retry ended with `398.5`, which
-  FAILED at 2.375. That used 13 of 13 wakes. M1 stays DRAFT, and the loop does
-  not extend M0 on its own.
-- **Step 2 from rule 1.** No P0 is open. The Slice 408 grill (on 406.6 and
-  four others) filed 408.1-408.3; 408.1 is the grid ring's placement by FILL,
-  which the 406.6 fix keyed on element names. Read the counters; `STATUS.md`
-  prints rule 4's pick.
-- **For the owner, a 0.9.1 candidate:** `406.6` is a shipped WCAG 2.4.7 fix,
-  and 401.1 (`bo-check-markup` multi-root) is already waiting on a 0.9.1
-  decision. Publishing stays owner-triggered.
-- **Before choosing, read CI for main's HEAD** (`gh run list --branch main
-  --limit 2`). A red main is rule 1.
-- **Today's owner report is closed:** the version-switcher 404 was `404.1`,
-  landed and verified on Pages. Its follow-up `404.2` is open.
+  Step 0b). Before choosing, read CI for main's HEAD (`gh run list --branch
+  main --limit 2`); a red main is rule 1.
+- **No standing GOAL.** M0 ended with `398.5` (FAILED, 2.375); M1 stays DRAFT.
+- **Rule 4's pick is `386.1`, started, not landed** (nothing in the checkout).
+  Base rate: 0 of 312 print readings off `#fff`/`#000` (128 `distPages` + 28
+  `suitePages`, both themes, `23a22cce`). Shape chosen: a print probe in
+  `check-layout.mjs` on each page it already loads (a shared source would not
+  catch a NEW page). **Red-proof not done:** the first injection removed 0 rules;
+  delete the unlayered `@media print` `body` rule from ANY sheet (href or not),
+  assert 1 removed, then read. Script: `~/Projects/busy-office-ui-handoff/386.1-base-rate.mjs`.
+- **Jev reviews are UNVERIFIED until the owner lands the migration below.**
+  CLAUDE.md still names `mcp__jev__*`; the owner removed that server and the
+  old `jev-*` skills on 2026-09-27. Never fall back to MCP; do not use the
+  `jev` CLI for loop reviews until CLAUDE.md says so.
 
 ## Direction — 2026-09-26
+
+**2026-09-27 — the Jev 0.10/0.11 migration waits on the owner.** Proposal
+(6 files, +589 −118, applies to `107e4a49`, reviewed clean) is outside the repo,
+uncommitted by instruction: `~/Projects/busy-office-ui-handoff/jev-0.11-proposal/`
+(`proposal-final.diff`, `hit_table.md`, `evidence.md`, `flags.json`). Landing it
+turns Jev back on for every wake. Owner has allowed the repo, set the key, and
+removed the MCP server and old `jev-*` skills; left: `~/.zshrc:93`,
+`/plugin configure busy-office`, and busy-office-erp's AGENTS.md/ADR-0022.
 
 Owner decisions and actions waiting. **A recommendation for every item below,
 with its re-measured evidence and a validated field block to paste, is in
