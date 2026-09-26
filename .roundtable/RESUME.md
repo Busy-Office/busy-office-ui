@@ -23,7 +23,6 @@ survives none.
 
 ## In flight
 
-wf=wf_55d90bb5-ac3 item=slice-406-objective-grill started=2026-09-26T07:46:40Z cap=120 session=1dbfe40a-17f6-4a1d-a447-12cd87bce187 out=/private/tmp/claude-501/-Users-thepfmind-Projects-busy-office-ui/1dbfe40a-17f6-4a1d-a447-12cd87bce187/scratchpad/grill-406 paths=.roundtable/grill-*,ROADMAP.md
 ## Uncommitted
 
 Nothing in this checkout. The owner's own uncommitted work of 2026-09-20 is parked
@@ -38,9 +37,15 @@ that branch is the owner's call.
 - **No standing GOAL.** The owner's M0 retry ended with `398.5`, which
   FAILED at 2.375. That used 13 of 13 wakes. M1 stays DRAFT, and the loop does
   not extend M0 on its own.
-- **Step 2 from rule 1.** Read the counters rather than this line: the
-  last wake ran Standardize (Slice 405, clean) at 4 of 4, and before it rule 4
-  ran `377.9`. `STATUS.md` prints rule 4's next pick; read every
+- **Step 2 from rule 1: there are TWO OPEN P0s**, both filed by the
+  Slice 406 grill:
+  - `406.1`: a snapshot cut nests every older snapshot, and the next release
+    hits it;
+  - `406.6`: a focused, checked checkbox in a data grid has no visible ring,
+    shipped in 0.9.0.
+
+  Rule 1 dispatches them before anything else; read the counters for the
+  rest. `STATUS.md` prints rule 4's next pick; read every
   free item older than it before quoting it. M1 is DRAFT, so rules M and D do
   not run.
 - **Before choosing, read CI for main's HEAD** (`gh run list --branch main

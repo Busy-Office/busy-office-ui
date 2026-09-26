@@ -145,12 +145,14 @@ jobs:
   #
   # BUILDING ONCE AND PASSING dist TO THE SHARDS WAS REFUSED TWICE (roadmap
   # 375.6, re-decided on runner timings by 377.9). The duplicated builds are
-  # real, 16.7-19.2% of machine time over 8 runs, and building once would save
-  # at most 2.4-2.9 machine-minutes before any artifact transfer. But this
-  # repo is public, so those minutes cost nothing, and the shards would have
-  # to WAIT for the build job: the wall clock could not fall below 5.7-6.1
-  # min against 5.4-5.9 today, before transfer adds to it. What sets the wall
-  # clock is the claims shard (377.15). Both bounds, per run:
+  # real, 13.4-15.5% of machine time over 8 runs, and building once would save
+  # about 2.4-2.9 machine-minutes before any artifact transfer. But this repo
+  # is public, so those minutes cost nothing, and the shards would have to
+  # WAIT for the build job, so the wall clock could shorten by at most about
+  # 11s before job-start latency and transfer (Slice 406 re-ran the bounds as
+  # estimates). What sets the wall clock is the claims shard (377.15), which
+  # is why "balanced against measured step times" above no longer holds.
+  # Both estimates, per run:
   #     python3 scripts/loops/ci_timings.py 8
   #
   # fail-fast is off on purpose: one shard going red must not hide what the

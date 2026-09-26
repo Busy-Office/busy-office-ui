@@ -559,6 +559,143 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 406 — Objective grill of 377.8 and 404.1 (full), with 377.9 and Slice 405 narrowed: 42 of 57 claims reproduce in full, 20 findings (18 confirmed, 2 narrowed, 0 refuted), two P0s — 404.1 left a release trap, and a focused checked checkbox in a data grid has no visible ring (2026-09-26)
+
+Report: `.roundtable/grill-objective-377-404-405-2026-09-26.md`. Six of the
+57 claims do not reproduce, and every one of them is the dispatcher's own.
+Framework code since Slice 403: 0 files. The first user's `main` moved today
+(ADR-0020, a process change), and ADR-0016 is still "Proposed".
+
+1. [ ] **P0 · 406.1 — a snapshot cut nests every older snapshot inside the new
+       one.** Track: defect
+       - **Why (404-F1).** `cut-version-snapshot.mjs` runs the docs build,
+         which since 404.1 ends with `install-versions.mjs` and so creates
+         `dist/v`, then copies all of `dist` into `versions/<ver>/`,
+         stripping only `pagefind`. Measured in scratch: 0.9.0's snapshot
+         would go from 391 files / 13.5 MB to 876 / 38.2 MB, and each later
+         cut doubles. On the next plain build, install-versions walks the
+         nested directories and rewrites their switchers to claim the
+         enclosing version. Its reconciliation passes, because it counts
+         what it rewrote. Nothing has been cut since 404.1, so no snapshot is
+         nested yet; the next release is the one that hits it.
+       - **Accept — the property.** A snapshot cut contains no `v/`
+         directory. install-versions refuses a snapshot that contains one,
+         naming it, and its count of switchers comes from the committed
+         snapshot pages, never from the tree it just wrote. Shown by running
+         the cut logic on a scratch build before and after the fix, without
+         writing to `apps/docs/versions`, and by a red-proof that plants a
+         nested `v/` and watches install-versions refuse.
+2. [ ] **406.2 — 404.1's follow-ups.** Track: defect
+       - **Why (404-F2 to F10).**
+         - **404-F3/F4:** the case's selection is synthetic, so a hidden or
+           disabled switcher passes; and it never checks that an option lands
+           on the version it names.
+         - **404-F5:** `check:markup` walks `dist/v` and fails after every
+           docs build.
+         - **404-F6:** the versioning page, `dist-pages.mjs`'s "INERT" and
+           `cut-version-snapshot.mjs`'s comments describe the pre-404.1 flow.
+         - **404-F8:** snapshot content pages request pagefind-ui files that
+           404 everywhere.
+         - **404-F2:** no gate serves `nginx.conf`.
+         - **404-F7, F9, F10 (nits):** serveDist on a snapshot-base dist,
+           the nginx `last` loop, and `pages.yml`'s existence-only assertion.
+       - **Accept — the property.**
+         - The case drives the switcher with real input (keyboard or mouse)
+           at 1440 and 390, asserts the landed page names the chosen version,
+           and fails on a hidden or disabled switcher (red-proven).
+         - `check:markup` passes after a docs build, or skips `v/` by a stated
+           rule.
+         - Every sentence that describes the snapshot flow matches it.
+         - Snapshot pages request nothing that 404s, or the case names what
+           it tolerates.
+         - The container leg is either gated or stated as ungated in the
+           Accept 404.1 claimed, with the reason.
+         - Each nit is fixed or refused with a line.
+3. [ ] **406.3 — the ACR's verdicts rest on detectors that can miss what they
+       certify.** Track: defect
+       - **Why (377-F1 to F8).**
+         - **F1:** 2.4.7's suppression counter is one regex. It misses
+           `outline: none !important`, `outline-style: none`,
+           `outline-width: 0`, a zeroed `--bo-focus-ring-width` and five other
+           forms, and it counts a string or a custom property as a
+           suppression.
+         - **F4:** 1.4.11 ignores focus-ring contrast.
+         - **F2:** a fixed debt pairing keeps its verdict and publishes a
+           contradiction.
+         - **F3:** readings can drop behind a non-empty floor.
+         - **F5:** inset rings paint on fills nobody measures. Its live
+           instance is P0 406.6; the detector half stays here.
+         - **§3a:** check-claims' quantity case catches `outline: none` only
+           because the width reset to 3px makes the ring overlap its
+           neighbour. It never reads `outline-style`, so B and C pass it.
+         - **F6:** brand-dark readings do not follow the cascade.
+         - **F7, F8 (doc-claims):** "28 pairings" reads as a census, and the
+           page hard-codes "Two criteria".
+       - **Accept — the property.**
+         - The suppression check reads parsed declarations, or a browser's
+           computed outline on a focused component, rather than a spelling.
+           Every form in the grill's list is a red-proof that flips the
+           verdict. A string or custom property does not.
+         - The reading count reconciles to grounds × configurations, counted
+           from the source.
+         - Ring contrast enters 1.4.11's verdict, or the remark says why not.
+         - A passing debt entry fails the gate, which is how the debt list
+           ratchets.
+         - Brand-dark readings match the rendered cascade, reconciled against
+           a browser.
+         - F5's grounds come from the inset sites themselves.
+         - F7 and F8's sentences match the data.
+         - The full chain's behaviour on an injected tree is quoted from
+           §3a of the report.
+4. [ ] **406.4 — `ci_timings.py`'s reconciliation shares the recogniser it
+       checks, and the recorder downgrades a refused STATUS.md.**
+       - **Why.** Both sides of the reconciliation match step NAMES. A rename
+         that lands in `ci.yml` and in the runs reconciles and reports 0.0
+         machine-minutes saved; a docs build in the core job reconciles at
+         12 = 12 and inverts the argument. And `record_iteration.py` prints
+         `generate_status.py`'s named refusal as a warning and exits 0, so
+         STATUS.md goes stale as it did in the incident 377.9's follow-up
+         fixed.
+       - **Accept — the property.** Build steps are classified by their
+         `run:` command, and the reconciliation compares against something
+         the classifier does not share. Both of the grill's renames are
+         red-proofs that refuse. A refused STATUS.md fails the recorder
+         loudly, or the recorder's output makes the stale state impossible to
+         miss, and the choice is argued.
+5. [ ] **406.5 — the byline demo's avatar 404s on Pages.** Track: defect
+       - **Why (404-F12).** `<img src="/favicon.svg">` ignores the base, so on
+         `https://busy-office.github.io/busy-office-ui/components/byline/` it
+         requests the host root and breaks, in latest and all three
+         snapshots. The container serves `/favicon.svg` and hides it. It is
+         one of 3 root-absolute references in 58,690 across the snapshots.
+       - **Accept — the property.** The avatar renders on a base-path build.
+         A check fails on any root-absolute asset reference in built pages
+         that ignores the base, red-proven on this one.
+6. [ ] **P0 · 406.6 — a focused, checked checkbox in a data grid shows no
+       focus ring.** Track: defect
+       - **Why (377-F5, the report's §3a).** Grid navigation makes the table
+         `role="grid"`, and
+         `.bo-data-table[role="grid"] :focus-visible { outline-offset: -2px }`
+         paints the ring INSIDE the control. On a checked checkbox, that is on
+         its accent fill.
+         - Every brand's dark block sets `--bo-color-focus-ring` and
+           `--bo-color-accent` to the same step, so the ring is 1.00:1 there:
+           invisible in six presets.
+         - It is under 3:1 in all 14 configurations, measured with real keys
+           on `/components/table-toolbar/`.
+         - This ships in 0.9.0. The ACR's 2.4.7 remark does not mention it.
+       - **Accept — the property.**
+         - A keyboard-focused control inside a grid shows a ring of at least
+           3:1 against every colour it paints on, the control's own fill
+           included, in all 14 configurations. It is measured in a browser
+           by a check-claims case that drives real keys and fails on today's
+           build.
+         - Every ring pairing the grid can produce is in the contrast gate,
+           so a brand that sets ring equal to accent fails the build.
+         - The fix is argued as a SHAPE, not per brand: move the inset ring
+           off the control, or pick the ring from a token that contrasts with
+           accent. Red-proven by restoring the equal-step brand values.
+
 ## Slice 405 — Standardize sweep, 4 of 4 lanes on an isolated clean build: lanes 1, 2 and 4 equal Slice 402, and lane 3's +50 words are all 377.8's generated ACR remarks, measured by reverting it (2026-09-26)
 
 **Dispatched by rule 2**, `Standardize 4 / 4 OVERDUE`. The sweep ran in a
@@ -641,6 +778,20 @@ Got 404."
              `pages.yml`'s copy is now an assertion.
            - `nginx.conf` and `serveDist` map the Pages prefix. `serveDist`
              derives it from a snapshot's own asset URL instead of a literal.
+         - ⚠ **Corrected by the Slice 406 grill.**
+           - **"A real selection" was wrong.** `page.select` sets the option and
+             dispatches synthetic `input` and `change` events. A hidden or
+             disabled switcher passes (406.2).
+           - **The Accept is met for the gates' server and for Pages' URL
+             layout, but not for the container.** The CI claims shard runs
+             the case on a `DOCS_BASE=/busy-office-ui` build. No gate serves
+             `nginx.conf` (406.2).
+           - **"Every dist walker skips `v/`" was false.** `check:markup`
+             walks all of `dist` and fails on the snapshots after a build
+             (406.2).
+           - **404.1 introduced a release trap.** The next
+             `cut-version-snapshot.mjs` run nests every older snapshot
+             inside the new one (P0 406.1).
          - **Red-proven:** the case failed 1 of 325 before the fix. Three
            injections, run through the case's own sliced source, each fail on
            their own cause, and the baseline passes:
@@ -661,10 +812,12 @@ Got 404."
          like the latest home, carries neither the switcher nor the "You're
          reading the vX snapshot" banner, so a reader who switched lands on
          old docs with nothing saying so, and no way back but the brand link
-         (which stays in the snapshot) or the browser's Back. 272 of the 308
-         snapshot pages carry both. The other 36 are the three homes and
-         pages with their own layout, such as the full-screen patterns and
-         the tokens page, counted by `id="version"` in the raw HTML.
+         (which stays in the snapshot) or the browser's Back. Of the 308
+         snapshot HTML files, 25 are meta-refresh redirect stubs, among them
+         `/tokens/`. Of the 283 real pages, 272 carry both. The other 11 are
+         the three homes and eight full-screen pattern pages (corrected by the
+         Slice 406 grill; it first read "272 of 308", citing "the tokens
+         page").
        - **Accept — the property.** Switching from a page that exists in the
          target version lands on that page. Switching from one that does not
          lands on a page that says why. Every snapshot page a reader can land
@@ -4990,21 +5143,26 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          new, reading `gh api repos/…/actions/runs/<id>/jobs`. Over 8 green push
          runs on main (`cff02475`..`4ce66750`):
          - **The premise re-checked, and both of its figures had moved.**
-           Build steps are **16.7-19.2%** of machine time, not 14.2-15.6%, and
+           Build steps are **16.7-19.2%** of machine time, not 14.2-15.6%. That
+           counts all 11 build steps; the DUPLICATED share, the builds
+           building once would remove, is 13.4-15.5% (Slice 406). And
            `npm ci` is **3.8-4.6%**, about a quarter of the build, not a third.
            A run is **18.0-19.4 machine-minutes and 5.4-5.9 min wall**, not the
            ~14.7 and ~3 ci.yml quoted. 375.6's local 8% was a warm developer
            machine: the runners take 23-43s per shard for the two builds, not
            13s.
-         - **The decision, from two bounds that are identities over the
-           measured steps, not predictions.** Building once saves **at most
-           2.4-2.9 machine-minutes** before any artifact transfer: every
-           shard's builds, minus the one docs build that remains. But the
-           shards would wait for the build job, so the wall clock **cannot
-           fall below 5.7-6.1 min**, against 5.4-5.9 today, and transfer only
-           adds to that. The repo is public, so the machine-minutes cost
-           nothing; the wall clock is what a wake waits on. Build-once makes
-           the number that matters worse.
+         - **The decision, from two bounds.** ⚠ *Corrected by the Slice 406
+           grill, whose repro reran them:* they are **estimates, not the
+           identities first claimed here.** `docs_once` is the mean docs build,
+           and the build job is modelled from one sample, the core job's
+           segment. With the observed minima, the floor fell below the
+           measured wall in **3 of 8 runs**, by at most 11s. What the data
+           supports: building once saves at most about 2.4-2.9
+           machine-minutes before artifact transfer, and **cannot shorten the
+           wall clock by more than about 11s**, before job-start latency and
+           transfer. The repo is public, so the minutes cost nothing, and 11s
+           is not worth a build stage. The refusal stands on those grounds,
+           not on "makes the wall clock worse".
          - **What does set the wall clock** is the claims shard: 325-354s,
            against 174-191s for the next slowest shard in every run. Filed as
            377.15. It was first filed as 377.10, an id an open item already
@@ -5429,10 +5587,11 @@ untracked or uncommitted, so the removal was a working-tree change.
          reading and the honest way to confirm it is the per-step timings in
          any real run's log. Reopen if those show the build dominating.
        - **Re-decided on runner timings, 2026-09-26 (377.9): still refused,
-         on different grounds.** The 8% was wrong: the build is 16.7-19.2% of
-         machine time over 8 runs. But building once cannot shorten the wall
-         clock, only lengthen it, and on a public repo machine-minutes cost
-         nothing. The figures and the command are under 377.9.
+         on different grounds.** The 8% was wrong: the duplicated builds are
+         13.4-15.5% of machine time over 8 runs (all builds 16.7-19.2%). But
+         building once could shorten the wall clock by at most about 11s, and
+         on a public repo machine-minutes cost nothing. The figures, the
+         command and the Slice 406 correction are under 377.9.
 
 7. [x] **375.7 — three "Not when" cells on the decision page are
        content-free, and the page's own generated prose overclaims that they
