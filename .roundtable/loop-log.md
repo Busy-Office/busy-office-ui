@@ -1833,3 +1833,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-26 11:25 · Continue · release · 0.9.0 published (@busy-office/ui 0.9.0, create-ui 0.2.0) on owner request; tarballs verified; 377.5 + 394.3 closed · released · 70ef6293
 - 2026-09-26 12:34 · Objective · grill · Slice 401 — Objective grill of 375.11, 392.1, 399.3 + 0.9.0 (full), 393/398/400 (narrowed): 36/51 claims full, 10 findings (3 confirmed, 7 narrowed); 401.1 bo-check-markup regression · landed · 2888ce5c
 - 2026-09-26 12:43 · Continue · build · 376.7 — lane-4 ratchet: a cut is >=100 words and >=1% (argued from 196 shrinks); replay at filing rev -> 09-07 sweep; red-proved · landed · 3569a013
+- 2026-09-26 13:08 · Continue · build · 377.4 — check:pointer-coverage meta-gate; 7 trusted check-claims cases added (16/16 covered, 0 exempt); mislabelled comments fixed · track=defect · landed · 1f34a912
