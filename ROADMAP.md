@@ -598,11 +598,13 @@ rule 3. 387.1: 11 claims, 9 hold, 2 fail; 7 findings (5 confirmed, 2 narrowed).
        injection is applied (grep the served CSS or DOM first), and each figure names
        its band and count.
        Track: defect
-5. [ ] **413.5 — 384.1's write-up states the basis of the ratchet floor.**
+5. [x] **413.5 — 384.1's write-up states the basis of the ratchet floor.**
        The ratchet's `is_real_cut` is on FILE words (194 for LOOPS.md), so
        330051e0's -101 does not pass it; on region words (floor 100) it does. The
        refusal stands only on the region basis. Accept: the measure file and the
        DONE line name the basis.
+       - **DONE 2026-09-27** — the measure file's table header and the refusal line now name
+         the basis (region words; the ratchet's floor is on file words).
        Track: defect
 
 **Thesis (2026-09-27 03:44).** npm `ui` 980 downloads in the month, 125 outside

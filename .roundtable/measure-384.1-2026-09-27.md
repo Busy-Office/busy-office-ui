@@ -22,7 +22,7 @@ growth fell out of the next sweep's attribution. The premise holds.
 (`last_region_cut` → `is_cut`) has none. Every region shrink on record
 (`report_loop_prose.region_words_at` on each LOOPS.md commit):
 
-| commit | day | region | `is_cut` | passes the ratchet's floor |
+| commit | day | region | `is_cut` | passes a floor applied to REGION words (max(100, 1% of the region)) |
 |---|---|---|---|---|
 | `ec482111` | 09-26 | 10,399 → 10,374 (−25) | yes | no |
 | `daea445f` | 09-26 | 10,625 → 10,374 (−251) | yes | yes |
@@ -93,7 +93,10 @@ the refused-milestone stop: the M1 milestone machinery.
   `3006da0a` would read as partial. The per-section block would then fold
   every new rule into the "did the previous cut hold" reading. Keeping those
   two apart is what 308.1 and 339.1's branches exist for.
-- **The ratchet's floor on the region anchor: refused.** It would not have
+- **The ratchet's floor on the region anchor: refused.** Basis: the ratchet's own
+  `is_real_cut` is applied to FILE words (LOOPS.md 19,404 → 19,303, floor 194), where
+  `330051e0` does NOT pass; the figures here apply the same rule to REGION words, the
+  way a region-anchored floor would be built (Slice 413, 413.5). It would not have
   prevented the reset 384.1 names, because `330051e0` removed 101 words and
   passes the floor. It would skip only `4e6b83c1` (−68) and `ec482111` (−25).
 - **What the number does say:** the dispatch region grew 39% in 18 days, and
