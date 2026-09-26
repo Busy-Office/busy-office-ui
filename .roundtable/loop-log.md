@@ -1861,3 +1861,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-26 22:33 · Continue · build · 377.15 — closed: split claims shard measured over 3 green runs, CI wall 3.9-4.0 min (from 5.4-5.9), reconciled 163 + 197 = 360 in CI · landed · 26b262ce
 - 2026-09-26 22:42 · Continue · fix · 377.17 (in progress) — file-picker case asserts the input's trusted click; chooser event best-effort; red-proven (for-mismatch activated 0) · track=defect · landed · 0205933f
 - 2026-09-26 23:02 · Continue · fix · 377.17 — closed: file-picker case asserts the input's trusted click; 5 consecutive CI passes (run 36249444686 attempts 1-5) · track=defect · landed · 9eedab1f
+- 2026-09-26 23:35 · Continue · build · 381.1 — correction-site check unwired on the number: re-tuned 234 -> 84 printed lines, blind judge 4 real (4.8%) under the 10% floor stated first; recall held; self-test 20/20 mutations · landed · 68b2f088
+- 2026-09-26 23:35 · Meta · refusal · 381.1: section suppression (drops 2 of 4 real) and archive search (+132 lines) as re-tunes · refused · 68b2f088

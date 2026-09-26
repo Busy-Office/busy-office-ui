@@ -154,9 +154,10 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1855 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-09-26 22:29   ok
-  Objective     2 / 3 slices          since 2026-09-26 19:15   ok  [377, 409]
+dispatch status — counter-triggered rules (1857 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-09-26 22:29   OVERDUE
+  Objective     3 / 3 slices          since 2026-09-26 19:15   OVERDUE  [377, 381, 409]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 159 sample(s), 8 of 52 name(s) paired across days]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-25 (2026-09-26), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -291,8 +292,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-26 19:15 · Objective · grill · Slice 408 — Objective grill of 406.6 (full), 406.1/377.11/377.12/407 (narrowed): 30/42 claims full, 8 findings (5 confirmed, 3 narrowed), no P0; 406.6 fix keyed on element names not fill (408.1) · landed · 95f31c4d
-- 2026-09-26 19:44 · Continue · build · 377.13 — 375.9's grid-press corpus sweep committed (report:grid-presses, suitePages, --counterfactual); HEAD 0 of 4,910 over 132 pages; old 4,944 not reconstructable, corrected · landed · 908cf7c9
 - 2026-09-26 20:56 · Continue · build · 377.14 — seam loop derived (7 docs, 31 seams), shell band derived + check-floor needle (container stand-down), report:text-collapse (373.9 corrected 3/8/1, filed 377.16), runtime-claim coverage 18.5% · landed · f7cecafb
 - 2026-09-26 21:11 · Roadmap · triage · 377.17 filed — SC 2.5.7 file-picker case flaked on CI at 15s (3rd failure; rerun passed) · triaged · 01f1941c
 - 2026-09-26 22:01 · Continue · build · 377.15 (in progress) — check:claims split into two CI shards at the runtime midpoint; 162 + 197 = 359 reconciled; wall-clock reading waits on 3 green runs · landed · 20dc0918
@@ -301,6 +300,8 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 22:33 · Continue · build · 377.15 — closed: split claims shard measured over 3 green runs, CI wall 3.9-4.0 min (from 5.4-5.9), reconciled 163 + 197 = 360 in CI · landed · 26b262ce
 - 2026-09-26 22:42 · Continue · fix · 377.17 (in progress) — file-picker case asserts the input's trusted click; chooser event best-effort; red-proven (for-mismatch activated 0) · landed · 0205933f
 - 2026-09-26 23:02 · Continue · fix · 377.17 — closed: file-picker case asserts the input's trusted click; 5 consecutive CI passes (run 36249444686 attempts 1-5) · landed · 9eedab1f
+- 2026-09-26 23:35 · Continue · build · 381.1 — correction-site check unwired on the number: re-tuned 234 -> 84 printed lines, blind judge 4 real (4.8%) under the 10% floor stated first; recall held; self-test 20/20 mutations · landed · 68b2f088
+- 2026-09-26 23:35 · Meta · refusal · 381.1: section suppression (drops 2 of 4 real) and archive search (+132 lines) as re-tunes · refused · 68b2f088
 
 ## Sunset test
 
