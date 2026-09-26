@@ -239,3 +239,4 @@
 {"ts": "2026-09-26 18:17", "name": "adoption-github-clones-uniques-14d", "value": 132.0, "unit": "count", "window": "GitHub traffic 14 days 2026-09-10..2026-09-23", "source": "gh api traffic/clones"}
 {"ts": "2026-09-26 19:44", "name": "grid-presses-lost", "value": 0.0, "unit": "presses"}
 {"ts": "2026-09-26 19:44", "name": "grid-presses-total", "value": 4910.0, "unit": "presses"}
+{"ts": "2026-09-26 22:29", "name": "dispatch-region-words", "value": 10374.0, "unit": "words", "commit": "bb80a2ea"}
