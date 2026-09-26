@@ -145,7 +145,7 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1816 iterations logged)
+dispatch status — counter-triggered rules (1817 iterations logged)
   Standardize  14 / 4 Continue rounds since 2026-09-25 12:20   OVERDUE
   Objective     3 / 3 slices          since 2026-09-25 13:32   OVERDUE  [375, 392, 393]
   -> a counter is at or past its threshold; the dispatcher should pick it
@@ -292,7 +292,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-25 23:33 · Meta · refusal · 392.4: design-grill rows resetting rule 3 — they grill a screen, not the armed slices' claims · refused · a4f4fd13
 - 2026-09-26 00:04 · Continue · build · 393.6 — routes.json + route telemetry; recorder preflight and column read-back; tier none→top per §5 (owner to confirm) · landed · 887ac04c
 - 2026-09-26 00:04 · Meta · refusal · 393.6: refusing a none tier — §5 and O14 say it runs on top; the Accept's wording is superseded, owner asked to confirm · refused · 887ac04c
 - 2026-09-26 01:08 · Continue · build · 393.7 — rule D: triggers replayed, item lint re-measured, planner output contract, frequency limits · landed · 62652720
@@ -302,6 +301,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 01:56 · Continue · build · 393.9 — realignment markers on 63 open items (48 blocks, +94 lines), checked by script; compare IDENTICAL 63/63 · landed · 8d0cdd2d
 - 2026-09-26 02:25 · Continue · build · 393.10 — loop re-score FAIL (2.375; Correctness 1, Maintainability 1); M1 stays DRAFT; N1 fixed, rest filed as Slice 398 · landed · a2cd9c51
 - 2026-09-26 09:18 · Roadmap · triage · owner recommendations for O5-O18 and 22 other waiting items (.roundtable/owner-recs-2026-09-26.md); 398.1 third dead reference, 398.4 filed · triaged · 7438e033
+- 2026-09-26 09:28 · Roadmap · triage · owner extends M0 once: 398.1 → 398.2 → re-score 398.5, cap 13; four parked .roundtable records copied to main · triaged · 0ab92652
 
 ## Sunset test
 
