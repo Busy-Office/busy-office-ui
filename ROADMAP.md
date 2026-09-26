@@ -559,6 +559,139 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 411 — Objective grill of 377.14 and 377.16 (full), with 377.13, 377.15, 377.17, 381.1 and Slices 409/410 narrowed: 63 claims, 52 hold; 15 findings (12 confirmed, 3 narrowed, 0 refuted, no P0). 377.16's fix regressed the anchor marker it did not measure (2026-09-27)
+
+Report: `.roundtable/grill-objective-377-381-409-410-2026-09-27.md`
+(workflow `wf_07f2da2a-8bb`: 3 hunts, 3 refute-first verifiers and a critic,
+against the live container at `23a22cce`).
+- **Why narrowed:** six subjects shipped 0 lines under `packages/` and
+  `apps/docs/src`. 377.14 shipped 89 lines and 377.16 shipped 8.
+- **Jev not consulted:** the owner paused Jev sends on 2026-09-27 pending
+  the jev 0.10 migration.
+- **Thesis:**
+  - framework code since Slice 408 is **0 lines**;
+  - adoption is unchanged;
+  - busy-office-erp recorded 0.9.0 in its ADR-0016, still "Proposed", and
+    no UI code imports the framework yet.
+- **Corrected in place:** 377.14's "seven", and 377.15's three secondary
+  timings.
+
+1. [ ] **411.1 — the object-page anchor strip loses the reader at narrow widths.**
+       Track: defect
+       - **Why (F1, F2, F3, F7).**
+         - **F1, a regression 377.16 introduced:** at 390 and 320, as the
+           page scrolls, the `aria-current` label scrolls out of the strip.
+           At 390, "Document flow" shows 28.4 of 101.7px, where it was fully
+           visible before the fix.
+         - **F2:** Tab onto a partly visible anchor does not bring it into
+           view (30 of 113.3px visible).
+         - **F3, predating 377.16:** the strip's own scroll container clips
+           every focus ring top and bottom, and the first link's left side.
+         - **F7:** with overlay scrollbars, nothing but a label cut mid-word
+           shows that the strip scrolls.
+       - **Accept — the property.**
+         - At every width where the strip overflows (320 and 390 today),
+           after the PAGE is scrolled into each section, the `aria-current`
+           link's text lies fully inside the strip's visible client box.
+         - With real Tab presses, each link's box, focus outline included,
+           ends fully inside that box once the scroll settles, in all three
+           row sizes.
+         - The full outline paints unclipped at 390 and 1440, at the strip's
+           scroll start and at its end.
+         - A non-text cue marks each edge only while the strip overflows in
+           that direction. Alternatively, a recorded decision says the
+           clipped label is the cue.
+         - Each of these is a check-claims case, red on today's build.
+2. [ ] **411.2 — the published CSS under the copyable Markup reproduces the overlap 377.16 fixed.**
+       Track: defect
+       - **Why (F4, narrowed).** The Markup sample (2 links) renders clean.
+         With the demo's 5 links, the published `@busy-office/ui` CSS alone
+         overlaps and spills at 390, because 377.16's fix is page-scoped CSS
+         no reader sees. The Anatomy says "kept to one line and allowed to
+         scroll sideways".
+       - **Accept — the property.** A reader who copies the Markup, adds
+         sections up to the demo's count, and loads only the published CSS
+         gets a strip with no overlap, no text outside its control, and
+         every label reachable, at 390 in every row size. The fix lands
+         wherever that requires, in framework or sample, with a CHANGELOG
+         entry if it is framework CSS. Checked in a browser against the
+         copied sample, not the demo.
+3. [ ] **411.3 — 377.16's check-claims case is LTR-only.**
+       - **Why (F5).** Under `dir=rtl` the case's own formula reports a
+         false red on the fixed build (overlap 219.7, two unreachable), so
+         it cannot guard the RTL form of the bug, which existed before the
+         fix. `concepts/i18n` advertises RTL as one attribute.
+       - **Accept — the property.** The case takes neighbour order and the
+         reachable edge from the strip's inline direction, or proves reach by
+         scrolling each label into view. It passes on an RTL render of
+         today's build and fails on an RTL render with the rule reverted.
+4. [ ] **411.4 — object-page's States table overflows the main pane at 320.**
+       Track: defect
+       - **Why (F6, predating 377.16).** At 320 (the ZOOM_400 width), the
+         main pane's scrollWidth exceeds its clientWidth by 12px comfortable
+         and 52px spacious. The States table is the page's one
+         `bo-data-table` outside a container. The list-report and
+         record-detail States tables fit.
+       - **Accept — the property.** At 320, in every row size,
+         `.bo-app-shell__main` does not scroll sideways on
+         `/patterns/object-page/`, or the table scrolls inside a focusable
+         region of its own. Held by `check:layout` or a claims case.
+5. [ ] **411.5 — two docs sentences 377.14 (d) found false were never filed.**
+       Track: defect
+       - **Why (377.14-F1, narrowed).** `/components/richtext` says its
+         align controls "sync `aria-pressed` across all three". They render
+         as `type=radio` with no `aria-pressed`, and check-claims asserts
+         exactly that. The output-form "measured by reading the text back"
+         wording is the half that did not reproduce as stated. Re-read it
+         first.
+       - **Accept — the property.** Each statement matches what the page
+         renders and what check-claims executes. A claims case fails on a
+         mismatch like today's, and any sentence that is true is recorded as
+         such, with its command.
+6. [ ] **411.6 — nothing floors the derived seam list.**
+       - **Why (377.14-F2).** Cutting the derivation to `/components/` pages
+         (8 runs → 2, 31 seams → 20) keeps every case green, including the
+         one named "and no fewer runs". Its second conjunct follows from the
+         first.
+       - **Accept — the property.** The derived list is reconciled against
+         an enumeration that shares none of its regex, such as DOM counts
+         over every `distPages`/`suitePages` page. The `/components/`-only
+         mutation turns the case red. Alternatively, the case's name drops
+         "no fewer runs", and the record says 8/31 is unfloored.
+7. [ ] **411.7 — the band needle and the sidebar-nav demo frames.**
+       - **Why (377.14-F4, F5).**
+         - The needle is case-sensitive and whitespace-only. It passes
+           `56REM` (which Chromium's `matchMedia` accepts), `896&nbsp;px`
+           and `896 pixels`.
+         - The sidebar-nav captions print the derived band, but the frames
+           that put each demo on its side of it are hand-typed (40rem,
+           60rem) and unmeasured.
+       - **Accept — the property.**
+         - The needle catches every spelling a browser or a reader takes as
+           the band, each shown by a self-test case that fails without the
+           fix. Or the gate header lists these as known misses.
+         - Each demo frame demonstrably holds its side of the band, by a
+           rail-width assertion or by frame sizes derived from the band.
+           Red-proven by moving the band past a frame in a scratch build.
+8. [ ] **411.8 — 377.14 (d)'s counts cannot be re-derived.**
+       - **Why (377.14-F6).** Its extractor, predicate and labels stayed in
+         session scratch, which is the shape (c) was created to fix for
+         373.9. Of its figures, the corpus (81) and the 289 call sites
+         reproduce. The 762, ~635 ± 96 and 18.5% do not.
+       - **Accept — the property.** Either the counts re-derive from
+         committed code, or 377.14 (d) says they do not and that no decision
+         may cite them until they do.
+9. [ ] **411.9 — the file-picker case passes when the click is cancelled.**
+       - **Why (R-F1, narrowed).** With `preventDefault` on the input's
+         click, the case stays green with no picker (`activated: 1`,
+         `chooserSeen: false`, even at 10s). A trusted click is necessary
+         for a picker, not sufficient, and the case's label claims the
+         picker.
+       - **Accept — the property.** The case also asserts that the click
+         was not cancelled, via `defaultPrevented` from a bubble-phase
+         listener or after a macrotask. The `preventDefault` mutation must
+         FAIL while the baseline passes. Or the write-up states the gap.
+
 ## Slice 410 — Standardize sweep, 4 of 4 lanes on an isolated clean build: lanes 1, 2 and 3 equal Slice 409; lane 4's dispatch region grew 25 words on 381.1's history sentence, and applying the charter returns it to 10,374 (2026-09-26)
 
 **Dispatched by rule 2**, `Standardize 4 / 4 OVERDUE`, after rule 1 read 0 open
@@ -5727,6 +5860,12 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          replacing 373.3's "900px" grep, which matched one viewport height
          and 0 band sites. It fails on any literal restatement outside 5
          counted exemptions (code that must equal the band).
+         [**Corrected by Slice 411:** six of the seven now print from the lib.
+         The seventh, density's "Resize this page's window below 56rem" and
+         "— this docs site does exactly that", was deleted. The deletion was
+         correct: the docs rail measures 0px at the band (`display: none`),
+         not a 52px icon rail. Of the 5 exemptions, 2 are exact
+         (`sidebar-nav.css`, `Gallery.astro`) and 3 are coincidences.]
          - The docs container copies neither `CLAUDE.md`, `README.md` nor
            `LOOPS.md`, and the first container build failed on it
            (`ENOENT … CLAUDE.md`). Those three now stand down as "NOT verified
@@ -5870,6 +6009,12 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
            - **Wall clock 3.9-4.0 min**, against the 5.4-5.9 min baseline and
              6.4 min on the last unsplit run. The two claims shards took
              228-238s, now level with the other shards (150-185s).
+             [**Corrected by Slice 411:** from the runner API (`gh api
+             …/actions/runs/<id>/jobs`), the last unsplit run's wall was
+             **6.55 min** (`36244315651`). 6.4 is `36243511500` attempt 2's
+             claims job (386s), or `36239785537`'s wall. The claims shards
+             took 206-237s and the other docs shards 134-196s. Wall clock
+             includes runner queue time. The headline 3.9-4.0 holds.]
            - **Machine time rose** from 18.0-19.4 to 19.8-20.8 min, the extra
              shard's setup and builds. It is free on a public repo, which is
              the same ground 375.6 stands on.

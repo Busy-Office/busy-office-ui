@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 15:48 UTC
+Generated at: 2026-09-26 16:49 UTC
 
 oldest dispatchable: 384.1 — lane 4's anchor and the rule-text generator.
 
@@ -148,6 +148,16 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 408.1 — grid ring placement follows fill, not element name.
   - 408.2 — the container stamp's dirty half is enforced, and ignored inputs are visible.
   - 408.3 — the combobox case asserts the event's VALUE, not only its text.
+- **Slice 411** (9 open)
+  - 411.1 — the object-page anchor strip loses the reader at narrow widths.
+  - 411.2 — the published CSS under the copyable Markup reproduces the overlap 377.16 fixed.
+  - 411.3 — 377.16's check-claims case is LTR-only.
+  - 411.4 — object-page's States table overflows the main pane at 320.
+  - 411.5 — two docs sentences 377.14 (d) found false were never filed.
+  - 411.6 — nothing floors the derived seam list.
+  - 411.7 — the band needle and the sidebar-nav demo frames.
+  - 411.8 — 377.14 (d)'s counts cannot be re-derived.
+  - 411.9 — the file-picker case passes when the click is cancelled.
 - **Slice —** (1 open)
   - AT runtime evidence
 
@@ -173,7 +183,7 @@ dispatch status — counter-triggered rules (1858 iterations logged)
      no direction is recorded with a sample, so the movement above is a reading and the regression verdict is the wake's. A name that has NEVER MOVED is either healthy or pinned by a gate — rule 5 cannot fire on it either way (`axe-violations` is 0 on every day because `test:axe` fails the build above 0).
      a direction is NOT recorded on purpose (roadmap 324.1): adding one makes rule 5 fire on `bundle-gz-kb`'s four consecutive rises, which the log's own same-timestamp `components` samples refute (0.400 -> 0.355 kB per component over that window). A rise with no denominator is growth. Where a name has a real threshold, use it — `check:size` gates the bundle at 16.7 kB gz, which is rule 5's budget clause, not its trend one.
      not rule 5's input: 24 adoption-* name(s), the Objective grill's reading of the world (377.7), never a size or speed regression.
-  Holds         6 hold-wake(s) recorded, 5 today (UTC dates)   [inflight.py hold; .roundtable/hold-wakes.jsonl]
+  Holds         7 hold-wake(s) recorded, 6 today (UTC dates)   [inflight.py hold; .roundtable/hold-wakes.jsonl]
 ```
 
 ## Milestone progress
