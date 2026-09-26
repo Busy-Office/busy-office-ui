@@ -559,6 +559,80 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 400 — Standardize sweep, 4 of 4 lanes on an isolated clean build: lanes 1-3 match their base, lane 4 reads a 10,625-word dispatch region and the Step 0c charter takes 203 of it back (2026-09-26)
+
+**Dispatched by rule 2**, `Standardize 20 / 4 OVERDUE`, once the M0 GOAL
+ended. The sweep ran in a worktree of HEAD (`116f6e86`) with its own `npm ci`.
+`@busy-office/ui` realpath-resolves inside it, and the core build, the docs
+build and `standardize_lanes.py` all exit 0. Base: Slice 390 (`c76a841e`).
+Every lane's inputs moved since then, so no lane is "unchanged by
+construction".
+
+- **Lane 1 (of 4):** *"0 dead style attribute(s) on 0 page(s); 1392 live"*.
+  Equal to the base.
+- **Lane 2 (of 4):** *"74 source file(s) · 246 rule(s) with 3+ declarations ·
+  235 distinct bodies · 7 body(ies) appearing more than once"*. Equal to the
+  base, although `data-table.css` gained 82 lines. With comments stripped, its
+  code diff is:
+  - two `@position-try` blocks of two declarations each, below the lane's
+    three-declaration threshold;
+  - one `position-try-fallbacks` value change;
+  - three declarations added to one existing rule, whose body stays unique.
+
+  No group formed, grew or dissolved, so there is no delta finding.
+- **Lane 3 (of 4):** 119 pages, median 833, 119,971 words (base 119,993). The
+  flagged union is **18**, as at the base, and all 18 carry an enumerated
+  verdict:
+  - nine from 158.1's twelve: calendar, data-table, form, money, richtext,
+    layouts, which-pattern, editable-grid, list-report;
+  - 161.1's three;
+  - 178.3's `/concepts/scale/`;
+  - 376.3's four;
+  - 390's `/components/button/`.
+
+  A clean round, which is the expected result. The enumeration is unchanged.
+- **Lane 4 (of 4):** the dispatch region reads **10,625** at HEAD (Slice 390:
+  7,775). By section, since the last cut (`330051e0`):
+  - Step 0c: +487 net (a rename, shown as +2,007 new and −1,520 gone);
+  - rule 3's span, which now holds rules M and D and 392.4's thesis gate:
+    +1,075;
+  - rule 4: +481;
+  - Step 0: +435;
+  - the new wake-prompt section: +270;
+  - Step 0b: +165.
+
+  Two of the playbook's branches apply:
+  - **Step 0c regrew on NEW material**, collisions 6-8 and O1's reversal, so
+    the answer is its charter, not a new cut: one line per collision, with the
+    forensics in `LOOPS-archive.md`. The forensics were already archived
+    ("Collision 6", the lane-3 double collision, "Collision 8"), so entries
+    6-8 were duplicates. Each is now one line with its `cost:` tag. The one
+    instruction among them is kept: read the fetch's range, and expect to lose
+    the next dispatch. **The generator is collision write-ups, and under O1's
+    one dispatcher it should stay dormant.** A new entry is the evidence that
+    it is not.
+  - **The rest is new instruction:** the Step 0 guard and the in-flight rule,
+    Step 0b's refusal, rules M and D, and rule 4's exception. A second cut
+    there would remove instruction. The structural question is the owner's,
+    already in RESUME Direction #0.
+  - **One piece of that instruction had expired.** Rule 4's "one standing
+    exception" still described the M0 bootstrap as running, although it ended
+    with 398.5. It now reads, in the past tense, that the exception ended and
+    that only an owner decision recorded in the Milestone table can add one.
+    Its two siblings, found by a fixed-string sweep, are fixed too:
+    - Continue's Input;
+    - `generate_status.py`'s "overrides it until 393.10 closes", which
+      STATUS.md prints on every wake. That is 399.1's B1.
+
+  - **Working tree after the round: 10,374** (−251). The count is
+    `str.split()` from the start of the file to `## Playbooks`, which
+    reproduces the report's 10,625 at HEAD exactly. The report reads
+    revisions only, so the recorded metric is taken at the commit.
+- **Archive sweep: not due.** `roadmap_scope.py` reads 1,222 / 10,659 = 11.5%.
+- **Round check:** `check-loop-vocab`, the resume charter, `check-floor`,
+  `check:repo` and `generate_status --self-test` (42 cases) all pass. A
+  re-scan for the expired-exception wording finds none outside dated history.
+
 ## Slice 399 — findings of the 398.5 re-score and the release check: stale statements a second pair of scorers found, a check that still reads a drifted heading as "nothing in flight", a floor that ships lower than the CSS needs, and five red pushes nobody saw (2026-09-26)
 
 M0 ended with 398.5's FAIL, so these are ordinary backlog items, dispatched
@@ -576,7 +650,8 @@ retry. Report: `.roundtable/loop-doctor-rescore-398.5-2026-09-26.md`.
          - Explore's §-Trigger "dispatched when the backlog is empty", against
            rule 8 (A: NI-3);
          - `generate_status.py`'s "until 393.10 closes", shown in STATUS.md
-           (B: B1);
+           (B: B1). **Fixed in Slice 400's round** (the expired M0 exception
+           and its siblings);
          - `.roundtable/milestone-draft-2026-09-25/4-prompt.md`'s pointers to
            files that do not exist (B: B5);
          - `.roundtable/DISPATCHER:4`'s "so it stops at Step 0" (both

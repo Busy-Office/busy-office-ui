@@ -277,36 +277,22 @@ work`, `a rebase`, `a renumber`, `caught early — nothing`:
    strictly dominated, and had independently found the loser's one distinctive
    result. That is a negative result for that instruction, not a reason to drop
    it: the check is cheap and this time it said discard. **cost: a wake's work.**
-6. **`336.2` (rule 4), the cloud routine against a local session, 2026-09-25** —
-   the first collision measured in **days rather than hours**: the container's
-   Step 0 `fetch` and `ls-remote` **agreed** on `1e756a5d` while the real tip was
-   **159 commits and 16 days** further on, so the wake ran rule 4 against a queue
-   whose item had been decided that same night. Both wakes reached a verdict and
-   they **DISAGREE** — the loser refused on a base rate, the winner (Slice 366)
-   printed the union on the contract, having recorded that its own base rate
-   argued against. **cost: a wake's work.**
-7. **The rule-2 Standardize sweep, both dispatchers, 2026-09-25** — the loser
-   re-dispatched after collision 6, ran the sweep, and collided again ~40
-   minutes later on the **same lane-3 finding** (`/components/button/` newly
-   flagged, verdicted as the owner's which-one guideline), the same enumeration
-   amendment `20 → 21`, and independently the same number `## Slice 390`. Two
-   collisions in one wake, on two different rules. **cost: a wake's work.**
-8. **Slice 391's NUMBER, the cloud routine (its own Slice 391, a CI-vs-container
-   `check:claims` finding) against the local /loop session (rule 3's Objective
-   grill of 388.1 / 389.4 / 390), 2026-09-25** — different rules and different
-   work, as collision 4; the local grill was pushed second, renumbered to
-   **Slice 392** (items 392.1-392.5, one docs caption reference) on a clean
-   worktree of the winner's tip and landed intact. **cost: a renumber.**
+6. **`336.2` (rule 4), cloud routine vs local, 2026-09-25** — a Step 0 159
+   commits stale; both reached opposite verdicts (forensics: `LOOPS-archive.md`,
+   "Collision 6"). **cost: a wake's work.**
+7. **The rule-2 Standardize sweep, both dispatchers, 2026-09-25** — the same
+   finding, amendment and `## Slice 390` again ~40 minutes after collision 6
+   (archive). **cost: a wake's work.**
+8. **Slice 391's NUMBER, cloud routine vs local, 2026-09-25** — different rules
+   and work; renumbered to Slice 392 (archive, "Collision 8"). **cost: a
+   renumber.**
 
-**Two collisions in ONE wake is what a 159-commit stale Step 0 buys**, and it is
-the argument for reading the fetch's *range* rather than only its result: `git
-fetch` printing `d876765..1e756a5` looks identical whether the remote is one
-commit ahead or sixteen days, and `ls-remote` agreed with it. Neither check is
-wrong; both answer *"what does origin say now"*, and neither answers *"is a
-dispatcher mid-flight"*. **A wake that finds the pre-commit fetch has moved
-should expect to lose its NEXT dispatch too** — the other dispatcher is
-demonstrably active — and should prefer work no second dispatcher can duplicate
-(this section's own record, the hand-off) over re-entering the queue.
+**Read the fetch's RANGE, not only its result** — `git fetch` prints the same
+shape whether origin is one commit ahead or sixteen days, and `ls-remote`
+agrees with it (collision 6, archive). **A wake whose pre-commit fetch has
+moved should expect to lose its NEXT dispatch too**, and should prefer work no
+second dispatcher can duplicate (this record, the hand-off) over re-entering
+the queue.
 
 **A new collision adds a LINE here and its forensics to `LOOPS-archive.md`** —
 274.2's charter, which collisions 3 and 4 did not follow, and applying it late is
@@ -876,14 +862,11 @@ match to its full playbook below:
    - While a milestone is ACTIVE, the next milestone item is rule M's
      computed pick. It is not a GOAL written into RESUME.md.
 
-   **One standing exception, named so it is not mistaken for the mechanism:**
-   the owner's M0 bootstrap (decision O3 in ROADMAP.md's `## Milestone M1`)
-   dispatches 393.5-393.10 in `After:` order until 393.10 closes. It runs
-   through RESUME.md's `Next rule` section, capped at `m0-wakes`, because M1 is not ACTIVE
-   yet and rule M cannot run. After 393.10's FAIL, the owner extended it once on
-   2026-09-26 (O3's cell): 398.1 → 398.2 → the re-score 398.5, cap 13, with rules
-   2 and 3 still paused until 398.5 closes. No new GOAL may be written as a
-   dispatch override, and the loop does not extend M0 on its own.
+   **The one exception there was has ended:** the owner's M0 bootstrap (O3's
+   cell in ROADMAP.md's `## Milestone M1`) ran 393.1-393.10 and its one retry
+   398.1-398.5 through RESUME.md's `Next rule`, and closed with 398.5 on
+   2026-09-26. No GOAL may be written as a dispatch override; only an owner
+   decision recorded in that table can add one.
 5. **A tracked metric regressed on TWO CONSECUTIVE runs** (bundle size, gate
    coverage, a number from `record_metric.py` trending the wrong way), **or a
    size budget breached outright**? → dispatch **Optimize**.
@@ -1067,8 +1050,7 @@ and the top item is unambiguous.
 ### 2. Continue (build or fix) — multi-round until done
 **Trigger:** dispatched by Roadmap. **Input:** the item Step 2 dispatched —
 rule 1's P0 bug, rule M's pick while a milestone is ACTIVE, or rule 4's oldest
-dispatchable item (including the owner's M0 bootstrap, rule 4's one standing
-exception). `RESUME.md`'s In flight section is not an override (retired by
+dispatchable item. `RESUME.md`'s In flight section is not an override (retired by
 393.4); a workflow in flight is a hold at Step 0.
 Run **try → verify → adjust** as many rounds as it takes to satisfy the item's
 *Accept* criteria — this is not "one attempt, ship whatever happened":

@@ -633,8 +633,8 @@ def render(now_str):
         "Dispatcher rule 4's pick, computed: the oldest open item that no owner "
         "marker, open `After:` target or held `Parked:` line holds — and, while a "
         "milestone is ACTIVE, that the milestone does not tag (rule M dispatches "
-        "those; `dispatch_status.py` prints its pick). The one standing GOAL, the "
-        "owner's M0 bootstrap (O3), overrides it until 393.10 closes. "
+        "those; `dispatch_status.py` prints its pick). No GOAL overrides it: the "
+        "owner's M0 bootstrap (O3), the one exception there was, ended with 398.5. "
         "A named item without a number has no age to rank by; any that nothing "
         "holds is listed here instead of being dropped."
     )
