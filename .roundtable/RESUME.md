@@ -34,15 +34,16 @@ that branch is the owner's call.
 - **Step 0:** `step0_guard.py`, then `inflight.py hold`, then
   `dispatch_status.py` (a REFUSED milestone line stops the wake; see LOOPS.md
   Step 0b).
-- **The one standing GOAL — the owner's M0 retry** (O3's cell, extended
-  2026-09-26 after `393.10`'s FAIL): *"one retry, 398.1 → 398.2 → re-score
-  398.5; rules 2 and 3 paused until 398.5; cap 13"*. **Used: 12 of 13**,
-  counted as distinct loop-log timestamps of M0 dispatch rows; holds are
-  counted separately (`hold-wakes`). `398.1` and `398.2` landed. **Next:
-  `398.5`**, the re-score, the last M0 wake. A P0 still preempts. Rules 2 and 3 print OVERDUE and stay paused.
-- **After `398.5`:** on PASS, the owner sets `Status: ACTIVE`. On FAIL, M1
-  stays DRAFT, and the loop does not extend M0 again. Either way the GOAL
-  ends: Step 2 from rule 1, with rules 2 and 3 resuming.
+- **No standing GOAL.** The owner's M0 retry ended with `398.5`, which
+  FAILED at 2.375. That used 13 of 13 wakes. M1 stays DRAFT, and the loop does
+  not extend M0 on its own.
+- **Step 2 from rule 1.** Rules 2 and 3 resume, and both print OVERDUE, so
+  with no open P0 the next dispatch is rule 2, Standardize. Rule 4's oldest
+  dispatchable item is `376.7` now that `375.11` carries NEEDS-RUNTIME. M1 is
+  DRAFT, so rules M and D do not run.
+- **Before choosing, read CI for main's HEAD** (`gh run list --branch main
+  --limit 2`). It was red for five pushes until `57e67a42`. A red main is
+  rule 1 (`399.5`).
 
 ## Direction — 2026-09-26
 
@@ -50,10 +51,20 @@ Owner decisions and actions waiting. **A recommendation for every item below,
 with its re-measured evidence and a validated field block to paste, is in
 `.roundtable/owner-recs-2026-09-26.md`** (start at "Start here").
 
-0. **Archive the cloud sessions before `398.5`** (O1): 302 of 307 sessions of
-   the disabled routine are still active. The loop can list them but has no
-   archive action. `398.5` re-lists them and quotes the count, and is not held
-   for it. (M0's FAIL was answered on 2026-09-26: one retry, above.)
+0. **M0 failed twice** (`393.10` and `398.5`, both 2.375). Each fresh
+   scorer finds a new 5-7 stale statements, so patching sites does not
+   converge. The choice is yours:
+   - set `Status: ACTIVE` without the test (the O-fields still come first);
+   - or have the loop shrink what a wake must trust: move the
+     cloud-container history out of `ENVIRONMENT.md`, and out of `LOOPS.md`,
+     the way RESUME's history moved to `resume-history.md`. Then re-score.
+
+   The activation sentence at ROADMAP.md:148 still names `393.10`. That is
+   your section, and both scorers flagged it. Suggested wording: "393.10, or
+   its one retry 398.5, reports …".
+   **Archive the cloud sessions** (O1): 302 of 307 are still active.
+   **Release (O6):** CI is green again as of `57e67a42`. Decide `399.3`, the
+   published floor, before 0.9.0.
 1. **O5-O18** in `.roundtable/milestone-draft-2026-09-25/5-open-decisions.md`,
    the fields M1 needs before ACTIVE.
 2. **Three readings to confirm or reverse:**

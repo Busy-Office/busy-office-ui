@@ -559,6 +559,99 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 399 — findings of the 398.5 re-score and the release check: stale statements a second pair of scorers found, a check that still reads a drifted heading as "nothing in flight", a floor that ships lower than the CSS needs, and five red pushes nobody saw (2026-09-26)
+
+M0 ended with 398.5's FAIL, so these are ordinary backlog items, dispatched
+oldest-first (rule 4). Nothing here is parked, and none of it is a third M0
+retry. Report: `.roundtable/loop-doctor-rescore-398.5-2026-09-26.md`.
+
+1. [ ] **399.1 — the stale statements the 398.5 scorers found, and the
+       sweep for their siblings.**
+       - **Accept — the property.** Each site agrees with the code or with
+         the rule that superseded it, re-read after the edit and quoted:
+         - LOOPS.md's routine-tick paragraph that still says "bind-mounted
+           … no image rebuild", against the wake prompt (A: NI-1);
+         - LOOPS.md's claim that `.roundtable/**` is in CI's `paths-ignore`,
+           against `.github/workflows/ci.yml` (A: NI-2);
+         - Explore's §-Trigger "dispatched when the backlog is empty", against
+           rule 8 (A: NI-3);
+         - `generate_status.py`'s "until 393.10 closes", shown in STATUS.md
+           (B: B1);
+         - `.roundtable/milestone-draft-2026-09-25/4-prompt.md`'s pointers to
+           files that do not exist (B: B5);
+         - `.roundtable/DISPATCHER:4`'s "so it stops at Step 0" (both
+           scorers).
+
+         The owner-only sentence at ROADMAP.md:148, which names 393.10 as
+         the activation test, goes to RESUME's Direction with its
+         replacement text. The loop does not edit it.
+       - **Siblings.** For each old wording, run a fixed-string sweep over
+         the live files and quote the counts. More sites than named is a
+         satisfying outcome.
+2. [ ] **399.2 — the in-flight check reads a drifted heading as "nothing in
+       flight".**
+       - **Why.** Scorer A found six forms where a valid, live line under a
+         changed heading reads exit 0: `## In flight (393.2)`,
+         `## In Flight`, `### In flight`, `## In-flight`, the line under
+         another section, or a second `## In flight` section. RESUME.md is
+         rewritten every wake. A non-UTF-8 byte exits 1 with a traceback.
+         A future `started`, or an enormous `cap`, holds forever.
+       - **Accept — the property.** Each form is a `--self-test` case, and
+         none of them reads "nothing in flight":
+         - each of the six heading forms either parses or exits 5;
+         - an undecodable file exits 5;
+         - a `started` in the future, or a `cap` beyond a stated maximum,
+           exits 5.
+
+         Red-proved by reverting and watching the cases fail.
+3. [ ] **399.3 — the published browser floor agrees with the one the CSS
+       needs.**
+       Track: defect
+       - **Why.** `package.json`'s `browserslist` ships to npm. It has been
+         hand-typed since the initial commit and was published in 0.8.0.
+         `floor.json`, derived from the shipped CSS by `derive-floor.mjs`,
+         is one version higher on Firefox and on Safari, and names
+         `@starting-style` as the driver. DESIGN.md's prose beside the stat
+         still gives the lower Firefox reason. Nothing compares the two.
+       - **Accept — the property.** The published floor and the derived floor
+         agree, or the difference is deliberate and stated where both
+         appear: for example, `@starting-style` is an enhancement the floor
+         should not count, and `derive-floor.mjs` says so. The CHANGELOG
+         entry matches the actual compatibility, with the reasoning. A check
+         compares the two, red-proved by lowering one.
+
+         Relevant to O6: decide before 0.9.0 ships, or ship with the
+         entry saying it is known.
+4. [ ] **399.4 — the loop-written owner fields and the activation rule
+       (both scorers' Safety finding).**
+       - **Why.** Both scorers count, as an Invalid, that the loop wrote
+         Precedence, Rules-2-3, Planner and Direction-drift into the owner's
+         field block while O11, O12, O14 and O16 are blank. B adds that
+         `milestone.py` would accept `Status: ACTIVE` from any writer.
+       - **Accept — the property.** `milestone.py` does not count a field as
+         owner-set when its decision cell is blank (this absorbs 398.3).
+         Whether `Status: ACTIVE` can be told apart from a loop edit is
+         measured and reported (the loop commits as the owner's git
+         author). An honest "cannot, here is why" is a satisfying outcome.
+5. [ ] **399.5 — a `.roundtable`-only commit broke CI for five pushes, and no
+       local step saw it.**
+       Track: defect
+       - **Why.** `bbdc4269` through `b07ff571` were all red in CI and
+         Pages. `check-floor.mjs`, the docs build's first gate, scans
+         `.roundtable/**` and found five floor labels in the
+         recommendations file. Each wake ran `test:axe` and `check:layout`
+         before pushing, as the wake prompt says. It did not run
+         `docs:build`, which is where the repo-wide source gates run. Nothing
+         checked CI after the push either. Fixed in `57e67a42`.
+       - **Accept — the property.** Before a wake pushes, the repo-wide
+         source gates that scan every file run locally: `check-floor`,
+         `check:repo`, and whatever else the docs build runs over the whole
+         tree (list them from `apps/docs/package.json`, do not recall them).
+         After it pushes, the wake reads the CI conclusion for its sha, or
+         the next wake does at Step 0 and treats a red main as rule 1.
+         Red-prove it by planting a floor label in a scratch `.roundtable`
+         file.
+
 ## Slice 398 — findings of the 393.10 re-score (2.375, FAIL): stale statements M0 did not sweep, two dead references, and two checks that report less than they see (2026-09-26)
 
 **Why these are parked, and why that is the owner's to lift.** Slice 393's
@@ -795,7 +888,7 @@ not need.
          comma form and fails without the fix. The Milestone block's comment
          is the owner's to change; the report says whether it still invites
          the comma form.
-5. [ ] **398.5 — the second re-score: M0's exit test, run once more.**
+5. [x] **398.5 — the second re-score: M0's exit test, run once more.**
        Milestone: M1 · Phase: 0
        Route: build
        After: 398.1, 398.2
@@ -828,6 +921,42 @@ not need.
            the 2026-09-26 report, the recommendations file, or the DONE notes
            of 393.10 and Slice 398 before writing their own scores.
          - A third agent lists the cloud routine's sessions, read-only.
+       - **DONE 2026-09-26 — FAIL again: mean 2.375. M1 stays DRAFT, and the
+         loop does not extend M0.** Report:
+         `.roundtable/loop-doctor-rescore-398.5-2026-09-26.md`.
+         - **Closes on HEAD.** 15 of 15 named commands of 398.1 and 398.2 exit
+           0 on a clean worktree of `252c2ec9`.
+         - **Scorer A (the verdict).** Correctness 2, Safety 2, Reliability 2,
+           Cost 3, Maintainability 1, Understandability 3, Observability 3,
+           Purpose 3.
+         - **Scorer B (variance).** Correctness 1, Safety 2, Reliability 3,
+           Cost 3, Maintainability 1, Understandability 3, Observability 3,
+           Purpose 3.
+         - Both disclose that the earlier mean reached them before they
+           scored, so their agreement on 2.375 is weak evidence.
+         - **N1-N7 are closed in both**, except for one leftover at
+           `.roundtable/DISPATCHER:4`.
+         - **The failing dimensions rest on new Invalids.** Each scorer found
+           its own 5-7 stale or contradicting statements. Most are text, but
+           A's NI-5 was an unmarked blocked item. The two sets overlap in only
+           three places: DISPATCHER:4, the activation rule at ROADMAP.md:148
+           (the owner's section), and the owner fields the loop wrote itself
+           (398.3). They are filed as Slice 399.
+         - **What that means, measured over three runs.** The 2026-09-26
+           score named seven Invalids and this retry closed them, yet two
+           fresh scorers each found about as many again. Patching named sites
+           does not converge: the stale-statement tail of a 2,318-line
+           LOOPS.md and a 992-line ENVIRONMENT.md is longer than one pass
+           finds. That is an owner call (RESUME Direction), not a third
+           retry.
+         - **Cloud sessions.** 302 of 307 still active (31 pages read,
+           `last_event_at`). None has an event after 2026-09-25T05:20:50Z.
+           The routine is disabled.
+         - **Also found while this ran:** CI and Pages had been red since
+           `bbdc4269`, fixed in `57e67a42`. See 399.5.
+         - **Jev (J2, advisory):** fresh scorer without an earlier score 0.86
+           (the scorers' own disclosure is why it is not higher), closes on
+           HEAD 0.96, sessions listed 0.96, verdict rule applied 0.97.
 
 ## Slice 397 — M1 Phase 3: components go through the experimental tier, and the milestone closes (owner realignment, 2026-09-25)
 
@@ -4797,7 +4926,13 @@ untracked or uncommitted, so the removal was a working-tree change.
          - STILL OPEN — **Firefox**: Playwright Firefox 155 (firefox-1543)
            exits "Could not find profile folder" on Darwin 27.2, sandboxed or
            not, launched directly too. Needs another machine or a stock
-           Firefox install.
+           Firefox install. **NEEDS-RUNTIME** (triaged 2026-09-26, from the
+           398.5 re-score's NI-5): this was the item's only open half and it
+           had no marker, so STATUS.md and rule 4 kept computing 375.11 as the
+           oldest dispatchable item, which no wake on this machine can finish.
+           The owner's action is a stock Firefox (`brew install --cask
+           firefox`, `.roundtable/owner-recs-2026-09-26.md`). Lift the marker
+           once a launch succeeds.
          - **FIXED 2026-09-25 — 400% zoom** (the half below). A design panel
            (G2 refined vs R2), a judge re-measuring both over 6 layouts x 6
            lengths x 5 positions x Tab/click, and an adversarial verifier.

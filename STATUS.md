@@ -2,9 +2,9 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 02:17 UTC
+Generated at: 2026-09-26 02:36 UTC
 
-oldest dispatchable: 375.11 — what 375.9 measured and did not fix.
+oldest dispatchable: 376.7 — the lane-4 ratchet counts any net shrink as a cut.
 
 Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, open `After:` target or held `Parked:` line holds — and, while a milestone is ACTIVE, that the milestone does not tag (rule M dispatches those; `dispatch_status.py` prints its pick). The one standing GOAL, the owner's M0 bootstrap (O3), overrides it until 393.10 closes. A named item without a number has no age to rank by; any that nothing holds is listed here instead of being dropped.
 
@@ -133,10 +133,15 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 - **Slice 397** (2 open)
   - 397.1 — the first real run: the first need Configuration or Distribution logs walks the component lifecycle as far as its fill.
   - 397.2 — EXIT: close Milestone M1.
-- **Slice 398** (3 open)
+- **Slice 398** (2 open)
   - 398.3 — `milestone.py` counts a field as filled only when the owner filled it.
   - 398.4 — a `Modules` value that is not ` · `-separated is refused, not read as one module.
-  - 398.5 — the second re-score: M0's exit test, run once more.
+- **Slice 399** (5 open)
+  - 399.1 — the stale statements the 398.5 scorers found, and the sweep for their siblings.
+  - 399.2 — the in-flight check reads a drifted heading as "nothing in flight".
+  - 399.3 — the published browser floor agrees with the one the CSS needs.
+  - 399.4 — the loop-written owner fields and the activation rule (both scorers' Safety finding).
+  - 399.5 — a `.roundtable`-only commit broke CI for five pushes, and no local step saw it.
 - **Slice —** (1 open)
   - AT runtime evidence
 
@@ -169,7 +174,7 @@ dispatch status — counter-triggered rules (1819 iterations logged)
 Generated from the `Milestone: Mn · Phase: n` markers on every item, open or closed (roadmap 393.8). The milestone's own status is its `Status:` field.
 
 - **M1** — DRAFT
-  - Phase 0: 12 of 16 closed
+  - Phase 0: 13 of 16 closed
   - Phase 1: 0 of 22 closed
   - Phase 2: 0 of 34 closed
   - Phase 3: 0 of 2 closed
@@ -188,6 +193,7 @@ Open items carrying an owner marker (`BLOCKED ON`, `OWNER CALL`, `OWNER OR <X> C
 - 389.7 — The journey's RF confirm and failure verdict are in view at a rugged viewport.
 - 377.5 — release the unreleased fixes, or record why not.
 - 377.6 — is busy-office-erp the named first user?
+- 375.11 — what 375.9 measured and did not fix.
 - 374.4 — `.bo-btn--secondary` standing alone is identified almost entirely by a 1.47:1 border, the contrast gate structurally cannot see it, and the published ACR says it can.
 - 373.6 — App dock: hide on UPWARD scroll. OWNER CALL — two refusals stand on the record and the reversal is not written down.
 - 373.8 — docs IA: collapse 17 sidebar groups into the prompt's seven (Start here / Foundations / Components / Patterns and layouts / Integration / Reference / Contributor and decision history). OWNER CALL.
