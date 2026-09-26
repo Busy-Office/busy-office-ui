@@ -158,8 +158,8 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1847 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-09-26 18:07   ok
+dispatch status — counter-triggered rules (1848 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-09-26 18:07   ok
   Objective     1 / 3 slice           since 2026-09-26 19:15   ok  [377]
   Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 157 sample(s), 8 of 51 name(s) paired across days]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
@@ -297,7 +297,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-26 15:43 · Roadmap · triage · 377.10 amended: owner's no-cap Jev input; model-string premise added to Accept · triaged · 954f769a
 - 2026-09-26 15:49 · Meta · fix · Jev key hygiene (owner input): .env/.env.* in .gitignore; agents use MCP, scripts read ~/Projects/jev-mcp/.env; key in 0 tracked files/commits · landed · af6f835d
 - 2026-09-26 16:54 · Objective · grill · Slice 406 — Objective grill of 377.8/404.1 (full), 377.9/405 (narrowed): 42/57 claims full, 20 findings (18 confirmed); P0 406.1 snapshot nesting, P0 406.6 invisible grid-checkbox ring; own 377.9/404.1 claims corrected · landed · 5773572c
 - 2026-09-26 17:05 · Continue · fix · 406.1 (P0) — snapshot cut leaves out v/ and pagefind/ and asserts it; install refuses a nested v/, counts switchers from committed pages, clears dist/v · landed · 45a0bfa7
@@ -307,6 +306,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 18:07 · Standardize · sweep · Slice 407 — 4 of 4 lanes (isolated build): all equal Slice 405; lane 2's moved input (406.6) is single-declaration rules, below its census; dispatch region 10,374 · landed · 1a64e98b
 - 2026-09-26 19:15 · Objective · grill · Slice 408 — Objective grill of 406.6 (full), 406.1/377.11/377.12/407 (narrowed): 30/42 claims full, 8 findings (5 confirmed, 3 narrowed), no P0; 406.6 fix keyed on element names not fill (408.1) · landed · 95f31c4d
 - 2026-09-26 19:44 · Continue · build · 377.13 — 375.9's grid-press corpus sweep committed (report:grid-presses, suitePages, --counterfactual); HEAD 0 of 4,910 over 132 pages; old 4,944 not reconstructable, corrected · landed · 908cf7c9
+- 2026-09-26 20:56 · Continue · build · 377.14 — seam loop derived (7 docs, 31 seams), shell band derived + check-floor needle (container stand-down), report:text-collapse (373.9 corrected 3/8/1, filed 377.16), runtime-claim coverage 18.5% · landed · f7cecafb
 
 ## Sunset test
 
