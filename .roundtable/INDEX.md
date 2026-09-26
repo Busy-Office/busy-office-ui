@@ -26,7 +26,7 @@ A **·** marks a file nothing outside `.roundtable/` links to. That is not a def
 | — | [Grill — Slice 22 item 1, the color/scales/tokens docs (presentation pass)](grill-slice22-color-docs.md) | ✓ |
 | — | [Grill — Slice 22 sign-off (items 2+3, shipped ungrilled)](grill-slice22-signoff.md) | · |
 | — | [History — the 2026-09-20/21 two-agent arrangement (RETIRED)](history-two-agent-2026-09.md) | ✓ |
-| — | [Jev rubrics — v1 (2026-09-22)](jev-rubrics.md) | ✓ |
+| — | [Jev rubrics — v2 (2026-09-27)](jev-rubrics.md) | ✓ |
 | — | [0.3.0 release brief — read in under a minute (2026-08-22)](release-0.3.0-brief.md) | ✓ |
 | — | [Suite score — the screen ledger](suite-score.md) | ✓ |
 | — | [Verification discipline — the worked examples](verification-discipline.md) | ✓ |

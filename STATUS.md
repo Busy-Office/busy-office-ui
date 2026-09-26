@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 19:16 UTC
+Generated at: 2026-09-26 19:21 UTC
 
 oldest dispatchable: 387.2 — a frozen cell's message still has two covers above it.
 
@@ -160,7 +160,7 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1866 iterations logged)
+dispatch status — counter-triggered rules (1867 iterations logged)
   Standardize   4 / 4 Continue rounds since 2026-09-26 23:48   OVERDUE
   Objective     3 / 3 slices          since 2026-09-27 00:50   OVERDUE  [384, 386, 387]
   -> a counter is at or past its threshold; the dispatcher should pick it
@@ -297,7 +297,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-26 23:35 · Meta · refusal · 381.1: section suppression (drops 2 of 4 real) and archive search (+132 lines) as re-tunes · refused · 68b2f088
 - 2026-09-26 23:48 · Standardize · sweep · Slice 410 — 4 of 4 lanes (isolated build): lanes 1-3 equal Slice 409; lane 4 +25 in Step 0 from 381.1's history sentence, trimmed to the instruction; dispatch region 10,374 · landed · ec482111
 - 2026-09-27 00:50 · Objective · grill · Slice 411 — Objective grill of 377.14/377.16 (full), 377.13/15/17, 381.1, 409, 410 (narrowed): 63 claims, 52 hold; 15 findings (12 confirmed, 3 narrowed), no P0; 377.16 fix regressed the anchor marker (411.1) · landed · 94450fd5
 - 2026-09-27 01:10 · Continue · fix · red main on be4458f3: check:pseudo Chrome launch timed out waiting for the WS endpoint (30s); first occurrence in the last 40 failed CI runs; job rerun green (run 36256896839 attempt 2); no code change · logged · be4458f3
@@ -307,6 +306,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-27 01:45 · Continue · fix · 386.1 — check:layout print probe: body white/black under print emulation in both themes over 128 docs + 28 suite pages (base rate 0/312); red-proved 3 ways; earlier 0-rule injection corrected · landed · 3c840c02
 - 2026-09-27 01:45 · Meta · refusal · 386.1: sharing one source for the ten copies (still loses silently on a NEW page) · refused · 3c840c02
 - 2026-09-27 03:16 · Continue · fix · 387.1 — data-table message no longer lengthens the scroller/page without anchor positioning: press after reading lands (a) and sticky bar holds (b); simulated in one engine; 4 claims (364 total); rf-essentials 41,966/41,984; filed 387.3 · landed · d808dc7f
+- 2026-09-27 03:21 · Roadmap · triage · Jev 0.10/0.11 migration landed, owner-approved 2026-09-27: CLAUDE.md, LOOPS §6 step 4, jev-rubrics v2, local/grill-finding judge; MCP path retired · triaged · afb2f38b
 
 ## Sunset test
 
