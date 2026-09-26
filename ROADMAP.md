@@ -5796,7 +5796,7 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          - `check:claims` 360 of 360, `test:axe` 128 × 2 with 0 violations,
            and `check:layout` 128, all pass. The case sits in part A.
 
-17. [ ] **377.17 — the SC 2.5.7 file-picker case flakes on CI, even at 15s.**
+17. [x] **377.17 — the SC 2.5.7 file-picker case flakes on CI, even at 15s.**
        Track: defect
        - **Why.** `check-claims`' "a single real mouse click on the dropzone's
          visible hint opens the file picker" waits on puppeteer's
@@ -5835,6 +5835,13 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
            changed. The argument is structural: the condition no longer waits
            on an event the runner delivers late. The runs are the sanity
            check.
+       - **DONE 2026-09-26. N = 5 consecutive CI passes** of the "Claims
+         (part b)" job, which holds the case: attempts 1 to 5 of run
+         36249444686 (`05816125`). The push run was followed by 4 single-job
+         re-runs:
+         `gh run rerun 36249444686 --job <Claims (part b) job id>`, then
+         `gh api …/actions/runs/36249444686/attempts/<n>/jobs`. The caveat
+         above stands: the fix rests on what is asserted, not on the count.
 
 ## Slice 376 — Standardize sweep, **4 of 4 lanes**: one dead style and two false passages fixed, four prose verdicts recorded (enumeration 16 -> 20), one standing CSS group found DISSOLVED by a measured fix, and two shipped defects found BESIDE the lanes; the completeness critic also found two closed items resting on uncommitted work (2026-09-24)
 
