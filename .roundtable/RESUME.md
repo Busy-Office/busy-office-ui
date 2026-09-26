@@ -37,17 +37,14 @@ that branch is the owner's call.
 - **No standing GOAL.** The owner's M0 retry ended with `398.5`, which
   FAILED at 2.375. That used 13 of 13 wakes. M1 stays DRAFT, and the loop does
   not extend M0 on its own.
-- **Step 2 from rule 1: there are TWO OPEN P0s**, both filed by the
-  Slice 406 grill:
-  - `406.1`: a snapshot cut nests every older snapshot, and the next release
-    hits it;
-  - `406.6`: a focused, checked checkbox in a data grid has no visible ring,
-    shipped in 0.9.0.
-
-  Rule 1 dispatches them before anything else; read the counters for the
-  rest. `STATUS.md` prints rule 4's next pick; read every
-  free item older than it before quoting it. M1 is DRAFT, so rules M and D do
-  not run.
+- **Step 2 from rule 1.** The two P0s the Slice 406 grill filed are closed:
+  `406.1` (snapshot nesting) and `406.6` (the grid-checkbox ring). Both
+  ship in the next release. With no P0 open, read the counters; `STATUS.md`
+  prints rule 4's pick. `406.7` (the forest-light ring at 2.99) is open, and
+  is a candidate for the same release.
+- **For the owner, a 0.9.1 candidate:** `406.6` is a shipped WCAG 2.4.7 fix,
+  and 401.1 (`bo-check-markup` multi-root) is already waiting on a 0.9.1
+  decision. Publishing stays owner-triggered.
 - **Before choosing, read CI for main's HEAD** (`gh run list --branch main
   --limit 2`). A red main is rule 1.
 - **Today's owner report is closed:** the version-switcher 404 was `404.1`,

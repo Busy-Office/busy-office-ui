@@ -157,8 +157,8 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1841 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-09-26 15:34   ok
+dispatch status — counter-triggered rules (1842 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-09-26 15:34   ok
   Objective     1 / 3 slice           since 2026-09-26 16:54   ok  [406]
   Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 154 sample(s), 8 of 49 name(s) paired across days]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
@@ -299,7 +299,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-26 14:28 · Continue · build · 377.8 — ACR 1.4.11/2.4.7 remarks + verdicts derived from check-contrast's published edge and focus-ring readings; red-proved 3 ways; live · landed · 6c125f02
 - 2026-09-26 15:02 · Continue · fix · 404.1 — docs version switcher 404 on the container and gates; frozen snapshot switchers (owner report) · landed · e6922d05
 - 2026-09-26 15:16 · Continue · build · 377.9 — 375.6 re-decided on runner timings (ci_timings.py, 8 runs): still refused, wall clock cannot fall; filed 377.10 · landed · f0704759
 - 2026-09-26 15:16 · Meta · refusal · 375.6 build-once-and-share-dist, re-refused on runner data: wall clock >= 5.7-6.1 min vs 5.4-5.9 today · refused · f0704759
@@ -309,6 +308,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 15:49 · Meta · fix · Jev key hygiene (owner input): .env/.env.* in .gitignore; agents use MCP, scripts read ~/Projects/jev-mcp/.env; key in 0 tracked files/commits · landed · af6f835d
 - 2026-09-26 16:54 · Objective · grill · Slice 406 — Objective grill of 377.8/404.1 (full), 377.9/405 (narrowed): 42/57 claims full, 20 findings (18 confirmed); P0 406.1 snapshot nesting, P0 406.6 invisible grid-checkbox ring; own 377.9/404.1 claims corrected · landed · 5773572c
 - 2026-09-26 17:05 · Continue · fix · 406.1 (P0) — snapshot cut leaves out v/ and pagefind/ and asserts it; install refuses a nested v/, counts switchers from committed pages, clears dist/v · landed · 45a0bfa7
+- 2026-09-26 17:33 · Continue · fix · 406.6 (P0) — grid controls keep their focus ring outside their own fill (1px offset; cells stay inset); 14-config real-key case with contrast vs published debt; filed 406.7 (forest-light 2.99) · landed · c8ec19c2
 
 ## Sunset test
 
