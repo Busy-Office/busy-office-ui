@@ -1860,3 +1860,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-26 22:29 · Standardize · sweep · Slice 409 — 4 of 4 lanes (isolated build): lanes 1, 2, 4 equal Slice 407; lane 3 120,015 (-6, 377.14 b prose, bounded by diff); dispatch region 10,374 · landed · bb80a2ea
 - 2026-09-26 22:33 · Continue · build · 377.15 — closed: split claims shard measured over 3 green runs, CI wall 3.9-4.0 min (from 5.4-5.9), reconciled 163 + 197 = 360 in CI · landed · 26b262ce
 - 2026-09-26 22:42 · Continue · fix · 377.17 (in progress) — file-picker case asserts the input's trusted click; chooser event best-effort; red-proven (for-mismatch activated 0) · track=defect · landed · 0205933f
+- 2026-09-26 23:02 · Continue · fix · 377.17 — closed: file-picker case asserts the input's trusted click; 5 consecutive CI passes (run 36249444686 attempts 1-5) · track=defect · landed · 9eedab1f
