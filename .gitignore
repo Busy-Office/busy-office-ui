@@ -41,11 +41,12 @@ __pycache__/
 # Secrets. A local `.env.local` holding the Jev API key sat in the repo root,
 # ignored only by this clone's .git/info/exclude, which a fresh clone or a cloud
 # session does not have (owner: "make sure it won't leak out", 2026-09-26).
-# Nothing here reads it: agents reach Jev through its MCP server, and a script
-# calling the API reads ~/Projects/jev-mcp/.env at runtime (jev-rubrics.md).
+# Nothing here reads it: the `jev` command reads its key from
+# ~/.config/jev/secrets.env, outside every repo (jev-rubrics.md).
 .env
 .env.*
-# Claude Code's per-project local settings. It carries JEV_AI_API_KEY in its
-# env block so sandboxed agents can call Jev (owner, 2026-09-26). The owner's
-# global git ignore covers it on this machine; this line covers every clone.
+# Claude Code's per-project local settings. It carried JEV_AI_API_KEY in an
+# env block from 2026-09-26 (owner); the owner removed the entry on 2026-09-27,
+# and `jev` never read it. The owner's global git ignore covers the file on
+# this machine; this line covers every clone.
 .claude/settings.local.json

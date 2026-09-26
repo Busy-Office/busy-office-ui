@@ -2637,6 +2637,16 @@ this: it orders rule M against rule 4, not within M1.
          - **377.10** closes by its own Accept, run here: 20 cases, uniform
            criteria, 3 or more repeats, and the false-positive and
            false-negative rates at 0.85 and 0.35 with their spread.
+       - **Plugin 0.10.0 (2026-09-27).** The fields to describe are now the
+         `jev` result's. "Line 41" is now the rubric's section "Reading the
+         output", named by heading because the line moved. The premise is
+         about the API's own `confidence`, which `jev` never reads: it
+         computes `confidence` itself, as the top probability
+         (`confidenceOf` in `jev.mjs`), so the source is the instrument, and
+         a direct probe of the API is not allowed (skill `jev`, "Never").
+         For "n agrees": CLAUDE.md now gives n=20 for v1's question only and
+         no n for the v2 judges; re-check the heading, the text and CLAUDE.md
+         against that.
 13. [ ] **394.13 — the queue-screen calibration set, built from ROADMAP history.**
        Milestone: M1 · Phase: 1
        Route: build
@@ -2689,6 +2699,25 @@ this: it orders rule M against rule 4, not within M1.
            and the model string.
          - **Refusal is allowed.** If the gate is refused, the record says so and
            the screen stays code-only. That is a satisfying outcome.
+       - **Plugin 0.10.0 (2026-09-27).** `kev-gate` is gone and the `jev` skill
+         forbids direct calls to jev-ai.pro. The gate file becomes
+         `.jev/judges/queue-screen.json`, the only place `jev judge local/…`
+         loads from, and **394.14 authors it** from prompt §6 JQ and the
+         pilot file; nothing has been drafted for it. Read "`kev-gate lint`
+         reports 0 errors" as "`jev judge local/queue-screen --help` loads
+         it", which is a FORMAT check only. kev-gate's phrasing lint (K4) has
+         no replacement, so the questions are checked by hand against the
+         skill's `references/recipes.md`, "Phrasing questions so the answers
+         separate", and the record says so. Read "direct HTTPS" as the script
+         running `jev`, where any exit other than 0, 3 or 4 is the fail-open
+         `sharpen`. Two self-test classes are not exit codes, so the script
+         checks them itself: an answer whose option keys differ from the
+         question's (`jev` does not compare them, and scores a missing option
+         as 0) and a changed model string (only a `model_unexpected`
+         warning). The "repeat 3 times" probe is a calibration run: every
+         call carries `--run 394.14` and every reading is recorded. The
+         three-action rules stay in the script's code, because a judge maps
+         REVIEW to one action.
 15. [ ] **394.15 — the queue screen runs beside every milestone dispatch, and its
        outcomes are joined.**
        Milestone: M1 · Phase: 1
@@ -5852,6 +5881,19 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          states whether the string varied within the run and, if it did,
          the FP/FN for each string separately. Finding one string throughout
          satisfies it.
+       - **Plugin 0.10.0 (2026-09-27).** Rubric 2 is now `jev judge
+         completion`, so that is what is re-measured, through `jev` and never
+         a direct call, with Rubric 2's state template unchanged and each
+         case's evidence attached from a file (without one the judge cannot
+         PASS). **The primary instrument is each case's exit code against its
+         truth** (0 supports, 4 does not, 3 the middle band; any other exit is
+         UNVERIFIED and not a sample). The 0.85 and 0.35 rates read from
+         `answers.completion.probabilities.complete` are secondary, because
+         the judge's FAIL cut is `completion.incomplete >= 0.70`, not
+         `complete <= 0.35`. The repeats are a calibration run, the named
+         exception to "never re-ask unchanged": every call carries `--run
+         377.10`, and every reading is recorded with `model` and `warnings`.
+         CLAUDE.md now gives n=20 for v1's question only (see 394.12).
         Milestone: M1 · Phase: 1
         Route: build
         After: 394.12

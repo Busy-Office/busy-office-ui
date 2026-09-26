@@ -1726,8 +1726,10 @@ named since the last Objective row that reset the count, or on demand.
    `Hypothesis`; every claim carries counter-evidence.
 3. Feed findings back into the Roadmap loop's triage as re-prioritization, not as vibes.
 4. **A grill's verifier briefs say it may consult Jev after its own verdict**
-   (CLAUDE.md, Jev: raw evidence in the state, one call per finding, reading and
-   `model` string returned beside its verdict). The report quotes both, and
+   (CLAUDE.md, Jev; `jev-rubrics.md` Rubric 2b: `jev judge
+   local/grill-finding`, its reproduction run first and attached, one call per
+   finding, exit code, decision and `model` returned beside its verdict, never
+   re-asked). The report quotes both, and
    lists every verdict where they disagree. A finder is not told to, since a
    finder has no claim to check yet.
 **Exit:** a scored report lands in `.roundtable/`, and it carries a **thesis

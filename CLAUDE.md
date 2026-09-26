@@ -91,36 +91,70 @@ deliberate follow-ups.
 
 ## Jev — typed second opinion at two points (rubrics: `.roundtable/jev-rubrics.md`)
 
-Jev (`jev-ai.pro`, MCP tools `jev_evaluate` / `jev_route`) answers typed
-`noul`/`choice`/`score` questions with probabilities. Use it at exactly two
-points: **deciding between drafted alternatives**, and **reviewing whether
-evidence supports a completion claim**. Batch questions that share one evidence
-state into one call. Do not call it per action, per file, or for anything the
-code can answer — read the code instead. It is a different service from `kev`;
-never substitute one for the other.
+Jev (`jev-ai.pro`) answers typed `noul`/`choice`/`score` questions with
+probabilities. **Reach it only through the `jev` command** (busy-office plugin
+0.10.0 or later, skill `jev`), never by a direct HTTP call and never through
+the `mcp__jev__*` tools (the owner removed that server, and the six old
+`jev-*` skills, on 2026-09-27). The command is what checks that this repo may
+send, attaches evidence, scans for secrets and keeps the audit log. **If `jev` is not found, the review did
+not run; never fall back to the MCP tools.** Use it at exactly two points:
+- **deciding between drafted alternatives** → `jev ask`, one `choice` question
+  (Rubric 1);
+- **reviewing whether evidence supports a claim** → `jev judge completion` for
+  a completion claim (Rubric 2), and `jev judge local/grill-finding` for a
+  grill verifier's finding (Rubric 2b, LOOPS §6 step 4). The verifier's
+  consult was already inside this point (owner, 2026-09-26); it now has its own
+  judge, because a finding is a defect claim, not a done-claim.
+
+One call per evidence state. Do not call it per action, per file, or for
+anything the code can answer — read the code instead. The skill's other judges
+(`router`, `tool-guard`, `research`, `release` and the rest) are not points in
+this repo. It is a different service from `kev`; never substitute one for the
+other.
 
 **It is advisory and it is not a gate.** PASS needs the required checks to pass
-AND the criteria to be supported; a failed check is FAIL whatever Jev says; and
-a Jev outage is **UNVERIFIED, never PASS**. `noul` is a probability, not a
-confidence, and a `score` is a weighted mean over levels — not a confidence
-either. Thresholds (≥0.85 supports, ≤0.35 does not, between = unverified) are
-**provisional at n=5**; the rubric file carries the validation set to re-run.
+AND the criteria to be supported; a failed check is FAIL whatever Jev says.
+Jev's own PASS / REVIEW / FAIL is a reading, not that verdict. **Read the exit
+code before anything else**: 0 PASS, 3 REVIEW (the old middle band: go
+measure), 4 FAIL, and **any other exit is UNVERIFIED, never PASS** — 5 (not
+checked), 64 (refused), 1 (internal error), 127 (`jev` not found) — whatever
+a printed `decision` says. A refusal can print nothing on stdout, so never
+parse before reading the exit code. `completion` never PASSes on stated
+evidence alone: with no attached item the best it returns is REVIEW. Every
+result says `calibrated: false`; the n=20 validation in the rubric file
+measured v1's single question, not these judges (`jev-rubrics.md`).
 
 **Agents consult it too, at the same two points** (owner, 2026-09-26). A
-subagent or workflow agent reaches Jev through the session's MCP server
-(ToolSearch, then `mcp__jev__jev_evaluate`). A sandboxed script calling the API
-directly reads `JEV_AI_API_KEY` from its environment, which the git-ignored
-`.claude/settings.local.json` supplies (owner's request; `jev-rubrics.md` has
-the handling rules). Credit is not the limit; the two points are. An agent that
-consults it:
+subagent or workflow agent runs `jev` from Bash. The owner allowed this repo
+on 2026-09-27, and a `jev ask` run inside the Bash sandbox that day returned
+exit 0. The key lives outside every repo, in `~/.config/jev/secrets.env`, set
+by the owner with `/plugin configure busy-office`; `jev` ignores
+`JEV_AI_API_KEY` in the environment, and no file here should hold it. **An
+agent runs only `jev judge`, `jev ask`, `jev judges`, `jev judge <name>
+--help`, `jev outcome`, `jev report` and `jev doctor`.** Every other
+subcommand (`allow`, `deny`, `setup`, `forget`, `link`, `unlink`) changes the
+owner's key, allow list or PATH, and is the owner's. Credit is not the limit;
+the two points are. An agent that consults it:
 - **forms its own verdict first**, then asks, and reports both. A disagreement
   is surfaced as a finding, never settled by Jev;
-- sends **raw evidence** (the command and its output, the diff, the rendered
-  value), never its own summary or conclusion, or Jev grades the summary;
-- makes one call per evidence state and records the reading and the
-  response's `model` string;
-- reads an outage as UNVERIFIED, and never lets a reading decide a gate or a
-  PASS.
+- **runs every check first, in its own shell**, with the output and
+  `[exit N]` saved to a file in a directory made for this call
+  (`D=$(mktemp -d)`, never a fixed name in a shared `$TMPDIR`), and reads it.
+  A failed check is FAIL, and there is no claim left to review. Only then does
+  it pass the file with `--attach`. `--attach-cmd` is for cheap read-only
+  context (`git show --stat`, `git rev-parse HEAD`), because its output
+  reaches Jev but never the agent;
+- **attaches raw evidence**, never its own summary or conclusion, or Jev
+  grades the summary; it never types `evidence` or `tool_results` into the
+  state, since both are read as evidence and only attachments are marked
+  `attached`;
+- records the exit code, the decision, `jev_run_id` and `model`. A
+  `model_unexpected` warning means another model answered: treat the reading
+  as unchecked; a PASS was capped to REVIEW (its `reasons` say "capped:");
+- **never re-asks with unchanged evidence**, except in a calibration run named
+  by its roadmap item (377.10, 394.14), which tags every call with `--run <item
+  id>` and records every reading; never passes flags to get past a refusal;
+  and never lets a reading decide a gate or a PASS.
 
 **A blind scorer or critic never consults it** (LOOPS §3b step 4, the
 Gauntlet critic). A reading seen before its own verdict is the prior its
