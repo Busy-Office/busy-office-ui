@@ -16,7 +16,7 @@ Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_
 - [`surface-baseline.md`](surface-baseline.md) — the scored-surface baseline
 - [`surface-review-rubric.md`](surface-review-rubric.md) — how a surface is scored
 
-## Findings — 225 snapshots, newest first
+## Findings — 226 snapshots, newest first
 
 A **·** marks a file nothing outside `.roundtable/` links to. That is not a defect: a grill can settle a question without anything needing to cite it afterwards. It is here so the uncited set stays visible instead of growing unnoticed.
 
@@ -32,6 +32,7 @@ A **·** marks a file nothing outside `.roundtable/` links to. That is not a def
 | — | [Verification discipline — the worked examples](verification-discipline.md) | ✓ |
 | 2026-09-26 | [Objective grill of 375.11 (zoom half), 392.1, 399.3 and the 0.9.0 release, with 393, 398 and Sli](grill-objective-375-392-393-398-399-400-2026-09-26.md) | ✓ |
 | 2026-09-26 | [Objective grill of 377.4 (full), with 376.7, 377.7 and Slice 402 narrowed (2026-09-26)](grill-objective-376-377-402-2026-09-26.md) | ✓ |
+| 2026-09-26 | [Objective grill of 377.8 and 404.1 (full), with 377.9 and Slice 405 narrowed (2026-09-26)](grill-objective-377-404-405-2026-09-26.md) | ✓ |
 | 2026-09-26 | [Loop-doctor re-score — 393.10, M0's exit test (2026-09-26)](loop-doctor-rescore-2026-09-26.md) | ✓ |
 | 2026-09-26 | [Loop-doctor re-score, second run — 398.5, M0 exit test (2026-09-26)](loop-doctor-rescore-398.5-2026-09-26.md) | ✓ |
 | 2026-09-26 | [Owner decisions — recommendations for every item waiting on you (2026-09-26)](owner-recs-2026-09-26.md) | ✓ |
@@ -259,4 +260,4 @@ The signature of a directory that has outgrown retrieval is the same subject inv
 
 Two files on one subject is usually a deliberate follow-up (a grill and its sign-off). Three is worth a look.
 
-— 234 files, 175 cited from outside, 60 uncited snapshots, 4 repeated subject(s).
+— 235 files, 176 cited from outside, 60 uncited snapshots, 4 repeated subject(s).

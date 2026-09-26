@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 08:53 UTC
+Generated at: 2026-09-26 08:54 UTC
 
 oldest dispatchable: 377.11 — 375.10's "holds the option" half must be able to fail.
 
@@ -150,18 +150,17 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 406.2 — 404.1's follow-ups.
   - 406.3 — the ACR's verdicts rest on detectors that can miss what they certify.
   - 406.4 — `ci_timings.py`'s reconciliation shares the recogniser it checks, and the recorder downgrades a refused STATUS.md.
-  - 406.6 — a focused, checked checkbox in a data grid shows no focus ring.
   - 406.5 — the byline demo's avatar 404s on Pages.
+  - 406.6 — a focused, checked checkbox in a data grid shows no focus ring.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1839 iterations logged)
+dispatch status — counter-triggered rules (1840 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-09-26 15:34   ok
-  Objective     3 / 3 slices          since 2026-09-26 14:16   OVERDUE  [377, 404, 405]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-09-26 16:54   ok
   Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 154 sample(s), 8 of 49 name(s) paired across days]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-25 (2026-09-26), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -301,7 +300,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-26 13:26 · Standardize · sweep · Slice 402 — 4 of 4 lanes (isolated build): all equal Slice 400; ratchet floor surfaces ENVIRONMENT.md never cut (36 up) -> owner Direction #0 · landed · da1b2cb8
 - 2026-09-26 14:16 · Objective · grill · Slice 403 — Objective grill of 377.4 (full), 376.7/377.7/402 (narrowed): 33/39 claims full, 13 findings (6 confirmed); own 196->188 and touchscreen claims corrected · landed · 8fa43c1d
 - 2026-09-26 14:28 · Continue · build · 377.8 — ACR 1.4.11/2.4.7 remarks + verdicts derived from check-contrast's published edge and focus-ring readings; red-proved 3 ways; live · landed · 6c125f02
 - 2026-09-26 15:02 · Continue · fix · 404.1 — docs version switcher 404 on the container and gates; frozen snapshot switchers (owner report) · landed · e6922d05
@@ -311,6 +309,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 15:34 · Standardize · sweep · Slice 405 — 4 of 4 lanes (isolated build): lanes 1, 2, 4 equal Slice 402; lane 3 +50 words attributed to 377.8's ACR remarks by reverting it; dispatch region 10,374 · landed · e6c341a2
 - 2026-09-26 15:43 · Roadmap · triage · 377.10 amended: owner's no-cap Jev input; model-string premise added to Accept · triaged · 954f769a
 - 2026-09-26 15:49 · Meta · fix · Jev key hygiene (owner input): .env/.env.* in .gitignore; agents use MCP, scripts read ~/Projects/jev-mcp/.env; key in 0 tracked files/commits · landed · af6f835d
+- 2026-09-26 16:54 · Objective · grill · Slice 406 — Objective grill of 377.8/404.1 (full), 377.9/405 (narrowed): 42/57 claims full, 20 findings (18 confirmed); P0 406.1 snapshot nesting, P0 406.6 invisible grid-checkbox ring; own 377.9/404.1 claims corrected · landed · 5773572c
 
 ## Sunset test
 
