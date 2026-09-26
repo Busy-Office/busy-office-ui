@@ -8147,31 +8147,33 @@ const pickerByPointer = await (async () => {
     };
   });
   if (!geom || !geom.isLabel) return { missing: true, geom };
-  let opened = false, chooserErr = null;
-  try {
-    const [chooser] = await Promise.all([
-      // 15s, not 5s (roadmap 391.2). The 5s wait failed on 2 of 4 observed CI
-      // runs — 88ba16bb and 07aef5bf, both markdown-only diffs — with the
-      // geometry block healthy every time (isLabel, inputHidden,
-      // pointIsOnInput false, pointInViewport true) and only the chooser event
-      // missing. A shared runner is slower than this container, where the case
-      // has never failed. This raises PATIENCE, not permissiveness: the check
-      // below still requires `opened === true`, so a dropzone that never opens
-      // a picker still fails, it just takes longer to say so.
-      page.waitForFileChooser({ timeout: 15000 }),
-      page.mouse.click(geom.point.x, geom.point.y),
-    ]);
-    opened = !!chooser;
-    await chooser.cancel();
-  } catch (e) { chooserErr = String(e.message || e); }
-  return { geom, opened, chooserErr };
+  /* What is ASSERTED is the file input's own trusted `click`, which the
+     label's activation dispatches to it and which is what opens a picker
+     (roadmap 377.17). The chooser event itself stays only as a best-effort
+     observation, never a condition. Waiting on it failed 3 times on CI and
+     never locally: twice at 5s (88ba16bb, 07aef5bf), then at 15s (89c4a85e)
+     after 391.2 raised the wait. Each time the geometry was healthy and only
+     the event was missing, so more patience was not the fix. It is still
+     consumed (3s, then cancelled) so a real picker never blocks the page. */
+  await page.evaluate(() => {
+    const input = document.querySelector('.bo-file-dropzone input[type="file"]');
+    window.__dzClicks = [];
+    input.addEventListener('click', (e) => window.__dzClicks.push({ trusted: e.isTrusted, onInput: e.target === input }), { capture: true, once: false });
+  });
+  const chooserWait = page.waitForFileChooser({ timeout: 3000 }).catch(() => null);
+  await page.mouse.click(geom.point.x, geom.point.y);
+  const chooser = await chooserWait;
+  if (chooser) await chooser.cancel().catch(() => {});
+  const clicks = await page.evaluate(() => window.__dzClicks);
+  const activated = clicks.filter((c) => c.trusted && c.onInput).length;
+  return { geom, activated, clicks: clicks.length, chooserSeen: !!chooser };
 })();
 check(
   'SC 2.5.7 alternative: a single real mouse click on the dropzone\'s visible hint — not on the clipped input — opens the file picker, so the drop function is reachable without any dragging movement',
   !pickerByPointer.missing && pickerByPointer.geom.isLabel &&
     pickerByPointer.geom.inputHidden && pickerByPointer.geom.inputNotDisplayNone &&
     pickerByPointer.geom.pointIsOnInput === false && pickerByPointer.geom.pointInViewport &&
-    pickerByPointer.opened === true,
+    pickerByPointer.activated === 1,
   JSON.stringify(pickerByPointer),
 );
 

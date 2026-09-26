@@ -5815,6 +5815,26 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          the input is `display: none`, red-proven on both. It passes N
          consecutive CI runs, with N and the command stated. Or the case is
          kept and the flake is quantified and accepted, with the reason.
+       - **Progress 2026-09-26 (rule 4): the observation is replaced; CI runs
+         are being counted.**
+         - **What the case asserts now:** the file input's own trusted `click`,
+           which the label's activation dispatches and which is what opens a
+           picker. The chooser event is still consumed (3s, then cancelled),
+           so a real picker never blocks the page, but it is reported
+           (`chooserSeen`), never a condition.
+         - **Red-proven with the case's own sliced source:**
+           - baseline passes (activated 1, and the chooser seen too);
+           - a label whose `for` points at a missing id fails with
+             `activated: 0` while the geometry stays healthy, so the new
+             assertion is what catches it;
+           - `display: none` on the input fails, through geometry;
+           - a hint that is not a label fails.
+         - **What N passes can and cannot show.** No run count proves a rare
+           flake gone: at the observed rate, about 3 in several dozen CI runs,
+           5 passes would happen most of the time even if nothing had
+           changed. The argument is structural: the condition no longer waits
+           on an event the runner delivers late. The runs are the sanity
+           check.
 
 ## Slice 376 — Standardize sweep, **4 of 4 lanes**: one dead style and two false passages fixed, four prose verdicts recorded (enumeration 16 -> 20), one standing CSS group found DISSOLVED by a measured fix, and two shipped defects found BESIDE the lanes; the completeness critic also found two closed items resting on uncommitted work (2026-09-24)
 
