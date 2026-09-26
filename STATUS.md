@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 09:05 UTC
+Generated at: 2026-09-26 09:33 UTC
 
 oldest dispatchable: 377.11 — 375.10's "holds the option" half must be able to fail.
 
@@ -150,16 +150,16 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 406.3 — the ACR's verdicts rest on detectors that can miss what they certify.
   - 406.4 — `ci_timings.py`'s reconciliation shares the recogniser it checks, and the recorder downgrades a refused STATUS.md.
   - 406.5 — the byline demo's avatar 404s on Pages.
-  - 406.6 — a focused, checked checkbox in a data grid shows no focus ring.
+  - 406.7 — the forest-light focus ring is 2.99:1 on `bg-muted`.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1840 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-09-26 15:34   ok
-  Objective     0 / 3 slices          since 2026-09-26 16:54   ok
+dispatch status — counter-triggered rules (1841 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-09-26 15:34   ok
+  Objective     1 / 3 slice           since 2026-09-26 16:54   ok  [406]
   Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 154 sample(s), 8 of 49 name(s) paired across days]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-25 (2026-09-26), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -299,7 +299,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-26 14:16 · Objective · grill · Slice 403 — Objective grill of 377.4 (full), 376.7/377.7/402 (narrowed): 33/39 claims full, 13 findings (6 confirmed); own 196->188 and touchscreen claims corrected · landed · 8fa43c1d
 - 2026-09-26 14:28 · Continue · build · 377.8 — ACR 1.4.11/2.4.7 remarks + verdicts derived from check-contrast's published edge and focus-ring readings; red-proved 3 ways; live · landed · 6c125f02
 - 2026-09-26 15:02 · Continue · fix · 404.1 — docs version switcher 404 on the container and gates; frozen snapshot switchers (owner report) · landed · e6922d05
 - 2026-09-26 15:16 · Continue · build · 377.9 — 375.6 re-decided on runner timings (ci_timings.py, 8 runs): still refused, wall clock cannot fall; filed 377.10 · landed · f0704759
@@ -309,6 +308,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 15:43 · Roadmap · triage · 377.10 amended: owner's no-cap Jev input; model-string premise added to Accept · triaged · 954f769a
 - 2026-09-26 15:49 · Meta · fix · Jev key hygiene (owner input): .env/.env.* in .gitignore; agents use MCP, scripts read ~/Projects/jev-mcp/.env; key in 0 tracked files/commits · landed · af6f835d
 - 2026-09-26 16:54 · Objective · grill · Slice 406 — Objective grill of 377.8/404.1 (full), 377.9/405 (narrowed): 42/57 claims full, 20 findings (18 confirmed); P0 406.1 snapshot nesting, P0 406.6 invisible grid-checkbox ring; own 377.9/404.1 claims corrected · landed · 5773572c
+- 2026-09-26 17:05 · Continue · fix · 406.1 (P0) — snapshot cut leaves out v/ and pagefind/ and asserts it; install refuses a nested v/, counts switchers from committed pages, clears dist/v · landed · 45a0bfa7
 
 ## Sunset test
 

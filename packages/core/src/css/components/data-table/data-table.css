@@ -470,8 +470,27 @@
      ring so the focused cell's outline doesn't bleed into its neighbor —
      the default 2px outward offset from reset.css reads ambiguously in a
      dense grid of adjacent cells. */
-  .bo-data-table[role="grid"] :focus-visible {
+  .bo-data-table[role="grid"] :focus-visible:not(input, select, textarea, button) {
     outline-offset: -2px;
+  }
+
+  /* A CONTROL with its own fill keeps its ring OUTSIDE its box (roadmap
+     406.6). The inset above suits what has no fill of its own, a cell or a
+     cell link, whose ring paints on the cell. Applied to a control, it
+     painted the ring on the control's own fill. On a checked checkbox that
+     is the accent, and every brand's dark block sets the ring and the accent
+     to the same step, so the ring measured 1.00:1 in six presets and under
+     3:1 in all 14 (Slice 406 grill).
+     A 1px offset puts the 2px ring on the cell's padding, whose grounds
+     check-contrast measures, with a 1px gap of that ground between ring and
+     fill. At offset 0 a ring the same colour as the fill merged into it, and
+     read as a bigger checkbox rather than a ring. The ring reaches 3px, and
+     the smallest cell padding is --bo-space-1 (4px), so it stays inside the
+     cell at every density. `:where()` keeps this below a component's own
+     offset, so money's and quantity's joined-segment insets still win inside
+     a grid. */
+  :where(.bo-data-table[role="grid"]) :is(input, select, textarea, button):focus-visible {
+    outline-offset: 1px;
   }
 
   /* Loading: attribute flipped by JS/HTMX. */

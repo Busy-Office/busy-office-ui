@@ -9,7 +9,25 @@ pin.
 
 ## Unreleased
 
-_Nothing yet._
+### Fixed
+
+- **A keyboard-focused control inside a data grid now shows its focus ring.**
+  In a `.bo-data-table` with grid navigation (`data-grid-nav`, which sets
+  `role="grid"`), the inset ring meant for cells also applied to the
+  controls inside them. It painted on the control's own fill, and on a
+  checked checkbox that is the accent. Every brand's dark theme sets the
+  ring and the accent to the same colour, so a focused, checked checkbox
+  looked exactly like an unfocused one in six presets. The ring was under
+  3:1 against the fill in all 14 theme and brand combinations.
+  - Cells and cell links keep the inset ring, since they tile.
+  - An `input`, `select`, `textarea` or `button` now gets a 1px offset: its
+    ring sits just outside its own box on the cell's padding, with a 1px gap
+    so it reads as a ring even where it matches the fill colour. It stays
+    inside the cell at every row size.
+  - Money and quantity segments keep their own joined-segment inset.
+  - Nothing to migrate, unless you copied the old rule
+    `.bo-data-table[role="grid"] :focus-visible { outline-offset: -2px }`
+    into your own CSS. (Roadmap 406.6.)
 
 
 ## 0.9.0 (2026-09-26)

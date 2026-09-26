@@ -698,7 +698,7 @@ Framework code since Slice 403: 0 files. The first user's `main` moved today
        - **Accept — the property.** The avatar renders on a base-path build.
          A check fails on any root-absolute asset reference in built pages
          that ignores the base, red-proven on this one.
-6. [ ] **P0 · 406.6 — a focused, checked checkbox in a data grid shows no
+6. [x] **P0 · 406.6 — a focused, checked checkbox in a data grid shows no
        focus ring.** Track: defect
        - **Why (377-F5, the report's §3a).** Grid navigation makes the table
          `role="grid"`, and
@@ -722,6 +722,77 @@ Framework code since Slice 403: 0 files. The first user's `main` moved today
          - The fix is argued as a SHAPE, not per brand: move the inset ring
            off the control, or pick the ring from a token that contrasts with
            accent. Red-proven by restoring the equal-step brand values.
+       - **DONE 2026-09-26 (rule 1, P0). The fix is a shape: ring placement
+         now follows whether the thing has a fill.**
+         - **What has no fill of its own keeps the inset ring:** cells and
+           cell links. They tile, and the inset exists so a ring never
+           bleeds into a neighbour.
+         - **An `input`, `select`, `textarea` or `button` gets a 1px
+           offset.** Its ring sits on the cell's padding with a 1px gap of
+           cell ground. At offset 0 a ring the same colour as the fill merged
+           into it and read as a bigger checkbox, which the indigo-dark
+           screenshot showed, so the gap is what makes it a ring.
+         - **Low specificity (`:where`),** so money's and quantity's
+           joined-segment insets still win inside a grid.
+         - **No brand token changed.** The equal-step ring and accent are
+           harmless once the ring never paints on the fill.
+         - **Regression case in `check-claims`:** it drives real keys (a
+           click on the caption, Tab, then ArrowDown, Enter, Space for the
+           row checkbox and ArrowUp, Enter, Space for select-all) in all 14
+           theme × brand configurations, 28 readings. It asserts:
+           - the ring is outside the control's box (offset ≥ 0);
+           - a strip just outside the box changes when focus arrives. The
+             Escape reference frame keeps the check in place, so the ring is
+             the only difference;
+           - the ring is at least 3:1 against the cell's composited ground.
+             Below that it passes only where `contrast.json` publishes the
+             same configuration below 3:1 at the same ratio. That is read,
+             never copied.
+           - **Watched red first on the pre-fix build:** offset −2px and no
+             change outside the box, in 14 of 14. That revert of the CSS is
+             the red-proof. Restoring brand values proves nothing here,
+             since they are unchanged.
+           - **Green after,** 14 of 14.
+         - **Geometry, measured:** cells keep −2px. The control's ring stays
+           inside the cell at every row size: 1.5px spare at compact (4px
+           padding), 6.5 at comfortable, 11.5 at spacious.
+         - **Live on :8081** (the container confirmed serving the rule): 1440
+           and 390 in light and dark, plus indigo-dark, all with a visible
+           separated ring and no page overflow.
+         - **CHANGELOG** Unreleased → Fixed, with the migration note: only CSS
+           that copied the old rule needs to change.
+         - **The Accept's 3:1 clause: 27 of 28 readings meet it** (min 3.15
+           on a row, 3.4 on base-light's header). The 28th is forest-light's
+           select-all on the header's `bg-muted` at **2.99**: the same reading
+           `contrast.json` and the ACR's 2.4.7 remark already publish, and
+           not introduced here. No open item owned it, so it is filed as
+           406.7. Jev read 0.60 on "Accept met" before this was measured; it
+           was right that the case did not yet assert contrast.
+         - **Red-proof of the debt reconciliation:** that reading removed
+           from a scratch `contrast.json` (70 → 69) fails the case, naming
+           forest-light select-all at 2.99.
+         - **The second clause is met by removal, not by a new pairing.** The
+           grid no longer produces ring-on-accent, and the ring's grounds
+           (surface, selected, muted) were already in `RING_GROUNDS`.
+         - **Not covered:** Firefox and Safari's native checkbox painting,
+           forced colours beyond `check:forced-colors`, and controls in grids
+           other than this demo.
+7. [ ] **406.7 — the forest-light focus ring is 2.99:1 on `bg-muted`.**
+       Track: defect
+       - **Why.** It is the only focus-ring reading under 3:1 in
+         `contrast.json` (1 of 70), and the reason 2.4.7 reads Partially
+         Supports. It is live wherever the ring meets `bg-muted` under
+         brand-forest light: a data grid's header select-all (406.6's case
+         measures it) and `.bo-segmented`'s track (374.6). The grill
+         red-proved one fix: green-600 → green-700 gives a lowest reading of
+         3.31. But green-700 is also forest-light's accent, so any inset ring
+         on an accent fill would then match it.
+       - **Accept — the property.** Every focus-ring reading in
+         `contrast.json` is at least 3:1 in all 14 configurations, and
+         406.6's case passes with no published debt. Before the token moves,
+         every place a ring can paint on an accent fill is listed, measured
+         in a browser, and shown not to become ring-equals-fill; 406.6's
+         shape covers grids. Or the reading stays, refused with a reason.
 
 ## Slice 405 — Standardize sweep, 4 of 4 lanes on an isolated clean build: lanes 1, 2 and 4 equal Slice 402, and lane 3's +50 words are all 377.8's generated ACR remarks, measured by reverting it (2026-09-26)
 

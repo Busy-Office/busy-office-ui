@@ -1692,6 +1692,87 @@ check(
 );
 }
 
+/* A keyboard-focused CONTROL inside a grid shows its ring OUTSIDE its own box,
+   visibly and at 3:1 against the ground it paints on, in every theme × brand
+   configuration (roadmap 406.6). The grid's inset ring was written for cells
+   and applied to everything focusable in the table. On a checked checkbox it
+   painted on the accent fill, and every brand's dark block sets the ring and
+   the accent to the same step: 1.00:1 in six presets, under 3:1 in all 14,
+   and 0 changed pixels outside the box when focus arrived (Slice 406 grill).
+   Driven with real keys, both checkboxes on one load: a real click on the
+   demo's caption parks the sequential-focus start point, then Tab into the
+   grid; ArrowDown, Enter, Space for the row checkbox; Escape; ArrowUp, Enter,
+   Space for select-all. Escape gives each reference frame and leaves the
+   check in place, so the only difference in the strip just outside the box
+   is the checkbox's own ring.
+   Contrast is computed against the cell's composited background. A reading
+   under 3:1 passes only where contrast.json's focusRing already publishes the
+   same configuration below 3:1 at the same ratio, which is tracked debt, and
+   the report names it (forest-light on bg-muted, 2.99, 406.7). Any other
+   sub-3 reading fails: the published record is read, never copied here. */
+{
+const { readdir } = await import('node:fs/promises');
+const brandDir = join(REPO_ROOT, 'packages/core/dist/css');
+const published = JSON.parse(await readFile(join(REPO_ROOT, 'packages/core/dist/contrast.json'), 'utf8')).focusRing.readings;
+const brands = (await readdir(brandDir)).filter((f) => /^brand-[a-z]+\.css$/.test(f)).sort();
+const ringConfigs = ['light', 'dark'].flatMap((theme) => [{ theme, brand: null }, ...brands.map((brand) => ({ theme, brand }))]);
+const readFocused = () => page.evaluate(() => {
+  const px = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
+  const rgba = (c) => { px.clearRect(0, 0, 1, 1); px.fillStyle = '#000'; px.fillStyle = c; px.fillRect(0, 0, 1, 1); const d = px.getImageData(0, 0, 1, 1).data; return [d[0], d[1], d[2], d[3] / 255]; };
+  const a = document.activeElement; const cs = getComputedStyle(a); const b = a.getBoundingClientRect();
+  let ground = [255, 255, 255]; const chain = []; for (let e = a.closest('td,th'); e; e = e.parentElement) chain.unshift(e);
+  for (const e of chain) { const [r, g, bl, al] = rgba(getComputedStyle(e).backgroundColor); if (al > 0) ground = [r, g, bl].map((v, i) => Math.round(v * al + ground[i] * (1 - al))); }
+  return { el: a.tagName + (a.type ? `[${a.type}]` : ''), checked: a.checked, fv: a.matches(':focus-visible'), offset: cs.outlineOffset,
+    style: cs.outlineStyle, ring: rgba(cs.outlineColor).slice(0, 3), ground, box: [b.x, b.y, b.width] };
+});
+const ringResults = [];
+for (const cfg of ringConfigs) {
+  await visit('/components/table-toolbar/', { width: DESKTOP_WIDTH });
+  await page.evaluate((t) => localStorage.setItem('bo-theme-pref', t), cfg.theme);
+  await visit('/components/table-toolbar/', { width: DESKTOP_WIDTH });
+  const where = cfg.brand ? `${cfg.brand.replace(/\.css$/, '')}-${cfg.theme}` : cfg.theme;
+  let brandApplied = true;
+  if (cfg.brand) {
+    const css = await readFile(join(brandDir, cfg.brand), 'utf8');
+    brandApplied = await page.evaluate((c) => {
+      const before = getComputedStyle(document.documentElement).getPropertyValue('--bo-color-accent');
+      const st = document.createElement('style'); st.textContent = c; document.head.appendChild(st);
+      return getComputedStyle(document.documentElement).getPropertyValue('--bo-color-accent') !== before;
+    }, css);
+  }
+  await page.waitForSelector('#grid-nav-demo[role="grid"]');
+  const caption = await page.evaluateHandle(() => document.querySelector('#grid-nav-demo').closest('section.demo').querySelector('p.bo-u-text-muted'));
+  await caption.click();
+  for (let i = 0; i < 6; i++) {
+    await page.keyboard.press('Tab');
+    if (await page.evaluate(() => /^(TD|TH)$/.test(document.activeElement?.tagName) && !!document.activeElement.closest('#grid-nav-demo'))) break;
+  }
+  for (const [which, nav] of [['row', 'ArrowDown'], ['select-all', 'ArrowUp']]) {
+    await page.keyboard.press(nav);
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('Space');
+    const m = await readFocused();
+    const [x, y, w] = m.box;
+    const clip = { x: Math.round(x) - 4, y: Math.round(y) - 4, width: Math.round(w) + 8, height: 3 };
+    const focused = await page.screenshot({ clip });
+    await page.keyboard.press('Escape');
+    const plain = await page.screenshot({ clip });
+    const ratio = +contrastRatio(m.ring, m.ground).toFixed(2);
+    const debt = ratio < 3 ? published.find((r) => r.where === where && r.ratio < 3 && Math.abs(r.ratio - ratio) <= 0.01) : undefined;
+    ringResults.push({ where, which, el: m.el, checked: m.checked, fv: m.fv, offset: m.offset, style: m.style, ratio,
+      stripChanges: Buffer.compare(focused, plain) !== 0, brandApplied, publishedDebt: debt ? `${debt.ground} ${debt.ratio}` : undefined });
+  }
+}
+await page.evaluate(() => localStorage.removeItem('bo-theme-pref'));
+const ringOk = (r) => r.el === 'INPUT[checkbox]' && r.checked && r.fv && r.style !== 'none' && parseFloat(r.offset) >= 0 &&
+  r.stripChanges && r.brandApplied && (r.ratio >= 3 || !!r.publishedDebt);
+check(
+  'data grid: a keyboard-focused checked checkbox shows its focus ring OUTSIDE its own fill, visibly and at 3:1 on its ground (or a published debt), in all 14 theme × brand configurations (roadmap 406.6)',
+  ringResults.length === 28 && ringResults.every(ringOk),
+  JSON.stringify({ failing: ringResults.filter((r) => !ringOk(r)), publishedDebtUsed: ringResults.filter((r) => r.publishedDebt), min: Math.min(...ringResults.map((r) => r.ratio)) }),
+);
+}
+
 /* Two screens that promised behaviour they never showed (roadmap 45.2).
    `invoice-list` discussed paging in four places and rendered none;
    `master-detail` said the panel "becomes a full-width drawer" and rendered no
