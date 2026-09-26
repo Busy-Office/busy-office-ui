@@ -4977,7 +4977,7 @@ No earlier grill covers any of them. Report:
   packages/core/src` lists 0 files. Adoption channels, the first user (377.6,
   still an owner call) and comparators were NOT re-read this grill.
 
-1. [ ] **386.1 — nothing keeps the print reset true on a NEW standalone page.**
+1. [x] **386.1 — nothing keeps the print reset true on a NEW standalone page.**
        369.2's fix is ten copies of one block, and the ten exist because each
        page builds its own `<html>` with an unlayered `body` rule. A page added
        tomorrow repeats the loss silently.
@@ -4987,6 +4987,44 @@ No earlier grill covers any of them. Report:
          red-prove it with the rule removed), OR the ten are made to share one
          source and the shape is refused with the reason recorded.
        Track: defect
+       - **DONE 2026-09-27 — the check, not the shared source.**
+         - **What landed:** `apps/docs/scripts/check-layout.mjs` emulates
+           print on every page it already loads and reads `<body>`'s
+           background and colour in light and dark. Anything other than
+           `rgb(255, 255, 255)` / `rgb(0, 0, 0)` fails. The 28 suite screens
+           are not in `distPages`, so each gets one extra load for this probe
+           only.
+         - **Base rate, re-measured at `23a22cce`:** 0 of 312 readings (128
+           docs pages + 28 suite screens, times two themes). That is why the
+           check cannot fail on this tree, and why it was red-proved.
+         - **Red-proved by editing the built output and restoring it by
+           hash**, each injection asserted to match before it was applied:
+           - deleting the page's own print rule from the built stylesheet
+             (`goods-receipt-rf.*.css`, shared by the RF pages) fails 6 pages
+             in both themes;
+           - a suite screen given its own print background fails `/suite/`;
+           - a rule that only applies under `data-theme=dark` fails
+             `/components/badge/` in dark alone, so the theme toggle really
+             sets the theme.
+         - **A red-proof that came back green first:** last wake's injection
+           removed 0 rules, because it looked only at inline `<style>` and
+           the page's rule is hoisted into an external sheet at build time.
+           Its "white/black" reading proved nothing. The working injection
+           deletes the unlayered `@media print` `body` rule from any sheet
+           and asserts 1 removed. The control page, whose reset is the
+           layered framework rule, removes 0 and stays white.
+         - **Why not the shared source:** the ten copies exist because each
+           page builds its own `<html>`. Making them share one source
+           would fix today's ten and still lose silently on the eleventh
+           page whose author forgot to include it. Only a check catches that.
+         - **Cost:** `check:layout` took 66 s here (once, not a controlled
+           comparison), against 65 s recorded earlier.
+         - **CI reach:** every docs-gates shard runs `npm run build -w docs`
+           first, which includes the suite; `check:claims` already depends on
+           `suitePages` in that context.
+         - **Not covered:** only `<body>` is read. A page that colours
+           `<html>` itself, or a print rule on a descendant such as a wrapper
+           `<div>`, is not.
 
 ## Slice 385 — Standardize sweep, 4 of 4 lanes on an isolated clean build, plus the thirteenth archive sweep: lanes 1-3 match their base, lane 4 is +26 body words with no cut, and 21 closed slices moved verbatim (ROADMAP.md 10,140 -> 6,726 lines; [corrected by Slice 386: 6,750 after this slice's own entry, and the closed-history share is 14.4%, not ~0]) (2026-09-24)
 

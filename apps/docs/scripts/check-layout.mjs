@@ -13,18 +13,29 @@
 //  - spacing compares clipping BEFORE and AFTER the override, so
 //    deliberate ellipsis truncation is not reported as a 1.4.12 failure
 //
+// A third property rides the same loads (roadmap 386.1): a page on paper is
+// white with black text, in both themes. The framework's print reset is
+// LAYERED, so any page that builds its own <html> with an unlayered `body`
+// rule beats it and prints its screen colours; 369.2 had to restate the reset
+// on ten pages by hand, and a page added tomorrow would lose it silently. The
+// base rate is 0 of 312 readings (156 pages x 2 themes), so this cannot fail on
+// a healthy tree; it was red-proved by deleting the page's own print rule from
+// its built stylesheet (see 386.1's DONE block). Suite pages are not in
+// `distPages`, so they get their own single load below.
+//
 // @exact — measures geometry in a real browser. Exempt from --self-test: there is no
 // judgement to get wrong, and ceremony around a lookup is noise.
 import { serveDist } from './serve-dist.mjs';
 import { SCROLL_REGION_SELECTOR } from './scroll-regions.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
-import { distPages } from './dist-pages.mjs';
+import { distPages, suitePages } from './dist-pages.mjs';
 import { DIST } from './paths.mjs';
 import { DESKTOP_WIDTH, NARROW_WIDTH } from './viewports.mjs';
 
 
 const { server, port, base } = await serveDist(DIST);
 const paths = (await distPages(DIST)).map((p) => p.url);
+const suitePaths = (await suitePages(DIST)).map((p) => p.url);
 const browser = await launchDocsBrowser();
 
 /* These are SUPPOSED to overflow, so this gate ignores them; check-scroll
@@ -108,6 +119,32 @@ function exemptSelector() { return SCROLL_REGION_SELECTOR; }
    need a frame to land. */
 const settle = (ms = 80) => new Promise((r) => setTimeout(r, ms));
 
+/* Print emulation, both themes: the page's <body> must read white/black. The
+   theme attribute is put back afterwards because the page object is reused. */
+const PAPER = ['rgb(255, 255, 255)', 'rgb(0, 0, 0)'];
+async function printProbe(page) {
+  const bad = [];
+  for (const theme of ['light', 'dark']) {
+    const prev = await page.evaluate((t) => {
+      const el = document.documentElement, was = el.getAttribute('data-theme');
+      el.setAttribute('data-theme', t);
+      return was;
+    }, theme);
+    await page.emulateMediaType('print');
+    const [bg, fg] = await page.evaluate(() => {
+      const cs = getComputedStyle(document.body);
+      return [cs.backgroundColor, cs.color];
+    });
+    await page.emulateMediaType(null);
+    await page.evaluate((was) => {
+      const el = document.documentElement;
+      if (was === null) el.removeAttribute('data-theme'); else el.setAttribute('data-theme', was);
+    }, prev);
+    if (bg !== PAPER[0] || fg !== PAPER[1]) bad.push({ theme, bg, fg });
+  }
+  return bad;
+}
+
 async function sweep(path, page) {
   const url = `http://localhost:${port}${base}${path}`;
   // narrow: both stresses share this load
@@ -132,6 +169,8 @@ async function sweep(path, page) {
   // text-decoration while six other anchor-bearing components did.
   const underlined = await underlineProbe(page);
   if (underlined.length) findings.push({ kind: 'underline', path, cfg: String(DESKTOP_WIDTH), els: underlined });
+  const unpapered = await printProbe(page);
+  if (unpapered.length) findings.push({ kind: 'print', path, cfg: 'print', read: unpapered });
 
   // browser zoom: overflow only. Zoom is cleared explicitly afterwards because
   // the page object is reused for the next path from the pool — previously the
@@ -170,13 +209,26 @@ async function underlineProbe(page) {
   }, CONTROL_ON_ANCHOR);
 }
 
+/* Suite screens: one load each, the print probe only (they are not part of
+   the docs shell the two stresses above measure). */
+async function sweepSuite(path, page) {
+  await page.goto(`http://localhost:${port}${base}${path}`, { waitUntil: 'load' });
+  const unpapered = await printProbe(page);
+  if (unpapered.length) findings.push({ kind: 'print', path, cfg: 'print', read: unpapered });
+}
+
 const POOL = 4;
 const queue = [...paths];
+const suiteQueue = [...suitePaths];
 await Promise.all(Array.from({ length: POOL }, async () => {
   const page = await browser.newPage();
   while (queue.length) {
     const path = queue.shift();
     if (path) await sweep(path, page);
+  }
+  while (suiteQueue.length) {
+    const path = suiteQueue.shift();
+    if (path) await sweepSuite(path, page);
   }
   await page.close();
 }));
@@ -185,7 +237,9 @@ await browser.close();
 server.close();
 
 for (const f of findings) {
-  if (f.kind === 'underline') {
+  if (f.kind === 'print') {
+    console.log(`FAIL print ${f.path}: body is not white/black on paper — ${f.read.map((r) => `${r.theme}: ${r.bg} / ${r.fg}`).join('; ')}`);
+  } else if (f.kind === 'underline') {
     console.log(`FAIL underline ${f.path}: ${f.els.length} anchor(s) styled as a control keep a link underline`);
     for (const e of f.els) console.log(`     a.${e.cls} "${e.text}"`);
   } else if (f.kind === 'overflow') console.log(`FAIL overflow ${f.path} @${f.cfg}: ${f.overflow}px — widest: ${f.worst.cls}`);
@@ -198,4 +252,4 @@ if (findings.length) {
   console.error(`layout check FAILED — ${findings.length} finding(s) across ${paths.length} pages`);
   process.exit(1);
 }
-console.log(`layout check passed — ${paths.length} pages: no overflow at ${NARROW_WIDTH} or 150% zoom, no content lost under WCAG 1.4.12 spacing, no control-styled anchor wearing a link underline`);
+console.log(`layout check passed — ${paths.length} pages: no overflow at ${NARROW_WIDTH} or 150% zoom, no content lost under WCAG 1.4.12 spacing, no control-styled anchor wearing a link underline; ${paths.length + suitePaths.length} pages (incl. ${suitePaths.length} suite screens) print white/black in both themes`);
