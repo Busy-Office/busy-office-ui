@@ -953,6 +953,12 @@ def report_comparable(samples, dates):
 # measure — excluded from the freshness verdict above, never from the listing.
 AUTO_SAMPLED = frozenset({"dispatch-region-words"})
 
+# Readings of the WORLD, not of the tree (roadmap 377.7): the Objective grill's
+# adoption reading (`record_metric.py --adoption`). A download dip is not a size
+# or speed regression, so these are neither rule 5's input nor evidence that its
+# input is fresh. They are listed by name so the exclusion is visible.
+NOT_RULE5_PREFIXES = ("adoption-",)
+
 
 def report_metrics(all_rows):
     """Rule 5's input: how stale is the newest pair it could actually compare?"""
@@ -960,6 +966,8 @@ def report_metrics(all_rows):
     if samples is None:
         print(f"  Optimize     no {METRICS} at all — rule 5 has no input to read   NO INPUT")
         return True
+    world = sorted({s["name"] for s in samples if s["name"].startswith(NOT_RULE5_PREFIXES)})
+    samples = [s for s in samples if not s["name"].startswith(NOT_RULE5_PREFIXES)]
     counts = {}
     for s in samples:
         counts[s["name"]] = counts.get(s["name"], 0) + 1
@@ -1045,6 +1053,9 @@ def report_metrics(all_rows):
             f"undetermined dates. Widen MAX_CLOCK_SKEW."
         )
     report_comparable(samples, dates)
+    if world:
+        print(f"     not rule 5's input: {len(world)} adoption-* name(s), the Objective grill's "
+              f"reading of the world (377.7), never a size or speed regression.")
     return bool(provable)
 
 

@@ -1727,7 +1727,9 @@ named since the last Objective row that reset the count, or on demand.
 section** (roadmap 377.7, this half landed by Slice 381). The section has four
 parts:
 - the adoption reading, with each channel's window and what the channels
-  cannot see;
+  cannot see. `python3 scripts/loops/record_metric.py --adoption` takes it and
+  records it, and prints both (377.7). Quote its output rather than reading the
+  channels by hand;
 - the named first user and its state;
 - comparators, starting from SAP fundamental-styles;
 - the framework-code lines changed since the last grill, with the command

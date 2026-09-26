@@ -4,6 +4,15 @@ loops.db. The jsonl file is the source of truth; the DB is the mirror.
 
 Usage:
   python3 scripts/loops/record_metric.py --name bundle-gz-kb --value 7.0 --unit kB
+  python3 scripts/loops/record_metric.py --adoption      # roadmap 377.7
+
+`--adoption` takes the adoption reading (`adoption.py`): npm downloads with the
+publish days excluded, current-version downloads, jsDelivr hits (and hits to
+`dist/*` files), non-owner GitHub signals and GitHub traffic. Every sample
+carries its WINDOW in the jsonl row, because each channel reads a different
+span and npm's lags. A channel that cannot be read is printed with its error
+and records NOTHING, never a 0. The blind spots are printed with the reading, so
+the grill that quotes it quotes them too.
 
 THERE IS DELIBERATELY NO `--direction`, AND DO NOT ADD ONE (roadmap 324.1,
 2026-09-08). Two reasons, both measured. Shape: direction is constant per NAME,
@@ -76,14 +85,15 @@ snapshots; every command that produced one is named, so re-run rather than quote
 import argparse
 import datetime
 import json
+import sys
 
 from _common import METRICS, connect
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--name", required=True)
-    ap.add_argument("--value", required=True, type=float)
+    ap.add_argument("--name")
+    ap.add_argument("--value", type=float)
     ap.add_argument("--unit", default=None)
     # The revision the value describes (roadmap 353.2). A sample with no
     # revision beside it is read as current, and dispatch-region-words mixed
@@ -92,25 +102,50 @@ def main():
     # keeps its four columns.
     ap.add_argument("--commit", default=None)
     ap.add_argument("--no-log", action="store_true")
+    ap.add_argument("--adoption", action="store_true",
+                    help="take and record the adoption reading (roadmap 377.7)")
     args = ap.parse_args()
 
     ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    if args.adoption:
+        import adoption
+        rows, errors = adoption.readings()
+        for r in rows:
+            record(ts, {"ts": ts, "name": r["name"], "value": float(r["value"]), "unit": r["unit"],
+                        "window": r["window"], "source": r["source"]}, args.no_log)
+            print(f"  {r['name']:40} {r['value']:>8g} {r['unit']:<10} {r['window']}")
+        for e in errors:
+            print(f"  NOT READ, nothing recorded: {e}")
+        print("  what no channel here can see:")
+        for b in adoption.BLIND:
+            print(f"    - {b}")
+        print(f"recorded {len(rows)} adoption metric(s) at {ts}; {len(errors)} channel(s) not read")
+        if not rows:
+            sys.exit("record_metric --adoption: no channel could be read, so nothing was recorded")
+        return
+
+    if args.name is None or args.value is None:
+        ap.error("--name and --value are required (or use --adoption)")
     row = {"ts": ts, "name": args.name, "value": args.value, "unit": args.unit}
     if args.commit:
         row["commit"] = args.commit
+    record(ts, row, args.no_log)
+    print(f"recorded metric: {ts} · {args.name}={args.value}{args.unit or ''}")
 
-    if not args.no_log:
+
+def record(ts, row, no_log):
+    """Append `row` to the jsonl (the source of truth) and mirror its four
+    columns into loops.db."""
+    if not no_log:
         with open(METRICS, "a", encoding="utf-8") as f:
             f.write(json.dumps(row) + "\n")
-
     conn = connect()
     conn.execute(
         "INSERT INTO metrics (ts, name, value, unit) VALUES (?, ?, ?, ?)",
-        (ts, args.name, args.value, args.unit),
+        (ts, row["name"], row["value"], row["unit"]),
     )
     conn.commit()
     conn.close()
-    print(f"recorded metric: {ts} · {args.name}={args.value}{args.unit or ''}")
 
 
 if __name__ == "__main__":

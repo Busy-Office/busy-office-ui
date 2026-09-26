@@ -4638,7 +4638,7 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
        contract; nothing in this repo's steering documents names it. If yes:
        the Objective names it, and one checkable property (its contract's
        §7.1 conformance against current `dist`) stands in for "serves them".
-7. [ ] **377.7 — an adoption reading at every Objective grill, and §6's exit
+7. [x] **377.7 — an adoption reading at every Objective grill, and §6's exit
        requires the thesis section.** No record has ever read adoption; none
        of 71 grills ran step 1; in 373-376 about 1% of changed lines were
        framework code.
@@ -4659,6 +4659,54 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          files, since every hit so far was a README, package.json or script;
          and add GitHub traffic, the only channel above zero.
        Parked: M1 — Objective-grill machinery — revisit: the Objective grill at milestone close
+       - **DONE 2026-09-26 (rule 4): the instrument half.**
+         `python3 scripts/loops/record_metric.py --adoption` takes and records
+         the reading through the new `scripts/loops/adoption.py`.
+         `adoption.py --self-test` has 5 cases: publish-day exclusion both
+         ways, the `/dist/` prefix trap, and the owner and bot filter. It
+         meets the four requirements the 381 grill measured:
+         - **The window, recorded with every sample.** The window goes in
+           the jsonl row, which is the source of truth; the DB mirror keeps
+           its four columns. npm's window names its newest computed day
+           (09-24 today). The current-version reading says when that version
+           was published *after* the window, so 0.9.0's 0 reads as "cannot
+           show yet", not as "nobody".
+         - **Current-version downloads**, from npm's per-version API.
+         - **jsDelivr hits to `dist/*`**, summed over each version's file
+           stats. Today that is 0 of 30 for ui and 0 of 23 for create-ui.
+         - **GitHub traffic**: views and clones with uniques, the 14-day span
+           and the peak day. Also stars, forks, watchers, non-owner issues and
+           PRs, and discussions.
+
+         Beside these, npm downloads with the publish days excluded (the
+         registry's `time` field): 134 of 989 for ui, a median of 3 a day.
+       - **A channel that cannot be read records nothing, never 0.**
+         Red-proof: with jsDelivr's fetch made to raise "HTTP 503", 16
+         readings recorded and both jsDelivr channels were reported as
+         errors, with no jsDelivr row. The blind spots are printed with every
+         reading: docs readership, private proxies, the CI and first-user
+         share of npm counts, traffic beyond 14 days, and copied `dist/`.
+       - **First instrumented reading: 20 metrics at 2026-09-26 13:16.** It
+         reconciles with the Slice 401 grill's hand reading of the same
+         channels: 989 and 134, 30 and 0, the GitHub zeros, 20/6 views and
+         367/132 clones. The 381 grill's four hand readings
+         (`adoption-npm-ui-week` and the others) use other names with no
+         window, so they are not the same series.
+       - **Kept out of rule 5.** These are readings of the world, not of the
+         tree: a download dip is not a regression. `dispatch_status.py`
+         excludes `adoption-*` from rule 5's input and freshness, and names
+         the exclusion. Red-proof: with the exclusion disabled, rule 5 reads
+         174 samples over 71 names; with it, 150 over 47.
+       - **"The next grill quotes it."** LOOPS.md §6's exit now names the
+         command, and tells the grill to quote its output rather than read the
+         channels by hand. That half is satisfied at the next Objective grill;
+         the §6 text asks for it, and no code enforces it.
+       - **Jev (J2, advisory):** the four requirements 0.86. The two safety
+         properties together read 0.73, unverified. The unread-channel
+         red-proof exercised `readings()`, not the write, and the write path
+         records only the rows `readings()` returns, so a failed channel
+         cannot write one. That holds by construction, not by a separate
+         measurement.
 8. [ ] **377.8 — the ACR's 1.4.11 and 2.4.7 remarks derive from source.** 1.4.11
        still states the limitation 374.7 removed; both remarks are literals.
        - **Accept:** removing check-contrast's edge branch, or changing the
