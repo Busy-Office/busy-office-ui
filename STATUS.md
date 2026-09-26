@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 06:28 UTC
+Generated at: 2026-09-26 07:02 UTC
 
 oldest dispatchable: 377.9 — re-decide 375.6 on real CI timings.
 
@@ -143,15 +143,17 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 - **Slice 403** (2 open)
   - 403.1 — the pointer-coverage gate cannot be satisfied by a comment, and it reads what it could not classify.
   - 403.2 — the seven trusted cases assert what their names claim (cases-F1, F2, F5, F6 and the two nits).
+- **Slice 404** (1 open)
+  - 404.2 — switching versions keeps the reader's page, and a snapshot's landing page says it is a snapshot.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1832 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-09-26 13:26   ok
-  Objective     1 / 3 slice           since 2026-09-26 14:16   ok  [377]
+dispatch status — counter-triggered rules (1833 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-09-26 13:26   ok
+  Objective     2 / 3 slices          since 2026-09-26 14:16   ok  [377, 404]
   Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 151 sample(s), 8 of 47 name(s) paired across days]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-25 (2026-09-26), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -291,7 +293,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-26 11:02 · Continue · release-prep · 0.9.0 release prep (e43330f2): @busy-office/ui 0.9.0, create-ui 0.2.0; publish is the owner's · landed · 64ba08eb
 - 2026-09-26 11:15 · Standardize · sweep · Slice 400 — 4 of 4 lanes (isolated build): lanes 1-3 equal to base; lane 4 Step 0c charter applied, expired M0 exception retired; dispatch region 10,625 -> 10,374 · landed · daea445f
 - 2026-09-26 11:25 · Continue · release · 0.9.0 published (@busy-office/ui 0.9.0, create-ui 0.2.0) on owner request; tarballs verified; 377.5 + 394.3 closed · released · 70ef6293
 - 2026-09-26 12:34 · Objective · grill · Slice 401 — Objective grill of 375.11, 392.1, 399.3 + 0.9.0 (full), 393/398/400 (narrowed): 36/51 claims full, 10 findings (3 confirmed, 7 narrowed); 401.1 bo-check-markup regression · landed · 2888ce5c
@@ -301,6 +302,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 13:26 · Standardize · sweep · Slice 402 — 4 of 4 lanes (isolated build): all equal Slice 400; ratchet floor surfaces ENVIRONMENT.md never cut (36 up) -> owner Direction #0 · landed · da1b2cb8
 - 2026-09-26 14:16 · Objective · grill · Slice 403 — Objective grill of 377.4 (full), 376.7/377.7/402 (narrowed): 33/39 claims full, 13 findings (6 confirmed); own 196->188 and touchscreen claims corrected · landed · 8fa43c1d
 - 2026-09-26 14:28 · Continue · build · 377.8 — ACR 1.4.11/2.4.7 remarks + verdicts derived from check-contrast's published edge and focus-ring readings; red-proved 3 ways; live · landed · 6c125f02
+- 2026-09-26 15:02 · Continue · fix · 404.1 — docs version switcher 404 on the container and gates; frozen snapshot switchers (owner report) · landed · e6922d05
 
 ## Sunset test
 
