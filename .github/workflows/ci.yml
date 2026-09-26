@@ -79,8 +79,12 @@ on:
     #
     # WHAT IT COSTS, re-measured on the day it was taken rather than carried:
     # 9 of the last 30 commits and 38 of the last 100 touched ONLY those paths,
-    # and one full run is ~14.7 machine-minutes across 6 parallel jobs (~3 min
-    # wall). Those commit counts are an UPPER bound on the runs saved: a push
+    # and one full run was then ~14.7 machine-minutes across 6 parallel jobs
+    # (~3 min wall). Re-measured 2026-09-26 (roadmap 377.9) over 8 green push
+    # runs: 18.0-19.4 machine-minutes, 5.4-5.9 min wall. Re-read it, the
+    # figures are snapshots:
+    #     python3 scripts/loops/ci_timings.py 8
+    # Those commit counts are an UPPER bound on the runs saved: a push
     # is what CI evaluates, and a wake pushes its hand-off together with a
     # ROADMAP change, which triggers a run regardless. Over one 13.7-hour
     # window, main took 47 commits and CI ran 30 times; how much of that gap
@@ -136,7 +140,18 @@ jobs:
   # while each one spends most of its time walking the same 121 built pages.
   # Sharding does not make any single gate faster; it makes the WALL CLOCK the
   # slowest shard instead of the sum. Shards are balanced against measured
-  # step times, and every shard pays the same ~50s to build core + docs first.
+  # step times, and every shard pays 23-43s to build core + docs first
+  # (8 runs, 2026-09-26).
+  #
+  # BUILDING ONCE AND PASSING dist TO THE SHARDS WAS REFUSED TWICE (roadmap
+  # 375.6, re-decided on runner timings by 377.9). The duplicated builds are
+  # real, 16.7-19.2% of machine time over 8 runs, and building once would save
+  # at most 2.4-2.9 machine-minutes before any artifact transfer. But this
+  # repo is public, so those minutes cost nothing, and the shards would have
+  # to WAIT for the build job: the wall clock could not fall below 5.7-6.1
+  # min against 5.4-5.9 today, before transfer adds to it. What sets the wall
+  # clock is the claims shard (377.10). Both bounds, per run:
+  #     python3 scripts/loops/ci_timings.py 8
   #
   # fail-fast is off on purpose: one shard going red must not hide what the
   # others would have found, which is the whole reason these are separate

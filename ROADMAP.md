@@ -4935,13 +4935,60 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
            light and dark: the document never overflows, and at 390 the
            table scrolls inside its own container, as it did before.
          - **Jev (J2, advisory):** Accept 0.93, derivation and live 0.95.
-9. [ ] **377.9 — re-decide 375.6 on real CI timings.** Build steps are
+9. [x] **377.9 — re-decide 375.6 on real CI timings.** Build steps are
        14.2-15.6% of job time (8 runs), not ~8%; `npm ci` is about a third of
        the build.
        - **Accept:** 375.6 and ci.yml's cost comment carry figures reproduced
          from `gh api …/actions/runs/<id>/jobs` over ≥3 recent runs, with the
          command beside them; the decision follows the data either way.
        Parked: M1 — CI cost, not milestone work — revisit: the next change to CI cost
+       - **DONE 2026-09-26 (rule 4). 375.6 stays refused, on corrected
+         grounds.** The command is `python3 scripts/loops/ci_timings.py 8`,
+         new, reading `gh api repos/…/actions/runs/<id>/jobs`. Over 8 green push
+         runs on main (`cff02475`..`4ce66750`):
+         - **The premise re-checked, and both of its figures had moved.**
+           Build steps are **16.7-19.2%** of machine time, not 14.2-15.6%, and
+           `npm ci` is **3.8-4.6%**, about a quarter of the build, not a third.
+           A run is **18.0-19.4 machine-minutes and 5.4-5.9 min wall**, not the
+           ~14.7 and ~3 ci.yml quoted. 375.6's local 8% was a warm developer
+           machine: the runners take 23-43s per shard for the two builds, not
+           13s.
+         - **The decision, from two bounds that are identities over the
+           measured steps, not predictions.** Building once saves **at most
+           2.4-2.9 machine-minutes** before any artifact transfer: every
+           shard's builds, minus the one docs build that remains. But the
+           shards would wait for the build job, so the wall clock **cannot
+           fall below 5.7-6.1 min**, against 5.4-5.9 today, and transfer only
+           adds to that. The repo is public, so the machine-minutes cost
+           nothing; the wall clock is what a wake waits on. Build-once makes
+           the number that matters worse.
+         - **What does set the wall clock** is the claims shard: 325-354s,
+           against 174-191s for the next slowest shard in every run. Filed as
+           377.10.
+         - **The instrument reconciles against its source.** ci.yml's
+           `Build core` and `Build docs` step lines, times the jobs they run
+           in, must equal the steps classified in each run (11), or it
+           refuses. Red-proven: renaming one step line in ci.yml made it refuse
+           naming the run, 11 against 6. The two bounds were checked by hand
+           against run `4ce66750`'s step list, 167.8s and 356s. `--self-test`
+           has 5 cases.
+         - **Not covered:** artifact transfer time, which only a real run
+           would show; it can only worsen build-once, so the decision does not
+           need it. Queue time before a job starts is outside the wall figure.
+         - **Jev J2 (advisory):** Accept supported 0.88; the decision follows
+           the data 0.86.
+10. [ ] **377.10 — the claims shard sets CI's wall clock, at nearly twice the
+       next shard.** In 8 of 8 runs the `Claims + formatting` job took
+       325-354s, against 174-191s for the next slowest. Every push waits on
+       it, and every wake reads CI after pushing. Balanced, the slowest shard
+       would be nearer 3 min than 5.5.
+       - **Accept — the property.** After the change, `ci_timings.py` over at
+         least 3 green runs reports a lower wall clock than this baseline
+         (5.4-5.9 min). Every `check:claims` case still runs exactly once per
+         run, reconciled by count against the single-process run. Or the
+         change is refused, with the measurement that refuses it: for example,
+         if the cases cannot be split without sharing state across pages.
+       Parked: M1 — CI cost, not milestone work
 10. [ ] **377.10 — the Jev band, re-measured with the question form Rubric 2
        prescribes, and the set recorded.** 375.8's zero-FP result rested on
        asymmetric criteria; uniform re-runs put a false case at 0.87 once.
@@ -5318,6 +5365,11 @@ untracked or uncommitted, so the removal was a working-tree change.
          should not differ by an order of magnitude, but the 8% is a local
          reading and the honest way to confirm it is the per-step timings in
          any real run's log. Reopen if those show the build dominating.
+       - **Re-decided on runner timings, 2026-09-26 (377.9): still refused,
+         on different grounds.** The 8% was wrong: the build is 16.7-19.2% of
+         machine time over 8 runs. But building once cannot shorten the wall
+         clock, only lengthen it, and on a public repo machine-minutes cost
+         nothing. The figures and the command are under 377.9.
 
 7. [x] **375.7 — three "Not when" cells on the decision page are
        content-free, and the page's own generated prose overclaims that they
