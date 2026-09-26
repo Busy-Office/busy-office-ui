@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 19:43 UTC
+Generated at: 2026-09-26 20:02 UTC
 
 oldest dispatchable: 387.2 — a frozen cell's message still has two covers above it.
 
@@ -154,14 +154,21 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 411.7 — the band needle and the sidebar-nav demo frames.
   - 411.8 — 377.14 (d)'s counts cannot be re-derived.
   - 411.9 — the file-picker case passes when the click is cancelled.
+- **Slice 413** (5 open)
+  - 413.1 — bound the fallback message's height, or say what it can do.
+  - 413.2 — `position: relative` gives the message the scrollport as its box.
+  - 413.3 — an unbreakable token still lengthens the scroller (fallback only).
+  - 413.4 — the claims that cannot fail.
+  - 413.5 — 384.1's write-up states the basis of the ratchet floor.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1869 iterations logged)
+dispatch status — counter-triggered rules (1870 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-09-27 03:43   ok
+  (Objective row 2026-09-27 04:02 did not reset rule 3: .roundtable/grill-objective-384-386-387-412-2026-09-27.md: no `## Thesis section`)
   Objective     4 / 3 slices          since 2026-09-27 00:50   OVERDUE  [384, 386, 387, 412]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      2 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 161 sample(s), 8 of 52 name(s) paired across days]
@@ -179,7 +186,7 @@ dispatch status — counter-triggered rules (1869 iterations logged)
      no direction is recorded with a sample, so the movement above is a reading and the regression verdict is the wake's. A name that has NEVER MOVED is either healthy or pinned by a gate — rule 5 cannot fire on it either way (`axe-violations` is 0 on every day because `test:axe` fails the build above 0).
      a direction is NOT recorded on purpose (roadmap 324.1): adding one makes rule 5 fire on `bundle-gz-kb`'s four consecutive rises, which the log's own same-timestamp `components` samples refute (0.400 -> 0.355 kB per component over that window). A rise with no denominator is growth. Where a name has a real threshold, use it — `check:size` gates the bundle at 16.7 kB gz, which is rule 5's budget clause, not its trend one.
      not rule 5's input: 24 adoption-* name(s), the Objective grill's reading of the world (377.7), never a size or speed regression.
-  Holds         7 hold-wake(s) recorded, 6 today (UTC dates)   [inflight.py hold; .roundtable/hold-wakes.jsonl]
+  Holds         8 hold-wake(s) recorded, 7 today (UTC dates)   [inflight.py hold; .roundtable/hold-wakes.jsonl]
 ```
 
 ## Milestone progress
@@ -297,7 +304,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-27 01:10 · Continue · fix · red main on be4458f3: check:pseudo Chrome launch timed out waiting for the WS endpoint (30s); first occurrence in the last 40 failed CI runs; job rerun green (run 36256896839 attempt 2); no code change · logged · be4458f3
 - 2026-09-27 01:23 · Continue · build · 384.1 — both refused on the number: dispatch-region growth since 4e6b83c1 is 11.5-15.8% narrative, ~85% instruction (two blind labellers); charter line and high-water anchor refused · refused · 39bfa34d
 - 2026-09-27 01:23 · Meta · refusal · 384.1: charter line (targets <=16% of growth; restates lane 4's third branch) · refused · 39bfa34d
 - 2026-09-27 01:23 · Meta · refusal · 384.1: high-water anchor and region floor (anchor would never move; floor misses the 101-word case) · refused · 39bfa34d
@@ -307,6 +313,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-27 03:21 · Roadmap · triage · Jev 0.10/0.11 migration landed, owner-approved 2026-09-27: CLAUDE.md, LOOPS §6 step 4, jev-rubrics v2, local/grill-finding judge; MCP path retired · triaged · afb2f38b
 - 2026-09-27 03:34 · Continue · fix · red main on a8fae14b/17dddf66: 387.1's path (a) counterfactual claim failed on CI (the sideways wheel did not scroll in 300ms on Linux); case now waits for the wheel and falls back to scrollLeft, recording which; verified real and stubbed wheel locally · landed · 464f1e57
 - 2026-09-27 03:43 · Standardize · sweep · Slice 412 — 4 of 4 lanes (isolated build): lanes 1, 3 equal Slice 410; lane 2 +1 rule (387.1's position: relative, traced); lane 4 dispatch region 10,374; CLAUDE.md +405 on the approved Jev section · landed · c7af39f2
+- 2026-09-27 04:02 · Objective · grill · Slice 413 — grill of 384.1/386.1/387.1/412: 387.1's fix trades a horizontal lengthening for a vertical one (not within six lines); overclaims corrected, 413.1-413.5 filed · landed · 1565560b
 
 ## Sunset test
 
