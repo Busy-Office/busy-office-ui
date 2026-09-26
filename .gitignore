@@ -37,3 +37,11 @@ packages/core/scripts/_*.mjs
 # busy-office-ui.tgz found 2026-08-22. Derived, per-interpreter, rebuildable.
 __pycache__/
 *.pyc
+
+# Secrets. A local `.env.local` holding the Jev API key sat in the repo root,
+# ignored only by this clone's .git/info/exclude, which a fresh clone or a cloud
+# session does not have (owner: "make sure it won't leak out", 2026-09-26).
+# Nothing here reads it: agents reach Jev through its MCP server, and a script
+# calling the API reads ~/Projects/jev-mcp/.env at runtime (jev-rubrics.md).
+.env
+.env.*

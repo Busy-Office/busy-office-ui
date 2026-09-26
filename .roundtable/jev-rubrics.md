@@ -21,7 +21,22 @@ threshold is only meaningful for the wording it was measured on.
   question plus a confidence threshold). There are no others.
 - Credentials: `JEV_AI_API_KEY`, from the environment or
   `~/Projects/jev-mcp/.env`, which is gitignored there. **Nothing in this repo
-  references or stores it**, and nothing here should.
+  references it, and no tracked file or commit holds it** (checked 2026-09-26
+  by value, reporting counts only: 0 tracked files, 0 commits in any ref).
+  Nothing here should.
+  - **How agents reach Jev: through the MCP server, never a copy of the key.**
+    The server is a local stdio process that loads the key itself, and
+    subagents and workflow agents call it through ToolSearch. A subagent test
+    confirmed this on 2026-09-26. The owner has approved no daily cap.
+  - **A script that calls the API directly** (for example 377.10's
+    re-measurement) reads `~/Projects/jev-mcp/.env` at runtime, which the
+    Bash sandbox can read. It sends the key only as a request header to
+    `https://jev-ai.pro/api`. It never prints or logs the key, and never puts
+    it in a URL, an agent prompt, workflow `args` or a file under the repo.
+  - **A local `.env.local` copy exists in the repo root.** It dates from
+    2026-09-25, and nothing reads it. `.gitignore` now covers `.env` and
+    `.env.*` for every clone, not only this one's `.git/info/exclude`.
+    Deleting it is the owner's call.
 - **`kev` is a different service** (local, `127.0.0.1:8008`). Never substitute one
   for the other; they are separate MCP servers with separate tools.
 
