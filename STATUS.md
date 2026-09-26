@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 21:16 UTC
+Generated at: 2026-09-26 21:47 UTC
 
 oldest dispatchable: 387.2 — a frozen cell's message still has two covers above it.
 
@@ -154,8 +154,7 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 411.7 — the band needle and the sidebar-nav demo frames.
   - 411.8 — 377.14 (d)'s counts cannot be re-derived.
   - 411.9 — the file-picker case passes when the click is cancelled.
-- **Slice 413** (4 open)
-  - 413.1 — bound the fallback message's height, or say what it can do.
+- **Slice 413** (3 open)
   - 413.2 — `position: relative` gives the message the scrollport as its box.
   - 413.3 — an unbreakable token still lengthens the scroller (fallback only).
   - 413.4 — the claims that cannot fail.
@@ -165,7 +164,7 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1873 iterations logged)
+dispatch status — counter-triggered rules (1874 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-09-27 03:43   ok
   Objective     1 / 3 slice           since 2026-09-27 04:02   ok  [413]
   Optimize      0 wake-date(s) newer   since 2026-09-27 05:16   ok   [newest pair: claims; 163 sample(s), 8 of 52 name(s) paired across days]
@@ -299,7 +298,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-27 01:45 · Continue · fix · 386.1 — check:layout print probe: body white/black under print emulation in both themes over 128 docs + 28 suite pages (base rate 0/312); red-proved 3 ways; earlier 0-rule injection corrected · landed · 3c840c02
 - 2026-09-27 01:45 · Meta · refusal · 386.1: sharing one source for the ten copies (still loses silently on a NEW page) · refused · 3c840c02
 - 2026-09-27 03:16 · Continue · fix · 387.1 — data-table message no longer lengthens the scroller/page without anchor positioning: press after reading lands (a) and sticky bar holds (b); simulated in one engine; 4 claims (364 total); rf-essentials 41,966/41,984; filed 387.3 · landed · d808dc7f
 - 2026-09-27 03:21 · Roadmap · triage · Jev 0.10/0.11 migration landed, owner-approved 2026-09-27: CLAUDE.md, LOOPS §6 step 4, jev-rubrics v2, local/grill-finding judge; MCP path retired · triaged · afb2f38b
@@ -309,6 +307,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-27 04:24 · Continue · fix · 413.5 — 384.1's write-up states the basis of the ratchet floor (file vs region words) · landed · 848e8c49
 - 2026-09-27 04:45 · Roadmap · triage · 413.1 — options for the fallback message height, sent to the decision ladder · triaged · 384bbd56
 - 2026-09-27 05:16 · Optimize · measure · rule 5 re-read: claims 311 -> 364 (+53, 387.1's four cases plus earlier); dispatch region flat at 10374; no regression verdict, no budget breach · logged · 188f0d60
+- 2026-09-27 05:47 · Roadmap · triage · 413.1 decided by the ladder pilot: option b, Jev 0.77 agrees with own verdict; reversible · landed · 4c60f6f4
 
 ## Sunset test
 
