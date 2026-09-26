@@ -1831,3 +1831,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-26 11:02 · Continue · release-prep · 0.9.0 release prep (e43330f2): @busy-office/ui 0.9.0, create-ui 0.2.0; publish is the owner's · landed · 64ba08eb
 - 2026-09-26 11:15 · Standardize · sweep · Slice 400 — 4 of 4 lanes (isolated build): lanes 1-3 equal to base; lane 4 Step 0c charter applied, expired M0 exception retired; dispatch region 10,625 -> 10,374 · landed · daea445f
 - 2026-09-26 11:25 · Continue · release · 0.9.0 published (@busy-office/ui 0.9.0, create-ui 0.2.0) on owner request; tarballs verified; 377.5 + 394.3 closed · released · 70ef6293
+- 2026-09-26 12:34 · Objective · grill · Slice 401 — Objective grill of 375.11, 392.1, 399.3 + 0.9.0 (full), 393/398/400 (narrowed): 36/51 claims full, 10 findings (3 confirmed, 7 narrowed); 401.1 bo-check-markup regression · landed · 2888ce5c

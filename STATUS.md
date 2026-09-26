@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 04:33 UTC
+Generated at: 2026-09-26 04:34 UTC
 
 oldest dispatchable: 376.7 — the lane-4 ratchet counts any net shrink as a cut.
 
@@ -150,10 +150,9 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1825 iterations logged)
+dispatch status — counter-triggered rules (1826 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-09-26 11:15   ok
-  Objective     6 / 3 slices          since 2026-09-25 13:32   OVERDUE  [375, 392, 393, 398, 399, 400]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-09-26 12:34   ok
   Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 154 sample(s), 8 of 51 name(s) paired across days]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-25 (2026-09-26), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -294,7 +293,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-26 09:18 · Roadmap · triage · owner recommendations for O5-O18 and 22 other waiting items (.roundtable/owner-recs-2026-09-26.md); 398.1 third dead reference, 398.4 filed · triaged · 7438e033
 - 2026-09-26 09:28 · Roadmap · triage · owner extends M0 once: 398.1 → 398.2 → re-score 398.5, cap 13; four parked .roundtable records copied to main · triaged · 0ab92652
 - 2026-09-26 10:00 · Continue · build · 398.1 — stale statements fixed (N2-N7, both Redundants, 4 more found by re-reading); dead-ref re-scan 31 unresolved, none live · landed · 08ca48f0
 - 2026-09-26 10:08 · Continue · build · 398.2 — in-flight check: unparseable state is exit 5 (STOP), self-test 11→25, red-proved (13 of 14 new cases fail on the old parser) · landed · 428ca7f1
@@ -304,6 +302,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 11:02 · Continue · release-prep · 0.9.0 release prep (e43330f2): @busy-office/ui 0.9.0, create-ui 0.2.0; publish is the owner's · landed · 64ba08eb
 - 2026-09-26 11:15 · Standardize · sweep · Slice 400 — 4 of 4 lanes (isolated build): lanes 1-3 equal to base; lane 4 Step 0c charter applied, expired M0 exception retired; dispatch region 10,625 -> 10,374 · landed · daea445f
 - 2026-09-26 11:25 · Continue · release · 0.9.0 published (@busy-office/ui 0.9.0, create-ui 0.2.0) on owner request; tarballs verified; 377.5 + 394.3 closed · released · 70ef6293
+- 2026-09-26 12:34 · Objective · grill · Slice 401 — Objective grill of 375.11, 392.1, 399.3 + 0.9.0 (full), 393/398/400 (narrowed): 36/51 claims full, 10 findings (3 confirmed, 7 narrowed); 401.1 bo-check-markup regression · landed · 2888ce5c
 
 ## Sunset test
 
