@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 07:43 UTC
+Generated at: 2026-09-26 07:49 UTC
 
 oldest dispatchable: 377.11 — 375.10's "holds the option" half must be able to fail.
 
@@ -151,7 +151,7 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1837 iterations logged)
+dispatch status — counter-triggered rules (1839 iterations logged)
   Standardize   0 / 4 Continue rounds since 2026-09-26 15:34   ok
   Objective     3 / 3 slices          since 2026-09-26 14:16   OVERDUE  [377, 404, 405]
   -> a counter is at or past its threshold; the dispatcher should pick it
@@ -294,8 +294,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-26 13:08 · Continue · build · 377.4 — check:pointer-coverage meta-gate; 7 trusted check-claims cases added (16/16 covered, 0 exempt); mislabelled comments fixed · landed · 1f34a912
-- 2026-09-26 13:18 · Continue · build · 377.7 — adoption reading instrument (record_metric --adoption): windows, current-version, dist hits, GitHub traffic; unread = nothing; out of rule 5 · landed · dfc9bf54
 - 2026-09-26 13:26 · Standardize · sweep · Slice 402 — 4 of 4 lanes (isolated build): all equal Slice 400; ratchet floor surfaces ENVIRONMENT.md never cut (36 up) -> owner Direction #0 · landed · da1b2cb8
 - 2026-09-26 14:16 · Objective · grill · Slice 403 — Objective grill of 377.4 (full), 376.7/377.7/402 (narrowed): 33/39 claims full, 13 findings (6 confirmed); own 196->188 and touchscreen claims corrected · landed · 8fa43c1d
 - 2026-09-26 14:28 · Continue · build · 377.8 — ACR 1.4.11/2.4.7 remarks + verdicts derived from check-contrast's published edge and focus-ring readings; red-proved 3 ways; live · landed · 6c125f02
@@ -304,6 +302,8 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 15:16 · Meta · refusal · 375.6 build-once-and-share-dist, re-refused on runner data: wall clock >= 5.7-6.1 min vs 5.4-5.9 today · refused · f0704759
 - 2026-09-26 15:19 · Continue · fix · 377.9 follow-up — duplicate 377.10 renumbered to 377.15; generate_status refuses a duplicate open id by name · landed · d9163e67
 - 2026-09-26 15:34 · Standardize · sweep · Slice 405 — 4 of 4 lanes (isolated build): lanes 1, 2, 4 equal Slice 402; lane 3 +50 words attributed to 377.8's ACR remarks by reverting it; dispatch region 10,374 · landed · e6c341a2
+- 2026-09-26 15:43 · Roadmap · triage · 377.10 amended: owner's no-cap Jev input; model-string premise added to Accept · triaged · 954f769a
+- 2026-09-26 15:49 · Meta · fix · Jev key hygiene (owner input): .env/.env.* in .gitignore; agents use MCP, scripts read ~/Projects/jev-mcp/.env; key in 0 tracked files/commits · landed · af6f835d
 
 ## Sunset test
 

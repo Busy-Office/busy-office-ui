@@ -23,6 +23,7 @@ survives none.
 
 ## In flight
 
+wf=wf_55d90bb5-ac3 item=slice-406-objective-grill started=2026-09-26T07:46:40Z cap=120 session=1dbfe40a-17f6-4a1d-a447-12cd87bce187 out=/private/tmp/claude-501/-Users-thepfmind-Projects-busy-office-ui/1dbfe40a-17f6-4a1d-a447-12cd87bce187/scratchpad/grill-406 paths=.roundtable/grill-*,ROADMAP.md
 ## Uncommitted
 
 Nothing in this checkout. The owner's own uncommitted work of 2026-09-20 is parked

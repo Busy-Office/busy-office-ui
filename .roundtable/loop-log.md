@@ -1843,3 +1843,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-26 15:16 · Meta · refusal · 375.6 build-once-and-share-dist, re-refused on runner data: wall clock >= 5.7-6.1 min vs 5.4-5.9 today · refused · f0704759
 - 2026-09-26 15:19 · Continue · fix · 377.9 follow-up — duplicate 377.10 renumbered to 377.15; generate_status refuses a duplicate open id by name · landed · d9163e67
 - 2026-09-26 15:34 · Standardize · sweep · Slice 405 — 4 of 4 lanes (isolated build): lanes 1, 2, 4 equal Slice 402; lane 3 +50 words attributed to 377.8's ACR remarks by reverting it; dispatch region 10,374 · landed · e6c341a2
+- 2026-09-26 15:43 · Roadmap · triage · 377.10 amended: owner's no-cap Jev input; model-string premise added to Accept · triaged · 954f769a
+- 2026-09-26 15:49 · Meta · fix · Jev key hygiene (owner input): .env/.env.* in .gitignore; agents use MCP, scripts read ~/Projects/jev-mcp/.env; key in 0 tracked files/commits · landed · af6f835d
