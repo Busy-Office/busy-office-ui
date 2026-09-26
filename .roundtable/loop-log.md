@@ -1827,3 +1827,5 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-26 10:08 · Continue · build · 398.2 — in-flight check: unparseable state is exit 5 (STOP), self-test 11→25, red-proved (13 of 14 new cases fail on the old parser) · milestone=M1 route=build tier=top model=claude-opus-5-5 · landed · 428ca7f1
 - 2026-09-26 10:36 · Continue · build · 398.5 — second re-score FAIL (A 2.375 verdict; B 2.375 variance); M0 ends, M1 DRAFT; Slice 399 filed; 375.11 NEEDS-RUNTIME · milestone=M1 route=build tier=top model=claude-opus-5-5 agent=general-purpose skill=loop-doctor · landed · 35c25abf
 - 2026-09-26 10:37 · Continue · fix · CI red since bbdc4269: five floor labels in the owner-recs record tripped check-floor; fixed 57e67a42 (399.5 filed) · track=defect · landed · 35c25abf
+- 2026-09-26 11:02 · Continue · build · 399.3 — browserslist raised to the derived floor (Firefox/Safari +1), held equal by derive-floor; dist byte-identical (red-proved) · track=defect · landed · 64ba08eb
+- 2026-09-26 11:02 · Continue · release-prep · 0.9.0 release prep (e43330f2): @busy-office/ui 0.9.0, create-ui 0.2.0; publish is the owner's · landed · 64ba08eb

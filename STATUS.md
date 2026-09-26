@@ -147,9 +147,9 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1821 iterations logged)
-  Standardize  18 / 4 Continue rounds since 2026-09-25 12:20   OVERDUE
-  Objective     4 / 3 slices          since 2026-09-25 13:32   OVERDUE  [375, 392, 393, 398]
+dispatch status — counter-triggered rules (1823 iterations logged)
+  Standardize  20 / 4 Continue rounds since 2026-09-25 12:20   OVERDUE
+  Objective     5 / 3 slices          since 2026-09-25 13:32   OVERDUE  [375, 392, 393, 398, 399]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 153 sample(s), 8 of 51 name(s) paired across days]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
@@ -293,8 +293,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-26 01:44 · Continue · build · 393.8 — bounded RESUME (75 lines, 4 sections, cap red-proved), one wake prompt, milestone progress; read cost moved to 393.13 · landed · 144d2398
-- 2026-09-26 01:44 · Meta · refusal · 393.8: closing the read-cost clause on a modelled figure — no milestone wake exists; moved to 393.13 (Jev 0.08) · refused · 144d2398
 - 2026-09-26 01:56 · Continue · build · 393.9 — realignment markers on 63 open items (48 blocks, +94 lines), checked by script; compare IDENTICAL 63/63 · landed · 8d0cdd2d
 - 2026-09-26 02:25 · Continue · build · 393.10 — loop re-score FAIL (2.375; Correctness 1, Maintainability 1); M1 stays DRAFT; N1 fixed, rest filed as Slice 398 · landed · a2cd9c51
 - 2026-09-26 09:18 · Roadmap · triage · owner recommendations for O5-O18 and 22 other waiting items (.roundtable/owner-recs-2026-09-26.md); 398.1 third dead reference, 398.4 filed · triaged · 7438e033
@@ -303,6 +301,8 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 10:08 · Continue · build · 398.2 — in-flight check: unparseable state is exit 5 (STOP), self-test 11→25, red-proved (13 of 14 new cases fail on the old parser) · landed · 428ca7f1
 - 2026-09-26 10:36 · Continue · build · 398.5 — second re-score FAIL (A 2.375 verdict; B 2.375 variance); M0 ends, M1 DRAFT; Slice 399 filed; 375.11 NEEDS-RUNTIME · landed · 35c25abf
 - 2026-09-26 10:37 · Continue · fix · CI red since bbdc4269: five floor labels in the owner-recs record tripped check-floor; fixed 57e67a42 (399.5 filed) · landed · 35c25abf
+- 2026-09-26 11:02 · Continue · build · 399.3 — browserslist raised to the derived floor (Firefox/Safari +1), held equal by derive-floor; dist byte-identical (red-proved) · landed · 64ba08eb
+- 2026-09-26 11:02 · Continue · release-prep · 0.9.0 release prep (e43330f2): @busy-office/ui 0.9.0, create-ui 0.2.0; publish is the owner's · landed · 64ba08eb
 
 ## Sunset test
 
