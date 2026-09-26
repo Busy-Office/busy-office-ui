@@ -63,8 +63,10 @@ with its re-measured evidence and a validated field block to paste, is in
    your section, and both scorers flagged it. Suggested wording: "393.10, or
    its one retry 398.5, reports …".
    **Archive the cloud sessions** (O1): 302 of 307 are still active.
-   **Release (O6):** CI is green again as of `57e67a42`. Decide `399.3`, the
-   published floor, before 0.9.0.
+   **Release 0.9.0 is prepped** (`e43330f2`, owner direction "Prep 0.9.0
+   release"; `399.3`'s floor fix landed first). Once CI is green on that sha,
+   publish GitHub Release `v0.9.0`. The loop then runs `derive-introduced
+   --refresh` and closes 377.5 and 394.3.
 1. **O5-O18** in `.roundtable/milestone-draft-2026-09-25/5-open-decisions.md`,
    the fields M1 needs before ACTIVE.
 2. **Three readings to confirm or reverse:**
