@@ -45,7 +45,9 @@ pin.
     pointer: 4 of 7 presses along it landed (7 points spaced down the Post bar at 390px, simulated).
   - The message now sits where it would in normal flow, inside the
     scroller and bounded by the room left to its inline end, so it cannot
-    change what can scroll. In a simulated fallback the press lands, the
+    change what can scroll, except a message holding one unbreakable word
+    longer than the room (413.3: it still lengthens the scroller, as before).
+    In a simulated fallback the press lands, the
     focused scroller stays as long as the blurred one, and the sticky bar
     does not move (7 of 7).
   - Browsers with anchor positioning are unchanged.

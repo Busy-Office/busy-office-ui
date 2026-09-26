@@ -601,11 +601,18 @@ rule 3. 387.1: 11 claims, 9 hold, 2 fail; 7 findings (5 confirmed, 2 narrowed).
        characters: 65x82 vs 152x28 before). Accept: the width the message gets is
        stated with its cause, and 413.1's matrix covers it.
        Track: defect
-3. [ ] **413.3 — an unbreakable token still lengthens the scroller (fallback only).**
+3. [x] **413.3 — an unbreakable token still lengthens the scroller (fallback only).**
        `overflow-wrap: anywhere` exists only in the anchored branch. scrollWidth
        1200 to 1729, identical to before 387.1, so not a regression, but the item's
        claim "cannot change what can scroll" is false for it. Also folds 387.3's
        "very long unbreakable word" candidate. Accept: wraps or the claim is narrowed.
+       - **DONE 2026-09-27 — the claim is narrowed, no code.** Own verdict: narrow.
+         `overflow-wrap: anywhere` in the fallback costs bytes in a profile that is
+         18 bytes under its cap (rf-essentials 41,966 of 41,984), for a case that is
+         not a regression (scrollWidth 1200 to 1729, identical before 387.1) and needs
+         an unbreakable word in a validation message. CHANGELOG now names the exception.
+         Reverse by reopening if a real message hits it. 387.3's "long unbreakable
+         word" candidate is answered the same way.
        Track: defect
 4. [ ] **413.4 — the claims that cannot fail.** (a) `noAnchorPastedPage`'s sticky-bar
        half passes with the pre-fix rules under overlay scrollbars (postTop equal
