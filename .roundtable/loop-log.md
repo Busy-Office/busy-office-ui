@@ -1877,3 +1877,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-27 03:43 · Standardize · sweep · Slice 412 — 4 of 4 lanes (isolated build): lanes 1, 3 equal Slice 410; lane 2 +1 rule (387.1's position: relative, traced); lane 4 dispatch region 10,374; CLAUDE.md +405 on the approved Jev section · landed · c7af39f2
 - 2026-09-27 04:02 · Objective · grill · Slice 413 — grill of 384.1/386.1/387.1/412: 387.1's fix trades a horizontal lengthening for a vertical one (not within six lines); overclaims corrected, 413.1-413.5 filed · landed · 1565560b
 - 2026-09-27 04:24 · Continue · fix · 413.5 — 384.1's write-up states the basis of the ratchet floor (file vs region words) · track=defect · landed · 848e8c49
+- 2026-09-27 04:45 · Roadmap · triage · 413.1 — options for the fallback message height, sent to the decision ladder · triaged · 384bbd56

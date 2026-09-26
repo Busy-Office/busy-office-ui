@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 20:24 UTC
+Generated at: 2026-09-26 20:45 UTC
 
 oldest dispatchable: 387.2 — a frozen cell's message still has two covers above it.
 
@@ -165,7 +165,7 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1871 iterations logged)
+dispatch status — counter-triggered rules (1872 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-09-27 03:43   ok
   Objective     1 / 3 slice           since 2026-09-27 04:02   ok  [413]
   Optimize      2 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 161 sample(s), 8 of 52 name(s) paired across days]
@@ -301,7 +301,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-27 01:23 · Meta · refusal · 384.1: charter line (targets <=16% of growth; restates lane 4's third branch) · refused · 39bfa34d
 - 2026-09-27 01:23 · Meta · refusal · 384.1: high-water anchor and region floor (anchor would never move; floor misses the 101-word case) · refused · 39bfa34d
 - 2026-09-27 01:45 · Continue · fix · 386.1 — check:layout print probe: body white/black under print emulation in both themes over 128 docs + 28 suite pages (base rate 0/312); red-proved 3 ways; earlier 0-rule injection corrected · landed · 3c840c02
 - 2026-09-27 01:45 · Meta · refusal · 386.1: sharing one source for the ten copies (still loses silently on a NEW page) · refused · 3c840c02
@@ -311,6 +310,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-27 03:43 · Standardize · sweep · Slice 412 — 4 of 4 lanes (isolated build): lanes 1, 3 equal Slice 410; lane 2 +1 rule (387.1's position: relative, traced); lane 4 dispatch region 10,374; CLAUDE.md +405 on the approved Jev section · landed · c7af39f2
 - 2026-09-27 04:02 · Objective · grill · Slice 413 — grill of 384.1/386.1/387.1/412: 387.1's fix trades a horizontal lengthening for a vertical one (not within six lines); overclaims corrected, 413.1-413.5 filed · landed · 1565560b
 - 2026-09-27 04:24 · Continue · fix · 413.5 — 384.1's write-up states the basis of the ratchet floor (file vs region words) · landed · 848e8c49
+- 2026-09-27 04:45 · Roadmap · triage · 413.1 — options for the fallback message height, sent to the decision ladder · triaged · 384bbd56
 
 ## Sunset test
 
