@@ -160,15 +160,15 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1868 iterations logged)
-  Standardize   5 / 4 Continue rounds since 2026-09-26 23:48   OVERDUE
-  Objective     3 / 3 slices          since 2026-09-27 00:50   OVERDUE  [384, 386, 387]
+dispatch status — counter-triggered rules (1869 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-09-27 03:43   ok
+  Objective     4 / 3 slices          since 2026-09-27 00:50   OVERDUE  [384, 386, 387, 412]
   -> a counter is at or past its threshold; the dispatcher should pick it
-  Optimize      2 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 160 sample(s), 8 of 52 name(s) paired across days]
+  Optimize      2 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 161 sample(s), 8 of 52 name(s) paired across days]
   -> rule 5's newest comparable pair predates 2 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-25 (2026-09-26, 2026-09-27), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (44 of 52 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
-       dispatch-region-words       6d  2026-09-25 7775 words -> 2026-09-26 10374 words  +2599   [5 same-day]
+       dispatch-region-words       7d  2026-09-26 10374 words -> 2026-09-27 10374 words  +0   [5 same-day]
        claims                      6d  2026-09-19 203 count -> 2026-09-25 311 count  +108
        gates                       4d  2026-09-07 55 count -> 2026-09-09 56 count  +1
        axe-violations              8d  2026-09-03 0 count -> 2026-09-06 0 count  +0   NEVER MOVED
@@ -297,7 +297,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-27 00:50 · Objective · grill · Slice 411 — Objective grill of 377.14/377.16 (full), 377.13/15/17, 381.1, 409, 410 (narrowed): 63 claims, 52 hold; 15 findings (12 confirmed, 3 narrowed), no P0; 377.16 fix regressed the anchor marker (411.1) · landed · 94450fd5
 - 2026-09-27 01:10 · Continue · fix · red main on be4458f3: check:pseudo Chrome launch timed out waiting for the WS endpoint (30s); first occurrence in the last 40 failed CI runs; job rerun green (run 36256896839 attempt 2); no code change · logged · be4458f3
 - 2026-09-27 01:23 · Continue · build · 384.1 — both refused on the number: dispatch-region growth since 4e6b83c1 is 11.5-15.8% narrative, ~85% instruction (two blind labellers); charter line and high-water anchor refused · refused · 39bfa34d
 - 2026-09-27 01:23 · Meta · refusal · 384.1: charter line (targets <=16% of growth; restates lane 4's third branch) · refused · 39bfa34d
@@ -307,6 +306,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-27 03:16 · Continue · fix · 387.1 — data-table message no longer lengthens the scroller/page without anchor positioning: press after reading lands (a) and sticky bar holds (b); simulated in one engine; 4 claims (364 total); rf-essentials 41,966/41,984; filed 387.3 · landed · d808dc7f
 - 2026-09-27 03:21 · Roadmap · triage · Jev 0.10/0.11 migration landed, owner-approved 2026-09-27: CLAUDE.md, LOOPS §6 step 4, jev-rubrics v2, local/grill-finding judge; MCP path retired · triaged · afb2f38b
 - 2026-09-27 03:34 · Continue · fix · red main on a8fae14b/17dddf66: 387.1's path (a) counterfactual claim failed on CI (the sideways wheel did not scroll in 300ms on Linux); case now waits for the wheel and falls back to scrollLeft, recording which; verified real and stubbed wheel locally · landed · 464f1e57
+- 2026-09-27 03:43 · Standardize · sweep · Slice 412 — 4 of 4 lanes (isolated build): lanes 1, 3 equal Slice 410; lane 2 +1 rule (387.1's position: relative, traced); lane 4 dispatch region 10,374; CLAUDE.md +405 on the approved Jev section · landed · c7af39f2
 
 ## Sunset test
 
