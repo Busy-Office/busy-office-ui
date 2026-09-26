@@ -416,26 +416,11 @@ def main():
         except Exception as exc:  # noqa: BLE001 - same reason as above
             print(f"  (warning: {name} could not run: {exc})", file=sys.stderr)
 
-    # A FOURTH advisory check, and like the third below it can only run once
-    # the commit exists (roadmap 346.1). Did a correction to ROADMAP.md reach
-    # every copy of the number? At least 13 of the 59 superseding commits the
-    # 346.1 census found left one standing. It reads the RECORDED commit, not
-    # HEAD: a wake that records an earlier item with --commit would otherwise
-    # never have that item checked (Slice 381). REPORTED on the slice-id
-    # check's rule: it cannot tell a quotation from a stale copy.
-    sites = os.path.join(os.path.dirname(__file__), "check_correction_sites.py")
-    try:
-        r = subprocess.run([sys.executable, sites, "--commit", commit or "HEAD"],
-                           capture_output=True, text=True,
-                           cwd=os.path.join(os.path.dirname(__file__), "..", ".."))
-        if r.returncode == 1:
-            print("  (correction-site check REPORTED — see below)", file=sys.stderr)
-            print((r.stdout or "") + (r.stderr or ""), file=sys.stderr)
-        elif r.returncode != 0:
-            print(f"  (warning: correction-site check could not run: {(r.stderr or '').strip()})",
-                  file=sys.stderr)
-    except Exception as exc:  # noqa: BLE001 - same reason as above
-        print(f"  (warning: correction-site check could not run: {exc})", file=sys.stderr)
+    # check_correction_sites.py (346.1) used to run here as a fourth advisory
+    # check. It was unwired by 381.1: re-tuned, it printed 84 lines on the
+    # 150-commit window and a blind judge found 4 real (4.8%), under the 10%
+    # floor stated before measuring. It is now run on purpose, before a
+    # correcting commit, with --worktree and --old (LOOPS.md operating rules).
 
     # A THIRD advisory check, and it runs from here for a reason the other two
     # do not have: it can only work AFTER the commit (roadmap 283.2).

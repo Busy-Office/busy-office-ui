@@ -4958,7 +4958,7 @@ forks or non-owner items. Framework code since Slice 379: **0 lines** (`git
 diff --numstat 2fad3cc7 HEAD -- packages/core/src`), against 373 lines of loop
 tooling and 339 of records.
 
-1. [ ] **381.1 — the correction-site check: precision, coverage, or unwire it.**
+1. [x] **381.1 — the correction-site check: precision, coverage, or unwire it.**
        Over the last 150 `ROADMAP.md` commits it printed 234 site lines, about 4
        of them real stale copies; 12 of 19 mutations survive its self-test,
        including the paths the published 10-of-17 rests on (commit-message
@@ -5008,6 +5008,67 @@ tooling and 339 of records.
              script as the deliberate `--worktree --old` tool that LOOPS.md's
              operating rule describes. The floor judges only the automatic
              run; `--old` is a separate, deliberate mode (16 of 17).
+       - **DONE 2026-09-26 — unwired on the number: 4 of 84 (4.8%), under the
+         10% floor.** Commands, the judged lines and every figure:
+         `.roundtable/measure-381.1-2026-09-26.md`.
+         - **Re-tuned first, on the same window:**
+           - a small number is listed only where the same unit follows it,
+             cut at punctuation, and one with no unit lists nothing;
+           - a sign is not a new figure;
+           - "M …, not N" takes the unit from its own clause.
+
+           234 printed lines became 84 (36 reports became 25).
+         - **Precision:** a blind judge read all 84 and found 4 REAL. They are
+           exactly the four known sites in the window that the check lists,
+           which reconciles two independent readings. 11 FALSE lines are
+           the corrected text itself.
+         - **Recall, not below today's:**
+           - the 18 known sites: 12 from the diff alone (the same 12 as
+             before), 17 with `--old`;
+           - out of sample: 1 of 2, from 0.
+         - **Named re-tunes, measured and not adopted:**
+           - Section suppression would drop 2 of the 4 real lines, because
+             both `11503760` sites are in Slice 301's own heading and body.
+           - Item-only suppression gives at best 4 of 73, 5.5%.
+           - Searching the archive adds 132 lines, with precision
+             unmeasured. The known-site set cannot speak to it, because the
+             346.1 audit read `ROADMAP.md` only.
+         - **Self-test:** 2 cases became 10, one per path, and **20 of 20
+           mutations are killed** (`mutate.py`). Two defects were found
+           while measuring and are fixed:
+           - a crash exited 1 ("listed something"), and now exits 2;
+           - `--old` matched its phrase against the display window, not the
+             hit.
+         - **Unwired:** `record_iteration.py` no longer runs it. LOOPS.md
+           Step 0 now counts three advisory checks, and its operating rule
+           says to run the check on purpose, `--worktree --old`, before a
+           correcting commit. RESUME.md's header matches.
+         - **Not covered:** one 150-commit window; one full judge, with its
+           REAL set reconciled against the 346.1 audit and 6 of its FALSE
+           verdicts spot-read; and 6 capped hits that were never printed.
+         - **Jev completion review, advisory, two rounds.** Round 1
+           (`typesafe/jev-1.13-20260917`) sent the evidence as descriptions:
+           - floor first 0.73;
+           - re-measured on the same windows 0.87;
+           - unwired on the number 0.66;
+           - self-test guards each path 0.43.
+
+           Round 2 (`jev-1.13.0`) sent the artifacts: the `record_iteration.py`
+           diff, the comment-stripped token count (1 at HEAD, 0 staged), the
+           20 mutations named per path, and the file times. It read:
+           - unwired 0.95;
+           - self-test 0.89;
+           - floor first 0.75, still unverified.
+
+           **The one disagreement, kept as a finding.** The wake reads "floor
+           first" as supported:
+           - the floor commit (15:11:03Z) precedes the judged output
+             (15:19:23Z) and the verdicts (15:26:54Z);
+           - the floor governs precision.
+
+           What Jev may be weighing is also true: the volume re-run (234
+           lines) came before the floor, as the floor commit's own message
+           says, and file times are weak evidence of order.
 2. [x] **381.2 — rule 3 arms on slices that shipped nothing.** This grill's
        three subjects changed 0 lines under `packages/` or `apps/docs`, and it
        still ran four finders and four verifiers. Before anything changes, the

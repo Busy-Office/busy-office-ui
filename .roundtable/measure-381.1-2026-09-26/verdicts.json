@@ -1,0 +1,758 @@
+[
+{
+"h": 1,
+"commit": "faf331b4",
+"number": "21",
+"how": "quoted in a correction",
+"line": 1189,
+"verdict": "FALSE",
+"why": "Corrected site itself; CORRECTION bullet sits directly above in item 374.6"
+},
+{
+"h": 2,
+"commit": "faf331b4",
+"number": "21",
+"how": "quoted in a correction",
+"line": 1252,
+"verdict": "FALSE",
+"why": "Same item; correction explicitly names '21 rows'; 21 is true after 5d0146f5"
+},
+{
+"h": 3,
+"commit": "faf331b4",
+"number": "21",
+"how": "quoted in a correction",
+"line": 6368,
+"verdict": "FALSE",
+"why": "21-row ledger in Slice 283, different thing"
+},
+{
+"h": 4,
+"commit": "faf331b4",
+"number": "21",
+"how": "quoted in a correction",
+"line": 6542,
+"verdict": "FALSE",
+"why": "21-row ledger base rate, different claim"
+},
+{
+"h": 5,
+"commit": "faf331b4",
+"number": "21",
+"how": "quoted in a correction",
+"line": 6293,
+"verdict": "FALSE",
+"why": "21-row ledger, different thing"
+},
+{
+"h": 6,
+"commit": "faf331b4",
+"number": "21",
+"how": "quoted in a correction",
+"line": 6436,
+"verdict": "FALSE",
+"why": "21-row ledger, different thing"
+},
+{
+"h": 7,
+"commit": "2c1de813",
+"number": "one",
+"how": "\"not N\" in the commit message, \"not N\" annotation",
+"line": 3095,
+"verdict": "FALSE",
+"why": "Scan's one ts(6133) hit, unrelated claim"
+},
+{
+"h": 8,
+"commit": "2c1de813",
+"number": "one",
+"how": "\"not N\" in the commit message, \"not N\" annotation",
+"line": 4919,
+"verdict": "FALSE",
+"why": "352.2 machine gap, unrelated"
+},
+{
+"h": 9,
+"commit": "2c1de813",
+"number": "one",
+"how": "\"not N\" in the commit message, \"not N\" annotation",
+"line": 8470,
+"verdict": "FALSE",
+"why": "327.3 instrument gap, unrelated"
+},
+{
+"h": 10,
+"commit": "2c1de813",
+"number": "one",
+"how": "\"not N\" in the commit message, \"not N\" annotation",
+"line": 13020,
+"verdict": "FALSE",
+"why": "249.7's banked gap heading, unrelated"
+},
+{
+"h": 11,
+"commit": "4e6b83c1",
+"number": "two",
+"how": "\"not N\" in the commit message, \"not N\" annotation",
+"line": 3403,
+"verdict": "FALSE",
+"why": "Slice 353 region growth two kinds, different question from 339.2"
+},
+{
+"h": 12,
+"commit": "4e6b83c1",
+"number": "two",
+"how": "\"not N\" in the commit message, \"not N\" annotation",
+"line": 3434,
+"verdict": "FALSE",
+"why": "Slice 353's own answer, different claim"
+},
+{
+"h": 13,
+"commit": "4e6b83c1",
+"number": "two",
+"how": "\"not N\" in the commit message, \"not N\" annotation",
+"line": 7519,
+"verdict": "FALSE",
+"why": "326.3 closure, region growth, different claim"
+},
+{
+"h": 14,
+"commit": "4e6b83c1",
+"number": "two",
+"how": "\"not N\" in the commit message, \"not N\" annotation",
+"line": 11899,
+"verdict": "FALSE",
+"why": "249.9 Accept clauses, unrelated"
+},
+{
+"h": 15,
+"commit": "4e6b83c1",
+"number": "two",
+"how": "\"not N\" in the commit message, \"not N\" annotation",
+"line": 13177,
+"verdict": "FALSE",
+"why": "242.1's two arguments, unrelated"
+},
+{
+"h": 16,
+"commit": "c5780113",
+"number": "2.54",
+"how": "\"not N\" annotation",
+"line": 5522,
+"verdict": "FALSE",
+"why": "Token-on-white hypothetical for gate predicate, not marker print claim"
+},
+{
+"h": 17,
+"commit": "c5780113",
+"number": "2.54",
+"how": "\"not N\" annotation",
+"line": 5553,
+"verdict": "FALSE",
+"why": "Token measured on white, true; inside 338.1 annotated DECIDED"
+},
+{
+"h": 18,
+"commit": "c5780113",
+"number": "2.54",
+"how": "\"not N\" annotation",
+"line": 8303,
+"verdict": "FALSE",
+"why": "Token contrast on white recomputed, historically true"
+},
+{
+"h": 19,
+"commit": "c5780113",
+"number": "2.54",
+"how": "\"not N\" annotation",
+"line": 8447,
+"verdict": "FALSE",
+"why": "Slice 316 heading: token on white paper, true"
+},
+{
+"h": 20,
+"commit": "c5780113",
+"number": "2.54",
+"how": "\"not N\" annotation",
+"line": 8530,
+"verdict": "FALSE",
+"why": "298.1 token measurement, true, different claim"
+},
+{
+"h": 21,
+"commit": "c5780113",
+"number": "2.54",
+"how": "\"not N\" annotation",
+"line": 9622,
+"verdict": "FALSE",
+"why": "Raw token-on-white table, true"
+},
+{
+"h": 22,
+"commit": "5ce62916",
+"number": "four",
+"how": "\"not N\" annotation",
+"line": 555,
+"verdict": "FALSE",
+"why": "Annotated in place; CORRECTED block follows within same bullet"
+},
+{
+"h": 23,
+"commit": "5ce62916",
+"number": "four",
+"how": "\"not N\" annotation",
+"line": 3621,
+"verdict": "FALSE",
+"why": "Sweep four hours old, different claim"
+},
+{
+"h": 24,
+"commit": "5ce62916",
+"number": "four",
+"how": "\"not N\" annotation",
+"line": 6812,
+"verdict": "FALSE",
+"why": "Four lanes / four sweeps ran three, different"
+},
+{
+"h": 25,
+"commit": "5ce62916",
+"number": "four",
+"how": "\"not N\" annotation",
+"line": 12757,
+"verdict": "FALSE",
+"why": "Slice 208 four prior sweeps, historical"
+},
+{
+"h": 26,
+"commit": "5ce62916",
+"number": "four",
+"how": "\"not N\" annotation",
+"line": 5428,
+"verdict": "REAL",
+"why": "337.1 DONE note still says '4 of 15 sweeps old', uncorrected"
+},
+{
+"h": 27,
+"commit": "5ce62916",
+"number": "four",
+"how": "\"not N\" annotation",
+"line": 9309,
+"verdict": "FALSE",
+"why": "Four sweep lanes reproduce, different"
+},
+{
+"h": 28,
+"commit": "5ce62916",
+"number": "four",
+"how": "\"not N\" annotation",
+"line": 10635,
+"verdict": "FALSE",
+"why": "Archive sweep clause, different"
+},
+{
+"h": 29,
+"commit": "5ce62916",
+"number": "four",
+"how": "\"not N\" annotation",
+"line": 11015,
+"verdict": "FALSE",
+"why": "Archive sweep lines, different"
+},
+{
+"h": 30,
+"commit": "9a5faeca",
+"number": "15",
+"how": "quoted in a correction",
+"line": 1924,
+"verdict": "FALSE",
+"why": "Union of 15 is correct, not superseded"
+},
+{
+"h": 31,
+"commit": "9a5faeca",
+"number": "15",
+"how": "quoted in a correction",
+"line": 3219,
+"verdict": "FALSE",
+"why": "Union of 15 is correct"
+},
+{
+"h": 32,
+"commit": "9a5faeca",
+"number": "15",
+"how": "quoted in a correction",
+"line": 3813,
+"verdict": "FALSE",
+"why": "Union of 15 is correct"
+},
+{
+"h": 33,
+"commit": "9a5faeca",
+"number": "15",
+"how": "quoted in a correction",
+"line": 8929,
+"verdict": "FALSE",
+"why": "Union of 15 correct, historical grill"
+},
+{
+"h": 34,
+"commit": "9a5faeca",
+"number": "15",
+"how": "quoted in a correction",
+"line": 3226,
+"verdict": "FALSE",
+"why": "15 flagged pages correct"
+},
+{
+"h": 35,
+"commit": "9a5faeca",
+"number": "15",
+"how": "quoted in a correction",
+"line": 6448,
+"verdict": "FALSE",
+"why": "15 flagged pages correct"
+},
+{
+"h": 36,
+"commit": "9a5faeca",
+"number": "15",
+"how": "quoted in a correction",
+"line": 7463,
+"verdict": "FALSE",
+"why": "Same 15 pages, correct"
+},
+{
+"h": 37,
+"commit": "9a5faeca",
+"number": "15",
+"how": "quoted in a correction",
+"line": 6454,
+"verdict": "FALSE",
+"why": "Fifteen pages, correct"
+},
+{
+"h": 38,
+"commit": "9a5faeca",
+"number": "2",
+"how": "\"not N\" annotation",
+"line": 1773,
+"verdict": "FALSE",
+"why": "Slice 358 census quoting item's disclosed sample, historical"
+},
+{
+"h": 39,
+"commit": "9a5faeca",
+"number": "2",
+"how": "\"not N\" annotation",
+"line": 5192,
+"verdict": "FALSE",
+"why": "336.2 original text kept verbatim below explicit correction"
+},
+{
+"h": 40,
+"commit": "9a5faeca",
+"number": "2",
+"how": "\"not N\" annotation",
+"line": 4210,
+"verdict": "FALSE",
+"why": "Last two archive sweeps, different claim"
+},
+{
+"h": 41,
+"commit": "9a5faeca",
+"number": "2",
+"how": "\"not N\" annotation",
+"line": 5194,
+"verdict": "FALSE",
+"why": "Original text kept verbatim below explicit correction"
+},
+{
+"h": 42,
+"commit": "9a5faeca",
+"number": "2",
+"how": "\"not N\" annotation",
+"line": 5200,
+"verdict": "FALSE",
+"why": "Accept clause in original text under correction"
+},
+{
+"h": 43,
+"commit": "fed40de9",
+"number": "23",
+"how": "\"not N\" in the commit message, \"not N\" annotation",
+"line": 758,
+"verdict": "FALSE",
+"why": "23 errors is correct raw output"
+},
+{
+"h": 44,
+"commit": "fed40de9",
+"number": "23",
+"how": "\"not N\" in the commit message, \"not N\" annotation",
+"line": 798,
+"verdict": "FALSE",
+"why": "23 errors correct; tally was the defect, not 23"
+},
+{
+"h": 45,
+"commit": "9307c6aa",
+"number": "two",
+"how": "\"not N\" annotation",
+"line": 9643,
+"verdict": "FALSE",
+"why": "Not a correction; two instruments reconciled, unrelated"
+},
+{
+"h": 46,
+"commit": "9307c6aa",
+"number": "two",
+"how": "\"not N\" annotation",
+"line": 894,
+"verdict": "FALSE",
+"why": "Two independent instruments, unrelated"
+},
+{
+"h": 47,
+"commit": "9307c6aa",
+"number": "two",
+"how": "\"not N\" annotation",
+"line": 1273,
+"verdict": "FALSE",
+"why": "Two instruments agreeing, unrelated"
+},
+{
+"h": 48,
+"commit": "9307c6aa",
+"number": "two",
+"how": "\"not N\" annotation",
+"line": 1494,
+"verdict": "FALSE",
+"why": "Two instruments agree, unrelated"
+},
+{
+"h": 49,
+"commit": "9307c6aa",
+"number": "two",
+"how": "\"not N\" annotation",
+"line": 2363,
+"verdict": "FALSE",
+"why": "Grill's two wrong instruments, unrelated"
+},
+{
+"h": 50,
+"commit": "9307c6aa",
+"number": "two",
+"how": "\"not N\" annotation",
+"line": 2464,
+"verdict": "FALSE",
+"why": "Unrelated"
+},
+{
+"h": 51,
+"commit": "9307c6aa",
+"number": "two",
+"how": "\"not N\" annotation",
+"line": 2572,
+"verdict": "FALSE",
+"why": "Two red-proved instruments, unrelated"
+},
+{
+"h": 52,
+"commit": "9307c6aa",
+"number": "two",
+"how": "\"not N\" annotation",
+"line": 5251,
+"verdict": "FALSE",
+"why": "Two censuses disagreeing, unrelated"
+},
+{
+"h": 53,
+"commit": "cfd781ab",
+"number": "40",
+"how": "\"not N\" in the commit message, \"not N\" annotation",
+"line": 4756,
+"verdict": "FALSE",
+"why": "331.1 original kept verbatim under closure note giving 53"
+},
+{
+"h": 54,
+"commit": "54636e74",
+"number": "two",
+"how": "\"not N\" in the commit message, \"not N\" annotation",
+"line": 9814,
+"verdict": "FALSE",
+"why": "Two branches, unrelated"
+},
+{
+"h": 55,
+"commit": "54636e74",
+"number": "two",
+"how": "\"not N\" in the commit message, \"not N\" annotation",
+"line": 2592,
+"verdict": "FALSE",
+"why": "2 NO LIVE INPUT count, unrelated"
+},
+{
+"h": 56,
+"commit": "54636e74",
+"number": "two",
+"how": "\"not N\" in the commit message, \"not N\" annotation",
+"line": 4490,
+"verdict": "FALSE",
+"why": "330.1 Accept wording; two occurrences historically true"
+},
+{
+"h": 57,
+"commit": "919d55d5",
+"number": "two",
+"how": "\"not N\" annotation",
+"line": 1579,
+"verdict": "FALSE",
+"why": "Two smaller things, unrelated"
+},
+{
+"h": 58,
+"commit": "919d55d5",
+"number": "two",
+"how": "\"not N\" annotation",
+"line": 3972,
+"verdict": "FALSE",
+"why": "Two things kept, unrelated"
+},
+{
+"h": 59,
+"commit": "919d55d5",
+"number": "two",
+"how": "\"not N\" annotation",
+"line": 4994,
+"verdict": "FALSE",
+"why": "Two things outlive it, unrelated"
+},
+{
+"h": 60,
+"commit": "919d55d5",
+"number": "two",
+"how": "\"not N\" annotation",
+"line": 6808,
+"verdict": "FALSE",
+"why": "Two smaller things, unrelated"
+},
+{
+"h": 61,
+"commit": "919d55d5",
+"number": "two",
+"how": "\"not N\" annotation",
+"line": 7189,
+"verdict": "FALSE",
+"why": "Slice 299 heading, unrelated"
+},
+{
+"h": 62,
+"commit": "919d55d5",
+"number": "two",
+"how": "\"not N\" annotation",
+"line": 9717,
+"verdict": "FALSE",
+"why": "Two things measured, unrelated"
+},
+{
+"h": 63,
+"commit": "919d55d5",
+"number": "two",
+"how": "\"not N\" annotation",
+"line": 10524,
+"verdict": "FALSE",
+"why": "Two things it did not say, unrelated"
+},
+{
+"h": 64,
+"commit": "919d55d5",
+"number": "two",
+"how": "\"not N\" annotation",
+"line": 10711,
+"verdict": "FALSE",
+"why": "Slice 211 heading, unrelated"
+},
+{
+"h": 65,
+"commit": "6cfe380c",
+"number": "five",
+"how": "struck",
+"line": 598,
+"verdict": "FALSE",
+"why": "Five docs files changed; the true 'five' counting files"
+},
+{
+"h": 66,
+"commit": "cdfcb129",
+"number": "three",
+"how": "\"not N\" annotation",
+"line": 2387,
+"verdict": "FALSE",
+"why": "161.1's three family pages, unrelated"
+},
+{
+"h": 67,
+"commit": "ac4a9a0f",
+"number": "20",
+"how": "\"not N\" in the commit message, \"not N\" annotation",
+"line": 2596,
+"verdict": "FALSE",
+"why": "20 gates is correct, not superseded"
+},
+{
+"h": 68,
+"commit": "19fc0045",
+"number": "42",
+"how": "quoted in a correction",
+"line": 451,
+"verdict": "FALSE",
+"why": "42 cards correct; line is the correction itself"
+},
+{
+"h": 69,
+"commit": "19fc0045",
+"number": "42",
+"how": "quoted in a correction",
+"line": 1859,
+"verdict": "FALSE",
+"why": "42-70ms headroom, different thing"
+},
+{
+"h": 70,
+"commit": "8ef9b944",
+"number": "three",
+"how": "\"not N\" annotation",
+"line": 3248,
+"verdict": "FALSE",
+"why": "git stat for badge page, unrelated"
+},
+{
+"h": 71,
+"commit": "ccb7d3ce",
+"number": "five",
+"how": "\"not N\" annotation, struck",
+"line": 812,
+"verdict": "REAL",
+"why": "320.2 still says headline number 'five write-ups have quoted'; corrected to 17"
+},
+{
+"h": 72,
+"commit": "ccb7d3ce",
+"number": "five",
+"how": "\"not N\" annotation, struck",
+"line": 4985,
+"verdict": "FALSE",
+"why": "Five recorded archive sweep decisions, different"
+},
+{
+"h": 73,
+"commit": "9e08040e",
+"number": "23",
+"how": "replaced by 25",
+"line": 862,
+"verdict": "FALSE",
+"why": "Slice 315's 21 of 23, different grill"
+},
+{
+"h": 74,
+"commit": "810e37fa",
+"number": "one",
+"how": "\"not N\" annotation",
+"line": 1644,
+"verdict": "FALSE",
+"why": "One thing loop may not do, unrelated"
+},
+{
+"h": 75,
+"commit": "26d464fe",
+"number": "one",
+"how": "\"not N\" annotation",
+"line": 2760,
+"verdict": "FALSE",
+"why": "Both on one day, unrelated"
+},
+{
+"h": 76,
+"commit": "26d464fe",
+"number": "one",
+"how": "\"not N\" annotation",
+"line": 2795,
+"verdict": "FALSE",
+"why": "One day after, unrelated"
+},
+{
+"h": 77,
+"commit": "26d464fe",
+"number": "one",
+"how": "\"not N\" annotation",
+"line": 4564,
+"verdict": "FALSE",
+"why": "One day after fifth sweep, unrelated"
+},
+{
+"h": 78,
+"commit": "0879c6c3",
+"number": "one",
+"how": "\"not N\" annotation",
+"line": 2681,
+"verdict": "FALSE",
+"why": "249.7's one banked gap, unrelated"
+},
+{
+"h": 79,
+"commit": "0879c6c3",
+"number": "one",
+"how": "\"not N\" annotation",
+"line": 3359,
+"verdict": "FALSE",
+"why": "One thing measured, unrelated"
+},
+{
+"h": 80,
+"commit": "11503760",
+"number": "4,676",
+"how": "replaced by 4,738",
+"line": 612,
+"verdict": "REAL",
+"why": "Slice 301 body still says 6,839 to 4,676; block fixed to 4,738"
+},
+{
+"h": 81,
+"commit": "11503760",
+"number": "7.2%",
+"how": "replaced by 8.4%",
+"line": 536,
+"verdict": "REAL",
+"why": "Slice 301 heading still says down to 7.2%; corrected 8.4%"
+},
+{
+"h": 82,
+"commit": "7ad1aca6",
+"number": "2,882",
+"how": "\"not N\" annotation",
+"line": 1313,
+"verdict": "FALSE",
+"why": "Annotated in place; correction blockquote directly follows"
+},
+{
+"h": 83,
+"commit": "d257b9b8",
+"number": "20",
+"how": "\"not N\" annotation",
+"line": 709,
+"verdict": "FALSE",
+"why": "286.3 original kept verbatim under DONE annotation"
+},
+{
+"h": 84,
+"commit": "89455547",
+"number": "32",
+"how": "replaced by 33",
+"line": 555,
+"verdict": "FALSE",
+"why": "Verbatim transcript deliberately kept; true at dispatch"
+}
+]

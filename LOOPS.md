@@ -144,10 +144,13 @@ hardened at **11:42:09Z** (`18791d5`, 172.1) and demoted at **12:26:17Z**
 (`33fb89e`, 169.4) — **44 minutes, two consecutive wakes, neither naming the
 other.**
 
-**FOUR advisory checks now run from the same place, so expect up to four
+**THREE advisory checks run from the same place, so expect up to three
 stderr blocks** (roadmap 186.1, 2026-08-29; the third added by 283.2,
-2026-09-05; the fourth, `check_correction_sites.py`, by 346.1, 2026-09-24,
-which like the third reads the commit just made). The third is `polish_requeue.py --verify-stamps`, and it lives here
+2026-09-05). A fourth, `check_correction_sites.py` (346.1), ran here from
+2026-09-24 until 381.1 unwired it on its measured precision: 4 real lines in
+84, against a 10% floor stated before measuring. It is now run on purpose;
+see the operating rules. The one added by 283.2 is `polish_requeue.py
+--verify-stamps`, and it lives here
 rather than at Polish step 0 for a reason the other two do not have: **it can
 only work after the commit.** A `--stamp` taken at the end of a round digests
 the working tree; if the round then edits that surface's source again before
@@ -2272,16 +2275,18 @@ than the two differing by design.
   when deciding). Among the 231 commits that add a correction line to
   `ROADMAP.md`, at least 59 struck or superseded a number, and 13 of those left
   a stale copy standing (18 sites) — a heading, a DONE line, another slice.
-  Only 2 were hidden by a line wrap. `record_iteration.py` runs
-  `scripts/loops/check_correction_sites.py` on the commit it records and lists
-  the other places the old number still appears. Run it with `--worktree`
-  before committing, and add `--old "<old spelling>"` when the correction
-  keeps the old text (a withdrawal, a refuted premise): on the first 17 sites
-  the diff alone found 10 by their own number, and naming the old value 16.
-  Expect mostly false alarms — about 4 real sites in 234 printed lines over the
-  last 150 commits (381.1 owns that). It reports and never fails — a quotation
-  is fine, a restatement is a missed site. Commands and lists:
-  `.roundtable/measure-346.1-2026-09-24.md`.
+  Only 2 were hidden by a line wrap. **Before committing a correction, run
+  `python3 scripts/loops/check_correction_sites.py --worktree --old "<old
+  spelling>"`**. It lists the other places the old number still appears.
+  Naming the old value is what makes it work: on the 18 known sites it listed
+  17 with `--old`, against 12 from the diff alone. **Nothing runs it for
+  you:** `record_iteration.py` did until 381.1. Re-tuned to match a small
+  number by what it counts, it still printed 84 lines over 150 commits, and a
+  blind judge found 4 of them real. That is under the 10% floor 381.1 set
+  before measuring. It reports and never fails: a quotation is fine, a
+  restatement is a missed site. Commands and lists:
+  `.roundtable/measure-346.1-2026-09-24.md` and
+  `.roundtable/measure-381.1-2026-09-26.md`.
 - **No longer session-scoped, and that is what made concurrency real** — this
   bullet used to read "these run while this session is open; closing it stops
   them. For durable cloud cadence, promote to `/schedule`." The promotion
