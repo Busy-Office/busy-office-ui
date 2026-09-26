@@ -145,8 +145,8 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1824 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-09-26 11:15   ok
+dispatch status — counter-triggered rules (1825 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-09-26 11:15   ok
   Objective     6 / 3 slices          since 2026-09-25 13:32   OVERDUE  [375, 392, 393, 398, 399, 400]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 154 sample(s), 8 of 51 name(s) paired across days]
@@ -289,7 +289,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-26 02:25 · Continue · build · 393.10 — loop re-score FAIL (2.375; Correctness 1, Maintainability 1); M1 stays DRAFT; N1 fixed, rest filed as Slice 398 · landed · a2cd9c51
 - 2026-09-26 09:18 · Roadmap · triage · owner recommendations for O5-O18 and 22 other waiting items (.roundtable/owner-recs-2026-09-26.md); 398.1 third dead reference, 398.4 filed · triaged · 7438e033
 - 2026-09-26 09:28 · Roadmap · triage · owner extends M0 once: 398.1 → 398.2 → re-score 398.5, cap 13; four parked .roundtable records copied to main · triaged · 0ab92652
 - 2026-09-26 10:00 · Continue · build · 398.1 — stale statements fixed (N2-N7, both Redundants, 4 more found by re-reading); dead-ref re-scan 31 unresolved, none live · landed · 08ca48f0
@@ -299,6 +298,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 11:02 · Continue · build · 399.3 — browserslist raised to the derived floor (Firefox/Safari +1), held equal by derive-floor; dist byte-identical (red-proved) · landed · 64ba08eb
 - 2026-09-26 11:02 · Continue · release-prep · 0.9.0 release prep (e43330f2): @busy-office/ui 0.9.0, create-ui 0.2.0; publish is the owner's · landed · 64ba08eb
 - 2026-09-26 11:15 · Standardize · sweep · Slice 400 — 4 of 4 lanes (isolated build): lanes 1-3 equal to base; lane 4 Step 0c charter applied, expired M0 exception retired; dispatch region 10,625 -> 10,374 · landed · daea445f
+- 2026-09-26 11:25 · Continue · release · 0.9.0 published (@busy-office/ui 0.9.0, create-ui 0.2.0) on owner request; tarballs verified; 377.5 + 394.3 closed · released · 70ef6293
 
 ## Sunset test
 
