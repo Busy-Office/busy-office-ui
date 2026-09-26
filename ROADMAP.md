@@ -559,6 +559,25 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 414 — Standardize sweep, 4 of 4 lanes on an isolated clean build: all four equal Slice 412 (2026-09-27)
+
+**Dispatched by rule 2**, `Standardize 4 / 4 OVERDUE`, CI green on `36279554792`.
+Worktree of HEAD (`392642e8`) with its own `npm ci`; core build, docs build and
+`standardize_lanes.py` all exit 0. Base: Slice 412 (`df443ce3`).
+
+- **Lane 1 (of 4):** *"0 dead style attribute(s) on 0 page(s); 1392 live"*, equal.
+  Inputs moved (`check-claims.mjs`); none renders an inline style.
+- **Lane 2 (of 4):** *"74 source file(s) · 247 rule(s) with 3+ declarations · 236
+  distinct bodies · 7 body(ies) appearing more than once"*, equal to 412. Its
+  input moved by a comment only (`data-table.css`, the corrected six-lines
+  note), so it was run, not assumed.
+- **Lane 3 (of 4):** 119 pages of 128, median 833, **120,015 words**, equal.
+- **Lane 4 (of 4):** dispatch region **10,374**, 0 of 17 sections moved, +0 body
+  words. `LOOPS.md` 23,037 (equal). Roadmap regrowth is Slice 413's 100 lines
+  and this one; `roadmap_scope.py` reads 14.7% closed history, targets listed
+  there, and 249.12 remains the open trigger.
+- **Exit:** a clean pass. Nothing to consolidate.
+
 ## Slice 413 — Objective grill of 384.1, 386.1, 387.1 and Slice 412: 387.1's headline holds for the axis it measured and fails on the other — the message is not "within the six lines" (2026-09-27)
 
 Report: `.roundtable/grill-objective-384-386-387-412-2026-09-27.md`. Dispatched by
