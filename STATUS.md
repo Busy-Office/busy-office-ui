@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 15:46 UTC
+Generated at: 2026-09-26 15:48 UTC
 
 oldest dispatchable: 384.1 — lane 4's anchor and the rule-text generator.
 
@@ -154,15 +154,15 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1857 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-09-26 22:29   OVERDUE
-  Objective     3 / 3 slices          since 2026-09-26 19:15   OVERDUE  [377, 381, 409]
+dispatch status — counter-triggered rules (1858 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-09-26 23:48   ok
+  Objective     4 / 3 slices          since 2026-09-26 19:15   OVERDUE  [377, 381, 409, 410]
   -> a counter is at or past its threshold; the dispatcher should pick it
-  Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 159 sample(s), 8 of 52 name(s) paired across days]
+  Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 160 sample(s), 8 of 52 name(s) paired across days]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-25 (2026-09-26), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (44 of 52 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
-       dispatch-region-words       6d  2026-09-25 7775 words -> 2026-09-26 10374 words  +2599   [4 same-day]
+       dispatch-region-words       6d  2026-09-25 7775 words -> 2026-09-26 10374 words  +2599   [5 same-day]
        claims                      6d  2026-09-19 203 count -> 2026-09-25 311 count  +108
        gates                       4d  2026-09-07 55 count -> 2026-09-09 56 count  +1
        axe-violations              8d  2026-09-03 0 count -> 2026-09-06 0 count  +0   NEVER MOVED
@@ -292,7 +292,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-26 20:56 · Continue · build · 377.14 — seam loop derived (7 docs, 31 seams), shell band derived + check-floor needle (container stand-down), report:text-collapse (373.9 corrected 3/8/1, filed 377.16), runtime-claim coverage 18.5% · landed · f7cecafb
 - 2026-09-26 21:11 · Roadmap · triage · 377.17 filed — SC 2.5.7 file-picker case flaked on CI at 15s (3rd failure; rerun passed) · triaged · 01f1941c
 - 2026-09-26 22:01 · Continue · build · 377.15 (in progress) — check:claims split into two CI shards at the runtime midpoint; 162 + 197 = 359 reconciled; wall-clock reading waits on 3 green runs · landed · 20dc0918
 - 2026-09-26 22:17 · Continue · fix · 377.16 — object-page anchor strip: buttons flex-shrink 0 (labels no longer overlap, first reachable at 390); text-Range case red 14-33px then green · landed · 4e9308c9
@@ -302,6 +301,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 23:02 · Continue · fix · 377.17 — closed: file-picker case asserts the input's trusted click; 5 consecutive CI passes (run 36249444686 attempts 1-5) · landed · 9eedab1f
 - 2026-09-26 23:35 · Continue · build · 381.1 — correction-site check unwired on the number: re-tuned 234 -> 84 printed lines, blind judge 4 real (4.8%) under the 10% floor stated first; recall held; self-test 20/20 mutations · landed · 68b2f088
 - 2026-09-26 23:35 · Meta · refusal · 381.1: section suppression (drops 2 of 4 real) and archive search (+132 lines) as re-tunes · refused · 68b2f088
+- 2026-09-26 23:48 · Standardize · sweep · Slice 410 — 4 of 4 lanes (isolated build): lanes 1-3 equal Slice 409; lane 4 +25 in Step 0 from 381.1's history sentence, trimmed to the instruction; dispatch region 10,374 · landed · ec482111
 
 ## Sunset test
 

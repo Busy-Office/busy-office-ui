@@ -1863,3 +1863,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-26 23:02 · Continue · fix · 377.17 — closed: file-picker case asserts the input's trusted click; 5 consecutive CI passes (run 36249444686 attempts 1-5) · track=defect · landed · 9eedab1f
 - 2026-09-26 23:35 · Continue · build · 381.1 — correction-site check unwired on the number: re-tuned 234 -> 84 printed lines, blind judge 4 real (4.8%) under the 10% floor stated first; recall held; self-test 20/20 mutations · landed · 68b2f088
 - 2026-09-26 23:35 · Meta · refusal · 381.1: section suppression (drops 2 of 4 real) and archive search (+132 lines) as re-tunes · refused · 68b2f088
+- 2026-09-26 23:48 · Standardize · sweep · Slice 410 — 4 of 4 lanes (isolated build): lanes 1-3 equal Slice 409; lane 4 +25 in Step 0 from 381.1's history sentence, trimmed to the instruction; dispatch region 10,374 · landed · ec482111
