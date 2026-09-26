@@ -16,7 +16,7 @@ Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_
 - [`surface-baseline.md`](surface-baseline.md) — the scored-surface baseline
 - [`surface-review-rubric.md`](surface-review-rubric.md) — how a surface is scored
 
-## Findings — 229 snapshots, newest first
+## Findings — 230 snapshots, newest first
 
 A **·** marks a file nothing outside `.roundtable/` links to. That is not a defect: a grill can settle a question without anything needing to cite it afterwards. It is here so the uncited set stays visible instead of growing unnoticed.
 
@@ -31,6 +31,7 @@ A **·** marks a file nothing outside `.roundtable/` links to. That is not a def
 | — | [Suite score — the screen ledger](suite-score.md) | ✓ |
 | — | [Verification discipline — the worked examples](verification-discipline.md) | ✓ |
 | 2026-09-27 | [Objective grill — 377.14 and 377.16 in full; 377.13, 377.15, 377.17, 381.1, Slices 409 and 410 n](grill-objective-377-381-409-410-2026-09-27.md) | ✓ |
+| 2026-09-27 | [384.1 — how much of the dispatch region's growth is measurement narrative (2026-09-27)](measure-384.1-2026-09-27.md) | ✓ |
 | 2026-09-26 | [Objective grill of 375.11 (zoom half), 392.1, 399.3 and the 0.9.0 release, with 393, 398 and Sli](grill-objective-375-392-393-398-399-400-2026-09-26.md) | ✓ |
 | 2026-09-26 | [Objective grill of 377.4 (full), with 376.7, 377.7 and Slice 402 narrowed (2026-09-26)](grill-objective-376-377-402-2026-09-26.md) | ✓ |
 | 2026-09-26 | [Objective grill of 377.8 and 404.1 (full), with 377.9 and Slice 405 narrowed (2026-09-26)](grill-objective-377-404-405-2026-09-26.md) | ✓ |
@@ -263,4 +264,4 @@ The signature of a directory that has outgrown retrieval is the same subject inv
 
 Two files on one subject is usually a deliberate follow-up (a grill and its sign-off). Three is worth a look.
 
-— 238 files, 179 cited from outside, 60 uncited snapshots, 4 repeated subject(s).
+— 239 files, 180 cited from outside, 60 uncited snapshots, 4 repeated subject(s).

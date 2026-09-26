@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 17:20 UTC
+Generated at: 2026-09-26 17:23 UTC
 
 oldest dispatchable: 386.1 — nothing keeps the print reset true on a NEW standalone page.
 
@@ -162,11 +162,9 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1860 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-09-26 23:48   ok
-  !! 1 Objective-closing round(s) since the last Objective round and none names a slice.
-     At the measured 24% slice-less rate that is p=24.2% if the parser is fine — not yet evidence of one; a slice-less row is ordinary here.
-  Objective     0 / 3 slices          since 2026-09-27 00:50   ok
+dispatch status — counter-triggered rules (1863 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-09-26 23:48   ok
+  Objective     1 / 3 slice           since 2026-09-27 00:50   ok  [384]
   Optimize      2 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 160 sample(s), 8 of 52 name(s) paired across days]
   -> rule 5's newest comparable pair predates 2 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-25 (2026-09-26, 2026-09-27), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -300,9 +298,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-26 22:17 · Continue · fix · 377.16 — object-page anchor strip: buttons flex-shrink 0 (labels no longer overlap, first reachable at 390); text-Range case red 14-33px then green · landed · 4e9308c9
-- 2026-09-26 22:29 · Standardize · sweep · Slice 409 — 4 of 4 lanes (isolated build): lanes 1, 2, 4 equal Slice 407; lane 3 120,015 (-6, 377.14 b prose, bounded by diff); dispatch region 10,374 · landed · bb80a2ea
-- 2026-09-26 22:33 · Continue · build · 377.15 — closed: split claims shard measured over 3 green runs, CI wall 3.9-4.0 min (from 5.4-5.9), reconciled 163 + 197 = 360 in CI · landed · 26b262ce
 - 2026-09-26 22:42 · Continue · fix · 377.17 (in progress) — file-picker case asserts the input's trusted click; chooser event best-effort; red-proven (for-mismatch activated 0) · landed · 0205933f
 - 2026-09-26 23:02 · Continue · fix · 377.17 — closed: file-picker case asserts the input's trusted click; 5 consecutive CI passes (run 36249444686 attempts 1-5) · landed · 9eedab1f
 - 2026-09-26 23:35 · Continue · build · 381.1 — correction-site check unwired on the number: re-tuned 234 -> 84 printed lines, blind judge 4 real (4.8%) under the 10% floor stated first; recall held; self-test 20/20 mutations · landed · 68b2f088
@@ -310,6 +305,9 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 23:48 · Standardize · sweep · Slice 410 — 4 of 4 lanes (isolated build): lanes 1-3 equal Slice 409; lane 4 +25 in Step 0 from 381.1's history sentence, trimmed to the instruction; dispatch region 10,374 · landed · ec482111
 - 2026-09-27 00:50 · Objective · grill · Slice 411 — Objective grill of 377.14/377.16 (full), 377.13/15/17, 381.1, 409, 410 (narrowed): 63 claims, 52 hold; 15 findings (12 confirmed, 3 narrowed), no P0; 377.16 fix regressed the anchor marker (411.1) · landed · 94450fd5
 - 2026-09-27 01:10 · Continue · fix · red main on be4458f3: check:pseudo Chrome launch timed out waiting for the WS endpoint (30s); first occurrence in the last 40 failed CI runs; job rerun green (run 36256896839 attempt 2); no code change · logged · be4458f3
+- 2026-09-27 01:23 · Continue · build · 384.1 — both refused on the number: dispatch-region growth since 4e6b83c1 is 11.5-15.8% narrative, ~85% instruction (two blind labellers); charter line and high-water anchor refused · refused · 39bfa34d
+- 2026-09-27 01:23 · Meta · refusal · 384.1: charter line (targets <=16% of growth; restates lane 4's third branch) · refused · 39bfa34d
+- 2026-09-27 01:23 · Meta · refusal · 384.1: high-water anchor and region floor (anchor would never move; floor misses the 101-word case) · refused · 39bfa34d
 
 ## Sunset test
 
