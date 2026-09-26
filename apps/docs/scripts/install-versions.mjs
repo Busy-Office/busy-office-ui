@@ -19,18 +19,25 @@
  * versions.json and the current package version, with the snapshot's own
  * version selected, keeping its site root and its scoped attributes.
  *
- * It runs LAST in the docs build. Every dist walker skips `v/`
- * (`dist-pages.mjs`), and `check-markup` and pagefind have already run, so the
- * old snapshots are served, not re-gated. That is the arrangement `pages.yml`
- * relied on.
+ * It runs LAST in the docs build. The dist walkers that go through
+ * `dist-pages.mjs` skip `v/`, and `check-markup` and pagefind have already run
+ * inside the build, so the old snapshots are served, not re-gated. A walker
+ * run AFTER the build that does not use `dist-pages.mjs` does see them:
+ * `npm run check:markup -w docs` does (Slice 406 grill, 406.2).
+ *
+ * A snapshot never carries `v/` or `pagefind/` (`snapshots.mjs`, 406.1). The
+ * cut excludes both, and this refuses any committed snapshot that has either
+ * before copying anything. A nested `v/` is what a cut from a post-404.1 build
+ * would otherwise have committed.
  *
  * @exact — a copy and a rewrite, each reconciled against the source: every
  * snapshot in versions.json has an index.html, and every snapshot page carrying
  * a switcher (counted in the raw HTML) was rewritten to select its own version.
  */
-import { access, cp, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
+import { access, cp, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { DOCS_ROOT, REPO_ROOT } from './paths.mjs';
+import { badSnapshots } from './snapshots.mjs';
 
 const src = join(DOCS_ROOT, 'versions');
 const dest = join(DOCS_ROOT, 'dist', 'v');
@@ -65,6 +72,20 @@ async function* htmlFiles(dir) {
   }
 }
 
+// Every directory under versions/, listed in versions.json or not, since a
+// stray one would still be copied and served.
+const present = (await readdir(src, { withFileTypes: true })).filter((e) => e.isDirectory()).map((e) => e.name);
+const bad = await badSnapshots(src, [...new Set([...snapshots, ...present])]);
+if (bad.length) {
+  console.error(`install-versions FAILED — committed snapshot(s) carry a directory a snapshot never may: ` +
+    `${bad.map((b) => `apps/docs/versions/${b}/`).join(', ')}. A nested v/ is every older snapshot copied into this one ` +
+    `(roadmap 406.1): delete it and re-cut with scripts/cut-version-snapshot.mjs, which now leaves it out.`);
+  process.exit(1);
+}
+
+// Fresh every build: cp merges into what is there, and a file left over from
+// an earlier build would be served, and counted, without being in versions/.
+await rm(dest, { recursive: true, force: true });
 await mkdir(dest, { recursive: true });
 await cp(src, dest, { recursive: true });
 
@@ -77,11 +98,13 @@ for (const v of snapshots) {
     problems.push(`dist/v/${v}/index.html is missing, so the switcher would offer a version that 404s`);
     continue;
   }
+  // The expected count comes from the COMMITTED pages, not from the tree this
+  // script just wrote (CLAUDE.md: reconcile against the source, not the argument).
   let raw = 0;
+  for await (const f of htmlFiles(join(src, v))) if ((await readFile(f, 'utf8')).includes('id="version"')) raw++;
   let done = 0;
   for await (const f of htmlFiles(join(dest, v))) {
     const html = await readFile(f, 'utf8');
-    if (html.includes('id="version"')) raw++;
     const out = rewriteSwitcher(html, v);
     if (out == null) continue;
     const selected = out.match(SELECT)[2].match(/\bselected\b/g) ?? [];
@@ -92,7 +115,7 @@ for (const v of snapshots) {
     await writeFile(f, out);
     done++;
   }
-  if (done !== raw) problems.push(`snapshot ${v}: ${raw} page(s) carry id="version" and ${done} switcher(s) were rewritten`);
+  if (done !== raw) problems.push(`snapshot ${v}: ${raw} committed page(s) carry id="version" and ${done} switcher(s) were rewritten`);
   rewritten += done;
 }
 if (!snapshots.length) problems.push('versions.json lists no snapshots');

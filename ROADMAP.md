@@ -566,7 +566,7 @@ Report: `.roundtable/grill-objective-377-404-405-2026-09-26.md`. Six of the
 Framework code since Slice 403: 0 files. The first user's `main` moved today
 (ADR-0020, a process change), and ADR-0016 is still "Proposed".
 
-1. [ ] **P0 · 406.1 — a snapshot cut nests every older snapshot inside the new
+1. [x] **P0 · 406.1 — a snapshot cut nests every older snapshot inside the new
        one.** Track: defect
        - **Why (404-F1).** `cut-version-snapshot.mjs` runs the docs build,
          which since 404.1 ends with `install-versions.mjs` and so creates
@@ -585,6 +585,33 @@ Framework code since Slice 403: 0 files. The first user's `main` moved today
          the cut logic on a scratch build before and after the fix, without
          writing to `apps/docs/versions`, and by a red-proof that plants a
          nested `v/` and watches install-versions refuse.
+       - **DONE 2026-09-26 (rule 1, P0).** The rule is stated once, in the new
+         `apps/docs/scripts/snapshots.mjs`: a snapshot never carries `v/` or
+         `pagefind/`.
+         - **The cut** (`cut-version-snapshot.mjs`) copies through
+           `copySnapshot`, which leaves both out and then asserts it did.
+         - **The install** refuses any committed snapshot that has either,
+           naming it, before copying anything. It checks every directory
+           under `versions/`, not only the listed ones. That guard runs on
+           every build.
+         - **It now counts the expected switchers from the COMMITTED pages**,
+           not from the tree it just wrote, and it clears `dist/v` first, so
+           a leftover from an earlier build is never served or counted.
+         - **Measured on the real `dist`**, in scratch, never writing to
+           `versions/`: the cut's old copy gives 876 files / 38.2 MB carrying
+           `v/`; `copySnapshot` gives 391 / 13.5 MB with neither directory.
+           That is the grill hunter's figure exactly, reached independently.
+         - **Red-proven three ways:**
+           - a nested `versions/0.4.0/v/` fails the build with exit 1,
+             naming it, and cleanup leaves `versions/` with 0 changes;
+           - a stale page planted in `dist/v` is gone after the next install;
+           - with the filter disabled in a scratch copy, `copySnapshot`
+             throws "carries v/, pagefind/".
+         - **Still green:** `check:repo`, the full docs build (272 of 272
+           rewritten), and 404.1's switcher case on the new build.
+         - **Not covered:** a real cut end to end, since that writes to
+           `versions/` and belongs to the next release, and the cut script's
+           own build step, which is unchanged.
 2. [ ] **406.2 — 404.1's follow-ups.** Track: defect
        - **Why (404-F2 to F10).**
          - **404-F3/F4:** the case's selection is synthetic, so a hidden or

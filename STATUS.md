@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 08:54 UTC
+Generated at: 2026-09-26 09:05 UTC
 
 oldest dispatchable: 377.11 — 375.10's "holds the option" half must be able to fail.
 
@@ -145,8 +145,7 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 403.2 — the seven trusted cases assert what their names claim (cases-F1, F2, F5, F6 and the two nits).
 - **Slice 404** (1 open)
   - 404.2 — switching versions keeps the reader's page, and a snapshot's landing page says it is a snapshot.
-- **Slice 406** (6 open)
-  - 406.1 — a snapshot cut nests every older snapshot inside the new one.
+- **Slice 406** (5 open)
   - 406.2 — 404.1's follow-ups.
   - 406.3 — the ACR's verdicts rest on detectors that can miss what they certify.
   - 406.4 — `ci_timings.py`'s reconciliation shares the recogniser it checks, and the recorder downgrades a refused STATUS.md.
