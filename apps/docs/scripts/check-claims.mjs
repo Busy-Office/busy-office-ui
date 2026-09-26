@@ -3073,6 +3073,45 @@ for (const w of WIDTHS) {
   );
 }
 
+/* The anchor strip's labels never overlap and every label is reachable, at
+   390px in every row size (roadmap 377.16). The strip is a one-line
+   scroller (`.op-anchors`: nowrap, overflow-x auto), but each
+   `.bo-pagination__btn` kept `flex-shrink: 1` and an explicit min-inline-size
+   that replaces flex's content minimum. So at 390 the buttons shrank below
+   their labels. The centred, unwrappable text spilled out of both sides,
+   overlapping its neighbours by 5.6-20.5px, and "General information"
+   started before the scroller's left edge, which no scroll can reach (377.14
+   c). Measured on the TEXT (a Range over each label), not the button box,
+   because the box is exactly what was wrong. */
+{
+const stripRuns = [];
+for (const density of ['compact', 'comfortable', 'spacious']) {
+  await visit('/patterns/object-page/', { width: NARROW_WIDTH, height: 844 });
+  stripRuns.push(await page.evaluate((d) => {
+    document.documentElement.setAttribute('data-density', d);
+    const strip = document.querySelector('.op-anchors');
+    const s = strip.getBoundingClientRect();
+    const reachL = s.left - strip.scrollLeft + strip.clientLeft;
+    const reachR = reachL + strip.scrollWidth;
+    const labels = [...strip.querySelectorAll('.bo-pagination__btn')].map((b) => {
+      const r = document.createRange(); r.selectNodeContents(b); const t = r.getBoundingClientRect();
+      return { text: b.textContent.trim(), l: t.left, r: t.right };
+    });
+    let maxOverlap = 0;
+    for (let i = 1; i < labels.length; i++) maxOverlap = Math.max(maxOverlap, labels[i - 1].r - labels[i].l);
+    const unreachable = labels.filter((l) => l.l < reachL - 0.5 || l.r > reachR + 0.5).map((l) => l.text);
+    return { density: d, applied: document.documentElement.dataset.density === d, labels: labels.length,
+      maxOverlap: +maxOverlap.toFixed(1), unreachable, scrolls: strip.scrollWidth > strip.clientWidth };
+  }, density));
+}
+await page.evaluate(() => document.documentElement.removeAttribute('data-density'));
+check(
+  'object-page: at 390px, in every row size, no anchor label overlaps its neighbour and every label is reachable inside the strip (roadmap 377.16)',
+  stripRuns.length === 3 && stripRuns.every((r) => r.applied && r.labels >= 4 && r.maxOverlap <= 0 && r.unreachable.length === 0),
+  JSON.stringify(stripRuns),
+);
+}
+
 /* The scroll-collapse (52.2). Three things, all silent if they break: the facts
    collapse so the record gets the screen back, the collapse reaches ZERO (a
    bare `0fr` track cannot shrink below the child's padding — it left a 32px

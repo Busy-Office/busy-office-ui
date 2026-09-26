@@ -5662,7 +5662,7 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          `docs:container` was rebuilt, and `/concepts/layouts` and
          `/components/sidebar-nav` were screenshotted at 1440 and 390 in
          light and dark with 0 overflow.
-16. [ ] **377.16 — the object-page anchor strip's labels overlap at 390px.**
+16. [x] **377.16 — the object-page anchor strip's labels overlap at 390px.**
        Track: defect
        - **Why (377.14 c).** On `/patterns/object-page/` the anchor strip
          (`.bo-pagination.op-anchors`, `overflow-x: auto`) squeezes its labels
@@ -5679,6 +5679,37 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          on today's build, and passes after. The fix is argued as a shape:
          whether the strip is a pagination composition at all, or a tabs or
          anchor-bar pattern.
+       - **DONE 2026-09-26 (rule 4; 377.15 was waiting only on CI runs).**
+         - **Cause.** The strip's own rule said "one line, scrollable"
+           (`nowrap`, `overflow-x: auto`), but every `.bo-pagination__btn`
+           kept `flex-shrink: 1`, and its explicit `min-inline-size` replaces
+           flex's content minimum. So at 390 the buttons shrank below their
+           labels, and the centred, unwrappable text spilled out of both
+           sides. Spilling left past the scroller's start is negative
+           overflow, which no scroll reaches.
+         - **The shape, argued.** The strip is a pagination composition on
+           purpose: a row of `aria-current` buttons that move within one
+           record, the same control as page numbers. The page already owned
+           the one-line-scroller rule, and the fix completes it with
+           `flex-shrink: 0` on its buttons. A framework `.bo-anchor-bar` or
+           pagination modifier is refused for now. Only this page composes
+           it, since `data-anchor-nav` appears on one page, and Objective §3
+           asks for 2 or more independent compositions before a shape is
+           promoted.
+         - **The case in `check-claims`** measures each label's TEXT (a
+           Range, not the button box, which is what was wrong) at 390 in
+           compact, comfortable and spacious. It asserts no overlap between
+           neighbours, every label inside the strip's scrollable range, and
+           that the row size applied.
+           - **Red first:** overlaps of 14.2, 20.5 and 32.7px, with "General
+             information" unreachable in all three. The compact and
+             comfortable figures equal 377.14 c's independent measurement.
+           - **Green after:** 0 overlap, 0 unreachable, and the strip
+             scrolls (510px of content in 342).
+         - **Live on :8081** at 1440 and 390, light and dark: the labels are
+           separate, and the first starts inside the strip.
+         - `check:claims` 360 of 360, `test:axe` 128 × 2 with 0 violations,
+           and `check:layout` 128, all pass. The case sits in part A.
 
 17. [ ] **377.17 — the SC 2.5.7 file-picker case flakes on CI, even at 15s.**
        Track: defect

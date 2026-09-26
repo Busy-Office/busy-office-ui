@@ -444,8 +444,16 @@ const markup = `<div class="op-sticky">                        <!-- ONE sticky w
     justify-content: flex-start;
   }
 
+  /* And no button shrinks (roadmap 377.16). A flex item shrinks by default,
+     and .bo-pagination__btn's explicit min-inline-size replaces flex's
+     content minimum. So at 390 the buttons shrank below their unwrappable
+     labels, which spilled out of both sides: 14-33px overlaps, and the first
+     label started left of the scroller, where no scroll reaches. The strip
+     already scrolls; the buttons keep their content width and the strip
+     does the scrolling. */
   .op-anchors > .bo-pagination__btn {
     white-space: nowrap;
+    flex-shrink: 0;
   }
 
   /* Land below the sticky chrome — sized for the COLLAPSED header, because
