@@ -5712,6 +5712,35 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          change is refused, with the measurement that refuses it: for example,
          if the cases cannot be split without sharing state across pages.
        Parked: M1 — CI cost, not milestone work
+       - **Progress 2026-09-26 (rule 4): the split landed; the wall-clock
+         reading waits on 3 green CI runs.**
+         - **Why the claims shard alone.** In run 36243511500, `check:claims`
+           took 329s of the shard's 386s, and `check:formatting` took 0.06s.
+         - **Where to cut, measured, not guessed.** A timing-instrumented
+           run put 50% of 314s at the command-bar case, not at the line
+           midpoint. At the line midpoint, part A alone would have run 253s.
+         - **Coupling, measured with a parser.** acorn over the file: 374
+           top-level declarations. At the split, 13 names appear to cross.
+           Read one by one, 11 are comments, strings or shadowing locals.
+           The real 2 are the dropzone temp files, which move to the
+           preamble.
+         - **The mechanism.** `CLAIMS_PART=a|b` gates two contiguous blocks.
+           Unset runs both, as `npm run check:claims` does locally. CI's
+           claims shard becomes two matrix entries.
+         - **Reconciled by count against the single-process run.** The first
+           attempt summed to 162 + 199 = 361 against 359. A per-check name
+           log found the cause: the suite's first two cases ("Cancel reverts
+           derived totals", "data-loading blocks interaction") sat above
+           part A's opening, so both shards ran them. Moved in, it reads
+           **162 + 197 = 359**, and 0 `check()` calls remain outside the
+           blocks.
+         - **Local, alone:** part A 162s, part B 153s, the whole suite 307s.
+           Run in parallel on one laptop, each took about 15 minutes; that
+           is contention between two browsers, not the split.
+         - `ci_timings.py` reconciles 13 build steps from now on and refuses
+           windows that mix in the 11-step runs. That refusal is correct.
+         - **Still owed:** `python3 scripts/loops/ci_timings.py 3` over 3
+           green runs of the new layout, against the 5.4-5.9 min baseline.
 
 ## Slice 376 — Standardize sweep, **4 of 4 lanes**: one dead style and two false passages fixed, four prose verdicts recorded (enumeration 16 -> 20), one standing CSS group found DISSOLVED by a measured fix, and two shipped defects found BESIDE the lanes; the completeness critic also found two closed items resting on uncommitted work (2026-09-24)
 

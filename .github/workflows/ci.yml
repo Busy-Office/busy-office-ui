@@ -171,8 +171,16 @@ jobs:
           # Pure Intl, milliseconds: the SG/TH strings printed on /concepts/i18n
           # and the ISO-vs-CLDR precision divergence it names are facts about
           # the platform, so an ICU upgrade can make the page wrong on its own.
-          - name: Claims + formatting
-            run: npm run check:claims -w docs && npm run check:formatting -w docs
+          #
+          # Two shards, split at the suite's measured runtime midpoint (roadmap
+          # 377.15): one shard running every case was the wall clock at 325-386s
+          # against 160-190s for the next slowest. check-claims reads
+          # CLAIMS_PART; the two halves run every case exactly once, which
+          # 377.15 reconciled by count against a single-process run.
+          - name: Claims (part a) + formatting
+            run: CLAIMS_PART=a npm run check:claims -w docs && npm run check:formatting -w docs
+          - name: Claims (part b)
+            run: CLAIMS_PART=b npm run check:claims -w docs
           # check:layout EXEMPTS the scroll containers from its overflow rule —
           # correctly, they are meant to overflow — and until 2026-08-24 nothing
           # then asked whether they SCROLL. The framework's entire answer to a

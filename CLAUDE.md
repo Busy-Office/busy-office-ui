@@ -256,7 +256,8 @@ the build if the result drifts from this shape. To add or document a component m
 If a page says the browser will do something — "Cancel reverts totals",
 "this blocks interaction", "the skip link lands after the grid", "409
 re-renders with a banner" — add a case to
-`apps/docs/scripts/check-claims.mjs`. A dogfood spike (2026-08-17)
+`apps/docs/scripts/check-claims.mjs`, inside one of its two part blocks (CI
+runs them as separate shards, 377.15). A dogfood spike (2026-08-17)
 proved a confident, reviewed page flatly wrong: htmx discards non-2xx
 responses, so the documented 409 pattern did nothing at all. Drive real
 key/mouse events in those checks — a synthetic `keydown` on `document`

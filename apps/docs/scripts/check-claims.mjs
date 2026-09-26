@@ -120,6 +120,26 @@ async function mirror(match) {
 }
 
 
+/* CI runs this suite as TWO shards (roadmap 377.15): CLAIMS_PART=a runs the
+   first block of cases below, b the second, and unset runs both, which is
+   what `npm run check:claims` does locally. The split sits at the measured
+   runtime midpoint (50% of a 314s run is reached at the command-bar case),
+   and the only state that crosses it, the dropzone's temp files, is made
+   here. The blocks are not re-indented, so the diff stays reviewable. A new
+   case goes inside one of the two blocks, and so runs in exactly one shard. */
+const CLAIMS_PART = process.env.CLAIMS_PART ?? '';
+if (!['', 'a', 'b'].includes(CLAIMS_PART)) throw new Error(`check-claims: CLAIMS_PART must be a, b or unset, got "${CLAIMS_PART}"`);
+const dzDir = await mkdtemp(join(tmpdir(), 'bo-dz-'));
+const dzFiles = await Promise.all(
+  ['a.pdf', 'b.png', 'c.exe'].map(async (n) => {
+    const p = join(dzDir, n);
+    await writeFile(p, `x-${n}`);
+    return p;
+  }),
+);
+
+if (CLAIMS_PART !== 'b') { // ── part A ──────────────────────────────────────
+
 // "Cancel restores the row's values and re-fires input events, so
 //  derived totals revert with it." — editable-grid / concurrency
 await visit('/patterns/editable-grid/');
@@ -2676,14 +2696,7 @@ check(
    synthetic DragEvent cannot exercise the platform's own refusal, which is
    the whole subject — the case above it, which is synthetic, passes against
    every one of the three defects. */
-const dzDir = await mkdtemp(join(tmpdir(), 'bo-dz-'));
-const dzFiles = await Promise.all(
-  ['a.pdf', 'b.png', 'c.exe'].map(async (n) => {
-    const p = join(dzDir, n);
-    await writeFile(p, `x-${n}`);
-    return p;
-  }),
-);
+// dzDir and dzFiles are made in the preamble: the case at the end of part B uses them (377.15).
 
 const DZ_CASES = [
   { id: 'multiple', attrs: 'multiple', n: 3 },
@@ -3655,6 +3668,9 @@ check(
   railTransition.found && railTransition.mid !== railTransition.settled,
   JSON.stringify(railTransition),
 );
+
+} // ── end of part A ───────────────────────────────────────────────────────
+if (CLAIMS_PART !== 'a') { // ── part B ──────────────────────────────────────
 
 /* /patterns/command-bar states two things the browser must actually do, and
    the second is the reason the page exists in the shape it does.
@@ -8528,9 +8544,11 @@ check(
   JSON.stringify({ noJsResult, url: page.url() }),
 );
 
+} // ── end of part B ───────────────────────────────────────────────────────
+
 await rm(dzDir, { recursive: true, force: true });
 
 await browser.close();
 server.close();
 
-g.report('verified live');
+g.report(CLAIMS_PART ? `verified live (part ${CLAIMS_PART} of a/b)` : 'verified live');
