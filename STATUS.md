@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 20:45 UTC
+Generated at: 2026-09-26 21:16 UTC
 
 oldest dispatchable: 387.2 — a frozen cell's message still has two covers above it.
 
@@ -165,15 +165,13 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1872 iterations logged)
+dispatch status — counter-triggered rules (1873 iterations logged)
   Standardize   1 / 4 Continue round  since 2026-09-27 03:43   ok
   Objective     1 / 3 slice           since 2026-09-27 04:02   ok  [413]
-  Optimize      2 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 161 sample(s), 8 of 52 name(s) paired across days]
-  -> rule 5's newest comparable pair predates 2 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
-     the unit is DISTINCT LOG DATES after 2026-09-25 (2026-09-26, 2026-09-27), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
+  Optimize      0 wake-date(s) newer   since 2026-09-27 05:16   ok   [newest pair: claims; 163 sample(s), 8 of 52 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (44 of 52 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
-       dispatch-region-words       7d  2026-09-26 10374 words -> 2026-09-27 10374 words  +0   [5 same-day]
-       claims                      6d  2026-09-19 203 count -> 2026-09-25 311 count  +108
+       claims                      7d  2026-09-25 311 count -> 2026-09-27 364 count  +53
+       dispatch-region-words       7d  2026-09-26 10374 words -> 2026-09-27 10374 words  +0   [6 same-day]
        gates                       4d  2026-09-07 55 count -> 2026-09-09 56 count  +1
        axe-violations              8d  2026-09-03 0 count -> 2026-09-06 0 count  +0   NEVER MOVED
        bundle-gz-kb                5d  2026-08-17 11.7 kB -> 2026-09-03 15.1 kB  +3.4   [2 same-day]
@@ -301,7 +299,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-27 01:23 · Meta · refusal · 384.1: high-water anchor and region floor (anchor would never move; floor misses the 101-word case) · refused · 39bfa34d
 - 2026-09-27 01:45 · Continue · fix · 386.1 — check:layout print probe: body white/black under print emulation in both themes over 128 docs + 28 suite pages (base rate 0/312); red-proved 3 ways; earlier 0-rule injection corrected · landed · 3c840c02
 - 2026-09-27 01:45 · Meta · refusal · 386.1: sharing one source for the ten copies (still loses silently on a NEW page) · refused · 3c840c02
 - 2026-09-27 03:16 · Continue · fix · 387.1 — data-table message no longer lengthens the scroller/page without anchor positioning: press after reading lands (a) and sticky bar holds (b); simulated in one engine; 4 claims (364 total); rf-essentials 41,966/41,984; filed 387.3 · landed · d808dc7f
@@ -311,6 +308,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-27 04:02 · Objective · grill · Slice 413 — grill of 384.1/386.1/387.1/412: 387.1's fix trades a horizontal lengthening for a vertical one (not within six lines); overclaims corrected, 413.1-413.5 filed · landed · 1565560b
 - 2026-09-27 04:24 · Continue · fix · 413.5 — 384.1's write-up states the basis of the ratchet floor (file vs region words) · landed · 848e8c49
 - 2026-09-27 04:45 · Roadmap · triage · 413.1 — options for the fallback message height, sent to the decision ladder · triaged · 384bbd56
+- 2026-09-27 05:16 · Optimize · measure · rule 5 re-read: claims 311 -> 364 (+53, 387.1's four cases plus earlier); dispatch region flat at 10374; no regression verdict, no budget breach · logged · 188f0d60
 
 ## Sunset test
 
