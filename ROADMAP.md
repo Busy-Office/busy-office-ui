@@ -559,6 +559,79 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 401 — Objective grill of 375.11 (zoom), 392.1, 399.3 + 0.9.0 (full) and 393/398/400 (narrowed): 36 of 51 claims reproduce in full, 10 findings survive verification (3 confirmed, 7 narrowed, 0 refuted, no P0), and the one that matters is a regression in the gate 0.9.0 shipped (2026-09-26)
+
+Report: `.roundtable/grill-objective-375-392-393-398-399-400-2026-09-26.md`. It carries the thesis section:
+- adoption is indistinguishable from zero outside the owner's use;
+- the first user has not moved since 09-09;
+- four comparators, and none ships CSS, behaviour and htmx in one package;
+- framework code since `e8ac9844` is 2 files, +92 −3.
+
+1. [ ] **401.1 — `bo-check-markup` fails closed on every root that yields no
+       HTML (G401-2, a regression shipped in 0.9.0).**
+       Track: defect
+       - **Why.** 300.1's issue #1 fix lets a missing path fall through the
+         walk. The only guard is the global `if (!files)`, so
+         `bo-check-markup ok.html typo.html` passes with exit 0 in 0.9.0,
+         where 0.8.0 failed closed (an ENOENT crash, exit 1). Unreadable
+         directories are treated as missing, against the new in-code comment.
+         Verified on both published tarballs. The common one-directory form is
+         unaffected.
+       - **Accept — the property.** Every root argument that yields zero HTML
+         (missing, unreadable or empty) makes the run exit non-zero, naming
+         that root, whatever the other roots yield. An unreadable directory is
+         reported as unreadable, not as missing. A `--self-test` or vitest case
+         with one good and one typo path fails without the fix.
+       - **Release.** A consumer's CI gate reporting a pass it did not earn
+         is the tool's own named failure mode. Whether it ships as 0.9.1 is
+         the owner's call. The fix is small.
+2. [ ] **401.2 — the 0.9.0 CHANGELOG says what 0.9.0 actually does (G401-1,
+       G401-3, g375-F1, g392-F3).**
+       - **Why.** 0.9.0's notes are released and contain four false or
+         unscoped statements:
+         - Firefox 128 still runs the dialog and offcanvas keyframe entrance,
+           because their transition is gated on `transition-behavior`;
+         - "+141 `-webkit-`" is a total, not a gain (+113), and "148 dist
+           files" is the dist less its 31 `.d.ts` files;
+         - "Messages that fit are unchanged" is false for an unbreakable run
+           wider than the box, because `overflow-wrap: anywhere` now wraps it;
+         - "Every stamp now restarts the flash" does not hold under reduced
+           motion or forced colours.
+       - **Accept — the property.** Each statement in the 0.9.0 section
+         matches the shipped CSS and JS, and is re-derived from a command
+         written beside it: per browser and per component for motion, and a
+         labelled set for counts. Corrections are marked as corrections in the
+         released section, not silently rewritten. The GitHub Release body is
+         the owner's to update.
+3. [ ] **401.3 — 392.1's restart survives a consumer's tree-shaking, or the
+       limit is recorded (g392-F1, g392-F2).**
+       Track: defect
+       - **Why.** The fix rests on `void body.offsetWidth;`
+         (scan-input.ts:52). Rollup's `treeshake: 'smallest'` and terser
+         `pure_getters: true` delete it, and the P0 returns in that
+         consumer's bundle. Every default tested keeps it. vitest stays
+         175/175 green with the flush removed; only the `check:claims`
+         browser case sees it.
+       - **Accept — the property.** Either:
+         - the restart holds in the consumer's bundled output under the
+           documented presets, including 'smallest', measured in a browser
+           against the bundle; or
+         - the limitation is recorded where a consumer reads it.
+
+         Each half of the mechanism names the instrument that fails on its
+         removal.
+4. [ ] **401.4 — how a repeat verdict is acknowledged without motion
+       (g392-F3).**
+       - **Why.** Under `prefers-reduced-motion` and forced colours, a second
+         same-verdict scan inside a live stamp renders 0 changed frames, so
+         a sighted user cannot tell a rescan happened. This was true before
+         392.1 and is the documented static design. Only the question is
+         open.
+       - **Accept — the property.** Under both media, a second stamp inside a
+         live one produces a rendered change a frame sampler detects, without
+         adding motion. Or the scan docs name the channel that carries a repeat
+         verdict there, and it is heard or seen in a measured check.
+
 ## Slice 400 — Standardize sweep, 4 of 4 lanes on an isolated clean build: lanes 1-3 match their base, lane 4 reads a 10,625-word dispatch region and the Step 0c charter takes 203 of it back (2026-09-26)
 
 **Dispatched by rule 2**, `Standardize 20 / 4 OVERDUE`, once the M0 GOAL
@@ -2511,6 +2584,10 @@ superseded once a named item has landed or the owner has acted.
          - **No change when inactive.** `dispatch_status.py` is byte-identical
            to HEAD's (2,398 bytes, compared in a git worktree).
          - **Jev stays out.** `grep -ril jev scripts/loops/` finds 0 files.
+           [**Corrected by Slice 401:** it prints **1**, `routes.json`, which
+           393.6 itself created, both at `887ac04c` and at HEAD. The property
+           holds: no Jev CODE reads or writes a Route. Jev's 0.96 was given on
+           misquoted evidence.]
          - **Jev, rubric 2** (advisory): table 0.89, refusals 0.75, telemetry
            0.95, rebuild 0.94, Jev-out 0.96. The refusals bullet is in the
            unverified band, and the reason is the stated supersession above.
@@ -4081,6 +4158,18 @@ Found by the skeptics of the 375.11 workflow; each measured, none fixed here.
          accepted with a reason. The candidate named by the skeptic is the
          top layer (a popover message), which is a markup/JS change, so this
          is a builder's decision to argue, not a CSS tweak.
+       - **Measured wider by Slice 401's grill** (g375-F2): the cause is a
+         sticky cell at 1051 trapping the message below `thead th` at 1100
+         (data-table.css:774-778). A first-row frozen field's message placed
+         above loses lines in every arrival measured:
+         - 10 of 10 at 320x256, 3 of them capped;
+         - 8 of 8 at 320x568;
+         - 6 of 6 at 390x844;
+         - 6 of 6 at 1440x900.
+
+         The whole message was never seen in 2 of 10 arrivals at 320x256. Any
+         Accept here must hold for capped and uncapped messages at every
+         viewport. (`.roundtable/grill-objective-375-392-393-398-399-400-2026-09-26.md`)
        Track: defect
 
 ## Slice 386 — Objective grill of 362.1, 369.2 and Slice 385: 3 of 3 headline claims reproduce, and the defect is in the sweep's own write-up — it said the closed-history share fell to "~0" (measured 14.4%) and called lane 2 "unchanged by construction" while a lane-2 input had moved (2026-09-25)
@@ -5092,6 +5181,15 @@ untracked or uncommitted, so the removal was a working-tree change.
            The owner's action is a stock Firefox (`brew install --cask
            firefox`, `.roundtable/owner-recs-2026-09-26.md`). Lift the marker
            once a launch succeeds.
+           [**Updated by Slice 401:** that action was already done: Firefox
+           156.0.1 was installed at 09:21 +0800. The launch still fails with
+           "Could not find profile folder", inside and outside the sandbox and
+           with an explicit `-profile`. `-CreateProfile` hangs until timeout.
+           `~/Library/Application Support/Firefox` does not exist. **The
+           owner's action is now to open Firefox.app once interactively**,
+           which should create that folder; that is unverified. The loop then
+           retries: `firefox --headless --no-remote -profile <scratch>
+           --screenshot <scratch>/shot.png about:blank`.]
          - **FIXED 2026-09-25 — 400% zoom** (the half below). A design panel
            (G2 refined vs R2), a judge re-measuring both over 6 layouts x 6
            lengths x 5 positions x Tab/click, and an adversarial verifier.

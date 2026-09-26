@@ -63,10 +63,15 @@ with its re-measured evidence and a validated field block to paste, is in
    your section, and both scorers flagged it. Suggested wording: "393.10, or
    its one retry 398.5, reports …".
    **Archive the cloud sessions** (O1): 302 of 307 are still active.
-   **Release 0.9.0 is prepped** (`e43330f2`, owner direction "Prep 0.9.0
-   release"; `399.3`'s floor fix landed first). Once CI is green on that sha,
-   publish GitHub Release `v0.9.0`. The loop then runs `derive-introduced
-   --refresh` and closes 377.5 and 394.3.
+   **0.9.0 is released** (owner: "Can you publish the 0.9.0?"), and the
+   tarballs are verified; 377.5 and 394.3 are closed. **A 0.9.1 decision is
+   yours:** Slice 401's grill found that 0.9.0's `bo-check-markup` passes when
+   one of several paths is missing, where 0.8.0 failed closed (`401.1`). The fix
+   is small. `401.2` corrects four statements in the released notes; the
+   GitHub Release body is yours to update.
+   **Firefox** (375.11's half): installing it was not enough. The launch fails
+   even outside the sandbox. Open Firefox.app once, which should create
+   `~/Library/Application Support/Firefox` (unverified), and the loop retries.
 1. **O5-O18** in `.roundtable/milestone-draft-2026-09-25/5-open-decisions.md`,
    the fields M1 needs before ACTIVE.
 2. **Three readings to confirm or reverse:**

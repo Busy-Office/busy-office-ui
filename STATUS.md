@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 03:25 UTC
+Generated at: 2026-09-26 04:33 UTC
 
 oldest dispatchable: 376.7 — the lane-4 ratchet counts any net shrink as a cut.
 
@@ -139,6 +139,11 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 399.2 — the in-flight check reads a drifted heading as "nothing in flight".
   - 399.4 — the loop-written owner fields and the activation rule (both scorers' Safety finding).
   - 399.5 — a `.roundtable`-only commit broke CI for five pushes, and no local step saw it.
+- **Slice 401** (4 open)
+  - 401.1 — `bo-check-markup` fails closed on every root that yields no HTML (G401-2, a regression shipped in 0.9.0).
+  - 401.2 — the 0.9.0 CHANGELOG says what 0.9.0 actually does (G401-1, G401-3, g375-F1, g392-F3).
+  - 401.3 — 392.1's restart survives a consumer's tree-shaking, or the limit is recorded (g392-F1, g392-F2).
+  - 401.4 — how a repeat verdict is acknowledged without motion (g392-F3).
 - **Slice —** (1 open)
   - AT runtime evidence
 
@@ -163,7 +168,7 @@ dispatch status — counter-triggered rules (1825 iterations logged)
        behaviors_frozen            2d  2026-08-15 16 count -> 2026-08-16 18 count  +2   [2 same-day]
      no direction is recorded with a sample, so the movement above is a reading and the regression verdict is the wake's. A name that has NEVER MOVED is either healthy or pinned by a gate — rule 5 cannot fire on it either way (`axe-violations` is 0 on every day because `test:axe` fails the build above 0).
      a direction is NOT recorded on purpose (roadmap 324.1): adding one makes rule 5 fire on `bundle-gz-kb`'s four consecutive rises, which the log's own same-timestamp `components` samples refute (0.400 -> 0.355 kB per component over that window). A rise with no denominator is growth. Where a name has a real threshold, use it — `check:size` gates the bundle at 16.7 kB gz, which is rule 5's budget clause, not its trend one.
-  Holds         1 hold-wake(s) recorded, 0 today (UTC dates)   [inflight.py hold; .roundtable/hold-wakes.jsonl]
+  Holds         3 hold-wake(s) recorded, 2 today (UTC dates)   [inflight.py hold; .roundtable/hold-wakes.jsonl]
 ```
 
 ## Milestone progress
