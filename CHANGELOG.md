@@ -30,6 +30,32 @@ pin.
     `.bo-data-table[role="grid"] :focus-visible { outline-offset: -2px }`
     into your own CSS. (Roadmap 406.6.)
 
+- **A data-table's validation message can no longer make you lose a press in
+  a browser without CSS anchor positioning.**
+  Where `position-area` is missing, a focused invalid field's message was
+  positioned inside the scroller, so while it showed it could make the
+  scroller (or the page) longer, and blur made it shorter again.
+  - Read a long message by scrolling sideways, then press a control you could
+    see: the press blurred the field, the scroller shortened, `scrollLeft`
+    clamped, and the control slid 70px out from under the pointer before
+    the mouse came up. The click landed on the row.
+  - In pasted markup with no `.bo-data-table-container`, the message
+    lengthened the page instead. With classic scrollbars the page's
+    horizontal bar then took 15px and lifted a sticky action bar under the
+    pointer: 4 of 7 presses along it landed.
+  - The message now sits where it would in normal flow, inside the
+    scroller and bounded by the room left to its inline end, so it cannot
+    change what can scroll. In a simulated fallback the press lands, the
+    focused scroller stays as long as the blurred one, and the sticky bar
+    does not move (7 of 7).
+  - Browsers with anchor positioning are unchanged.
+  - A message from a field near the inline end can be narrower and taller,
+    within the six lines already reserved under the grid.
+  - Nothing to migrate, unless you restyled `.bo-form-field` inside a
+    `.bo-data-table`. In these browsers it is now `display: block` and
+    `position: static`, which is what puts the message where it would sit in
+    normal flow. (Roadmap 387.1.)
+
 
 ## 0.9.0 (2026-09-26)
 

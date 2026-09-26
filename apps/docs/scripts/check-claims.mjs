@@ -45,6 +45,7 @@
 import { serveDist } from './serve-dist.mjs';
 import { gate } from './gate-report.mjs';
 import { launchDocsBrowser } from './browser-harness.mjs';
+import { simulateNoAnchor } from './no-anchor.mjs';
 import { distPages, suitePages } from './dist-pages.mjs';
 import { DIST, REPO_ROOT } from './paths.mjs';
 import { WIDTHS, DESKTOP_WIDTH, NARROW_WIDTH, RF_WIDTH, ZOOM_400 } from './viewports.mjs';
@@ -8584,6 +8585,91 @@ check(
   noJsResult.files !== 1,
   JSON.stringify({ noJsResult, url: page.url() }),
 );
+
+/* 387.1 — with no anchor positioning (no `position-area`; see no-anchor.mjs
+   for which supported browsers that is) a data-table message must
+   not change what its scroller scrolls, or a press made after reading it is
+   lost when the blur shortens the scroller. SIMULATED in this Chrome by
+   `simulateNoAnchor`, which makes data-table.css take its fallback branch; it
+   is not a run in another engine. The counterfactual puts the pre-387.1
+   rules back, and the case must then fail for the stated reason. */
+const NO_ANCHOR_FIX_REVERTED = '.bo-data-table-container{position:static}.bo-data-table .bo-form-field{position:relative;display:flex}.bo-data-table .bo-form-field:focus-within .bo-form-field__message{inset-block-start:100%;inset-inline-start:0;inline-size:max-content}';
+const LONG_MESSAGE = 'Quantity exceeds the on-hand stock of 200 units at this warehouse and the receiving dock cannot take a partial delivery today; reduce the quantity or request a transfer from another site, or ask the warehouse lead to approve a split delivery across two days. Contact stores if unsure.';
+
+async function noAnchorScrollThenPress({ revert }) {
+  const p = await browser.newPage();
+  try {
+    await simulateNoAnchor(p, { extraCss: revert ? NO_ANCHOR_FIX_REVERTED : '' });
+    await p.setViewport({ width: NARROW_WIDTH, height: 844 });
+    await p.goto(url('/patterns/editable-grid/'), { waitUntil: 'networkidle0' });
+    const setup = await p.evaluate((m) => {
+      document.querySelector('#line-1-qty-err').textContent = m.slice(0, 118);
+      const c = document.querySelector('#eg-table').closest('.bo-data-table-container');
+      const r = c.getBoundingClientRect();
+      return { fallbackBranch: getComputedStyle(c).overflowX === 'scroll', sw: c.scrollWidth, cw: c.clientWidth, x: r.x + r.width / 2, y: r.y + 30 };
+    }, LONG_MESSAGE);
+    await p.focus('#line-1-qty');
+    await new Promise((r) => setTimeout(r, 150));
+    const focused = await p.evaluate(() => { const c = document.querySelector('#eg-table').closest('.bo-data-table-container'); return { sw: c.scrollWidth }; });
+    await p.mouse.move(setup.x, setup.y);
+    await p.mouse.wheel({ deltaX: 70 });
+    await new Promise((r) => setTimeout(r, 300));
+    const btn = await p.evaluate(() => {
+      window.__clicks = [];
+      document.addEventListener('click', (e) => window.__clicks.push(e.target.closest('button,input')?.getAttribute('aria-label') || e.target.tagName), true);
+      const c = document.querySelector('#eg-table').closest('.bo-data-table-container');
+      const r = document.querySelector('[data-line-remove]').getBoundingClientRect();
+      return { x: r.x + r.width / 2, y: r.y + r.height / 2, sl: Math.round(c.scrollLeft) };
+    });
+    await p.mouse.move(btn.x, btn.y);
+    await p.mouse.down();
+    await new Promise((r) => setTimeout(r, 60));
+    const slid = await p.evaluate((x) => Math.round(document.querySelector('[data-line-remove]').getBoundingClientRect().x + document.querySelector('[data-line-remove]').getBoundingClientRect().width / 2 - x), btn.x);
+    await p.mouse.up();
+    await new Promise((r) => setTimeout(r, 200));
+    const clicks = await p.evaluate(() => window.__clicks);
+    return { fallbackBranch: setup.fallbackBranch, blurredSw: setup.sw, focusedSw: focused.sw, scrolledTo: btn.sl, slid, clicks };
+  } finally { await p.close(); }
+}
+
+async function noAnchorPastedPage({ revert }) {
+  const p = await browser.newPage();
+  try {
+    await simulateNoAnchor(p, { extraCss: revert ? NO_ANCHOR_FIX_REVERTED : '' });
+    await p.setViewport({ width: NARROW_WIDTH, height: 700 });
+    await p.goto(url('/patterns/editable-grid/'), { waitUntil: 'networkidle0' });
+    const sample = await p.evaluate(() => [...document.querySelectorAll('pre')].map((x) => x.textContent)
+      .find((t) => t.includes('data-line-add') && t.includes('line-1-qty-err')) ?? null);
+    await p.setContent(`<!doctype html><html lang="en"><head><meta charset="utf-8">
+      <link rel="stylesheet" href="${url('/assets/busy-office-ui.min.css')}"></head>
+      <body style="padding: 16px">${(sample ?? '').replace(/<script[\s\S]*?<\/script>/g, '')}<div style="height: 900px"></div>
+      <div class="bo-form-actions"><button class="bo-btn" id="post" type="button">Post</button></div></body></html>`, { waitUntil: 'load' });
+    await p.evaluate((m) => { document.getElementById('line-1-qty-err').textContent = m; }, LONG_MESSAGE);
+    const read = () => p.evaluate(() => ({ pageOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth, postTop: Math.round(document.getElementById('post').getBoundingClientRect().top * 10) / 10 }));
+    const blurred = await read();
+    await p.focus('[aria-describedby="line-1-qty-err"]');
+    await new Promise((r) => setTimeout(r, 200));
+    const focused = await read();
+    return { sampleFound: !!sample, blurred, focused };
+  } finally { await p.close(); }
+}
+
+for (const revert of [false, true]) {
+  const a = await noAnchorScrollThenPress({ revert });
+  const landed = a.clicks[0] === 'Remove LINE-1';
+  check(revert
+    ? 'editable-grid, no anchor positioning, pre-387.1 rules put back: the message lengthens the scroller and the press after reading it is lost (the stated reason)'
+    : 'editable-grid, no anchor positioning (simulated): a press on a visible control after a sideways wheel lands, and focusing the field leaves the scroller no longer (387.1)',
+  revert ? (a.fallbackBranch && a.focusedSw > a.blurredSw && !landed) : (a.fallbackBranch && a.focusedSw === a.blurredSw && landed && a.slid === 0),
+  JSON.stringify(a));
+  const b2 = await noAnchorPastedPage({ revert });
+  check(revert
+    ? 'pasted canonical markup, no anchor positioning, pre-387.1 rules put back: the message overflows the page sideways (the stated reason)'
+    : 'pasted canonical markup, no anchor positioning (simulated): a long message does not overflow the page or move a sticky action bar (387.1)',
+  revert ? (b2.sampleFound && b2.focused.pageOverflow > b2.blurred.pageOverflow)
+    : (b2.sampleFound && b2.focused.pageOverflow <= b2.blurred.pageOverflow && b2.focused.postTop === b2.blurred.postTop),
+  JSON.stringify(b2));
+}
 
 } // ── end of part B ───────────────────────────────────────────────────────
 

@@ -18,6 +18,8 @@
  *
  *   npm run report:grid-presses -w docs                        both widths
  *   npm run report:grid-presses -w docs -- --width <px> --shard 0/4 --out f.json
+ *   npm run report:grid-presses -w docs -- --no-anchor         simulate a browser
+ *        without anchor positioning (387.1; see no-anchor.mjs)
  *   npm run report:grid-presses -w docs -- --counterfactual    re-inject the
  *        pre-375.9 toggled reserve; presses MUST be lost, or the sweep cannot fail
  *
@@ -33,6 +35,7 @@
  */
 import { writeFile } from 'node:fs/promises';
 import { launchDocsBrowser } from './browser-harness.mjs';
+import { simulateNoAnchor } from './no-anchor.mjs';
 import { serveDist } from './serve-dist.mjs';
 import { distPages, suitePages } from './dist-pages.mjs';
 import { DIST } from './paths.mjs';
@@ -53,6 +56,7 @@ const out = opt('--out', null);
 const TOGGLED_RESERVE = `.bo-data-table-container:has(.bo-form-field:focus-within .bo-form-field__message)
   { padding-block-end: calc(6lh + var(--bo-space-4)) !important; }`;
 const counterfactual = argv.includes('--counterfactual');
+const noAnchor = argv.includes('--no-anchor');
 
 // The docs pages AND the suite's screens: 375.9's corpus covered both.
 const corpus = [...await distPages(DIST), ...(argv.includes('--no-suite') ? [] : await suitePages(DIST))];
@@ -244,6 +248,7 @@ async function sweep(width) {
     const url = `http://localhost:${port}${base}${rel}`;
     const p = await browser.newPage();
     await p.setViewport({ width, height });
+    const noAnchorStats = noAnchor ? await simulateNoAnchor(p) : null;
     try {
       await p.goto(url, { waitUntil: 'load', timeout: 60000 });
       if (counterfactual) await p.addStyleTag({ content: TOGGLED_RESERVE });
@@ -290,6 +295,9 @@ async function sweep(width) {
     } catch (e) {
       results.push({ page: rel, error: String(e).slice(0, 300) });
     }
+    if (noAnchorStats && (noAnchorStats.passedThrough || !noAnchorStats.rewritten)) {
+      results.push({ page: rel, error: `--no-anchor did not apply: ${JSON.stringify(noAnchorStats)}` });
+    }
     await p.close();
   }
   return results;
@@ -306,7 +314,7 @@ for (const w of widths) {
   const prOk = ok.flatMap((r) => r.presses.filter((x) => !x.skipped));
   const lost = pr.filter((x) => !x.landed).length;
   anyLost += lost;
-  console.log(`${w}x${heightFor(w)}${counterfactual ? ' COUNTERFACTUAL' : ''}: pages ${new Set(recs.map((r) => r.page)).size}, ` +
+  console.log(`${w}x${heightFor(w)}${counterfactual ? ' COUNTERFACTUAL' : ''}${noAnchor ? ' NO-ANCHOR' : ''}: pages ${new Set(recs.map((r) => r.page)).size}, ` +
     `targets ${recs.length} (focused ${ok.length}), errors ${results.length - recs.length}, ` +
     `presses ${pr.length} lost ${lost} | focused-only presses ${prOk.length} lost ${prOk.filter((x) => !x.landed).length}`);
 }

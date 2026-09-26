@@ -122,7 +122,8 @@ const BUDGETS = {
   'css/components/*.css': { total: 32.5, max: 2.7 },  // 29.57 / largest 2.15 after the 374.5 strip
   // max 2.2 -> 2.3 (375.11): data-table.min.css reached 2.25 with the scoped frozen-cell raise, the loading-table hide and the fallback's permanent scrollbar — a trapped message and two lost/misdirected presses. Trims considered widened the selector past the cells the file makes sticky.
   // max 2.3 -> 2.4 (375.11 zoom half): data-table.min.css reached 2.37, same two @position-try rules.
-  'css/components/*.min.css': { total: 27.3, max: 2.4 },
+  // max 2.4 -> 2.5 (387.1): data-table.min.css reached 2.42 with the no-anchor fallback's placement (a static block field, the scroller as the message's box), the fix for a press lost after reading a long message. 17 bytes gzipped over; no behaviour was honest to drop.
+  'css/components/*.min.css': { total: 27.3, max: 2.5 },
   'css/brand-*.css': { total: 2.4, max: 0.45 },  // 2.15 / largest 0.37 after the strip
   'css/brand-*.min.css': { total: 1.9, max: 0.4 },
   'css/*.css': { total: 6.8, max: 2.6 },  // 6.12 / largest 2.28 after the strip

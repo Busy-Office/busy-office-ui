@@ -577,36 +577,7 @@
        control. That changes only when the grid gains its first control or
        loses its last, which follows a completed press rather than landing
        inside one. The visible cost is an empty band under such grids in
-       those browsers, and it is the price of a press that always lands.
-
-     The reserve is sized to SIX LINES of the message box, not to one (roadmap
-     190.1). The first version reserved 3.5rem — fitted, like the width cap
-     above, to the single 21-character string this framework's own demo
-     carries — and a longer message overran it at four of six
-     density/width combinations, by as little as 3px. Six is not arbitrary:
-     it is the line count 190.1's Accept names, and `lh` makes it the
-     message's OWN line box rather than a pixel guess that drifts when the
-     density tokens move. */
-  @media screen {
-    @supports not (position-area: block-end) {
-      .bo-data-table-container:has(tbody :is(input:not([type="checkbox"], [type="radio"], [type="hidden"]), select, textarea)) {
-        padding-block-end: calc(6lh + var(--bo-space-4));
-        /* The horizontal scrollbar's room is permanent too (roadmap 375.11).
-           A long message from a field away from the inline start passes the
-           scrollport (196.1), and with CLASSIC scrollbars that toggled a 15px
-           scrollbar on focus and blur: the blurring mousedown lifted
-           everything below by 15px, and a press in a control's bottom 15px
-           was lost (5 of 10 sweep points on a compact button, centre
-           included; Chrome 124, which has no anchor positioning). Overlay
-           scrollbars take no room, so this costs nothing there. The cost it
-           does have: an empty track under every editable grid in a fallback
-           browser with classic scrollbars, and that track cannot reveal the
-           clipped message, because pressing it blurs the field. */
-        overflow-x: scroll;
-      }
-    }
-  }
-
+       those browsers, and it is the price of a press that always lands. */
   .bo-data-table .bo-form-field:focus-within .bo-form-field__message {
     display: block;
     position: absolute;
@@ -656,6 +627,80 @@
        ground to stay readable — a bare floating string over table text is
        not. */
     box-shadow: var(--bo-shadow-sm);
+  }
+
+  /* Where there is no anchor positioning, the message must not change what the
+     scroller can scroll (roadmap 387.1). It is absolute inside its field, so
+     while it shows it can reach past the scroller's edge and lengthen it, and
+     blur takes that length away again. Two measured consequences, both in a
+     browser without the anchored escape below (`position-area` arrived in
+     Chrome and Edge 129, Firefox 147, Safari 26 per @mdn/browser-compat-data,
+     so all three still carry a supported version without it):
+
+     - A reader wheels sideways to read a long message (scrollLeft 70), then
+       presses a control that was visible. The press blurs the field, the
+       message hides, the scroller shortens and scrollLeft clamps to 0 between
+       mousedown and mouseup. The button slides 70px and the click lands on
+       the row.
+     - With no scroll container in the markup (what a reader pastes), the
+       message lengthens the PAGE, and with classic scrollbars the page's
+       horizontal bar appears and takes 15px, which lifts a sticky action bar
+       15px under the pointer: 4 of 7 presses along its height landed.
+
+     So the message is placed where it would sit in normal flow (`inset: auto`
+     is its static position, which needs the field to be a block: a flex
+     container starts a static box at its own top), and its box is the
+     scroller's, so `fit-content` is bounded by the room left to the scroller's
+     inline end instead of by the message's own length. The message can no
+     longer make the scroller longer, so nothing changes on focus or blur.
+
+     Measured by simulating the fallback in one engine (Chrome, with the
+     `position-area` feature test made false): the press lands (it was lost),
+     the focused scroller is as long as the blurred one (340 both; was 340 to
+     435), the message is painted in full inside the container (was 94px past
+     its edge, 112 of 128 sample points visible), and the sticky bar stays put.
+     The cost: a message from a field near the inline end is narrower and so
+     taller, capped by the six lines the reserve rule in this block already holds. Not run
+     in Firefox or Safari; how they place a static box in a block is per spec,
+     not observed here. */
+  @media screen {
+    @supports not (position-area: block-end) {
+      /* The reserve is sized to SIX LINES of the message box, not to one (roadmap
+         190.1). The first version reserved 3.5rem — fitted, like the width cap
+         above, to the single 21-character string this framework's own demo
+         carries — and a longer message overran it at four of six
+         density/width combinations, by as little as 3px. Six is not arbitrary:
+         it is the line count 190.1's Accept names, and `lh` makes it the
+         message's OWN line box rather than a pixel guess that drifts when the
+         density tokens move. */
+      .bo-data-table-container:has(tbody :is(input:not([type="checkbox"], [type="radio"], [type="hidden"]), select, textarea)) {
+        padding-block-end: calc(6lh + var(--bo-space-4));
+        /* The horizontal scrollbar's room is permanent too (roadmap 375.11).
+           A long message from a field away from the inline start passes the
+           scrollport (196.1), and with CLASSIC scrollbars that toggled a 15px
+           scrollbar on focus and blur: the blurring mousedown lifted
+           everything below by 15px, and a press in a control's bottom 15px
+           was lost (5 of 10 sweep points on a compact button, centre
+           included; Chrome 124, which has no anchor positioning). Overlay
+           scrollbars take no room, so this costs nothing there. The cost it
+           does have: an empty track under every editable grid in a fallback
+           browser with classic scrollbars, and that track cannot reveal the
+           clipped message, because pressing it blurs the field. */
+        overflow-x: scroll;
+        /* The scroller is the message's box (387.1, below). */
+        position: relative;
+      }
+
+      .bo-data-table .bo-form-field {
+        position: static;
+        display: block;
+      }
+
+      .bo-data-table .bo-form-field:focus-within .bo-form-field__message {
+        inset: auto;
+        inline-size: fit-content;
+      }
+    }
   }
 
   /* The anchored escape (roadmap 375.9). `position: fixed` takes the message

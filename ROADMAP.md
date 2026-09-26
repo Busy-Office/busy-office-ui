@@ -4912,7 +4912,7 @@ screen. Task screen can be better."* Two items; the grill is dispatched by rule 
 
 Found by the skeptics of the 375.11 workflow; each measured, none fixed here.
 
-1. [ ] **387.1 — the message's horizontal overflow loses presses on two more
+1. [x] **387.1 — the message's horizontal overflow loses presses on two more
        paths.** (a) Scroll then press, every scrollbar mode: after a
        horizontal wheel to read a long message (scrollLeft ~70), the
        blurring mousedown clamps scrollLeft to 0, the row's Remove button
@@ -4928,6 +4928,71 @@ Found by the skeptics of the 375.11 workflow; each measured, none fixed here.
          reason. The skeptic's reading: moving the message's overflow out of
          the scroll container would close both and 196.1's residual at once.
        Track: defect
+       - **DONE 2026-09-27 — fixed for both paths, in the fallback only.**
+         - **Where it lives.** Both paths need a browser without
+           `position-area`. `@mdn/browser-compat-data` puts it at Chrome and
+           Edge 129, Firefox 147 and Safari 26, and the declared floor
+           predates all three, so this is inside the supported set (and the RF
+           profile's Chrome/WebView 108 runs it as its only path). The
+           docs' own Chrome always takes the anchored branch, which is why no
+           gate had ever exercised this one. A first draft of the fix's
+           comments said Chrome 125, from memory; the compat data says 129
+           (125 is `anchor-name`), and that was corrected before it shipped.
+         - **Reproduced by simulation, in one engine.** `no-anchor.mjs`
+           rewrites stylesheet responses so the `position-area` feature test
+           names a property that does not exist; `@supports not (…)` is then
+           true, as in such a browser. Path (a): focusing grew the scroller
+           340 → 435, the wheel scrolled 70, the blur shortened it, and the
+           button slid 70px under the press, which landed on the row. Path
+           (b), with emulated classic scrollbars (`::-webkit-scrollbar`, the
+           harness's `--hide-scrollbars` dropped): the page gained horizontal
+           overflow, the sticky Post bar moved 15px and 4 of 7 presses along
+           it landed.
+         - **The fix** is in `data-table.css`'s existing fallback block:
+           `position: relative` on the scroller (folded into the reserve
+           rule), the field `display: block; position: static`, and the
+           message `inset: auto; inline-size: fit-content`. The message sits
+           where it would in normal flow, in the scroller's box, bounded by
+           the room to its inline end, so it cannot lengthen anything.
+         - **Measured on the shipped CSS** (rebuilt container, simulated
+           fallback): (a) the focused scroller stays 340 and the press lands
+           on Remove; (b) Post moves 0px and 7 of 7 land, equal to native.
+           The message paints in full inside the container (was 94px past
+           its edge, 112 of 128 sample points). A frozen field's message
+           stays attached through a 100 → 180px scroll, and RTL places it
+           inside the container at 390 and 1440. Both were measured by hand
+           and are not gated.
+         - **Executable:** four cases in `check-claims.mjs` part B (197 → 201,
+           and 163 + 201 = 364 in all): the two above, and two counterfactuals
+           that put the pre-387.1 rules back and must fail for the stated
+           reason (the scroller lengthens and the press is lost; the page
+           overflows sideways). Native is unchanged by construction: the
+           rules sit inside `@supports not (position-area: block-end)`.
+         - **The corpus sweep cannot see this defect, and now says so.**
+           `report:grid-presses --no-anchor` lost 0 of 2,051 presses at 390
+           BEFORE the fix, and 0 of 2,156 (390) and 0 of 2,231 (1440) after,
+           over the same 3,170 targets. It presses at rest and never scrolls
+           sideways first, so it holds only non-regression here.
+         - **Budgets.** `rf-essentials` is 41,966 of 41,984 bytes: it went
+           over at first, and the fix was trimmed to fit (one wrapper shared
+           with the existing fallback rule, and `position: relative` folded
+           into it) instead of raising 41 kB. 18 bytes are left, so 389.16
+           has almost no room. `data-table.min.css` is 2.42 kB gzipped, 17
+           bytes over its per-file max, which was raised 2.4 → 2.5 with the
+           reason, as 375.9 and 375.11 did.
+         - **CHANGELOG:** Unreleased → Fixed. Not Breaking: no contract
+           shape changes; the one observable change is that a
+           `.bo-form-field` inside a `.bo-data-table` is `display: block;
+           position: static` in these browsers, and the entry says so.
+         - **Not covered.** Firefox and Safari: static positioning in a
+           block is by spec, not observed here. Classic scrollbars are
+           emulated, not native. Only `/patterns/editable-grid/` has an
+           editable field in a data table: a DOM query for
+           `.bo-data-table .bo-form-field` over the 156 built pages (128
+           docs + 28 suite) found 1, so the corpus of pages is one. A
+           message from a field near the inline end is narrower and taller,
+           within the six-line reserve. 387.2 (a frozen cell's message under
+           two covers) is untouched.
 2. [ ] **387.2 — a frozen cell's message still has two covers above it.** Near
        the viewport bottom the anchored message flips ABOVE a first-row
        frozen field onto the sticky header (z 1100) and is 128-160 of 160
@@ -4951,6 +5016,19 @@ Found by the skeptics of the 375.11 workflow; each measured, none fixed here.
          The whole message was never seen in 2 of 10 arrivals at 320x256. Any
          Accept here must hold for capped and uncapped messages at every
          viewport. (`.roundtable/grill-objective-375-392-393-398-399-400-2026-09-26.md`)
+       Track: defect
+3. [ ] **387.3 — is the fallback's permanent horizontal scrollbar still needed?**
+       375.11 added `overflow-x: scroll` to editable containers in the no-anchor
+       branch so a message could not toggle a classic scrollbar on focus and
+       blur. 387.1 stops the message lengthening the scroller, which was that
+       toggle's cause, so the rule may now cost an empty track under every
+       editable grid in those browsers for nothing.
+       - **Accept — the property.** With classic scrollbars, in the simulated
+         fallback (`no-anchor.mjs`), removing the rule changes no press: 375.11's
+         own case and the 387.1 cases still pass, and the corpus sweep still
+         loses 0. Then it is removed with a CHANGELOG entry; OR it stays with
+         the measurement that shows what still needs it (a message with one
+         very long unbreakable word is the candidate).
        Track: defect
 
 ## Slice 386 — Objective grill of 362.1, 369.2 and Slice 385: 3 of 3 headline claims reproduce, and the defect is in the sweep's own write-up — it said the closed-history share fell to "~0" (measured 14.4%) and called lane 2 "unchanged by construction" while a lane-2 input had moved (2026-09-25)

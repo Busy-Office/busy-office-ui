@@ -2,9 +2,9 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 17:45 UTC
+Generated at: 2026-09-26 19:16 UTC
 
-oldest dispatchable: 387.1 — the message's horizontal overflow loses presses on two more paths.
+oldest dispatchable: 387.2 — a frozen cell's message still has two covers above it.
 
 Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, open `After:` target or held `Parked:` line holds — and, while a milestone is ACTIVE, that the milestone does not tag (rule M dispatches those; `dispatch_status.py` prints its pick). No GOAL overrides it: the owner's M0 bootstrap (O3), the one exception there was, ended with 398.5. A named item without a number has no age to rank by; any that nothing holds is listed here instead of being dropped.
 
@@ -39,8 +39,8 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 377.6 — is busy-office-erp the named first user?
   - 377.10 — the Jev band, re-measured with the question form Rubric 2 prescribes, and the set recorded.
 - **Slice 387** (2 open)
-  - 387.1 — the message's horizontal overflow loses presses on two more paths.
   - 387.2 — a frozen cell's message still has two covers above it.
+  - 387.3 — is the fallback's permanent horizontal scrollbar still needed?
 - **Slice 388** (2 open)
   - 388.3 — the segmented control's checked option draws an author-colour focus ring under forced colours.
   - 388.4 — two docs follow-ups from 388.1's panel, not re-measured.
