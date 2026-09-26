@@ -565,7 +565,7 @@ Report: `.roundtable/grill-objective-384-386-387-412-2026-09-27.md`. Dispatched 
 rule 3. 387.1: 11 claims, 9 hold, 2 fail; 7 findings (5 confirmed, 2 narrowed).
 384.1's write-up narrowed (basis of the floor). 386.1 and 412 reproduce.
 
-1. [ ] **413.1 — bound the fallback message's height, or say what it can do.**
+1. [x] **413.1 — bound the fallback message's height, or say what it can do.**
        Last column, 390px, 117 characters: message 83x262px (15 lines), container
        `scrollHeight` 244 to 360 on focus; a press after a vertical wheel lands on
        TBODY. Cause (413.2): the message's box is bounded by the scrollport, not the
@@ -585,6 +585,15 @@ rule 3. 387.1: 11 claims, 9 hold, 2 fail; 7 findings (5 confirmed, 2 narrowed).
          browsers below the `position-area` floor. Weigh (c) first: one of 156
          built pages has the markup and none of the RF pages runs it (Slice 413 F4).
          Needs a builder's decision, so it goes to the ladder, not a code wake.
+       - **DECIDED 2026-09-27 by the ladder — option (b), reversible.** My verdict
+         first: (b), because (c) contradicts the declared floor (Chrome 119-128,
+         Firefox 129-146 and Safari 17.5-25 are inside it) and (a) is a new layout
+         mechanism for a path one page in 156 uses. Jev (`jev ask`, `jev-1.13.0`,
+         run `2e9c13bc-1cdf-45f5-8ddc-550c492b8844`, exit 0, calibrated: false):
+         b 0.77, a 0.17, c 0.06. They agree. The CSS comment and CHANGELOG already
+         say the message is not bounded by six lines (`3611…` grill commit), so the
+         claim is narrowed; the cost stays measured in the Slice 413 report.
+         **Owner: reverse by reopening this item and choosing (a) or (c).**
        Track: defect
 2. [ ] **413.2 — `position: relative` gives the message the scrollport as its box.**
        Static position sits ~1100px in a 1200px table while the containing block is
