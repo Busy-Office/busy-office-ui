@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 20:02 UTC
+Generated at: 2026-09-26 20:24 UTC
 
 oldest dispatchable: 387.2 — a frozen cell's message still has two covers above it.
 
@@ -154,23 +154,20 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 411.7 — the band needle and the sidebar-nav demo frames.
   - 411.8 — 377.14 (d)'s counts cannot be re-derived.
   - 411.9 — the file-picker case passes when the click is cancelled.
-- **Slice 413** (5 open)
+- **Slice 413** (4 open)
   - 413.1 — bound the fallback message's height, or say what it can do.
   - 413.2 — `position: relative` gives the message the scrollport as its box.
   - 413.3 — an unbreakable token still lengthens the scroller (fallback only).
   - 413.4 — the claims that cannot fail.
-  - 413.5 — 384.1's write-up states the basis of the ratchet floor.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1870 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-09-27 03:43   ok
-  (Objective row 2026-09-27 04:02 did not reset rule 3: .roundtable/grill-objective-384-386-387-412-2026-09-27.md: no `## Thesis section`)
-  Objective     4 / 3 slices          since 2026-09-27 00:50   OVERDUE  [384, 386, 387, 412]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+dispatch status — counter-triggered rules (1871 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-09-27 03:43   ok
+  Objective     1 / 3 slice           since 2026-09-27 04:02   ok  [413]
   Optimize      2 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 161 sample(s), 8 of 52 name(s) paired across days]
   -> rule 5's newest comparable pair predates 2 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-25 (2026-09-26, 2026-09-27), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -304,7 +301,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-27 01:23 · Continue · build · 384.1 — both refused on the number: dispatch-region growth since 4e6b83c1 is 11.5-15.8% narrative, ~85% instruction (two blind labellers); charter line and high-water anchor refused · refused · 39bfa34d
 - 2026-09-27 01:23 · Meta · refusal · 384.1: charter line (targets <=16% of growth; restates lane 4's third branch) · refused · 39bfa34d
 - 2026-09-27 01:23 · Meta · refusal · 384.1: high-water anchor and region floor (anchor would never move; floor misses the 101-word case) · refused · 39bfa34d
 - 2026-09-27 01:45 · Continue · fix · 386.1 — check:layout print probe: body white/black under print emulation in both themes over 128 docs + 28 suite pages (base rate 0/312); red-proved 3 ways; earlier 0-rule injection corrected · landed · 3c840c02
@@ -314,6 +310,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-27 03:34 · Continue · fix · red main on a8fae14b/17dddf66: 387.1's path (a) counterfactual claim failed on CI (the sideways wheel did not scroll in 300ms on Linux); case now waits for the wheel and falls back to scrollLeft, recording which; verified real and stubbed wheel locally · landed · 464f1e57
 - 2026-09-27 03:43 · Standardize · sweep · Slice 412 — 4 of 4 lanes (isolated build): lanes 1, 3 equal Slice 410; lane 2 +1 rule (387.1's position: relative, traced); lane 4 dispatch region 10,374; CLAUDE.md +405 on the approved Jev section · landed · c7af39f2
 - 2026-09-27 04:02 · Objective · grill · Slice 413 — grill of 384.1/386.1/387.1/412: 387.1's fix trades a horizontal lengthening for a vertical one (not within six lines); overclaims corrected, 413.1-413.5 filed · landed · 1565560b
+- 2026-09-27 04:24 · Continue · fix · 413.5 — 384.1's write-up states the basis of the ratchet floor (file vs region words) · landed · 848e8c49
 
 ## Sunset test
 
