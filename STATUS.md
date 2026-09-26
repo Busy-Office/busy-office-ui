@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 05:17 UTC
+Generated at: 2026-09-26 05:18 UTC
 
 oldest dispatchable: 377.8 — the ACR's 1.4.11 and 2.4.7 remarks derive from source.
 
@@ -147,9 +147,10 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1828 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-09-26 11:15   ok
+dispatch status — counter-triggered rules (1829 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-09-26 11:15   OVERDUE
   Objective     2 / 3 slices          since 2026-09-26 12:34   ok  [376, 377]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 150 sample(s), 8 of 47 name(s) paired across days]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-25 (2026-09-26), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -289,7 +290,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-26 10:08 · Continue · build · 398.2 — in-flight check: unparseable state is exit 5 (STOP), self-test 11→25, red-proved (13 of 14 new cases fail on the old parser) · landed · 428ca7f1
 - 2026-09-26 10:36 · Continue · build · 398.5 — second re-score FAIL (A 2.375 verdict; B 2.375 variance); M0 ends, M1 DRAFT; Slice 399 filed; 375.11 NEEDS-RUNTIME · landed · 35c25abf
 - 2026-09-26 10:37 · Continue · fix · CI red since bbdc4269: five floor labels in the owner-recs record tripped check-floor; fixed 57e67a42 (399.5 filed) · landed · 35c25abf
 - 2026-09-26 11:02 · Continue · build · 399.3 — browserslist raised to the derived floor (Firefox/Safari +1), held equal by derive-floor; dist byte-identical (red-proved) · landed · 64ba08eb
@@ -299,6 +299,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 12:34 · Objective · grill · Slice 401 — Objective grill of 375.11, 392.1, 399.3 + 0.9.0 (full), 393/398/400 (narrowed): 36/51 claims full, 10 findings (3 confirmed, 7 narrowed); 401.1 bo-check-markup regression · landed · 2888ce5c
 - 2026-09-26 12:43 · Continue · build · 376.7 — lane-4 ratchet: a cut is >=100 words and >=1% (argued from 196 shrinks); replay at filing rev -> 09-07 sweep; red-proved · landed · 3569a013
 - 2026-09-26 13:08 · Continue · build · 377.4 — check:pointer-coverage meta-gate; 7 trusted check-claims cases added (16/16 covered, 0 exempt); mislabelled comments fixed · landed · 1f34a912
+- 2026-09-26 13:18 · Continue · build · 377.7 — adoption reading instrument (record_metric --adoption): windows, current-version, dist hits, GitHub traffic; unread = nothing; out of rule 5 · landed · dfc9bf54
 
 ## Sunset test
 
