@@ -151,9 +151,10 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1835 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-09-26 13:26   ok
+dispatch status — counter-triggered rules (1836 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-09-26 13:26   OVERDUE
   Objective     2 / 3 slices          since 2026-09-26 14:16   ok  [377, 404]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 153 sample(s), 8 of 49 name(s) paired across days]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-25 (2026-09-26), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
@@ -293,7 +294,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-26 12:34 · Objective · grill · Slice 401 — Objective grill of 375.11, 392.1, 399.3 + 0.9.0 (full), 393/398/400 (narrowed): 36/51 claims full, 10 findings (3 confirmed, 7 narrowed); 401.1 bo-check-markup regression · landed · 2888ce5c
 - 2026-09-26 12:43 · Continue · build · 376.7 — lane-4 ratchet: a cut is >=100 words and >=1% (argued from 196 shrinks); replay at filing rev -> 09-07 sweep; red-proved · landed · 3569a013
 - 2026-09-26 13:08 · Continue · build · 377.4 — check:pointer-coverage meta-gate; 7 trusted check-claims cases added (16/16 covered, 0 exempt); mislabelled comments fixed · landed · 1f34a912
 - 2026-09-26 13:18 · Continue · build · 377.7 — adoption reading instrument (record_metric --adoption): windows, current-version, dist hits, GitHub traffic; unread = nothing; out of rule 5 · landed · dfc9bf54
@@ -303,6 +303,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 15:02 · Continue · fix · 404.1 — docs version switcher 404 on the container and gates; frozen snapshot switchers (owner report) · landed · e6922d05
 - 2026-09-26 15:16 · Continue · build · 377.9 — 375.6 re-decided on runner timings (ci_timings.py, 8 runs): still refused, wall clock cannot fall; filed 377.10 · landed · f0704759
 - 2026-09-26 15:16 · Meta · refusal · 375.6 build-once-and-share-dist, re-refused on runner data: wall clock >= 5.7-6.1 min vs 5.4-5.9 today · refused · f0704759
+- 2026-09-26 15:19 · Continue · fix · 377.9 follow-up — duplicate 377.10 renumbered to 377.15; generate_status refuses a duplicate open id by name · landed · d9163e67
 
 ## Sunset test
 

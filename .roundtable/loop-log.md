@@ -1841,3 +1841,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-26 15:02 · Continue · fix · 404.1 — docs version switcher 404 on the container and gates; frozen snapshot switchers (owner report) · track=defect · landed · e6922d05
 - 2026-09-26 15:16 · Continue · build · 377.9 — 375.6 re-decided on runner timings (ci_timings.py, 8 runs): still refused, wall clock cannot fall; filed 377.10 · landed · f0704759
 - 2026-09-26 15:16 · Meta · refusal · 375.6 build-once-and-share-dist, re-refused on runner data: wall clock >= 5.7-6.1 min vs 5.4-5.9 today · refused · f0704759
+- 2026-09-26 15:19 · Continue · fix · 377.9 follow-up — duplicate 377.10 renumbered to 377.15; generate_status refuses a duplicate open id by name · landed · d9163e67
