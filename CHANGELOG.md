@@ -11,7 +11,8 @@ pin.
 
 ### Fixed
 
-- **A keyboard-focused control inside a data grid now shows its focus ring.**
+- **A keyboard-focused form control or `<button>` inside a data grid now
+  shows its focus ring.**
   In a `.bo-data-table` with grid navigation (`data-grid-nav`, which sets
   `role="grid"`), the inset ring meant for cells also applied to the
   controls inside them. It painted on the control's own fill, and on a

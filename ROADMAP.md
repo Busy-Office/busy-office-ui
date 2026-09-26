@@ -559,6 +559,71 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 408 — Objective grill of 406.6 (full), with 406.1, 377.11, 377.12 and Slice 407 narrowed: 30 of 42 claims reproduce in full, 8 findings (5 confirmed, 3 narrowed, 0 refuted, no P0); the 406.6 fix keyed on element names, not fill (2026-09-26)
+
+Report: `.roundtable/grill-objective-377-406-407-2026-09-26.md`. This is the
+first grill whose verifier consulted Jev after its own verdicts: 8 readings,
+0.77–0.91. Five confirmed verdicts sit in the unverified band; they are
+surfaced, not settled. Framework code since Slice 406 is 1 file, +20 −1,
+406.6's fix. Adoption is unchanged from 16:32, and ADR-0016 is still
+"Proposed".
+
+1. [ ] **408.1 — grid ring placement follows fill, not element name.**
+       Track: defect
+       - **Why (406.6-F1 to F8).** 406.6's rule moves the ring outward only
+         for `input`, `select`, `textarea` and `button`. A focused filled
+         `<a class="bo-btn">` or `[role=button][tabindex].bo-btn` in a grid
+         keeps the inset ring on its accent fill: 1.25–2.96:1 in 14 of 14.
+         No built page composes it yet, and the pre-fix rule inset
+         everything, so it is not a regression.
+         - The case accepts offset 0 (F2), does not gate "inside the cell"
+           (F3), matches debt without the ground (F7), and never asserts
+           that the theme applied (F8).
+         - At the auto tier, a first-column control's ring covers 2 of the
+           3px row-state bar, at 1.02–3.53:1 (F4).
+       - **Accept — the property.**
+         - Inset applies only to what has no fill of its own: cells and the
+           full-cell link. Everything else focusable in a cell gets the
+           outward ring.
+         - Shown in a browser, with real keys, in 14 configurations, for
+           `a.bo-btn` in primary, danger and secondary, a `[tabindex]`
+           widget, and the four element types.
+         - The case asserts an offset of at least 1, the ring inside the
+           cell, debt matched by configuration AND ground, and the theme
+           applied. Each assertion is red-proven.
+         - The row-state bar keeps its full width visible while a
+           first-column control has focus, or the overlap is argued and
+           the case asserts the argument.
+2. [ ] **408.2 — the container stamp's dirty half is enforced, and ignored
+       inputs are visible.**
+       - **Why (377.12's "no" and partlys).**
+         - `ARG BUILD_DIRTY_PATHS=""` makes an omitted arg read as clean.
+         - Seven gitignored paths sit under the COPY inputs with no
+           `.containerignore`, so they enter the image unseen.
+         - `copyInputs` reads single-line shell-form COPYs only, and its
+           self-test cannot fail on the `--from` lookahead.
+         - The stamp's git branch mis-parses quoted names.
+       - **Accept — the property.**
+         - An omitted `BUILD_DIRTY_PATHS` fails the stamp; a clean tree is
+           passed explicitly. CI passes both args.
+         - What the image contains is exactly what the stamp can see:
+           ignored files are kept out of the build context, or named in the
+           stamp.
+         - `copyInputs` refuses any COPY form it cannot parse, and its
+           self-test fails on each removed guard.
+         - The git branch parses NUL-separated output.
+         - Each is red-proven on a scratch tree.
+3. [ ] **408.3 — the combobox case asserts the event's VALUE, not only its
+       text.** Track: defect
+       - **Why (377.11's partly).** No row compares `detail.value` with the
+         pressed option's `data-value`, and the palette's result check is
+         self-referential. A wrong `detail.value` passes all 5 rows, while
+         `syncFormValue` would submit the wrong code.
+       - **Accept — the property.** Every row asserts `detail.value` equals
+         the pressed option's `data-value` (or the documented fallback).
+         The palette asserts its result names that value. Red-proven by a
+         dispatch that sends the wrong value.
+
 ## Slice 407 — Standardize sweep, 4 of 4 lanes on an isolated clean build: every lane equals Slice 405; lane 2's one moved input cannot enter its census (2026-09-26)
 
 **Dispatched by rule 2**, `Standardize 4 / 4 OVERDUE`. The sweep ran in a
@@ -589,7 +654,9 @@ build and `standardize_lanes.py` all exit 0. Base: Slice 405 (`e6c341a2`).
   - `ENVIRONMENT.md` is still never cut at 36 up, unchanged since 402; the
     owner's call (RESUME Direction #0).
 - **Archive sweep: not due.** `roadmap_scope.py` at HEAD, before this write-up,
-  reads the closed-history share as 1,374 / 11,671 = 11.8%.
+  reads the closed-history share as 1,374 / 11,671 = 11.8%. That is a
+  judgement, not a measurement: no trigger is written for it to be false
+  against (249.12 is open), per the Slice 408 grill.
 - **Exit:** a clean pass. Nothing inside Standardize's remit is left to
   consolidate.
 
@@ -631,6 +698,11 @@ Framework code since Slice 403: 0 files. The first user's `main` moved today
          - **It now counts the expected switchers from the COMMITTED pages**,
            not from the tree it just wrote, and it clears `dist/v` first, so
            a leftover from an earlier build is never served or counted.
+           ⚠ *Narrowed by the Slice 408 grill:* `dist/v` is a verbatim copy
+           of `versions/` made one line earlier, so on a nested tree the two
+           counts agree by construction (375 rewritten, exit 0). The
+           `badSnapshots` guard is the ONLY nesting detector, and it runs
+           first.
          - **Measured on the real `dist`**, in scratch, never writing to
            `versions/`: the cut's old copy gives 876 files / 38.2 MB carrying
            `v/`; `copySnapshot` gives 391 / 13.5 MB with neither directory.
@@ -789,7 +861,11 @@ Framework code since Slice 403: 0 files. The first user's `main` moved today
            - **Green after,** 14 of 14.
          - **Geometry, measured:** cells keep −2px. The control's ring stays
            inside the cell at every row size: 1.5px spare at compact (4px
-           padding), 6.5 at comfortable, 11.5 at spacious.
+           padding), 6.5 at comfortable, 11.5 at spacious. ⚠ *Corrected by
+           the Slice 408 grill:* the minimum is **1.0px at the auto tier**
+           (4px inline padding), the density the demo renders at 390px.
+           Compact's 4px is block padding, and 0 of 460 readings cross a cell
+           edge.
          - **Live on :8081** (the container confirmed serving the rule): 1440
            and 390 in light and dark, plus indigo-dark, all with a visible
            separated ring and no page overflow.
@@ -808,6 +884,12 @@ Framework code since Slice 403: 0 files. The first user's `main` moved today
          - **The second clause is met by removal, not by a new pairing.** The
            grid no longer produces ring-on-accent, and the ring's grounds
            (surface, selected, muted) were already in `RING_GROUNDS`.
+           ⚠ *Refuted by the Slice 408 grill.* A filled `<a class="bo-btn">`
+           or `[tabindex]` widget in a grid still paints its ring on its
+           accent fill, because the placement keys on four element NAMES,
+           not on fill (408.1). The fix also moves control rings onto
+           row-state and tone tints that `RING_GROUNDS` does not measure
+           (minimum 3.01).
          - **Not covered:** Firefox and Safari's native checkbox painting,
            forced colours beyond `check:forced-colors`, and controls in grids
            other than this demo.
@@ -5357,6 +5439,11 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
            carries this option, `#cmd-result` reads "Would open: <value>",
            the field is empty and the dialog closed. The other four rows
            keep "holds".
+         - ⚠ **Narrowed by the Slice 408 grill:** only the TEXT half of "the
+           event carries this option" is asserted. `detail.value` is never
+           compared with the option's `data-value`, and the palette's check
+           compares the page's echo of `detail.value` with itself. A wrong
+           `detail.value` passes all 5 rows (408.3).
          - **Red-proven** by running the case's own sliced source, with the
            old predicate evaluated alongside:
            - a handler that clears the field on select fails the 4 "holds"
@@ -5400,6 +5487,11 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          - **Red-proven:** an empty `BUILD_SHA` exits 1, a non-hex one exits 1,
            and a bare `podman build` fails at `RUN npm run build -w docs` with
            the refusal message.
+         - ⚠ **Corrected by the Slice 408 grill:** only the SHA half is
+           enforced. `ARG BUILD_DIRTY_PATHS=""` makes an omitted arg read as a
+           clean tree, so `BUILD_SHA` alone on a dirty tree stamps it clean.
+           Gitignored files under the COPY inputs also enter the image
+           unseen, because there is no `.containerignore` (408.2).
          - **Not covered until CI runs:** that `docker build` with the new arg
            passes on the runner.
 13. [ ] **377.13 — 375.9's corpus figure is re-runnable.** The sweep script
