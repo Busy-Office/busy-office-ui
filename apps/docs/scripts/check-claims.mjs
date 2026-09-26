@@ -1651,6 +1651,47 @@ check(
 );
 }
 
+/* The docs version switcher lands on each version it offers (owner report,
+   2026-09-26: "Navigate the version on doc site doesn't working. Got 404").
+   Its options are <option value>s, so the link checker never sees them, and
+   the snapshots reached the site only through a copy step in pages.yml — so
+   the local container and serveDist served no /v/ at all, and every snapshot
+   option 404'd there. Driven as a real selection, for every option that is not
+   already selected (selecting the current one fires no change, so there is
+   nothing to navigate): from a latest page into each snapshot, then from that
+   snapshot's own Button page back to latest. The switcher lands on a
+   snapshot's HOME, which, like the latest home, carries no switcher, so the
+   return leg starts from a page that does. A snapshot is built for the Pages
+   base, so a 200 with its stylesheets 404ing is still a broken page: each
+   landing must also have every stylesheet loaded. */
+{
+const switchTo = async (value) => {
+  const [resp] = await Promise.all([
+    page.waitForNavigation({ waitUntil: 'load', timeout: 15000 }).catch(() => null),
+    page.select('#version', value),
+  ]);
+  const styled = await page.$$eval('link[rel="stylesheet"]', (ls) =>
+    ls.length > 0 && ls.every((l) => { try { return (l.sheet?.cssRules.length ?? 0) > 0; } catch { return false; } }));
+  return { to: value, status: resp?.status() ?? null, styled, landed: new URL(page.url()).pathname };
+};
+await visit('/components/button/', { width: DESKTOP_WIDTH });
+const verOpts = await page.$$eval('#version option', (os) =>
+  os.filter((o) => !o.selected).map((o) => o.value));
+const verResults = [];
+for (const v of verOpts) {
+  await visit('/components/button/', { width: DESKTOP_WIDTH });
+  verResults.push(await switchTo(v));
+  await visit(`${v.slice(v.indexOf('/v/'))}components/button/`, { width: DESKTOP_WIDTH }); // visit() adds the base
+  const back = await page.$$eval('#version option', (os) => os.find((o) => !o.selected && !o.value.includes('/v/'))?.value ?? null);
+  verResults.push(back ? await switchTo(back) : { to: 'latest', status: null, styled: false, landed: 'no latest option' });
+}
+check(
+  'docs version switcher: every version it offers, and latest from each, lands on a real styled page, not a 404 (owner report 2026-09-26)',
+  verOpts.length >= 1 && verResults.every((r) => r.status === 200 && r.styled),
+  JSON.stringify(verResults),
+);
+}
+
 /* Two screens that promised behaviour they never showed (roadmap 45.2).
    `invoice-list` discussed paging in four places and rendered none;
    `master-detail` said the panel "becomes a full-width drawer" and rendered no

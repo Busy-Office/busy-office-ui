@@ -37,14 +37,13 @@ jobs:
       # Versioned snapshots (Slice 20 item 3): committed under
       # apps/docs/versions/<ver>/ (built at release time with
       # DOCS_BASE=/busy-office-ui/v/<ver>, pagefind stripped), served at
-      # /v/<ver>/ alongside the latest docs. The switcher in the docs
-      # header reads apps/docs/versions.json.
-      - name: Include versioned doc snapshots
-        run: |
-          if [ -d apps/docs/versions ]; then
-            mkdir -p apps/docs/dist/v
-            cp -R apps/docs/versions/. apps/docs/dist/v/
-          fi
+      # /v/<ver>/ alongside the latest docs. The docs build installs them as
+      # its last step (scripts/install-versions.mjs, owner report 2026-09-26).
+      # This workflow used to copy them itself, which is why the local
+      # container and every browser gate served no /v/ and the switcher 404'd
+      # there. This step only asserts they are in place.
+      - name: Versioned doc snapshots are installed
+        run: test -d apps/docs/dist/v && ls apps/docs/dist/v
       # Hashed-asset carryover (owner-reported bug, 2026-08-16): Pages
       # serves HTML with cache-control: max-age=600, so a browser reuses
       # a page's HTML for up to 10 minutes — and every deploy RENAMES the

@@ -559,6 +559,77 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 404 — the docs version switcher 404'd everywhere but Pages (owner report, 2026-09-26)
+
+Owner input, verbatim: "FYI; Navigate the version on doc site doesn't working.
+Got 404."
+
+1. [x] **404.1 — every version the switcher offers lands on a real, styled
+       page, in every place the docs are served.**
+       Track: defect
+       - **Accept — the property.** From a latest page, every option the
+         switcher offers returns 200 with its stylesheets loaded, and from each
+         snapshot, latest does too. This holds on the local container, on the
+         browser gates' server and on Pages. A `check-claims` case drives it as
+         a real selection and fails when any of those breaks.
+       - **DONE 2026-09-26 (owner report, defect track).**
+         - **Reproduced first, then diagnosed.** Pages already worked: every
+           option returned 200 from every page. The container on :8081
+           returned 404 for all three snapshots. **The confirmed cause:** the
+           snapshots under `apps/docs/versions/` reached the site only through
+           a copy step in `pages.yml`, after the build, so the Containerfile
+           and `serveDist` never had a `/v/` at all. No gate could see it,
+           because the options are `<option value>`s, which the link checker
+           never reads.
+         - **A second layer behind it.** Snapshots are built for the Pages
+           base, so even once installed, their CSS and their "latest" option
+           carry `/busy-office-ui/` and 404 on a root-served site.
+         - **A third, found by the new case.** Each snapshot's own switcher was
+           frozen when it was built. In 0.4.0 and 0.3.0 no option was
+           selected, so the dropdown read "v0.4.0 · latest" on an option that
+           goes to the CURRENT docs. Selecting it fired no change, so the
+           dropdown could not take a reader back. This was live on Pages too.
+         - **The fix, one source each:**
+           - `install-versions.mjs` runs last in the docs build, so Pages, the
+             container and every browser gate serve the same `/v/`. It
+             rewrites each snapshot switcher from `versions.json` and the
+             package version, and reconciles against the raw HTML: 272 pages
+             carry `id="version"` (108, 103 and 61), and 272 were rewritten.
+             `pages.yml`'s copy is now an assertion.
+           - `nginx.conf` and `serveDist` map the Pages prefix. `serveDist`
+             derives it from a snapshot's own asset URL instead of a literal.
+         - **Red-proven:** the case failed 1 of 325 before the fix. Three
+           injections, run through the case's own sliced source, each fail on
+           their own cause, and the baseline passes:
+           - no `dist/v`: 404;
+           - no prefix map: `styled: false`, and latest 404;
+           - the raw frozen switchers: "no latest option" for 0.4.0 and
+             0.3.0, while 0.1.1, whose frozen switcher was right, passes.
+         - **Live:** `check:claims` 325/325; the :8081 loop 200 on all four;
+           each snapshot's stylesheets 200 through the container; 1440 and 390
+           in light and dark on `/v/0.4.0/components/button/`, showing
+           "v0.4.0". `test:axe` and `check:layout` still cover 128 pages each,
+           so `/v/` stays outside the sweeps.
+         - **Not covered:** the snapshots' own content is served, not
+           re-gated, which is unchanged. Only Chromium.
+2. [ ] **404.2 — switching versions keeps the reader's page, and a snapshot's
+       landing page says it is a snapshot.**
+       - **Why.** The switcher goes to a snapshot's HOME. A snapshot home,
+         like the latest home, carries neither the switcher nor the "You're
+         reading the vX snapshot" banner, so a reader who switched lands on
+         old docs with nothing saying so, and no way back but the brand link
+         (which stays in the snapshot) or the browser's Back. 272 of the 308
+         snapshot pages carry both. The other 36 are the three homes and
+         pages with their own layout, such as the full-screen patterns and
+         the tokens page, counted by `id="version"` in the raw HTML.
+       - **Accept — the property.** Switching from a page that exists in the
+         target version lands on that page. Switching from one that does not
+         lands on a page that says why. Every snapshot page a reader can land
+         on, the home included, says which version it is and links to latest.
+         A `check-claims` case asserts both, and it fails on today's build.
+         Refusing is a valid outcome, if the argument shows readers do not
+         land on snapshot homes.
+
 ## Slice 403 — Objective grill of 377.4 (full), with 376.7, 377.7 and Slice 402 narrowed: 33 of 39 claims reproduce in full, 13 findings (6 confirmed, 7 narrowed, 0 refuted, no P0); the pointer gate fails open on a comment, and two of the dispatcher's own figures were wrong (2026-09-26)
 
 Report: `.roundtable/grill-objective-376-377-402-2026-09-26.md`. Its thesis section quotes 377.7's
