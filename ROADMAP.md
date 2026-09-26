@@ -559,6 +559,44 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 402 — Standardize sweep, 4 of 4 lanes on an isolated clean build: every lane equals Slice 400, and the ratchet's new floor (376.7) shows ENVIRONMENT.md has never been cut in 36 steps (2026-09-26)
+
+**Dispatched by rule 2**, `Standardize 4 / 4 OVERDUE`. The sweep ran in a
+worktree of HEAD (`5f559fc4`) with its own `npm ci`. `@busy-office/ui`
+realpath-resolves inside it, and the core build, the docs build and
+`standardize_lanes.py` all exit 0. Base: Slice 400 (`daea445f`).
+
+- **Lane 1 (of 4):** *"0 dead style attribute(s) on 0 page(s); 1392 live"*.
+  Equal to the base.
+- **Lane 2 (of 4):** *"74 source file(s) · 246 rule(s) with 3+ declarations ·
+  235 distinct bodies · 7 body(ies) appearing more than once"*. **Unchanged by
+  construction:** `git diff --stat daea445f HEAD --` over the lane's inputs is
+  empty, and the figure equals the base.
+- **Lane 3 (of 4):** 119 pages, median 833, 119,971 words. The flagged union
+  is 18: **the same 18 pages as Slice 400**, a set diff of 0, all with
+  enumerated verdicts. The inputs that moved are the pointer gate and
+  `check-claims`, `introduced.json` and `readme-facts.json`. None changed a
+  rendered word count.
+- **Lane 4 (of 4):** the dispatch region is **10,374**, as at the base; 0 of
+  17 sections moved. This is the first sweep to read the ratchet with 376.7's
+  floor, and that floor is what makes the finding visible:
+  - **ENVIRONMENT.md: never cut, 36 steps up.** Before 376.7, a 7-word edit
+    (`1005d1db`) read as its last cut. It is read at Step 0 on every wake, so
+    this is lane 4's own finding condition: "a file the loop reads every wake
+    accumulating with no cut behind it". It is 8,596 words, and the 398.5
+    scorer measured about 525 of its 992 lines under headings about a cloud
+    container that can no longer dispatch under O1.
+  - **The answer is not a cut this sweep makes.** Moving that material out
+    is the owner's pending choice, RESUME Direction #0: "have the loop shrink
+    what a wake must trust". Recorded here, not acted on.
+  - The other files: RESUME.md, LOOPS.md and ROADMAP.md each have a real
+    cut behind them. The two archives and DESIGN.md are never cut, and none
+    of them is read at Step 0 on every wake.
+- **Archive sweep: not due.** `roadmap_scope.py` reads the closed-history share
+  as 1,295 / 11,023 = 11.7%.
+- **Exit:** a clean pass. Nothing inside Standardize's remit is left to
+  consolidate.
+
 ## Slice 401 — Objective grill of 375.11 (zoom), 392.1, 399.3 + 0.9.0 (full) and 393/398/400 (narrowed): 36 of 51 claims reproduce in full, 10 findings survive verification (3 confirmed, 7 narrowed, 0 refuted, no P0), and the one that matters is a regression in the gate 0.9.0 shipped (2026-09-26)
 
 Report: `.roundtable/grill-objective-375-392-393-398-399-400-2026-09-26.md`. It carries the thesis section:
