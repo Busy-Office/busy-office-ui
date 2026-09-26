@@ -1420,7 +1420,9 @@ remaining, per `.roundtable/polish-state.md`.
    would be marking its own homework, and this file's own doctrine already
    says an instrument's first output is not evidence. Without this the
    dry-round exit can never fire and the 3/10 budgets become a guarantee of
-   self-approved work.
+   self-approved work. **The scorer never consults Jev** (CLAUDE.md, Jev):
+   a reading seen before its own verdict is a prior, the same kind of leak
+   the ⚠ below describes.
 
    **This step was called "*the load-bearing step*" until 2026-09-06, and
    that label was false of 17 of the 22 rounds that have run** (roadmap
@@ -1723,6 +1725,11 @@ named since the last Objective row that reset the count, or on demand.
 2. Evidence gate: a conclusion needs ≥2 independent sources to be `Evidence`, else
    `Hypothesis`; every claim carries counter-evidence.
 3. Feed findings back into the Roadmap loop's triage as re-prioritization, not as vibes.
+4. **A grill's verifier briefs say it may consult Jev after its own verdict**
+   (CLAUDE.md, Jev: raw evidence in the state, one call per finding, reading and
+   `model` string returned beside its verdict). The report quotes both, and
+   lists every verdict where they disagree. A finder is not told to, since a
+   finder has no claim to check yet.
 **Exit:** a scored report lands in `.roundtable/`, and it carries a **thesis
 section** (roadmap 377.7, this half landed by Slice 381). The section has four
 parts:
@@ -1826,6 +1833,7 @@ overlap is real and a loop that duplicates one of these should be refused:
    the load-bearing step, for the same reason §3b step 4 spells out: an agent
    marking its own homework cannot produce a failing verdict, and this file's
    own doctrine already says an instrument's first output is not evidence.
+   The critic never consults Jev (CLAUDE.md, Jev).
 3. **Record the round** in `.roundtable/gauntlet/ROUNDS.md` — artifact, class,
    critic, verdict, fixes taken. One row per round, appended, never rewritten.
    **The artifact cell carries step 0's repo-relative path**, so a reader can

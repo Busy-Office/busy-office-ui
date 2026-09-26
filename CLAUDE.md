@@ -106,6 +106,24 @@ confidence, and a `score` is a weighted mean over levels — not a confidence
 either. Thresholds (≥0.85 supports, ≤0.35 does not, between = unverified) are
 **provisional at n=5**; the rubric file carries the validation set to re-run.
 
+**Agents consult it too, at the same two points** (owner, 2026-09-26). A
+subagent or workflow agent reaches Jev through the session's MCP server
+(ToolSearch, then `mcp__jev__jev_evaluate`); no key is copied anywhere
+(`jev-rubrics.md`). Credit is not the limit; the two points are. An agent that
+consults it:
+- **forms its own verdict first**, then asks, and reports both. A disagreement
+  is surfaced as a finding, never settled by Jev;
+- sends **raw evidence** (the command and its output, the diff, the rendered
+  value), never its own summary or conclusion, or Jev grades the summary;
+- makes one call per evidence state and records the reading and the
+  response's `model` string;
+- reads an outage as UNVERIFIED, and never lets a reading decide a gate or a
+  PASS.
+
+**A blind scorer or critic never consults it** (LOOPS §3b step 4, the
+Gauntlet critic). A reading seen before its own verdict is the prior its
+independence exists to exclude.
+
 ## Quality bar (every change meets it)
 
 - Verify **live** before committing — the docs run in a Podman container on `:8081`
