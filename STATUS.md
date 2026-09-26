@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 14:17 UTC
+Generated at: 2026-09-26 14:28 UTC
 
 oldest dispatchable: 377.15 — the claims shard sets CI's wall clock, at nearly twice the next shard.
 
@@ -38,8 +38,8 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 377.3 — the completion gate cannot see a revision.
   - 377.6 — is busy-office-erp the named first user?
   - 377.10 — the Jev band, re-measured with the question form Rubric 2 prescribes, and the set recorded.
-  - 377.17 — the SC 2.5.7 file-picker case flakes on CI, even at 15s.
   - 377.15 — the claims shard sets CI's wall clock, at nearly twice the next shard.
+  - 377.17 — the SC 2.5.7 file-picker case flakes on CI, even at 15s.
 - **Slice 381** (1 open)
   - 381.1 — the correction-site check: precision, coverage, or unwire it.
 - **Slice 384** (1 open)

@@ -559,6 +559,36 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 409 — Standardize sweep, 4 of 4 lanes on an isolated clean build: lanes 1, 2 and 4 equal Slice 407; lane 3 is 6 words lighter from 377.14's derived band sentences (2026-09-26)
+
+**Dispatched by rule 2**, `Standardize 4 / 4 OVERDUE`. The sweep ran in a
+worktree of HEAD (`ab28fc86`) with its own `npm ci`. The core build, the docs
+build and `standardize_lanes.py` all exit 0. Base: Slice 407 (`1a64e98b`).
+
+- **Lane 1 (of 4):** *"0 dead style attribute(s) on 0 page(s); 1392 live"*.
+  Equal to the base. Its inputs moved (377.14's pages and scripts, 377.16's
+  page CSS), and none adds an inline style.
+- **Lane 2 (of 4):** *"74 source file(s) · 246 rule(s) with 3+ declarations ·
+  235 distinct bodies · 7 body(ies) appearing more than once"*. **Unchanged by
+  construction:** `git diff --stat 1a64e98b HEAD --` over the lane's inputs is
+  empty, and the figure equals the base.
+- **Lane 3 (of 4):** 119 pages of 128 built, median 833, **120,015 words**,
+  against 120,021 at the base. The flagged union is the same 18 pages, all
+  with enumerated verdicts, so it is a clean round.
+  - `/concepts/layouts` is unchanged at 2,413 words, and the concepts family
+    median moved from 554 to 551.
+  - The −6 comes from 377.14 (b)'s edits of `density`, `container-queries`
+    and `sidebar-nav`, whose derived band sentences replaced hand-typed
+    ones. That is bounded by the diff but not measured per page, because
+    the report prints only flagged pages.
+- **Lane 4 (of 4):** the dispatch region is **10,374**; 0 of 17 sections
+  moved. `CLAUDE.md` is 15 steps up since its 09-22 cut (377.15 added the
+  part-block note). `ENVIRONMENT.md` is still never cut, which is the
+  owner's Direction #0.
+- **Also fixed:** 377.15, 377.16 and 377.17 were out of numeric order in
+  Slice 377 and are reordered.
+- **Exit:** a clean pass.
+
 ## Slice 408 — Objective grill of 406.6 (full), with 406.1, 377.11, 377.12 and Slice 407 narrowed: 30 of 42 claims reproduce in full, 8 findings (5 confirmed, 3 narrowed, 0 refuted, no P0); the 406.6 fix keyed on element names, not fill (2026-09-26)
 
 Report: `.roundtable/grill-objective-377-406-407-2026-09-26.md`. This is the
@@ -5662,6 +5692,48 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          `docs:container` was rebuilt, and `/concepts/layouts` and
          `/components/sidebar-nav` were screenshotted at 1440 and 390 in
          light and dark with 0 overflow.
+15. [ ] **377.15 — the claims shard sets CI's wall clock, at nearly twice the
+       next shard.** In 8 of 8 runs the `Claims + formatting` job took
+       325-354s, against 174-191s for the next slowest. Every push waits on
+       it, and every wake reads CI after pushing. Balanced, the slowest shard
+       would be nearer 3 min than 5.5.
+       - **Accept — the property.** After the change, `ci_timings.py` over at
+         least 3 green runs reports a lower wall clock than this baseline
+         (5.4-5.9 min). Every `check:claims` case still runs exactly once per
+         run, reconciled by count against the single-process run. Or the
+         change is refused, with the measurement that refuses it: for example,
+         if the cases cannot be split without sharing state across pages.
+       Parked: M1 — CI cost, not milestone work
+       - **Progress 2026-09-26 (rule 4): the split landed; the wall-clock
+         reading waits on 3 green CI runs.**
+         - **Why the claims shard alone.** In run 36243511500, `check:claims`
+           took 329s of the shard's 386s, and `check:formatting` took 0.06s.
+         - **Where to cut, measured, not guessed.** A timing-instrumented
+           run put 50% of 314s at the command-bar case, not at the line
+           midpoint. At the line midpoint, part A alone would have run 253s.
+         - **Coupling, measured with a parser.** acorn over the file: 374
+           top-level declarations. At the split, 13 names appear to cross.
+           Read one by one, 11 are comments, strings or shadowing locals.
+           The real 2 are the dropzone temp files, which move to the
+           preamble.
+         - **The mechanism.** `CLAIMS_PART=a|b` gates two contiguous blocks.
+           Unset runs both, as `npm run check:claims` does locally. CI's
+           claims shard becomes two matrix entries.
+         - **Reconciled by count against the single-process run.** The first
+           attempt summed to 162 + 199 = 361 against 359. A per-check name
+           log found the cause: the suite's first two cases ("Cancel reverts
+           derived totals", "data-loading blocks interaction") sat above
+           part A's opening, so both shards ran them. Moved in, it reads
+           **162 + 197 = 359**, and 0 `check()` calls remain outside the
+           blocks.
+         - **Local, alone:** part A 162s, part B 153s, the whole suite 307s.
+           Run in parallel on one laptop, each took about 15 minutes; that
+           is contention between two browsers, not the split.
+         - `ci_timings.py` reconciles 13 build steps from now on and refuses
+           windows that mix in the 11-step runs. That refusal is correct.
+         - **Still owed:** `python3 scripts/loops/ci_timings.py 3` over 3
+           green runs of the new layout, against the 5.4-5.9 min baseline.
+
 16. [x] **377.16 — the object-page anchor strip's labels overlap at 390px.**
        Track: defect
        - **Why (377.14 c).** On `/patterns/object-page/` the anchor strip
@@ -5730,48 +5802,6 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          the input is `display: none`, red-proven on both. It passes N
          consecutive CI runs, with N and the command stated. Or the case is
          kept and the flake is quantified and accepted, with the reason.
-
-15. [ ] **377.15 — the claims shard sets CI's wall clock, at nearly twice the
-       next shard.** In 8 of 8 runs the `Claims + formatting` job took
-       325-354s, against 174-191s for the next slowest. Every push waits on
-       it, and every wake reads CI after pushing. Balanced, the slowest shard
-       would be nearer 3 min than 5.5.
-       - **Accept — the property.** After the change, `ci_timings.py` over at
-         least 3 green runs reports a lower wall clock than this baseline
-         (5.4-5.9 min). Every `check:claims` case still runs exactly once per
-         run, reconciled by count against the single-process run. Or the
-         change is refused, with the measurement that refuses it: for example,
-         if the cases cannot be split without sharing state across pages.
-       Parked: M1 — CI cost, not milestone work
-       - **Progress 2026-09-26 (rule 4): the split landed; the wall-clock
-         reading waits on 3 green CI runs.**
-         - **Why the claims shard alone.** In run 36243511500, `check:claims`
-           took 329s of the shard's 386s, and `check:formatting` took 0.06s.
-         - **Where to cut, measured, not guessed.** A timing-instrumented
-           run put 50% of 314s at the command-bar case, not at the line
-           midpoint. At the line midpoint, part A alone would have run 253s.
-         - **Coupling, measured with a parser.** acorn over the file: 374
-           top-level declarations. At the split, 13 names appear to cross.
-           Read one by one, 11 are comments, strings or shadowing locals.
-           The real 2 are the dropzone temp files, which move to the
-           preamble.
-         - **The mechanism.** `CLAIMS_PART=a|b` gates two contiguous blocks.
-           Unset runs both, as `npm run check:claims` does locally. CI's
-           claims shard becomes two matrix entries.
-         - **Reconciled by count against the single-process run.** The first
-           attempt summed to 162 + 199 = 361 against 359. A per-check name
-           log found the cause: the suite's first two cases ("Cancel reverts
-           derived totals", "data-loading blocks interaction") sat above
-           part A's opening, so both shards ran them. Moved in, it reads
-           **162 + 197 = 359**, and 0 `check()` calls remain outside the
-           blocks.
-         - **Local, alone:** part A 162s, part B 153s, the whole suite 307s.
-           Run in parallel on one laptop, each took about 15 minutes; that
-           is contention between two browsers, not the split.
-         - `ci_timings.py` reconciles 13 build steps from now on and refuses
-           windows that mix in the 11-step runs. That refusal is correct.
-         - **Still owed:** `python3 scripts/loops/ci_timings.py 3` over 3
-           green runs of the new layout, against the 5.4-5.9 min baseline.
 
 ## Slice 376 — Standardize sweep, **4 of 4 lanes**: one dead style and two false passages fixed, four prose verdicts recorded (enumeration 16 -> 20), one standing CSS group found DISSOLVED by a measured fix, and two shipped defects found BESIDE the lanes; the completeness critic also found two closed items resting on uncommitted work (2026-09-24)
 
