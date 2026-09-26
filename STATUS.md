@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 02:36 UTC
+Generated at: 2026-09-26 02:37 UTC
 
 oldest dispatchable: 376.7 — the lane-4 ratchet counts any net shrink as a cut.
 
@@ -148,8 +148,8 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1819 iterations logged)
-  Standardize  16 / 4 Continue rounds since 2026-09-25 12:20   OVERDUE
+dispatch status — counter-triggered rules (1821 iterations logged)
+  Standardize  18 / 4 Continue rounds since 2026-09-25 12:20   OVERDUE
   Objective     4 / 3 slices          since 2026-09-25 13:32   OVERDUE  [375, 392, 393, 398]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 153 sample(s), 8 of 51 name(s) paired across days]
@@ -294,8 +294,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-26 01:08 · Continue · build · 393.7 — rule D: triggers replayed, item lint re-measured, planner output contract, frequency limits · landed · 62652720
-- 2026-09-26 01:08 · Meta · refusal · 393.7: dropping the lint's instrument clause — the Accept names it; kept with a revisit condition (2 of the first 5 bounces executable as written) · refused · 62652720
 - 2026-09-26 01:44 · Continue · build · 393.8 — bounded RESUME (75 lines, 4 sections, cap red-proved), one wake prompt, milestone progress; read cost moved to 393.13 · landed · 144d2398
 - 2026-09-26 01:44 · Meta · refusal · 393.8: closing the read-cost clause on a modelled figure — no milestone wake exists; moved to 393.13 (Jev 0.08) · refused · 144d2398
 - 2026-09-26 01:56 · Continue · build · 393.9 — realignment markers on 63 open items (48 blocks, +94 lines), checked by script; compare IDENTICAL 63/63 · landed · 8d0cdd2d
@@ -304,6 +302,8 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 09:28 · Roadmap · triage · owner extends M0 once: 398.1 → 398.2 → re-score 398.5, cap 13; four parked .roundtable records copied to main · triaged · 0ab92652
 - 2026-09-26 10:00 · Continue · build · 398.1 — stale statements fixed (N2-N7, both Redundants, 4 more found by re-reading); dead-ref re-scan 31 unresolved, none live · landed · 08ca48f0
 - 2026-09-26 10:08 · Continue · build · 398.2 — in-flight check: unparseable state is exit 5 (STOP), self-test 11→25, red-proved (13 of 14 new cases fail on the old parser) · landed · 428ca7f1
+- 2026-09-26 10:36 · Continue · build · 398.5 — second re-score FAIL (A 2.375 verdict; B 2.375 variance); M0 ends, M1 DRAFT; Slice 399 filed; 375.11 NEEDS-RUNTIME · landed · 35c25abf
+- 2026-09-26 10:37 · Continue · fix · CI red since bbdc4269: five floor labels in the owner-recs record tripped check-floor; fixed 57e67a42 (399.5 filed) · landed · 35c25abf
 
 ## Sunset test
 
