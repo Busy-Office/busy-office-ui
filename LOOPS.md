@@ -18,14 +18,14 @@ demand: `/loop <type> …`.
 
 | Loop | Job (one line) | Cadence | Primary skills / agents |
 |------|----------------|---------|-------------------------|
-| **Roadmap** | Dispatcher: triage new input, decide what runs next | **every wake, first** — 20 min | `Plan`, `domain-modeling` |
+| **Roadmap** | Dispatcher: triage new input, decide what runs next | **every wake, first** — the owner's self-paced `/loop` (no fixed interval) | `Plan`, `domain-modeling` |
 | **Continue** | Build the next backlog item — multi-round until its Accept criteria are met | dispatched most wakes | `frontend-design`, `diagnosing-bugs`, `Explore`, `verifier` |
 | **Standardize** | DRY + tidy: one pattern, no one-offs — multi-round until a clean pass | dispatched every 4th Continue round, or on drift | `Explore`, `stylelint` gate, `verifier`, `Workflow` fan-out |
 | **Polish** | Raise ONE scored surface per round — components 3 rounds, patterns 10 | dispatched when the backlog is clear (owner, 2026-08-23) | blind re-scorer agent, existing rubrics |
 | **Research** | Answer what we don't know from trusted sources; queue, never build | dispatched when Polish is exhausted | web research agents, `grilling` |
 | **Optimize** | Smaller, faster, lower-specificity | on demand / size-budget breach | build metrics, `Explore` |
 | **Explore** | Find & spike a *new* idea (try/error) | on demand (seed list exhausted 2026-08-14) | `frontend-design`, `Plan`, worktree isolation |
-| **Objective** | Grill the product *vision* | dispatched at milestones / on demand | `round-table` (rt-*), project panel |
+| **Objective** | Grill the product *vision* | dispatched by rule 3's counter (3 slices named since the last reset) / on demand | `round-table` (rt-*), project panel |
 | **Gauntlet** | Build ONE artifact to an absolute bar, graded by a BLIND critic — ≤3 rounds, then stop and report the gap | dispatched by rule 4 when the oldest open item is a gauntlet item; **no counter of its own** | builder + a fresh-context critic subagent, `.roundtable/gauntlet/` |
 
 ---
@@ -73,8 +73,10 @@ router now, and it acts on what it finds instead of just reading it.
 continue. Any other exit: **STOP the wake** — write nothing, commit nothing, push
 nothing; print the guard's message, and (a local wake) tell the owner. It stops
 on `.roundtable/HALT` (the owner's emergency stop for every wake), on a checkout
-that is not the one dispatcher named in `.roundtable/DISPATCHER` (**every cloud
-session stops here**, whoever sends it the wake prompt), and on upstream commits
+that is not the one dispatcher named in `.roundtable/DISPATCHER` (a cloud session
+that runs this Step 0 stops here — but a revived stale session runs its own
+older copy of this file, which has no guard, so **the owner's archive of the
+routine's sessions is the prevention and exit 5 below is the backstop**), and on upstream commits
 by an author outside that topology. **Run it again just before the wake's first
 commit.** A local wake also lists the sessions of the cloud routine
 (`RemoteTrigger list_runs trig_019aw8tDjiYxC3ejSFd5wYZY`, every page) and tells
@@ -208,7 +210,7 @@ by `python3 scripts/loops/milestone.py`, not here, because the owner fills a
 DRAFT over several edits. A cloud wake runs it with `--cloud`, so a
 `NEEDS-BROWSER` item is held.
 
-### Step 0c — Two dispatchers share this queue, and collisions are ACCEPTED
+### Step 0c — One dispatcher (O1, 2026-09-25); the earlier "accept collisions" decision is kept below as the record
 
 Decided 2026-08-28 (roadmap 162.1). Two dispatchers reading one `ROADMAP.md`
 always pick the same item, because rule 4 is deterministic — promoting the
@@ -220,7 +222,13 @@ with the cloud routine disabled — two of its 09-09 sessions were revived by
 wake prompts sent to them. `.roundtable/DISPATCHER` names the one checkout and
 author, and `scripts/loops/step0_guard.py` stops any other wake at Step 0 and
 halts the dispatcher itself on a foreign upstream commit. The text below is the
-2026-08-28 decision (162.1) this reverses, kept as the record.
+2026-08-28 decision (162.1) this reverses, kept as the record. **Two parts of it
+still apply.**
+- The pre-commit fetch is now the guard's second run, which STOPS on a foreign
+  author (exit 5) instead of rebasing.
+- The renumber mechanic and keep-both-rows still cover the one collision the
+  guard cannot see: two local sessions in the same checkout. `DISPATCHER`
+  names a checkout, not a session.
 
 **The decision (2026-08-28, 162.1): accept collisions.** Two dispatchers may take the same item; the
 one that pushes second loses its work and re-dispatches. Nothing partitions the
@@ -1031,7 +1039,8 @@ line already names which loop ran; that's the audit trail for *why*.
 ## Playbooks
 
 ### 1. Roadmap (dispatcher) — runs first, every wake
-**Trigger:** every wake, always — 20 min, or immediately on new input arriving
+**Trigger:** every wake, always — the owner's self-paced `/loop` sets the
+interval (there is no fixed one), or immediately on new input arriving
 out of band (a user message with an issue/requirement mid-cycle doesn't wait for
 the next tick if the session is live to receive it).
 1. Triage (Step 1 above) — commit if anything changed.
@@ -1044,9 +1053,11 @@ the next tick if the session is live to receive it).
 and the top item is unambiguous.
 
 ### 2. Continue (build or fix) — multi-round until done
-**Trigger:** dispatched by Roadmap. **Input:** the P0 bug, or the OLDEST
-still-open item anywhere in `ROADMAP.md`'s backlog — unless `RESUME.md`
-names a genuinely in-progress slice, verified current, not merely present.
+**Trigger:** dispatched by Roadmap. **Input:** the item Step 2 dispatched —
+rule 1's P0 bug, rule M's pick while a milestone is ACTIVE, or rule 4's oldest
+dispatchable item (including the owner's M0 bootstrap, rule 4's one standing
+exception). `RESUME.md`'s In flight section is not an override (retired by
+393.4); a workflow in flight is a hold at Step 0.
 Run **try → verify → adjust** as many rounds as it takes to satisfy the item's
 *Accept* criteria — this is not "one attempt, ship whatever happened":
 1. Pick the item. If it's a bug → `diagnosing-bugs` (build a red-capable repro
@@ -1642,7 +1653,8 @@ never dirties main.
 **Exit:** one idea resolved (kept or killed) per iteration.
 
 ### 6. Objective (grill the vision)
-**Trigger:** dispatched at a milestone (e.g. pre-1.0), or on demand.
+**Trigger:** dispatched by Step 2 rule 3 once three distinct slices have been
+named since the last Objective row that reset the count, or on demand.
 **Heavy — not every wake.**
 
 0. **Narrow the arming set before grilling it.** Rule 3 counts distinct slice
@@ -2268,10 +2280,11 @@ than the two differing by design.
 - **No longer session-scoped, and that is what made concurrency real** — this
   bullet used to read "these run while this session is open; closing it stops
   them. For durable cloud cadence, promote to `/schedule`." The promotion
-  happened (owner call, 2026-08-28), so an hourly cloud routine now dispatches
-  whether or not a local session is open, and both read one `ROADMAP.md`.
-  **Collisions are accepted — see Step 0c for the decision, its cost, and the
-  one fetch that makes the loser find out early.**
+  happened (owner call, 2026-08-28), and from then an hourly cloud routine
+  dispatched whether or not a local session was open, both reading one
+  `ROADMAP.md`, with collisions accepted. **Reversed by the owner on 2026-09-25
+  (O1): the routine is disabled and the local `/loop` is the one dispatcher.**
+  Step 0c has the decision, the collisions that prompted it, and the guard.
 - **Recognize steady state; don't manufacture busywork** (2026-08-15) — once
   the Ideas seed list AND the Long-term backlog's directly-actionable items
   are genuinely exhausted (checked, not assumed — re-read `ROADMAP.md` fresh

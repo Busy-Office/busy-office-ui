@@ -4,7 +4,8 @@
 Owner decision O1 (2026-09-25): ONE dispatcher. Two dispatchers were live on
 2026-09-25 (the local /loop and two revived cloud sessions) and collided three
 times in one day (LOOPS.md Step 0c, collisions 6-8). "Accept collisions"
-(162.1) is reversed while Milestone M1 runs; this script is how a wake knows.
+(162.1) is reversed. This script enforces that on every wake now, whatever
+Milestone M1's status; it is how a wake knows.
 
 Run it FIRST at Step 0, before any other read, and AGAIN just before the
 wake's first commit. Exit 0 means continue. Any other exit means STOP: do not
@@ -13,8 +14,10 @@ write, commit or push; print the message and hand off.
   3  .roundtable/HALT exists — the owner's emergency stop for EVERY wake.
      Its first line is printed.
   4  this checkout is not the dispatcher named in .roundtable/DISPATCHER.
-     A cloud session's checkout root is never the owner's, so every cloud
-     wake stops here — whoever sends it the wake prompt.
+     A cloud session's checkout root is never the owner's, so a cloud wake
+     that runs this guard stops here. A revived stale session runs its own
+     older checkout, which has no guard: the owner's archive of the cloud
+     sessions is the prevention, and exit 5 is the backstop.
   5  origin/main carries a commit whose author the topology does not allow
      (a second dispatcher is live). The shas are printed for the hand-off.
   2  the guard itself could not read its inputs — a guard that cannot run

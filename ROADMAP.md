@@ -349,8 +349,9 @@ and the A/B test (396.5) will show it.
 
 ### Rules this milestone changes while ACTIVE
 
-- **Step 0.** A wake checks for `.roundtable/HALT` first, then the in-flight
-  line, then foreign commits. Each check can halt the wake (393.1, 393.2).
+- **Step 0.** A wake runs `step0_guard.py` first (HALT, then the checkout,
+  then foreign commits), then the in-flight line. Each check can halt the wake
+  (393.1, 393.2).
 - **Step 2.** Rule M (the milestone's oldest dispatchable item, with the
   interleave) sits below rules 2-3 and above rule 4. Rule D (the planner)
   sits directly below rule M (393.4, 393.7). Oldest-first means every
@@ -358,8 +359,9 @@ and the A/B test (396.5) will show it.
   `simulate_rule_m.py`. `After:` lines hold items back but never pull one
   forward.
 - **Rules 2 and 3** follow the `Rules-2-3` field (393.5).
-- **Step 0c.** "Accept collisions" becomes the owner's topology (O1), and a
-  foreign commit halts the wake (393.1).
+- **Step 0c.** "Accept collisions" is reversed (O1), and a foreign commit
+  halts the wake (393.1). This and Step 0 are live already, since M0; they are
+  listed because M1 depends on them.
 - **Jev.** CLAUDE.md's Jev section names a third point, the queue screen, once
   the owner closes 394.18 (O13). It runs in shadow, or in escalate-only if the
   owner chooses that there.
@@ -580,7 +582,7 @@ extension. 398.3 and 398.4 stay parked: 398.3 closes as satisfied when the
 owner fills the O11, O12, O14 and O16 cells, and 398.4 is code the retry does
 not need.
 
-1. [ ] **398.1 — the statements that disagree with the rule that replaced
+1. [x] **398.1 — the statements that disagree with the rule that replaced
        them (N2-N7 and the two Redundants).**
        Milestone: M1 · Phase: 0
        Route: build
@@ -613,6 +615,103 @@ not need.
          finds no statement that still presents it as current. Quote each
          command and its count. Finding more sites than the report named is a
          satisfying outcome.
+       - **DONE 2026-09-26.** Each site re-read after the edit:
+         - **N2 and the first Redundant.** The Step 0c heading now reads "One
+           dispatcher (O1, 2026-09-25); the earlier "accept collisions"
+           decision is kept below as the record". The operating rule reads, in
+           the past tense, that the hourly routine "dispatched … with
+           collisions accepted. **Reversed by the owner on 2026-09-25 (O1)**",
+           and points at Step 0c.
+         - **N3.** Continue's input is "the item Step 2 dispatched": rule 1's
+           P0, rule M's pick, or rule 4's oldest item, including the M0
+           bootstrap. It says RESUME.md's In flight section "is not an
+           override (retired by 393.4)".
+         - **N4.** CLAUDE.md reads "chosen per wake by the dispatcher's rules
+           in `LOOPS.md` Step 2 (not restated here: restatements drift)".
+         - **N5.** `test -e` exits 0 on
+           `.roundtable/milestone-draft-2026-09-25/4-prompt.md` (§9 is its
+           line 504), on `…/1-grill-report.md`, and on
+           `grill-kev-in-the-loop-2026-09-21.md`, which the M0-retry triage
+           (`0ab92652`) copied byte-identical from the parked branch.
+         - **N6.** LOOPS.md Step 0 and `step0_guard.py`'s exit-4 docstring
+           now say a revived stale session runs an older copy with no guard,
+           so the owner's archive is the prevention and exit 5 the backstop.
+           Self-test: 6 cases behave.
+         - **N7.** The loop table and §6's Trigger name rule 3's counter.
+         - **Second Redundant.** The Milestone section's Step 0 sentence
+           matches `step0_guard.py` (HALT, checkout, foreign commits; lines
+           62-89), then `inflight.py`. The owner approved the scribe edit on
+           2026-09-26, since only the owner edits that section.
+         - **Found beyond the report.** Re-reading every remaining hit, rather
+           than trusting a zero, found four more sites:
+           - The "20 min" cadence, the scorer's Correctness risk, in the loop
+             table and §1's Trigger. It now names the owner's self-paced
+             `/loop`.
+           - Step 0c's body still gave a present-tense collision procedure
+             under a banner calling all of it "the record". It now says which
+             two parts still apply: the pre-commit fetch, now the guard's
+             second run, which stops on exit 5; and the renumber mechanic, for
+             two local sessions in one checkout, which the guard cannot tell
+             apart.
+           - `step0_guard.py`'s header scoped the reversal "while Milestone M1
+             runs", but the guard enforces it on every wake now. The header
+             states that fact, and no longer states O1's intent.
+           - The Milestone section's Step 0c bullet said the reversal
+             "becomes" the topology while ACTIVE, but it has been live since
+             M0. The owner approved this second scribe edit on 2026-09-26.
+         - **Checked and left alone.** The frame's "dispatch #26" still holds
+           by its own instrument: `--compare` puts 395.1 at entry 26 of 63,
+           counting owner-held positions. The owner-recommendations critic's
+           "#17" counted differently.
+       - **The sweep.** 14 fixed-string `git grep -i -F` patterns over tracked
+         files, excluding archives, the loop log, resume-history and dated
+         reports:
+         - Before the edit there were 18 hits on 17 lines. 11 lines were live
+           sites to fix; the other 6 hits were quotes or history.
+         - Once edited, and outside 398.1's own text, there are 7 hits. Every
+           one is a quote or dated history:
+           - an old measurement table;
+           - the new Step 0c heading, which names the old decision as the
+             record;
+           - the record under the REVERSED banner;
+           - the past-tense operating rule;
+           - the Milestone section's Step 0c bullet, now "is reversed";
+           - the struck-through override;
+           - `step0_guard.py`'s "is reversed".
+
+         `whoever sends it the wake prompt` goes from 2 to 0, and
+         `every cloud session stops here` read 0 before and after. The bold
+         markup wraps that phrase across a line, so only the first phrase
+         could see it. Script and outputs are in the 398.1 scratch directory.
+       - **The dead-reference re-scan** covers bare filenames, the class the
+         re-score missed. It checks 1,301 backticked file references in
+         ROADMAP, LOOPS, CLAUDE, DESIGN, RESUME and ENVIRONMENT against the
+         tracked tree and the worktree, including ignored build output such
+         as `dist/api.json`. **31 do not resolve, and none is a live claim
+         that a file exists:**
+         - 18 are future deliverables named in open items or in the Milestone
+           section (`jobs.json` 9 times, `queue_screen.json` twice, the ADR
+           and others);
+         - 1 is in the external busy-office-erp repo;
+         - 1 is marked "not committed — one-off";
+         - 9 are history in closed items;
+         - 2 are ENVIRONMENT.md's record of `check-boost.mjs`'s deletion.
+
+         **Red-proof:** on HEAD's ROADMAP.md the scanner lists both N5 paths.
+         After the fix it lists 0 of them.
+       - **Jev (J2, advisory).**
+         - Sites agree, re-reads quoted: 0.86.
+         - Dead references resolve: 0.96, once the new citation lines were in
+           the evidence (0.66 without them).
+         - The dead-reference scan can fail: 0.91.
+         - The sweep: **0.71, unverified.** Whether a remaining hit "presents
+           the old rule as current" is a reading of prose, and no instrument
+           measures it. The counts are measured; the classification is
+           judgement, with every hit quoted above so it can be checked.
+
+           An earlier call read 0.23 on evidence that summarised the remaining
+           hits. That prompted the in-context re-read that found three of the
+           four extra sites. 398.5's fresh scorer is the independent check.
 2. [ ] **398.2 — the in-flight check refuses what it cannot parse.**
        Milestone: M1 · Phase: 0
        Route: build
@@ -693,7 +792,7 @@ the three steps that follow an experimental part: **N.1** build and fill
 (`Route: design`), and **N.3** "experimental `<name>`: admit or remove"
 (`Route: build`). The committer numbers these items after a fetch, and each one
 carries `After:` lines, so code releases them in order. The rules are in
-`.roundtable/milestone-m1-prompt.md` §9.
+`.roundtable/milestone-draft-2026-09-25/4-prompt.md` §9.
 
 **When these items run.** Rule M takes the oldest dispatchable item first, and
 items filed here are newer than every Slice 396 item. So an N.x item runs after
@@ -1528,7 +1627,7 @@ this: it orders rule M against rule 4, not within M1.
 
 **Owner answer 4, 2026-09-25:** "The loop isn't ready for this milestone - then
 realign the roadmap." The grill report is at
-`.roundtable/grill-milestone-m1-2026-09-25.md`.
+`.roundtable/milestone-draft-2026-09-25/1-grill-report.md`.
 
 **Inclusion test.** It applies to every item here, and to anything proposed for
 this slice later. An item belongs in M0 only if, without it, the first unattended

@@ -60,8 +60,8 @@ for the plan, `LOOPS.md` for autonomous-work orchestration.
 ## Autonomous loops
 
 Work runs as loops (`LOOPS.md`; the names are the `loop:` comment in the block
-below, which `check:loop-vocab` holds to the recorder's set), chosen per wake by the router
-(P0 bug > build > tidy > explore > grill). `Meta` labels refusal rows. **Every
+below, which `check:loop-vocab` holds to the recorder's set), chosen per wake by the dispatcher's rules in `LOOPS.md` Step 2 (not restated
+here: restatements drift). `Meta` labels refusal rows. **Every
 iteration, after the commit, record it:**
 
 ```
