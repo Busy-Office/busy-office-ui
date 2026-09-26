@@ -150,7 +150,7 @@ jobs:
   # repo is public, so those minutes cost nothing, and the shards would have
   # to WAIT for the build job: the wall clock could not fall below 5.7-6.1
   # min against 5.4-5.9 today, before transfer adds to it. What sets the wall
-  # clock is the claims shard (377.10). Both bounds, per run:
+  # clock is the claims shard (377.15). Both bounds, per run:
   #     python3 scripts/loops/ci_timings.py 8
   #
   # fail-fast is off on purpose: one shard going red must not hide what the

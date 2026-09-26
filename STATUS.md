@@ -2,9 +2,9 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 07:02 UTC
+Generated at: 2026-09-26 07:19 UTC
 
-oldest dispatchable: 377.9 — re-decide 375.6 on real CI timings.
+oldest dispatchable: 377.11 — 375.10's "holds the option" half must be able to fail.
 
 Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, open `After:` target or held `Parked:` line holds — and, while a milestone is ACTIVE, that the milestone does not tag (rule M dispatches those; `dispatch_status.py` prints its pick). No GOAL overrides it: the owner's M0 bootstrap (O3), the one exception there was, ended with 398.5. A named item without a number has no age to rank by; any that nothing holds is listed here instead of being dropped.
 
@@ -37,12 +37,12 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 - **Slice 377** (8 open)
   - 377.3 — the completion gate cannot see a revision.
   - 377.6 — is busy-office-erp the named first user?
-  - 377.9 — re-decide 375.6 on real CI timings.
   - 377.10 — the Jev band, re-measured with the question form Rubric 2 prescribes, and the set recorded.
   - 377.11 — 375.10's "holds the option" half must be able to fail.
   - 377.12 — the preview's provenance is truthful.
   - 377.13 — 375.9's corpus figure is re-runnable.
   - 377.14 — the low items, one bundle.
+  - 377.15 — the claims shard sets CI's wall clock, at nearly twice the next shard.
 - **Slice 381** (1 open)
   - 381.1 — the correction-site check: precision, coverage, or unwire it.
 - **Slice 384** (1 open)
@@ -151,13 +151,13 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1833 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-09-26 13:26   ok
+dispatch status — counter-triggered rules (1835 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-09-26 13:26   ok
   Objective     2 / 3 slices          since 2026-09-26 14:16   ok  [377, 404]
-  Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 151 sample(s), 8 of 47 name(s) paired across days]
+  Optimize      1 wake-date(s) newer   since 2026-09-25 05:14   STALE   [newest pair: claims; 153 sample(s), 8 of 49 name(s) paired across days]
   -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-25, not this one — record a metric or say the rule could not be evaluated.
      the unit is DISTINCT LOG DATES after 2026-09-25 (2026-09-26), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
-     rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (39 of 47 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
+     rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (41 of 49 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
        dispatch-region-words       6d  2026-09-25 7775 words -> 2026-09-26 10374 words  +2599   [1 same-day]
        claims                      6d  2026-09-19 203 count -> 2026-09-25 311 count  +108
        gates                       4d  2026-09-07 55 count -> 2026-09-09 56 count  +1
@@ -274,10 +274,10 @@ Open items with a `Parked:` line. Held only while that milestone is ACTIVE.
 - 391.1 — M1, not held
 - 384.1 — M1, not held
 - 381.1 — M1, not held
-- 377.9 — M1, not held
 - 377.12 — M1, not held
 - 377.13 — M1, not held
 - 377.14 — M1, not held
+- 377.15 — M1, not held
 
 ## Browser-blocked
 
@@ -293,8 +293,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-26 11:15 · Standardize · sweep · Slice 400 — 4 of 4 lanes (isolated build): lanes 1-3 equal to base; lane 4 Step 0c charter applied, expired M0 exception retired; dispatch region 10,625 -> 10,374 · landed · daea445f
-- 2026-09-26 11:25 · Continue · release · 0.9.0 published (@busy-office/ui 0.9.0, create-ui 0.2.0) on owner request; tarballs verified; 377.5 + 394.3 closed · released · 70ef6293
 - 2026-09-26 12:34 · Objective · grill · Slice 401 — Objective grill of 375.11, 392.1, 399.3 + 0.9.0 (full), 393/398/400 (narrowed): 36/51 claims full, 10 findings (3 confirmed, 7 narrowed); 401.1 bo-check-markup regression · landed · 2888ce5c
 - 2026-09-26 12:43 · Continue · build · 376.7 — lane-4 ratchet: a cut is >=100 words and >=1% (argued from 196 shrinks); replay at filing rev -> 09-07 sweep; red-proved · landed · 3569a013
 - 2026-09-26 13:08 · Continue · build · 377.4 — check:pointer-coverage meta-gate; 7 trusted check-claims cases added (16/16 covered, 0 exempt); mislabelled comments fixed · landed · 1f34a912
@@ -303,6 +301,8 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-26 14:16 · Objective · grill · Slice 403 — Objective grill of 377.4 (full), 376.7/377.7/402 (narrowed): 33/39 claims full, 13 findings (6 confirmed); own 196->188 and touchscreen claims corrected · landed · 8fa43c1d
 - 2026-09-26 14:28 · Continue · build · 377.8 — ACR 1.4.11/2.4.7 remarks + verdicts derived from check-contrast's published edge and focus-ring readings; red-proved 3 ways; live · landed · 6c125f02
 - 2026-09-26 15:02 · Continue · fix · 404.1 — docs version switcher 404 on the container and gates; frozen snapshot switchers (owner report) · landed · e6922d05
+- 2026-09-26 15:16 · Continue · build · 377.9 — 375.6 re-decided on runner timings (ci_timings.py, 8 runs): still refused, wall clock cannot fall; filed 377.10 · landed · f0704759
+- 2026-09-26 15:16 · Meta · refusal · 375.6 build-once-and-share-dist, re-refused on runner data: wall clock >= 5.7-6.1 min vs 5.4-5.9 today · refused · f0704759
 
 ## Sunset test
 

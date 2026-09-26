@@ -4964,7 +4964,12 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
            the number that matters worse.
          - **What does set the wall clock** is the claims shard: 325-354s,
            against 174-191s for the next slowest shard in every run. Filed as
-           377.10.
+           377.15. It was first filed as 377.10, an id an open item already
+           had. The only thing that noticed was the STATUS mirror's UNIQUE
+           constraint, as a bare IntegrityError that the recorder printed as a
+           warning. It is renumbered, and `generate_status.py` now refuses a
+           duplicate open id by name, with a self-test case, red-proven on the
+           real roadmap.
          - **The instrument reconciles against its source.** ci.yml's
            `Build core` and `Build docs` step lines, times the jobs they run
            in, must equal the steps classified in each run (11), or it
@@ -4977,18 +4982,6 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
            need it. Queue time before a job starts is outside the wall figure.
          - **Jev J2 (advisory):** Accept supported 0.88; the decision follows
            the data 0.86.
-10. [ ] **377.10 — the claims shard sets CI's wall clock, at nearly twice the
-       next shard.** In 8 of 8 runs the `Claims + formatting` job took
-       325-354s, against 174-191s for the next slowest. Every push waits on
-       it, and every wake reads CI after pushing. Balanced, the slowest shard
-       would be nearer 3 min than 5.5.
-       - **Accept — the property.** After the change, `ci_timings.py` over at
-         least 3 green runs reports a lower wall clock than this baseline
-         (5.4-5.9 min). Every `check:claims` case still runs exactly once per
-         run, reconciled by count against the single-process run. Or the
-         change is refused, with the measurement that refuses it: for example,
-         if the cases cannot be split without sharing state across pages.
-       Parked: M1 — CI cost, not milestone work
 10. [ ] **377.10 — the Jev band, re-measured with the question form Rubric 2
        prescribes, and the set recorded.** 375.8's zero-FP result rested on
        asymmetric criteria; uniform re-runs put a false case at 0.87 once.
@@ -5028,6 +5021,19 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
        a `check-claims` case before deciding anything about the umbrella
        pattern. Each closes on its own measurement.
         Parked: M1 — a low-severity bundle — revisit: milestone close
+
+15. [ ] **377.15 — the claims shard sets CI's wall clock, at nearly twice the
+       next shard.** In 8 of 8 runs the `Claims + formatting` job took
+       325-354s, against 174-191s for the next slowest. Every push waits on
+       it, and every wake reads CI after pushing. Balanced, the slowest shard
+       would be nearer 3 min than 5.5.
+       - **Accept — the property.** After the change, `ci_timings.py` over at
+         least 3 green runs reports a lower wall clock than this baseline
+         (5.4-5.9 min). Every `check:claims` case still runs exactly once per
+         run, reconciled by count against the single-process run. Or the
+         change is refused, with the measurement that refuses it: for example,
+         if the cases cannot be split without sharing state across pages.
+       Parked: M1 — CI cost, not milestone work
 
 ## Slice 376 — Standardize sweep, **4 of 4 lanes**: one dead style and two false passages fixed, four prose verdicts recorded (enumeration 16 -> 20), one standing CSS group found DISSOLVED by a measured fix, and two shipped defects found BESIDE the lanes; the completeness critic also found two closed items resting on uncommitted work (2026-09-24)
 

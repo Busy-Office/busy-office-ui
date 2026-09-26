@@ -308,6 +308,18 @@ def parse_roadmap(text, archive_text=""):
             "or the roadmap's formatting before regenerating."
         )
     reconcile_markers(text, parsed_markers)
+    # Two open items with one id: the mirror keys on it, and a citation of it
+    # resolves to either. 377.9 filed a second 377.10 beside an open one, and
+    # the mirror's UNIQUE constraint was the only thing that noticed, as a bare
+    # IntegrityError the recorder printed as a warning (2026-09-26).
+    counts = {}
+    for it in items:
+        if it["id"]:
+            counts[it["id"]] = counts.get(it["id"], 0) + 1
+    for iid, n in sorted(counts.items()):
+        if n > 1:
+            problems.append(f"item id {iid} is used by {n} open items; renumber one, since the mirror "
+                            f"keys on the id and a citation of {iid} would resolve to either")
     for c in _after_cycles(items):
         problems.append(f"{c}'s `After:` chain comes back to {c}, so it would be held forever")
     if problems:
@@ -978,6 +990,9 @@ def self_test():
     refuses("a second Parked: line refuses the write",
             FIXTURE.replace("revisit: later\n", "revisit: later\n       Parked: M1 — another — revisit: never\n"),
             "has 2 `Parked:` lines")
+    refuses("a duplicated open item id refuses the write, naming it",
+            FIXTURE + "\n## Slice 7 — dup\n\n1. [ ] **7.1 — one.**\n\n2. [ ] **7.1 — two.**\n",
+            "item id 7.1 is used by 2 open items")
     arch = "## Slice 1 — archived\n\n1. [x] **1.1 — an archived item.**\n"
     refuses("an archived After: target resolves only through the archive",
             FIXTURE.replace("After: 2.2", "After: 1.1"), "2.1 is `After: 1.1`")
