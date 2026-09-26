@@ -610,7 +610,7 @@ rule 3. 387.1: 11 claims, 9 hold, 2 fail; 7 findings (5 confirmed, 2 narrowed).
 4. [ ] **413.4 — the claims that cannot fail.** (a) `noAnchorPastedPage`'s sticky-bar
        half passes with the pre-fix rules under overlay scrollbars (postTop equal
        either way), and neither new case reads `passedThrough`, so a failed refetch
-       passes vacuously; (b) "2 of 7 top-band" vs "4 of 7 along Post" are different
+       passes vacuously; (b) [labelled 2026-09-27 at the two sites] "2 of 7 top-band" vs "4 of 7 along Post" are different
        samplings, unlabelled; (c) the size budget for `css/components/*.min.css`
        was raised a third time for one file. Accept: each case fails when its
        injection is applied (grep the served CSS or DOM first), and each figure names
@@ -5062,7 +5062,7 @@ Found by the skeptics of the 375.11 workflow; each measured, none fixed here.
        900ms, at HEAD and with 375.11's rule. (b) The page's canonical markup
        has no `.bo-data-table-container`, so with classic scrollbars at 390 a
        303-character message toggles the VIEWPORT's scrollbar and a sticky
-       `.bo-form-actions` "Post" moves 15px: 2 of 7 top-band presses land.
+       `.bo-form-actions` "Post" moves 15px: 2 of 7 top-band presses land (7 points in the top band, as filed; the 4 of 7 in the DONE block samples 7 points along Post at 390px, a different band, 413.4).
        375.9's Accept names the canonical markup.
        - **Accept — the property.** A real press on a control that was visible
          when the press began activates it, on both paths, measured where

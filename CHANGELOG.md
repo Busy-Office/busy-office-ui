@@ -42,7 +42,7 @@ pin.
   - In pasted markup with no `.bo-data-table-container`, the message
     lengthened the page instead. With classic scrollbars the page's
     horizontal bar then took 15px and lifted a sticky action bar under the
-    pointer: 4 of 7 presses along it landed.
+    pointer: 4 of 7 presses along it landed (7 points spaced down the Post bar at 390px, simulated).
   - The message now sits where it would in normal flow, inside the
     scroller and bounded by the room left to its inline end, so it cannot
     change what can scroll. In a simulated fallback the press lands, the
