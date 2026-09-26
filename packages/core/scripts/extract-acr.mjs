@@ -179,14 +179,37 @@ const brandPresetCount = new Set(Object.keys(contrast.brands ?? {}).map((k) => k
 const nonTextPairs = Object.values(contrast.themes).flat().filter((p) => p.threshold === 3);
 const nonTextPerTheme = nonTextPairs.length / Object.keys(contrast.themes).length;
 const pairsPerTheme = contrastTotal / Object.keys(contrast.themes).length;
-/* Which border tokens the gate actually watches, and which it does not — read
-   off the shipped pairs instead of asserted, so this cannot go stale the way
-   the sentence it replaces did. */
-const gatedBorderTokens = [...new Set(nonTextPairs.map((p) => p.fg).filter((t) => t.includes('border')))].sort();
-const UNGATED_EDGE_TOKENS = ['--bo-color-border-strong', '--bo-color-border-default'];
-const ungatedEdgeTokens = UNGATED_EDGE_TOKENS.filter(
-  (t) => !Object.values(contrast.themes).flat().some((p) => p.fg === t),
-);
+/* 1.4.11 and 2.4.7 are built from what check-contrast.mjs PUBLISHES (roadmap
+   377.8), never from literals. Both rows used to hand-type their figures
+   ("1.34-1.70:1", "2.99:1 on bg-muted under forest") and one claim that 374.7
+   had already made false ("cannot see a border-color at all"). The gate now
+   writes its edge verdicts, each debt pairing's measured ratios in every theme
+   and brand, and the focus ring's ratio on each ground it paints on. A token
+   change moves the published remark, and a missing section fails this build. */
+const edges = contrast.edges;
+const ring = contrast.focusRing;
+if (!edges?.todo || !ring?.readings?.length) {
+  throw new Error('ACR: contrast.json has no edges/focusRing section. Run check-contrast.mjs first; 1.4.11 and 2.4.7 are built from it');
+}
+const short = (tok) => tok.replace('--bo-color-', '');
+const span = (rs) => {
+  const v = rs.map((r) => r.ratio);
+  const lo = Math.min(...v).toFixed(2);
+  const hi = Math.max(...v).toFixed(2);
+  return lo === hi ? `${lo}:1` : `${lo}-${hi}:1`;
+};
+const ringUnder = ring.readings.filter((r) => r.ratio < 3);
+const ringLow = ring.readings.reduce((a, b) => (b.ratio < a.ratio ? b : a));
+/* `outline: none` anywhere in the shipped source would suppress the ring the
+   2.4.7 row describes. Counted here on every build instead of asserted. */
+const SRC_CSS = join(root, 'src/css');
+const walkCss = (dir) => readdirSync(dir).flatMap((n) => {
+  const p = join(dir, n);
+  return statSync(p).isDirectory() ? walkCss(p) : n.endsWith('.css') ? [p] : [];
+});
+const outlineNone = walkCss(SRC_CSS)
+  .map((f) => (uncomment(readFileSync(f, 'utf8')).match(/outline\s*:\s*(none|0)\s*[;}]/g) ?? []).length)
+  .reduce((a, b) => a + b, 0);
 
 const cite = (comp) => {
   if (!componentNames.has(comp)) throw new Error(`ACR cites unknown component "${comp}"`);
@@ -226,8 +249,8 @@ const CRITERIA = [
   },
   {
     id: '1.4.11', name: 'Non-text Contrast', level: 'AA',
-    verdict: 'Partially Supports',
-    remarks: `${nonTextPerTheme} of the ${pairsPerTheme} gated token pairs per theme are non-text and run in the same contrast.json gate as the text pairs, at 3:1 — so there is no separate, weaker check. What that gate does NOT cover is part of this verdict, not a footnote. Only ${gatedBorderTokens.join(' and ')} is watched among edge tokens; ${ungatedEdgeTokens.join(' and ')} ${ungatedEdgeTokens.length === 1 ? 'has' : 'have'} no row, and check-contrast.mjs's coverage guard binds its foreground only on a \`color:\` declaration, so it cannot see a \`border-color\` at all and cannot report the omission. Measured on the shipped tokens, border-strong is 1.34-1.70:1 on the surfaces it sits on and is the only non-text identifier for .bo-btn--secondary, ${cite('file-upload')}'s dropzone and its file-input button; the focus ring is gated on bg-canvas alone, which is why it reads 2.99:1 on bg-muted under the forest preset, where ${cite('segmented')} draws it. Tracked as roadmap 374.4; this row returns to Supports when the gate can fail on an edge pairing, not before.`,
+    verdict: edges.todo.length ? 'Partially Supports' : 'Supports',
+    remarks: `${nonTextPerTheme} of the ${pairsPerTheme} gated token pairs per theme are non-text and run in the same contrast.json gate as the text pairs, at 3:1 — so there is no separate, weaker check. Edges are adjudicated on every build (check-contrast.mjs, roadmap 374.7): of the ${edges.seen} edge pairings the component CSS paints, ${edges.gated} are gated at 3:1, ${edges.exempt} are exempt with a stated reason naming the other channel that identifies the element, and ${edges.todo.length} are tracked as debt because the edge is the only non-text identifier and does not meet 3:1${edges.todo.length ? ': ' + edges.todo.map((t) => `${cite(t.component)} (${short(t.fg)} on ${short(t.bg)}): ${t.readings.filter((r) => r.ratio < 3).length} of ${t.readings.length} theme and brand readings under 3:1, spanning ${span(t.readings)}`).join('; ') : ''}. The focus ring is gated on ${ring.gatedOn.map(short).join(' and ')} alone; its other grounds are 2.4.7's row. Tracked as roadmap 374.4. This verdict is computed from that debt list, and it reads Supports when the list is empty.`,
   },
   {
     id: '1.4.12', name: 'Text Spacing', level: 'AA',
@@ -256,8 +279,8 @@ const CRITERIA = [
   },
   {
     id: '2.4.7', name: 'Focus Visible', level: 'AA',
-    verdict: 'Partially Supports',
-    remarks: `A single :focus-visible ring token is used framework-wide and is never suppressed (zero \`outline: none\` in packages/core/src/css — true today, though no gate enforces it). Its CONTRAST is gated on one background only: the ring pair in contrast.json is against bg-canvas. The universal ring rule uses outline-offset, so the ring is painted on whatever surface sits behind the control — surface, surface-raised, muted or selected, none of them gated. That is a live miss, not just a structural one: on brand-forest light the ring measures 2.99:1 on bg-muted, under the 3:1 floor, while its gated canvas pair reads 3.15 and passes, and ${cite('segmented')} draws exactly that combination. Same root cause as 1.4.11 and fixed with it (roadmap 374.4).`,
+    verdict: ringUnder.length || outlineNone ? 'Partially Supports' : 'Supports',
+    remarks: `A single :focus-visible ring token (${ring.token}) is used framework-wide${outlineNone ? `, but ${outlineNone} \`outline: none\` declaration(s) in packages/core/src/css can suppress it` : ` and is never suppressed: 0 \`outline: none\` in packages/core/src/css, counted on every build (not gated)`}. Its contrast FAILS the build only on ${ring.gatedOn.map(short).join(' and ')}; the universal ring rule uses outline-offset, so the ring paints on whatever sits behind the control. Measured on every build against ${ring.grounds.length} grounds (${ring.grounds.map(short).join(', ')}) in both themes and every brand preset, ${ring.readings.length} readings: the lowest is ${ringLow.ratio}:1 (${ringLow.where}, on ${short(ringLow.ground)})${ringUnder.length ? `, and ${ringUnder.length} reading(s) fall under the 3:1 floor: ${ringUnder.map((r) => `${r.ratio}:1 on ${short(r.ground)} (${r.where})`).join(', ')}` : ', and none falls under 3:1'}. Same root cause as 1.4.11 (roadmap 374.4). This verdict is computed from those readings.`,
   },
   {
     id: '2.4.11', name: 'Focus Not Obscured (Minimum)', level: 'AA',

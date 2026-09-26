@@ -212,6 +212,7 @@ for (const [theme, vars] of [['light', light], ['dark', dark]]) {
 // the already-passing base result, so re-checking all of them is cheap and
 // correct rather than trying to guess which pairs a given file touches.
 report.brands = {};
+const brandVars = {}; // theme-merged vars per brand key, for the readings below (377.8)
 try {
   const brandDir = join(pkgRoot, 'src/css/brand');
   const brandFiles = (await readdir(brandDir)).filter((f) => f.endsWith('.css'));
@@ -229,6 +230,7 @@ try {
     ]) {
       const vars = { ...base, ...override };
       const key = `${name}-${theme}`;
+      brandVars[key] = vars;
       report.brands[key] = [];
       for (const [fgTok, bgTok, threshold] of PAIRS) {
         const fg = resolve(vars, vars[fgTok] ?? '');
@@ -397,6 +399,48 @@ for (const dir of ['components', 'primitives']) {
       edgeUncovered.add(`${edge} on ${ground} (${rel}) [site key: ${siteKey}]`);
     });
   }
+}
+
+/* PUBLISHED READINGS for what this gate adjudicates but does not gate (roadmap
+   377.8). The ACR's 1.4.11 and 2.4.7 remarks were hand-typed literals — "1.34-
+   1.70:1", "2.99:1 on bg-muted under forest", "cannot see a border-color at all"
+   — and the last was already false when 374.7 added the edge half above. So the
+   verdicts and the measured ratios are written here, from the same token
+   values and the same edge scan, and extract-acr.mjs builds both rows from
+   them. Change a token and the published remark moves with it. */
+const ratioIn = (vars, fgTok, bgTok) => {
+  const fg = resolve(vars, vars[fgTok] ?? '');
+  const bg = resolve(vars, vars[bgTok] ?? '');
+  return fg?.startsWith('#') && bg?.startsWith('#') ? Math.round(ratio(fg, bg) * 100) / 100 : null;
+};
+const everywhere = (fgTok, bgTok) =>
+  [['light', light], ['dark', dark], ...Object.entries(brandVars)]
+    .map(([where, vars]) => ({ where, ratio: ratioIn(vars, fgTok, bgTok) }))
+    .filter((r) => r.ratio != null);
+const pairOfSite = (site) => site.split(':')[1].split('|');
+report.edges = {
+  seen: edgeSeen.size,
+  gated: [...edgeSeen].filter((k) => KNOWN.has(PAIR_KEY(...pairOfSite(k)))).length,
+  exempt: EDGE_EXEMPT.size,
+  todo: [...EDGE_TODO].map(([site, why]) => {
+    const [fg, bg] = pairOfSite(site);
+    return { site, component: site.split(':')[0], fg, bg, why, readings: everywhere(fg, bg) };
+  }),
+};
+/* The ring is an `outline` with an offset, so it paints on whatever sits behind
+   the control. These are the grounds a focusable control sits on in the shipped
+   CSS; the gate FAILS only on the PAIRS rows, and reports the rest here. */
+const RING = '--bo-color-focus-ring';
+const RING_GROUNDS = ['--bo-color-bg-canvas', '--bo-color-bg-surface', '--bo-color-bg-surface-raised', '--bo-color-bg-muted', '--bo-color-bg-selected'];
+report.focusRing = {
+  token: RING,
+  gatedOn: PAIRS.filter(([f]) => f === RING).map(([, b]) => b),
+  grounds: RING_GROUNDS,
+  readings: RING_GROUNDS.flatMap((ground) => everywhere(RING, ground).map((r) => ({ ground, ...r }))),
+};
+if (!report.focusRing.readings.length || report.edges.todo.some((t) => !t.readings.length)) {
+  console.error('contrast: a published reading resolved to nothing — the ACR would quote an empty set');
+  process.exit(1);
 }
 
 await mkdir(join(pkgRoot, 'dist'), { recursive: true });

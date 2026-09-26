@@ -4815,12 +4815,55 @@ attribution, 376.8's figures, 374.5's missing CHANGELOG entry, a stale
          records only the rows `readings()` returns, so a failed channel
          cannot write one. That holds by construction, not by a separate
          measurement.
-8. [ ] **377.8 — the ACR's 1.4.11 and 2.4.7 remarks derive from source.** 1.4.11
+8. [x] **377.8 — the ACR's 1.4.11 and 2.4.7 remarks derive from source.** 1.4.11
        still states the limitation 374.7 removed; both remarks are literals.
        - **Accept:** removing check-contrast's edge branch, or changing the
          forest focus-ring or border-strong value in a scratch copy, changes
          the published remark or fails the build.
        Track: defect
+       - **DONE 2026-09-26 (rule 4).** Premise re-checked: 1.4.11 still said
+         the coverage guard "cannot see a `border-color` at all", which 374.7's
+         edge half had made false. Both rows' figures were literals.
+         - **The gate publishes what it adjudicates.** `check-contrast.mjs`
+           now writes `contrast.json.edges`: 28 edge pairings seen, 6 gated,
+           17 exempt, and each of the 5 `EDGE_TODO` debt pairings with its
+           ratio in both themes and all six brand presets (14 readings each).
+           It also writes `contrast.json.focusRing`: the ring on canvas,
+           surface, surface-raised, muted and selected, 70 readings. The
+           readings come from the same token resolution the gate already
+           runs, and an empty reading set fails the gate. The existing
+           consumers read only `themes` and `brands`, so the change is
+           additive.
+         - **`extract-acr.mjs` builds both rows from those readings, including
+           their VERDICTS:**
+           - 1.4.11 is Partially Supports while the debt list is non-empty;
+           - 2.4.7 is Partially Supports while any ring reading is under 3:1
+             or any `outline: none` ships, and that count is now taken on
+             every build from `src/css` instead of asserted.
+
+           A missing section throws. The old hand-listed edge tokens are gone.
+         - **Reconciled with an independent source.** The computed values
+           reproduce the old literals exactly: border-strong 1.34-1.70:1, and
+           the forest ring 2.99:1 on bg-muted and 3.15 on canvas. They also
+           show what the literals hid: file-upload's dragover edge fails in 7
+           of 14 readings, which is its dark theme in all six presets plus
+           the base.
+         - **Red-proof, all three of the Accept's injections, on a scratch
+           copy of `packages/core`, since removed:**
+           - Removing the edge branch makes `check-contrast` exit 1 (stale
+             `EDGE_EXEMPT`/`EDGE_TODO` entries).
+           - A darker forest focus-ring changes the 2.4.7 remark and flips
+             its verdict to Supports ("lowest 3.31:1 … none falls under
+             3:1").
+           - A darker light-theme border-strong changes 1.4.11's figures
+             (7 of 14 readings under 3:1, spanning 1.70-7.56).
+         - **Live.** The core build and docs build pass. The container was
+           rebuilt on :8081, with a single listener. `/reference/acr/`
+           returns 200 and serves the new remarks, and the "cannot see a
+           `border-color`" claim appears 0 times. Checked at 1440 and 390,
+           light and dark: the document never overflows, and at 390 the
+           table scrolls inside its own container, as it did before.
+         - **Jev (J2, advisory):** Accept 0.93, derivation and live 0.95.
 9. [ ] **377.9 — re-decide 375.6 on real CI timings.** Build steps are
        14.2-15.6% of job time (8 runs), not ~8%; `npm ci` is about a third of
        the build.

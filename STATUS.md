@@ -2,9 +2,9 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-26 06:16 UTC
+Generated at: 2026-09-26 06:28 UTC
 
-oldest dispatchable: 377.8 — the ACR's 1.4.11 and 2.4.7 remarks derive from source.
+oldest dispatchable: 377.9 — re-decide 375.6 on real CI timings.
 
 Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, open `After:` target or held `Parked:` line holds — and, while a milestone is ACTIVE, that the milestone does not tag (rule M dispatches those; `dispatch_status.py` prints its pick). No GOAL overrides it: the owner's M0 bootstrap (O3), the one exception there was, ended with 398.5. A named item without a number has no age to rank by; any that nothing holds is listed here instead of being dropped.
 
@@ -34,10 +34,9 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 375.11 — what 375.9 measured and did not fix.
 - **Slice 376** (1 open)
   - 376.5 — the app-launch launcher hand-rolls a dialog header.
-- **Slice 377** (9 open)
+- **Slice 377** (8 open)
   - 377.3 — the completion gate cannot see a revision.
   - 377.6 — is busy-office-erp the named first user?
-  - 377.8 — the ACR's 1.4.11 and 2.4.7 remarks derive from source.
   - 377.9 — re-decide 375.6 on real CI timings.
   - 377.10 — the Jev band, re-measured with the question form Rubric 2 prescribes, and the set recorded.
   - 377.11 — 375.10's "holds the option" half must be able to fail.
