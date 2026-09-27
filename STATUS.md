@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-27 05:16 UTC
+Generated at: 2026-09-27 05:49 UTC
 
 oldest dispatchable: 387.2 — a frozen cell's message still has two covers above it.
 
@@ -156,8 +156,7 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 417.4 — the spend counter and the soft/hard guard.
   - 417.5 — routing in shadow (`local/assign`) and its agreement report.
   - 417.6 — the hourly floor in the wake prompt; supervised run; trial week.
-- **Slice 419** (3 open)
-  - 419.3 — a dashboard card and a board column have a heading and a name.
+- **Slice 419** (2 open)
   - 419.4 — a grouped report is shown.
   - 419.2 — the reply to issue #2 is drafted for the owner
 - **Slice —** (1 open)
@@ -166,9 +165,10 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1890 iterations logged)
-  Standardize   3 / 4 Continue rounds since 2026-09-27 11:18   ok
+dispatch status — counter-triggered rules (1891 iterations logged)
+  Standardize   4 / 4 Continue rounds since 2026-09-27 11:18   OVERDUE
   Objective     1 / 3 slice           since 2026-09-27 12:22   ok  [419]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-09-27 05:16   ok   [newest pair: claims; 165 sample(s), 8 of 52 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (44 of 52 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
        claims                      7d  2026-09-25 311 count -> 2026-09-27 364 count  +53
@@ -300,7 +300,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-27 09:34 · Continue · fix · 387.3 — removal experiment: 2 of 201 claims fail (marker and no room); rule kept with reasons; nothing shipped · refused · 02aeed87
 - 2026-09-27 10:05 · Objective · grill · Slice 415 — grill of 387.3/413/414 (narrowed): 4 of 5 hold; one wrong sampling label fixed · landed · b64ad396
 - 2026-09-27 10:44 · Continue · fix · 388.3 — segmented checked option's focus ring computes Highlight under forced colours; case red-proved (rgb(13,148,136) before) · landed · 23b4213a
 - 2026-09-27 11:18 · Standardize · sweep · Slice 416 — 4 of 4 lanes (isolated build): 0 dead/1392; 247/236/7; 120,015 words; dispatch region 10,374; all equal Slice 414 · landed · 8d85b2b7
@@ -310,6 +309,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-27 12:22 · Objective · grill · Slice 418 — grill of 388/416/417 (narrowed): one defect, inflight overlap judged ./a and a disjoint; fixed, 47 cases, red-proved · landed · 19936318
 - 2026-09-27 12:53 · Roadmap · triage · Slice 419 — first-user gap from busy-office-erp contract §7.3 (kanban, report): 419.1 measure against contract, 419.2 draft reply · triaged · debdb59e
 - 2026-09-27 13:16 · Continue · measure · 419.1 — kanban/report vs first user's contract: 2.1 fails (widget title is a span, section unnamed), 5.3 holds with a limit; 419.3, 419.4 filed · landed · f69a40db
+- 2026-09-27 13:49 · Continue · fix · 419.3 (kanban) — columns are sections named by an h3; claims part B 202; other ~35 span titles left as a policy call · landed · 42524242
 
 ## Sunset test
 
