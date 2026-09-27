@@ -1897,3 +1897,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-27 12:53 · Roadmap · triage · Slice 419 — first-user gap from busy-office-erp contract §7.3 (kanban, report): 419.1 measure against contract, 419.2 draft reply · triaged · debdb59e
 - 2026-09-27 13:16 · Continue · measure · 419.1 — kanban/report vs first user's contract: 2.1 fails (widget title is a span, section unnamed), 5.3 holds with a limit; 419.3, 419.4 filed · track=defect · landed · f69a40db
 - 2026-09-27 13:49 · Continue · fix · 419.3 (kanban) — columns are sections named by an h3; claims part B 202; other ~35 span titles left as a policy call · track=defect · landed · 42524242
+- 2026-09-27 14:14 · Standardize · sweep · Slice 420 — 4 of 4 lanes (isolated build): 0 dead/1392; 247/236/7; 120,015 words; dispatch region 10,374; all equal Slice 416 · landed · 9a6a394e
