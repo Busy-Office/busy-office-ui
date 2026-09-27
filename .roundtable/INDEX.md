@@ -16,7 +16,7 @@ Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_
 - [`surface-baseline.md`](surface-baseline.md) — the scored-surface baseline
 - [`surface-review-rubric.md`](surface-review-rubric.md) — how a surface is scored
 
-## Findings — 237 snapshots, newest first
+## Findings — 238 snapshots, newest first
 
 A **·** marks a file nothing outside `.roundtable/` links to. That is not a defect: a grill can settle a question without anything needing to cite it afterwards. It is here so the uncited set stays visible instead of growing unnoticed.
 
@@ -35,6 +35,7 @@ A **·** marks a file nothing outside `.roundtable/` links to. That is not a def
 | 2026-09-27 | [Objective grill — 377.14 and 377.16 in full; 377.13, 377.15, 377.17, 381.1, Slices 409 and 410 n](grill-objective-377-381-409-410-2026-09-27.md) | ✓ |
 | 2026-09-27 | [Objective grill — 384.1, 386.1, 387.1, Slice 412 (2026-09-27)](grill-objective-384-386-387-412-2026-09-27.md) | ✓ |
 | 2026-09-27 | [Objective grill — 387.3, Slices 413 and 414 (2026-09-27), narrowed](grill-objective-387-413-414-2026-09-27.md) | ✓ |
+| 2026-09-27 | [Objective grill — 387.2 (reverted), 421.1, Slice 424 (2026-09-27), narrowed](grill-objective-387-421-424-2026-09-27.md) | ✓ |
 | 2026-09-27 | [Objective grill — 388.3/388.4, Slices 416 and 417 (2026-09-27), narrowed](grill-objective-388-416-417-2026-09-27.md) | ✓ |
 | 2026-09-27 | [Objective grill — Slices 419, 420, 422 (2026-09-27), narrowed](grill-objective-419-420-422-2026-09-27.md) | ✓ |
 | 2026-09-27 | [The hourly loop for busy-office-ui — design (2026-09-27)](hourly-loop-design-2026-09-27.md) | ✓ |
@@ -271,4 +272,4 @@ The signature of a directory that has outgrown retrieval is the same subject inv
 
 Two files on one subject is usually a deliberate follow-up (a grill and its sign-off). Three is worth a look.
 
-— 246 files, 187 cited from outside, 60 uncited snapshots, 4 repeated subject(s).
+— 247 files, 188 cited from outside, 60 uncited snapshots, 4 repeated subject(s).
