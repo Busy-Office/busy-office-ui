@@ -559,6 +559,14 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 425 — Objective grill of 387.2/421.1/424, narrowed: zero framework lines changed since Slice 423 — the fourth grill in a row to find nothing new (2026-09-27)
+
+Report: `.roundtable/grill-objective-387-421-424-2026-09-27.md`. Dispatched by rule 3,
+`Objective 3 / 3 OVERDUE [387, 421, 424]`. `git diff --numstat` since the last grill is
+empty. 421.1's reconciliation red-proof re-run and still holds. Reading: rule 3 fires on
+elapsed slices, not framework change, and keeps re-measuring an unchanged tree — 421.3
+(filed, not built) is the fix this repetition argues for.
+
 ## Slice 424 — Standardize sweep, 4 of 4 lanes on an isolated clean build: all four equal Slice 420 (2026-09-27)
 
 **Dispatched by rule 2**, `Standardize 4 / 4 OVERDUE`, CI in progress on the 387.2-revert push at
