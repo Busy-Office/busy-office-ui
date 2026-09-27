@@ -2,9 +2,9 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-27 06:47 UTC
+Generated at: 2026-09-27 07:20 UTC
 
-oldest dispatchable: 387.2 — a frozen cell's message still has two covers above it.
+oldest dispatchable: 389.3 — A rejected scan's reason stays readable after the flash.
 
 Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, open `After:` target or held `Parked:` line holds — and, while a milestone is ACTIVE, that the milestone does not tag (rule M dispatches those; `dispatch_status.py` prints its pick). No GOAL overrides it: the owner's M0 bootstrap (O3), the one exception there was, ended with 398.5. A named item without a number has no age to rank by; any that nothing holds is listed here instead of being dropped.
 
@@ -38,8 +38,6 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 377.3 — the completion gate cannot see a revision.
   - 377.6 — is busy-office-erp the named first user?
   - 377.10 — the Jev band, re-measured with the question form Rubric 2 prescribes, and the set recorded.
-- **Slice 387** (1 open)
-  - 387.2 — a frozen cell's message still has two covers above it.
 - **Slice 389** (23 open)
   - 389.1 — Every RF task screen accepts a wedge scan on arrival without stealing the docs reader's focus.
   - 389.2 — RF task screens complete the task, or stop claiming to.
@@ -174,7 +172,7 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1895 iterations logged)
+dispatch status — counter-triggered rules (1896 iterations logged)
   Standardize   2 / 4 Continue rounds since 2026-09-27 14:14   ok
   Objective     0 / 3 slices          since 2026-09-27 14:47   ok
   Optimize      0 wake-date(s) newer   since 2026-09-27 05:16   ok   [newest pair: claims; 166 sample(s), 8 of 52 name(s) paired across days]
@@ -308,7 +306,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-27 12:17 · Roadmap · triage · Slice 417 — hourly loop design note and build order filed (417.1-417.6) · triaged · 7a4b3a79
 - 2026-09-27 12:18 · Continue · fix · 417.1 — multi-line inflight (limit 1 by default), overlap check red-proved, 43 self-test cases · landed · 90dbeef4
 - 2026-09-27 12:22 · Objective · grill · Slice 418 — grill of 388/416/417 (narrowed): one defect, inflight overlap judged ./a and a disjoint; fixed, 47 cases, red-proved · landed · 19936318
 - 2026-09-27 12:53 · Roadmap · triage · Slice 419 — first-user gap from busy-office-erp contract §7.3 (kanban, report): 419.1 measure against contract, 419.2 draft reply · triaged · debdb59e
@@ -318,6 +315,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-27 14:25 · Continue · measure · 422.1-422.2 — wake card (759 words) drafted and checked by a fresh agent on 4 states: right rule in 4 of 4, 12 ambiguities fixed, one wrong claim (red main = rule 1) corrected · landed · 22496210
 - 2026-09-27 14:27 · Continue · measure · 422.2 second pass — fresh agent on 7 more states: 7 of 7 right; stop/record gaps fixed in the card; LOOPS.md silent on rescheduling after a stop · landed · 7719618b
 - 2026-09-27 14:47 · Objective · grill · Slice 423 — grill of 419/420/422 (narrowed): 419.3 red-proved, 420/422 have no framework claim; three grills in a row confirm thin shipped surface · landed · 2f82414b
+- 2026-09-27 15:20 · Roadmap · triage · 387.2 decided by the ladder: top-layer popover message (Jev 1.0 agrees); build scoped, not yet shipped · triaged · 680d64ff
 
 ## Sunset test
 
