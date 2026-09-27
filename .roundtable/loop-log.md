@@ -1887,3 +1887,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-27 08:23 · Continue · fix · 413.2 — scrollport containing block and min-content width stated in the data-table.css comment · track=defect · landed · 2e7f5c5e
 - 2026-09-27 08:57 · Continue · fix · 413.4 closed — case text says which half can fail; size ceiling kept with reason · track=defect · landed · b42ed5c6
 - 2026-09-27 09:34 · Continue · fix · 387.3 — removal experiment: 2 of 201 claims fail (marker and no room); rule kept with reasons; nothing shipped · track=defect · refused · 02aeed87
+- 2026-09-27 10:05 · Objective · grill · Slice 415 — grill of 387.3/413/414 (narrowed): 4 of 5 hold; one wrong sampling label fixed · landed · b64ad396

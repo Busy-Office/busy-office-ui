@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-27 01:34 UTC
+Generated at: 2026-09-27 02:05 UTC
 
 oldest dispatchable: 387.2 — a frozen cell's message still has two covers above it.
 
@@ -159,8 +159,9 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1881 iterations logged)
+dispatch status — counter-triggered rules (1882 iterations logged)
   Standardize   3 / 4 Continue rounds since 2026-09-27 07:52   ok
+  (Objective row 2026-09-27 10:05 did not reset rule 3: .roundtable/grill-objective-387-413-414-2026-09-27.md: the first user part was skipped without naming the error that stopped the read; the comparators part has no reading beside its label)
   Objective     3 / 3 slices          since 2026-09-27 04:02   OVERDUE  [387, 413, 414]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-09-27 05:16   ok   [newest pair: claims; 164 sample(s), 8 of 52 name(s) paired across days]
@@ -294,7 +295,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-27 04:45 · Roadmap · triage · 413.1 — options for the fallback message height, sent to the decision ladder · triaged · 384bbd56
 - 2026-09-27 05:16 · Optimize · measure · rule 5 re-read: claims 311 -> 364 (+53, 387.1's four cases plus earlier); dispatch region flat at 10374; no regression verdict, no budget breach · logged · 188f0d60
 - 2026-09-27 05:47 · Roadmap · triage · 413.1 decided by the ladder pilot: option b, Jev 0.77 agrees with own verdict; reversible · landed · 4c60f6f4
 - 2026-09-27 06:26 · Continue · fix · 413.4 part — pasted-page case reads simApplied (rewritten, passedThrough, fallback static box); red-proved 2 of 201 · landed · 9bee4829
@@ -304,6 +304,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-27 08:23 · Continue · fix · 413.2 — scrollport containing block and min-content width stated in the data-table.css comment · landed · 2e7f5c5e
 - 2026-09-27 08:57 · Continue · fix · 413.4 closed — case text says which half can fail; size ceiling kept with reason · landed · b42ed5c6
 - 2026-09-27 09:34 · Continue · fix · 387.3 — removal experiment: 2 of 201 claims fail (marker and no room); rule kept with reasons; nothing shipped · refused · 02aeed87
+- 2026-09-27 10:05 · Objective · grill · Slice 415 — grill of 387.3/413/414 (narrowed): 4 of 5 hold; one wrong sampling label fixed · landed · b64ad396
 
 ## Sunset test
 
