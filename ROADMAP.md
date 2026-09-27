@@ -559,6 +559,14 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 418 — Objective grill of 388.3/388.4 and Slices 416/417, narrowed: 4 of 5 claims hold; 417.1's overlap check judged `./a` and `a` disjoint (fixed) (2026-09-27)
+
+Report: `.roundtable/grill-objective-388-416-417-2026-09-27.md`. Dispatched by rule 3,
+`Objective 3 / 3 OVERDUE [388, 416, 417]`. The design's whole defence against parallel
+writers is `overlap()`; the self-test used one spelling. Paths are now normalised and
+absolute or `..` paths are refused; 47 cases, red-proved. Not covered: symlinks,
+case-insensitive checkouts, brace globs.
+
 ## Slice 417 — The hourly loop: design settled, built in order (2026-09-27)
 
 Design: `.roundtable/hourly-loop-design-2026-09-27.md` (owner-settled Q1-Q20 and the

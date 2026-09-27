@@ -39,6 +39,7 @@ import datetime as dt
 import fnmatch
 import json
 import os
+import posixpath
 import re
 import sys
 import tempfile
@@ -112,6 +113,12 @@ def paths_of(m):
     return re.search(r'paths=(\S+)', m.group(0)).group(1).split(',')
 
 
+def norm(g):
+    """A path glob in one spelling: './a//b' and 'a/b' are the same place. Absolute paths and
+    '..' are refused by `open` (they cannot be compared by text), so norm never sees them there."""
+    return posixpath.normpath(g).lstrip('/') if g else g
+
+
 def _stem(g):
     """A glob's fixed directory prefix: 'a/b/**' and 'a/b/*.css' both stem to 'a/b'."""
     parts = []
@@ -128,8 +135,8 @@ def overlap(a, b):
     Conservative on purpose: a false "overlap" costs a serial run, a false
     "disjoint" costs a conflicted landing. Two globs overlap when either matches
     the other as text, or one's fixed prefix contains the other's."""
-    for x in a:
-        for y in b:
+    for x in map(norm, a):
+        for y in map(norm, b):
             if fnmatch.fnmatch(x, y) or fnmatch.fnmatch(y, x):
                 return True
             sx, sy = _stem(x), _stem(y)
@@ -187,6 +194,9 @@ def cmd_open(root, a, limit=DEFAULT_LIMIT):
     if any(wf_of(m) == a['wf'] for m in ms):
         return 1, f"inflight: wf={a['wf']} is already open"
     mine = a['paths'].split(',')
+    for g in mine:
+        if g.startswith('/') or '..' in g.split('/'):
+            return 2, f'inflight: paths={g} is absolute or climbs with .. — write repo-relative globs so overlap can be judged'
     for m in ms:
         if overlap(mine, paths_of(m)):
             return 1, f"inflight: paths={a['paths']} overlap an open line — run serially: " + m.group(0)
@@ -311,6 +321,10 @@ def self_test():
         expect('an overlapping third is refused (same file)', op('wf_c', 'apps/docs/src/pages/x.astro'), 1)
         expect('a wf id already open is refused', op('wf_a', 'scripts/loops/*.py'), 1)
         expect('a glob with no fixed prefix overlaps everything', op('wf_c', '**/*.css'), 1)
+        expect('an overlapping third is refused (./ spelling)', op('wf_c', './packages/core/x.css'), 1)
+        expect('an overlapping third is refused (// spelling)', op('wf_c', 'apps//docs/src/y'), 1)
+        expect('an absolute path is refused', op('wf_c', '/Users/x/scripts/a.py'), 2)
+        expect('a path that climbs is refused', op('wf_c', 'scripts/../packages/core/z'), 2)
         expect('a disjoint third opens', op('wf_c', 'scripts/loops/*.py'), 0)
         expect('a fourth is refused at the limit', op('wf_d', 'docs/x/*'), 1)
         expect('status at the limit holds', run(root, 'status', L), 3)
