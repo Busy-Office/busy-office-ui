@@ -1894,3 +1894,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-27 12:17 · Roadmap · triage · Slice 417 — hourly loop design note and build order filed (417.1-417.6) · triaged · 7a4b3a79
 - 2026-09-27 12:18 · Continue · fix · 417.1 — multi-line inflight (limit 1 by default), overlap check red-proved, 43 self-test cases · track=defect · landed · 90dbeef4
 - 2026-09-27 12:22 · Objective · grill · Slice 418 — grill of 388/416/417 (narrowed): one defect, inflight overlap judged ./a and a disjoint; fixed, 47 cases, red-proved · landed · 19936318
+- 2026-09-27 12:53 · Roadmap · triage · Slice 419 — first-user gap from busy-office-erp contract §7.3 (kanban, report): 419.1 measure against contract, 419.2 draft reply · triaged · debdb59e
