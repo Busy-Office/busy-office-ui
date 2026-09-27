@@ -630,10 +630,19 @@ without a decision are items; the two that need a threshold say so.
          a row without `--value` is counted as `unclassified`, never as `process`; it reconciles
          against the row count in the window (CLAUDE.md's mirror rule).
        Track: defect
-2. [ ] **421.2 — a planner run after N consecutive `process` wakes.** *Owner: N (proposed 3) and
-       the value classes.* Runs without an ACTIVE milestone; may not change direction.
+2. [ ] **421.2 — a planner run after N consecutive `process` wakes.**
+       **Owner-approved 2026-09-27 ("as recommended"): N = 3; value classes shipped
+       (consumer-visible CSS/JS), evidence (a measurement of a real screen or the first
+       user), process (everything else).** Runs without an ACTIVE milestone; may not change
+       direction. Re-check N after about 30 wakes.
 3. [ ] **421.3 — Standardize and Objective count changed framework lines, not rows.**
-       *Owner: the thresholds.* Accept: a 5-line comment change does not advance either counter.
+       **Owner-approved 2026-09-27 ("as recommended"): Standardize fires after 50 changed
+       lines under `packages/` or `apps/docs/src`; Objective fires after 100 such lines OR
+       3 slices, whichever is later.** Estimates from this week's diffs (~110 lines in ~15
+       wakes); re-check after the first two firings under the new rule.
+       - **Accept — the property.** A 5-line comment change does not advance either counter;
+         the line count is read from `git diff --numstat` against the base commit each
+         counter last fired from, the same command 421.3's own build uses.
        Track: defect
 4. [ ] **421.4 — archive thresholds for `loop-log.md` (549 KB) and `polish-state.md` (181 KB).**
        Track: defect
