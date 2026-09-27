@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-27 04:17 UTC
+Generated at: 2026-09-27 04:18 UTC
 
 oldest dispatchable: 387.2 — a frozen cell's message still has two covers above it.
 
@@ -150,8 +150,7 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 411.7 — the band needle and the sidebar-nav demo frames.
   - 411.8 — 377.14 (d)'s counts cannot be re-derived.
   - 411.9 — the file-picker case passes when the click is cancelled.
-- **Slice 417** (6 open)
-  - 417.1 — multi-line `inflight`.
+- **Slice 417** (5 open)
   - 417.2 — `paths=` declared on roadmap items
   - 417.3 — `routes.json` as the profile menu; `record_iteration.py --profile`.
   - 417.4 — the spend counter and the soft/hard guard.
@@ -163,9 +162,10 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1886 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-09-27 11:18   ok
-  Objective     2 / 3 slices          since 2026-09-27 10:05   ok  [388, 416]
+dispatch status — counter-triggered rules (1887 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-09-27 11:18   ok
+  Objective     3 / 3 slices          since 2026-09-27 10:05   OVERDUE  [388, 416, 417]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-09-27 05:16   ok   [newest pair: claims; 165 sample(s), 8 of 52 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (44 of 52 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
        claims                      7d  2026-09-25 311 count -> 2026-09-27 364 count  +53
@@ -297,7 +297,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-27 07:28 · Continue · fix · 413.3 — unbreakable-token exception named in the CHANGELOG; code refused on the RF byte budget · landed · aedf3a49
 - 2026-09-27 07:52 · Standardize · sweep · Slice 414 — 4 of 4 lanes (isolated build): lane 1 0 dead/1392; lane 2 247/236/7; lane 3 120,015 words; lane 4 dispatch region 10,374; all equal Slice 412 · landed · d9583913
 - 2026-09-27 08:23 · Continue · fix · 413.2 — scrollport containing block and min-content width stated in the data-table.css comment · landed · 2e7f5c5e
 - 2026-09-27 08:57 · Continue · fix · 413.4 closed — case text says which half can fail; size ceiling kept with reason · landed · b42ed5c6
@@ -307,6 +306,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-27 11:18 · Standardize · sweep · Slice 416 — 4 of 4 lanes (isolated build): 0 dead/1392; 247/236/7; 120,015 words; dispatch region 10,374; all equal Slice 414 · landed · 8d85b2b7
 - 2026-09-27 11:50 · Continue · fix · 388.4 — cascade sample 0 to 2px; target-size header records bounding-box basis · landed · b5d026c9
 - 2026-09-27 12:17 · Roadmap · triage · Slice 417 — hourly loop design note and build order filed (417.1-417.6) · triaged · 7a4b3a79
+- 2026-09-27 12:18 · Continue · fix · 417.1 — multi-line inflight (limit 1 by default), overlap check red-proved, 43 self-test cases · landed · 90dbeef4
 
 ## Sunset test
 
