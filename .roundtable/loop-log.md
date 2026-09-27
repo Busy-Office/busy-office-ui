@@ -1889,3 +1889,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-27 09:34 · Continue · fix · 387.3 — removal experiment: 2 of 201 claims fail (marker and no room); rule kept with reasons; nothing shipped · track=defect · refused · 02aeed87
 - 2026-09-27 10:05 · Objective · grill · Slice 415 — grill of 387.3/413/414 (narrowed): 4 of 5 hold; one wrong sampling label fixed · landed · b64ad396
 - 2026-09-27 10:44 · Continue · fix · 388.3 — segmented checked option's focus ring computes Highlight under forced colours; case red-proved (rgb(13,148,136) before) · track=defect · landed · 23b4213a
+- 2026-09-27 11:18 · Standardize · sweep · Slice 416 — 4 of 4 lanes (isolated build): 0 dead/1392; 247/236/7; 120,015 words; dispatch region 10,374; all equal Slice 414 · landed · 8d85b2b7
