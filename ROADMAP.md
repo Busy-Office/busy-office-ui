@@ -603,7 +603,7 @@ before it does any work, and that text is also the part that keeps going stale. 
          alone (they say to open `LOOPS.md`, deliberately). Fixed in the card: a "what each stop
          means" paragraph, the rule-4 query, the M1 state, `--track defect`. **Recorded, not
          fixed:** `LOOPS.md` is silent on rescheduling after a guard stop, so the card says so
-         rather than inventing a rule. Card 850 words. Next: one supervised wake on the card.
+         rather than inventing a rule. Card 924 words. Next: one supervised wake on the card.
 3. [ ] **422.3 — measure the saving with the instrument lane 4 already uses**
        (`report_loop_prose.py`): words a wake loads before and after. Accept: the figure is
        quoted from the command, and says what it does NOT cover (playbooks a rule opens).
