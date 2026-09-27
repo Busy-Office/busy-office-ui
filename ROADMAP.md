@@ -5083,7 +5083,7 @@ screen. Task screen can be better."* Two items; the grill is dispatched by rule 
          `forced-color-adjust: none`, so the same defect cannot occur there (cleared by
          reading the rule, not measured).
        Track: defect
-4. [ ] **388.4 — two docs follow-ups from 388.1's panel, not re-measured.**
+4. [x] **388.4 — two docs follow-ups from 388.1's panel, not re-measured.**
        (a) `/concepts/cascade`'s example `.bo-btn { border-radius: 0; }` works
        only because 0 is a group's inner radius; (b) `check:target-size` reads
        bounding boxes, so a fully rounded target (`.bo-chip__remove`, 24px) is
@@ -5092,6 +5092,12 @@ screen. Task screen can be better."* Two items; the grill is dispatched by rule 
          override whose result does not depend on a coincidence of values, or
          the dependence is stated; (b) the target-size gate measures hit-tested
          area for fully rounded targets, or records why the box is enough.
+       - **DONE 2026-09-27.** (a) the cascade sample now overrides to `2px`, a value that is
+         not any group's inner radius, so the example no longer works by coincidence;
+         (b) recorded, not changed: the gate reads bounding boxes because the SC's
+         definition does, and the reason now sits in `check-target-size.mjs`'s header.
+         Only (b)'s premise about the definition was read from memory of the SC text,
+         not re-fetched; reopen if the criterion is read differently.
        Track: defect
 2. [x] **388.2 — grill the RF / rugged-device family as a JOURNEY
        (`/design-grill` flow mode).** Owner hypotheses to test, not to assume:

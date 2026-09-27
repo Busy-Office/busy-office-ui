@@ -17,6 +17,13 @@
  *   note  — undersized but adequately spaced: conformant via the exception,
  *           and the reason the docs may not claim a blanket 24px floor.
  *
+ * BOUNDING BOXES, NOT HIT-TESTED AREA (roadmap 388.4). A fully rounded target
+ * (`.bo-chip__remove`, 24px) does not fill its box; the gate still judges the
+ * box. That is the basis of the SC's own definition, which measures the target's
+ * bounding box, and the 24px-circle spacing test above is drawn around the box's
+ * centre. A hit-tested reading would fail every round control for area the
+ * criterion does not count. Not measured against a real pointer here.
+ *
  * WHAT THIS GATE DOES NOT CHECK, because it was assumed to (roadmap 319.3):
  * a page's NAMED pixel value. Eighteen docs pages say things like "24px hit
  * area", "44px controls", "28px at compact"; four of them are inside the sweep
