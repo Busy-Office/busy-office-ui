@@ -11,6 +11,12 @@ pin.
 
 ### Fixed
 
+- **RF screens: an identifier could break inside itself at the 320px floor.**
+  A pick, count or putaway screen's bin, item code or task id (`bo-u-tabular`)
+  had no `white-space: nowrap`, so a longer code (`MAT-4471`) wrapped onto a
+  second line at 320px. `bo-u-text-nowrap` now ships alongside it on all
+  three screens. Nothing to migrate.
+
 - **RF essentials profile: two utility classes and a stretched badge.**
   `bo-u-tabular` and `bo-u-text-muted` shipped no rule in the RF-essentials
   profile though 5 of 6 isolated RF documents use them; the profile now

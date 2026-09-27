@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-27 11:24 UTC
+Generated at: 2026-09-27 11:49 UTC
 
 oldest dispatchable: 389.3 — A rejected scan's reason stays readable after the flash.
 
@@ -38,7 +38,7 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 377.3 — the completion gate cannot see a revision.
   - 377.6 — is busy-office-erp the named first user?
   - 377.10 — the Jev band, re-measured with the question form Rubric 2 prescribes, and the set recorded.
-- **Slice 389** (21 open)
+- **Slice 389** (20 open)
   - 389.1 — Every RF task screen accepts a wedge scan on arrival without stealing the docs reader's focus.
   - 389.2 — RF task screens complete the task, or stop claiming to.
   - 389.3 — A rejected scan's reason stays readable after the flash.
@@ -58,7 +58,6 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 389.20 — The RF queue drops a column and a tab stop that carry nothing, and names itself.
   - 389.21 — RF docs pages: screen first, figures true, promised states buildable from the profile.
   - 389.22 — Count and putaway on-screen wording and emphasis.
-  - 389.23 — Pick identifiers do not break inside themselves at the 320 px floor.
   - 389.24 — The data-table cell-link focus ring is clipped on the first and last rows.
 - **Slice 391** (1 open)
   - 391.1 — settle why `check:claims` is red here and green on CI at the same commit, and record which environment is telling the truth.

@@ -8745,6 +8745,32 @@ check(
   JSON.stringify(badgeFit),
 );
 
+/* 389.23 — no identifier on the pick, count or putaway screen (bin, item
+   code, task id) breaks inside itself at the 320-390px RF range 135.3
+   documents. Measured by line-box count per identifier, on the isolated
+   rf-essentials pages, at all three widths — a 320px page loaded at a wider
+   viewport and resized would not catch the same wrap the real narrow load
+   does, so each width gets its own navigation. */
+const idBreaks = {};
+for (const [url, name] of [
+  ['/patterns/rf/rf-pick-rf/', 'pick'],
+  ['/patterns/rf/rf-count-rf/', 'count'],
+  ['/patterns/rf/rf-putaway-rf/', 'putaway'],
+]) {
+  for (const width of [ZOOM_400.width, RF_WIDTH, NARROW_WIDTH]) {
+    await visit(url, { width, height: 700 });
+    const items = await page.evaluate(() => [...document.querySelectorAll('.bo-u-tabular')].map((el) => ({
+      text: el.textContent.trim(), lineBoxes: el.getClientRects().length,
+    })));
+    for (const it of items) if (it.lineBoxes !== 1) idBreaks[`${name}@${width} ${it.text}`] = it.lineBoxes;
+  }
+}
+check(
+  'rf pick/count/putaway (isolated rf-essentials): no identifier breaks inside itself at 320, 360 or 390px (389.23)',
+  Object.keys(idBreaks).length === 0,
+  JSON.stringify(idBreaks),
+);
+
 } // ── end of part B ───────────────────────────────────────────────────────
 
 await rm(dzDir, { recursive: true, force: true });

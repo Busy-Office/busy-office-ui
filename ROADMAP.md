@@ -5236,7 +5236,7 @@ removal or rewording; one shipped framework defect (389.4).
         Route: design
         After: 396.12
 
-23. [ ] **389.23 — Pick identifiers do not break inside themselves at the 320 px floor.**
+23. [x] **389.23 — Pick identifiers do not break inside themselves at the 320 px floor.**
        At 320x533, MAT-4471 takes 2 line boxes; at 360 and 390 it takes
        1. 135.3 documented 320-800 as the supported range. The no-wrap
        utility is not in the profile, which has 179 characters of
@@ -5248,7 +5248,19 @@ removal or rewording; one shipped framework defect (389.4).
          width. The fix's cost to the profile budget is measured.
          Refusing is acceptable if the documented range is changed to
          match.
-        Track: defect
+               - **DONE 2026-09-27.** `bo-u-text-nowrap` (already shipped in this same
+         wake by 389.16's utilities import) added alongside `bo-u-tabular` on
+         all three RF screens' identifiers (Pick, Count, Putaway), not just
+         Pick — the item's own scope, widened per "every other page... is
+         re-measured" (389.19's own precedent). Measured live on the three
+         isolated rf-essentials pages: 30 identifiers across 320/360/390px
+         all read 1 line box; before the fix, only `MAT-4471` at 320px broke
+         (2 boxes), matching the item's own number exactly. `check:claims`
+         part B gained a case (203 to 204), red-proved by reverting the class
+         and rebuilding — the case fails with the exact same defect
+         (`{"pick@320 MAT-4471":2}`). No profile-byte cost: the class was
+         already shipped. `check:claims`, core build and docs build all green.
+       Track: defect
 
 24. [ ] **389.24 — The data-table cell-link focus ring is clipped on the first and last rows.**
        Pixel sampling of the focus ring, in both themes:
