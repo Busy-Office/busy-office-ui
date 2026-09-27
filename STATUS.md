@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-27 06:14 UTC
+Generated at: 2026-09-27 06:25 UTC
 
 oldest dispatchable: 387.2 — a frozen cell's message still has two covers above it.
 
@@ -165,15 +165,19 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 421.3 — Standardize and Objective count changed framework lines, not rows.
   - 421.4 — archive thresholds for `loop-log.md` (549 KB) and `polish-state.md` (181 KB).
   - 421.5 — `RESUME.md` names a handoff script that lives outside the repo.
+- **Slice 422** (2 open)
+  - 422.3 — measure the saving with the instrument lane 4 already uses
+  - 422.4 — adoption.
 - **Slice —** (1 open)
   - AT runtime evidence
 
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1892 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-09-27 14:14   ok
-  Objective     2 / 3 slices          since 2026-09-27 12:22   ok  [419, 420]
+dispatch status — counter-triggered rules (1893 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-09-27 14:14   ok
+  Objective     3 / 3 slices          since 2026-09-27 12:22   OVERDUE  [419, 420, 422]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-09-27 05:16   ok   [newest pair: claims; 166 sample(s), 8 of 52 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (44 of 52 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
        claims                      7d  2026-09-25 311 count -> 2026-09-27 364 count  +53
@@ -305,7 +309,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-27 10:44 · Continue · fix · 388.3 — segmented checked option's focus ring computes Highlight under forced colours; case red-proved (rgb(13,148,136) before) · landed · 23b4213a
 - 2026-09-27 11:18 · Standardize · sweep · Slice 416 — 4 of 4 lanes (isolated build): 0 dead/1392; 247/236/7; 120,015 words; dispatch region 10,374; all equal Slice 414 · landed · 8d85b2b7
 - 2026-09-27 11:50 · Continue · fix · 388.4 — cascade sample 0 to 2px; target-size header records bounding-box basis · landed · b5d026c9
 - 2026-09-27 12:17 · Roadmap · triage · Slice 417 — hourly loop design note and build order filed (417.1-417.6) · triaged · 7a4b3a79
@@ -315,6 +318,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-27 13:16 · Continue · measure · 419.1 — kanban/report vs first user's contract: 2.1 fails (widget title is a span, section unnamed), 5.3 holds with a limit; 419.3, 419.4 filed · landed · f69a40db
 - 2026-09-27 13:49 · Continue · fix · 419.3 (kanban) — columns are sections named by an h3; claims part B 202; other ~35 span titles left as a policy call · landed · 42524242
 - 2026-09-27 14:14 · Standardize · sweep · Slice 420 — 4 of 4 lanes (isolated build): 0 dead/1392; 247/236/7; 120,015 words; dispatch region 10,374; all equal Slice 416 · landed · 9a6a394e
+- 2026-09-27 14:25 · Continue · measure · 422.1-422.2 — wake card (759 words) drafted and checked by a fresh agent on 4 states: right rule in 4 of 4, 12 ambiguities fixed, one wrong claim (red main = rule 1) corrected · landed · 22496210
 
 ## Sunset test
 
