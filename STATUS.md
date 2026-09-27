@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-27 03:18 UTC
+Generated at: 2026-09-27 03:50 UTC
 
 oldest dispatchable: 387.2 — a frozen cell's message still has two covers above it.
 
@@ -40,8 +40,6 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 377.10 — the Jev band, re-measured with the question form Rubric 2 prescribes, and the set recorded.
 - **Slice 387** (1 open)
   - 387.2 — a frozen cell's message still has two covers above it.
-- **Slice 388** (1 open)
-  - 388.4 — two docs follow-ups from 388.1's panel, not re-measured.
 - **Slice 389** (23 open)
   - 389.1 — Every RF task screen accepts a wedge scan on arrival without stealing the docs reader's focus.
   - 389.2 — RF task screens complete the task, or stop claiming to.
@@ -158,8 +156,8 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1884 iterations logged)
-  Standardize   0 / 4 Continue rounds since 2026-09-27 11:18   ok
+dispatch status — counter-triggered rules (1885 iterations logged)
+  Standardize   1 / 4 Continue round  since 2026-09-27 11:18   ok
   Objective     2 / 3 slices          since 2026-09-27 10:05   ok  [388, 416]
   Optimize      0 wake-date(s) newer   since 2026-09-27 05:16   ok   [newest pair: claims; 165 sample(s), 8 of 52 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (44 of 52 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
@@ -292,7 +290,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-27 06:26 · Continue · fix · 413.4 part — pasted-page case reads simApplied (rewritten, passedThrough, fallback static box); red-proved 2 of 201 · landed · 9bee4829
 - 2026-09-27 06:57 · Continue · fix · 413.4 (b) — '2 of 7' and '4 of 7' labelled with their samplings · landed · a09c0bde
 - 2026-09-27 07:28 · Continue · fix · 413.3 — unbreakable-token exception named in the CHANGELOG; code refused on the RF byte budget · landed · aedf3a49
 - 2026-09-27 07:52 · Standardize · sweep · Slice 414 — 4 of 4 lanes (isolated build): lane 1 0 dead/1392; lane 2 247/236/7; lane 3 120,015 words; lane 4 dispatch region 10,374; all equal Slice 412 · landed · d9583913
@@ -302,6 +299,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-27 10:05 · Objective · grill · Slice 415 — grill of 387.3/413/414 (narrowed): 4 of 5 hold; one wrong sampling label fixed · landed · b64ad396
 - 2026-09-27 10:44 · Continue · fix · 388.3 — segmented checked option's focus ring computes Highlight under forced colours; case red-proved (rgb(13,148,136) before) · landed · 23b4213a
 - 2026-09-27 11:18 · Standardize · sweep · Slice 416 — 4 of 4 lanes (isolated build): 0 dead/1392; 247/236/7; 120,015 words; dispatch region 10,374; all equal Slice 414 · landed · 8d85b2b7
+- 2026-09-27 11:50 · Continue · fix · 388.4 — cascade sample 0 to 2px; target-size header records bounding-box basis · landed · b5d026c9
 
 ## Sunset test
 
