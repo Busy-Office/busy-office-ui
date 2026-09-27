@@ -571,6 +571,15 @@ a row to equal its base** (414, 416, 420): the counter fires on Continue rows, a
 changes a comment counts the same as one that ships a rule (loop-doctor L3, 2026-09-27).
 Exit: a clean pass; nothing to consolidate.
 
+## Slice 423 — Objective grill of Slices 419/420/422, narrowed: nothing new; three grills running now confirm the same thing (2026-09-27)
+
+Report: `.roundtable/grill-objective-419-420-422-2026-09-27.md`. Dispatched by rule 3,
+`Objective 3 / 3 OVERDUE [419, 420, 422]`. 419.3's claim reproduces (red-proved: requiring
+`SPAN` instead of a heading fails 1 of 202). 420 and 422 have no framework claim to grill.
+Thesis unchanged since Slice 418: framework code since the last grill is one markup fix
+(kanban headings) plus gate text. Read as confirming 421.1-421.3 are the next move, not
+another grill.
+
 ## Slice 422 — the wake card: what a wake loads drops from about 15,000-28,000 words to about 600 (2026-09-27)
 
 Owner: "Go" on the recommendation after the loop-doctor review (2026-09-27): a wake loads
