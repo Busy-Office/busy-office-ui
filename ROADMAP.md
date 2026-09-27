@@ -559,6 +559,13 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 415 — Objective grill of 387.3 and Slices 413/414, narrowed to headline reproduction: 4 of 5 claims hold; the one defect is the sampling label written last wake (2026-09-27)
+
+Report: `.roundtable/grill-objective-387-413-414-2026-09-27.md`. Dispatched by rule 3,
+`Objective 3 / 3 OVERDUE [387, 413, 414]`. "Down the Post bar" was wrong: the rig
+samples across the button's height. Corrected in CHANGELOG and here. Framework code
+since 1565560b: 8 lines of comment and 15 of gate text, no new shipped rule.
+
 ## Slice 414 — Standardize sweep, 4 of 4 lanes on an isolated clean build: all four equal Slice 412 (2026-09-27)
 
 **Dispatched by rule 2**, `Standardize 4 / 4 OVERDUE`, CI green on `36279554792`.
@@ -5097,7 +5104,7 @@ Found by the skeptics of the 375.11 workflow; each measured, none fixed here.
        900ms, at HEAD and with 375.11's rule. (b) The page's canonical markup
        has no `.bo-data-table-container`, so with classic scrollbars at 390 a
        303-character message toggles the VIEWPORT's scrollbar and a sticky
-       `.bo-form-actions` "Post" moves 15px: 2 of 7 top-band presses land (7 points in the top band, as filed; the 4 of 7 in the DONE block samples 7 points along Post at 390px, a different band, 413.4).
+       `.bo-form-actions` "Post" moves 15px: 2 of 7 top-band presses land (7 points in the top band, as filed; the 4 of 7 in the DONE block samples 7 points across the Post button's height at 390px, a different band, 413.4).
        375.9's Accept names the canonical markup.
        - **Accept — the property.** A real press on a control that was visible
          when the press began activates it, on both paths, measured where
