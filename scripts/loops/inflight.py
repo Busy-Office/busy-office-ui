@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The in-flight protocol: one workflow at a time (roadmap 393.2).
+"""The in-flight protocol: workflows under a limit, one by default (roadmap 393.2, 417.1).
 
 On 2026-09-25, 6 of 10 /loop wakes found a background Workflow still running
 and could only hold, and nothing in the repo said so: a 3-hour workflow was
@@ -9,14 +9,17 @@ invisible to the hand-off. This keeps ONE structured line under RESUME.md's
   wf=<id> item=<id> started=<UTC ISO> cap=<minutes> session=<id> out=<path> paths=<globs>
 
   open    --wf ID --item ID --cap MIN --session ID --out PATH --paths GLOBS [--started ISO]
-          writes the line; exit 1 if one already exists (one workflow at a time).
-  status  exit 0: no line · 3: a line under its cap · 4: a line past its cap ·
+          writes the line; exit 1 at the limit (DEFAULT_LIMIT, 1 today; `--limit N`
+          overrides), for a repeated wf, or when `paths` (comma-separated globs) may
+          touch an open line's. 417.1: overlap is judged conservatively.
+  status  exit 0: room to dispatch (open lines are printed) · 3: at the limit ·
+          4: any line past its cap · 
           5: the section holds something that does not parse, or RESUME.md
           cannot be read (398.2). Exit 5 is a STOP, never "nothing in flight".
   hold    status, and when the line is under its cap also append one row to
           .roundtable/hold-wakes.jsonl; same exits as status. This is the whole
           of a hold wake: guard, hold, schedule the next wake, stop.
-  close   removes the line; exit 1 if there was none.
+  close   removes the line; with several open, `--wf ID` (exit 2 without); exit 1 if none.
 
 Why exit 5 exists (roadmap 398.2): the 2026-09-26 re-score fed `status` five
 malformed lines (a trailing space, a space in `paths`, fields reordered,
@@ -33,6 +36,7 @@ stop a Claude Code task.
 @exact — string and time comparisons; `--self-test` exercises every exit.
 """
 import datetime as dt
+import fnmatch
 import json
 import os
 import re
@@ -46,6 +50,9 @@ HOLDS = '.roundtable/hold-wakes.jsonl'
 HEADING = '## In flight'
 LINE_RE = re.compile(r'wf=\S+ item=\S+ started=(\S+) cap=(\d+) session=\S+ out=\S+ paths=\S+')
 UNPARSED = 5
+# How many workflows may run at once. 1 until 417.2-417.5 make parallel work safe (the
+# design note, section 7); raise it there, not per call. `--limit N` overrides for tests.
+DEFAULT_LIMIT = 1
 
 
 class Unparsed(Exception):
@@ -66,32 +73,71 @@ def section_bounds(text):
     return start, (start + n.start() if n else len(text))
 
 
-def current(text):
-    """The in-flight line's match; None when the section is absent or blank.
+def lines_in(text):
+    """Every in-flight line's match, in file order; [] when the section is absent or blank.
 
     Raises Unparsed when the section holds anything else: a line that is not
-    exactly the protocol's form (trailing whitespace aside), more than one line,
-    or a `started` that is not a timezone-aware ISO time."""
+    exactly the protocol's form (trailing whitespace aside), a `started` that is
+    not a timezone-aware ISO time, or two lines with the same `wf` (417.1: more
+    than one line is allowed now, so a repeated id is what "two lines" used to be)."""
     b = section_bounds(text)
     if not b:
-        return None
-    lines = [l.rstrip() for l in text[b[0]:b[1]].split('\n') if l.strip()]
-    if not lines:
-        return None
-    if len(lines) > 1:
-        raise Unparsed(f'{len(lines)} lines under {HEADING}; the protocol allows one: ' + ' | '.join(lines))
-    m = LINE_RE.fullmatch(lines[0])
-    if not m:
-        raise Unparsed(f'the line under {HEADING} does not parse (expected: '
-                       'wf=… item=… started=… cap=<minutes> session=… out=… paths=…, '
-                       'single spaces, no bullet): ' + lines[0])
-    try:
-        started = dt.datetime.fromisoformat(m.group(1).replace('Z', '+00:00'))
-    except ValueError:
-        raise Unparsed(f'started={m.group(1)} is not an ISO time: ' + lines[0])
-    if started.tzinfo is None:
-        raise Unparsed(f'started={m.group(1)} has no timezone (write it in UTC with a Z): ' + lines[0])
-    return m
+        return []
+    out, seen = [], set()
+    for l in (l.rstrip() for l in text[b[0]:b[1]].split('\n') if l.strip()):
+        m = LINE_RE.fullmatch(l)
+        if not m:
+            raise Unparsed(f'the line under {HEADING} does not parse (expected: '
+                           'wf=… item=… started=… cap=<minutes> session=… out=… paths=…, '
+                           'single spaces, no bullet): ' + l)
+        try:
+            started = dt.datetime.fromisoformat(m.group(1).replace('Z', '+00:00'))
+        except ValueError:
+            raise Unparsed(f'started={m.group(1)} is not an ISO time: ' + l)
+        if started.tzinfo is None:
+            raise Unparsed(f'started={m.group(1)} has no timezone (write it in UTC with a Z): ' + l)
+        wf = re.match(r'wf=(\S+)', l).group(1)
+        if wf in seen:
+            raise Unparsed(f'wf={wf} appears twice under {HEADING}: ' + l)
+        seen.add(wf)
+        out.append(m)
+    return out
+
+
+def wf_of(m):
+    return re.match(r'wf=(\S+)', m.group(0)).group(1)
+
+
+def paths_of(m):
+    return re.search(r'paths=(\S+)', m.group(0)).group(1).split(',')
+
+
+def _stem(g):
+    """A glob's fixed directory prefix: 'a/b/**' and 'a/b/*.css' both stem to 'a/b'."""
+    parts = []
+    for seg in g.strip('/').split('/'):
+        if any(c in seg for c in '*?['):
+            break
+        parts.append(seg)
+    return '/'.join(parts)
+
+
+def overlap(a, b):
+    """True when two comma-separated path-glob lists may touch the same file.
+
+    Conservative on purpose: a false "overlap" costs a serial run, a false
+    "disjoint" costs a conflicted landing. Two globs overlap when either matches
+    the other as text, or one's fixed prefix contains the other's."""
+    for x in a:
+        for y in b:
+            if fnmatch.fnmatch(x, y) or fnmatch.fnmatch(y, x):
+                return True
+            sx, sy = _stem(x), _stem(y)
+            if sx == sy or sx.startswith(sy + '/') or sy.startswith(sx + '/'):
+                return True
+            if not sx or not sy:
+                return True   # a glob with no fixed prefix can match anywhere
+    return False
 
 
 def read(root):
@@ -107,28 +153,43 @@ def write(root, text):
         f.write(text)
 
 
-def status(root, at=None):
-    text = read(root)
-    m = current(text)
-    if not m:
-        return 0, 'inflight: nothing in flight'
+def _mins(m, at):
     started = dt.datetime.fromisoformat(m.group(1).replace('Z', '+00:00'))
-    cap = int(m.group(2))
-    mins = ((at or now_utc()) - started).total_seconds() / 60
-    line = m.group(0)
-    if mins < cap:
-        return 3, f'inflight: IN FLIGHT {mins:.0f}/{cap} min — hold (dispatch nothing): {line}'
-    return 4, f'inflight: PAST CAP {mins:.0f}/{cap} min — stop the workflow, keep `out`, record logged, close: {line}'
+    return ((at or now_utc()) - started).total_seconds() / 60
 
 
-def cmd_open(root, a):
+def status(root, at=None, limit=DEFAULT_LIMIT):
+    """0: room to dispatch (lines may be open, each is printed) · 3: at the limit ·
+    4: a line is past its cap · 5: unreadable."""
+    ms = lines_in(read(root))
+    if not ms:
+        return 0, 'inflight: nothing in flight'
+    past = [m for m in ms if _mins(m, at) >= int(m.group(2))]
+    if past:
+        return 4, ('inflight: PAST CAP — stop the workflow, keep `out`, record logged, close it: '
+                   + ' | '.join(f'{_mins(m, at):.0f}/{m.group(2)} min {m.group(0)}' for m in past))
+    listing = ' | '.join(f'{_mins(m, at):.0f}/{m.group(2)} min {m.group(0)}' for m in ms)
+    if len(ms) >= limit:
+        return 3, f'inflight: IN FLIGHT {len(ms)}/{limit} — hold (dispatch nothing): {listing}'
+    return 0, (f'inflight: {len(ms)}/{limit} in flight, room for {limit - len(ms)} more '
+               f'(open refuses overlapping paths): {listing}')
+
+
+def cmd_open(root, a, limit=DEFAULT_LIMIT):
     text = read(root)
-    if current(text):
-        return 1, 'inflight: a workflow is already in flight — one at a time. ' + current(text).group(0)
+    ms = lines_in(text)
+    if len(ms) >= limit:
+        return 1, f'inflight: {len(ms)}/{limit} in flight — at the limit. ' + ' | '.join(m.group(0) for m in ms)
     started = a.get('started') or now_utc().isoformat().replace('+00:00', 'Z')
     for k in ('wf', 'item', 'cap', 'session', 'out', 'paths'):
         if not a.get(k) or re.search(r'\s', a[k]):
             return 2, f'inflight: --{k} is required and may not contain spaces'
+    if any(wf_of(m) == a['wf'] for m in ms):
+        return 1, f"inflight: wf={a['wf']} is already open"
+    mine = a['paths'].split(',')
+    for m in ms:
+        if overlap(mine, paths_of(m)):
+            return 1, f"inflight: paths={a['paths']} overlap an open line — run serially: " + m.group(0)
     line = f"wf={a['wf']} item={a['item']} started={started} cap={int(a['cap'])} session={a['session']} out={a['out']} paths={a['paths']}"
     b = section_bounds(text)
     if b:
@@ -142,24 +203,33 @@ def cmd_open(root, a):
     return 0, 'inflight: opened ' + line
 
 
-def cmd_close(root):
+def cmd_close(root, a=None):
     text = read(root)
-    m = current(text)
-    if not m:
+    ms = lines_in(text)
+    if not ms:
         return 1, 'inflight: nothing to close'
+    wf = (a or {}).get('wf')
+    if wf:
+        pick = [m for m in ms if wf_of(m) == wf]
+        if not pick:
+            return 1, f'inflight: no open line has wf={wf}'
+    elif len(ms) == 1:
+        pick = ms
+    else:
+        return 2, f'inflight: {len(ms)} lines are open; say which with --wf ID'
     b = section_bounds(text)
-    kept = [l for l in text[b[0]:b[1]].split('\n') if l.rstrip() != m.group(0)]
+    kept = [l for l in text[b[0]:b[1]].split('\n') if l.rstrip() != pick[0].group(0)]
     write(root, text[:b[0]] + '\n'.join(kept) + text[b[1]:])
-    return 0, 'inflight: closed ' + m.group(0)
+    return 0, 'inflight: closed ' + pick[0].group(0)
 
 
-def cmd_hold(root):
-    code, msg = status(root)
+def cmd_hold(root, limit=DEFAULT_LIMIT):
+    code, msg = status(root, limit=limit)
     if code == 3:
-        m = current(read(root))
-        row = {'ts': now_utc().isoformat().replace('+00:00', 'Z'), 'line': m.group(0)}
+        ts = now_utc().isoformat().replace('+00:00', 'Z')
         with open(os.path.join(root, HOLDS), 'a', encoding='utf-8') as f:
-            f.write(json.dumps(row) + '\n')
+            for m in lines_in(read(root)):
+                f.write(json.dumps({'ts': ts, 'line': m.group(0)}) + '\n')
     return code, msg
 
 
@@ -209,7 +279,8 @@ def self_test():
             ('fields reordered', good.replace('wf=wf_z item=398.2', 'item=398.2 wf=wf_z'), UNPARSED),
             ('cap=60m', good.replace('cap=60 ', 'cap=60m '), UNPARSED),
             ('a bullet prefix', '- ' + good, UNPARSED),
-            ('two lines', good + '\n' + good.replace('wf_z', 'wf_w'), UNPARSED),
+            ('two lines at a limit of 1 hold', good + '\n' + good.replace('wf_z', 'wf_w'), 3),
+            ('the same wf twice', good + '\n' + good, UNPARSED),
             ('started with no timezone', good.replace(z, z[:-1]), UNPARSED),
             ('started not a time', good.replace(z, 'yesterday'), UNPARSED),
         ]
@@ -226,6 +297,40 @@ def self_test():
         write(root, f'# Resume\n\n## In flight\n{good}  \n\n## Uncommitted\n')
         expect('close removes a line with trailing whitespace', run(root, 'close'), 0)
         expect('status after that close', run(root, 'status'), 0)
+        # 417.1 — several lines: a limit above 1, disjoint paths, overlap refused.
+        write(root, '# Resume\n\n## In flight\n\n## Uncommitted\n')
+        base = dict(item='417.1', cap='60', session='s1', out='/tmp/o')
+        L = ['--limit', '3']
+        def op(wf, paths, extra=()):
+            return run(root, 'open', ['--wf', wf, '--item', base['item'], '--cap', base['cap'], '--session', 's1',
+                                      '--out', '/tmp/o', '--paths', paths, *L, *extra])
+        expect('first of three opens', op('wf_a', 'packages/core/**'), 0)
+        expect('a disjoint second opens', op('wf_b', 'apps/docs/src/**'), 0)
+        expect('status with room says 0', run(root, 'status', L), 0)
+        expect('an overlapping third is refused (nested glob)', op('wf_c', 'packages/core/src/css/*.css'), 1)
+        expect('an overlapping third is refused (same file)', op('wf_c', 'apps/docs/src/pages/x.astro'), 1)
+        expect('a wf id already open is refused', op('wf_a', 'scripts/loops/*.py'), 1)
+        expect('a glob with no fixed prefix overlaps everything', op('wf_c', '**/*.css'), 1)
+        expect('a disjoint third opens', op('wf_c', 'scripts/loops/*.py'), 0)
+        expect('a fourth is refused at the limit', op('wf_d', 'docs/x/*'), 1)
+        expect('status at the limit holds', run(root, 'status', L), 3)
+        rows = sum(1 for _ in open(os.path.join(root, HOLDS)))
+        expect('hold at the limit', run(root, 'hold', L), 3)
+        if sum(1 for _ in open(os.path.join(root, HOLDS))) != rows + 3:
+            bad.append('hold at the limit did not append one row per open line')
+        expect('close with several open needs --wf', run(root, 'close'), 2)
+        expect('close of an unknown wf', run(root, 'close', ['--wf', 'wf_zz']), 1)
+        expect('close one by id', run(root, 'close', ['--wf', 'wf_b']), 0)
+        if 'wf=wf_a' not in read(root) or 'wf=wf_c' not in read(root) or 'wf=wf_b' in read(root):
+            bad.append('close --wf removed the wrong line')
+        expect('status with two open and a limit of 3', run(root, 'status', L), 0)
+        write(root, '# Resume\n\n## In flight\n' + good + '\nwf=wf_bad item=x\n\n## Uncommitted\n')
+        expect('a malformed line among good ones is still a STOP', run(root, 'status', L), UNPARSED)
+        old = (now_utc() - dt.timedelta(minutes=90)).isoformat().replace('+00:00', 'Z')
+        write(root, '# Resume\n\n## In flight\n' + good + '\n'
+              + f'wf=wf_old item=x started={old} cap=60 session=s1 out=/tmp/o paths=q/*\n\n## Uncommitted\n')
+        expect('one line past its cap among fresh ones is exit 4', run(root, 'status', L), 4)
+
         os.remove(os.path.join(root, RESUME))
         expect('a missing RESUME.md', run(root, 'status'), UNPARSED)
     if not os.path.exists(os.path.join(ROOT, 'scripts', 'loops', 'inflight.py')):
@@ -235,20 +340,22 @@ def self_test():
         return 1
     print(f'inflight --self-test: {checked[0]} cases behave (status 0/3/4/5, open, refused second open, '
           'hold row, close, reopen; 398.2: the five malformed lines, two lines, bad started, '
-          'hold/open/close over an unparsed line, a missing RESUME.md, the root)')
+          'hold/open/close over an unparsed line, a missing RESUME.md, the root; 417.1: three lines, overlap refused, limit, close by id, one bad or late line among good ones)')
     return 0
 
 
 def run(root, cmd, argv=()):
     """One command; an unreadable in-flight state is exit 5 for every command."""
+    a = parse(list(argv))
+    limit = int(a.get('limit', DEFAULT_LIMIT))
     try:
         if cmd == 'open':
-            return cmd_open(root, parse(list(argv)))
+            return cmd_open(root, a, limit)
         if cmd == 'close':
-            return cmd_close(root)
+            return cmd_close(root, a)
         if cmd == 'hold':
-            return cmd_hold(root)
-        return status(root)
+            return cmd_hold(root, limit)
+        return status(root, limit=limit)
     except Unparsed as e:
         return UNPARSED, f'inflight: STOP — {e}. Fix it by hand; dispatch nothing until it parses.'
 

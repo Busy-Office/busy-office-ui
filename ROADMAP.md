@@ -564,13 +564,23 @@ would have stopped paying for itself.
 Design: `.roundtable/hourly-loop-design-2026-09-27.md` (owner-settled Q1-Q20 and the
 decision ladder; sibling of busy-office-erp ADR-0023). Each step makes the next safe.
 
-1. [ ] **417.1 — multi-line `inflight`.** Several `wf=` lines, a per-line cap, `open`
+1. [x] **417.1 — multi-line `inflight`.** Several `wf=` lines, a per-line cap, `open`
        refuses a line whose `paths` overlap an open one or a 4th line, `hold` holds
        only when the next dispatch is forbidden. Exit 5 stays a STOP.
        - **Accept — the property.** With two disjoint lines open, `open` of a third
          disjoint line succeeds and of an overlapping one fails; `status` names each
          line's state; a malformed line among good ones is still exit 5; every exit is
          exercised by `--self-test`, and a red-proof (drop the overlap check) fails it.
+       - **DONE 2026-09-27.** `scripts/loops/inflight.py` takes several lines under a
+         limit (`DEFAULT_LIMIT = 1`, so today's wake behaves exactly as before; `--limit N`
+         overrides, and 417.6 raises the constant). `open` refuses at the limit, a repeated
+         `wf`, and overlapping comma-separated `paths` (judged conservatively: nested or
+         equal fixed prefixes, or a glob with no prefix); `close --wf ID` closes one;
+         `status` exits 0 with room (printing each line), 3 at the limit, 4 if any line is
+         past its cap, 5 if any line does not parse or a `wf` repeats. `--self-test` is 43
+         cases (was 26). Red-proved: replacing the overlap test with `False` failed 2 cases.
+         Not covered: `LOOPS.md` still says one workflow at a time, which stays true until the
+         limit is raised, and no wake uses `--limit` yet.
        Track: defect
 2. [ ] **417.2 — `paths=` declared on roadmap items**, parsed and reconciled against the
        source by the mirror (count the raw markers).
