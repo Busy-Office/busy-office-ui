@@ -35,7 +35,7 @@ import re
 import subprocess
 import sys
 
-from _common import LOG, METRICS, ROOT
+from _common import LOG, METRICS, ROOT, parse_log_line
 
 ROW = re.compile(r"^- (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) · ([\w-]+) · ([\w-]+) · (.*)$")
 # `[\w-]`, not `\w`, and the hyphen is not hypothetical: NINE rows carry a
@@ -255,6 +255,15 @@ RULES = {
     "Objective": (3, "slice"),
 }
 
+# 421.3, owner-approved 2026-09-27 ("as recommended"): a counter needs BOTH the
+# row/slice count AND at least this many changed lines under CHANGE_LINE_PATHS
+# since its own last reset. A 5-line comment change no longer advances either
+# counter to OVERDUE on its own. Re-check after the first two firings.
+LINE_THRESHOLD = {
+    "Standardize": 50,
+    "Objective": 100,
+}
+
 
 def slice_of(item):
     """The slice number a log item names, or None. All three conventions."""
@@ -271,7 +280,9 @@ def rows():
                 bullets += 1
             m = ROW.match(line.rstrip("\n"))
             if m:
-                out.append({"at": m.group(1), "loop": m.group(2), "mode": m.group(3), "item": m.group(4)})
+                parsed = parse_log_line(line)
+                out.append({"at": m.group(1), "loop": m.group(2), "mode": m.group(3),
+                            "item": m.group(4), "commit": parsed["commit_sha"] if parsed else None})
     if bullets != len(out):
         raise SystemExit(
             f"dispatch_status: {bullets} iteration bullet(s) in {LOG} but only {len(out)} "
@@ -280,6 +291,30 @@ def rows():
             f"this script exists to make impossible. Fix ROW; do not print a number."
         )
     return out
+
+
+CHANGE_LINE_PATHS = ("packages", "apps/docs/src", "apps/docs/scripts")
+
+
+def changed_lines_since(base_sha):
+    """Total +/- lines under CHANGE_LINE_PATHS since `base_sha` (421.3): the
+    line count `git diff --numstat` reports, summed. None if there is no base
+    (the loop has never reset) — callers then fall back to the row-only trigger,
+    never blocking a counter that has nothing to compare against."""
+    if not base_sha:
+        return None
+    out = _git("diff", "--numstat", base_sha, "HEAD", "--", *CHANGE_LINE_PATHS)
+    if out is None:
+        return None
+    total = 0
+    for line in out.splitlines():
+        parts = line.split("\t")
+        if len(parts) < 2:
+            continue
+        for p in parts[:2]:
+            if p.isdigit():
+                total += int(p)
+    return total
 
 
 def since_last(all_rows, loop):
@@ -301,7 +336,7 @@ def since_last(all_rows, loop):
             print(f"  (Objective row {r['at']} did not reset rule 3: {why})")
     else:
         last = max((i for i, r in enumerate(all_rows) if r["loop"] == loop), default=None)
-    return (all_rows[last + 1:], all_rows[last]["at"]) if last is not None else (all_rows, "never")
+    return (all_rows[last + 1:], all_rows[last]["at"], all_rows[last]) if last is not None else (all_rows, "never", None)
 
 
 # ---------------------------------------------------------------------------
@@ -432,7 +467,7 @@ def report(all_rows, loop, threshold, unit, scope=(None, "normal")):
     if mode == "suspended":
         print(f"  {loop:<12} suspended — Rules-2-3: suspended while {mid} is ACTIVE; one sweep runs at its exit")
         return False
-    after, when = since_last(all_rows, loop)
+    after, when, reset_row = since_last(all_rows, loop)
     if mode == "scoped":
         # Only rows tagged `milestone=<mid>` count (roadmap 393.5); the reset is
         # still the last row of the rule's own loop.
@@ -497,11 +532,27 @@ def report(all_rows, loop, threshold, unit, scope=(None, "normal")):
                 f"p={p_fluke:.1%} if the parser is fine — {verdict}."
             )
         detail = f"  [{', '.join(slices)}]" if slices else ""
-    overdue = count >= threshold
+    line_threshold = LINE_THRESHOLD.get(loop)
+    lines = changed_lines_since(reset_row["commit"] if reset_row else None) if line_threshold else None
+    rows_overdue = count >= threshold
+    if line_threshold is None:
+        overdue = rows_overdue
+        lines_detail = ""
+    elif lines is None:
+        # No base commit (never reset) or `git diff` failed: fail OPEN on the
+        # line gate rather than block a counter forever on a read it cannot
+        # make (same asymmetry as 393.5's over-arming-costs-less rule).
+        overdue = rows_overdue
+        lines_detail = "  [line count unavailable — gated on rows only]"
+    else:
+        overdue = rows_overdue and lines >= line_threshold
+        lines_detail = f"  [{lines} / {line_threshold} changed line(s)]"
+        if rows_overdue and not overdue:
+            lines_detail += "  -- rows OVERDUE but under the line threshold, held (421.3)"
     flag = "OVERDUE" if overdue else "ok"
     print(
         f"  {loop:<12} {count:>2} / {threshold} {unit + ('' if count == 1 else 's'):<16}"
-        f"since {when}   {flag}{detail}" + (f"   (scoped: {mid} rows only)" if mode == "scoped" else "")
+        f"since {when}   {flag}{detail}{lines_detail}" + (f"   (scoped: {mid} rows only)" if mode == "scoped" else "")
     )
     return overdue
 

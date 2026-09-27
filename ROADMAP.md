@@ -670,7 +670,7 @@ without a decision are items; the two that need a threshold say so.
        (consumer-visible CSS/JS), evidence (a measurement of a real screen or the first
        user), process (everything else).** Runs without an ACTIVE milestone; may not change
        direction. Re-check N after about 30 wakes.
-3. [ ] **421.3 — Standardize and Objective count changed framework lines, not rows.**
+3. [x] **421.3 — Standardize and Objective count changed framework lines, not rows.**
        **Owner-approved 2026-09-27 ("as recommended"): Standardize fires after 50 changed
        lines under `packages/` or `apps/docs/src`; Objective fires after 100 such lines OR
        3 slices, whichever is later.** Estimates from this week's diffs (~110 lines in ~15
@@ -678,6 +678,17 @@ without a decision are items; the two that need a threshold say so.
        - **Accept — the property.** A 5-line comment change does not advance either counter;
          the line count is read from `git diff --numstat` against the base commit each
          counter last fired from, the same command 421.3's own build uses.
+       - **DONE 2026-09-27.** `dispatch_status.py`: `rows()` now carries each row's
+         commit sha (via `_common.parse_log_line`); `since_last()` also returns the
+         reset row; a new `changed_lines_since(base_sha)` sums `git diff --numstat`
+         under `packages/`, `apps/docs/src`, `apps/docs/scripts`. Both counters now
+         need rows_overdue AND at least their line threshold (Standardize 50,
+         Objective 100) to flag OVERDUE; a line count that cannot be read (no base,
+         or `git diff` fails) fails OPEN to rows-only, never blocking the counter
+         forever. Red-proved: forcing `overdue = rows_overdue` (dropping the line
+         gate) falsely reported Standardize OVERDUE at 0 changed lines; the correct
+         version holds it with `-- rows OVERDUE but under the line threshold, held`.
+         `--self-test` (14+6+5+17 cases) still passes unmodified.
        Track: defect
 4. [ ] **421.4 — archive thresholds for `loop-log.md` (549 KB) and `polish-state.md` (181 KB).**
        Track: defect
