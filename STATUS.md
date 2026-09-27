@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-27 10:02 UTC
+Generated at: 2026-09-27 11:23 UTC
 
 oldest dispatchable: 389.3 — A rejected scan's reason stays readable after the flash.
 
@@ -38,7 +38,7 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 377.3 — the completion gate cannot see a revision.
   - 377.6 — is busy-office-erp the named first user?
   - 377.10 — the Jev band, re-measured with the question form Rubric 2 prescribes, and the set recorded.
-- **Slice 389** (22 open)
+- **Slice 389** (21 open)
   - 389.1 — Every RF task screen accepts a wedge scan on arrival without stealing the docs reader's focus.
   - 389.2 — RF task screens complete the task, or stop claiming to.
   - 389.3 — A rejected scan's reason stays readable after the flash.
@@ -55,7 +55,6 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 389.15 — Decide what a wedge scan does on the menu and the queue.
   - 389.17 — Decide whether putaway verifies the pallet as well as the bin.
   - 389.18 — The receiving log reads at the glove tier, and its headers say what the cells hold.
-  - 389.19 — The task-menu count badge is sized to its content.
   - 389.20 — The RF queue drops a column and a tab stop that carry nothing, and names itself.
   - 389.21 — RF docs pages: screen first, figures true, promised states buildable from the profile.
   - 389.22 — Count and putaway on-screen wording and emphasis.
@@ -169,9 +168,9 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1902 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-09-27 16:50   ok  [146 / 50 changed line(s)]
-  Objective     2 / 3 slices          since 2026-09-27 16:51   ok  [389, 421]  [146 / 100 changed line(s)]
+dispatch status — counter-triggered rules (1903 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-09-27 16:50   ok  [195 / 50 changed line(s)]
+  Objective     2 / 3 slices          since 2026-09-27 16:51   ok  [389, 421]  [195 / 100 changed line(s)]
   Optimize      0 wake-date(s) newer   since 2026-09-27 05:16   ok   [newest pair: claims; 167 sample(s), 8 of 52 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (44 of 52 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
        claims                      7d  2026-09-25 311 count -> 2026-09-27 364 count  +53
@@ -186,7 +185,7 @@ dispatch status — counter-triggered rules (1902 iterations logged)
      a direction is NOT recorded on purpose (roadmap 324.1): adding one makes rule 5 fire on `bundle-gz-kb`'s four consecutive rises, which the log's own same-timestamp `components` samples refute (0.400 -> 0.355 kB per component over that window). A rise with no denominator is growth. Where a name has a real threshold, use it — `check:size` gates the bundle at 16.7 kB gz, which is rule 5's budget clause, not its trend one.
      not rule 5's input: 24 adoption-* name(s), the Objective grill's reading of the world (377.7), never a size or speed regression.
   Holds         8 hold-wake(s) recorded, 0 today (UTC dates)   [inflight.py hold; .roundtable/hold-wakes.jsonl]
-  Value        last 10: shipped 2 · evidence 2 · process 2 · unclassified 4   [421.1; trailing process streak: 0]
+  Value        last 10: shipped 3 · evidence 2 · process 2 · unclassified 3   [421.1; trailing process streak: 0]
 ```
 
 ## Milestone progress
@@ -304,7 +303,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-27 14:25 · Continue · measure · 422.1-422.2 — wake card (759 words) drafted and checked by a fresh agent on 4 states: right rule in 4 of 4, 12 ambiguities fixed, one wrong claim (red main = rule 1) corrected · landed · 22496210
 - 2026-09-27 14:27 · Continue · measure · 422.2 second pass — fresh agent on 7 more states: 7 of 7 right; stop/record gaps fixed in the card; LOOPS.md silent on rescheduling after a stop · landed · 7719618b
 - 2026-09-27 14:47 · Objective · grill · Slice 423 — grill of 419/420/422 (narrowed): 419.3 red-proved, 420/422 have no framework claim; three grills in a row confirm thin shipped surface · landed · 2f82414b
 - 2026-09-27 15:20 · Roadmap · triage · 387.2 decided by the ladder: top-layer popover message (Jev 1.0 agrees); build scoped, not yet shipped · triaged · 680d64ff
@@ -314,6 +312,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-27 16:51 · Objective · grill · Slice 425 — grill of 387.2/421.1/424 (narrowed): zero framework lines changed since 423; fourth grill in a row confirming the same reading; 421.3 is the recommended fix · landed · 6f664eb8
 - 2026-09-27 17:22 · Continue · fix · 421.3 — dispatch_status.py counters gated on changed framework lines (50/100) AND rows; fail-open on unreadable line count; red-proved · landed · 42c47ced
 - 2026-09-27 18:02 · Continue · build · 389.16 — check-rf-profile-coverage.mjs proves bo-u-tabular/bo-u-text-muted missing from rf-essentials; instrument's own first-draft bug (nested @-rule miss) caught and fixed; 98-byte gap vs 18-byte headroom filed as owner call; README drift (58/25 -> 59/26) fixed · landed · 4db1d729
+- 2026-09-27 18:55 · Continue · fix · 389.16, 389.19 — RF budget 41->42kb (Jev a=1.0 over trim/defer): bo-u-tabular/bo-u-text-muted shipped; badge align-self fix, red-proved live on rf-landing-rf at 6 theme/width combos · landed · 497d3c82
 
 ## Sunset test
 

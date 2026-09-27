@@ -5088,7 +5088,7 @@ removal or rewording; one shipped framework defect (389.4).
          `check-rf-profile-coverage.mjs` is now empty; the gate stays wired
          into `docs:build`. `check:claims`, core build and docs build all
          green.
-Track: defect
+       Track: defect
 
 17. [ ] **389.17 — Decide whether putaway verifies the pallet as well as the bin.**
        Scanning the pallet's own label gives 'Wrong bin: HU-100234'.
