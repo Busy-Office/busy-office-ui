@@ -559,6 +559,22 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 424 — Standardize sweep, 4 of 4 lanes on an isolated clean build: all four equal Slice 420 (2026-09-27)
+
+**Dispatched by rule 2**, `Standardize 4 / 4 OVERDUE`, CI in progress on the 387.2-revert push at
+step 0 (last known-green run confirmed by the claims suite this wake, not by `gh run list`).
+Worktree of HEAD (`809db949`), own `npm ci`; core build, docs build and `standardize_lanes.py`
+exit 0. Base: Slice 420.
+
+- **Lane 1 (of 4):** *"0 dead style attribute(s) on 0 page(s); 1392 live"*, equal.
+- **Lane 2 (of 4):** *"74 source file(s) · 247 rule(s) with 3+ declarations · 236 distinct bodies ·
+  7 body(ies) appearing more than once"*, equal. No CSS shipped since 420 (387.2 was reverted).
+- **Lane 3 (of 4):** 119 pages of 128, median 833, **120,015 words**, equal.
+- **Lane 4 (of 4):** dispatch region **10,374**, 0 of 17 sections moved, +0 body words.
+- **Exit:** a clean pass. Nothing to consolidate. Four sweeps in a row (414, 416, 420, 424) now
+  equal their base — 421.3's change-line threshold, once built, would have skipped at least the
+  last two of these for lack of framework change.
+
 ## Slice 420 — Standardize sweep, 4 of 4 lanes on an isolated clean build: all four equal Slice 416 (2026-09-27)
 
 **Dispatched by rule 2**, `Standardize 4 / 4 OVERDUE`, CI green on `36298328964`. Worktree
