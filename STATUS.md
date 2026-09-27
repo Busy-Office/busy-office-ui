@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-27 00:57 UTC
+Generated at: 2026-09-27 01:34 UTC
 
 oldest dispatchable: 387.2 — a frozen cell's message still has two covers above it.
 
@@ -38,9 +38,8 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
   - 377.3 — the completion gate cannot see a revision.
   - 377.6 — is busy-office-erp the named first user?
   - 377.10 — the Jev band, re-measured with the question form Rubric 2 prescribes, and the set recorded.
-- **Slice 387** (2 open)
+- **Slice 387** (1 open)
   - 387.2 — a frozen cell's message still has two covers above it.
-  - 387.3 — is the fallback's permanent horizontal scrollbar still needed?
 - **Slice 388** (2 open)
   - 388.3 — the segmented control's checked option draws an author-colour focus ring under forced colours.
   - 388.4 — two docs follow-ups from 388.1's panel, not re-measured.
@@ -160,9 +159,10 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1880 iterations logged)
-  Standardize   2 / 4 Continue rounds since 2026-09-27 07:52   ok
-  Objective     2 / 3 slices          since 2026-09-27 04:02   ok  [413, 414]
+dispatch status — counter-triggered rules (1881 iterations logged)
+  Standardize   3 / 4 Continue rounds since 2026-09-27 07:52   ok
+  Objective     3 / 3 slices          since 2026-09-27 04:02   OVERDUE  [387, 413, 414]
+  -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-09-27 05:16   ok   [newest pair: claims; 164 sample(s), 8 of 52 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (44 of 52 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
        claims                      7d  2026-09-25 311 count -> 2026-09-27 364 count  +53
@@ -294,7 +294,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-27 04:24 · Continue · fix · 413.5 — 384.1's write-up states the basis of the ratchet floor (file vs region words) · landed · 848e8c49
 - 2026-09-27 04:45 · Roadmap · triage · 413.1 — options for the fallback message height, sent to the decision ladder · triaged · 384bbd56
 - 2026-09-27 05:16 · Optimize · measure · rule 5 re-read: claims 311 -> 364 (+53, 387.1's four cases plus earlier); dispatch region flat at 10374; no regression verdict, no budget breach · logged · 188f0d60
 - 2026-09-27 05:47 · Roadmap · triage · 413.1 decided by the ladder pilot: option b, Jev 0.77 agrees with own verdict; reversible · landed · 4c60f6f4
@@ -304,6 +303,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-27 07:52 · Standardize · sweep · Slice 414 — 4 of 4 lanes (isolated build): lane 1 0 dead/1392; lane 2 247/236/7; lane 3 120,015 words; lane 4 dispatch region 10,374; all equal Slice 412 · landed · d9583913
 - 2026-09-27 08:23 · Continue · fix · 413.2 — scrollport containing block and min-content width stated in the data-table.css comment · landed · 2e7f5c5e
 - 2026-09-27 08:57 · Continue · fix · 413.4 closed — case text says which half can fail; size ceiling kept with reason · landed · b42ed5c6
+- 2026-09-27 09:34 · Continue · fix · 387.3 — removal experiment: 2 of 201 claims fail (marker and no room); rule kept with reasons; nothing shipped · refused · 02aeed87
 
 ## Sunset test
 
