@@ -559,6 +559,22 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 416 — Standardize sweep, 4 of 4 lanes on an isolated clean build: all four equal Slice 414 (2026-09-27)
+
+**Dispatched by rule 2**, `Standardize 4 / 4 OVERDUE`, CI green on `36289393602`.
+Worktree of HEAD (`59ad7dc1`) with its own `npm ci`; core build, docs build and
+`standardize_lanes.py` exit 0. Base: Slice 414.
+
+- **Lane 1 (of 4):** *"0 dead style attribute(s) on 0 page(s); 1392 live"*, equal.
+- **Lane 2 (of 4):** *"74 source file(s) · 247 rule(s) with 3+ declarations · 236
+  distinct bodies · 7 body(ies) appearing more than once"*, equal. Its input moved
+  (388.3 added one declaration to an existing forced-colours rule in
+  `segmented.css`, a rule that already had 3+), so it was run, not assumed.
+- **Lane 3 (of 4):** 119 pages of 128, median 833, **120,015 words**, equal.
+- **Lane 4 (of 4):** dispatch region **10,374**, 0 of 17 sections moved, +0 body
+  words; `LOOPS.md` 23,037, equal.
+- **Exit:** a clean pass. Nothing to consolidate.
+
 ## Slice 415 — Objective grill of 387.3 and Slices 413/414, narrowed to headline reproduction: 4 of 5 claims hold; the one defect is the sampling label written last wake (2026-09-27)
 
 Report: `.roundtable/grill-objective-387-413-414-2026-09-27.md`. Dispatched by rule 3,
