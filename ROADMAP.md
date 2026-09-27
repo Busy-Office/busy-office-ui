@@ -5377,7 +5377,7 @@ Found by the skeptics of the 375.11 workflow; each measured, none fixed here.
            message from a field near the inline end is narrower and taller,
            within the six-line reserve. 387.2 (a frozen cell's message under
            two covers) is untouched.
-2. [ ] **387.2 — a frozen cell's message still has two covers above it.** Near
+2. [~] **387.2 — a frozen cell's message still has two covers above it.** Near
        the viewport bottom the anchored message flips ABOVE a first-row
        frozen field onto the sticky header (z 1100) and is 128-160 of 160
        points hidden; and the sticky `.bo-form-actions` (1150) covers it 80 of
@@ -5400,6 +5400,25 @@ Found by the skeptics of the 375.11 workflow; each measured, none fixed here.
          The whole message was never seen in 2 of 10 arrivals at 320x256. Any
          Accept here must hold for capped and uncapped messages at every
          viewport. (`.roundtable/grill-objective-375-392-393-398-399-400-2026-09-26.md`)
+       - **DECIDED 2026-09-27 by the ladder — option (a), promote the message to a
+         top-layer popover.** My verdict first: (a), because the cause is structural
+         (the message's stacking context sits below the sticky cell at z 1051 and the
+         header at 1100, so no z-index on the message can reach above them) and the
+         framework already uses native popover for exactly this escape, in the
+         dropdown and kanban Move menus. Accepting the clipping (b) would leave a
+         validation message invisible on the one viewport/row combination where it
+         matters most, against the Objective's two-channel state rule. Jev (`jev ask`,
+         `jev-1.13.0`, run `0fcccb02-4ecd-4387-b237-2d3aa5588456`, exit 0,
+         `calibrated: false`): a=1.0, b=0. They agree.
+         **Scope for the build** (not done this wake — JS + markup + CSS, needs its
+         own round): the message becomes `popover="manual"`, shown with
+         `showPopover()` on the field's `focusin` and hidden on `focusout` (matching
+         `aria-describedby`, unchanged); it keeps `anchor-name`/`position-anchor` and
+         the existing `position-try-fallbacks` chain, since a popover element can
+         still be CSS-anchored; a `check:claims` case with a real frozen first-row
+         field at 320x568 confirms 0 of N hidden points, red-proved by reverting to
+         the current absolute positioning. **Owner: reverse by reopening and choosing
+         (b).**
        Track: defect
 3. [x] **387.3 — is the fallback's permanent horizontal scrollbar still needed?**
        375.11 added `overflow-x: scroll` to editable containers in the no-anchor
