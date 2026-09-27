@@ -5194,7 +5194,7 @@ Found by the skeptics of the 375.11 workflow; each measured, none fixed here.
          Accept here must hold for capped and uncapped messages at every
          viewport. (`.roundtable/grill-objective-375-392-393-398-399-400-2026-09-26.md`)
        Track: defect
-3. [ ] **387.3 — is the fallback's permanent horizontal scrollbar still needed?**
+3. [x] **387.3 — is the fallback's permanent horizontal scrollbar still needed?**
        375.11 added `overflow-x: scroll` to editable containers in the no-anchor
        branch so a message could not toggle a classic scrollbar on focus and
        blur. 387.1 stops the message lengthening the scroller, which was that
@@ -5206,6 +5206,19 @@ Found by the skeptics of the 375.11 workflow; each measured, none fixed here.
          loses 0. Then it is removed with a CHANGELOG entry; OR it stays with
          the measurement that shows what still needs it (a message with one
          very long unbreakable word is the candidate).
+       - **DONE 2026-09-27 — it stays, with the measurement.** Removed the rule
+         (`overflow-x: scroll`, one declaration) and rebuilt: claims part B fails 2
+         of 201, both `editable-grid, no anchor positioning` cases, with
+         `{"fallbackBranch":false,"blurredSw":340,"focusedSw":340,"room":0,
+         "method":"none (no room to scroll)"}`. Two readings, stated apart: (1)
+         those cases use `overflow-x` as their fallback-branch marker, so they cannot
+         run without it, which says nothing about presses; (2) with the rule gone the
+         scroller has no room, so the press path is not exercised at all. What still
+         needs the rule is the unbreakable-word message, which 413.3 shows still
+         lengthens the scroller and so still toggles a classic scrollbar. The
+         headless harness has overlay scrollbars, so no gate here can watch a classic
+         scrollbar toggle: the rule is kept on 375.11's measurement (5 of 10 lost,
+         Chrome 124) and 413.3's, not on a passing case. Restored; nothing shipped.
        Track: defect
 
 ## Slice 386 — Objective grill of 362.1, 369.2 and Slice 385: 3 of 3 headline claims reproduce, and the defect is in the sweep's own write-up — it said the closed-history share fell to "~0" (measured 14.4%) and called lane 2 "unchanged by construction" while a lane-2 input had moved (2026-09-25)
