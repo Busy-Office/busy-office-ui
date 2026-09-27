@@ -559,6 +559,26 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 417 — The hourly loop: design settled, built in order (2026-09-27)
+
+Design: `.roundtable/hourly-loop-design-2026-09-27.md` (owner-settled Q1-Q20 and the
+decision ladder; sibling of busy-office-erp ADR-0023). Each step makes the next safe.
+
+1. [ ] **417.1 — multi-line `inflight`.** Several `wf=` lines, a per-line cap, `open`
+       refuses a line whose `paths` overlap an open one or a 4th line, `hold` holds
+       only when the next dispatch is forbidden. Exit 5 stays a STOP.
+       - **Accept — the property.** With two disjoint lines open, `open` of a third
+         disjoint line succeeds and of an overlapping one fails; `status` names each
+         line's state; a malformed line among good ones is still exit 5; every exit is
+         exercised by `--self-test`, and a red-proof (drop the overlap check) fails it.
+       Track: defect
+2. [ ] **417.2 — `paths=` declared on roadmap items**, parsed and reconciled against the
+       source by the mirror (count the raw markers).
+3. [ ] **417.3 — `routes.json` as the profile menu; `record_iteration.py --profile`.**
+4. [ ] **417.4 — the spend counter and the soft/hard guard.**
+5. [ ] **417.5 — routing in shadow (`local/assign`) and its agreement report.**
+6. [ ] **417.6 — the hourly floor in the wake prompt; supervised run; trial week.**
+
 ## Slice 416 — Standardize sweep, 4 of 4 lanes on an isolated clean build: all four equal Slice 414 (2026-09-27)
 
 **Dispatched by rule 2**, `Standardize 4 / 4 OVERDUE`, CI green on `36289393602`.
