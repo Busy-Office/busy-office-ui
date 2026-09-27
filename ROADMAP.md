@@ -571,6 +571,29 @@ a row to equal its base** (414, 416, 420): the counter fires on Continue rows, a
 changes a comment counts the same as one that ships a rule (loop-doctor L3, 2026-09-27).
 Exit: a clean pass; nothing to consolidate.
 
+## Slice 422 — the wake card: what a wake loads drops from about 15,000-28,000 words to about 600 (2026-09-27)
+
+Owner: "Go" on the recommendation after the loop-doctor review (2026-09-27): a wake loads
+`LOOPS.md` (23,037 words; dispatch region 10,374), `CLAUDE.md` (4,274) and `RESUME.md` (930)
+before it does any work, and that text is also the part that keeps going stale. The card is
+`.roundtable/WAKE-CARD.md`, a derived summary that says `LOOPS.md` wins on disagreement.
+
+1. [x] **422.1 — the card is written** (610 words: guards with exits, triage, the 8 rules with
+       their conditions and the section to open, the never-unattended list, pre-commit gates,
+       the record command, the two Jev points). Not adopted: the wake prompt is the owner's text.
+2. [ ] **422.2 — the card is checked against `LOOPS.md`, both ways.**
+       - **Accept — the property.** A fresh agent given ONLY the card reaches the same rule and
+         the same loop as the dispatcher's own text for at least four distinct wake states
+         (counter overdue, oldest item, hold, halt), and every place it says it needed
+         `LOOPS.md` is either fixed in the card or recorded as a reason to keep reading. And a
+         mechanical check: every command, exit code and counter threshold in the card appears
+         in `LOOPS.md`, so the card cannot name what the source does not.
+3. [ ] **422.3 — measure the saving with the instrument lane 4 already uses**
+       (`report_loop_prose.py`): words a wake loads before and after. Accept: the figure is
+       quoted from the command, and says what it does NOT cover (playbooks a rule opens).
+4. [ ] **422.4 — adoption.** *Owner:* whether the wake prompt says "read the card, open
+       `LOOPS.md` only for the rule that fires". Until then the loop keeps reading `LOOPS.md`.
+
 ## Slice 421 — loop-doctor 2026-09-27 (review of the loop, score 2.6 "watch"): proposals, owner threshold pending
 
 Report: the review in the session scratchpad (not in the repo). The findings the loop can act on
