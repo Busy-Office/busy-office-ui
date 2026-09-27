@@ -1902,3 +1902,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-27 14:27 · Continue · measure · 422.2 second pass — fresh agent on 7 more states: 7 of 7 right; stop/record gaps fixed in the card; LOOPS.md silent on rescheduling after a stop · landed · 7719618b
 - 2026-09-27 14:47 · Objective · grill · Slice 423 — grill of 419/420/422 (narrowed): 419.3 red-proved, 420/422 have no framework claim; three grills in a row confirm thin shipped surface · landed · 2f82414b
 - 2026-09-27 15:20 · Roadmap · triage · 387.2 decided by the ladder: top-layer popover message (Jev 1.0 agrees); build scoped, not yet shipped · triaged · 680d64ff
+- 2026-09-27 15:50 · Continue · fix · 421.1 — --value tag added to record_iteration.py; 10-wake tally in dispatch_status.py, reconciled and red-proved · value=shipped track=defect · landed · f4f4ac8d
