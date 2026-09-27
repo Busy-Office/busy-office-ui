@@ -11,6 +11,12 @@ pin.
 
 ### Fixed
 
+- **Segmented control: the focus ring under forced colours is a system colour.**
+  A checked option opts out of forced-colour flattening, which also left its
+  focus ring in the author colour (teal, both themes) while every other
+  control's ring computed Highlight. The ring is now `Highlight`. Nothing to
+  migrate.
+
 - **A keyboard-focused form control or `<button>` inside a data grid now
   shows its focus ring.**
   In a `.bo-data-table` with grid navigation (`data-grid-nav`, which sets

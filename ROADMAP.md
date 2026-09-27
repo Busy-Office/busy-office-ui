@@ -5050,7 +5050,7 @@ screen. Task screen can be better."* Two items; the grill is dispatched by rule 
          RF profile budget went 40 -> 41 kB for it (65 characters over; reason
          in `build-rf-essentials.mjs`). `check:claims` +5 [corrected by Slice 392: +6 counted the flashRow change], each seen to fail
          on a broken build (314/314 green). Jev (Rubric 2): 0.97 / 0.91 / 0.91.
-3. [ ] **388.3 — the segmented control's checked option draws an author-colour
+3. [x] **388.3 — the segmented control's checked option draws an author-colour
        focus ring under forced colours.** Found by 388.1's panel: rgb(13,148,136)
        in both themes, where every other control's ring computes Highlight,
        because the checked option sets `forced-color-adjust: none`.
@@ -5058,6 +5058,14 @@ screen. Task screen can be better."* Two items; the grill is dispatched by rule 
          option's ring computes a system colour, asserted by a `check:claims`
          case that fails on today's CSS; the tabs' forced rule is measured for
          the same defect and fixed or cleared.
+       - **DONE 2026-09-27.** `outline-color: Highlight` on the forced-colours checked
+         rule in `segmented.css`. `check:claims` part A gained a case (163 to 164) that
+         reads the ring on a keyboard-focused checked option against a `Highlight`
+         probe. Red-proved: with the declaration removed and both builds redone the
+         case fails with `ring: rgb(13, 148, 136)` (the finding's colour), 1 of 164;
+         restored, 164 of 164. Tabs: their forced block sets no
+         `forced-color-adjust: none`, so the same defect cannot occur there (cleared by
+         reading the rule, not measured).
        Track: defect
 4. [ ] **388.4 — two docs follow-ups from 388.1's panel, not re-measured.**
        (a) `/concepts/cascade`'s example `.bo-btn { border-radius: 0; }` works

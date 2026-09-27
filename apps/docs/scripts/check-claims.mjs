@@ -3619,6 +3619,30 @@ const toggleFc = await page.evaluate(() => {
 check('button: under forced colours a pressed toggle (aria-pressed="true") computes a different background and text colour from an unpressed one (388.1)',
   toggleFc.forced && toggleFc.on.bg !== toggleFc.off.bg && toggleFc.on.fg !== toggleFc.off.fg, JSON.stringify(toggleFc));
 
+/* 388.3 — the segmented control's checked option opts out of forced-colour
+   flattening, and its focus ring used to keep the author colour (teal in both
+   themes) where every other control's ring computes Highlight. */
+await visit('/components/segmented/', { features: [{ name: 'forced-colors', value: 'active' }] });
+const segRingFc = await page.evaluate(() => {
+  const input = document.getElementById('seg-mine');
+  const probe = document.createElement('div');
+  probe.style.outlineColor = 'Highlight'; probe.style.outlineStyle = 'solid';
+  document.body.append(probe);
+  const highlight = getComputedStyle(probe).outlineColor;
+  probe.remove();
+  return { forced: matchMedia('(forced-colors: active)').matches, checked: input.checked, highlight };
+});
+await page.keyboard.press('Tab');
+for (let i = 0; i < 40 && await page.evaluate(() => document.activeElement?.id !== 'seg-mine'); i++) await page.keyboard.press('Tab');
+const segRing = await page.evaluate(() => {
+  const el = document.getElementById('seg-mine');
+  const cs = getComputedStyle(el.nextElementSibling);
+  return { focused: document.activeElement === el, focusVisible: el.matches(':focus-visible'), ring: cs.outlineColor, width: cs.outlineWidth };
+});
+check('segmented: under forced colours the focus ring on a checked option computes the system Highlight colour, not the author colour (388.3)',
+  segRingFc.forced && segRingFc.checked && segRing.focused && segRing.focusVisible && segRing.width !== '0px' && segRing.ring === segRingFc.highlight,
+  JSON.stringify({ probe: { ...segRingFc, option: undefined }, segRing }));
+
 /* 200.3 — tab and segmented selection easing. Three cases, each locking a
    thing that was measured to be different from what reading the CSS suggests.
 
