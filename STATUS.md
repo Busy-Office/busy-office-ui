@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-27 06:25 UTC
+Generated at: 2026-09-27 06:27 UTC
 
 oldest dispatchable: 387.2 — a frozen cell's message still has two covers above it.
 
@@ -174,8 +174,8 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1893 iterations logged)
-  Standardize   1 / 4 Continue round  since 2026-09-27 14:14   ok
+dispatch status — counter-triggered rules (1894 iterations logged)
+  Standardize   2 / 4 Continue rounds since 2026-09-27 14:14   ok
   Objective     3 / 3 slices          since 2026-09-27 12:22   OVERDUE  [419, 420, 422]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-09-27 05:16   ok   [newest pair: claims; 166 sample(s), 8 of 52 name(s) paired across days]
@@ -309,7 +309,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-27 11:18 · Standardize · sweep · Slice 416 — 4 of 4 lanes (isolated build): 0 dead/1392; 247/236/7; 120,015 words; dispatch region 10,374; all equal Slice 414 · landed · 8d85b2b7
 - 2026-09-27 11:50 · Continue · fix · 388.4 — cascade sample 0 to 2px; target-size header records bounding-box basis · landed · b5d026c9
 - 2026-09-27 12:17 · Roadmap · triage · Slice 417 — hourly loop design note and build order filed (417.1-417.6) · triaged · 7a4b3a79
 - 2026-09-27 12:18 · Continue · fix · 417.1 — multi-line inflight (limit 1 by default), overlap check red-proved, 43 self-test cases · landed · 90dbeef4
@@ -319,6 +318,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-27 13:49 · Continue · fix · 419.3 (kanban) — columns are sections named by an h3; claims part B 202; other ~35 span titles left as a policy call · landed · 42524242
 - 2026-09-27 14:14 · Standardize · sweep · Slice 420 — 4 of 4 lanes (isolated build): 0 dead/1392; 247/236/7; 120,015 words; dispatch region 10,374; all equal Slice 416 · landed · 9a6a394e
 - 2026-09-27 14:25 · Continue · measure · 422.1-422.2 — wake card (759 words) drafted and checked by a fresh agent on 4 states: right rule in 4 of 4, 12 ambiguities fixed, one wrong claim (red main = rule 1) corrected · landed · 22496210
+- 2026-09-27 14:27 · Continue · measure · 422.2 second pass — fresh agent on 7 more states: 7 of 7 right; stop/record gaps fixed in the card; LOOPS.md silent on rescheduling after a stop · landed · 7719618b
 
 ## Sunset test
 

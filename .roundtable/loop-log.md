@@ -1899,3 +1899,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-27 13:49 · Continue · fix · 419.3 (kanban) — columns are sections named by an h3; claims part B 202; other ~35 span titles left as a policy call · track=defect · landed · 42524242
 - 2026-09-27 14:14 · Standardize · sweep · Slice 420 — 4 of 4 lanes (isolated build): 0 dead/1392; 247/236/7; 120,015 words; dispatch region 10,374; all equal Slice 416 · landed · 9a6a394e
 - 2026-09-27 14:25 · Continue · measure · 422.1-422.2 — wake card (759 words) drafted and checked by a fresh agent on 4 states: right rule in 4 of 4, 12 ambiguities fixed, one wrong claim (red main = rule 1) corrected · landed · 22496210
+- 2026-09-27 14:27 · Continue · measure · 422.2 second pass — fresh agent on 7 more states: 7 of 7 right; stop/record gaps fixed in the card; LOOPS.md silent on rescheduling after a stop · landed · 7719618b
