@@ -559,6 +559,33 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 419 — the first user's conformance gap: busy-office-erp's contract says two of nine screen kinds have no component here (2026-09-27)
+
+Source: busy-office-erp `docs/specs/RUNTIME_UI_CONTRACT_V0.md` §7.3 (read 2026-09-27):
+`kanban` and `report` "have no component in the reference implementation" at 0.9.0, and
+`kanban` "is currently composed from layout primitives, which does not satisfy 5.3"
+(keyboard operability), tracked as issue #2. This repo answers with patterns
+(`/patterns/kanban`, `/patterns/report`), which Slice 317 accepted as the framework's
+answer. Nobody has checked the two against the contract's own tests. This is real work
+toward Milestone M1's stated end (a long-use ERP app), and the first user's ADR-0016
+stays Proposed until it is settled.
+
+1. [ ] **419.1 — measure `/patterns/kanban` and `/patterns/report` against contract §2, §5.1-5.3.**
+       - **Accept — the property.** For each page, on the served docs at 1440 and 390
+         px: the required structure of §2.1 is present (kanban: a region per state, each
+         with a heading, containing a list; report: a table per group with a caption, `th
+         scope="col"` and a totals row), state is carried in text as well as colour, and
+         every region and every move/sort action is reachable and operable by keyboard
+         alone, driven with real key events. The result is a table of contract clauses,
+         each PASS, FAIL or NOT APPLICABLE with its instrument. A FAIL is filed as a
+         defect; an all-PASS result is the evidence the first user needs, stated in their
+         terms.
+       - **Also.** Does `check-markup` accept the markup the contract requires? Run it on
+         the emitted structure, not only on our demo.
+       Track: defect
+2. [ ] **419.2 — the reply to issue #2 is drafted for the owner** with 419.1's table
+       (replying is the owner's action).
+
 ## Slice 418 — Objective grill of 388.3/388.4 and Slices 416/417, narrowed: 4 of 5 claims hold; 417.1's overlap check judged `./a` and `a` disjoint (fixed) (2026-09-27)
 
 Report: `.roundtable/grill-objective-388-416-417-2026-09-27.md`. Dispatched by rule 3,
