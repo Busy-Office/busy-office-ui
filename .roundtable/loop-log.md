@@ -1904,3 +1904,4 @@ by `scripts/loops/record_iteration.py`. See `LOOPS.md` for the playbooks and rou
 - 2026-09-27 15:20 · Roadmap · triage · 387.2 decided by the ladder: top-layer popover message (Jev 1.0 agrees); build scoped, not yet shipped · triaged · 680d64ff
 - 2026-09-27 15:50 · Continue · fix · 421.1 — --value tag added to record_iteration.py; 10-wake tally in dispatch_status.py, reconciled and red-proved · value=shipped track=defect · landed · f4f4ac8d
 - 2026-09-27 16:45 · Continue · build · 387.2 — popover mechanism verified live on the real demo table; frozen-row escape not verified in time; reverted after a stale dist artifact looked like 4 claim regressions · value=process track=defect · reverted · 52e75246
+- 2026-09-27 16:50 · Standardize · sweep · Slice 424 — 4 of 4 lanes (isolated build): 0 dead/1392; 247/236/7; 120,015 words; dispatch region 10,374; all equal Slice 420 (387.2 reverted, no CSS shipped) · value=process · landed · f037f0f7
