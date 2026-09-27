@@ -614,11 +614,14 @@ rule 3. 387.1: 11 claims, 9 hold, 2 fail; 7 findings (5 confirmed, 2 narrowed).
          claim is narrowed; the cost stays measured in the Slice 413 report.
          **Owner: reverse by reopening this item and choosing (a) or (c).**
        Track: defect
-2. [ ] **413.2 — `position: relative` gives the message the scrollport as its box.**
+2. [x] **413.2 — `position: relative` gives the message the scrollport as its box.**
        Static position sits ~1100px in a 1200px table while the containing block is
        356px; `fit-content` gets negative room and falls to min-content (21
        characters: 65x82 vs 152x28 before). Accept: the width the message gets is
        stated with its cause, and 413.1's matrix covers it.
+       - **DONE 2026-09-27** — the cause and the measured width are now stated in the
+         `data-table.css` comment beside the fallback (comment only); 413.1's decision (b)
+         accepts the cost, so no matrix is added.
        Track: defect
 3. [x] **413.3 — an unbreakable token still lengthens the scroller (fallback only).**
        `overflow-wrap: anywhere` exists only in the anchored branch. scrollWidth
