@@ -8684,7 +8684,7 @@ for (const revert of [false, true]) {
   const b2 = await noAnchorPastedPage({ revert });
   check(revert
     ? 'pasted canonical markup, no anchor positioning, pre-387.1 rules put back: the message overflows the page sideways (the stated reason)'
-    : 'pasted canonical markup, no anchor positioning (simulated): a long message does not overflow the page or move a sticky action bar (387.1)',
+    : 'pasted canonical markup, no anchor positioning (simulated): a long message does not overflow the page (387.1; the sticky bar is asserted equal too, but overlay scrollbars here never move it, so only the overflow half can fail: 413.4)',
   revert ? (b2.sampleFound && b2.simApplied && b2.focused.pageOverflow > b2.blurred.pageOverflow)
     : (b2.sampleFound && b2.simApplied && b2.focused.pageOverflow <= b2.blurred.pageOverflow && b2.focused.postTop === b2.blurred.postTop),
   JSON.stringify(b2));

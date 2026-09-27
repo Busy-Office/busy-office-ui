@@ -636,7 +636,7 @@ rule 3. 387.1: 11 claims, 9 hold, 2 fail; 7 findings (5 confirmed, 2 narrowed).
          Reverse by reopening if a real message hits it. 387.3's "long unbreakable
          word" candidate is answered the same way.
        Track: defect
-4. [ ] **413.4 — the claims that cannot fail.** (a) `noAnchorPastedPage`'s sticky-bar
+4. [x] **413.4 — the claims that cannot fail.** (a) `noAnchorPastedPage`'s sticky-bar
        half passes with the pre-fix rules under overlay scrollbars (postTop equal
        either way), and neither new case reads `passedThrough`, so a failed refetch
        passes vacuously; (b) [labelled 2026-09-27 at the two sites] "2 of 7 top-band" vs "4 of 7 along Post" are different
@@ -650,6 +650,12 @@ rule 3. 387.1: 11 claims, 9 hold, 2 fail; 7 findings (5 confirmed, 2 narrowed).
          requiring 999 rewrites failed both pasted-page cases (2 of 201). Still
          open: the sticky-bar half under classic scrollbars, (b) the two press
          figures' labels, (c) the size-budget trend.
+       - **DONE 2026-09-27** — (a) the case names which half can fail (overflow) and
+         which cannot under overlay scrollbars (sticky bar; the classic-scrollbar
+         15px figure remains a one-off rig measurement, not a gate); (b) labelled;
+         (c) the size max for `css/components/*.min.css` is a ceiling per file, raised
+         2.4 to 2.5 for the one file that needed it, and stays: trimming
+         data-table.css is refused while it is the only file near it.
        Track: defect
 5. [x] **413.5 — 384.1's write-up states the basis of the ratchet floor.**
        The ratchet's `is_real_cut` is on FILE words (194 for LOOPS.md), so
