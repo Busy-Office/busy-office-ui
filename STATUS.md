@@ -167,9 +167,9 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1904 iterations logged)
-  Standardize   4 / 4 Continue rounds since 2026-09-27 16:50   OVERDUE  [195 / 50 changed line(s)]
-  Objective     2 / 3 slices          since 2026-09-27 16:51   ok  [389, 421]  [195 / 100 changed line(s)]
+dispatch status — counter-triggered rules (1905 iterations logged)
+  Standardize   5 / 4 Continue rounds since 2026-09-27 16:50   OVERDUE  [241 / 50 changed line(s)]
+  Objective     2 / 3 slices          since 2026-09-27 16:51   ok  [389, 421]  [241 / 100 changed line(s)]
   -> a counter is at or past its threshold; the dispatcher should pick it
   Optimize      0 wake-date(s) newer   since 2026-09-27 05:16   ok   [newest pair: claims; 167 sample(s), 8 of 52 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (44 of 52 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
@@ -185,7 +185,7 @@ dispatch status — counter-triggered rules (1904 iterations logged)
      a direction is NOT recorded on purpose (roadmap 324.1): adding one makes rule 5 fire on `bundle-gz-kb`'s four consecutive rises, which the log's own same-timestamp `components` samples refute (0.400 -> 0.355 kB per component over that window). A rise with no denominator is growth. Where a name has a real threshold, use it — `check:size` gates the bundle at 16.7 kB gz, which is rule 5's budget clause, not its trend one.
      not rule 5's input: 24 adoption-* name(s), the Objective grill's reading of the world (377.7), never a size or speed regression.
   Holds         8 hold-wake(s) recorded, 0 today (UTC dates)   [inflight.py hold; .roundtable/hold-wakes.jsonl]
-  Value        last 10: shipped 3 · evidence 2 · process 3 · unclassified 2   [421.1; trailing process streak: 1]
+  Value        last 10: shipped 4 · evidence 2 · process 3 · unclassified 1   [421.1; trailing process streak: 0]
 ```
 
 ## Milestone progress
@@ -303,7 +303,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-27 14:47 · Objective · grill · Slice 423 — grill of 419/420/422 (narrowed): 419.3 red-proved, 420/422 have no framework claim; three grills in a row confirm thin shipped surface · landed · 2f82414b
 - 2026-09-27 15:20 · Roadmap · triage · 387.2 decided by the ladder: top-layer popover message (Jev 1.0 agrees); build scoped, not yet shipped · triaged · 680d64ff
 - 2026-09-27 15:50 · Continue · fix · 421.1 — --value tag added to record_iteration.py; 10-wake tally in dispatch_status.py, reconciled and red-proved · landed · f4f4ac8d
 - 2026-09-27 16:45 · Continue · build · 387.2 — popover mechanism verified live on the real demo table; frozen-row escape not verified in time; reverted after a stale dist artifact looked like 4 claim regressions · reverted · 52e75246
@@ -313,6 +312,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-27 18:02 · Continue · build · 389.16 — check-rf-profile-coverage.mjs proves bo-u-tabular/bo-u-text-muted missing from rf-essentials; instrument's own first-draft bug (nested @-rule miss) caught and fixed; 98-byte gap vs 18-byte headroom filed as owner call; README drift (58/25 -> 59/26) fixed · landed · 4db1d729
 - 2026-09-27 18:55 · Continue · fix · 389.16, 389.19 — RF budget 41->42kb (Jev a=1.0 over trim/defer): bo-u-tabular/bo-u-text-muted shipped; badge align-self fix, red-proved live on rf-landing-rf at 6 theme/width combos · landed · 497d3c82
 - 2026-09-27 19:24 · Continue · fix · 389.16 marker fix — a Track: defect line lost its indentation in the DONE-block insertion; generate_status's own-line-marker reconciliation (44 raw vs 43 parsed) caught it · landed · cc1f8d2a
+- 2026-09-27 19:49 · Continue · fix · 389.23 — bo-u-text-nowrap added to pick/count/putaway identifiers (already shipped by 389.16's utilities import, no new bytes); 30 identifiers verified at 3 widths, red-proved · landed · a631a660
 
 ## Sunset test
 
