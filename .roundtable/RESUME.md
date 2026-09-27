@@ -1,109 +1,83 @@
 # Resume state — read this at Step 0 of every wake
 
-> **⚠ ALSO READ `.roundtable/ENVIRONMENT.md` — the git/build traps and the
-> toolchain that works.** It used to live in this file. It does not any more
-> (roadmap 169.3, 2026-08-28), because this file is rewritten wholesale every
-> wake and that is where corrections go to die. `LOOPS.md` Step 0 names both
-> files, and **three** advisory checks run from `record_iteration.py` — the
-> charter check, `check:resume-slice-ids` and `polish_requeue.py
-> --verify-stamps`. All three REPORT; none fails a build (roadmap 175.3).
-> `check_correction_sites.py` is run on purpose before a correcting commit
-> (381.1 unwired it). Run
-> them against the file as it now stands rather than trusting a stale reading.
+> **⚠ ALSO READ `.roundtable/ENVIRONMENT.md`** — the git/build traps and the
+> toolchain that works; this file used to hold that too (roadmap 169.3).
+> `LOOPS.md` Step 0 names both. Three advisory checks run from
+> `record_iteration.py` (the charter check, `check:resume-slice-ids`,
+> `polish_requeue.py --verify-stamps`); all REPORT, none fails a build
+> (roadmap 175.3). Run them fresh rather than trusting a stale reading.
 
-The wake prompt says *"don't assume prior-turn state"*. This file is how a wake
-picks up work that was left mid-flight, so the instruction stays true across a
-context clear. **Keep it current whenever a slice is left uncommitted, and clear
-its In flight and Uncommitted sections the moment the slice lands.**
-
-**Citation practice for this file: cite by slice number only, never by raw
-`ROADMAP.md:NN`.** A slice number survives every rewrite; a line number
-survives none.
+The wake prompt says *"don't assume prior-turn state"*; this file is how a wake
+picks up mid-flight work across a context clear. **Rewritten wholesale every
+wake; clear In flight/Uncommitted the moment a slice lands.** Cite by slice
+number, never `ROADMAP.md:NN` — a line number survives no rewrite.
 
 ---
 
 ## In flight
 
+Nothing. `inflight.py status` reads exit 0.
+
 ## Uncommitted
 
-Nothing in this checkout. The owner's own uncommitted work of 2026-09-20 is parked
-on `park/owner-checkpoint-2026-09-20` (`a9a2d9bb`, decision O2); pushing or merging
-that branch is the owner's call.
+Nothing. Working tree clean at HEAD, main's CI green. The owner's own
+uncommitted work of 2026-09-20 is parked on `park/owner-checkpoint-2026-09-20`
+(`a9a2d9bb`, decision O2); pushing/merging it is the owner's call.
 
 ## Next rule
 
-- **Step 0:** `step0_guard.py`, then `inflight.py hold`, then
-  `dispatch_status.py` (a REFUSED milestone line stops the wake; see LOOPS.md
-  Step 0b). Before choosing, read CI for main's HEAD (`gh run list --branch
-  main --limit 2`); a red main is rule 1.
-- **No standing GOAL.** M0 ended with `398.5` (FAILED, 2.375); M1 stays DRAFT.
-- **Rule 4's pick is `386.1`, started, not landed** (nothing in the checkout).
-  Base rate: 0 of 312 print readings off `#fff`/`#000` (128 `distPages` + 28
-  `suitePages`, both themes, `23a22cce`). Shape chosen: a print probe in
-  `check-layout.mjs` on each page it already loads (a shared source would not
-  catch a NEW page). **Red-proof not done:** the first injection removed 0 rules;
-  delete the unlayered `@media print` `body` rule from ANY sheet (href or not),
-  assert 1 removed, then read. Script: `~/Projects/busy-office-ui-handoff/386.1-base-rate.mjs`.
-- **Jev is live through the `jev` CLI** (owner approved the migration 2026-09-27;
-  CLAUDE.md "Jev" and `jev-rubrics.md` v2 are the rules). Read the exit code first;
-  any exit other than 0, 3 or 4 is UNVERIFIED. Never use `mcp__jev__*`.
+- **Where this wake is running:** if this is a LOCAL wake, it was restarted —
+  **the local `/loop` was stopped 2026-09-27** (owner: "pause the loop and
+  schedule"); the cloud routine `⚡ Busy Office UI loop wake`
+  (`trig_019aw8tDjiYxC3ejSFd5wYZY`) is `enabled: true` instead, cron
+  `27 * * * *` (hourly), cloud-adapted (no Podman there; runs
+  `check:claims`/`test:axe`/`check:layout -w docs` via `serve-dist.mjs`,
+  pushes once at the end or not at all). That routine's prompt predates the
+  Jev CLI, so it skips Jev — UNVERIFIED per `LOOPS.md`, not a failure.
+- **Step 0:** `step0_guard.py`, `inflight.py hold`, `dispatch_status.py` (a
+  REFUSED milestone line stops the wake). Read CI for main's HEAD first; red
+  main is rule 1.
+- **No standing GOAL.** M1 stays DRAFT.
+- **Rule 2 (Standardize) is OVERDUE — 5/4 rounds, 241 changed lines** (past
+  421.3's 50-line gate). **Next wake's pick**: isolated worktree sweep, base
+  Slice 424.
+- **Rule 3 (Objective) is 2/3**, not due; [389, 421] armed.
+- **Rule 4's queue, oldest-first, unblocked:** 389.3, 391.1, 392.2, 392.3,
+  393.11, … — re-run `sqlite3 .roundtable/loops.db "select item_id, title
+  from roadmap_items where blocked=0 and after_open='' and parked_held=0
+  order by cast(slice as int), item_id limit 8"`, never trust a cached list.
+- **`387.2` DECIDED, NOT BUILT.** Ladder chose a top-layer `popover="manual"`
+  message (Jev `jev-1.13.0` a=1.0 agreeing). A build attempt shipped working
+  CSS/JS (verified live) but not the actual frozen-row escape, and was fully
+  reverted — nothing shipped. Trap for the next attempt: `editable-grid.astro`'s
+  FIRST `<script>` block is a JS template-literal STRING for the "Markup"
+  sample and never executes; wire `initCellMessages()` into the SECOND, real
+  block instead.
+- **RF-essentials budget raised 41→42kb this session** (ladder, Jev a=1.0) to
+  ship 389.16+389.19+389.23. Real headroom, **measured on the built file**:
+  487 bytes. The next claim must argue and measure its own.
+- **Hourly-loop design (Slice 417) mostly unbuilt.** 417.1 (multi-line
+  `inflight.py`) landed, limit still 1. 417.2-417.6 open, in order. Design:
+  `.roundtable/hourly-loop-design-2026-09-27.md`.
+- **421.1-421.3 live**: `record_iteration.py --value shipped|evidence|process`;
+  `dispatch_status.py` prints a 10-wake tally + process-streak (N=3 should
+  trigger a planner run — reading exists, the run itself is not wired);
+  Standardize/Objective need row count AND changed lines to fire OVERDUE.
+- **A `Track:` marker's indentation can desync `loops.db` silently** — run
+  `generate_status.py` after any manual edit near a marker line, not just
+  after `record_iteration.py`; it caught exactly this once this session.
+- **Jev via the `jev` CLI only** (never `mcp__jev__*`); exit 0/3/4 only, else
+  UNVERIFIED. **Ladder used 3x this session** (413.1, 387.2's design, the RF
+  budget), my verdict first each time, Jev agreeing a=1.0 each time; none
+  reached the owner. Never delegated: publish, outside replies, keys/`jev
+  allow`/plugin config, spend caps, irreversible deletion, the ladder itself.
 
-## Direction — 2026-09-26
+## Direction — 2026-09-27
 
-**2026-09-27 — the Jev migration landed** (owner-approved). Left for the owner:
-delete `~/.zshrc:93`, enter the key with `/plugin configure busy-office`, and migrate
-busy-office-erp's `AGENTS.md` / ADR-0022, which still name the removed skills.
-
-Owner decisions and actions waiting. **A recommendation for every item below,
-with its re-measured evidence and a validated field block to paste, is in
-`.roundtable/owner-recs-2026-09-26.md`** (start at "Start here").
-
-0. **M0 failed twice** (`393.10` and `398.5`, both 2.375). Each fresh
-   scorer finds a new 5-7 stale statements, so patching sites does not
-   converge. The choice is yours:
-   - set `Status: ACTIVE` without the test (the O-fields still come first);
-   - or have the loop shrink what a wake must trust: move the
-     cloud-container history out of `ENVIRONMENT.md`, and out of `LOOPS.md`,
-     the way RESUME's history moved to `resume-history.md`. Then re-score.
-
-   The activation sentence at ROADMAP.md:148 still names `393.10`. That is
-   your section, and both scorers flagged it. Suggested wording: "393.10, or
-   its one retry 398.5, reports …".
-   **Archive the cloud sessions** (O1): 302 of 307 are still active.
-   **0.9.0 is released** (owner: "Can you publish the 0.9.0?"), and the
-   tarballs are verified; 377.5 and 394.3 are closed. **A 0.9.1 decision is
-   yours:** Slice 401's grill found that 0.9.0's `bo-check-markup` passes when
-   one of several paths is missing, where 0.8.0 failed closed (`401.1`). The fix
-   is small. `401.2` corrects four statements in the released notes; the
-   GitHub Release body is yours to update.
-   **Firefox** (375.11's half): installing it was not enough. The launch fails
-   even outside the sandbox. Open Firefox.app once, which should create
-   `~/Library/Application Support/Firefox` (unverified), and the loop retries.
-1. **O5-O18** in `.roundtable/milestone-draft-2026-09-25/5-open-decisions.md`,
-   the fields M1 needs before ACTIVE.
-2. **Three readings to confirm or reverse:**
-   - `393.6`: a tier set to `none` runs on `top` (§5 and O14), not refused
-     (`393.6`'s Accept);
-   - four fields are loop-written while their decisions are blank: Precedence
-     (O11), Rules-2-3 (O12), Planner (O14), Direction-drift (O16); `398.3`;
-   - D4 (`Direction-drift`): the measured framework share has a median of
-     4.9%, so any X of 10% or more would fire almost daily (`393.7`).
-3. **Push `park/owner-checkpoint-2026-09-20`** to origin as a backup (it has no
-   upstream). Its four `.roundtable` records were copied to main on 2026-09-26;
-   the journey code stays parked until O5 decides RF.
-4. **`377.5`** — release: eight P0 fixes are unreleased (377.5's seven, plus
-   `392.1`).
-   **`377.6`** — is busy-office-erp the first user?
-5. **Issue #2** has had only the triage comment for weeks; replying is the
-   owner's action (Slice 317 refused the component).
-6. **`369.1`** (print from the dark theme), **`249.12`** (the archive-sweep
-   trigger) and **`273.2`** (Polish `dry`) are owner calls, unchanged.
-7. **The wake prompt still says "Read `LOOPS.md` and `ROADMAP.md` fresh"**,
-   while the milestone's read set (prompt §4) reads neither whole. Real wakes
-   already read far less (measured: 12.4k words at a cold start, 3.8k on a
-   bootstrap wake; `393.8`). Whether the prompt should say "read what they point
-   at" is the owner's wording to change; `393.13` re-measures on the first ACTIVE wake.
-8. **`375.11`'s Firefox half** is blocked: Playwright's Firefox does not
-   launch here ("Could not find profile folder").
+Owner decisions still open (O0-O8), the wake-card adoption question, and this
+session's full work log are archived verbatim in `.roundtable/resume-history.md`
+(2026-09-27 entry) — recommendations with re-measured evidence for the O-items
+are in `.roundtable/owner-recs-2026-09-26.md`. Not touched this session; the
+ladder's calls were reversible engineering decisions, not these.
 
 History lives in `.roundtable/resume-history.md` (`393.8`), never here.

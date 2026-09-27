@@ -1028,3 +1028,71 @@ wants that discipline it needs filing as its own item.**
 this wake filed a finding **about** `LOOPS.md`'s machinery and deliberately did
 not edit it, because `372.1`'s Accept leaves open which of two fixes is right
 and a grill that pre-empts its own item has decided it by practice.
+
+## 2026-09-27 — session handoff (owner: "pause the loop and schedule", then "handoff")
+
+Full "Direction — 2026-09-26" owner-decision list, archived verbatim before RESUME.md
+was trimmed to the milestone's 120-line cap. Recommendations with re-measured evidence
+for all of these are in `.roundtable/owner-recs-2026-09-26.md`.
+
+0. **M0 failed twice** (`393.10` and `398.5`, both 2.375). Each fresh scorer finds a new
+   5-7 stale statements, so patching sites does not converge. The choice is yours: set
+   `Status: ACTIVE` without the test (the O-fields still come first), or have the loop
+   shrink what a wake must trust — move the cloud-container history out of
+   `ENVIRONMENT.md`, and out of `LOOPS.md`, the way RESUME's history moved to
+   `resume-history.md`. Then re-score. The activation sentence at ROADMAP.md:148 still
+   names `393.10`; suggested wording: "393.10, or its one retry 398.5, reports …".
+   Archive the cloud sessions (O1). A 0.9.1 decision is yours: `401.1`'s markup gate
+   regression, small fix; `401.2` corrects four release-note statements; the GitHub
+   Release body is yours to update. Firefox (375.11's half): open Firefox.app once to
+   create its profile folder (unverified), and the loop retries.
+1. **O5-O18** in `.roundtable/milestone-draft-2026-09-25/5-open-decisions.md`, the
+   fields M1 needs before ACTIVE.
+2. **Three readings to confirm or reverse:** `393.6` (a tier set to `none` runs on
+   `top`, not refused); four fields loop-written while their decisions are blank —
+   Precedence (O11), Rules-2-3 (O12), Planner (O14), Direction-drift (O16), `398.3`;
+   D4 (`Direction-drift`): median framework share 4.9%, so X of 10%+ fires almost
+   daily (`393.7`).
+3. **Push `park/owner-checkpoint-2026-09-20`** to origin as a backup (no upstream).
+   Its four `.roundtable` records were copied to main on 2026-09-26; the journey code
+   stays parked until O5 decides RF.
+4. **`377.6`** — is busy-office-erp the first user? (Answered with real measurement
+   this session: see the 2026-09-27 entry below.)
+5. **Issue #2** — replying is the owner's action (Slice 317 refused the component).
+6. **`369.1`** (print from the dark theme) and **`249.12`** (the archive-sweep
+   trigger) are owner calls, unchanged.
+7. **The wake prompt still says "Read `LOOPS.md` and `ROADMAP.md` fresh"** — whether
+   it should instead point at a summary is the owner's wording to change; `393.13`
+   re-measures on the first ACTIVE wake.
+8. **`375.11`'s Firefox half** is blocked: Playwright's Firefox does not launch here.
+
+### This session's work (landed unless noted)
+
+Slices 413-425: 387.1's "within six lines" overclaim corrected (413); the wake
+card drafted and derivability-tested by two fresh agents, 11/11 states correct
+(422, `.roundtable/WAKE-CARD.md`); the loop-doctor review, score 2.6 "watch"
+(421, findings 421.1-421.5); the hourly-loop design note and build order (417,
+`.roundtable/hourly-loop-design-2026-09-27.md`; only 417.1 built — multi-line
+`inflight.py`, limit still 1); 421.1 (`--value` tag + 10-wake tally) and 421.3
+(Standardize/Objective now need a changed-line threshold, not just rows) built
+and red-proved; 389.16 (RF profile coverage instrument, `check-rf-profile-coverage.mjs`
+— its own first draft had a real bug, missed classes nested inside `@layer`,
+fixed and red-proved), 389.19 (task-menu badge stretch) and 389.23 (RF identifiers
+breaking at 320px) all shipped together with the RF-essentials budget raised
+41→42kb (decision ladder, Jev `jev-1.13.0` a=1.0 agreeing each time — 413.1's
+frozen-cell design, 387.2's popover design, and this budget raise). 419.1 measured
+the first user's conformance against busy-office-erp's `RUNTIME_UI_CONTRACT_V0`
+(kanban failed §2.1, fixed as 419.3; report at
+`.roundtable/first-user-conformance-2026-09-27.md`); 419.2 (the issue #2 reply)
+is drafted from that report, not sent. **387.2 was attempted and fully reverted**
+— the CSS/JS mechanism was verified live but the specific frozen-row escape was
+not, in the time available; see ROADMAP 387.2's own DONE-attempt note for the
+exact trap (a JS template-literal string masquerading as a live `<script>`) so
+the next attempt does not re-find it.
+
+**Operational change:** the local self-paced `/loop` was stopped this session
+on the owner's request. The cloud routine `⚡ Busy Office UI loop wake`
+(`trig_019aw8tDjiYxC3ejSFd5wYZY`) was re-enabled instead — hourly, `27 * * * *`
+— after checking its one prior failure (2026-09-09) was a weekly usage-limit
+rejection, not a structural block; it had actually landed and pushed Slice 373
+before hitting the limit.
