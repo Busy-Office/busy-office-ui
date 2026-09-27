@@ -50,7 +50,7 @@ def from_rev(rev):
 # never backfilled (393.5, and 393.6 for the route columns).
 ADDED_COLUMNS = (("milestone", "TEXT"), ("track", "TEXT"), ("route", "TEXT"), ("model", "TEXT"),
                  ("agent", "TEXT"), ("skill", "TEXT"), ("first_try", "TEXT"), ("tier", "TEXT"),
-                 ("trigger", "TEXT"))
+                 ("trigger", "TEXT"), ("value", "TEXT"))
 
 
 def connect(db=DB):
@@ -73,6 +73,7 @@ def connect(db=DB):
 # model and agent that ran it, the skill it leaned on, and whether it landed on
 # the first try.
 TAG_VALUES = {
+    "value": r"shipped|evidence|process",
     "milestone": r"M[1-9]\d*",
     "track": r"defect",
     "route": r"[a-z][a-z0-9-]*",
@@ -85,9 +86,9 @@ TAG_VALUES = {
 }
 _TOKEN = "(?:" + "|".join(f"{k}=(?:{v})" for k, v in TAG_VALUES.items()) + ")"
 TAG_SEGMENT = re.compile(rf"^{_TOKEN}(?: {_TOKEN})*$")
-TAG_COLUMNS = {"milestone": "milestone", "track": "track", "route": "route", "tier": "tier",
-               "model": "model", "agent": "agent", "skill": "skill", "first-try": "first_try",
-               "trigger": "trigger"}
+TAG_COLUMNS = {"value": "value", "milestone": "milestone", "track": "track", "route": "route",
+               "tier": "tier", "model": "model", "agent": "agent", "skill": "skill",
+               "first-try": "first_try", "trigger": "trigger"}
 
 
 def tags_of(segment):

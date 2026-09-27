@@ -624,11 +624,22 @@ before it does any work, and that text is also the part that keeps going stale. 
 Report: the review in the session scratchpad (not in the repo). The findings the loop can act on
 without a decision are items; the two that need a threshold say so.
 
-1. [ ] **421.1 — record what a wake changed for a user.** `record_iteration.py --value
+1. [x] **421.1 — record what a wake changed for a user.** `record_iteration.py --value
        shipped|evidence|process` and a 10-wake tally in `dispatch_status.py`.
        - **Accept — the property.** The tally counts rows by value from the log itself, and
          a row without `--value` is counted as `unclassified`, never as `process`; it reconciles
          against the row count in the window (CLAUDE.md's mirror rule).
+       - **DONE 2026-09-27.** `--value shipped|evidence|process` added to
+         `record_iteration.py` (the tag-column pattern _common.py already has for
+         milestone/track/route/etc, so parsing, round-trip verification and the
+         mirror rebuild all cover it for free). `dispatch_status.py` gained a
+         `report_value_tally` line: the last 10 rows (excluding Roadmap and Meta),
+         reconciled against the window count, with a trailing-process-streak
+         reading for 421.2's N=3 trigger. Red-proved: silently dropping counts
+         while leaving the window the same length raises the reconciliation
+         error. Not yet: no wake has used `--value` (this session's own rows
+         predate the flag, so today's tally reads all-unclassified); 421.2's
+         planner trigger reads the streak but does not act on it yet.
        Track: defect
 2. [ ] **421.2 — a planner run after N consecutive `process` wakes.**
        **Owner-approved 2026-09-27 ("as recommended"): N = 3; value classes shipped

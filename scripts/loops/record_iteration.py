@@ -147,6 +147,11 @@ def main():
     ap.add_argument("--item", required=True)
     ap.add_argument("--outcome", required=True)
     ap.add_argument("--commit", default=None)
+    ap.add_argument("--value", default=None, choices=["shipped", "evidence", "process"],
+                    help="421.1/421.2: shipped (consumer-visible CSS/JS), evidence (a "
+                         "measurement of a real screen or the first user), process (gates, "
+                         "docs, comments, the loop's own machinery). A row with no --value "
+                         "counts as unclassified, never as process, in the 10-wake tally.")
     ap.add_argument("--milestone", default=None, metavar="Mn",
                     help="tag the row as milestone work (roadmap 393.5): written into "
                          "the loop-log row, where dispatch_status.py counts it")
@@ -267,7 +272,7 @@ def main():
     # dispatch_status.py reads the log, not loops.db: rules 2 and 3 under
     # `Rules-2-3: scoped`, and rule M's interleave, count from the row (393.5).
     # A refusal row is not a dispatch, so it carries no tags.
-    given = {"milestone": args.milestone, "track": args.track, "route": args.route,
+    given = {"value": args.value, "milestone": args.milestone, "track": args.track, "route": args.route,
              "tier": args.tier, "model": args.model, "agent": args.agent, "skill": args.skill,
              "first-try": args.first_try, "trigger": args.trigger}
     tags = " ".join(f"{k}={v}" for k, v in given.items() if v)

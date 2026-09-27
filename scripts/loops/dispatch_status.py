@@ -1319,6 +1319,34 @@ def report_holds():
           f"[inflight.py hold; .roundtable/hold-wakes.jsonl]")
 
 
+def report_value_tally(n=10):
+    """421.1: the value class of the last N recorded rows, read from loop-log.md
+    (never a summary), reconciled against the row count in the window. A row with
+    no --value is `unclassified`, never counted as `process` (the planner trigger,
+    421.2, must not fire on rows this instrument cannot see). Excludes Roadmap
+    triage and Meta rows, which do not change the framework or measure it."""
+    from _common import LOG, parse_log_line
+    with open(LOG, encoding="utf-8") as f:
+        lines = [l for l in f if l.startswith("- ")]
+    rows = [r for l in lines if (r := parse_log_line(l)) and r["loop"] not in ("Roadmap", "Meta")]
+    window = rows[-n:]
+    counts = {"shipped": 0, "evidence": 0, "process": 0, "unclassified": 0}
+    for r in window:
+        counts[r.get("value") or "unclassified"] += 1
+    if sum(counts.values()) != len(window):
+        raise SystemExit("dispatch_status: value tally does not reconcile against the window "
+                          f"({sum(counts.values())} counted, {len(window)} in the window)")
+    process_streak = 0
+    for r in reversed(rows):
+        if r.get("value") != "process":
+            break
+        process_streak += 1
+    print(f"  Value        last {len(window)}: shipped {counts['shipped']} · evidence "
+          f"{counts['evidence']} · process {counts['process']} · unclassified "
+          f"{counts['unclassified']}   [421.1; trailing process streak: {process_streak}"
+          + (" -> planner due (421.2, N=3)" if process_streak >= 3 else "") + "]")
+
+
 def main():
     if "--self-test" in sys.argv:
         return self_test()
@@ -1353,6 +1381,7 @@ def main():
     # wake looks at dispatcher inputs (roadmap 184.1).
     report_metrics(all_rows)
     report_holds()
+    report_value_tally()
     for line in ms_lines:
         print(line)
     if ms_refusal:
