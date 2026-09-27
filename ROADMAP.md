@@ -581,13 +581,23 @@ before it does any work, and that text is also the part that keeps going stale. 
 1. [x] **422.1 — the card is written** (610 words: guards with exits, triage, the 8 rules with
        their conditions and the section to open, the never-unattended list, pre-commit gates,
        the record command, the two Jev points). Not adopted: the wake prompt is the owner's text.
-2. [ ] **422.2 — the card is checked against `LOOPS.md`, both ways.**
+2. [~] **422.2 — the card is checked against `LOOPS.md`, both ways.**
        - **Accept — the property.** A fresh agent given ONLY the card reaches the same rule and
          the same loop as the dispatcher's own text for at least four distinct wake states
          (counter overdue, oldest item, hold, halt), and every place it says it needed
          `LOOPS.md` is either fixed in the card or recorded as a reason to keep reading. And a
          mechanical check: every command, exit code and counter threshold in the card appears
          in `LOOPS.md`, so the card cannot name what the source does not.
+       - **First pass 2026-09-27.** A fresh agent, given only the card, chose the right rule and
+         loop in all 4 states (Standardize overdue, Objective overdue, oldest item 387.2, hold)
+         and listed 12 ambiguities. Fixed in the card: the guard order and the exit-3 hold (no
+         record), the exit-0 wording, the mode and loop values, the meaning of "reset the
+         counter", where drift is flagged, the kinds of blocked, and **one real error**: the
+         card said a red main is rule 1, which `LOOPS.md` does not say (it is RESUME.md's
+         practice, now labelled so). Mechanical pass: every command, script and flag the card
+         names appears in `LOOPS.md` or `CLAUDE.md`; that check is a presence test and would not
+         catch a wrong meaning, as the red-main error shows. Card is now 759 words. **Not yet:**
+         a second fresh agent on the corrected card, and the halt and REFUSED states.
 3. [ ] **422.3 — measure the saving with the instrument lane 4 already uses**
        (`report_loop_prose.py`): words a wake loads before and after. Accept: the figure is
        quoted from the command, and says what it does NOT cover (playbooks a rule opens).

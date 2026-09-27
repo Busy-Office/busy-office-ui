@@ -7,11 +7,13 @@ and this card is the defect. Playbooks, history and the reasoning behind each ru
 
 ## 1. Guards, in this order (LOOPS.md Step 0)
 1. `python3 scripts/loops/step0_guard.py` — any exit but 0: STOP, write and commit nothing.
-2. `python3 scripts/loops/inflight.py hold` — exit 0 continue; **3 hold** (dispatch nothing,
-   reschedule, stop); **4** past cap (TaskStop, keep `out`, record `logged`, `close`); **5** the
-   state cannot be read: STOP and tell the owner. Exit 0 may still list open lines (limit 1
-   today, so a line means 3).
-3. `gh run list --branch main --limit 2` — a red main is rule 1.
+2. `python3 scripts/loops/inflight.py hold` (after step 1) — exit 0: nothing in flight, or room
+   to dispatch (the limit is 1 today, so an open line is exit 3); **3 = HOLD**: the command has
+   already logged the hold, so record nothing, dispatch nothing, `ScheduleWakeup`, stop;
+   **4** past cap: TaskStop, keep `out`, record `--outcome logged` naming what did not finish,
+   `inflight.py close`, continue; **5** the state cannot be read: STOP and tell the owner.
+   A guard stop (step 1) or exit 5 writes and commits nothing, so there is nothing to record.
+3. `gh run list --branch main --limit 2` — if main's HEAD is red, fixing it comes before any dispatch (a Continue defect; this is RESUME.md's practice, not a Step 2 rule).
 4. `python3 scripts/loops/dispatch_status.py` — the counters (Step 0b). A `REFUSED` milestone
    line stops the wake.
 
@@ -22,14 +24,14 @@ value), tested against the Objective; refusing is a valid outcome. Commit it.
 ## 3. The rules, first match wins (Step 2)
 | # | Condition | Dispatch | Full text |
 |---|---|---|---|
-| 1 | an open P0 bug | Continue, bug mode | Step 2 rule 1 |
-| 2 | Standardize counter at 4 Continue rounds, or drift flagged | Standardize (§3 playbook) | Step 2 rule 2 |
-| 3 | 3 distinct slices since the last grill that reset the counter, or the owner asked | Objective (§6) | Step 2 rule 3 |
+| 1 | an open P0 bug (`grep -cE '^\s*[0-9]+\. \[ \].*P0' ROADMAP.md`) | Continue, bug mode | Step 2 rule 1 |
+| 2 | Standardize counter at 4 Continue rounds, or drift flagged (by Continue, or seen in triage) | Standardize (§3 playbook) | Step 2 rule 2 |
+| 3 | 3 distinct slices since the last grill that reset the counter (a grill whose report has the thesis section; `dispatch_status.py` prints a row that did not count, and why), or the owner asked | Objective (§6) | Step 2 rule 3 |
 | 4 | the **oldest** open item that is not blocked (`loops.db`, `roadmap_items`: `blocked=0`, `after_open=''`, `parked_held=0`) | Continue, build mode | Step 2 rule 4 |
 | 5 | a metric regressed on two consecutive runs, or a size budget breached | Optimize (§4) | Step 2 rule 5; `STALE` means record a metric first |
-| 6 | a scored surface below its round budget | Polish (§3b) | Step 2 rule 6; true of every surface, so read the rule |
+| 6 | a scored surface below its round budget and not dry | Polish (§3b) | Step 2 rule 6 (its predicate is not a queue test; open the rule before dispatching) |
 | 7 | every surface dry or spent | Research (§3c), queue only | Step 2 rule 7 |
-| 8 | nothing above matched | say why **once** and stop | Step 2 rule 8; name the kind of blocked |
+| 8 | nothing above matched | say why **once** and stop the loop | Step 2 rule 8; name the kind of blocked: owner-blocked, browser-blocked, agent-blocked, or dependency-blocked (`After:`) |
 
 While a milestone is ACTIVE, rules M and D (planner) precede these; M1 is DRAFT, so they are off.
 
@@ -45,8 +47,11 @@ push that touches pages.
 
 ## 6. Record, after every commit
 ```
-python3 scripts/loops/record_iteration.py --loop <Loop> --mode <mode> --item "<what>" --outcome <landed|released|logged|triaged|refused|reverted> [--track defect]
+python3 scripts/loops/record_iteration.py --loop <Loop> --mode <one word> --item "<what>" --outcome <landed|released|logged|triaged|refused|reverted> [--track defect] [--also-refused "<what>"]
 ```
+`--loop` is Continue, Standardize, Polish, Research, Optimize, Explore, Objective, Gauntlet, Roadmap or Meta.
+`--mode` is one free word (this session used build, fix, measure, sweep, grill, triage). A hold
+records nothing; a REFUSED milestone line is a stop, not a row.
 then `git add -A .roundtable STATUS.md`, commit, push, and `ScheduleWakeup` (last act unless
 halting). `record_metric.py --name <n> --value <v> --unit <u>` when you measured something.
 
