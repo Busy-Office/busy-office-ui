@@ -29,15 +29,12 @@ import { distPages } from './dist-pages.mjs';
 const PROFILE_PATH = `${CORE_DIST}/css/rf-essentials.min.css`;
 
 // Known gaps, each with a reason (the `check:wrong-choice` EXEMPT pattern,
-// CLAUDE.md). Not a silence switch for a NEW gap: only these two names are
+// CLAUDE.md). Not a silence switch for a NEW gap: only names listed here are
 // skipped, so a class this check has never seen before still fails loudly.
-const EXEMPT = {
-  'bo-u-tabular': '389.16, 2026-09-27 — 48 min bytes; the profile has 18 bytes of ' +
-    'headroom (measured against build-rf-essentials.mjs\'s 41 kB budget, not the ' +
-    'item\'s stale "179 characters"). Owner call: raise the RF budget or trim an ' +
-    'existing component to make room.',
-  'bo-u-text-muted': '389.16, 2026-09-27 — 50 min bytes; same 18-byte headroom, same owner call.',
-};
+// Empty as of 389.16/389.19 (2026-09-27): both filed gaps shipped, via the RF
+// budget raise 41 -> 42kb (build-rf-essentials.mjs). Kept as a mechanism, not
+// removed, since the next claim on the profile's room may need it again.
+const EXEMPT = {};
 
 function classesInSelectors(css) {
   // Every opening `{` is preceded by exactly one prelude — a selector list

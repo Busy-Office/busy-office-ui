@@ -8727,6 +8727,24 @@ for (const revert of [false, true]) {
   JSON.stringify(b2));
 }
 
+/* 389.19 — the task-menu count badge, a direct child of .bo-widget (no
+   wrapper), is sized to its content, not stretched to the tile's inline
+   size by the column-flex parent's default align-items: stretch. Checked on
+   the isolated rf-essentials page, at its real tile width, not a fixture. */
+await visit('/patterns/rf/rf-landing-rf/', { width: RF_WIDTH, height: 640 });
+const badgeFit = await page.evaluate(() => {
+  const tile = document.querySelector('.bo-widget-grid .bo-widget');
+  const badge = tile.querySelector('.bo-badge');
+  const t = tile.getBoundingClientRect();
+  const b = badge.getBoundingClientRect();
+  return { tileWidth: Math.round(t.width), badgeWidth: Math.round(b.width), ratio: b.width / t.width };
+});
+check(
+  'rf-landing (isolated rf-essentials): the task-menu count badge is sized to its content, not stretched to the tile (389.19)',
+  badgeFit.ratio < 0.5,
+  JSON.stringify(badgeFit),
+);
+
 } // ── end of part B ───────────────────────────────────────────────────────
 
 await rm(dzDir, { recursive: true, force: true });

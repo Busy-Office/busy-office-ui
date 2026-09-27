@@ -57,6 +57,13 @@ const imports = [
   `@import "${srcCss}/tokens/index.css";`,
   `@import "${srcCss}/reset/index.css";`,
   `@import "${srcCss}/primitives/visually-hidden.css";`,
+  // 389.16: bo-u-tabular and bo-u-text-muted ship no rule here at all, though
+  // 5 of 6 isolated RF documents use them. The canonical source stays
+  // utilities/index.css (one file, imported here whole rather than
+  // duplicating two of its eleven rules into a second copy) — its other
+  // classes are inert if unused, the same acceptance 109.7 already made for
+  // dashboard's stat/collapse rules above.
+  `@import "${srcCss}/utilities/index.css";`,
   ...RF_COMPONENTS.map((c) => `@import "${srcCss}/components/${c}.css";`),
 ];
 const entrySource = layers + imports.join('\n') + '\n';
@@ -96,8 +103,20 @@ await writeFile(to.replace(/\.css$/, '.min.css'), min.css);
    reset stops a mid-blend and the outline keeps the ring in the system
    palette. It is one rule set, not a component, so the membership debate this
    budget exists to force does not arise; 389.16 (every RF class has a rule)
-   is the next claim on this room and must argue its own. */
-const RF_BUDGET_KB = 41;
+   is the next claim on this room and must argue its own.
+   41 -> 42 (roadmap 389.16/389.19, 2026-09-27): the next claim, arrived —
+   headroom was 18 bytes; two measured, real defects together need 137
+   (bo-u-tabular/bo-u-text-muted ship no rule on 5 of 6 isolated RF pages that
+   use them, and a task-menu count badge stretches to 158 of its 160px tile).
+   No trim identified as safe within the wake that found this; decided by the
+   ladder (Jev `jev-1.13.0`, run `39f5a959-a8ca-47e4-970b-45bbbd386f28`,
+   a=1.0, agreeing with the same verdict) over trimming or deferring again.
+   The shipped fix imported utilities/index.css WHOLE rather than duplicating
+   two of its rules, so the real cost ran ahead of the 137-byte estimate:
+   487 bytes of headroom remain (measured on the built min.css), not the
+   887 the estimate implied. The next claim on this room must argue its own,
+   same as this one did — and measure the built artifact, not an estimate. */
+const RF_BUDGET_KB = 42;
 const minKb = min.css.length / 1024;
 if (minKb > RF_BUDGET_KB) {
   console.error(

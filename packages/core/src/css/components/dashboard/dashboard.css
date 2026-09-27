@@ -43,6 +43,17 @@
     grid-column: span 2;
   }
 
+  /* A .bo-widget is column flex, so a badge sitting directly in it (the RF
+     task menu's count chip, no wrapper) inherits the cross-axis default of
+     `align-items: stretch` and fills the tile's whole width — measured 158 of
+     160px on rf-landing, reading as an empty field rather than a number
+     (roadmap 389.19). AppTile's badge is unaffected: it sits inside its own
+     row-flex mark wrapper, so this selector's direct-child combinator does
+     not reach it, and that page is left unchanged, as required. */
+  .bo-widget > .bo-badge {
+    align-self: center;
+  }
+
   .bo-widget__header {
     display: flex;
     align-items: center;

@@ -5033,7 +5033,7 @@ removal or rewording; one shipped framework defect (389.4).
         Route: design
         After: 396.12
 
-16. [~] **389.16 — Every class an RF document uses has a rule in the profile it loads.**
+16. [x] **389.16 — Every class an RF document uses has a rule in the profile it loads.**
        bo-u-tabular has 0 rules in rf-essentials: on pick, font-
        variant-numeric computes to 'normal', while on /components/kv it
        is 'tabular-nums'. 4 of 6 RF documents carry a class with no
@@ -5076,7 +5076,19 @@ removal or rewording; one shipped framework defect (389.4).
          gates / 25 behaviors, live 59 / 26) despite CLAUDE.md's claim that stamping
          prevents silent drift — re-stamped; CLAUDE.md's own "58 today" corrected to
          59.
-       Track: defect
+       - **Shipped 2026-09-27, same wake as 389.19.** Decided by the ladder over
+         trimming or deferring again (Jev `jev-1.13.0`, run
+         `39f5a959-a8ca-47e4-970b-45bbbd386f28`, a=1.0, agreeing with my own
+         verdict): raised `RF_BUDGET_KB` 41 → 42 in `build-rf-essentials.mjs`,
+         with the reason inline there, and imported `utilities/index.css`
+         whole (never duplicating a rule body) rather than the two classes
+         alone — real cost ran ahead of the 98-byte estimate, so headroom
+         after both this and 389.19 is 487 bytes (measured on the built
+         `rf-essentials.min.css`), not an estimate. `EXEMPT` in
+         `check-rf-profile-coverage.mjs` is now empty; the gate stays wired
+         into `docs:build`. `check:claims`, core build and docs build all
+         green.
+Track: defect
 
 17. [ ] **389.17 — Decide whether putaway verifies the pallet as well as the bin.**
        Scanning the pallet's own label gives 'Wrong bin: HU-100234'.
@@ -5118,7 +5130,7 @@ removal or rewording; one shipped framework defect (389.4).
         Route: design
         After: 396.12
 
-19. [ ] **389.19 — The task-menu count badge is sized to its content.**
+19. [x] **389.19 — The task-menu count badge is sized to its content.**
        On rf-landing-rf the badge is 158 px wide in a 160 px tile (0.99
        of the tile), with the number left-aligned, so it reads as an
        empty field. It measures 138 of 140 px at 320 and 173 of 175 px
@@ -5132,7 +5144,20 @@ removal or rewording; one shipped framework defect (389.4).
          rf-essentials unless the budget is argued. Every other page
          that puts a .bo-badge directly in a .bo-widget is re-
          measured and either unchanged or fixed.
-        Track: defect
+               - **DONE 2026-09-27.** `.bo-widget > .bo-badge { align-self: center; }`
+         in `dashboard.css` — the column-flex parent's default
+         `align-items: stretch` was the cause; a direct-child combinator
+         reaches the RF task menu's naked badge but not `app-launch`'s, which
+         wraps its badge in its own row-flex mark box, so that page is
+         unchanged as the Accept requires (measured: 39px, unchanged).
+         Measured live on `/patterns/rf/rf-landing-rf/` (the isolated
+         rf-essentials page, real tile widths, not a fixture) at 320/360/390,
+         light and dark: badge 26px in all six, ratio 0.15-0.19 (was 0.99).
+         `check:claims` part B gained a case (202 to 203), red-proved by
+         removing the declaration and rebuilding: ratio back to 0.9875,
+         matching the item's own original measurement. Shared the RF budget
+         raise with 389.16 in the same wake — see its DONE block.
+       Track: defect
 
 20. [ ] **389.20 — The RF queue drops a column and a tab stop that carry nothing, and names itself.**
        The Status column has only 2 distinct values: 3 of 4 rows say

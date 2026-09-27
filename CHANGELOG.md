@@ -11,6 +11,17 @@ pin.
 
 ### Fixed
 
+- **RF essentials profile: two utility classes and a stretched badge.**
+  `bo-u-tabular` and `bo-u-text-muted` shipped no rule in the RF-essentials
+  profile though 5 of 6 isolated RF documents use them; the profile now
+  imports `utilities/index.css`. A task-menu count badge, a direct child of
+  `.bo-widget` with no wrapper, stretched to 158 of its 160px tile under the
+  column-flex parent's default `align-items: stretch`; it now reads
+  `align-self: center` and sizes to its content (26px measured). The RF
+  budget rose 41 → 42kb to hold both (`build-rf-essentials.mjs`, roadmap
+  389.16/389.19). Nothing to migrate; `app-launch`'s badge, wrapped in its
+  own mark box, is unaffected.
+
 - **Segmented control: the focus ring under forced colours is a system colour.**
   A checked option opts out of forced-colour flattening, which also left its
   focus ring in the author colour (teal, both themes) while every other
