@@ -570,7 +570,7 @@ answer. Nobody has checked the two against the contract's own tests. This is rea
 toward Milestone M1's stated end (a long-use ERP app), and the first user's ADR-0016
 stays Proposed until it is settled.
 
-1. [ ] **419.1 — measure `/patterns/kanban` and `/patterns/report` against contract §2, §5.1-5.3.**
+1. [x] **419.1 — measure `/patterns/kanban` and `/patterns/report` against contract §2, §5.1-5.3.**
        - **Accept — the property.** For each page, on the served docs at 1440 and 390
          px: the required structure of §2.1 is present (kanban: a region per state, each
          with a heading, containing a list; report: a table per group with a caption, `th
@@ -582,7 +582,22 @@ stays Proposed until it is settled.
          terms.
        - **Also.** Does `check-markup` accept the markup the contract requires? Run it on
          the emitted structure, not only on our demo.
+       - **DONE 2026-09-27**, `.roundtable/first-user-conformance-2026-09-27.md`: kanban
+         fails §2.1 (its column title is a `<span>`, the section is unnamed) and passes 5.3
+         with a limit; report is compliant as ungrouped, with no grouped demo;
+         `check-markup` passes both. The first user's "kanban fails 5.3" is not supported.
        Track: defect
+3. [ ] **419.3 — a dashboard card and a board column have a heading and a name.**
+       `.bo-widget__title` is a `<span>` in all 5 documented uses and the `<section>` has
+       no accessible name. Accept: the documented markup uses a heading element (or names
+       the section with `aria-labelledby`), `.bo-widget__title` still styles identically
+       on it, a `check:claims` case fails on today's markup, and `check:a11y`-style gates
+       see a heading per widget. A Breaking entry is judged, not assumed: consumers who
+       used the span keep working.
+       Track: defect
+4. [ ] **419.4 — a grouped report is shown.** A page section with one captioned table
+       per group and a totals row each, from the shipped table. Accept: generated from a
+       single string like every demo, and it satisfies contract §2.1's report row.
 2. [ ] **419.2 — the reply to issue #2 is drafted for the owner** with 419.1's table
        (replying is the owner's action).
 
