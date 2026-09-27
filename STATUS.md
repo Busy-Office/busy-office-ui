@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-27 06:27 UTC
+Generated at: 2026-09-27 06:47 UTC
 
 oldest dispatchable: 387.2 — a frozen cell's message still has two covers above it.
 
@@ -174,10 +174,9 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1894 iterations logged)
+dispatch status — counter-triggered rules (1895 iterations logged)
   Standardize   2 / 4 Continue rounds since 2026-09-27 14:14   ok
-  Objective     3 / 3 slices          since 2026-09-27 12:22   OVERDUE  [419, 420, 422]
-  -> a counter is at or past its threshold; the dispatcher should pick it
+  Objective     0 / 3 slices          since 2026-09-27 14:47   ok
   Optimize      0 wake-date(s) newer   since 2026-09-27 05:16   ok   [newest pair: claims; 166 sample(s), 8 of 52 name(s) paired across days]
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (44 of 52 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
        claims                      7d  2026-09-25 311 count -> 2026-09-27 364 count  +53
@@ -309,7 +308,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-27 11:50 · Continue · fix · 388.4 — cascade sample 0 to 2px; target-size header records bounding-box basis · landed · b5d026c9
 - 2026-09-27 12:17 · Roadmap · triage · Slice 417 — hourly loop design note and build order filed (417.1-417.6) · triaged · 7a4b3a79
 - 2026-09-27 12:18 · Continue · fix · 417.1 — multi-line inflight (limit 1 by default), overlap check red-proved, 43 self-test cases · landed · 90dbeef4
 - 2026-09-27 12:22 · Objective · grill · Slice 418 — grill of 388/416/417 (narrowed): one defect, inflight overlap judged ./a and a disjoint; fixed, 47 cases, red-proved · landed · 19936318
@@ -319,6 +317,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-27 14:14 · Standardize · sweep · Slice 420 — 4 of 4 lanes (isolated build): 0 dead/1392; 247/236/7; 120,015 words; dispatch region 10,374; all equal Slice 416 · landed · 9a6a394e
 - 2026-09-27 14:25 · Continue · measure · 422.1-422.2 — wake card (759 words) drafted and checked by a fresh agent on 4 states: right rule in 4 of 4, 12 ambiguities fixed, one wrong claim (red main = rule 1) corrected · landed · 22496210
 - 2026-09-27 14:27 · Continue · measure · 422.2 second pass — fresh agent on 7 more states: 7 of 7 right; stop/record gaps fixed in the card; LOOPS.md silent on rescheduling after a stop · landed · 7719618b
+- 2026-09-27 14:47 · Objective · grill · Slice 423 — grill of 419/420/422 (narrowed): 419.3 red-proved, 420/422 have no framework claim; three grills in a row confirm thin shipped surface · landed · 2f82414b
 
 ## Sunset test
 
