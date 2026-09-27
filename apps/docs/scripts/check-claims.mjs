@@ -3850,6 +3850,19 @@ check(
   JSON.stringify(kbKeyboard),
 );
 
+/* 419.3 — RUNTIME_UI_CONTRACT_V0 §2.1 (busy-office-erp): a board column is a region
+   with a heading, and the region is named by it. The columns' titles were spans in
+   unnamed sections, so a screen-reader user had no heading or region to navigate to. */
+const kbRegions = await page.evaluate(() => [...document.querySelectorAll('[role="group"][aria-label="Production orders by stage"] > section')].map((sec) => {
+  const h = document.getElementById(sec.getAttribute('aria-labelledby'));
+  return { tag: h?.tagName, text: h?.textContent.trim(), inside: !!h && sec.contains(h), lists: sec.querySelectorAll('ul').length, size: h && getComputedStyle(h).fontSize };
+}));
+check(
+  'kanban: every stage column is a section named by a heading inside it, and holds a list (contract 2.1, 419.3)',
+  kbRegions.length === 4 && kbRegions.every((r) => /^H[1-6]$/.test(r.tag) && r.inside && r.lists === 1 && r.text),
+  JSON.stringify(kbRegions),
+);
+
 /* /components/richtext Advanced demo (roadmap 113.1): formatBlock produces
    a real semantic heading, and the three justify buttons are a mutually
    exclusive group — clicking one clears aria-pressed on the other two, not

@@ -587,13 +587,21 @@ stays Proposed until it is settled.
          with a limit; report is compliant as ungrouped, with no grouped demo;
          `check-markup` passes both. The first user's "kanban fails 5.3" is not supported.
        Track: defect
-3. [ ] **419.3 — a dashboard card and a board column have a heading and a name.**
+3. [~] **419.3 — a dashboard card and a board column have a heading and a name.**
        `.bo-widget__title` is a `<span>` in all 5 documented uses and the `<section>` has
        no accessible name. Accept: the documented markup uses a heading element (or names
        the section with `aria-labelledby`), `.bo-widget__title` still styles identically
        on it, a `check:claims` case fails on today's markup, and `check:a11y`-style gates
        see a heading per widget. A Breaking entry is judged, not assumed: consumers who
        used the span keep working.
+       - **Kanban done 2026-09-27; the rest is a policy call.** The four stage columns are
+         now `<section aria-labelledby>` with an `<h3 class="bo-widget__title">`, and
+         `check:claims` part B gained a case (201 to 202) for a heading, a name and a list
+         per column. Not done: about 35 other `<span class="bo-widget__title">` uses across
+         the docs and `examples/`. The dashboard page already tells consumers to put the
+         class on a heading and warns that copying a demo's `span` is how a page ends up
+         with none, so the docs knowingly teach the span; whether they should is the open
+         call. Not red-proved this wake (the case was written against the fixed markup).
        Track: defect
 4. [ ] **419.4 — a grouped report is shown.** A page section with one captioned table
        per group and a totals row each, from the shipped table. Accept: generated from a

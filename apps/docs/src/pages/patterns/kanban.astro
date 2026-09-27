@@ -62,9 +62,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <section class="demo">
     <h2>The board</h2>
     <div class="bo-cluster" role="group" aria-label="Production orders by stage" tabindex="0" style="align-items: flex-start; gap: var(--bo-space-4); overflow-x: auto; padding-block-end: var(--bo-space-2)">
-      <section class="bo-widget" style="min-inline-size: 16rem; flex: 1">
+      <section class="bo-widget" aria-labelledby="kb-col-queued" style="min-inline-size: 16rem; flex: 1">
         <div class="bo-widget__header">
-          <span class="bo-widget__title">Queued</span>
+          <h3 class="bo-widget__title" id="kb-col-queued">Queued</h3>
           <span class="bo-badge">3</span>
         </div>
         <div class="bo-widget__body">
@@ -98,9 +98,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         </div>
       </section>
 
-      <section class="bo-widget" style="min-inline-size: 16rem; flex: 1">
+      <section class="bo-widget" aria-labelledby="kb-col-progress" style="min-inline-size: 16rem; flex: 1">
         <div class="bo-widget__header">
-          <span class="bo-widget__title">In progress</span>
+          <h3 class="bo-widget__title" id="kb-col-progress">In progress</h3>
           <span class="bo-badge">1</span>
         </div>
         <div class="bo-widget__body">
@@ -118,9 +118,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         </div>
       </section>
 
-      <section class="bo-widget" style="min-inline-size: 16rem; flex: 1">
+      <section class="bo-widget" aria-labelledby="kb-col-blocked" style="min-inline-size: 16rem; flex: 1">
         <div class="bo-widget__header">
-          <span class="bo-widget__title">Blocked</span>
+          <h3 class="bo-widget__title" id="kb-col-blocked">Blocked</h3>
           <span class="bo-badge bo-badge--danger">1</span>
         </div>
         <div class="bo-widget__body">
@@ -137,9 +137,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         </div>
       </section>
 
-      <section class="bo-widget" style="min-inline-size: 16rem; flex: 1">
+      <section class="bo-widget" aria-labelledby="kb-col-done" style="min-inline-size: 16rem; flex: 1">
         <div class="bo-widget__header">
-          <span class="bo-widget__title">Done</span>
+          <h3 class="bo-widget__title" id="kb-col-done">Done</h3>
           <span class="bo-badge bo-badge--success">2</span>
         </div>
         <div class="bo-widget__body">
@@ -172,9 +172,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <h2>Markup</h2>
     <pre><code>{`<!-- One lane. Widget + a plain list of cards; each card's move
      action is a dropdown menu, not a drag handle. -->
-<section class="bo-widget">
+<section class="bo-widget" aria-labelledby="kb-col-queued">
   <div class="bo-widget__header">
-    <span class="bo-widget__title">Queued</span>
+    <h3 class="bo-widget__title" id="kb-col-queued">Queued</h3>
     <span class="bo-badge">3</span>          <!-- the monitoring signal -->
   </div>
   <div class="bo-widget__body">
