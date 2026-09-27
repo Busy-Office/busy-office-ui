@@ -5439,6 +5439,29 @@ Found by the skeptics of the 375.11 workflow; each measured, none fixed here.
          field at 320x568 confirms 0 of N hidden points, red-proved by reverting to
          the current absolute positioning. **Owner: reverse by reopening and choosing
          (b).**
+       - **Build attempt 2026-09-27: reverted, not landed.** Wrote a new
+         `initCellMessages()` behavior and wired `popover="manual"` into
+         `/patterns/editable-grid/`. Verified live on the real demo (`#eg-table`):
+         focus opens the popover (`isOpen: true`), blur closes it, the UA border
+         reset applies (`border: 0px`). **Not verified**: the actual frozen-row vs
+         sticky-header/footer escape this item exists to fix — a synthetic rig for
+         that scenario did not render correctly and there was no time left to
+         debug it. Spent most of the wake chasing a false lead: the page's FIRST
+         demo table (and its accompanying `<script>`) is a JS template-literal
+         STRING (`const markup = ...`) reused for the "Markup" documentation
+         sample; its embedded `<script>` is display text, never executed — the
+         live interactive table is the page's SECOND ("Medium") demo, with its
+         own separate, real `<script>`. Editing the string cost most of the
+         debugging time before this was found. Reverted everything (CSS, the new
+         behavior file, the two docs edits, the JS size budget raise) after a
+         clean rebuild showed 4 claims failing; those turned out to be a stale
+         `dist/js/behaviors/cell-message.js` orphan from an earlier build — not a
+         real regression — but there was no budget left to redo the change and
+         reverify inside this wake, so nothing shipped. `main` confirmed at 164/164
+         and 202/202 claims after the revert. **Next wake: reapply the same
+         design to the SECOND script (already located, see above), skip the
+         frontmatter string entirely, and build the frozen-row rig before
+         attempting the live docs page again.**
        Track: defect
 3. [x] **387.3 — is the fallback's permanent horizontal scrollbar still needed?**
        375.11 added `overflow-x: scroll` to editable containers in the no-anchor
