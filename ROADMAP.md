@@ -559,6 +559,40 @@ finds **zero**, the thesis is wrong in an interesting way — the remaining
 modules would be re-argued rather than ground through, because the instrument
 would have stopped paying for itself.
 
+## Slice 420 — Standardize sweep, 4 of 4 lanes on an isolated clean build: all four equal Slice 416 (2026-09-27)
+
+**Dispatched by rule 2**, `Standardize 4 / 4 OVERDUE`, CI green on `36298328964`. Worktree
+of HEAD (`5103cddd`), own `npm ci`, core and docs builds and `standardize_lanes.py` exit 0.
+Base: Slice 416. Lane 1 *0 dead / 1392 live*; lane 2 *74 files · 247 rules · 236 bodies · 7
+repeated*; lane 3 *119 pages, median 833, 120,015 words*; lane 4 dispatch region *10,374*,
+0 of 17 sections moved. All equal. The framework inputs that moved since 416 are the kanban
+demo markup and one claims case, neither a lane input's figure. **This is the third sweep in
+a row to equal its base** (414, 416, 420): the counter fires on Continue rows, and a wake that
+changes a comment counts the same as one that ships a rule (loop-doctor L3, 2026-09-27).
+Exit: a clean pass; nothing to consolidate.
+
+## Slice 421 — loop-doctor 2026-09-27 (review of the loop, score 2.6 "watch"): proposals, owner threshold pending
+
+Report: the review in the session scratchpad (not in the repo). The findings the loop can act on
+without a decision are items; the two that need a threshold say so.
+
+1. [ ] **421.1 — record what a wake changed for a user.** `record_iteration.py --value
+       shipped|evidence|process` and a 10-wake tally in `dispatch_status.py`.
+       - **Accept — the property.** The tally counts rows by value from the log itself, and
+         a row without `--value` is counted as `unclassified`, never as `process`; it reconciles
+         against the row count in the window (CLAUDE.md's mirror rule).
+       Track: defect
+2. [ ] **421.2 — a planner run after N consecutive `process` wakes.** *Owner: N (proposed 3) and
+       the value classes.* Runs without an ACTIVE milestone; may not change direction.
+3. [ ] **421.3 — Standardize and Objective count changed framework lines, not rows.**
+       *Owner: the thresholds.* Accept: a 5-line comment change does not advance either counter.
+       Track: defect
+4. [ ] **421.4 — archive thresholds for `loop-log.md` (549 KB) and `polish-state.md` (181 KB).**
+       Track: defect
+5. [ ] **421.5 — `RESUME.md` names a handoff script that lives outside the repo.**
+       Accept: the line points at a file `git ls-files` lists, or is removed.
+       Track: defect
+
 ## Slice 419 — the first user's conformance gap: busy-office-erp's contract says two of nine screen kinds have no component here (2026-09-27)
 
 Source: busy-office-erp `docs/specs/RUNTIME_UI_CONTRACT_V0.md` §7.3 (read 2026-09-27):
