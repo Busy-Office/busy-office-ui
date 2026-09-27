@@ -5033,7 +5033,7 @@ removal or rewording; one shipped framework defect (389.4).
         Route: design
         After: 396.12
 
-16. [ ] **389.16 — Every class an RF document uses has a rule in the profile it loads.**
+16. [~] **389.16 — Every class an RF document uses has a rule in the profile it loads.**
        bo-u-tabular has 0 rules in rf-essentials: on pick, font-
        variant-numeric computes to 'normal', while on /components/kv it
        is 'tabular-nums'. 4 of 6 RF documents carry a class with no
@@ -5053,7 +5053,30 @@ removal or rewording; one shipped framework defect (389.4).
          budget, or listed with a reason (for example, a JS hook).
          The documents' own membership claims match what the
          instrument reports.
-        Track: defect
+               - **DONE 2026-09-27 (instrument), open (the finding).** `apps/docs/scripts/
+         check-rf-profile-coverage.mjs`: extracts every class token from the BUILT
+         `rf-essentials.min.css`'s own selector text and every `bo-*` class the six
+         built `/patterns/rf/*-rf/` pages use, and reports any page class with no
+         profile rule. Wired into `docs:build` right after `check:markup`.
+         **Proven to fail on today's `bo-u-tabular`/`bo-u-text-muted`**, exactly as
+         the item states — and a first draft of the instrument itself was WRONG:
+         a naive `split('}')[0]` parser missed any class nested inside `@layer`/
+         `@media`/`@supports` and falsely flagged `.bo-visually-hidden` (which DOES
+         have a rule) as missing on all 6 pages. Fixed to scan the prelude before
+         EVERY `{`, not just the first per top-level block; the self-test's new
+         cases (one- and two-deep @-rule nesting) are that exact bug, red-proved.
+         **The finding, not resolved:** `bo-u-tabular` (48 min bytes) and
+         `bo-u-text-muted` (50 bytes) need 98 bytes; the profile's real headroom is
+         **18 bytes**, not the item's stated "179 characters" (stale — 387.1/387.2's
+         work ate into it). Both are EXEMPT with a reason in the check, not silently
+         passed: a red-proof confirms a genuinely new gap still fails. **Owner call:
+         raise the RF budget (`build-rf-essentials.mjs`'s `RF_BUDGET_KB`) or trim an
+         existing RF component to make the 98 bytes.**
+         Side finding: `packages/core/README.md`'s stamped facts had drifted (58
+         gates / 25 behaviors, live 59 / 26) despite CLAUDE.md's claim that stamping
+         prevents silent drift — re-stamped; CLAUDE.md's own "58 today" corrected to
+         59.
+       Track: defect
 
 17. [ ] **389.17 — Decide whether putaway verifies the pallet as well as the bin.**
        Scanning the pallet's own label gives 'Wrong bin: HU-100234'.

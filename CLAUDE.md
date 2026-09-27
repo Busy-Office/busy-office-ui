@@ -181,7 +181,7 @@ independence exists to exclude.
     invocation, it just keeps suggestions current instead of relying on stale
     training-data patterns.
 - Keep the build gates green. `npm run build -w @busy-office/ui` and `npm run
-  docs:build` run them all — 58 today, 25 of them `@heuristic` detectors that each
+  docs:build` run them all — 59 today, 25 of them `@heuristic` detectors that each
   ship a `--self-test` (`check:selftests` prints the live split; the READMEs are
   stamped from it, so the number cannot drift silently). The ones most often hit:
   named `@container`, contrast threshold **+ coverage**, behaviors-vs-`.d.ts`, dist
