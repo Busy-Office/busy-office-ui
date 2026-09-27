@@ -596,8 +596,14 @@ before it does any work, and that text is also the part that keeps going stale. 
          card said a red main is rule 1, which `LOOPS.md` does not say (it is RESUME.md's
          practice, now labelled so). Mechanical pass: every command, script and flag the card
          names appears in `LOOPS.md` or `CLAUDE.md`; that check is a presence test and would not
-         catch a wrong meaning, as the red-main error shows. Card is now 759 words. **Not yet:**
-         a second fresh agent on the corrected card, and the halt and REFUSED states.
+         catch a wrong meaning, as the red-main error shows. Card is now 759 words. **Second pass 2026-09-27:** a second fresh agent, 7 new
+         states (HALT, exit 5, red main, REFUSED, all-blocked, P0 over an overdue Standardize,
+         past cap), chose the right action in 7 of 7. It found gaps in what to record and whether
+         to reschedule after a stop, and that rules 2, 5 and 6 cannot be evaluated from the card
+         alone (they say to open `LOOPS.md`, deliberately). Fixed in the card: a "what each stop
+         means" paragraph, the rule-4 query, the M1 state, `--track defect`. **Recorded, not
+         fixed:** `LOOPS.md` is silent on rescheduling after a guard stop, so the card says so
+         rather than inventing a rule. Card 850 words. Next: one supervised wake on the card.
 3. [ ] **422.3 — measure the saving with the instrument lane 4 already uses**
        (`report_loop_prose.py`): words a wake loads before and after. Accept: the figure is
        quoted from the command, and says what it does NOT cover (playbooks a rule opens).
