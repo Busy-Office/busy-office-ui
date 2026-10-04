@@ -2,7 +2,7 @@
 
 Generated — do not hand-edit. Regenerate with `python3 scripts/loops/generate_status.py` (also runs automatically after `record_iteration.py`). Source of truth for every number here is ROADMAP.md + `.roundtable/loop-log.md`/`loops.db`; this file is a derived mirror — rebuildable from ROADMAP.md and the loop log, so never edit it by hand. Unlike `loops.db` it is COMMITTED: CLAUDE.md's rule is that a queryable binary stays git-ignored while a file a human reads and reviews stays in git, and this one is read.
 
-Generated at: 2026-09-27 13:45 UTC
+Generated at: 2026-10-04 10:13 UTC
 
 oldest dispatchable: 389.3 — A rejected scan's reason stays readable after the flash.
 
@@ -167,14 +167,16 @@ Dispatcher rule 4's pick, computed: the oldest open item that no owner marker, o
 ## Dispatch counters
 
 ```
-dispatch status — counter-triggered rules (1905 iterations logged)
-  Standardize   5 / 4 Continue rounds since 2026-09-27 16:50   OVERDUE  [241 / 50 changed line(s)]
-  Objective     2 / 3 slices          since 2026-09-27 16:51   ok  [389, 421]  [241 / 100 changed line(s)]
+dispatch status — counter-triggered rules (1906 iterations logged)
+  Standardize   0 / 4 Continue rounds since 2026-10-04 18:12   ok  [0 / 50 changed line(s)]
+  Objective     3 / 3 slices          since 2026-09-27 16:51   OVERDUE  [389, 421, 428]  [241 / 100 changed line(s)]
   -> a counter is at or past its threshold; the dispatcher should pick it
-  Optimize      0 wake-date(s) newer   since 2026-09-27 05:16   ok   [newest pair: claims; 167 sample(s), 8 of 52 name(s) paired across days]
+  Optimize      1 wake-date(s) newer   since 2026-09-27 05:16   STALE   [newest pair: claims; 168 sample(s), 8 of 52 name(s) paired across days]
+  -> rule 5's newest comparable pair predates 1 wake-date(s) of loop activity. Any regression verdict quoted from it is about the tree as it was on 2026-09-27, not this one — record a metric or say the rule could not be evaluated.
+     the unit is DISTINCT LOG DATES after 2026-09-27 (2026-10-04), not wakes: several wakes on one date add nothing, and one wake on a new date adds the whole step.
      rule 5's comparable set — 8 name(s) sampled on 2+ distinct days (44 of 52 name(s) have only one day and are not an input to a rule that compares two runs). Each delta is DAY-CLOSE to DAY-CLOSE (the last sample of each day, roadmap 372.1); `[k same-day]` marks a day whose other samples are folded in, not shown:
+       dispatch-region-words       8d  2026-09-27 10374 words -> 2026-10-04 10374 words  +0   [5 same-day]
        claims                      7d  2026-09-25 311 count -> 2026-09-27 364 count  +53
-       dispatch-region-words       7d  2026-09-26 10374 words -> 2026-09-27 10374 words  +0   [10 same-day]
        gates                       4d  2026-09-07 55 count -> 2026-09-09 56 count  +1
        axe-violations              8d  2026-09-03 0 count -> 2026-09-06 0 count  +0   NEVER MOVED
        bundle-gz-kb                5d  2026-08-17 11.7 kB -> 2026-09-03 15.1 kB  +3.4   [2 same-day]
@@ -185,7 +187,7 @@ dispatch status — counter-triggered rules (1905 iterations logged)
      a direction is NOT recorded on purpose (roadmap 324.1): adding one makes rule 5 fire on `bundle-gz-kb`'s four consecutive rises, which the log's own same-timestamp `components` samples refute (0.400 -> 0.355 kB per component over that window). A rise with no denominator is growth. Where a name has a real threshold, use it — `check:size` gates the bundle at 16.7 kB gz, which is rule 5's budget clause, not its trend one.
      not rule 5's input: 24 adoption-* name(s), the Objective grill's reading of the world (377.7), never a size or speed regression.
   Holds         8 hold-wake(s) recorded, 0 today (UTC dates)   [inflight.py hold; .roundtable/hold-wakes.jsonl]
-  Value        last 10: shipped 4 · evidence 2 · process 3 · unclassified 1   [421.1; trailing process streak: 0]
+  Value        last 10: shipped 4 · evidence 2 · process 4 · unclassified 0   [421.1; trailing process streak: 1]
 ```
 
 ## Milestone progress
@@ -303,7 +305,6 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 
 ## Last 10 iterations
 
-- 2026-09-27 15:20 · Roadmap · triage · 387.2 decided by the ladder: top-layer popover message (Jev 1.0 agrees); build scoped, not yet shipped · triaged · 680d64ff
 - 2026-09-27 15:50 · Continue · fix · 421.1 — --value tag added to record_iteration.py; 10-wake tally in dispatch_status.py, reconciled and red-proved · landed · f4f4ac8d
 - 2026-09-27 16:45 · Continue · build · 387.2 — popover mechanism verified live on the real demo table; frozen-row escape not verified in time; reverted after a stale dist artifact looked like 4 claim regressions · reverted · 52e75246
 - 2026-09-27 16:50 · Standardize · sweep · Slice 424 — 4 of 4 lanes (isolated build): 0 dead/1392; 247/236/7; 120,015 words; dispatch region 10,374; all equal Slice 420 (387.2 reverted, no CSS shipped) · landed · f037f0f7
@@ -313,6 +314,7 @@ Open items whose only owner marker sits inside a code span or fence, so they are
 - 2026-09-27 18:55 · Continue · fix · 389.16, 389.19 — RF budget 41->42kb (Jev a=1.0 over trim/defer): bo-u-tabular/bo-u-text-muted shipped; badge align-self fix, red-proved live on rf-landing-rf at 6 theme/width combos · landed · 497d3c82
 - 2026-09-27 19:24 · Continue · fix · 389.16 marker fix — a Track: defect line lost its indentation in the DONE-block insertion; generate_status's own-line-marker reconciliation (44 raw vs 43 parsed) caught it · landed · cc1f8d2a
 - 2026-09-27 19:49 · Continue · fix · 389.23 — bo-u-text-nowrap added to pick/count/putaway identifiers (already shipped by 389.16's utilities import, no new bytes); 30 identifiers verified at 3 widths, red-proved · landed · a631a660
+- 2026-10-04 18:12 · Standardize · sweep · Slice 428 — 4 of 4 lanes (fresh build at HEAD 6575b0ab): 0 dead/1392; 247/236/7; 120,015 words; dispatch region 10,374 (0 of 17 sections moved); all equal Slice 424 although 229 input lines changed since (389.x RF/dashboard CSS moved no lane) · landed · 6575b0ab
 
 ## Sunset test
 

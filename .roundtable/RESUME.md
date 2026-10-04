@@ -36,9 +36,7 @@ uncommitted work of 2026-09-20 is parked on `park/owner-checkpoint-2026-09-20`
   REFUSED milestone line stops the wake). Read CI for main's HEAD first; red
   main is rule 1.
 - **No standing GOAL.** M1 stays DRAFT.
-- **Rule 2 (Standardize) is OVERDUE — 5/4 rounds, 241 changed lines** (past
-  421.3's 50-line gate). **Next wake's pick**: isolated worktree sweep, base
-  Slice 424.
+- **Rule 2 (Standardize) ran 2026-10-04** (Slice 428, clean pass, all four lanes equal to 424; counter reset). SSH to GitHub had to be re-added for `step0_guard.py` to pass — the first wake that day stopped at the guard (exit 2, fetch denied). The cloud routine has fired hourly through 2026-10-04 09:27Z (sessions listed active, no foreign commits).
 - **Rule 3 (Objective) is 2/3**, not due; [389, 421] armed.
 - **Rule 4's queue, oldest-first, unblocked:** 389.3, 391.1, 392.2, 392.3,
   393.11, … — re-run `sqlite3 .roundtable/loops.db "select item_id, title
