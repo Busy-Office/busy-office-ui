@@ -16,8 +16,6 @@ number, never `ROADMAP.md:NN` — a line number survives no rewrite.
 
 ## In flight
 
-Nothing. `inflight.py status` reads exit 0.
-
 ## Uncommitted
 
 Nothing. Working tree clean at HEAD, main's CI green. The owner's own
